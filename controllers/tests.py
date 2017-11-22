@@ -19,10 +19,10 @@ def display_form():
 def prueba_lista_servicios():
 	lista = ListaServicios(db)
 	print
-	#lista.invertir_ordenamiento()
-	lista.cambiar_columna('nombre_tipo')
+	lista.invertir_ordenamiento()
+	lista.cambiar_columna('sede')
 	lista.orden_y_filtrado()
 	for i in lista.servicios_a_mostrar:
-		print i.nombre
+		print i.sede
 
 	return dict()

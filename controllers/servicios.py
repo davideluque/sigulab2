@@ -17,14 +17,19 @@ def usuario():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
+	listado_de_servicios = ListaServicios(db)
+	
+	if request.vars.pagina:
+		listado_de_servicios.cambiar_pagina(int(request.vars.pagina))
 
-	servicio = Servicio(db, 'nombre', 1, 1, 'objetivo', 'alcance', 'metodo',
-			   'rango', 'incertidumbre', 'item_ensayar', 'requisitos', 'resultados',
-			   True, False, True, False, True, 
-			   1, 1, 1)
+	if request.vars.orden:
+		listado_de_servicios.invertir_ordenamiento()
 
-	s = Servicio(db)
+	if request.vars.columna:
+		listado_de_servicios.cambiar_columna(request.vars.columna)
 
-	print(servicio.insertar())
+	listado_de_servicios.orden_y_filtrado()
 
-	return dict()
+	return dict(grid=listado_de_servicios.servicios_a_mostrar,
+							pages=listado_de_servicios.rango_paginas,
+							actualpage=listado_de_servicios.pagina_central)

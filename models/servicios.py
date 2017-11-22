@@ -36,6 +36,9 @@ db.define_table(
 	Field('requisitos', 		'text', notnull=True, label=T('Requisitos')),
 	Field('resultados', 		'text', notnull=True, label=T('Resultados')),
 
+	# Fecha de Agregacion.
+	Field('fecha_de_agregacion', 'datetime', requires=IS_DATETIME(), default=request.now),
+
 	# Tipo y Categoria
 	Field('tipo', 				'reference tipos_servicios',
 		  requires=IS_IN_DB(db, db.tipos_servicios, '%(nombre)s'), label=T('Tipo')),

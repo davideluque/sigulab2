@@ -41,7 +41,7 @@ db.define_table(
 
 # Se define fuera de la tabla para asegurar su existencia antes de ser referenciada
 
-db.dependencias.unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None)
+db.dependencias.unidad_de_adscripcion.requires = IS_EMPTY_OR( IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None))
 
 db.dependencias._plural = 'Dependencias'
 db.dependencias._singular = 'Dependencia'

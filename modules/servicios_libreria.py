@@ -1,4 +1,3 @@
-
 #------------------------------------------------------------------------------
 #
 # Clase que permite tomar un record de la tabla servicios y realizar cada 
@@ -8,6 +7,7 @@
 
 
 class Servicio(object):
+
 
 	def __init__(self, db, nombre = None, tipo = None, categoria = None,
 				 objetivo = None, alcance = None, metodo = None, rango = None,
@@ -46,9 +46,11 @@ class Servicio(object):
 
 		self.db = db
 
+
 	def __str__(self):
 
 		return self.nombre
+
 
 	def insertar(self):
 		
@@ -63,6 +65,7 @@ class Servicio(object):
 			dependencia = self.dependencia, ubicacion = self.ubicacion)
 
 		return insercion
+
 
 	def instanciar(self, id):
 		
@@ -98,6 +101,7 @@ class Servicio(object):
 
 			return False
 
+
 	def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
 			   rango, incertidumbre, item_ensayar, requisitos, resultados,
 			   docencia, investigacion, gestion, extension, visibilidad, 
@@ -122,6 +126,7 @@ class Servicio(object):
 		self.responsable = responsable
 		self.dependencia = dependencia
 		self.ubicacion = ubicacion
+
 
 	def actualizar(self, id):
 	    
@@ -148,19 +153,16 @@ class Servicio(object):
 
 	    return actualizacion
 
+
 	def conseguir_categorias(self):
 		self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre		
 		self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre		
 		
 		seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+
 		self.seccion = seccion_fila.nombre
-		self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias).select(self.db.dependencias.ALL)[0].nombre
-		self.sede = self.db(seccion_fila.id_sede == self.db.sedes).select(self.db.sedes.ALL)[0].nombre
-
-
-
-
-
+		self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
+		self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
 
 
 #------------------------------------------------------------------------------
@@ -169,6 +171,7 @@ class Servicio(object):
 # funciones de paginado y ordenamiento.
 #
 #------------------------------------------------------------------------------
+
 
 class ListaServicios(object):
 
@@ -200,6 +203,7 @@ class ListaServicios(object):
 		self.boton_siguiente = self.pagina_central + 1
 		self.boton_anterior = self.pagina_central - 1
 
+		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
 		# Configuraremos estos botones
 		self.configurar_botones()
 
@@ -212,8 +216,8 @@ class ListaServicios(object):
 		# Lista de cada fila, convertida en el objeto servicio
 		self.servicios_a_mostrar = []
 
-
 	# Configurara la visibilidad y posicion de cada boton
+
 	def configurar_botones(self):
 		self.boton_principio = self.primera_pagina
 		self.boton_fin = self.ultima_pagina
@@ -232,16 +236,20 @@ class ListaServicios(object):
 		if self.pagina_central == self.ultima_pagina:
 			self.boton_siguiente = False
 
+
 	def cambiar_pagina(self, nueva_pagina):
 		self.pagina_central = nueva_pagina
 		self.configurar_botones()
 		self.posicionar_ultimo()
 
+
 	def posicionar_ultimo(self):
 		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
 
+
 	def invertir_ordenamiento(self):
 		self.orden = not(self.orden)
+
 
 	def cambiar_ordenamiento(self, orden):
 		self.orden = orden
@@ -258,5 +266,8 @@ class ListaServicios(object):
 
 	def orden_y_filtrado(self):
 		self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
-		self.servicios_a_mostrar = self.filas[(self.pagina_central - 1):self.ultimo_elemento]
+		self.servicios_a_mostrar = self.filas[(self.pagina_central - 1)*10:self.ultimo_elemento]
+
+
+
 

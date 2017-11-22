@@ -1,0 +1,42 @@
+{{extend "layout.html"}}
+{{block center}}
+<div class="container" style="padding-top:25px">
+	<div class="table-responsive" >
+		<table class="table table-hover" style="border: 1.5px !important; border-style: solid !important; border-color: #ddd !important;">
+		 <thead>
+				<tr>
+					<form>
+						<th><button class="btn-link" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
+						<th><button class="btn-link" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
+						<th><button class="btn-link" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
+						<th><button class="btn-link" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
+						<th><button class="btn-link" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
+						<th><button class="btn-link" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
+				</tr>
+			</thead>
+	    <tbody>
+				{{for item in grid:}}
+					<tr>
+						<th>{{=item.nombre_categoria}}</th>
+						<th>{{=item.nombre_tipo}}</th>
+						<th>{{=item.nombre}}</a></th>
+						<th>{{=item.seccion}}</th>
+						<th>{{=item.laboratorio}}</th>
+						<th>{{=item.sede}}</th>
+					</tr>
+				{{pass}}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>
+						{{for page in pages:}}
+							<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+						{{pass}}
+					</th><th></th><th></th><th></th><th></th><th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
+{{end}}
+
