@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{=URL('static','css/core.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/components.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/icons.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/pages.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/loginSIGULAB.css')}}" rel="stylesheet" type="text/css"/>
+    <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
+</head>
+
+<body>
+<!-- Inicio Wrapper -->
+<div class="wrapper-page">
+    <!-- Inicio Card Box -->
+    <div class="m-t-40 card-box" id="box">
+        
+        <div class="text-center">
+            <h4 class="text-uppercase font-bold m-b-0">SIGULAB</h4>
+        </div>
+        
+        <!-- Inicio panel -->
+        <div class="panel-body">
+            <!-- Inicio form login -->
+            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+
+                <!-- Correo Electronico -->
+                <div class="form-group" id="auth_user_email__row">
+                    <div class="col-xs-12">
+                        <!-- Todavia no sabemos si vamos a usar label o placeholder -->
+                        <!-- <label class="control-label col-sm-3" for="auth_user_email__row" id="auth_user_email__label">Correo Electrónico:</label> -->
+                        <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Contrasena -->
+                <div class="form-group" id="auth_user_password__row">
+                    <div class="col-xs-12">
+                        <!-- Todavia no sabemos si vamos a usar label o placeholder -->
+                        <!-- <label class="control-label col-sm-3" for="auth_user_password" id="auth_user_password__label">Contraseña:</label> -->
+                        <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" required>
+                        <span class="help-block"></span>
+                        <div class="form-group m-t-30 m-b-0">
+                        
+                        <div class="col-sm-12">
+                            <a href="resetpassword" class="text-muted">¿Has olvidado tu contraseña?</a>
+                        </div>
+                    </div>
+                    </div></div>
+
+                <!-- Check box Recordar contrasena --> 
+                <div class="form-group" id="auth_user_remember_me__row">    <div class="col-sm-offset-3 col-xs-12">
+                        <div class="checkbox checkbox-custom">
+    <!--                         <label class="" id="auth_user_remember_me__label">
+                            <input class="boolean" id="auth_user_remember_me" name="remember_me" type="checkbox" value="on"> Recordar mis datos</label> -->
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boton Iniciar Sesion -->
+                <div class="form-group text-center m-t-30" id="submit_record__row">
+                    <div class="col-xs-12 col-sm-offset-3">
+                        <input class="btn btn-primary" type="submit" value="Iniciar sesion">
+                    </div>
+                </div>
+
+                <!-- Boton Registrarse -->
+                <div class="form-group text-center m-t-30" id="submit_record__row">
+                    <div class="col-xs-12 col-sm-offset-3">
+                        <a href="{{=URL('register')}}"><input class="btn btn-primary" value="Registrarse"></a>
+                    </div>
+                </div>
+                {{=form.custom.begin}}
+                {{=form.custom.end}}
+            </form>
+            <!-- Fin form login -->
+        </div>
+        <!-- Fin panel -->
+    </div>
+    <!-- Fin Card Box -->
+</div>
+<!-- Fin Wrapper -->
+</body>

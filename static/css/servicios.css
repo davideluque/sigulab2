@@ -1,0 +1,150 @@
+/*
+ *   SIGULAB Servicios v1.1.0
+ *   Author:
+ *		David Cabeza <13-10191@usb.ve>
+ *	 Website:  <https://>
+ *   License: Public GNU
+ */
+
+body{
+	background-color: rgb(250,250,250);
+}
+
+.navbar-nav>li>a {
+    color: white !important;
+}
+
+.breadcrumb {
+	background-color: #606060 !important;
+	border-radius: 0px;
+	height: 30px;
+	padding-top: 5px;
+}
+
+.breadcrumbs {
+	margin-top: 60px;
+	padding: 5px 0px 10px 0px;
+	background-color: transparent !important;
+	border: none;
+	z-index:1;
+}
+
+.breadcrumb-item{
+	color: white !important;
+}
+
+.breadcrumb-item + .breadcrumb-item:before {
+	content: "/ ";
+}
+
+.dropdown-toggle{
+	background-color: transparent !important;
+	border: 0px;
+	-webkit-appearance: none;
+}
+
+.dropdown{
+	margin-top: 10px;
+	background-color: transparent !important;
+	border: 0px;
+}
+
+#iconoInfo{
+	font-size: 20px;
+}
+
+#iconoUser{
+	font-size: 17px;
+}
+
+@media only screen and (max-width: 767px){ 
+
+.separador{
+	height:55px;
+}
+
+.breadcrumbs{
+	margin-top:50px !important;
+	margin-bottom: 0px;
+}
+
+.logotext {
+	padding-left: 50px;
+	color: #0300d7;
+}
+
+
+.breadcrumbs {
+	margin-top: 0px;
+}
+
+
+
+}
+
+@media only screen and (min-width: 767px){ 
+
+.fondoblanco{
+	height:95px;
+	width:100%;
+	background-color: rgb(250,250,250) !important;
+	position:fixed;
+	z-index: 1;
+}
+
+.separador{
+	height:150px;
+	width:100%;
+}
+
+#logo{
+	top: 0;
+	padding-top: 8px;
+	position: fixed;
+	width: 200px;
+	padding-right: 0px;
+	z-index:100;
+}
+
+.logotext {
+	padding-top: 10px;
+	padding-left: 60px;	
+	color: #0300d7;
+}
+
+.navbar{
+	margin-left:200px;
+	border: 0px;
+	background-color: #606060;
+}
+
+#hide{
+	display:none;
+}
+
+.navbar-brand {
+	background:url(../images/logo-ulab.png) no-repeat;
+	width:170px;
+	left: 15px;
+	background-size: contain;
+	position: relative;
+}
+
+/*.navbar-brand {
+	position: relative;
+	background:url(../static/images/logo-ulab.png) no-repeat;
+	width: 170px;
+	left: 15px;
+	background-size: contain;
+}*/
+
+.dropdown.servici.active{
+	background-color: transparent !important;
+	border-bottom: 3px solid #0300d7;
+	height: 45px;
+	content: " ";
+	left: 0;
+	right: 0;
+}
+
+}
