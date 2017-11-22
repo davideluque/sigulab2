@@ -40,8 +40,20 @@
 			<tfoot>
 				<tr>
 					<th>
+						{{if firstpage:}}
+							<button name="pagina" value="{{=firstpage}}"> << </button>
+						{{pass}}
+						{{if prevpage:}}
+							<button name="pagina" value="{{=prevpage}}"> < </button>
+						{{pass}}
 						{{for page in pages:}}
 							<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+						{{pass}}
+						{{if nextpage:}}
+							<button name="pagina" value="{{=nextpage}}"> > </button>
+						{{pass}}
+						{{if lastpage:}}
+							<button name="pagina" value="{{=lastpage}}"> >> </button>
 						{{pass}}
 					</th><th></th><th></th><th></th><th></th><th></th>
 				</tr>
