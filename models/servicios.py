@@ -32,7 +32,7 @@ db.define_table(
 	Field('metodo', 			'string', notnull=True, label=T('Método')),
 	Field('rango', 				'string', label=T('Rango')),
 	Field('incertidumbre', 		'string', label=T('Incertidumbre')),
-	Field('itemensayar', 		'string', notnull=True, label=T('Item a Ensayar')),
+	Field('item_ensayar', 		'string', notnull=True, label=T('Item a Ensayar')),
 	Field('requisitos', 		'text', notnull=True, label=T('Requisitos')),
 	Field('resultados', 		'text', notnull=True, label=T('Resultados')),
 
