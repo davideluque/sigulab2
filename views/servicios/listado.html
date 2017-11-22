@@ -1,5 +1,16 @@
 {{extend "layout.html"}}
 {{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'servicios')}}">Servicios</a>
+  <span class="breadcrumb-item active">Listado</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación --> 
+
 <div class="container" style="padding-top:25px">
 	<div class="table-responsive" >
 		<table class="table table-hover" style="border: 1.5px !important; border-style: solid !important; border-color: #ddd !important;">

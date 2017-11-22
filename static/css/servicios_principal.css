@@ -1,0 +1,64 @@
+@media only screen and (min-width: 767px) { 
+
+	#titulo {
+		text-align: center;
+	}
+
+	.links {
+		text-decoration: none;
+		color: white;
+	}
+
+	.links:hover {
+		color: lightgrey;
+	}
+
+	.cuadrados {
+		padding: 110px 90px 110px 90px;
+		background-color: blue;
+		text-align: center;
+		margin-top: 120px;
+		border-radius: 7px;
+	}
+
+	#cuadrado1 {
+		background-color: #808080;
+	}
+
+	#cuadrado2 {
+		background-color: #303f9f;
+	}
+
+}
+
+@media only screen and (max-width: 767px) { 
+
+	#titulo {
+		text-align: center;
+	}
+
+	.links {
+		text-decoration: none;
+		color: white;
+	}
+
+	.links:hover {
+		color: lightgrey;
+	}
+
+	.cuadrados {
+		padding: 110px 90px 110px 90px;
+		background-color: blue;
+		text-align: center;
+		margin-top: 15px;
+		border-radius: 7px;
+	}
+
+	#cuadrado1 {
+		background-color: #808080;
+	}
+
+	#cuadrado2 {
+		background-color: #303f9f;
+	}
+}
