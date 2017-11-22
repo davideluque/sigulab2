@@ -99,3 +99,14 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#web2py
+__init__.py
+cache/ 
+databases/
+errors/ 
+sessions/  
+private/
+uploads/
+.hg/
+modules/
