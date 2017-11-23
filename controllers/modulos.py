@@ -50,9 +50,10 @@ def register():
 
 # Ajax helper para crear una membership para el usuario recien registrado
 def ajax_membership():
-    session.depid = int(request.post_vars.laboratorio)
+    session.depid = None
     session.rolid = int(request.post_vars.rol)
-
+    if request.post_vars.laboratorio:
+        session.depid = int(request.post_vars.laboratorio)
     if request.post_vars.seccion:
         session.depid = int(request.post_vars.seccion)
     return dict()
@@ -99,9 +100,9 @@ def ajax_registro_seccion():
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
-    site_url = URL('modulos', 'recoverpassword', host=True)
+    site_url = URL('default', 'recoverpassword', host=True)
     # pagina indicada en el email
-    auth.messages.reset_password = 'please click this link http://' + site_url+ '/?key='+'%(key)s to reset your password'
+    auth.messages.reset_password = 'please click this link ' + site_url+ '/?key='+'%(key)s to reset your password'
     form = auth.request_reset_password()
     return dict(form=form)
 

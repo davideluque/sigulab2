@@ -56,7 +56,7 @@ def listado():
         servicio_edicion = Servicio(db)
         servicio_edicion.instanciar(request.vars.idServicioEdit)
 
-        servicio_edicion.editar(equest.post_vars.nombreServicio, request.post_vars.tipoServicio,
+        servicio_edicion.editar(request.post_vars.nombreServicio, request.post_vars.tipoServicio,
                    request.post_vars.categoriaServicio, request.post_vars.objetivoServicio,
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,

@@ -90,47 +90,42 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefedependencia', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	Field('jefe_pendencia', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
 	Field('responsable', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
 
 	# TODO: Conectar el email con el responsable
 	#
 	# ###########################################
-	Field('emailresponsable', 'string', label=T('Email del Responsable de la Solicitud')),
+	Field('email_responsable', 'string', label=T('Email del Responsable de la Solicitud')),
 
-	Field('telefonosresponsable', 'list:string', label=T('Extensiones')),
+	Field('telefonos_responsable', 'list:string', label=T('Extensiones')),
 
 	Field('fecha',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
 
-	# TO DO: Cambiar esto a id_servicio_solicitud
-	#
-	##################################################################
-	Field('servicio', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
+
+	Field('id_servicio_solicitud', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
 
 	Field('proposito', 'reference propositos', requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'), label=T('Propósito del servicio solicitado')),
 
-	Field('propositodescripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
+	Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
 
 	# Si el propósito es extensión, este campo se llena con el cliente final.
-	Field('propositoclientefinal', 'string', label=T('Cliente final del propósito')),
+	Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
 	
 	Field('descripcion', 'string', label=T('Descripción de la Solicitud')),
 	
 	Field('observaciones', 'string', label=T('Observaciones de la Solicitud')),
-	
-	# TO DO: Cambiar esto a id_dependenciaejecutora_solicitud
-	#
-	##################################################################
-	Field('id_dependenciaejecutora', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
+
+	Field('id_dependencia_ejecutora_solicitud', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
 
 	# TO DO: Conectar el espacio físico con la dependencia
 	#
 	#######################################################
-	Field('lugarejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
+	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 	
-	Field('jefedependenciaejecutora', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
+	Field('jefede_pendencia_ejecutora', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
 	# TO DO: Conectar este correo con las validaciones de solicitudes
 	#
@@ -138,18 +133,18 @@ db.define_table(
 	#
 	# Otra cosa: esta tabla sería entonces una tabla de servicios solicitados "pendientes"
 	#######################################################################################
-	Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
+	#Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
 
-	Field('emailaprueba', 'string', label=T('Solicitud Aprobada Por')),
+	# estado=0 pendiente por aprobar
+	# estado=1 pendiente por ejecutar
 
-	Field('fechaaprobacion',   'date', 
+	Field('estado','string', default='0', label=T('Pendiente por aprobar')),
+
+
+	Field('email_aprueba', 'string', label=T('Solicitud Aprobada Por')),
+
+	Field('fecha_aprobacion',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Aprobacion de Solicitud')),
-
-
-	# TO DO: Agregar el campo del estado de la solicitud cuyos valores pueden ser:
-	# Por ejecutar si es una solicitud para ejecutar
-	# Ver los demas casos que pueden suceder.
-	############################################################################
 
 )
 
