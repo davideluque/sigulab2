@@ -1,0 +1,143 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+	<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<script src="{{=URL('static', 'js/prueba.js')}}"></script>
+{{end}}
+
+{{block center}}
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..')}}">Servicios</a>
+  <span class="breadcrumb-item active">Certicaciones de Servicios</span>
+  </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <!-- Boton que lleva al modal -->
+          <button type="button" id="botonCertificar" class="btn btn-info" data-toggle="modal" data-target="#modalServiceCertification">Certificar Servicio</button>
+        </div>
+    </div>
+</div>
+
+<div id="listadoContainer" class="container">
+  <div class="row">
+  	<div class="table-responsive" >
+  		<table id="tablaListado" class="table table-hover">
+  		 <form>
+          <thead>
+            <tr id="titulosListado">
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_categoria_servicio">Numero de Registro</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_tipo_servicio">Certificado por</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_nombre_servicio">Responsable</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_seccion_servicio">Orden de Compra / Fecha</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_laboratorio_servicio">Autorización de Pago / Fecha</button></th>
+        <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_sede_servicio">Número Factura</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_sede_servicio">Fecha de certificación</button></th>
+  			</tr>
+  		  </thead>
+  	     <tbody>
+  		  </tbody>
+  		 </form>
+  		</table>
+  	</div>
+  </div>
+</div>
+
+<!-- Modal solicitar un servicio -->
+  <div class="modal fade" id="modalServiceCertification" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Certificación de Servicio de Laboratorio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-12 col11Body" style="padding-left: 35px !important padding-bottom: 30px !important">
+                          <h4 class="titulosForm">Datos Básicos</h4>                
+                           	
+                           	<div class="mover">
+                           	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="numRegistro" placeholder="Número" required>
+                            </div>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Responsable</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" placeholder="Responsable del Servicio" required>
+                            </div>
+
+							               <!-- <label class="form-group" id="" style="margin-bottom: 0px">Orden de Compra</label> -->                            
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" placeholder="Orden de Compra" required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Autorización de Pago</label>  --> 
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" placeholder="Autorización de Pago" required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número Factura</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" placeholder="Numero Factura" required>
+                            </div> 
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de certificación</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" placeholder="Fecha de certificación" required>
+                            </div>                              
+                        </div>
+                      </div>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+
+                </form>
+            </div>
+          </div>               
+
+        </div>
+
+      <div class="modal-footer" style="border-color: white !important">
+        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Certificar</button>
+      </div> 
+
+      </div>
+
+    </div>
+  </div>
+
+
+{{end}}
