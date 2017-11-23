@@ -388,18 +388,80 @@ def query_ficha(db, idv):
 
 #------------------------------------------------------------------------------
 #
-# Clase de solicitud 
+# Clase certificacion de servicio
 #
 #------------------------------------------------------------------------------
 
-class Solicitudio(object): 
-	def __init__(self, db, nombre = None, registro= None,dependencia=None,
-				jefe_pendencia=None, responsable=None,  email_responsable=None,
-				telefonos_responsable=None,fecha None,id_servicio_solicitud= None,
-				proposito=None,proposito_descripcion=None, proposito_cliente_final= None,
-				descripcion=None,observaciones=None, id_dependencia_ejecutora_solicitud=None,
-				lugar_ejecucion=None,jefede_pendencia_ejecutora=None, estado=None, 
-				email_aprueba=None, fecha_aprobacion= None):
+class Servicio(object):
 
-		self.nombre = nombre
-		
+
+	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
+				 servicio=None, solicitud=None, fecha_certificacion=None, id=None):
+
+		self.registro = registro
+		self.proyecto = proyecto
+		self.elaborado_por = elaborado_por
+		self.servicio = servicio
+		self.solicitud = solicitud
+		self.fecha_certificacion = fecha_certificacion
+
+		self.db = db
+		# viene de la instanciacion
+		self.id = id
+
+	def __str__(self):
+
+		return self.registro + " " + self.proyecto
+
+	def insertar(self):
+
+		insercion = self.db.certificaciones.insert(registro=self.registro,
+											 proyecto=self.proyecto,
+											 elaborado_por=self.elaborado_por,
+											 servicio=self.servicio,
+											 solicitud=self.solicitud,
+											 fecha_certificacion=self.fecha_certificacion)
+
+		return insercion
+
+	def instanciar(self, id):
+
+		instanciacion = self.db(self.db.certificaciones.id == id).select(self.db.certificaciones.ALL)
+
+		if (len(instanciacion) == 1):
+			self.id = id
+			self.registro = instanciacion.registro
+			self.proyecto = instanciacion.proyecto
+			self.elaborado_por = instanciacion.elaborado_por
+			self.servicio = instanciacion.servicio
+			self.solicitud = instanciacion.solicitud
+			self.fecha_certificacion = instanciacion.fecha_certificacion
+
+			return True
+
+		else:
+			return False
+
+	def editar(self, registro, proyecto, elaborado_por,
+				 servicio, solicitud, fecha_certificacion):
+
+		self.registro = registro
+		self.proyecto = proyecto
+		self.elaborado_por = elaborado_por
+		self.servicio = servicio
+		self.solicitud = solicitud
+		self.fecha_certificacion = fecha_certificacion
+
+	def actualizar(self, id):
+
+		actualizacion = self.db(self.db.certificaciones.id == id).update(
+			registro=self.registro,
+			proyecto=self.proyecto,
+			elaborado_por=self.elaborado_por,
+			servicio=self.servicio,
+			solicitud=self.solicitud,
+			fecha_certificacion=self.fecha_certificacion)
+
+		return actualizacion
+
+
