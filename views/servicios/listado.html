@@ -1,13 +1,11 @@
 {{extend "layout.html"}}
 
 {{block head}}
-  <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
-  <script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
-  <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+<!--   <script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script> -->
 {{end}}
 
 {{block center}}
@@ -28,7 +26,7 @@
 		<div id="columnBotonAgregar" class="col-sm-6">
 			<div class="col-sm-6"></div>
 
-			<div class="col-sm-6"
+			<div class="col-sm-6">
                 <!-- Boton que lleva al modal -->
               <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addservice">Agregar Servicio</button>
             </div>
@@ -315,8 +313,9 @@
     </div>
   </div>
 
-  <button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
 <!-- Fin Modal Agregar Servicio -->
+
+<button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
 
 
 <!-- Inicio Modal Editar Servicio -->
@@ -355,7 +354,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioEdit" class="registration-form" method="post">
+                <form id="formularioCarga" class="registration-form" method="post">
 
                     <!-- Primer Paso -->
                     <fieldset class="formField">
@@ -392,16 +391,16 @@
                             <div class="form-group">
                               <h6>Función</h6>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="docenciaServicio" value="{{if editar[0].docencia:}}{{=editar[0].docencia}}{{pass}}">Docencia</label>
+                                <label><input type="checkbox" name="docenciaServicio" value="True" {{if editar[0].docencia:}} checked {{pass}}>Docencia</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="investigacionServicio" value="{{if editar[0].investigacion:}}{{=editar[0].investigacion}}{{pass}}">Investigación</label>
+                                <label><input type="checkbox" name="investigacionServicio" value="True" {{if editar[0].investigacion:}} checked {{pass}}>Investigación</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="extensionServicio" value="{{if editar[0].extension:}}{{=editar[0].extension}}{{pass}}">Extensión</label>
+                                <label><input type="checkbox" name="extensionServicio" value="True" {{if editar[0].extension:}} checked {{pass}}>Extensión</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="gestionServicio" value="{{if editar[0].gestion:}}{{=editar[0].gestion}}{{pass}}">Gestión</label>
+                                <label><input type="checkbox" name="gestionServicio" value="True" {{if editar[0].gestion:}} checked {{pass}}>Gestión</label>
                               </div>
                             </div>
                         </div>
@@ -465,7 +464,7 @@
 
                           <div class="form-group">
 
-                              <select class="form-control" id="sel6"  onchange="getAdscripcion();" name="sedeServicio" required>
+                              <select class="form-control" id="sel6-edit"  onchange="getAdscripcion();" name="sedeServicio" required>
                                   <option value="{{=request.post_vars.sedeIdFicha}}" selected hidden >{{=request.post_vars.sedeFicha}}</option>
                                   {{for sede in sedes:}}
                                   <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
@@ -474,28 +473,28 @@
                           </div>
 
 
-	                      <div id="adscripciondiv" class="form-group">
-                              <select class="form-control" id="sel4" onclick="getAdscripcion();" name="laboratorioServicio" required>
+	                      <div id="adscripciondiv-edit" class="form-group">
+                              <select class="form-control" id="sel4-edit" onclick="getAdscripcion();" name="laboratorioServicio" required>
                                   <option value="{{=request.post_vars.laboratorioIdFicha}}" selected hidden >{{=request.post_vars.laboratorioFicha}}</option>
                               </select>
 	                      </div>
 
-	                      <div id="dependenciadiv" class="form-group">
-	                        <select class="form-control" id="sel3" onclick="getDependencia();" name="seccionServicio" required>
-							  <option value="{{=request.post_vars.dependenciaIdFicha}}" selected hidden>{{=request.post_vars.dependenciaFicha}} </option>
-							</select>
+	                      <div id="dependenciadiv-edit" class="form-group">
+	                        <select class="form-control" id="sel3-edit" onclick="getDependencia();" name="seccionServicio" required>
+							                 <option value="{{=request.post_vars.dependenciaIdFicha}}" selected hidden>{{=request.post_vars.dependenciaFicha}} </option>
+							             </select>
 	                      </div>
 	                    
-	                      <div id="ubicaciondiv" class="form-group">
-						    <select class="form-control" id="sel5" onclick="getUbicacion();" name="ubicacionServicio" required>
- 							  <option value="{{=request.post_vars.ubicacionIdFicha}}" selected hidden>{{=request.post_vars.ubicacionFicha}}</option>
- 							</select>	                    
+	                      <div id="ubicaciondiv-edit" class="form-group">
+						              <select class="form-control" id="sel5-edit" onclick="getUbicacion();" name="ubicacionServicio" required>
+ 							              <option value="{{=request.post_vars.ubicacionIdFicha}}" selected hidden>{{=request.post_vars.ubicacionFicha}}</option>
+ 							            </select>	                    
 	                      </div>
 
-                            <div id="responsablediv" class="form-group">
-						    <select class="form-control" id="selresp" onclick="getResponsable();" name="responsableServicio" required>
- 							  <option value="{{=request.post_vars.responsableIdFicha}}" selected hidden>{{=request.post_vars.responsableNombreFicha}} | {{=request.post_vars.responsableEmailFicha}}</option>
- 							</select>
+                        <div id="responsablediv-edit" class="form-group">
+						              <select class="form-control" id="selresp-edit" onclick="getResponsable();" name="responsableServicio" required>
+ 							              <option value="{{=request.post_vars.responsableIdFicha}}" selected hidden>{{=request.post_vars.responsableNombreFicha}} | {{=request.post_vars.responsableEmailFicha}}</option>
+ 							            </select>
 	                      </div>
 
                         </div>
@@ -538,16 +537,14 @@
                 </form>
             </div>
           </div>               
-
-
         </div>
       </div>
 
     </div>
   </div>
-{{pass}}
-<!-- Fin Modal Editar Servicio -->
 
+<!-- Fin Modal Editar Servicio -->
+{{pass}}
 <!-- Ajax getLabs--> 
 <input type="hidden" id="sede" name="sede" value="">
 <!-- Ajax getSecc--> 
@@ -599,43 +596,40 @@
       ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
    }
 
-  function getLabs1(){
-    var opcionessede = document.getElementById("sel6.1");
+  // AJAX EDICION
+  function getAdscripcion(){
+    var opcionessede = document.getElementById("sel6");
     var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
-      var x = document.getElementById("sede");
+    var x = document.getElementById("sede");
       x.value = sedeelegida;
-    ajax('laboratoriosEdi', ['sede'], "laboratoriosdiv1");
-    getSecc1();
+    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
   }
 
-  function getSecc1(){
-      var opcioneslab = document.getElementById("sel4.1");
-      var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-      var x = document.getElementById("labo");
-        x.value = labelegido;
-      ajax('seccionesEdi', ['labo'], "seccionsdiv1");
-      getUbic1();
+  function getDependencia(){
+      var opcionesads = document.getElementById("sel4");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
+
    }
 
-  function getUbic1(){
-      var opcionessecc = document.getElementById("sel3.1");
-      var seccionelegida = opcionessecc.options[opcionessecc.selectedIndex].value;
-      var x = document.getElementById("seccion");
-        x.value = seccionelegida;
-      ajax('ubicacionesEdi', ['seccion'], "ubicaciondiv1");
-      getResp1();
+  function getUbicacion(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
+
    }
 
-  function getResp1(){
-      var opcionesubic = document.getElementById("sel5.1");
-      var ubicacionelegida =  opcionesubic.options[opcionesubic.selectedIndex].value;
-      var x = document.getElementById("ubicacion");
-        x.value = ubicacionelegida;
-      ajax('responsablesEdi', ['ubicacion'], "responsablediv1");
+  function getResponsable(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
    }
-
-	$('#addservice').modalSteps();
-  $('#editservice').modalSteps();
 
 </script>
 {{end}}
