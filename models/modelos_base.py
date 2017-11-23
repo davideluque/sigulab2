@@ -29,9 +29,11 @@ db.define_table(
     #Nombre de la entidad
     'dependencias',
     #Atributos;
-    Field('nombre', 'string', notnull=True, label=T('Nombre')),
+    Field('nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Nombre')),
     # Auto-Referencia
-    Field('unidad_de_adscripcion', 'reference dependencias', requires=False), label=T('Unidad de Adscripción')
+    Field('unidad_de_adscripcion', 'reference dependencias', requires=False, label=T('Unidad de Adscripción')),
+
+    Field('id_sede', 'reference sedes', requires=IS_IN_DB(db, db.sedes.id, '%(nombre)s'), label=T('Sede'))
 )
 
 # Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos
@@ -39,7 +41,7 @@ db.define_table(
 
 # Se define fuera de la tabla para asegurar su existencia antes de ser referenciada
 
-db.dependencias.unidad_de_adscripcion.requires = IS_EMPTY_OR(IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None))
+db.dependencias.unidad_de_adscripcion.requires = IS_EMPTY_OR( IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None))
 
 db.dependencias._plural = 'Dependencias'
 db.dependencias._singular = 'Dependencia'
@@ -107,7 +109,7 @@ db.define_table(
 
     #Referencias
     Field('usuario', 'reference auth_user',
-          requires=IS_IN_DB(db, db.auth_user, '%(email)s'), label=T('Usuario Asociado')),
+          requires=IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
     Field('dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
@@ -131,7 +133,7 @@ db.define_table(
     Field('direccion', 'string', unique=True, notnull=True, label=T('Direccion')),
     #Referencia (Revisar si el label es asistio o organizo)
     Field('dependencia_adscrita', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Ubicacion')),
+          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia Adscrita')),
     )
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'

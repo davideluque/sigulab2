@@ -1,64 +1,51 @@
-@media only screen and (min-width: 767px) { 
-
-	#titulo {
-		text-align: center;
-	}
-
-	.links {
-		text-decoration: none;
-		color: white;
-	}
-
-	.links:hover {
-		color: lightgrey;
-	}
-
-	.cuadrados {
-		padding: 110px 90px 110px 90px;
-		background-color: blue;
-		text-align: center;
-		margin-top: 120px;
-		border-radius: 7px;
-	}
-
-	#cuadrado1 {
-		background-color: #808080;
-	}
-
-	#cuadrado2 {
-		background-color: #303f9f;
-	}
-
+.columnas {
+	text-align: center;
 }
 
-@media only screen and (max-width: 767px) { 
+#tituloBienvenida {
+	text-align: center;
+}
 
-	#titulo {
-		text-align: center;
+.iconos {
+	width: 130px;
+}
+
+.opciones {
+	text-align: center;
+	color: #606060;
+}
+
+.opciones:hover {
+	color: #909090;
+}
+
+#fila2 {
+	padding: 30px 0 60px 0;
+	margin-top: 50px;
+}
+
+.columnas>a:hover {
+	color: #0300d7;
+	text-decoration: none;
+}
+
+.columnas>a {
+	color: black;
+}
+
+
+@media only screen and (max-width: 767px) {
+
+	#main {
+		margin-top: 0;
 	}
 
-	.links {
-		text-decoration: none;
-		color: white;
+	#fila1 {
+		padding: 0 0 20px 0;
 	}
 
-	.links:hover {
-		color: lightgrey;
+	#fila2 {
+		padding: 30px 0 10px 0;
 	}
 
-	.cuadrados {
-		padding: 110px 90px 110px 90px;
-		background-color: blue;
-		text-align: center;
-		margin-top: 15px;
-		border-radius: 7px;
-	}
-
-	#cuadrado1 {
-		background-color: #808080;
-	}
-
-	#cuadrado2 {
-		background-color: #303f9f;
-	}
 }

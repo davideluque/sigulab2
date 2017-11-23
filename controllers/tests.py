@@ -1,3 +1,5 @@
+from servicios_libreria import *
+
 # ----------------------------------------------------------------------------------------
 # Controlador que no sera implementado en la aplicacion final, pueden hacerse pruebas aca
 # ----------------------------------------------------------------------------------------
@@ -12,3 +14,15 @@ def display_form():
    else:
        response.flash = 'please fill out the form'
    return dict(form=form)
+
+
+def prueba_lista_servicios():
+	lista = ListaServicios(db)
+	print
+	lista.invertir_ordenamiento()
+	lista.cambiar_columna('sede')
+	lista.orden_y_filtrado()
+	for i in lista.servicios_a_mostrar:
+		print i.sede
+
+	return dict()
