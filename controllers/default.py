@@ -9,6 +9,9 @@
 def index():
     return dict()
 
+def recoverpassword():
+    return dict(form=auth.reset_password())
+
 #--------------------------------------
 # Otras Funcionalidades Basicas
 #--------------------------------------

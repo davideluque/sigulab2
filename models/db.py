@@ -99,6 +99,9 @@ plugins = PluginManager()
 # -------------------------------------------------------------------------
 auth.settings.request_reset_password_next = URL('login')
 auth.settings.login_next = URL('index')
+auth.settings.on_failed_authentication = URL('modulos', 'login')
+auth.settings.on_failed_authorization = URL('modulos', 'login')
+
 auth.settings.register_next = URL('modulos', 'redireccionando')
 auth.settings.create_user_groups = None
 

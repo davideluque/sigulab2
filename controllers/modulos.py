@@ -66,7 +66,6 @@ def redireccionando():
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
     rolid = request.post_vars.dependenciahidden
-    
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
     direccion=db(db.dependencias.nombre == "Dirección").select(db.dependencias.ALL)
     labs_y_coordinaciones=list(db(db.dependencias.unidad_de_adscripcion == direccion[0].id).select(db.dependencias.ALL))
@@ -85,10 +84,9 @@ def ajax_unidad_rol():
         lista = False
     else:
         lista = labs
-
     return(dict(lista=lista))
 
-def ajax_registro_seccion():
+def ajax_registro_seccion(): 
     rolid = request.post_vars.dependenciahidden
     labid = request.post_vars.seccionhidden
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
@@ -101,13 +99,12 @@ def ajax_registro_seccion():
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
-    site_url = URL(request.application, 'modulos', 'recoverpassword', host=True)
+    site_url = URL('modulos', 'recoverpassword', host=True)
     # pagina indicada en el email
-    auth.messages.reset_password = 'please click this link http://' + site_url+ 'account/reset_password'+ '/?key='+'%(key)s to reset your password'
+    auth.messages.reset_password = 'please click this link http://' + site_url+ '/?key='+'%(key)s to reset your password'
     form = auth.request_reset_password()
     return dict(form=form)
 
-# Recuperacion de Contraseña (reinicio) 
 def recoverpassword():
     return dict(form=auth.reset_password())
 

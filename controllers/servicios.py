@@ -128,7 +128,7 @@ def listado():
 #
 #------------------------------------------------------------------------------
 
-@auth.requires_login()
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
     session.forget(response)
 
@@ -164,7 +164,7 @@ def ajax_ficha_servicio():
 
     return dict(ficha=valores_de_ficha)
 
-@auth.requires_login()
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
@@ -176,7 +176,7 @@ def ajax_obtener_adscripcion():
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
-@auth.requires_login()
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_dependencia():
     session.forget(response)
     dependencia_query = db((db.dependencias.unidad_de_adscripcion == int(request.vars.adscripcion))).select(db.dependencias.ALL)
@@ -187,7 +187,7 @@ def ajax_obtener_dependencia():
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
-@auth.requires_login()
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_ubicacion():
     session.forget(response)
     ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
@@ -197,7 +197,7 @@ def ajax_obtener_ubicacion():
         ubicaciones_a_mostrar.append(l)
     return dict(ubicaciones=ubicaciones_a_mostrar)
 
-@auth.requires_login()
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable():
     session.forget(response)
     print("ANTES")
@@ -208,3 +208,4 @@ def ajax_obtener_responsable():
     for l in responsable_query:
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
+
