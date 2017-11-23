@@ -1,0 +1,79 @@
+#main {
+	margin-top:500px;
+}
+
+.nav-item>.nav-link {
+	color: black !important;
+	text-decoration: none;
+}
+
+.nav-item>.nav-link:hover {
+	color: #0300d7 !important;
+}
+
+.modal-header.fichaHeader{
+	height: 50px;
+	background-color: #0300d7 !important;
+	color: white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding-top: 10px;
+}
+
+#iconoFicha {
+	width: 30px;
+}
+
+.media-heading.fichaHeading {
+	left: 50px;
+	width: 500px !important;
+	margin-right: 0;
+	float: left;
+}
+
+.close {
+	color: #FFF;
+	opacity: 1;
+	padding-top: 3px !important;
+}
+
+.contenidoFicha {
+	padding-top: 20px;
+
+}
+
+.contenidoFicha>tr {
+	margin-bottom: 5px !important;
+}
+
+.contenidoFicha>tbody {
+	margin-right: 10px;
+}
+.media-body.fichaMedia {
+	padding-top: 3px;
+}
+
+.table>thead>tr>th#fichaTabla {
+	text-align: center;
+}
+
+.botonesFicha {
+	display: block !important;
+}
+
+.botonesFichita:hover {
+	background-color: #808080;
+}
+
+.botonEliminar:hover {
+	background-color: #DC143C;
+	color: white;
+}
+
+#tituloModalElim {
+	text-align: center;
+}
+
+#cuerpoModalElim {
+	margin-left: 50% !important;
+}

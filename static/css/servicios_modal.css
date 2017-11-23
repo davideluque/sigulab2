@@ -1,0 +1,230 @@
+@media only screen and (min-width: 767px){ 
+
+	.row.addRow{
+		margin-left: 0px !important;
+		margin-right: 0px !important;
+	}
+
+	.modal-header.addHeader{
+		padding-right: 0px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		padding-left: 0px !important;
+		border-bottom: 0px !important;
+	}
+
+	.modal-body.addBody{
+		padding-right: 0px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		padding-left: 0px !important;
+	}
+
+	#col1Header{
+		border-top-left-radius: 4px;
+		background-color: #606060;
+		height: 50px;
+	}
+
+	#col11Header{
+		background-color: #0300d7;
+		height: 50px;
+		width: 91.67% !important;
+		border-top-right-radius: 5px;
+	}
+
+	.col1Body{
+		padding-left: 10px !important;
+		background-color: #505050;
+		height: 460px;
+	}
+
+	#nuevoServicio{
+		text-align: left;
+		padding-top: 12px;
+		color: white;
+	}
+
+	#formularioCarga input{ 
+		border-top: 0px !important;
+		border-left: 0px !important;
+		border-right: 0px !important;
+		box-shadow: none !important;
+		border-bottom-width: 2px;
+		border-radius: 0px;
+		background-color: transparent;
+	}
+
+	#formularioCarga select{ 
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		box-shadow: none;
+		border-radius: 0px;
+		border-bottom-width: 2px;
+		background-color: transparent;
+
+	}
+
+
+	.step{
+	  background: #505050;
+	  border-radius: 0.8em;
+	  border-color: white !important;
+	  -moz-border-radius: 0.8em;
+	  -webkit-border-radius: 0.8em;
+	  color: white;
+	  display: inline-block;
+	  font-weight: bold;
+	  line-height: 1.6em;
+	  margin-right: 5px;
+	  text-align: center;
+	  width: 1.6em;
+	  margin-top: 40px; 
+	}
+
+	.activePass {
+	  background: white;
+	  color: #505050;
+	}
+
+	#plus{
+		padding-left: 0;
+		padding-right: 60px;
+		width: 50px;
+	}
+
+	#agregar{
+		margin-bottom: 0px !important;
+		margin-left: 0px !important;
+		margin-right: 0px !important;
+		margin-top: 0px !important;
+		color: white; 
+		font-weight: 400;
+	}
+
+	.formField {
+		text-align: right;
+		padding-right: 20px;
+	}
+
+	.titulosForm {
+		text-align: left !important;
+	}
+
+}
+
+@media only screen and (max-width: 767px){ 
+
+		.row.addRow{
+		margin-left: 0px !important;
+		margin-right: 0px !important;
+	}
+
+	.modal-header.addHeader{
+		padding-right: 0px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		padding-left: 0px !important;
+		border-bottom: 0px !important;
+	}
+
+	.modal-body.addBody{
+		padding-right: 0px !important;
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		padding-left: 0px !important;
+	}
+
+	#col1Header{
+		border-top-left-radius: 0px;
+		background-color: #606060;
+		height: 0px;
+	}
+
+	#col11Header{
+		background-color: blue;
+		height: 50px;
+		width: 100% !important;
+		border-top-right-radius: 5px;
+	}
+
+	.col1Body{
+		background-color: #505050;
+		height: 40px;
+		width: 100%;
+	}
+
+	#nuevoServicio{
+		text-align: left;
+		padding-top: 12px;
+		color: white;
+	}
+
+	#formularioCarga input{ 
+		border-top: 0px !important;
+		border-left: 0px !important;
+		border-right: 0px !important;
+		box-shadow: none !important;
+		border-bottom-width: 2px;
+		border-radius: 0px;
+		background-color: transparent;
+	}
+
+	#formularioCarga select{ 
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		box-shadow: none;
+		border-radius: 0px;
+		border-bottom-width: 2px;
+		background-color: transparent;
+
+	}
+
+	.step{
+	  background: #505050;
+	  border-radius: 0.8em;
+	  border-color: white !important;
+	  -moz-border-radius: 0.8em;
+	  -webkit-border-radius: 0.8em;
+	  color: white;
+	  display: inline-block;
+	  font-weight: bold;
+	  line-height: 1.6em;
+	  text-align: center;
+	  width: 1.6em;
+	  margin-top: 10px; 
+	  margin: 10px 0 0 10px;
+	}
+
+	.activePass {
+	  background: white;
+	  color: #505050;
+	}
+
+	#plus{
+		padding-left: 0;
+		padding-right: 60px;
+		width: 50px;
+	}
+
+	#agregar{
+		margin-bottom: 0px !important;
+		margin-left: 0px !important;
+		margin-right: 0px !important;
+		margin-top: 0px !important;
+		color: white; 
+		font-weight: 400;
+	}
+
+	.formField {
+		text-align: right;
+		padding-right: 0px;
+	}
+
+	.titulosForm {
+		text-align: left !important;
+	}
+
+}

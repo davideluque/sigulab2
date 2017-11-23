@@ -197,6 +197,9 @@ class ListaServicios(object):
 		self.primera_pagina = 1
 		self.ultima_pagina = int((self.cuenta / 10) + (self.cuenta % 10 > 0))
 
+		if self.ultima_pagina == 0:
+			self.ultima_pagina = 1
+
 		# Pagina a la que ira cada boton, False si el boton no estara presente
 		self.boton_principio = self.primera_pagina
 		self.boton_fin = self.ultima_pagina
@@ -267,6 +270,112 @@ class ListaServicios(object):
 	def orden_y_filtrado(self):
 		self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
 		self.servicios_a_mostrar = self.filas[(self.pagina_central - 1)*10:self.ultimo_elemento]
+
+
+#------------------------------------------------------------------------------
+#
+# Funciones para listar Categorias, Tipos y Sedes
+# funciones de paginado y ordenamiento.
+#
+#------------------------------------------------------------------------------
+
+def listar_categorias(db):
+	query = db().select(db.categorias_servicios.ALL)
+
+	return query
+
+def listar_tipos(db):
+	query = db().select(db.tipos_servicios.ALL)
+
+	return query
+
+def listar_sedes(db):
+	query = db().select(db.sedes.ALL)
+
+	return query
+
+#------------------------------------------------------------------------------
+#
+# Funcion para hacer query de Ficha de Servicio
+#
+#------------------------------------------------------------------------------
+
+
+def query_ficha(db, idv):
+    entrada = db(db.servicios.id == idv).select(db.servicios.ALL)
+
+
+    # Categoria
+    categrow = db(entrada[0].categoria == db.categorias_servicios.id).select(db.categorias_servicios.ALL)
+    categoria = categrow[0].nombre
+
+    # Tipo
+    tiporow = db(entrada[0].tipo == db.tipos_servicios.id).select(db.tipos_servicios.ALL)
+    tipo = tiporow[0].nombre
+
+    # Dependencia
+    dependrow = db(entrada[0].dependencia == db.dependencias.id).select(db.dependencias.ALL)
+    dependencia = dependrow[0].nombre
+    dependenciaid = dependrow[0].id
+
+    # Unidad de Adscripcion
+    adscripcionid = dependrow[0].unidad_de_adscripcion
+
+    adsrow = db(adscripcionid == db.dependencias.id).select(db.dependencias.ALL)
+    adscripcion = adsrow[0].nombre
+
+    # Sede
+    sederow = db(adsrow[0].id_sede == db.sedes.id).select(db.sedes.ALL)
+    sede = sederow[0].nombre
+    sedeid = sederow[0].id
+
+    # Ubicacion Fisica
+    ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
+    ubicacion = ubicrow[0].nombre
+    ubicacionid = ubicrow[0].id
+
+    # Responsable
+    resprow = db(entrada[0].responsable == db.personal.id).select(db.personal.ALL)
+    responsable = resprow[0].nombre
+    respid = resprow[0].id
+
+    # Numeros
+    telefono = resprow[0].telefono
+
+    # Correo
+    email = resprow[0].email
+
+    ficha_con_queries = {"entrada": entrada,
+                         "categoria": categoria,
+                         "tipo": tipo,
+                         "dependencia": dependencia,
+                         "dependenciaid": dependenciaid,
+                         "adscripcion": adscripcion,
+                         "adscripcionid": adscripcionid,
+                         "sede": sede,
+                         "sedeid": sedeid,
+                         "ubicacion": ubicacion,
+                         "ubicacionid": ubicacionid,
+                         "responsable": responsable,
+                         "respid": respid,
+                         "telefono": telefono,
+                         "email": email
+                         }
+
+    return ficha_con_queries
+
+
+#UNIDAD DE ADSCRIPCION:
+#A PARTIR DE SEDE: DEPENDENCIA1 QUE TENGA COMO UNIDAD DE unidad_de_adscripcion A "Direccion" Y A DIRECCION
+
+#DEPENDENCIA:
+#A PARTIR DE DEPENDENCIA1: DEPENDENCIA2 QUE TENGA COMO UNIDAD DE ADSCRIPCION A DEPENDENCIA1
+
+#ESPACIO FISICO:
+#A PARTIR DE DEPENDENCIA2: ESPACIOS FISICOS QUE TENGA COMO DEPENDENCIA ADSCRITA A DEPENDENCIA2
+
+#RESPONSABLE:
+#A PARTIR DE DEPENDENCIA2: PERSONAL QUE TENGA COMO DEPENDENCIA A DEPENDENCIA2
 
 
 

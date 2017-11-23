@@ -1,0 +1,199 @@
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+
+  <div class="modal-header fichaHeader">
+  	<div class="media">
+  		<div class="media-left media-middle">
+      		<img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
+      	</div>
+      	<div class="media-body fichaMedia">
+      		<h4 class="modal-title media-heading fichaHeading"><b>Ficha de Servicio</b></h4>
+      		<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div>
+    </div>
+  </div> 
+
+  <div class="modal-body">
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+	  <li class="nav-item active">
+	    <a class="nav-link" data-toggle="tab" href="#datos" role="tab" aria-controls="datos">Datos Básicos</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#responsable" role="tab" aria-controls="responsable">Responsable</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#especificaciones" role="tab" aria-controls="especificaciones">Especificaciones</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#historial" role="tab" aria-controls="historial">Historial</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#solicitud" role="tab" aria-controls="solicitud">Solicitud</a>
+	  </li>	
+	  <li id="botonesFicha" class="nav-item">
+
+	  </li>	
+
+	</ul>
+
+	<div class="tab-content">
+
+	  <div class="tab-pane active" id="datos" role="tabpanel">
+	  	<table class="table contenidoFicha">
+	  		<tbody>
+	  			<tr>
+		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre}}</td>
+		  		</tr>
+	  			<tr>
+		  			<td>Categoría:</td><td>{{=ficha['categoria']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun}}{{pass}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre}}</td>
+		  		</tr>
+		  	</tbody>
+	  	</table>
+	  </div>
+
+	  <div class="tab-pane" id="responsable" role="tabpanel">
+	  	<table class="table contenidoFicha">
+		  	<tbody>
+		  		<tr>
+		  			<td>Responsable:</td><td>{{=ficha['responsable']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Teléfonos(extensiones):</td><td>{{=ficha['telefono']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Correo electrónico:</td><td>{{=ficha['email']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Dependencia:</td><td>{{=ficha['dependencia']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Unidad de Adscripción:</td><td>{{=ficha['adscripcion']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Ubicación Física:</td><td>{{=ficha['ubicacion']}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Sede:</td><td>{{=ficha['sede']}}</td>
+		  		</tr>
+		  	</tbody>
+	  	</table>	  	
+	  </div>
+
+	  <div class="tab-pane" id="especificaciones" role="tabpanel">
+	  	<table class="table contenidoFicha">
+	  		<tbody>
+	  			<tr>
+		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados}}</td>
+		  		</tr>
+		  	</tbody>
+	  	</table>	  	
+	  </div>
+
+
+		  <div class="tab-pane" id="historial" role="tabpanel">
+		  	<div class="table-responsive">
+			  	<table class="contenidoFicha table" border="1px">
+			  		<thead>
+				  		<tr>
+				  			<th id="fichaTabla">Fecha Inicio</th>
+				  			<th id="fichaTabla">Fecha Culminación</th>
+				  			<th id="fichaTabla">No. Muestras</th>
+				  			<th id="fichaTabla">Cliente</th>
+				  			<th id="fichaTabla">Orden de Servicio</th>
+				  		</tr>
+				  	<thead>
+			  	</table>
+			</div>
+		  </div>
+
+
+	  <div class="tab-pane" id="solicitud" role="tabpanel">
+	  </div>
+
+	</div>
+  </div>
+
+  <div class="modal-footer">
+	  <form method="post">
+	  	<input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}">
+	  	<input type="hidden" name="dependenciaFicha" value="{{=ficha['dependencia']}}">
+        <input type="hidden" name="dependenciaIdFicha" value="{{=ficha['dependenciaid']}}">
+	  	<input type="hidden" name="adscripcionFicha" value="{{=ficha['adscripcion']}}">
+        <input type="hidden" name="adscripcionIdFicha" value="{{=ficha['adscripcionid']}}">
+	  	<input type="hidden" name="ubicacionFicha" value="{{=ficha['ubicacion']}}">
+        <input type="hidden" name="ubicacionIdFicha" value="{{=ficha['ubicacionid']}}">
+	  	<input type="hidden" name="sedeFicha" value="{{=ficha['sede']}}">
+        <input type="hidden" name="sedeIdFicha" value="{{=ficha['sedeid']}}">
+        <input type="hidden" name="responsableIdFicha" value="{{=ficha['respid']}}">
+        <input type="hidden" name="responsableNombreFicha" value="{{=ficha['responsable']}}">
+        <input type="hidden" name="responsableEmailFicha" value="{{=ficha['email']}}">
+
+        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
+	    <div class="btn-group botonesFicha">
+		  <button type="submit" class="btn botonesFichita" name="edit" value="True" onclick="ejecutate();">Editar</button>
+
+		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
+
+		  <!-- Modal del boton eliminar-->
+		  <div class="modal fade" id="modalEliminar" role="dialog">
+		    <div class="modal-dialog">
+		    
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar el servicio?</h4>
+		        </div>
+		        <div id="cuerpoModalElim" class="modal-body">
+		          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
+		          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
+		        </div>
+		      </div>
+		  
+		    </div>
+		  </div>
+
+		  {{if ficha['entrada'][0].visibilidad: }}
+		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
+		  {{else: }}
+		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
+		  {{pass}}
+		</div>
+      {{pass}}
+
+		</form>
+	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+  </div>
+
+
+<script type="text/javascript">
+	function cerrar() {
+		$("#modalEliminar").modal("hide")
+	}
+</script>

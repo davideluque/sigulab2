@@ -58,7 +58,7 @@ db.define_table(
 	Field('responsable',		'reference personal',
 		  requires=IS_IN_DB(db, db.personal.id, '%(nombre)s'), label=T('Encargado')),
 
-	# Seccion
+	# Dependencia
 	Field('dependencia',		'reference dependencias',
 		  requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencias')),
 
