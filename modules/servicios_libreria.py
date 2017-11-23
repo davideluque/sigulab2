@@ -392,14 +392,3 @@ def query_ficha(db, idv):
 #
 #------------------------------------------------------------------------------
 
-class Solicitudio(object): 
-	def __init__(self, db, nombre = None, registro= None,dependencia=None,
-				jefe_pendencia=None, responsable=None,  email_responsable=None,
-				telefonos_responsable=None,fecha None,id_servicio_solicitud= None,
-				proposito=None,proposito_descripcion=None, proposito_cliente_final= None,
-				descripcion=None,observaciones=None, id_dependencia_ejecutora_solicitud=None,
-				lugar_ejecucion=None,jefede_pendencia_ejecutora=None, estado=None, 
-				email_aprueba=None, fecha_aprobacion= None):
-
-		self.nombre = nombre
-		
