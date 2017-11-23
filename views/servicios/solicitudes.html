@@ -69,6 +69,7 @@
   </div>
 
   <!-- Inicio botones pagina -->
+  {{if controls:}}
 	<div class="row">
 	  {{if controls['firstpage']:}}
 	    <button name="page" value="{{=controls.firstpage}}"> << </button>
@@ -86,6 +87,7 @@
 	    <button name="page" value="{{=controls.lastpage}}"> >> </button>
 	  {{pass}}
 	</div>
+  {{pass}}
    <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado Solicitudes -->

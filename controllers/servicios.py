@@ -209,3 +209,9 @@ def ajax_obtener_responsable():
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
 
+def solicitudes():
+    return dict(grid=[], controls=False)
+
+def certificaciones():
+    return dict()
+
