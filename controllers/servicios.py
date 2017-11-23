@@ -201,7 +201,7 @@ def ajax_obtener_ubicacion():
 def ajax_obtener_responsable():
     session.forget(response)
     print("ANTES")
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
+    responsable_query = db((db.t_Personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
     print("DESPUES")
     responsables_a_mostrar = []
 

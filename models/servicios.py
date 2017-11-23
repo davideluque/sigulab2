@@ -55,8 +55,8 @@ db.define_table(
 	Field('visibilidad',		'boolean', default=True, label=T('Visible')),
 
 	# Prof Encargado
-	Field('responsable',		'reference personal',
-		  requires=IS_IN_DB(db, db.personal.id, '%(nombre)s'), label=T('Encargado')),
+	Field('responsable',		'reference t_Personal',
+		  requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s'), label=T('Encargado')),
 
 	# Dependencia
 	Field('dependencia',		'reference dependencias',
@@ -84,15 +84,15 @@ db.define_table(
 )
 
 db.define_table(
-	'solicitudes',
+	'solicitudes',	
 
 	Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_pendencia', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	Field('jefe_pendencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
-	Field('responsable', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
+	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
 
 	# TODO: Conectar el email con el responsable
 	#
@@ -125,7 +125,7 @@ db.define_table(
 	#######################################################
 	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 	
-	Field('jefede_pendencia_ejecutora', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
+	Field('jefede_pendencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
 	# TO DO: Conectar este correo con las validaciones de solicitudes
 	#
@@ -147,7 +147,6 @@ db.define_table(
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Aprobacion de Solicitud')),
 
 )
-
 
 
 ##################################################################################################
