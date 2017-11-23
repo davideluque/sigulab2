@@ -114,8 +114,8 @@
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
 </body>
 
-<script language="javascript" src="../static/js/jQuery.js"></script>
-<script language="javascript" src="../static/js/web2py.js"></script>
+<script language="javascript" src="{{=URL('static', 'js/jquery.js')}}"></script>
+<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
     function setMembership(){
         ajax('ajax_membership', ['laboratorio', 'rol', 'seccion'], 'hiddendiv');
@@ -126,6 +126,7 @@
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var x = document.getElementById("dependenciahidden");
         x.value = rolelegida;
+
         ajax('ajax_unidad_rol', ['dependenciahidden'], 'unidaddiv');
     }
 
