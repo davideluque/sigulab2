@@ -191,3 +191,30 @@ if db(db.propositos).isempty():
   db.propositos.insert(tipo='Extensión')
   db.propositos.insert(tipo='Gestión')
 
+if db(db.tipos_servicios).isempty():
+  db.tipos_servicios.insert(name='Ensayo')
+  db.tipos_servicios.insert(name='Inspección')
+  db.tipos_servicios.insert(name='Calibración')  
+  db.tipos_servicios.insert(name='Desarrollo de prototipos y piezas')
+  db.tipos_servicios.insert(name='Consultoría / Asesoría Técnica y Proyectos')
+  db.tipos_servicios.insert(name='Formación / Capacitación / Transferencia Tecnológica')
+  db.tipos_servicios.insert(name='Sala de Computadoras')
+  db.tipos_servicios.insert(name='Sala de Videos')
+  db.tipos_servicios.insert(name='Verificación')
+
+if db(db.categorias_servicios).isempty():
+  db.categorias_servicios.insert(name='Alimento')
+  db.categorias_servicios.insert(name='Ambiente')
+  db.categorias_servicios.insert(name='Arquitectura, Urbanismo y Arte')
+  db.categorias_servicios.insert(name='Biología')
+  db.categorias_servicios.insert(name='Energía')
+  db.categorias_servicios.insert(name='Manufactura, Instrumentación y Control')
+  db.categorias_servicios.insert(name='Matemáticas y Estadísticas')
+  db.categorias_servicios.insert(name='Mecánica y Materiales')
+  db.categorias_servicios.insert(name='Química')
+  db.categorias_servicios.insert(name='Física')  
+  db.categorias_servicios.insert(name='Informática, Computación, Comunicación e Información')
+  db.categorias_servicios.insert(name='Música')
+  db.categorias_servicios.insert(name='Salud')
+  db.categorias_servicios.insert(name='Otros')
+  
