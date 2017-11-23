@@ -197,6 +197,9 @@ class ListaServicios(object):
 		self.primera_pagina = 1
 		self.ultima_pagina = int((self.cuenta / 10) + (self.cuenta % 10 > 0))
 
+		if self.ultima_pagina == 0:
+			self.ultima_pagina = 1
+
 		# Pagina a la que ira cada boton, False si el boton no estara presente
 		self.boton_principio = self.primera_pagina
 		self.boton_fin = self.ultima_pagina
@@ -267,6 +270,38 @@ class ListaServicios(object):
 	def orden_y_filtrado(self):
 		self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
 		self.servicios_a_mostrar = self.filas[(self.pagina_central - 1)*10:self.ultimo_elemento]
+
+
+#------------------------------------------------------------------------------
+#
+# Funciones para listar Categorias, Tipos y Sedes
+# funciones de paginado y ordenamiento.
+#
+#------------------------------------------------------------------------------
+
+def listar_categorias(db):
+	query = db().select(db.categorias_servicios.ALL)
+
+	return query
+
+def listar_tipos(db):
+	query = db().select(db.tipos_servicios.ALL)
+
+	return query
+
+def listar_sedes(db):
+	query = db().select(db.sedes.ALL)
+
+	return query
+
+
+#A PARTIR DE SEDE: DEPENDENCIA1 QUE TENGA COMO UNIDAD DE unidad_de_adscripcion A "Direccion"
+
+#A PARTIR DE DEPENDENCIA1: DEPENDENCIA2 QUE TENGA COMO UNIDAD DE ADSCRIPCION A DEPENDENCIA1
+
+#A PARTIR DE DEPENDENCIA2: ESPACIOS FISICOS QUE TENGA COMO DEPENDENCIA ADSCRITA A DEPENDENCIA2
+
+#A PARTIR DE DEPENDENCIA2: PERSONAL QUE TENGA COMO DEPENDENCIA A DEPENDENCIA2
 
 
 

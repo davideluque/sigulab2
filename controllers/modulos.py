@@ -12,10 +12,11 @@
 
 # Pagina, botones de eleccion entre nuestros modulos
 # o SMDP
-
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return dict()
-
+    
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def sigulab2():
     return dict()
 
