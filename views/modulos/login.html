@@ -78,6 +78,14 @@
                 </div>
                 {{=form.custom.begin}}
                 {{=form.custom.end}}
+                {{if form.errors:}}
+                  <ul>
+                  {{for fieldname in form.errors:}}
+                    <li> error: {{=form.errors[fieldname]}}</li>
+                  {{pass}}
+                  </ul>
+                  {{form.errors.clear()}}
+                {{pass}}
             </form>
             <!-- Fin form login -->
         </div>
