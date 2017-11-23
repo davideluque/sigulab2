@@ -1,0 +1,87 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}">  
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab')}}">Inicio</a>
+  <span class="breadcrumb-item active">Personal</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación --> 
+
+<!-- Contenido principal de la página de gestión de servicios -->
+<div id="main" class="container">
+    <div id="fila1" class="row">
+
+      <h2 id="tituloBienvenida">Gestión de Personal</h2>
+
+    </div>
+
+    <div id="fila2" class="row">
+
+      <div class="col-sm-3">
+      </div>
+
+      <div class="col-sm-6">
+
+        <div class="col-sm-6 columnas">
+          <a href="{{=URL('listado')}}">
+            <img class="iconos" src="{{=URL('static','images/servicios/clipboard.png')}}">
+            <h4 class="opciones">Listado General</h4>
+          </a>
+        </div>
+
+        <div class="col-sm-6 columnas">
+          <a href="#">
+            <img class="iconos" src="{{=URL('static','images/servicios/file.png')}}">
+            <h4 class="opciones">Listado por Categorias</h4>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="col-sm-3">
+      </div>
+
+    </div>
+
+    <div id="fila3" class="row">
+
+      <div class="col-sm-3">
+      </div>
+
+      <div class="col-sm-6">
+
+        <div class="col-sm-6 columnas">
+          <a href="#">
+            <img class="iconos" src="{{=URL('static','images/servicios/diploma.png')}}">
+            <h4 class="opciones">Listado por Dependencias</h4>
+          </a>
+        </div>
+
+        <div class="col-sm-6 columnas">
+          <a href="#">
+            <img class="iconos" src="{{=URL('static','images/servicios/history.png')}}">
+            <h4 class="opciones">Listado por Años de Servicio</h4>
+          </a>
+        </div>
+        
+      </div>
+
+      <div class="col-sm-3">
+      </div>
+
+    </div>
+</div>
+<!-- Fin del contenido principal de la página de gestión de servicios -->
+
+{{end}}
+
+{{end}}
