@@ -1,15 +1,14 @@
 {{extend "layout.html"}}
 
 {{block head}}
-	<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
-	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/nuevo.css')}}">
-  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/prueba.css')}}">
-	<script src="{{=URL('static', 'js/prueba.js')}}"></script>
+  <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
 {{end}}
 
 {{block center}}
-
 <!-- Breadcrumb de navegación -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
@@ -20,57 +19,62 @@
 </nav>
 <!-- Fin del Breadcrum de navegación --> 
 
-<div class="container" style="padding-top:25px">
-	<div class="table-responsive" >
-		<table class="table table-hover" style="border: 1.5px !important; border-style: solid !important; border-color: #ddd !important;">
-		 <thead>
-				<tr>
-					<form>
-						<th><button class="btn-link" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
-						<th><button class="btn-link" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
-						<th><button class="btn-link" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
-						<th><button class="btn-link" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
-						<th><button class="btn-link" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
-						<th><button class="btn-link" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
-				</tr>
-			</thead>
-	    <tbody>
-				{{for item in grid:}}
-					<tr>
-						<th>{{=item.nombre_categoria}}</th>
-						<th>{{=item.nombre_tipo}}</th>
-						<th>{{=item.nombre}}</a></th>
-						<th>{{=item.seccion}}</th>
-						<th>{{=item.laboratorio}}</th>
-						<th>{{=item.sede}}</th>
-					</tr>
-				{{pass}}
-			</tbody>
-			<tfoot>
-				<tr>
-					<th>
-						{{if firstpage:}}
-							<button name="pagina" value="{{=firstpage}}"> << </button>
+<!-- Inicio Listado -->
+<div class="container" id="listadoContainer">
+	<div class="row">
+		<div class="table-responsive" >
+			<table id="tablaListado" class="table table-hover">
+				<form>
+					<!-- Titulos Listado -->
+					<thead>
+						<tr id="titulosListado">
+							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
+							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
+							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
+							<th class="camposTabla"><button class="btn-link" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
+							<th class="camposTabla"><button class="btn-link" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
+							<th class="camposTabla"><button class="btn-link" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
+						</tr>
+					</thead>
+		    		<!-- Contenido Listado -->
+		    		<tbody>
+						{{for item in grid:}}
+							<tr>
+								<th class="camposTabla">{{=item.nombre_categoria}}</th>
+								<th class="camposTabla">{{=item.nombre_tipo}}</th>
+								<th class="camposTabla">{{=item.nombre}}</a></th>
+								<th class="camposTabla">{{=item.seccion}}</th>
+								<th class="camposTabla">{{=item.laboratorio}}</th>
+								<th class="camposTabla">{{=item.sede}}</th>
+							</tr>
 						{{pass}}
-						{{if prevpage:}}
-							<button name="pagina" value="{{=prevpage}}"> < </button>
-						{{pass}}
-						{{for page in pages:}}
-							<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-						{{pass}}
-						{{if nextpage:}}
-							<button name="pagina" value="{{=nextpage}}"> > </button>
-						{{pass}}
-						{{if lastpage:}}
-							<button name="pagina" value="{{=lastpage}}"> >> </button>
-						{{pass}}
-					</th><th></th><th></th><th></th><th></th><th></th>
-				</tr>
-			</tfoot>
-		</table>
+					</tbody>
+				</form>
+			</table>
+		</div>
 	</div>
-</div>
 
+	<!-- Inicio botones pagina -->
+	<div class="row">
+      {{if firstpage:}}
+        <button name="page" value="{{=firstpage}}"> << </button>
+      {{pass}}
+      {{if prevpage:}}
+        <button name="page" value="{{=prevpage}}"> < </button>
+      {{pass}}
+      {{for page in pages:}}
+        <button name="page" value="{{=page}}" {{if page == actualpage:}}class="active"{{pass}}>{{=page}}</button>
+      {{pass}}
+      {{if nextpage:}}
+        <button name="page" value="{{=nextpage}}"> > </button>
+      {{pass}}
+      {{if lastpage:}}
+        <button name="page" value="{{=lastpage}}"> >> </button>
+      {{pass}}
+    </div>
+    <!-- Fin botones pagina -->
+
+</div>
 
 
 <input type="hidden" id="sede" name="sede" value="">
@@ -161,5 +165,6 @@
 	$('#addservice').modalSteps();
 
 </script>
+<!-- Fin Listado --> 
 {{end}}
 

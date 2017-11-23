@@ -11,7 +11,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+<script src="{{=URL('static', 'js/web2py.js')}}"></script>
     {{block head}}
     {{end}} 
 </head>
@@ -83,8 +83,8 @@
               <span id="iconoUser" class="glyphicon glyphicon-user dropdown-toggle"></span>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="{{=URL('modulos', 'editprofile', args='profile')}}">{{=auth.user.first_name}}  {{=auth.user.last_name}}</a></li>
-              <li><a href="{{=URL('servicios', 'usuario', args='logout')}}">Salir</a></li>
+              <li>{{if auth.is_logged_in():}}<a href="{{=URL('modulos', 'editprofile', args='profile')}}">{{=auth.user.first_name}}  {{=auth.user.last_name}}</a>{{pass}}</li>
+              <li><a href="{{=URL('modulos','logout')}}">Salir</a></li>
             </ul>
           </div>
         </li>
