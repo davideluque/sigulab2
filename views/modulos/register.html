@@ -68,57 +68,38 @@
                 </div>
             </div>
 
-
             <!-- Tipos de Rol -->
             <div class="form-group">
                 <div class="col-xs-12">
-                    <select class="form-control" type="select" required="" id="rol" placeholder="Rol">
+                    <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
                         <option value="" selected hidden disabled>Rol</option>
-                        <option value="">Coordinador</option>
-                        <option value="">Director</option>
-                        <option value="">Tecnico</option>
-                        <option value="">Personal de Coordinacion</option>
-                        <option value="">Jefe de Seccion</option>
-                        <option value="">Jefe de Laboratorio</option>
-                        <option value="">Gestor</option>
+                        {{for rol in roles:}}
+                        <option value='{{=rol.id}}'>{{=rol.role}}</option>
+                        {{pass}}
                     </select>
                 </div>
             </div>
 
-            <!-- Tipos de Sección -->
-            <div class="form-group">
-                <div class="col-xs-12">
-                    <select class="form-control" type="select" required="" placeholder="Sección">
-                        <option value="" selected hidden disabled>Sección</option>
-                        <option value="">Acústica y Comunicaciones</option>
-                        <option value="">Aeronave (Litoral)</option>
-                    </select>
-                </div>
-            </div>
+            <div id="unidaddiv" class="form-group"></div>
 
-            <!-- Laboratorio -->
-            <div class="form-group">
-                <div class="col-xs-12">
-                    <select class="form-control" type="select" required="" placeholder="Laboratorio">
-                        <option value="" selected hidden disabled>Laboratorio</option>
-                        <option value="">Laboratorio A</option>
-                        <option value="">Laboratorio B</option>
-                        <option value="">Laboratorio C</option>
-                        <option value="">Laboratorio D</option>
-                        <option value="">Laboratorio E</option>
-                        <option value="">Laboratorio F</option>
-                        <option value="">Laboratorio G</option>
-                    </select>
-                </div>
-            </div>
+            <div id="secciondiv" class="form-group"></div>
 
             <div class="form-group text-center m-t-40" id="submit_record__row">
-                <div class="col-xs-12">
-                    <input id="botonSubmitRegister" class="btn btn-primary botones" type="submit" value="Registrarse">
+
+                <div class="col-xs-12 col-sm-offset-3" onclick="setMembership();">
+                    <input class="btn btn-primary" type="submit" value="Registrarse">
                 </div>
             </div>
             {{=form.custom.begin}}
             {{=form.custom.end}}
+            {{if form.errors:}}
+              <ul>
+              {{for fieldname in form.errors:}}
+                <li> error: {{=form.errors[fieldname]}}</li>
+              {{pass}}
+              </ul>
+              {{form.errors.clear()}}
+            {{pass}}
         </form>
         <!-- Fin form de registro -->
         </div>
@@ -127,5 +108,38 @@
     <!-- Fin card-box -->
 </div>
 <!-- Fin Wrapper -->
+<input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
 </body>
+
+<input type="hidden" id="seccionhidden" name="seccionhidden" value="">
+</body>
+
+<script language="javascript" src="../static/js/jQuery.js"></script>
+<script language="javascript" src="../static/js/web2py.js"></script>
+<script language="javascript">
+    function setMembership(){
+        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion'], 'hiddendiv');
+    }
+
+    function getUnidad(){
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+        var x = document.getElementById("dependenciahidden");
+        x.value = rolelegida;
+        ajax('ajax_unidad_rol', ['dependenciahidden'], 'unidaddiv');
+    }
+
+    function getSeccion(){
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+        var opcioneslab = document.getElementById("laboratorio");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var x = document.getElementById("dependenciahidden");
+        x.value = rolelegida;
+        var x = document.getElementById("seccionhidden");
+        x.value = labelegido;
+        ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
+    }
+
+</script>
 </html>

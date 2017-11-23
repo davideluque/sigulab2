@@ -7,12 +7,7 @@
 
 # Pagina principal (Boton de SMDP y otros modulos)
 def index():
-    
-    message=auth.user
-    message2=""
-    if request.post_vars.rol:
-        message2=request.post_vars.rol
-    return dict(message=message, message2=message2)
+    return dict()
 
 #--------------------------------------
 # Otras Funcionalidades Basicas

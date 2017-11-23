@@ -22,11 +22,16 @@
 <!-- Fin del Breadcrum de navegación --> 
 
 <!-- Inicio Boton Agregar Listado -->
-<div class="container">
+<div class="container" id="containerAgregar">
 	<div class="row">
+		<div class="col-sm-6"></div>
 		<div id="columnBotonAgregar" class="col-sm-6">
+			<div class="col-sm-6"></div>
+
+			<div class="col-sm-6"
                 <!-- Boton que lleva al modal -->
-              <button type="button" id="botonAgregar" class="btn btn-info" data-toggle="modal" data-target="#addservice">Agregar Servicio</button>
+              <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addservice">Agregar Servicio</button>
+            </div>
         </div>
 	</div>
 </div>
@@ -41,12 +46,12 @@
 					<!-- Titulos Listado -->
 					<thead>
 						<tr id="titulosListado">
-							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
-							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
-							<th class="camposTabla"><button class="btn-link" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
-							<th class="camposTabla"><button class="btn-link" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
-							<th class="camposTabla"><button class="btn-link" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
-							<th class="camposTabla"><button class="btn-link" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
+							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
 						</tr>
 					</thead>
 		    		<!-- Contenido Listado -->
@@ -55,7 +60,7 @@
 							<tr>
 								<th class="camposTabla">{{=item.nombre_categoria}}</th>
 								<th class="camposTabla">{{=item.nombre_tipo}}</th>
-								<th class="camposTabla">{{=item.nombre}}</a></th>
+								<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.nombre}}</a></th>
 								<th class="camposTabla">{{=item.seccion}}</th>
 								<th class="camposTabla">{{=item.laboratorio}}</th>
 								<th class="camposTabla">{{=item.sede}}</th>
@@ -69,31 +74,20 @@
 
 	<!-- Inicio botones pagina -->
 	<div class="row">
-      {{if firstpage:}}
-        <button name="page" value="{{=firstpage}}"> << </button>
-      {{pass}}
-      {{if prevpage:}}
-        <button name="page" value="{{=prevpage}}"> < </button>
-      {{pass}}
-      {{for page in pages:}}
-        <button name="page" value="{{=page}}" {{if page == actualpage:}}class="active"{{pass}}>{{=page}}</button>
-      {{pass}}
-      {{if nextpage:}}
-        <button name="page" value="{{=nextpage}}"> > </button>
-      {{pass}}
-      {{if lastpage:}}
-        <button name="page" value="{{=lastpage}}"> >> </button>
-      {{pass}}
+		<form>
+			{{for page in pages:}}
+				<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+			{{pass}}
+		</form>
     </div>
     <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado --> 
 
-<!-- Ajax -->
+<!-- Ajax abrirFicha-->
 <input type="hidden" id="serv" name="serv" value="">
 
-<!-- Inicio Modal Agregar Servicio -->
-<!-- Modal ficha de servicio -->
+<!-- Inicio Modal ficha de Servicio -->
   <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -153,7 +147,8 @@
                               <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
                                 <option value="" selected hidden >Categoria</option>
 		                        {{for categoria in categorias:}}
-		                        <option value="{{=categoria.id}}">{{=categoria.f_nombre_CategoriaServicio}}</option>
+
+		                        <option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
 		                        {{pass}} 
                               </select>
                             </div>
@@ -161,7 +156,8 @@
                               <select class="form-control" type="select" id="sel2" name="tipoServicio" required>
                                 <option value="" selected hidden >Tipo</option>
 		                        {{for tipo in tipos:}}
-		                        <option value="{{=tipo.id}}">{{=tipo.f_nombre_TipoServicio}}</option>
+
+		                        <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
 		                        {{pass}}
                               </select>
                             </div>
@@ -247,19 +243,19 @@
                           </div>-->
 
                           <div class="form-group">
-                            <select class="form-control" type="select" id="sel6" onchange="getLabs(); getSecc(); getUbic(); getResp();" name="sedeServicio" required>
+                            <select class="form-control" type="select" id="sel6" onchange="getAdscripcion(); getDependencia(); getUbicacion(); getResponsable();" name="sedeServicio" required>
                               <option value="" selected hidden >Sede</option>
 		                      {{for sede in sedes:}}
-		                      <option id="sedechoice" value="{{=sede.id}}">{{=sede.f_nombre_sede}}</option>
+		                      <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
 		                      {{pass}}
                             </select>
                           </div>
 
-	                      <div id="laboratoriosdiv" class="form-group">
+	                      <div id="adscripciondiv" class="form-group">
 	                    
 	                      </div>
 
-	                      <div id="seccionsdiv" class="form-group">
+	                      <div id="dependenciadiv" class="form-group">
 	                    
 	                      </div>
 	                    
@@ -555,52 +551,52 @@
 <!-- Ajax getLabs--> 
 <input type="hidden" id="sede" name="sede" value="">
 <!-- Ajax getSecc--> 
-<input type="hidden" id="labo" name="labo" value="">
+<input type="hidden" id="adscripcion" name="adscripcion" value="">
 <!-- Ajax getUbic--> 
-<input type="hidden" id="seccion" name="seccion" value="">
+<input type="hidden" id="dependencia" name="dependencia" value="">
 <!-- Ajax getResp--> 
 <input type="hidden" id="ubicacion" name="ubicacion" value="">
 
 <script language="javascript">
 	
-  function changeTabs(servicio) {
+  function abrirFicha(servicio) {
 		var x = document.getElementById("serv");
 			x.value = servicio;
-		ajax('ficha_modal', ['serv'], "ficha");
+		ajax('ajax_ficha_servicio', ['serv'], "ficha");
 	}
 
-	function getLabs(){
+  function getAdscripcion(){
     var opcionessede = document.getElementById("sel6");
     var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
     var x = document.getElementById("sede");
       x.value = sedeelegida;
-    ajax('laboratorios', ['sede'], "laboratoriosdiv");
+    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
   }
 
-  function getSecc(){
-      var opcioneslab = document.getElementById("sel4");
-      var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-      var x = document.getElementById("labo");
-        x.value = labelegido;
-      ajax('secciones', ['labo'], "seccionsdiv");
+  function getDependencia(){
+      var opcionesads = document.getElementById("sel4");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
 
    }
 
-  function getUbic(){
-      var opcionessecc = document.getElementById("sel3");
-      var seccionelegida = opcionessecc.options[opcionessecc.selectedIndex].value;
-      var x = document.getElementById("seccion");
-        x.value = seccionelegida;
-      ajax('ubicaciones', ['seccion'], "ubicaciondiv");
+  function getUbicacion(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
 
    }
 
-  function getResp(){
-      var opcionesubic = document.getElementById("sel5");
-      var ubicacionelegida =  opcionesubic.options[opcionesubic.selectedIndex].value;
-      var x = document.getElementById("ubicacion");
-        x.value = ubicacionelegida;
-      ajax('responsables', ['ubicacion'], "responsablediv");
+  function getResponsable(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
    }
 
   function getLabs1(){

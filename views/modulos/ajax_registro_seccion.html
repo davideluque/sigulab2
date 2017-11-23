@@ -1,0 +1,10 @@
+{{if lista:}}
+
+<select class="form-control" type="select" required="" id="seccion" name="seccion" placeholder="Sección">
+    <option value="" selected hidden disabled>Sección</option>
+    {{for seccion in lista:}}
+    <option value='{{=seccion.id}}'>{{=seccion.nombre}}</option>
+    {{pass}}
+</select>
+
+{{pass}}
