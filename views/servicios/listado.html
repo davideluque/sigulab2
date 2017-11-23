@@ -80,7 +80,7 @@
 			{{pass}}
 		</form>
     </div>
-     <!-- Fin botones pagina -->
+    <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado --> 
 
@@ -147,6 +147,7 @@
                               <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
                                 <option value="" selected hidden >Categoria</option>
 		                        {{for categoria in categorias:}}
+
 		                        <option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
 		                        {{pass}} 
                               </select>
@@ -155,6 +156,7 @@
                               <select class="form-control" type="select" id="sel2" name="tipoServicio" required>
                                 <option value="" selected hidden >Tipo</option>
 		                        {{for tipo in tipos:}}
+
 		                        <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
 		                        {{pass}}
                               </select>
