@@ -2,9 +2,18 @@
 	text-align: right;
 }
 
-#botonAgregar {
+.botonesListado {
 	background-color: #0300d7; 
 	border-color: #0300d7;
+	color: white;
+}
+
+.botonesListado:hover {
+	color: white;
+}
+
+#botonBusquedaA {
+
 }
 
 #listadoContainer {

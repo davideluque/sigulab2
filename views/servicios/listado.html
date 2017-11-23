@@ -1,4 +1,5 @@
 {{extend "layout.html"}}
+
 {{block head}}
   <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
@@ -74,6 +75,96 @@
     <!-- Fin botones pagina -->
 
 </div>
+
+
+<input type="hidden" id="sede" name="sede" value="">
+<input type="hidden" id="labo" name="labo" value="">
+<input type="hidden" id="seccion" name="seccion" value="">
+<input type="hidden" id="ubicacion" name="ubicacion" value="">
+
+<script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
+<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+<script language="javascript">
+	
+  function changeTabs(servicio) {
+		var x = document.getElementById("serv");
+			x.value = servicio;
+		ajax('ficha_modal', ['serv'], "ficha");
+	}
+
+	function getLabs(){
+    var opcionessede = document.getElementById("sel6");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+    var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('laboratorios', ['sede'], "laboratoriosdiv");
+  }
+
+  function getSecc(){
+      var opcioneslab = document.getElementById("sel4");
+      var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+      var x = document.getElementById("labo");
+        x.value = labelegido;
+      ajax('secciones', ['labo'], "seccionsdiv");
+
+   }
+
+  function getUbic(){
+      var opcionessecc = document.getElementById("sel3");
+      var seccionelegida = opcionessecc.options[opcionessecc.selectedIndex].value;
+      var x = document.getElementById("seccion");
+        x.value = seccionelegida;
+      ajax('ubicaciones', ['seccion'], "ubicaciondiv");
+
+   }
+
+  function getResp(){
+      var opcionesubic = document.getElementById("sel5");
+      var ubicacionelegida =  opcionesubic.options[opcionesubic.selectedIndex].value;
+      var x = document.getElementById("ubicacion");
+        x.value = ubicacionelegida;
+      ajax('responsables', ['ubicacion'], "responsablediv");
+   }
+
+  function getLabs1(){
+    var opcionessede = document.getElementById("sel6.1");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+      var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('laboratoriosEdi', ['sede'], "laboratoriosdiv1");
+    getSecc1();
+  }
+
+  function getSecc1(){
+      var opcioneslab = document.getElementById("sel4.1");
+      var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+      var x = document.getElementById("labo");
+        x.value = labelegido;
+      ajax('seccionesEdi', ['labo'], "seccionsdiv1");
+      getUbic1();
+   }
+
+  function getUbic1(){
+      var opcionessecc = document.getElementById("sel3.1");
+      var seccionelegida = opcionessecc.options[opcionessecc.selectedIndex].value;
+      var x = document.getElementById("seccion");
+        x.value = seccionelegida;
+      ajax('ubicacionesEdi', ['seccion'], "ubicaciondiv1");
+      getResp1();
+   }
+
+  function getResp1(){
+      var opcionesubic = document.getElementById("sel5.1");
+      var ubicacionelegida =  opcionesubic.options[opcionesubic.selectedIndex].value;
+      var x = document.getElementById("ubicacion");
+        x.value = ubicacionelegida;
+      ajax('responsablesEdi', ['ubicacion'], "responsablediv1");
+   }
+
+	$('#addservice').modalSteps();
+
+</script>
 <!-- Fin Listado --> 
 {{end}}
 
