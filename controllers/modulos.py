@@ -98,15 +98,11 @@ def ajax_registro_seccion():
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
-    site_url = URL(request.application, 'modulos', 'recoverpassword', host=True)
+    site_url = URL('modulos', 'recoverpassword', host=True)
     # pagina indicada en el email
     auth.messages.reset_password = 'Por favor clickee el siguiente link ' + site_url + '/?key=' + '%(key)s para resetear su contraseña'
     form = auth.request_reset_password()
     return dict(form=form)
-
-# Recuperacion de Contraseña (reinicio) 
-def recoverpassword():
-    return dict(form=auth.reset_password())
 
 def logout():
     auth.logout()
