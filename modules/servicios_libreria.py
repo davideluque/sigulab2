@@ -130,7 +130,7 @@ class Servicio(object):
 
 	def actualizar(self, id):
 	    
-	    actualizacion = self.db(self.db.servicio.id == id).update(
+	    actualizacion = self.db(self.db.servicios.id == id).update(
 							nombre = self.nombre, 
 							tipo = self.tipo,
 							categoria = self.categoria, 

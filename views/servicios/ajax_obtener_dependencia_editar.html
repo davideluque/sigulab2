@@ -1,0 +1,6 @@
+<select class="form-control" type="select" id="sel3-edit" name="dependenciaServicio" onchange="getUbicacionEdit(); getResponsableEdit();" required>
+    <option value="" selected hidden>Dependencia</option>
+	{{for dep in dependencias:}}
+  <option value="{{=dep.id}}">{{=dep.nombre}}</option>
+  {{pass}}
+</select>

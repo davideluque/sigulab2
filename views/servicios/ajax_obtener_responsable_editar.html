@@ -1,0 +1,6 @@
+<select class="form-control" type="select" id="selresp-edit" name="responsableServicio" required>
+  <option value="" selected hidden>Responsable</option>
+  {{for responsable in responsables:}}
+    <option value="{{=responsable.id}}">{{=responsable.nombre}} | {{=responsable.email}}</option>
+  {{pass}}
+</select>
