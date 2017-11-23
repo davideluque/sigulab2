@@ -126,7 +126,7 @@ mail.settings.tls = myconf.get('smtp.tls')
 # configure auth policy
 # -------------------------------------------------------------------------
 auth.settings.registration_requires_verification = False
-auth.settings.registration_requires_approval = True
+auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 
 # -------------------------------------------------------------------------
