@@ -1,0 +1,43 @@
+#columnBotonAgregar {
+	text-align: right;
+}
+
+#botonAgregar {
+	background-color: #0300d7; 
+	border-color: #0300d7;
+}
+
+#listadoContainer {
+	padding-top: 25px;
+}
+
+#tablaListado {
+ border: 1.5px !important; 
+ border-style: solid !important; 
+ border-color: #ddd !important;
+}
+
+#titulosListado {
+	background-color: #505050;
+}
+
+.camposTabla {
+	text-align: center;
+}
+
+.linksNombres {
+	color: white;
+}
+
+.linksNombres:hover {
+	color: rgba(6, 164, 252, 1);
+	text-decoration: none;
+}
+
+.filtros {
+	width: 200px;
+}
+
+#filtroInput {
+	margin-left: 100px;
+}
