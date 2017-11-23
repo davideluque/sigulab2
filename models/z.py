@@ -183,3 +183,11 @@ if db(db.auth_group).isempty():
     db.auth_group.insert(role='Gestor de SMyDP',description='Gestor de SMyDP')
     db.auth_group.insert(role='Cliente Interno',description='Cliente Interno')
 
+# Propositos de una solicitud
+
+if db(db.propositos).isempty():
+  db.propositos.insert(tipo='Docencia')
+  db.propositos.insert(tipo='Investigación')
+  db.propositos.insert(tipo='Extensión')
+  db.propositos.insert(tipo='Gestión')
+
