@@ -209,9 +209,11 @@ def ajax_obtener_responsable():
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
     return dict(grid=[], controls=False)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
     return dict()
 
