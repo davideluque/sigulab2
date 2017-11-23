@@ -47,19 +47,18 @@ def register():
 
 # Ajax helper para crear una membership para el usuario recien registrado
 def ajax_membership():
-    depid = int(request.post_vars.laboratorio)
-    rolid = int(request.post_vars.rol)
-
+    session.depid = int(request.post_vars.laboratorio)
+    session.rolid = int(request.post_vars.rol)
 
     if request.post_vars.seccion:
-        depid = int(request.post_vars.seccion)
-
-    user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
-
-    print(rolid, depid)
-    print(user.id)
-    db.auth_membership(user_id=user.id, group_id=rolid, dependencia_asociada=depid)
+        session.depid = int(request.post_vars.seccion)
     return dict()
+
+def redireccionando():
+    user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
+    db.auth_membership.insert(user_id=user, group_id=session.rolid, dependencia_asociada=session.depid)
+    session.forget()
+    return redirect(URL('index'))
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():

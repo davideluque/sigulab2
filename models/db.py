@@ -99,7 +99,7 @@ plugins = PluginManager()
 # -------------------------------------------------------------------------
 auth.settings.request_reset_password_next = URL('login')
 auth.settings.login_next = URL('index')
-auth.settings.register_next = URL('index')
+auth.settings.register_next = URL('modulos', 'redireccionando')
 auth.settings.create_user_groups = None
 
 # -------------------------------------------------------------------------
@@ -123,7 +123,7 @@ mail.settings.tls = myconf.get('smtp.tls')
 # configure auth policy
 # -------------------------------------------------------------------------
 auth.settings.registration_requires_verification = False
-auth.settings.registration_requires_approval = False
+auth.settings.registration_requires_approval = True
 auth.settings.reset_password_requires_verification = True
 
 # -------------------------------------------------------------------------
