@@ -90,18 +90,15 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_pendencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
 	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
 
-	# TODO: Conectar el email con el responsable
-	#
-	# ###########################################
-	Field('email_responsable', 'string', label=T('Email del Responsable de la Solicitud')),
+	Field('email_responsable', 'reference t_Personal',requires=IS_IN_DB(db,db.t_Personal.id '%(email)s') , label=T('Email del Responsable de la Solicitud')),
 
 	Field('telefonos_responsable', 'list:string', label=T('Extensiones')),
 
-	Field('fecha',   'date', 
+	Field('fecha_solicitud',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
 
 
@@ -112,7 +109,7 @@ db.define_table(
 	Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
 
 	# Si el propósito es extensión, este campo se llena con el cliente final.
-	Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
+	Field('extension_cliente_final', 'string', label=T('Cliente final del propósito')),
 	
 	Field('descripcion', 'string', label=T('Descripción de la Solicitud')),
 	
@@ -125,7 +122,7 @@ db.define_table(
 	#######################################################
 	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 	
-	Field('jefede_pendencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
+	Field('jefede_pendencia_ejecutora', 'reference t_Personal' , requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
 	# TO DO: Conectar este correo con las validaciones de solicitudes
 	#
@@ -133,15 +130,9 @@ db.define_table(
 	#
 	# Otra cosa: esta tabla sería entonces una tabla de servicios solicitados "pendientes"
 	#######################################################################################
-	#Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
+	Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
 
-	# estado=0 pendiente por aprobar
-	# estado=1 pendiente por ejecutar
-
-	Field('estado','string', default='0', label=T('Pendiente por aprobar')),
-
-
-	Field('email_aprueba', 'string', label=T('Solicitud Aprobada Por')),
+	Field('email_aprueba', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id '%(email)s' ) label=T('Solicitud Aprobada Por')),
 
 	Field('fecha_aprobacion',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Aprobacion de Solicitud')),
