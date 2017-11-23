@@ -13,9 +13,6 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     });
 
-    function checkBoxes(){
-        
-    }
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
@@ -24,6 +21,8 @@ $(document).ready(function () {
 
         parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
             
+            
+
             if ($(this).val() == "") {
                 $(this).addClass('input-error');
                 next_step = false;
