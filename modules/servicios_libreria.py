@@ -392,7 +392,7 @@ def query_ficha(db, idv):
 #
 #------------------------------------------------------------------------------
 
-class Servicio(object):
+class Certificacion(object):
 
 
 	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
@@ -463,5 +463,3 @@ class Servicio(object):
 			fecha_certificacion=self.fecha_certificacion)
 
 		return actualizacion
-
-
