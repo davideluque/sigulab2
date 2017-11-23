@@ -6,9 +6,13 @@
 #
 ###############################################################################
 
+# Sedes
+
 if db(db.sedes).isempty():
   db.sedes.insert(nombre="Sartenejas")
   db.sedes.insert(nombre="Litoral")
+
+# Dependencias
 
 if db(db.dependencias).isempty():
   # Direccion
@@ -191,6 +195,8 @@ if db(db.propositos).isempty():
   db.propositos.insert(tipo='Extensión')
   db.propositos.insert(tipo='Gestión')
 
+# Tipos de servicios
+
 if db(db.tipos_servicios).isempty():
   db.tipos_servicios.insert(nombre='Ensayo')
   db.tipos_servicios.insert(nombre='Inspección')
@@ -201,6 +207,8 @@ if db(db.tipos_servicios).isempty():
   db.tipos_servicios.insert(nombre='Sala de Computadoras')
   db.tipos_servicios.insert(nombre='Sala de Videos')
   db.tipos_servicios.insert(nombre='Verificación')
+
+# Categorias de servicios
 
 if db(db.categorias_servicios).isempty():
   db.categorias_servicios.insert(nombre='Alimento')
@@ -217,3 +225,94 @@ if db(db.categorias_servicios).isempty():
   db.categorias_servicios.insert(nombre='Música')
   db.categorias_servicios.insert(nombre='Salud')
   db.categorias_servicios.insert(nombre='Otros')
+
+# Usuarios Basicos
+
+if db(db.auth_user).isempty():
+  db.auth_user.insert(first_name="Personal", last_name="ULAB", email='personal@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Técnico", last_name="ULAB", email='tecnico@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Jefe de Sección", last_name="ULAB", email='jefsecc@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Jefe de Laboratorio", last_name="ULAB", email='jeflab@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Gestor de Sustancias", last_name="ULAB", email='gestor@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Coordinador", last_name="ULAB", email='coordinador@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Director", last_name="ULAB", email='director@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Super", last_name="Usuario", email='webmaster@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Cliente", last_name="Interno", email='cinterno@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  db.auth_user.insert(first_name="Asistente del Director", last_name="ULAB", email='directassist@usb.ve',
+                      password=db.auth_user.password.validate('0000')[0])
+
+  user = db(db.auth_user.email == 'cinterno@usb.ve').select()[0].id
+  role = db(db.auth_group.role == 'Cliente Interno').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role)
+
+  user = db(db.auth_user.email == 'gestor@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
+  role = db(db.auth_group.role == 'Gestor de SMyDP').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'personal@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
+  role = db(db.auth_group.role == 'Personal de Coordinación').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'tecnico@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Alta Tensión').select()[0].id
+  role = db(db.auth_group.role == 'Técnico').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'jefsecc@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Alta Tensión').select()[0].id
+  role = db(db.auth_group.role == 'Jefe de Sección').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'jeflab@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Laboratorio A').select()[0].id
+  role = db(db.auth_group.role == 'Jefe de Laboratorio').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'coordinador@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Unidad de Administración').select()[0].id
+  role = db(db.auth_group.role == 'Coordinador').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'directassist@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
+  role = db(db.auth_group.role == 'Asistente del Director').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'director@usb.ve').select()[0].id
+  dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
+  role = db(db.auth_group.role == 'Director').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+  user = db(db.auth_user.email == 'webmaster@usb.ve').select()[0].id
+  role = db(db.auth_group.role == 'WebMaster').select()[0].id
+
+  db.auth_membership.insert(user_id=user, group_id=role)
