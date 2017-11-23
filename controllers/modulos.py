@@ -1,5 +1,8 @@
 #!/usr/bin/ python
 # encoding=utf8  
+
+# Caracteres especiales dentro de campos secretos (agregados por web2py)
+# no son aceptados por ciertos navegadores/terminales
 #import sys  
   
 #sys.setdefaultencoding('utf8')
@@ -100,7 +103,7 @@ def ajax_registro_seccion():
 def resetpassword():
     site_url = URL(request.application, 'modulos', 'recoverpassword', host=True)
     # pagina indicada en el email
-    auth.messages.reset_password = 'Por favor clickee el siguiente link ' + site_url + '/?key=' + '%(key)s para resetear su contraseña'
+    auth.messages.reset_password = 'please click this link http://' + site_url+ 'account/reset_password'+ '/?key='+'%(key)s to reset your password'
     form = auth.request_reset_password()
     return dict(form=form)
 
