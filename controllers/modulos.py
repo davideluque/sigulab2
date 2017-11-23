@@ -50,9 +50,10 @@ def register():
 
 # Ajax helper para crear una membership para el usuario recien registrado
 def ajax_membership():
-    session.depid = int(request.post_vars.laboratorio)
+    session.depid = None
     session.rolid = int(request.post_vars.rol)
-
+    if request.post_vars.laboratorio:
+        session.depid = int(request.post_vars.laboratorio)
     if request.post_vars.seccion:
         session.depid = int(request.post_vars.seccion)
     return dict()
