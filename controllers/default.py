@@ -12,6 +12,13 @@ def index():
 def recoverpassword():
     return dict(form=auth.reset_password())
 
+# Inicio de Sesion
+def login():
+    if auth.user:
+        return redirect(URL('index'))
+    form=auth.login()
+    return dict(form=form)
+
 #--------------------------------------
 # Otras Funcionalidades Basicas
 #--------------------------------------
