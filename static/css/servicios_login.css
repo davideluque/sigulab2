@@ -1,0 +1,60 @@
+html {
+	background-color: white !important;
+}
+
+body {
+	background-color: white !important;
+} 
+
+.cabecera {
+	margin-top: 20px;
+}
+
+.boxes {
+	background-color: #606060;
+}
+
+#boxLogin {
+	margin-top: 150px !important;
+}
+
+#boxRegister {
+	margin-top: 40px !important;
+}
+
+#boxResetPassword {
+	margin-top: 250px !important;
+}
+
+#titulo {
+	color: white;
+}
+
+#mensaje {
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+#instruccion {
+	margin-top: 0px;
+	color: white;
+}
+
+.botones {
+	width: 100%;
+	border-radius: 7px;
+	margin-right: 50px;
+}
+
+#botonSubmitRegister {
+	width: 50%;
+	margin-left: 30px;
+}
+
+
+.pagina {
+	margin-top: 20px !important; 
+	margin-bottom: 0px !important;
+}

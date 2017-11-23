@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
+  <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 {{end}}
 
 {{block center}}
@@ -18,6 +20,17 @@
   </div>
 </nav>
 <!-- Fin del Breadcrum de navegación --> 
+
+<!-- Inicio Boton Agregar Listado -->
+<div class="container">
+	<div class="row">
+		<div id="columnBotonAgregar" class="col-sm-6">
+                <!-- Boton que lleva al modal -->
+              <button type="button" id="botonAgregar" class="btn btn-info" data-toggle="modal" data-target="#addservice">Agregar Servicio</button>
+        </div>
+	</div>
+</div>
+<!-- Fin Boton Agregar Listado -->
 
 <!-- Inicio Listado -->
 <div class="container" id="listadoContainer">
@@ -73,17 +86,480 @@
       {{pass}}
     </div>
     <!-- Fin botones pagina -->
-
 </div>
+<!-- Fin Listado --> 
+
+<!-- Ajax -->
+<input type="hidden" id="serv" name="serv" value="">
+
+<!-- Inicio Modal Agregar Servicio -->
+<!-- Modal ficha de servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
+<!-- Modal añadir un servicio -->
+  <div class="modal fade" id="addservice" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Nuevo Servicio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                            <div class="col-sm-1 col1Body">
+                              <span class="step activePass">1</span>
+                              <span class="step">2</span>
+                              <span class="step">3</span>
+                              <span class="step">4</span>             
+                            </div>
+                          <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>                
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
+                                <option value="" selected hidden >Categoria</option>
+		                        {{for categoria in categorias:}}
+		                        <option value="{{=categoria.id}}">{{=categoria.f_nombre_CategoriaServicio}}</option>
+		                        {{pass}} 
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="sel2" name="tipoServicio" required>
+                                <option value="" selected hidden >Tipo</option>
+		                        {{for tipo in tipos:}}
+		                        <option value="{{=tipo.id}}">{{=tipo.f_nombre_TipoServicio}}</option>
+		                        {{pass}}
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <h6>Función</h6>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="docenciaServicio" value="True">Docencia</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="investigacionServicio" value="True">Investigación</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="extensionServicio" value="True">Extensión</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="gestionServicio" value="True">Gestión</label>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                    <!-- Segundo Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                          <!-- Aqui va la barra lateral -->
+                          <div class="col-sm-1 col1Body">
+                            <span class="step">1</span>
+                            <span class="step activePass">2</span>
+                            <span class="step">3</span>
+                            <span class="step">4</span> 
+                          </div>
+
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" placeholder="Objetivo">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" placeholder="Alcance">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="metodo" name="metodoServicio" placeholder="Método">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="rango" name="rangoServicio" placeholder="Rango">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" placeholder="Incertidumbre">
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step activePass">3</span>
+                          <span class="step">4</span> 
+                        </div>
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Responsable y Área</h4>
+
+                          <!--<div class="form-group">
+                            <select class="form-control" id="sel10" name="responsableServicio" required>
+                              <option value="1" selected hidden>Responsable</option>
+                                {for responsable in responsables:}}
+                                <option id="responsablechoice" value="{=responsable.id}}">{=responsable.f_nombre}} | {=responsable.f_email}}</option>
+                              {pass}}
+                            </select>                            
+                          </div>-->
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="sel6" onchange="getLabs(); getSecc(); getUbic(); getResp();" name="sedeServicio" required>
+                              <option value="" selected hidden >Sede</option>
+		                      {{for sede in sedes:}}
+		                      <option id="sedechoice" value="{{=sede.id}}">{{=sede.f_nombre_sede}}</option>
+		                      {{pass}}
+                            </select>
+                          </div>
+
+	                      <div id="laboratoriosdiv" class="form-group">
+	                    
+	                      </div>
+
+	                      <div id="seccionsdiv" class="form-group">
+	                    
+	                      </div>
+	                    
+	                      <div id="ubicaciondiv" class="form-group">
+	                    
+	                      </div>
+
+                          <div id="responsablediv" class="form-group">
+
+	                      </div>
+
+                        </div>
+                      </div> 
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span> 
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm">Especificaciones</h4>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="item" name="itemServicio" placeholder="Item a ensayar" required>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="resultados" name="resultadosServicio" placeholder="Resultados"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                </form>
+            </div>
+          </div>               
 
 
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
+<!-- Fin Modal Agregar Servicio -->
+
+
+<!-- Inicio Modal Editar Servicio -->
+{{if len(editar) != 0:}}
+    <script>
+
+        $(document).ready(function(){
+            document.getElementById("edito").click();
+        });
+
+    </script>
+
+<!-- Modal editar un servicio -->
+  <div class="modal fade" id="editservice" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Editar Servicio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioEdit" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step activePass">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>             
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>                
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nombreServicio" value="{{=editar[0].f_nombre_servicio}}" required>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" id="sel1.1" name="categoriaServicio" required>
+                                <option value="{{=editar[0].f_categoria_servicio}}" selected hidden>{{=db(db.t_CategoriaServicio.id == editar[0].f_categoria_servicio).select(db.t_CategoriaServicio.f_nombre_CategoriaServicio)[0].f_nombre_CategoriaServicio}}</option>
+		                        {{for categoria in categorias:}}
+		                        <option value="{{=categoria.id}}">{{=categoria.f_nombre_CategoriaServicio}}</option>
+		                        {{pass}} 
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" id="sel2.1" name="tipoServicio" required>
+                                <option value="{{=editar[0].f_tipo_servicio}}" selected hidden >{{=db(db.t_TipoServicio.id == editar[0].f_tipo_servicio).select(db.t_TipoServicio.f_nombre_TipoServicio)[0].f_nombre_TipoServicio}}</option>
+		                        {{for tipo in tipos:}}
+		                        <option value="{{=tipo.id}}">{{=tipo.f_nombre_TipoServicio}}</option>
+		                        {{pass}}
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <h6>Función</h6>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="docenciaServicio" value="{{if editar[0].f_docencia_servicio:}}{{=editar[0].f_docencia_servicio}}{{pass}}">Docencia</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="investigacionServicio" value="{{if editar[0].f_investigacion_servicio:}}{{=editar[0].f_investigacion_servicio}}{{pass}}">Investigación</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="extensionServicio" value="{{if editar[0].f_extension_servicio:}}{{=editar[0].f_extension_servicio}}{{pass}}">Extensión</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="gestionServicio" value="{{if editar[0].f_gestion_servicio:}}{{=editar[0].f_gestion_servicio}}{{pass}}">Gestión</label>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                    <!-- Segundo Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                          <!-- Aqui va la barra lateral -->
+                          <div class="col-sm-1 col1Body">
+                            <span class="step">1</span>
+                            <span class="step activePass">2</span>
+                            <span class="step">3</span>
+                            <span class="step">4</span> 
+                          </div>
+
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" value="{{=editar[0].f_objetivo_servicio}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" value="{{=editar[0].f_alcance_servicio}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="metodo" name="metodoServicio" value="{{=editar[0].f_metodo_servicio}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="rango" name="rangoServicio" value="{{=editar[0].f_rango_servicio}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" value="{{=editar[0].f_incertidumbre_servicio}}">
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step activePass">3</span>
+                          <span class="step">4</span> 
+                        </div>
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Responsable y Área</h4>
+
+
+
+                          <div class="form-group">
+
+                              <select class="form-control" id="sel6.1"  onchange="getLabs1();" name="sedeServicio" required>
+                                  <option value="{{=request.post_vars.sedeIdFicha}}" selected hidden >{{=request.post_vars.sedeFicha}}</option>
+                                  {{for sede in sedes:}}
+                                  <option id="sedechoice" value="{{=sede.id}}">{{=sede.f_nombre_sede}}</option>
+                                  {{pass}}
+                              </select>
+                          </div>
+
+
+	                      <div id="laboratoriosdiv1" class="form-group">
+                              <select class="form-control" id="sel4.1" onclick="getLabs1();" name="laboratorioServicio" required>
+                                  <option value="{{=request.post_vars.laboratorioIdFicha}}" selected hidden >{{=request.post_vars.laboratorioFicha}}</option>
+                              </select>
+	                      </div>
+
+	                      <div id="seccionsdiv1" class="form-group">
+	                        <select class="form-control" id="sel3.1" onclick="getSecc1();" name="seccionServicio" required>
+							  <option value="{{=request.post_vars.dependenciaIdFicha}}" selected hidden>{{=request.post_vars.dependenciaFicha}} </option>
+							</select>
+	                      </div>
+	                    
+	                      <div id="ubicaciondiv1" class="form-group">
+						    <select class="form-control" id="sel5.1" onclick="getUbic1();" name="ubicacionServicio" required>
+ 							  <option value="{{=request.post_vars.ubicacionIdFicha}}" selected hidden>{{=request.post_vars.ubicacionFicha}}</option>
+ 							</select>	                    
+	                      </div>
+
+                            <div id="responsablediv1" class="form-group">
+						    <select class="form-control" id="selresp.1" onclick="getResp1();" name="responsableServicio" required>
+ 							  <option value="{{=request.post_vars.responsableIdFicha}}" selected hidden>{{=request.post_vars.responsableNombreFicha}} | {{=request.post_vars.responsableEmailFicha}}</option>
+ 							</select>
+	                      </div>
+
+                        </div>
+                      </div> 
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span> 
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm">Especificaciones</h4>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="item" name="itemServicio" value="{{=editar[0].f_itemensayar_servicio}}" required>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" value="{{=editar[0].f_requisitos_servicio}}">{{=editar[0].f_requisitos_servicio}}</textarea>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="resultados" name="resultadosServicio" value="{{=editar[0].f_resultados_servicio}}"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
+                      <button type="submit" class="btn btn-submit botonForm" form="formularioEdit" name="envio" value="edicion" id="submit">Guardar Cambios</button>
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+                </form>
+            </div>
+          </div>               
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+{{pass}}
+<!-- Fin Modal Editar Servicio -->
+
+<!-- Ajax getLabs--> 
 <input type="hidden" id="sede" name="sede" value="">
+<!-- Ajax getSecc--> 
 <input type="hidden" id="labo" name="labo" value="">
+<!-- Ajax getUbic--> 
 <input type="hidden" id="seccion" name="seccion" value="">
+<!-- Ajax getResp--> 
 <input type="hidden" id="ubicacion" name="ubicacion" value="">
-
-<script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
-<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 
 <script language="javascript">
 	
@@ -165,6 +641,4 @@
 	$('#addservice').modalSteps();
 
 </script>
-<!-- Fin Listado --> 
 {{end}}
-

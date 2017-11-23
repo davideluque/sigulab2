@@ -9,7 +9,7 @@
     <link href="{{=URL('static','css/pages.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/loginSIGULAB.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/servicios_login.css')}}" rel="stylesheet" type="text/css"/>
     <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
 </head>
 
@@ -17,10 +17,10 @@
 <!-- Inicio Wrapper -->
 <div class="wrapper-page">
     <!-- Inicio Card Box -->
-    <div class="m-t-40 card-box" id="box">
+    <div class="m-t-40 card-box boxes" id="boxLogin">
         
-        <div class="text-center">
-            <h4 class="text-uppercase font-bold m-b-0">SIGULAB</h4>
+        <div class="text-center cabecera">
+            <h4 id="titulo" class="text-uppercase font-bold m-b-0">SIGULAB</h4>
         </div>
         
         <!-- Inicio panel -->
@@ -48,13 +48,14 @@
                         <div class="form-group m-t-30 m-b-0">
                         
                         <div class="col-sm-12">
-                            <a href="resetpassword" class="text-muted">¿Has olvidado tu contraseña?</a>
+                            <a href="resetpassword" class="text-muted"><p id="mensaje">¿Has olvidado tu contraseña?</p></a>
                         </div>
                     </div>
                     </div></div>
 
                 <!-- Check box Recordar contrasena --> 
-                <div class="form-group" id="auth_user_remember_me__row">    <div class="col-sm-offset-3 col-xs-12">
+                <div class="form-group" id="auth_user_remember_me__row">    
+                    <div class="col-xs-12 col-sm-offset-3">
                         <div class="checkbox checkbox-custom">
     <!--                         <label class="" id="auth_user_remember_me__label">
                             <input class="boolean" id="auth_user_remember_me" name="remember_me" type="checkbox" value="on"> Recordar mis datos</label> -->
@@ -65,15 +66,15 @@
 
                 <!-- Boton Iniciar Sesion -->
                 <div class="form-group text-center m-t-30" id="submit_record__row">
-                    <div class="col-xs-12 col-sm-offset-3">
-                        <input class="btn btn-primary" type="submit" value="Iniciar sesion">
+                    <div class="col-xs-12 ">
+                        <input id="botonLogin" class="btn btn-primary botones" type="submit" value="Iniciar sesion">
                     </div>
                 </div>
 
                 <!-- Boton Registrarse -->
                 <div class="form-group text-center m-t-30" id="submit_record__row">
-                    <div class="col-xs-12 col-sm-offset-3">
-                        <a href="{{=URL('register')}}"><input class="btn btn-primary" value="Registrarse"></a>
+                    <div class="col-xs-12">
+                        <a href="{{=URL('register')}}"><input id="botonRegister" class="btn btn-primary botones" value="Registrarse"></a>
                     </div>
                 </div>
                 {{=form.custom.begin}}
