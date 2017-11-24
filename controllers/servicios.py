@@ -123,13 +123,22 @@ def listado():
                 sedes=listar_sedes(db), editar=editar)
 
 
-
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
     return dict(grid=[], controls=False)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
+
+    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
+    listado_de_solicitudes = [solicitud_trial]*100
+    print(listado_de_solicitudes[20].registro)
+
+    return dict(grid=listado_de_solicitudes)
+
+def ajax_certificacion_servicio():
+    print(request.post_vars.solicitud)
+
     return dict()
 
 
@@ -210,7 +219,7 @@ def ajax_obtener_ubicacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable():
     session.forget(response)
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:
@@ -252,7 +261,7 @@ def ajax_obtener_ubicacion_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable_editar():
     session.forget(response)
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:

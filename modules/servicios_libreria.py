@@ -284,7 +284,7 @@ class ListaServicios(object):
 # Funciones para listar Categorias, Tipos y Sedes
 # funciones de paginado y ordenamiento.
 #
-#------------------------------------------------------------------------------
+#--------------------------x----------------------------------------------------
 
 def listar_categorias(db):
 	query = db().select(db.categorias_servicios.ALL)

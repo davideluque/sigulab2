@@ -31,7 +31,8 @@ db.define_table(
     #Atributos;
     Field('nombre', 'string', notnull=True, label=T('Nombre')),
     # Auto-Referencia
-    Field('unidad_de_adscripcion', 'reference dependencias', requires=False), label=T('Unidad de Adscripción')
+    Field('unidad_de_adscripcion', 'reference dependencias', requires=False, label=T('Unidad de Adscripción')),
+    Field('id_sede', 'reference sedes', requires=IS_IN_DB(db, db.sedes.id, '%(nombre)s'), label=T('Sede')),
 )
 
 # Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos
