@@ -145,25 +145,44 @@ def solicitudes():
 def certificaciones():
 
     # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
-    if request.post_vars.edicion:
-        print("cool")
+    if request.post_vars.registro:
         registro = request.post_vars.registro
         proyecto = request.post_vars.proyecto
         elaborado_por = request.post_vars.usuarioid
         dependencia = request.post_vars.dependenciaid
-        print(dependencia)
         solicitud = request.post_vars.solicitudid
         fecha = request.post_vars.fecha
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
 
-        print(certificado.insertar())
+        certificado.insertar()
+    #-------------------FIN------------------------
 
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
 
-    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
-    listado_de_solicitudes = [solicitud_trial]*100
+    listado_de_solicitudes = ListaSolicitudes(db)
 
-    return dict(grid=listado_de_solicitudes)
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage = listado_de_solicitudes.boton_principio
+    lastpage = listado_de_solicitudes.boton_fin
+    nextpage = listado_de_solicitudes.boton_siguiente
+    prevpage = listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage,
+                categorias=listar_categorias(db), tipos=listar_tipos(db),
+                sedes=listar_sedes(db))
 
 def ajax_certificar_servicio():
     solicitudesid = request.post_vars.solicitud

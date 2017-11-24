@@ -20,7 +20,7 @@ db.define_table(
 )
 
 
-db.categorias_servicios._plural = 'Categorías', 
+db.categorias_servicios._plural = 'Categorías',
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.

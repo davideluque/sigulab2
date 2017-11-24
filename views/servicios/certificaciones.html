@@ -38,9 +38,9 @@
             <tr id="titulosListado">
                 <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="fecha_aprobacion" id="fecha_aprobacion">Fecha de Solicitud</button></th>
 				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="registro" id="registro">Numero de Registro</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="servicio" id="servicio">Servicio</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="dependencia" id="dependencia">Solicitante</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="id_dependencia_ejecutora_solicitud" id="id_dependencia_ejecutora_solicitud">Dependencia Ejecutora</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_servicio" id="servicio">Servicio</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_solicitante" id="dependencia">Solicitante</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_dependencia_ejecutora" id="id_dependencia_ejecutora_solicitud">Dependencia Ejecutora</button></th>
   			</tr>
   		  </thead>
   	     <tbody>
@@ -48,12 +48,15 @@
               <tr>
                   <th class="camposTabla">{{=item.fecha_aprobacion}}</th>
                   <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}});">{{=item.registro}}</a></th>
-                  <th class="camposTabla">{{=item.id_servicio_solicitud}}</th>
-                  <th class="camposTabla">{{=item.dependencia}}</th>
-				  <th class="camposTabla">{{=item.id_dependencia_ejecutora_solicitud}}</th>
+                  <th class="camposTabla">{{=item.nombre_servicio}}</th>
+                  <th class="camposTabla">{{=item.nombre_solicitante}}</th>
+				  <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
               </tr>
 			{{pass}}
   		  </tbody>
+             <tfoot>
+
+             </tfoot>
   		 </form>
   		</table>
   	</div>
