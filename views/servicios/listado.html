@@ -354,7 +354,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioEdit" class="registration-form" method="post">
 
                     <!-- Primer Paso -->
                     <fieldset class="formField">
@@ -464,7 +464,7 @@
 
                           <div class="form-group">
 
-                              <select class="form-control" id="sel6-edit"  onchange="getAdscripcion();" name="sedeServicio" required>
+                              <select class="form-control" id="sel6-edit"  onchange="getAdscripcionEdit();" name="sedeServicio" required>
                                   <option value="{{=request.post_vars.sedeIdFicha}}" selected hidden >{{=request.post_vars.sedeFicha}}</option>
                                   {{for sede in sedes:}}
                                   <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
@@ -474,25 +474,25 @@
 
 
 	                      <div id="adscripciondiv-edit" class="form-group">
-                              <select class="form-control" id="sel4-edit" onclick="getAdscripcion();" name="laboratorioServicio" required>
-                                  <option value="{{=request.post_vars.laboratorioIdFicha}}" selected hidden >{{=request.post_vars.laboratorioFicha}}</option>
+                              <select class="form-control" id="sel4-edit" onclick="getAdscripcionEdit();" name="laboratorioServicio" required>
+                                  <option value="{{=request.post_vars.adscripcionIdFicha}}" selected hidden >{{=request.post_vars.adscripcionFicha}}</option>
                               </select>
 	                      </div>
 
 	                      <div id="dependenciadiv-edit" class="form-group">
-	                        <select class="form-control" id="sel3-edit" onclick="getDependencia();" name="seccionServicio" required>
+	                        <select class="form-control" id="sel3-edit" onclick="getDependenciaEdit();" name="dependenciaServicio" required>
 							                 <option value="{{=request.post_vars.dependenciaIdFicha}}" selected hidden>{{=request.post_vars.dependenciaFicha}} </option>
 							             </select>
 	                      </div>
 	                    
 	                      <div id="ubicaciondiv-edit" class="form-group">
-						              <select class="form-control" id="sel5-edit" onclick="getUbicacion();" name="ubicacionServicio" required>
+						              <select class="form-control" id="sel5-edit" onclick="getUbicacionEdit();" name="ubicacionServicio" required>
  							              <option value="{{=request.post_vars.ubicacionIdFicha}}" selected hidden>{{=request.post_vars.ubicacionFicha}}</option>
  							            </select>	                    
 	                      </div>
 
                         <div id="responsablediv-edit" class="form-group">
-						              <select class="form-control" id="selresp-edit" onclick="getResponsable();" name="responsableServicio" required>
+						              <select class="form-control" id="selresp-edit" onclick="getResponsableEdit();" name="responsableServicio" required>
  							              <option value="{{=request.post_vars.responsableIdFicha}}" selected hidden>{{=request.post_vars.responsableNombreFicha}} | {{=request.post_vars.responsableEmailFicha}}</option>
  							            </select>
 	                      </div>
@@ -525,13 +525,14 @@
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" value="{{=editar[0].requisitos}}">{{=editar[0].requisitos}}</textarea>
                           </div>
                           <div class="form-group">
-                            <textarea class="form-control" id="resultados" name="resultadosServicio" value="{{=editar[0].resultados}}"></textarea>
+                            <textarea class="form-control" id="resultados" name="resultadosServicio" value="{{=editar[0].resultados}}">{{=editar[0].resultados}}</textarea>
                           </div>
                         </div>
                       </div>
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
-                      <button type="submit" class="btn btn-submit botonForm" form="formularioEdit" name="envio" value="edicion" id="submit">Guardar Cambios</button>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button> 
+
                     </fieldset>
                     <!-- Fin Cuarto Paso -->
                 </form>
@@ -597,38 +598,38 @@
    }
 
   // AJAX EDICION
-  function getAdscripcion(){
-    var opcionessede = document.getElementById("sel6");
+  function getAdscripcionEdit(){
+    var opcionessede = document.getElementById("sel6-edit");
     var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
     var x = document.getElementById("sede");
       x.value = sedeelegida;
-    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
+    ajax('ajax_obtener_adscripcion_editar', ['sede'], "adscripciondiv-edit");
   }
 
-  function getDependencia(){
-      var opcionesads = document.getElementById("sel4");
+  function getDependenciaEdit(){
+      var opcionesads = document.getElementById("sel4-edit");
       var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
       var x = document.getElementById("adscripcion");
         x.value = adselegida;
-      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
+      ajax('ajax_obtener_dependencia_editar', ['adscripcion'], "dependenciadiv-edit");
 
    }
 
-  function getUbicacion(){
-      var opcionesdep = document.getElementById("sel3");
+  function getUbicacionEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
       var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
       var x = document.getElementById("dependencia");
         x.value = dependenciaelegida;
-      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
+      ajax('ajax_obtener_ubicacion_editar', ['dependencia'], "ubicaciondiv-edit");
 
    }
 
-  function getResponsable(){
-      var opcionesdep = document.getElementById("sel3");
+  function getResponsableEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
       var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
       var x = document.getElementById("dependencia");
         x.value = dependenciaelegida;
-      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
+      ajax('ajax_obtener_responsable_editar', ['dependencia'], "responsablediv-edit");
    }
 
 </script>

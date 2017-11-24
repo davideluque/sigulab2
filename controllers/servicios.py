@@ -75,6 +75,7 @@ def listado():
 
     if request.post_vars.edit and (request.post_vars.eliminar is None) and (request.post_vars.visibilidad is None):
         editar = db(db.servicios.id == request.vars.idFicha).select(db.servicios.ALL)
+        
     else:
         editar = []
 
@@ -122,22 +123,15 @@ def listado():
                 sedes=listar_sedes(db), editar=editar)
 
 
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-    if request.post_vars.numRegistro :
-        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
-                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
-                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, request.post_vars.dependenciaEjecutoraServicio,
-                        request.post_vars.jefeDependenciaEjecutoraServicios, request.post_vars.servicioElaboradoPor,
-                        request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, request.post_vars.fechaAprobacion, request.post_vars.observaciones)
-
-        solicitud_nueva.insertar()
-
-    return dict(grid=[])
+    return dict(grid=[], controls=False)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
     return dict()
+
 
 #------------------------------------------------------------------------------
 #
@@ -186,7 +180,6 @@ def ajax_ficha_servicio():
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
-    print("TEKE")
     dependencias_a_mostrar = []
 
     for l in adscripcion_query:

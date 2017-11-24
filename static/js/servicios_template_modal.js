@@ -22,8 +22,9 @@ $(document).ready(function () {
         parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
             
             
-
+            console.log($(this))
             if ($(this).val() == "") {
+
                 $(this).addClass('input-error');
                 next_step = false;
             } else {

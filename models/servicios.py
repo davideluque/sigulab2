@@ -90,10 +90,9 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
+	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
-	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
-
-	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Responsable de la Solicitud')),
+	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
 
 	# TODO: Conectar el email con el responsable
 	#
@@ -134,10 +133,15 @@ db.define_table(
 	#
 	# Otra cosa: esta tabla sería entonces una tabla de servicios solicitados "pendientes"
 	#######################################################################################
-	Field('pendiente',	'boolean', default=True, label=T('Pendiente')),
+	#Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
+
+	# estado=0 pendiente por aprobar
+	# estado=1 pendiente por ejecutar
+
+	Field('estado','string', default='0', label=T('Pendiente por aprobar')),
 
 
-	Field('email_aprueba', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(email)s'),  label=T('Solicitud Aprobada Por')),
+	Field('email_aprueba', 'string', label=T('Solicitud Aprobada Por')),
 
 	Field('fecha_aprobacion',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Aprobacion de Solicitud')),
