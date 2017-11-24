@@ -144,20 +144,40 @@ def solicitudes():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
 
+    # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
+    if request.post_vars.edicion:
+        print("cool")
+        registro = request.post_vars.registro
+        proyecto = request.post_vars.proyecto
+        elaborado_por = request.post_vars.usuarioid
+        dependencia = request.post_vars.dependenciaid
+        print(dependencia)
+        solicitud = request.post_vars.solicitudid
+        fecha = request.post_vars.fecha
+
+        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
+
+        print(certificado.insertar())
+
+
     solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
     listado_de_solicitudes = [solicitud_trial]*100
-    print(listado_de_solicitudes[20].registro)
 
     return dict(grid=listado_de_solicitudes)
 
 def ajax_certificar_servicio():
     solicitudesid = request.post_vars.solicitud
     solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
-    usuarioemail = db(db.auth_user.id == auth.user_id).select()[0].email
-    usuario = db(db.t_Personal.f_email == usuarioemail).select()[0]
+    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
     servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
+    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    if not(dependencia is None):
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
+    else:
+        dependencianombre = "Laboratorio A"
+        dependencia = db(db.dependencias.id > 0).select()[0].id
 
     if db(db.certificaciones.id > 0).count() > 1:
         ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
@@ -170,7 +190,9 @@ def ajax_certificar_servicio():
                 servicio=servicio,
                 responsable=responsable,
                 fecha=fecha,
-                registro=registro)
+                registro=registro,
+                dependenciaid=dependencia,
+                dependencia=dependencianombre)
 
 
 #------------------------------------------------------------------------------

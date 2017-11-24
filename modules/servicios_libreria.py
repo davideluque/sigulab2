@@ -616,12 +616,12 @@ class Certificacion(object):
 
 
 	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
-				 servicio=None, solicitud=None, fecha_certificacion=None, id=None):
+				 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
 
 		self.registro = registro
 		self.proyecto = proyecto
 		self.elaborado_por = elaborado_por
-		self.servicio = servicio
+		self.dependencia = dependencia
 		self.solicitud = solicitud
 		self.fecha_certificacion = fecha_certificacion
 
@@ -638,7 +638,7 @@ class Certificacion(object):
 		insercion = self.db.certificaciones.insert(registro=self.registro,
 											 proyecto=self.proyecto,
 											 elaborado_por=self.elaborado_por,
-											 servicio=self.servicio,
+											 dependencia=self.dependencia,
 											 solicitud=self.solicitud,
 											 fecha_certificacion=self.fecha_certificacion)
 
@@ -653,7 +653,7 @@ class Certificacion(object):
 			self.registro = instanciacion.registro
 			self.proyecto = instanciacion.proyecto
 			self.elaborado_por = instanciacion.elaborado_por
-			self.servicio = instanciacion.servicio
+			self.dependencia = instanciacion.servicio
 			self.solicitud = instanciacion.solicitud
 			self.fecha_certificacion = instanciacion.fecha_certificacion
 
@@ -663,12 +663,12 @@ class Certificacion(object):
 			return False
 
 	def editar(self, registro, proyecto, elaborado_por,
-				 servicio, solicitud, fecha_certificacion):
+				 dependencia, solicitud, fecha_certificacion):
 
 		self.registro = registro
 		self.proyecto = proyecto
 		self.elaborado_por = elaborado_por
-		self.servicio = servicio
+		self.dependencia = dependencia
 		self.solicitud = solicitud
 		self.fecha_certificacion = fecha_certificacion
 
@@ -678,7 +678,7 @@ class Certificacion(object):
 			registro=self.registro,
 			proyecto=self.proyecto,
 			elaborado_por=self.elaborado_por,
-			servicio=self.servicio,
+			dependencia=self.dependencia,
 			solicitud=self.solicitud,
 			fecha_certificacion=self.fecha_certificacion)
 
