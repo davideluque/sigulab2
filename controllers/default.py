@@ -5,6 +5,9 @@
 # - download y call son ejemplos de aplicaciones basicas de web2py.
 # -------------------------------------------------------------------------
 
+def register():
+    return redirect(URL('modulos','register'))
+
 # Pagina principal (Boton de SMDP y otros modulos)
 def index():
     return dict()
