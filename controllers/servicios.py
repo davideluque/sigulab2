@@ -136,10 +136,27 @@ def certificaciones():
 
     return dict(grid=listado_de_solicitudes)
 
-def ajax_certificacion_servicio():
-    print(request.post_vars.solicitud)
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuarioemail = db(db.auth_user.id == auth.user_id).select()[0].email
+    usuario = db(db.t_Personal.f_email == usuarioemail).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
 
-    return dict()
+    if db(db.certificaciones.id > 0).count() > 1:
+        ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
+        registro = str(int(ultima_certificacion)+1)
+    else:
+        registro = '1'
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro)
 
 
 #------------------------------------------------------------------------------
