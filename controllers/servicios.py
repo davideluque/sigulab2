@@ -139,7 +139,6 @@ def certificaciones():
 #
 #------------------------------------------------------------------------------
 
-# NO CONECTA LA DEPENDENCIA CON RESPONSABLE
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
