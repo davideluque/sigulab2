@@ -67,8 +67,6 @@ db.define_table(
 
     Field('pagina_web', 'string', label=T('Pagina Web'))
 
-
-
 )
 
 # Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos
