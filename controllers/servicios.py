@@ -23,6 +23,8 @@ def listado():
 
     #----- AGREGAR SERVICIO -----#
 
+
+
     if request.post_vars.nombreServicio and request.post_vars.envio != "edicion":
 
         docencia = False if not request.post_vars.docenciaServicio else True
@@ -40,12 +42,27 @@ def listado():
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio)
 
-        #idPersonal = db(auth.user.id == db.t_Personal.f_usuario).select(db.t_Personal.f_usuario)
+
+        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE 
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia    
+        jefeDependencia= db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].email
+        dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
+
+        # Variable nombre persona que recibe el email
+
+        # Variable nombre persona que realizo la operacion
+        # nombreUsuario = auth.user.first_name + ' ' + auth.user.last_name
+
+        # Variable rol persona que realizo la operacion
+        # rolUsuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].rol   
+
+        # Variable dependencia de la persona que realizo la operacion
+        # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
 
         servicio_nuevo.insertar()
+        __enviar_correo(jefeDependencia, 'Se ha agregado un nuevo servicio', 
+            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia (%dependenciaUsuario).</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
 
-        __enviar_correo(auth.user.email, 'Se ha agregado un nuevo servicio', 
-            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia VARIABLE DEPENDENCIA.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
 
     #----- FIN AGREGAR SERVICIO -----#
 
@@ -72,9 +89,6 @@ def listado():
                    request.post_vars.ubicacionServicio)
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
-
-        __enviar_correo(auth.user.email, 'Se ha editado un servicio', 
-            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha editado un servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia VARIABLE DEPENDENCIA.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
 
         redirect(URL('listado?order=id1&page=1'))
     #----- FIN EDITAR SERVICIO -----#
