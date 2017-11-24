@@ -443,9 +443,8 @@ class ListaSolicitudes(object):
 
 		self.posicionar_ultimo()
 
-
 		# Lista de cada fila, convertida en el objeto servicio
-		self.servicios_a_mostrar = []
+		self.solicitudes_a_mostrar = []
 
 	# Configurara la visibilidad y posicion de cada boton
 
@@ -490,9 +489,9 @@ class ListaSolicitudes(object):
 		self.columna = columna
 
 	def capturar_objetos(self):
-		for solic in self.set.select(self.db.solicitud.id):
+		for solic in self.set.select(self.db.solicitudes.id):
 			solicitud = Solicitud(self.db)
-			solicitud.instanciar(serv.id)
+			solicitud.instanciar(solic.id)
 			self.filas.append(solicitud)
 
 	def orden_y_filtrado(self):
