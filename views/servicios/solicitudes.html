@@ -41,12 +41,12 @@
           <!-- Titulos Tabla Solicitudes -->
           <thead>
             <tr id="titulosListado">
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="categoria" id="f_categoria_servicio">Numero de Registro</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="tipo" id="f_tipo_servicio">Dependencia Solicitante</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre" id="f_nombre_servicio">Dependencia Ejecutora</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="seccion" id="f_seccion_servicio">Servicio</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="sede" id="f_sede_servicio">Fecha de Solicitud</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="laboratorio" id="f_laboratorio_servicio">Estado</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="registro">Numero de Registro</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="dependencia">Dependencia Solicitante</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="id_dependenciaejecutora">Dependencia Ejecutora</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="servicio">Servicio</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="fechasolicitud">Fecha de Solicitud</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="pendiente">Estado</button></th>
             </tr>
   		    </thead>
 
@@ -69,26 +69,14 @@
   </div>
 
   <!-- Inicio botones pagina -->
-  {{if controls:}}
-	<div class="row">
-	  {{if controls['firstpage']:}}
-	    <button name="page" value="{{=controls.firstpage}}"> << </button>
-	  {{pass}}
-	  {{if controls['prevpg']:}}
-	    <button name="page" value="{{=controls.prevpage}}"> < </button>
-	  {{pass}}
-	  {{for page in controls['pages']:}}
-	    <button name="page" value="{{=page}}" {{if page == controls['actualpage']:}} class="active"{{pass}}>{{=page}}</button>
-	  {{pass}}
-	  {{if controls['nextpage']:}}
-	    <button name="page" value="{{=controls.nextpage}}"> > </button>
-	  {{pass}}
-	  {{if controls['lastpage']:}}
-	    <button name="page" value="{{=controls.lastpage}}"> >> </button>
-	  {{pass}}
-	</div>
-  {{pass}}
-   <!-- Fin botones pagina -->
+    <div class="row">
+      <form>
+        {{for page in pages:}}
+          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+        {{pass}}
+      </form>
+    </div>
+    <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado Solicitudes -->
 
