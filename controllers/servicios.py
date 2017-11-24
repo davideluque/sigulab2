@@ -207,34 +207,7 @@ def certificaciones():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
 
-def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
-    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
-    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
-    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
-    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
-    fecha = request.now
-    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    if not(dependencia is None):
-        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
-    else:
-        dependencianombre = "Laboratorio A"
-        dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    if db(db.certificaciones.id > 0).count() > 1:
-        ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
-        registro = str(int(ultima_certificacion)+1)
-    else:
-        registro = '1'
-
-    return dict(solicitud=solicitud_info,
-                usuario=usuario,
-                servicio=servicio,
-                responsable=responsable,
-                fecha=fecha,
-                registro=registro,
-                dependenciaid=dependencia,
-                dependencia=dependencianombre)
 
 
 #------------------------------------------------------------------------------
@@ -374,4 +347,30 @@ def __enviar_correo(destinatario, asunto, cuerpo):
 
 
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
+    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    if not(dependencia is None):
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
+    else:
+        dependencianombre = "Laboratorio A"
+        dependencia = db(db.dependencias.id > 0).select()[0].id
+
+    registro = validador_registro_certificaciones(request, db)
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro,
+                dependenciaid=dependencia,
+                dependencia=dependencianombre,
+                proyecto='Proyecto ' + registro)
 

@@ -55,7 +55,13 @@
 			{{pass}}
   		  </tbody>
              <tfoot>
-
+             <th>
+                <form>
+                    {{for page in pages:}}
+                    <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+                    {{pass}}
+                </form>
+             </th><th></th><th></th><th></th><th></th>
              </tfoot>
   		 </form>
   		</table>
