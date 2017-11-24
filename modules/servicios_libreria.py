@@ -1,3 +1,5 @@
+import random
+
 #------------------------------------------------------------------------------
 #
 # Clase que permite tomar un record de la tabla servicios y realizar cada 
@@ -699,3 +701,25 @@ class Certificacion(object):
 			fecha_certificacion=self.fecha_certificacion)
 
 		return actualizacion
+
+# Funcion que genera numeros arbitrarios para el registro de certificaciones y solicitudes
+
+def generador_num_registro():
+    min = 0
+    max = 500
+    digit = str(random.randint(min, max))
+    digits = (len(str(max))-len(digit))*'0' + digit
+
+    return digits
+
+def validador_registro_certificaciones(request, db):
+	anio = str(request.now)[2:4]
+	registro = 'UL-' + anio + '/' + generador_num_registro()
+
+	check = db(db.certificaciones.registro == registro).count()
+
+	if check != 0:
+		return validador_registro_certificaciones(request, db)
+	else:
+		return registro
+
