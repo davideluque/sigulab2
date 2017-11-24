@@ -19,8 +19,8 @@ db.define_table(
 	Field('nombre',	'string', unique=True, notnull=True, label=T('Nombre')),
 )
 
-
 db.categorias_servicios._plural = 'Categorías', 
+
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.
@@ -91,16 +91,9 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	#Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
 	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Responsable de la Solicitud')),
-
-	# TODO: Conectar el email con el responsable
-	#
-	# ###########################################
-	Field('email_responsable', 'string', label=T('Email del Responsable de la Solicitud')),
-
-	Field('telefonos_responsable', 'list:string', label=T('Extensiones')),
 
 	Field('fecha',   'date',
 		  requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
@@ -109,7 +102,7 @@ db.define_table(
 
 	Field('proposito', 'reference propositos', requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'), label=T('Propósito del servicio solicitado')),
 
-	Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
+	#Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
 
 	# Si el propósito es extensión, este campo se llena con el cliente final.
 	Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
@@ -118,14 +111,14 @@ db.define_table(
 	
 	Field('observaciones', 'string', label=T('Observaciones de la Solicitud')),
 
-	Field('id_dependencia_ejecutora_solicitud', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
+	#Field('id_dependencia_ejecutora', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
 
 	
 	#
 	#######################################################
-	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
+	#Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 
-	Field('jefe_dependencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Ejecutora')),
+	#Field('jefe_dependencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
 	
 
@@ -145,7 +138,7 @@ db.define_table(
 	Field('email_aprueba', 'string', label=T('Solicitud Aprobada Por')),
 
 	Field('fecha_aprobacion',   'date', 
-		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Aprobacion de Solicitud')),
+		  requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Aprobacion de Solicitud')),
 
 )
 
@@ -165,10 +158,10 @@ db.define_table(
 	Field('proyecto', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Poyecto')),
 	Field('elaborado_por', 'reference t_Personal',
 		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Elaborado Por')),
-	Field('dependencia', 'reference dependencias',
-		  requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Responsable Pertenece A')),
+	Field('servicio', 'reference servicios',
+		  requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
 	Field('solicitud', 'reference solicitudes',
-		  requires=IS_IN_DB(db, db.solicitudes.id, '%(registro)s'), label=T('Solicitud a Certificar')),
+		  requires=IS_IN_DB(db, db.solicitudes.id, '%(registro))s'), label=T('Solicitud a Certificar')),
 	Field('fecha_certificacion',   'date',
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Certificacion de Solicitud')),
 )
