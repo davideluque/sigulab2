@@ -7,8 +7,7 @@
 	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
   <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
 
-<div class="modal fade" id="modalServiceCertification" role="dialog">
-    <div class="modal-dialog">
+
 
       <!-- Modal content-->
       <div class="modal-content">
@@ -46,45 +45,45 @@
                            	<div class="mover">
                            	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="numRegistro" value="Número" required>
+                              <input type="text" class="form-control" id="numRegistro" value={{=registro}} required>
                             </div>
                             </div>
 
                             <div class="mover">
                             <label class="form-group" id="Proyecto" style="margin-bottom: 0px" style="">Proyecto</label>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="Proyecto" value="Proyecto" required>
+                              <input type="text" class="form-control" id="Proyecto" placeholder="Proyecto" required>
                             </div>
                             </div>
 
                             <!-- <label class="form-group" id="" style="margin-bottom: 0px">Elaborado Por</label> -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="Elaborado Por" required>
+                              <input type="text" class="form-control" id="" value={{=usuario.f_nombre}} required>
                             </div>
 
 							               <!-- <label class="form-group" id="" style="margin-bottom: 0px">C.I.</label> -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="C.I." required>
+                              <input type="text" class="form-control" id="" value={{=usuario.f_ci}} required>
                             </div>
 
                             <!-- <label class="form-group" id="" style="margin-bottom: 0px">Nombre del Servicio</label>  -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="Nombre del Servicio" required>
+                              <input type="text" class="form-control" id="" value={{=servicio.nombre}} required>
                             </div>
 
                             <!-- <label class="form-group" id="" style="margin-bottom: 0px">Responsable del Servicio</label> -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="Responsable del Servicio" required>
+                              <input type="text" class="form-control" id="" value={{=responsable.f_nombre}} required>
                             </div>
 
                             <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número de Solicitud</label> -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="Número de Solicitud" required>
+                              <input type="text" class="form-control" id="" value={{=solicitud.registro}} required>
                             </div>
 
                             <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de certificación</label> -->
                             <div class="form-group">
-                              <input type="text" class="form-control" id="" value="Fecha de certificación" required>
+                              <input type="text" class="form-control" id="" value={{=fecha}} required>
                             </div>
                         </div>
                       </div>
@@ -102,6 +101,3 @@
       </div>
 
       </div>
-
-    </div>
-  </div>
