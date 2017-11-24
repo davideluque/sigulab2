@@ -139,6 +139,8 @@ def certificaciones():
 #
 #------------------------------------------------------------------------------
 
+# NO CONECTA LA DEPENDENCIA CON RESPONSABLE
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
     session.forget(response)
@@ -169,7 +171,6 @@ def ajax_ficha_servicio():
     else:
         funcion.append("")
 
-    
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 
@@ -210,7 +211,7 @@ def ajax_obtener_ubicacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable():
     session.forget(response)
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:
@@ -252,7 +253,7 @@ def ajax_obtener_ubicacion_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable_editar():
     session.forget(response)
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:

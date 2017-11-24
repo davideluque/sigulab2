@@ -342,15 +342,16 @@ def query_ficha(db, idv):
     ubicacionid = ubicrow[0].id
 
     # Responsable
-    resprow = db(entrada[0].responsable == db.personal.id).select(db.personal.ALL)
-    responsable = resprow[0].nombre
+    resprow = db(entrada[0].responsable == db.t_Personal.id).select(db.t_Personal.ALL)
+
+    responsable = resprow[0].f_nombre
     respid = resprow[0].id
 
     # Numeros
-    telefono = resprow[0].telefono
+    telefono = resprow[0].f_telefono
 
     # Correo
-    email = resprow[0].email
+    email = resprow[0].f_email
 
     ficha_con_queries = {"entrada": entrada,
                          "categoria": categoria,
