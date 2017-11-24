@@ -19,8 +19,8 @@ db.define_table(
 	Field('nombre',	'string', unique=True, notnull=True, label=T('Nombre')),
 )
 
-db.categorias_servicios._plural = 'Categorías', 
 
+db.categorias_servicios._plural = 'Categorías', 
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.
@@ -165,10 +165,10 @@ db.define_table(
 	Field('proyecto', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Poyecto')),
 	Field('elaborado_por', 'reference t_Personal',
 		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Elaborado Por')),
-	Field('servicio', 'reference servicios',
-		  requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
+	Field('dependencia', 'reference dependencias',
+		  requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Responsable Pertenece A')),
 	Field('solicitud', 'reference solicitudes',
-		  requires=IS_IN_DB(db, db.solicitudes.id, '%(registro))s'), label=T('Solicitud a Certificar')),
+		  requires=IS_IN_DB(db, db.solicitudes.id, '%(registro)s'), label=T('Solicitud a Certificar')),
 	Field('fecha_certificacion',   'date',
 		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Certificacion de Solicitud')),
 )
