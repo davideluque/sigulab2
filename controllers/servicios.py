@@ -145,12 +145,12 @@ def listado():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
-#----- AGREGAR SOLICITUDES -----#
-
+#----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
 
-    if request.post_vars.numRegistro :
+    #----- AGREGAR SOLICITUDES -----#
+    if request.post_vars.numRegistro:
         solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
                         request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
                         request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
@@ -161,7 +161,31 @@ def solicitudes():
 
         solicitud_nueva.insertar()
 
-    return dict(grid=[], controls=False)
+    #----- LISTAR SOLICITUDES -----#
+    listado_de_solicitudes = ListaSolicitudes(db)
+
+    # Usuario solicita cambiar la pagina
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    # Usuario solicita ordenar los servicios
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    # Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
+    listado_de_solicitudes.orden_y_filtrado()
+
+    # Se recuperan las paginas calculadas en base a lo solicitado
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar, 
+        pages=listado_de_solicitudes.rango_paginas,
+        actualpage=listado_de_solicitudes.pagina_central,
+        nextpage=nextpage, prevpage=prevpage,
+        firstpage=firstpage, lastpage=lastpage)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
