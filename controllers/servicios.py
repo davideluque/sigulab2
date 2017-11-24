@@ -122,14 +122,37 @@ def listado():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
-
+#----- AGREGAR SOLICITUDES -----#
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+
+    if request.post_vars.numRegistro :
+        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
+                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
+                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
+                        request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, 
+                        request.post_vars.dependenciaEjecutoraServicio, request.post_vars.jefeDependenciaEjecutoraServicios, 
+                        request.post_vars.servicioElaboradoPor, request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, 
+                        request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+
+        solicitud_nueva.insertar()
+
     return dict(grid=[], controls=False)
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
+
+    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
+    listado_de_solicitudes = [solicitud_trial]*100
+    print(listado_de_solicitudes[20].registro)
+
+    return dict(grid=listado_de_solicitudes)
+
+def ajax_certificacion_servicio():
+    print(request.post_vars.solicitud)
+
     return dict()
 
 
