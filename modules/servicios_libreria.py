@@ -295,7 +295,7 @@ class Solicitud(object):
 		self.fecha_solicitud = fecha_solicitud
 		self.id_servicio_solicitud = id_servicio_solicitud
 		self.id_proposito_servicio = id_proposito_servicio
-		self.proposito_cliente_final = extension_cliente_final
+		self.proposito_cliente_final = proposito_cliente_final
 		self.descripcion_servicio = descripcion_servicio
 		self.observaciones = observaciones
 		self.id_dependencia_ejecutora = id_dependencia_ejecutora
@@ -304,19 +304,19 @@ class Solicitud(object):
 
 		# Variables Disponibles tras conseguir_atributos()
 		self.id = None
-		self.fecha_elaboracion
-		self.elaborada_por
-		self.email_responsable_solicitud
-		self.telef_responsable_solicitud
-		self.nombre_dependencia_solicitante
-		self.nombre_jefe_dependencia_solicitante
-		self.nombre_dependencia_ejecutora
-		self.jefe_dependencia_ejecutora
-		self.lugar_ejecucion_servicio
-		self.proposito_descripcion
-		self.nombre_servicio
-		self.tipo_servicio
-		self.categoria_servicio
+		self.fecha_elaboracion = None
+		self.elaborada_por = None
+		self.email_responsable_solicitud = None
+		self.telef_responsable_solicitud = None
+		self.nombre_dependencia_solicitante = None
+		self.nombre_jefe_dependencia_solicitante = None
+		self.nombre_dependencia_ejecutora = None
+		self.jefe_dependencia_ejecutora = None
+		self.lugar_ejecucion_servicio = None
+		self.proposito_descripcion = None
+		self.nombre_servicio = None
+		self.tipo_servicio = None
+		self.categoria_servicio = None
 		
 		# Variables disponibles despues de aprobacion
 		self.aprobada_por = None
@@ -381,7 +381,7 @@ class Solicitud(object):
 		self.fecha_solicitud = fecha_solicitud
 		self.id_servicio_solicitud = id_servicio_solicitud
 		self.id_proposito_servicio = id_proposito_servicio
-		self.proposito_cliente_final = extension_cliente_final
+		self.proposito_cliente_final = proposito_cliente_final
 		self.descripcion_servicio = descripcion_servicio
 		self.observaciones = observaciones
 		self.id_dependencia_ejecutora = id_dependencia_ejecutora
@@ -403,10 +403,10 @@ class Solicitud(object):
 
 	    return actualizacion
 
-	def conseguir_atributos():
+	def conseguir_atributos(self):
 
 		# Fecha de elaboracion
-		self.fecha_elaboracion = request.now
+		self.fecha_elaboracion = "02-02-2017"
 		
 		# Persona responsable de la solicitud y Elaborado por
 		self.elaborada_por = auth.user.first_name+" "+auth.user.last_name
