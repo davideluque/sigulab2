@@ -122,6 +122,23 @@ def listado():
                 sedes=listar_sedes(db), editar=editar)
 
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def solicitudes():
+    if request.post_vars.numRegistro :
+        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
+                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
+                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, request.post_vars.dependenciaEjecutoraServicio,
+                        request.post_vars.jefeDependenciaEjecutoraServicios, request.post_vars.servicioElaboradoPor,
+                        request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+
+        solicitud_nueva.insertar()
+
+    return dict(grid=[])
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def certificaciones():
+    return dict()
+
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
@@ -208,12 +225,4 @@ def ajax_obtener_responsable():
     for l in responsable_query:
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def solicitudes():
-    return dict(grid=[], controls=False)
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def certificaciones():
-    return dict()
 
