@@ -19,7 +19,7 @@ def usuario():
 
 # Tabla de servicios agregados
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado():
+def listado(): 
 
     #----- AGREGAR SERVICIO -----#
 
@@ -40,7 +40,12 @@ def listado():
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio)
 
+        #idPersonal = db(auth.user.id == db.t_Personal.f_usuario).select(db.t_Personal.f_usuario)
+
         servicio_nuevo.insertar()
+
+        __enviar_correo(auth.user.email, 'Se ha agregado un nuevo servicio', 
+            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia VARIABLE DEPENDENCIA.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
 
     #----- FIN AGREGAR SERVICIO -----#
 
@@ -68,6 +73,9 @@ def listado():
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
+        __enviar_correo(auth.user.email, 'Se ha editado un servicio', 
+            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha editado un servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia VARIABLE DEPENDENCIA.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
+
         redirect(URL('listado?order=id1&page=1'))
     #----- FIN EDITAR SERVICIO -----#
 
@@ -92,6 +100,7 @@ def listado():
     #----- ELIMINAR SERVICIO -----#
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
+
 
     #----- FIN ELIMINAR SERVICIO -----#
 
@@ -259,4 +268,16 @@ def ajax_obtener_responsable_editar():
     for l in responsable_query:
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
+
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
+
+
+
+
 

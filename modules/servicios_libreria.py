@@ -5,6 +5,7 @@
 #
 #------------------------------------------------------------------------------
 
+import random
 
 class Servicio(object):
 
@@ -464,3 +465,14 @@ class Certificacion(object):
 			fecha_certificacion=self.fecha_certificacion)
 
 		return actualizacion
+
+
+# Funcion para calcular numero del registro de las solicitudes 
+
+def generador_num_registro():
+	min = 0
+	max = 500
+	digits = str(random.randint(min, max))
+	digits = (len(str(max))-len(digit))*'0'
+
+	return digits
