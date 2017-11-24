@@ -131,15 +131,96 @@ def listado():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
-
+#----- AGREGAR SOLICITUDES -----#
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+
+    if request.post_vars.numRegistro :
+        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
+                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
+                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
+                        request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, 
+                        request.post_vars.dependenciaEjecutoraServicio, request.post_vars.jefeDependenciaEjecutoraServicios, 
+                        request.post_vars.servicioElaboradoPor, request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, 
+                        request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+
+        solicitud_nueva.insertar()
+
     return dict(grid=[], controls=False)
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
-    return dict()
+
+    # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
+    if request.post_vars.registro:
+        registro = request.post_vars.registro
+        proyecto = request.post_vars.proyecto
+        elaborado_por = request.post_vars.usuarioid
+        dependencia = request.post_vars.dependenciaid
+        solicitud = request.post_vars.solicitudid
+        fecha = request.post_vars.fecha
+
+        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
+
+        certificado.insertar()
+    #-------------------FIN------------------------
+
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+
+    listado_de_solicitudes = ListaSolicitudes(db)
+
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage = listado_de_solicitudes.boton_principio
+    lastpage = listado_de_solicitudes.boton_fin
+    nextpage = listado_de_solicitudes.boton_siguiente
+    prevpage = listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage,
+                categorias=listar_categorias(db), tipos=listar_tipos(db),
+                sedes=listar_sedes(db))
+
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
+    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    if not(dependencia is None):
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
+    else:
+        dependencianombre = "Laboratorio A"
+        dependencia = db(db.dependencias.id > 0).select()[0].id
+
+    if db(db.certificaciones.id > 0).count() > 1:
+        ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
+        registro = str(int(ultima_certificacion)+1)
+    else:
+        registro = '1'
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro,
+                dependenciaid=dependencia,
+                dependencia=dependencianombre)
 
 
 #------------------------------------------------------------------------------
@@ -148,7 +229,6 @@ def certificaciones():
 #
 #------------------------------------------------------------------------------
 
-# NO CONECTA LA DEPENDENCIA CON RESPONSABLE
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():

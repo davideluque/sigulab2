@@ -1,0 +1,110 @@
+<!-- Modal certificar un servicio -->
+<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+
+<!-- Modal content-->
+
+
+    <!-- Modal Header -->
+    <div class="modal-header addHeader">
+      <div class="row addRow" id="rowHeader">
+        <div class="col-sm-1" id="col1Header">
+          <div class="container" id="plus">
+          <h1 id="agregar">✓</h1>
+        </div>
+        </div>
+        <div class="col-sm-11" id="col11Header">
+          <h4 class="modal-title" id="nuevoServicio">Certificación de Servicio de Laboratorio</h4>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal Header -->
+
+    <!-- Modal Body -->
+    <div class="modal-body addBody">
+      <div class="row addRow">
+        <div class="col-md-12 form-box">
+            <form id="formularioCarga" class="registration-form" method="post">
+
+
+                <!-- Primer Paso -->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Aqui va la barra lateral -->
+
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-12 col11Body" style="padding-left: 35px !important padding-bottom: 30px !important">
+                      <h4 class="titulosForm">Datos Básicos</h4>
+
+                        <div class="mover">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="numRegistro" name="registro" value={{=registro}} readonly>
+                            <input type="hidden" id="edicion" name="edicion" value="1">
+                        </div>
+                        </div>
+
+                        <div class="mover">
+                        <label class="form-group" id="Proyecto" style="margin-bottom: 0px" style="">Proyecto</label>
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="Proyecto" name="proyecto" value="Proyecto" readonly>
+                        </div>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Elaborado Por</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" name="nombreresponsable" value={{=usuario.f_nombre}} readonly>
+                            <input type="hidden" id="edicion" name="usuarioid" value={{=usuario.id}}>
+                        </div>
+
+                                       <!-- <label class="form-group" id="" style="margin-bottom: 0px">C.I.</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" value={{=usuario.f_ci}} readonly>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Cargo</label>  -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" value={{=dependencia}} readonly>
+                            <input type="hidden" id="edicion" name="dependenciaid" value={{=dependenciaid}}>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Responsable del Servicio</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" value={{=responsable.f_nombre}} readonly>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número de Solicitud</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" value={{=solicitud.registro}} readonly>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de Solicitud</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" value={{=solicitud.fecha}} readonly>
+                             <input type="hidden" id="edicion" name="solicitudid" value={{=solicitud.id}}>
+                        </div>
+
+                        <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de Certificación</label> -->
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="" name="fecha" value={{=fecha}} readonly>
+                        </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+            </form>
+        </div>
+      </div>
+
+    </div>
+
+  <div class="modal-footer" style="border-color: white !important">
+    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Certificar</button>
+  </div>
+

@@ -161,6 +161,11 @@
 
 		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
 
+		  <form method="post" >
+		  	<input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}">
+		  	<button type="submit" class="btn botonesFichita" name="solicitar" value="True" ="">Solicitar</button>
+		  </form>
+
 		  <!-- Modal del boton eliminar-->
 		  <div class="modal fade" id="modalEliminar" role="dialog">
 		    <div class="modal-dialog">
