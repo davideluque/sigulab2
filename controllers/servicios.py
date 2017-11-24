@@ -123,6 +123,7 @@ def listado():
                 sedes=listar_sedes(db), editar=editar)
 
 #----- AGREGAR SOLICITUDES -----#
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
 
@@ -142,6 +143,16 @@ def solicitudes():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
+
+    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
+    listado_de_solicitudes = [solicitud_trial]*100
+    print(listado_de_solicitudes[20].registro)
+
+    return dict(grid=listado_de_solicitudes)
+
+def ajax_certificacion_servicio():
+    print(request.post_vars.solicitud)
+
     return dict()
 
 

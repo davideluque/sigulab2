@@ -90,9 +90,9 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
-	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
+	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Responsable de la Solicitud')),
 
 	# TODO: Conectar el email con el responsable
 	#
@@ -101,9 +101,8 @@ db.define_table(
 
 	Field('telefonos_responsable', 'list:string', label=T('Extensiones')),
 
-	Field('fecha',   'date', 
+	Field('fechsa',   'date',
 		  requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
-
 
 	Field('id_servicio_solicitud', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
 
@@ -120,14 +119,14 @@ db.define_table(
 
 	Field('id_dependencia_ejecutora_solicitud', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
 
-	# TO DO: Conectar el espacio físico con la dependencia
+	# TODO: Conectar el espacio físico con la dependencia
 	#
 	#######################################################
 	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
+
+	Field('jefe_dependencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
-	Field('jefede_pendencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
-	
-	# TO DO: Conectar este correo con las validaciones de solicitudes
+	# TODO: Conectar este correo con las validaciones de solicitudes
 	#
 	# Esto en vez de el email quizá pueda tener el id de la persona que aprobo la solicitud
 	#
@@ -163,7 +162,7 @@ db.define_table(
 	Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
 	Field('proyecto', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Poyecto')),
 	Field('elaborado_por', 'reference t_Personal',
-		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Elaborado Por')),
+		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Elaborado Por')),
 	Field('servicio', 'reference servicios',
 		  requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
 	Field('solicitud', 'reference solicitudes',
