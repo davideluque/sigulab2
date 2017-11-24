@@ -19,7 +19,7 @@ def usuario():
 
 # Tabla de servicios agregados
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado():
+def listado(): 
 
     #----- AGREGAR SERVICIO -----#
 
@@ -41,6 +41,42 @@ def listado():
                    request.post_vars.ubicacionServicio)
 
         servicio_nuevo.insertar()
+
+        try:
+            idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+            jefeDependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].id_jefe_dependencia
+
+            jefe_dependencia = db(jefeDependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+            assert(jefe_dependencia != None)
+            
+        except:
+
+            return redirect(URL('servicios', 'listado'))
+
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        dependencia = db(idDependencia == db.dependencias.id).select()[0].nombre
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s y pertenece a la dependencia %s.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha agregado un nuevo servicio', correo)
+
+        # Variable nombre persona que recibe el email
+
+        # Variable nombre persona que realizo la operacion
+        # nombreUsuario = auth.user.first_name + ' ' + auth.user.last_name
+
+        # Variable rol persona que realizo la operacion
+        # rolUsuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].rol   
+
+        # Variable dependencia de la persona que realizo la operacion
+        # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
+
+        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE 
 
     #----- FIN AGREGAR SERVICIO -----#
 
@@ -75,6 +111,7 @@ def listado():
 
     if request.post_vars.edit and (request.post_vars.eliminar is None) and (request.post_vars.visibilidad is None):
         editar = db(db.servicios.id == request.vars.idFicha).select(db.servicios.ALL)
+        
     else:
         editar = []
 
@@ -91,6 +128,7 @@ def listado():
     #----- ELIMINAR SERVICIO -----#
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
+
 
     #----- FIN ELIMINAR SERVICIO -----#
 
@@ -121,12 +159,101 @@ def listado():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
+#----- GESTIONAR SOLICITUDES -----#
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def solicitudes():
+
+    #----- AGREGAR SOLICITUDES -----#
+    if request.post_vars.numRegistro:
+        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
+                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
+                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
+                        request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, 
+                        request.post_vars.dependenciaEjecutoraServicio, request.post_vars.jefeDependenciaEjecutoraServicios, 
+                        request.post_vars.servicioElaboradoPor, request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, 
+                        request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+
+        solicitud_nueva.insertar()
+
+    #----- LISTAR SOLICITUDES -----#
+    listado_de_solicitudes = ListaSolicitudes(db)
+
+    # Usuario solicita cambiar la pagina
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    # Usuario solicita ordenar los servicios
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    # Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
+    listado_de_solicitudes.orden_y_filtrado()
+
+    # Se recuperan las paginas calculadas en base a lo solicitado
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar, 
+        pages=listado_de_solicitudes.rango_paginas,
+        actualpage=listado_de_solicitudes.pagina_central,
+        nextpage=nextpage, prevpage=prevpage,
+        firstpage=firstpage, lastpage=lastpage)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def certificaciones():
+
+    # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
+    if request.post_vars.registro:
+        registro = request.post_vars.registro
+        proyecto = request.post_vars.proyecto
+        elaborado_por = request.post_vars.usuarioid
+        dependencia = request.post_vars.dependenciaid
+        solicitud = request.post_vars.solicitudid
+        fecha = request.post_vars.fecha
+
+        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
+
+        certificado.insertar()
+    #-------------------FIN------------------------
+
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+
+    listado_de_solicitudes = ListaSolicitudes(db)
+
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage = listado_de_solicitudes.boton_principio
+    lastpage = listado_de_solicitudes.boton_fin
+    nextpage = listado_de_solicitudes.boton_siguiente
+    prevpage = listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage,
+                categorias=listar_categorias(db), tipos=listar_tipos(db),
+                sedes=listar_sedes(db))
+
+
+
 
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
 #
 #------------------------------------------------------------------------------
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
@@ -158,7 +285,6 @@ def ajax_ficha_servicio():
     else:
         funcion.append("")
 
-    
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 
@@ -168,7 +294,6 @@ def ajax_ficha_servicio():
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
-    print("TEKE")
     dependencias_a_mostrar = []
 
     for l in adscripcion_query:
@@ -200,9 +325,7 @@ def ajax_obtener_ubicacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable():
     session.forget(response)
-    print("ANTES")
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
-    print("DESPUES")
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:
@@ -210,10 +333,82 @@ def ajax_obtener_responsable():
     return dict(responsables=responsables_a_mostrar)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def solicitudes():
-    return dict(grid=[], controls=False)
+def ajax_obtener_adscripcion_editar():
+    session.forget(response)
+    adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
+    dependencias_a_mostrar = []
+
+    for l in adscripcion_query:
+        if re.match( r'Laboratorio\s[A-G]', l.nombre) or (l.id == 1):
+            dependencias_a_mostrar.append(l)
+    return dict(dependencias=dependencias_a_mostrar)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def certificaciones():
-    return dict()
+def ajax_obtener_dependencia_editar():
+    session.forget(response)
+    dependencia_query = db((db.dependencias.unidad_de_adscripcion == int(request.vars.adscripcion))).select(db.dependencias.ALL)
+    dependencias_a_mostrar = []
+
+    for l in dependencia_query:
+        if (re.match( r'Laboratorio\s[A-G]', l.nombre)) == None:
+            dependencias_a_mostrar.append(l)
+    return dict(dependencias=dependencias_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_ubicacion_editar():
+    session.forget(response)
+    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicaciones_a_mostrar = []
+
+    for l in ubicacion_query:
+        ubicaciones_a_mostrar.append(l)
+    return dict(ubicaciones=ubicaciones_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_responsable_editar():
+    session.forget(response)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
+    responsables_a_mostrar = []
+
+    for l in responsable_query:
+        responsables_a_mostrar.append(l)
+    return dict(responsables=responsables_a_mostrar)
+
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
+
+
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
+    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    if not(dependencia is None):
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
+    else:
+        dependencianombre = "Laboratorio A"
+        dependencia = db(db.dependencias.id > 0).select()[0].id
+
+    registro = validador_registro_certificaciones(request, db)
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro,
+                dependenciaid=dependencia,
+                dependencia=dependencianombre,
+                proyecto='Proyecto ' + registro)
 

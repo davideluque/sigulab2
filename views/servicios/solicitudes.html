@@ -41,12 +41,12 @@
           <!-- Titulos Tabla Solicitudes -->
           <thead>
             <tr id="titulosListado">
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="categoria" id="f_categoria_servicio">Numero de Registro</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="tipo" id="f_tipo_servicio">Dependencia Solicitante</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre" id="f_nombre_servicio">Dependencia Ejecutora</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="seccion" id="f_seccion_servicio">Servicio</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="sede" id="f_sede_servicio">Fecha de Solicitud</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="laboratorio" id="f_laboratorio_servicio">Estado</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="registro">Numero de Registro</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="dependencia">Dependencia Solicitante</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="id_dependenciaejecutora">Dependencia Ejecutora</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="servicio">Servicio</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="fechasolicitud">Fecha de Solicitud</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="pendiente">Estado</button></th>
             </tr>
   		    </thead>
 
@@ -69,26 +69,14 @@
   </div>
 
   <!-- Inicio botones pagina -->
-  {{if controls:}}
-	<div class="row">
-	  {{if controls['firstpage']:}}
-	    <button name="page" value="{{=controls.firstpage}}"> << </button>
-	  {{pass}}
-	  {{if controls['prevpg']:}}
-	    <button name="page" value="{{=controls.prevpage}}"> < </button>
-	  {{pass}}
-	  {{for page in controls['pages']:}}
-	    <button name="page" value="{{=page}}" {{if page == controls['actualpage']:}} class="active"{{pass}}>{{=page}}</button>
-	  {{pass}}
-	  {{if controls['nextpage']:}}
-	    <button name="page" value="{{=controls.nextpage}}"> > </button>
-	  {{pass}}
-	  {{if controls['lastpage']:}}
-	    <button name="page" value="{{=controls.lastpage}}"> >> </button>
-	  {{pass}}
-	</div>
-  {{pass}}
-   <!-- Fin botones pagina -->
+    <div class="row">
+      <form>
+        {{for page in pages:}}
+          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+        {{pass}}
+      </form>
+    </div>
+    <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado Solicitudes -->
 
@@ -139,26 +127,26 @@
                      	<div class="mover">
                      	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="numRegistro" placeholder="Número de Registro" required>
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="Número de Registro" required>
                       </div>
                       </div>
 
                       <!-- Dependencia Solicitante -->
                       <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
                       </div>
 
                       <!-- Jefe Dependencia Solicitante -->
                       <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="jefeDependencia" placeholder="Jefe de la Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" required>
                       </div>
 
                       <!-- Responsable Solicitud -->
                       <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
                       <div class="form-group">
-                        <input type="text" class="form-control" id="respSolicitud" placeholder="Persona Responsable de la Solicitud" required>
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" required>
                       </div>                         
                   </div>
                 </div>
@@ -199,12 +187,12 @@
 
                       <!-- Nombre Servicio-->
                       <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Nombre">
+                        <input type="text" class="form-control" id="" name="nombreServicio" placeholder="Nombre">
                       </div>
 
                       <!-- Propósito -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel3" name="" required>
+                        <select type="select" class="form-control" id="sel3" name="propositoServicio" required>
                           <option value="" selected hidden >Propósito</option>
                      		<option value="True"></option>
                         </select>
@@ -212,7 +200,7 @@
 
                       <!-- Descripción -->
                       <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="descrip" name="" placeholder="Descripción"></textarea>
+                        <textarea class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Descripción"></textarea>
                       </div>
                     </div>
                   </div>
@@ -238,13 +226,13 @@
 
                     <!-- Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Dependencia Ejecutora del Servicio">
+                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" placeholder="Dependencia Ejecutora del Servicio">
                     </div>
                     <br>
 
                     <!-- Jefe Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Jefe de la Dependencia Ejecutora">
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" placeholder="Jefe de la Dependencia Ejecutora">
                     </div>
 
                   </div>
@@ -271,17 +259,27 @@
                     
                     <!-- Servicio Elaborador por -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Elaborador por">
+                        <input type="text" class="form-control" id="" name="elaboradoPor" placeholder="Elaborador por">
+                    </div>
+
+                    <!-- Fecha Elaboracion -->
+                    <div class="form-group">
+                        <textarea class="form-control" type="textarea" id="" name="fechaElaboracion" placeholder="Fecha Elaboración"></textarea>
                     </div>
 
                     <!-- Servicio Aprobado por -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Aprobado por">
+                        <input type="text" class="form-control" id="" name="aprobadoPor" placeholder="Aprobado por">
                     </div>
 
-                    <!-- Observaciones -->
+                    <!-- Fecha Aprobacion -->
                     <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="obser" name="" placeholder="Observaciones"></textarea>
+                        <textarea class="form-control" type="textarea" id="" name="fechaAprobacion" placeholder="Fecha Aprobación"></textarea>
+                    </div>
+
+                    <!-- Fecha Aprobacion -->
+                    <div class="form-group">
+                        <textarea class="form-control" type="textarea" id="" name="observaciones" placeholder="Observaciones"></textarea>
                     </div>
 
                   </div>

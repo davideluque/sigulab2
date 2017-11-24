@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+
+ <div class="modal fade" id="ficha_edicion" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header fichaHeader">
+          <div class="media">
+            <div class="media-left media-middle">
+                <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
+              </div>
+              <div class="media-body fichaMedia">
+                <h4 class="modal-title media-heading fichaHeading">{{=basicos['nombre']}}</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+          </div>
+        </div> 
+
+        <div class="modal-body">
+
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item active">
+              <a class="nav-link" data-toggle="tab" role="tab" aria-controls="datos">Datos Básicos</a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane active" id="datos" role="tabpanel">
+              <table class="table contenidoFicha">
+                <tbody>
+                  <tr>
+                    <td>Cedula:</td><td id="field_ci"></td>
+                  </tr>
+                  <tr>
+                    <td>Correo Electronico:</td><td id="field_email"></td>
+                  </tr>
+                  <tr>
+                    <td>Extencion:</td><td id="field_telefono"></td>
+                  </tr>
+                  <tr>
+                    <td>Pagina Web:</td><td id="field_pagina_web"></td>
+                  </tr>
+                  <tr>
+                    <td>Categoria:</td><td id="field_categoria"></td>
+                  </tr>
+                  <tr>
+                    <td>Cargo:</td><td id="field_cargo"></td>
+                  </tr>
+                  <tr>
+                    <td>Fecha de Ingreso:</td><td id="field_fecha_i"></td>
+                  </tr>
+                  <tr>
+                    <td>Fecha de Salida:</td><td id="field_fecha_s"></td>
+                  </tr>
+                  <tr>
+                    <td>Estatus:</td><td id="field_estatus"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <form method="post">
+
+            <div class="btn-group botonesFicha">
+            <button type="submit" class="btn btn-primary btn-success" name="edit" value="True" onclick="ejecutate();">Editar</button>
+
+            <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name="eliminar" value="True">Eliminar</button>
+
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <!--Script para ventana de confirmacion-->
+  <script>
+    $('#eliminar').on('click',function(e){
+        var answer=confirm('¿Seguro que desea eliminar el servicio?');
+        if(answer){
+          alert('Servicio eliminado!');
+        }
+        else{
+          e.preventDefault();      
+        }
+    });
+  </script>
+
+  <script type="text/javascript">
+      $('#ficha_edicion').on('show.bs.modal', function(e){
+          var ci = $(e.relatedTarget).data('ci');
+          var categoria = $(e.relatedTarget).data('categoria');
+          var email = $(e.relatedTarget).data('email');
+          var fecha_s = $(e.relatedTarget).data('fecha_s');
+          var fecha_i = $(e.relatedTarget).data('fecha_i');
+          var nombre = $(e.relatedTarget).data('nombre');
+          var cargo = $(e.relatedTarget).data('cargo');
+          var estatus = $(e.relatedTarget).data('estatus');
+          var telefono = $(e.relatedTarget).data('telefono');
+          var pagina_web = $(e.relatedTarget).data('pagina_web');
+
+       
+          $("#field_ci").html(ci);
+          $("#field_categoria").html(categoria);
+          $("#field_email").html(email);
+          $("#field_fecha_s").html(fecha_s);
+          $("#field_fecha_i").html(fecha_i);
+          $("#field_nombre").html(nombre);
+          $("#field_cargo").html(cargo);
+          $("#field_estatus").html(estatus);
+          $("#field_telefono").html(telefono);
+          $("#field_pagina_web").html(pagina_web);
+
+          fields = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web]
+          console.log(fields);
+          //$("#field_ci").html(item);
+          //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
+
+      });
+  </script>
