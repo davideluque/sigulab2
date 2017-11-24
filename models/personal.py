@@ -77,18 +77,6 @@ db.t_Personal._singular = 'Personal'
 #
 #######################################################################################################################
 
-# Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
-db.define_table(
-    'espacios_fisicos',
-    #Atributos;
-    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
-    Field('direccion', 'string', unique=True, notnull=True, label=T('Direccion')),
-    #Referencia (Revisar si el label es asistio o organizo)
-    Field('dependencia_adscrita', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Ubicacion')),
-    )
-db.espacios_fisicos._plural = 'Espacio Fisico'
-db.espacios_fisicos._singular = 'Espacio Fisico'
 
 #------------------------------------------------Modulo de Personal-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
