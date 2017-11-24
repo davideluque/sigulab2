@@ -56,7 +56,7 @@ def listado():
         servicio_edicion = Servicio(db)
         servicio_edicion.instanciar(request.vars.idServicioEdit)
 
-        servicio_edicion.editar(equest.post_vars.nombreServicio, request.post_vars.tipoServicio,
+        servicio_edicion.editar(request.post_vars.nombreServicio, request.post_vars.tipoServicio,
                    request.post_vars.categoriaServicio, request.post_vars.objetivoServicio,
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
@@ -75,6 +75,7 @@ def listado():
 
     if request.post_vars.edit and (request.post_vars.eliminar is None) and (request.post_vars.visibilidad is None):
         editar = db(db.servicios.id == request.vars.idFicha).select(db.servicios.ALL)
+        
     else:
         editar = []
 
@@ -121,12 +122,63 @@ def listado():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
+#----- AGREGAR SOLICITUDES -----#
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def solicitudes():
+
+    if request.post_vars.numRegistro :
+        solicitud_nueva = Solicitudes(db, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
+                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
+                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
+                        request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, 
+                        request.post_vars.dependenciaEjecutoraServicio, request.post_vars.jefeDependenciaEjecutoraServicios, 
+                        request.post_vars.servicioElaboradoPor, request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, 
+                        request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+
+        solicitud_nueva.insertar()
+
+    return dict(grid=[], controls=False)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def certificaciones():
+
+    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
+    listado_de_solicitudes = [solicitud_trial]*100
+    print(listado_de_solicitudes[20].registro)
+
+    return dict(grid=listado_de_solicitudes)
+
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuarioemail = db(db.auth_user.id == auth.user_id).select()[0].email
+    usuario = db(db.t_Personal.f_email == usuarioemail).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
+
+    if db(db.certificaciones.id > 0).count() > 1:
+        ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
+        registro = str(int(ultima_certificacion)+1)
+    else:
+        registro = '1'
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro)
+
 
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
 #
 #------------------------------------------------------------------------------
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
@@ -158,7 +210,6 @@ def ajax_ficha_servicio():
     else:
         funcion.append("")
 
-    
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 
@@ -168,7 +219,6 @@ def ajax_ficha_servicio():
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
-    print("TEKE")
     dependencias_a_mostrar = []
 
     for l in adscripcion_query:
@@ -200,9 +250,7 @@ def ajax_obtener_ubicacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_responsable():
     session.forget(response)
-    print("ANTES")
-    responsable_query = db((db.personal.dependencia == int(request.vars.dependencia))).select(db.personal.ALL)
-    print("DESPUES")
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
     responsables_a_mostrar = []
 
     for l in responsable_query:
@@ -210,10 +258,44 @@ def ajax_obtener_responsable():
     return dict(responsables=responsables_a_mostrar)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def solicitudes():
-    return dict(grid=[], controls=False)
+def ajax_obtener_adscripcion_editar():
+    session.forget(response)
+    adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
+    dependencias_a_mostrar = []
+
+    for l in adscripcion_query:
+        if re.match( r'Laboratorio\s[A-G]', l.nombre) or (l.id == 1):
+            dependencias_a_mostrar.append(l)
+    return dict(dependencias=dependencias_a_mostrar)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def certificaciones():
-    return dict()
+def ajax_obtener_dependencia_editar():
+    session.forget(response)
+    dependencia_query = db((db.dependencias.unidad_de_adscripcion == int(request.vars.adscripcion))).select(db.dependencias.ALL)
+    dependencias_a_mostrar = []
+
+    for l in dependencia_query:
+        if (re.match( r'Laboratorio\s[A-G]', l.nombre)) == None:
+            dependencias_a_mostrar.append(l)
+    return dict(dependencias=dependencias_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_ubicacion_editar():
+    session.forget(response)
+    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicaciones_a_mostrar = []
+
+    for l in ubicacion_query:
+        ubicaciones_a_mostrar.append(l)
+    return dict(ubicaciones=ubicaciones_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_responsable_editar():
+    session.forget(response)
+    responsable_query = db((db.t_Personal.f_dependencia == int(request.vars.dependencia))).select(db.t_Personal.ALL)
+    responsables_a_mostrar = []
+
+    for l in responsable_query:
+        responsables_a_mostrar.append(l)
+    return dict(responsables=responsables_a_mostrar)
 
