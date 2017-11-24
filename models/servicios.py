@@ -56,7 +56,7 @@ db.define_table(
 
 	# Prof Encargado
 	Field('responsable',		'reference t_Personal',
-		  requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s'), label=T('Encargado')),
+		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), label=T('Encargado')),
 
 	# Dependencia
 	Field('dependencia',		'reference dependencias',
@@ -90,9 +90,10 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
-	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
+	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
+
+	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Responsable de la Solicitud')),
 
 	# TODO: Conectar el email con el responsable
 	#
@@ -125,7 +126,7 @@ db.define_table(
 	#######################################################
 	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 	
-	Field('jefede_pendencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
+	Field('jefede_pendencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
 	# TO DO: Conectar este correo con las validaciones de solicitudes
 	#
@@ -152,3 +153,17 @@ db.define_table(
 #
 #################################################################################################
 
+db.define_table(
+	'certificaciones',
+
+	Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
+	Field('proyecto', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Poyecto')),
+	Field('elaborado_por', 'reference t_Personal',
+		  requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(email)s'), label=T('Elaborado Por')),
+	Field('servicio', 'reference servicios',
+		  requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
+	Field('solicitud', 'reference solicitudes',
+		  requires=IS_IN_DB(db, db.solicitudes.id, '%(registro))s'), label=T('Solicitud a Certificar')),
+	Field('fecha_certificacion',   'date',
+		  requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Certificacion de Solicitud')),
+)

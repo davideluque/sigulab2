@@ -61,10 +61,10 @@ db.define_table(
 
     #Referencias
     Field('f_usuario', 'reference auth_user',
-          requires=IS_IN_DB(db, db.auth_user, '%(email)s'), label=T('Usuario Asociado'))#,
+          requires=IS_IN_DB(db, db.auth_user, '%(email)s'), label=T('Usuario Asociado')),
 
-    #Field('f_dependencia', 'reference dependencias',
-    #      requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
+    Field('f_dependencia', 'reference dependencias',
+          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
     )
 
 db.t_Personal._plural = 'Personal'
