@@ -14,10 +14,13 @@ def recoverpassword():
 
 # Inicio de Sesion
 def login():
-    if auth.user:
-        return redirect(URL('index'))
-    form=auth.login()
-    return dict(form=form)
+
+    #return redirect(URL('modulos', 'login'))
+    # if auth.user:
+    #     return redirect(URL('index'))
+    # form=auth.login()
+    # return dict(form=form)
+    return redirect(URL('modulos', 'login', vars=dict(error='1')))
 
 #--------------------------------------
 # Otras Funcionalidades Basicas

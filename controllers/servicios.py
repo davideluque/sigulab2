@@ -19,9 +19,11 @@ def usuario():
 
 # Tabla de servicios agregados
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado():
+def listado(): 
 
     #----- AGREGAR SERVICIO -----#
+
+
 
     if request.post_vars.nombreServicio and request.post_vars.envio != "edicion":
 
@@ -40,7 +42,27 @@ def listado():
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio)
 
+
+        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE 
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia    
+        jefeDependencia= db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].email
+        dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
+
+        # Variable nombre persona que recibe el email
+
+        # Variable nombre persona que realizo la operacion
+        # nombreUsuario = auth.user.first_name + ' ' + auth.user.last_name
+
+        # Variable rol persona que realizo la operacion
+        # rolUsuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].rol   
+
+        # Variable dependencia de la persona que realizo la operacion
+        # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
+
         servicio_nuevo.insertar()
+        __enviar_correo(jefeDependencia, 'Se ha agregado un nuevo servicio', 
+            '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, VARIABLE PERSONA QUE RECIBE EL EMAIL.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por VARIABLE NOMBRE PERSONA que cumple el rol de VARIABLE ROL y pertenece a la dependencia (%dependenciaUsuario).</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>')
+
 
     #----- FIN AGREGAR SERVICIO -----#
 
@@ -92,6 +114,7 @@ def listado():
     #----- ELIMINAR SERVICIO -----#
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
+
 
     #----- FIN ELIMINAR SERVICIO -----#
 
@@ -168,33 +191,47 @@ def solicitudes():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
 
-    solicitud_trial = db(db.solicitudes.id>0).select(db.solicitudes.ALL)[0]
-    listado_de_solicitudes = [solicitud_trial]*100
-    print(listado_de_solicitudes[20].registro)
+    # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
+    if request.post_vars.registro:
+        registro = request.post_vars.registro
+        proyecto = request.post_vars.proyecto
+        elaborado_por = request.post_vars.usuarioid
+        dependencia = request.post_vars.dependenciaid
+        solicitud = request.post_vars.solicitudid
+        fecha = request.post_vars.fecha
 
-    return dict(grid=listado_de_solicitudes)
+        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
 
-def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
-    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
-    usuarioemail = db(db.auth_user.id == auth.user_id).select()[0].email
-    usuario = db(db.t_Personal.f_email == usuarioemail).select()[0]
-    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
-    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
-    fecha = request.now
+        certificado.insertar()
+    #-------------------FIN------------------------
 
-    if db(db.certificaciones.id > 0).count() > 1:
-        ultima_certificacion = db(db.certificaciones.id > 0).select()[-1].registro
-        registro = str(int(ultima_certificacion)+1)
-    else:
-        registro = '1'
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
 
-    return dict(solicitud=solicitud_info,
-                usuario=usuario,
-                servicio=servicio,
-                responsable=responsable,
-                fecha=fecha,
-                registro=registro)
+    listado_de_solicitudes = ListaSolicitudes(db)
+
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage = listado_de_solicitudes.boton_principio
+    lastpage = listado_de_solicitudes.boton_fin
+    nextpage = listado_de_solicitudes.boton_siguiente
+    prevpage = listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage,
+                categorias=listar_categorias(db), tipos=listar_tipos(db),
+                sedes=listar_sedes(db))
+
+
 
 
 #------------------------------------------------------------------------------
@@ -322,4 +359,42 @@ def ajax_obtener_responsable_editar():
     for l in responsable_query:
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
+
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
+
+
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_certificar_servicio():
+    solicitudesid = request.post_vars.solicitud
+    solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
+    usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
+    servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
+    responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
+    fecha = request.now
+    dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    if not(dependencia is None):
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
+    else:
+        dependencianombre = "Laboratorio A"
+        dependencia = db(db.dependencias.id > 0).select()[0].id
+
+    registro = validador_registro_certificaciones(request, db)
+
+    return dict(solicitud=solicitud_info,
+                usuario=usuario,
+                servicio=servicio,
+                responsable=responsable,
+                fecha=fecha,
+                registro=registro,
+                dependenciaid=dependencia,
+                dependencia=dependencianombre,
+                proyecto='Proyecto ' + registro)
 
