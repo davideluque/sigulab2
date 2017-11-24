@@ -19,10 +19,8 @@ db.define_table(
 	Field('nombre',	'string', unique=True, notnull=True, label=T('Nombre')),
 )
 
-db.categorias_servicios._plural = 'Categorías'
-# you could use `rebase -i` to squash them afterwards
-# Or, you could do it manually (be sure to do this at top level of the repo)
-# get your index and work tree into the desired state, wit
+
+db.categorias_servicios._plural = 'Categorías', 
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.
@@ -104,7 +102,7 @@ db.define_table(
 
 	Field('telefonos_responsable', 'list:string', label=T('Extensiones')),
 
-	Field('fechsa',   'date',
+	Field('fecha',   'date',
 		  requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
 
 	Field('id_servicio_solicitud', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),

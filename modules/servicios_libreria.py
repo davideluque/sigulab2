@@ -296,8 +296,6 @@ class Solicitud(object):
 		self.dependencia_solicitante = dependencia_solicitante
 		self.jefe_dependencia_solicitante = jefe_dependencia_solicitante
 		self.responsable_solicitud = responsable_solicitud
-		self.email_responsable_solicitud = email_responsable_solicitud
-		self.telef_responsable_solicitud = telef_responsable_solicitud
 		self.categoria_servicio = categoria_servicio
 		self.tipo_servicio = tipo_servicio
 		self.nombre_servicio = nombre_servicio
@@ -315,6 +313,9 @@ class Solicitud(object):
 		self.lugar_ejecucion_servicio = lugar_ejecucion_servicio
 		self.estado_solicitud = estado_solicitud
 		self.db = db
+		
+		self.email_responsable_solicitud = email_responsable_solicitud
+		self.telef_responsable_solicitud = telef_responsable_solicitud
 		
 	def __str__(self):
 
