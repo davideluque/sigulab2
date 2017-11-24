@@ -19,7 +19,9 @@ db.define_table(
 	Field('nombre',	'string', unique=True, notnull=True, label=T('Nombre')),
 )
 
-db.categorias_servicios._plural = 'Categorías'
+db.categorias_servicios._plural = 'Categorías', you could use `rebase -i` to squash them afterwards
+# Or, you could do it manually (be sure to do this at top level of the repo)
+# get your index and work tree into the desired state, wit
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.
@@ -119,14 +121,15 @@ db.define_table(
 
 	Field('id_dependencia_ejecutora_solicitud', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), label=T('Dependencia Ejecutora')),
 
-	# TODO: Conectar el espacio físico con la dependencia
+	
 	#
 	#######################################################
 	Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 
 	Field('jefe_dependencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Ejecutora')),
 	
-	# TODO: Conectar este correo con las validaciones de solicitudes
+	
+
 	#
 	# Esto en vez de el email quizá pueda tener el id de la persona que aprobo la solicitud
 	#

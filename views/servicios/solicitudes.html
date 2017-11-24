@@ -139,26 +139,26 @@
                      	<div class="mover">
                      	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="numRegistro" placeholder="Número de Registro" required>
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="Número de Registro" required>
                       </div>
                       </div>
 
                       <!-- Dependencia Solicitante -->
                       <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
                       </div>
 
                       <!-- Jefe Dependencia Solicitante -->
                       <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="jefeDependencia" placeholder="Jefe de la Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" required>
                       </div>
 
                       <!-- Responsable Solicitud -->
                       <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
                       <div class="form-group">
-                        <input type="text" class="form-control" id="respSolicitud" placeholder="Persona Responsable de la Solicitud" required>
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" required>
                       </div>                         
                   </div>
                 </div>
@@ -199,12 +199,12 @@
 
                       <!-- Nombre Servicio-->
                       <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Nombre">
+                        <input type="text" class="form-control" id="" name="nombreServicio" placeholder="Nombre">
                       </div>
 
                       <!-- Propósito -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel3" name="" required>
+                        <select type="select" class="form-control" id="sel3" name="propositoServicio" required>
                           <option value="" selected hidden >Propósito</option>
                      		<option value="True"></option>
                         </select>
@@ -212,7 +212,7 @@
 
                       <!-- Descripción -->
                       <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="descrip" name="" placeholder="Descripción"></textarea>
+                        <textarea class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Descripción"></textarea>
                       </div>
                     </div>
                   </div>
@@ -238,13 +238,13 @@
 
                     <!-- Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Dependencia Ejecutora del Servicio">
+                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" placeholder="Dependencia Ejecutora del Servicio">
                     </div>
                     <br>
 
                     <!-- Jefe Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Jefe de la Dependencia Ejecutora">
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" placeholder="Jefe de la Dependencia Ejecutora">
                     </div>
 
                   </div>
@@ -271,17 +271,27 @@
                     
                     <!-- Servicio Elaborador por -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Elaborador por">
+                        <input type="text" class="form-control" id="" name="elaboradoPor" placeholder="Elaborador por">
+                    </div>
+
+                    <!-- Fecha Elaboracion -->
+                    <div class="form-group">
+                        <textarea class="form-control" type="textarea" id="" name="fechaElaboracion" placeholder="Fecha Elaboración"></textarea>
                     </div>
 
                     <!-- Servicio Aprobado por -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Aprobado por">
+                        <input type="text" class="form-control" id="" name="aprobadoPor" placeholder="Aprobado por">
                     </div>
 
-                    <!-- Observaciones -->
+                    <!-- Fecha Aprobacion -->
                     <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="obser" name="" placeholder="Observaciones"></textarea>
+                        <textarea class="form-control" type="textarea" id="" name="fechaAprobacion" placeholder="Fecha Aprobación"></textarea>
+                    </div>
+
+                    <!-- Fecha Aprobacion -->
+                    <div class="form-group">
+                        <textarea class="form-control" type="textarea" id="" name="observaciones" placeholder="Observaciones"></textarea>
                     </div>
 
                   </div>
