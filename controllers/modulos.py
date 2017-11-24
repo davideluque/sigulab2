@@ -32,8 +32,11 @@ def sigulab2():
 def login():
     if auth.user:
         return redirect(URL('index'))
+    error = False
+    if request.vars['error'] == '1':
+        response.flash=T("Usuario o clave incorrecta.")
     form=auth.login()
-    return dict(form=form)
+    return dict(form=form, error=error)
 
 # Perfil de Usuario
 @auth.requires_login(otherwise=URL('modulos', 'login'))

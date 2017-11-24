@@ -19,8 +19,7 @@ db.define_table(
 	Field('nombre',	'string', unique=True, notnull=True, label=T('Nombre')),
 )
 
-db.categorias_servicios._plural = 'Categorías', 
-
+db.categorias_servicios._plural = 'Categorías',
 db.categorias_servicios._singular = 'Categoría'
 
 # servicios: Catalogo de todos los Servicios agregados al sistema.

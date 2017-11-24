@@ -1,3 +1,5 @@
+import random
+
 #------------------------------------------------------------------------------
 #
 # Clase que permite tomar un record de la tabla servicios y realizar cada 
@@ -5,6 +7,7 @@
 #
 #------------------------------------------------------------------------------
 
+import random
 
 class Servicio(object):
 
@@ -287,6 +290,7 @@ class Solicitud(object):
 				 observaciones = None, id_dependencia_ejecutora = None, estado_solicitud = None):
 
 		self.registro = registro
+
 		self.id_responsable_solicitud = id_responsable_solicitud
 		self.fecha_solicitud = fecha_solicitud
 		self.id_servicio_solicitud = id_servicio_solicitud
@@ -300,18 +304,19 @@ class Solicitud(object):
 
 		# Variables Disponibles tras conseguir_atributos()
 		self.id = None
-		self.fecha_elaboracion = None
-		self.elaborada_por = None
-		self.email_responsable_solicitud = None
-		self.telef_responsable_solicitud = None
-		self.id_dependencia_solicitante = None
-		self.jefe_dependencia_solicitante = None
-		self.jefe_dependencia_ejecutora = None
-		self.lugar_ejecucion_servicio = None
-		self.proposito_descripcion = None
-		self.nombre_servicio = None
-		self.tipo_servicio = None
-		self.categoria_servicio = None
+		self.fecha_elaboracion
+		self.elaborada_por
+		self.email_responsable_solicitud
+		self.telef_responsable_solicitud
+		self.nombre_dependencia_solicitante
+		self.nombre_jefe_dependencia_solicitante
+		self.nombre_dependencia_ejecutora
+		self.jefe_dependencia_ejecutora
+		self.lugar_ejecucion_servicio
+		self.proposito_descripcion
+		self.nombre_servicio
+		self.tipo_servicio
+		self.categoria_servicio
 		
 		# Variables disponibles despues de aprobacion
 		self.aprobada_por = None
@@ -325,7 +330,7 @@ class Solicitud(object):
 		return self.registro 
 
 	def insertar(self):
-		
+
 		insercion = self.db.solicitudes.insert(registro = registro, dependencia = id_dependencia_solicitante,
 												responsable = id_responsable_solicitud, fecha = fecha_solicitud, 
 												id_servicio_solicitud = id_servicio_solicitud,
@@ -342,6 +347,7 @@ class Solicitud(object):
 		instanciacion = self.db(self.db.solicitudes.id == id).select(self.db.solicitudes.ALL)
 
 		if (len(instanciacion) == 1):
+
 			self.id = id
 			self.registro = instanciacion[0].registro
 			self.id_dependencia_solicitante = instanciacion[0].dependencia
@@ -527,9 +533,9 @@ class ListaSolicitudes(object):
 		self.columna = columna
 
 	def capturar_objetos(self):
-		for solic in self.set.select(self.db.solicitud.id):
+		for solic in self.set.select(self.db.solicitudes.id):
 			solicitud = Solicitud(self.db)
-			solicitud.instanciar(serv.id)
+			solicitud.instanciar(solic.id)
 			self.filas.append(solicitud)
 
 	def orden_y_filtrado(self):
@@ -721,3 +727,35 @@ class Certificacion(object):
 			fecha_certificacion=self.fecha_certificacion)
 
 		return actualizacion
+
+
+# Funcion para calcular numero del registro de las solicitudes 
+
+def generador_num_registro():
+	min = 0
+	max = 500
+	digits = str(random.randint(min, max))
+	digits = (len(str(max))-len(digit))*'0'
+
+	return digits
+
+# Funcion que genera numeros arbitrarios para el registro de certificaciones y solicitudes
+
+def generador_num_registro():
+    min = 0
+    max = 500
+    digit = str(random.randint(min, max))
+    digits = (len(str(max))-len(digit))*'0' + digit
+
+    return digits
+
+def validador_registro_certificaciones(request, db):
+	anio = str(request.now)[2:4]
+	registro = 'UL-' + anio + '/' + generador_num_registro()
+
+	check = db(db.certificaciones.registro == registro).count()
+
+	if check != 0:
+		return validador_registro_certificaciones(request, db)
+	else:
+		return registro
