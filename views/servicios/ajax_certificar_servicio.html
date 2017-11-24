@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!-- Modal certificar un servicio -->
+<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+
+<div class="modal fade" id="modalServiceCertification" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="ok">
+                <span class="glyphicon glyphicon-ok-sign"></span>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Certificación de Servicio de Laboratorio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-12 col11Body" style="padding-left: 35px !important padding-bottom: 30px !important">
+                          <h4 class="titulosForm">Datos Básicos</h4>
+
+                           	<div class="mover">
+                           	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="numRegistro" value="Número" required>
+                            </div>
+                            </div>
+
+                            <div class="mover">
+                            <label class="form-group" id="Proyecto" style="margin-bottom: 0px" style="">Proyecto</label>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="Proyecto" value="Proyecto" required>
+                            </div>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Elaborado Por</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="Elaborado Por" required>
+                            </div>
+
+							               <!-- <label class="form-group" id="" style="margin-bottom: 0px">C.I.</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="C.I." required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Nombre del Servicio</label>  -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="Nombre del Servicio" required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Responsable del Servicio</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="Responsable del Servicio" required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número de Solicitud</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="Número de Solicitud" required>
+                            </div>
+
+                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de certificación</label> -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="" value="Fecha de certificación" required>
+                            </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+
+                </form>
+            </div>
+          </div>
+
+        </div>
+
+      <div class="modal-footer" style="border-color: white !important">
+        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Certificar</button>
+      </div>
+
+      </div>
+
+    </div>
+  </div>

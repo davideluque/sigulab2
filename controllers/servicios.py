@@ -148,6 +148,8 @@ def ajax_certificacion_servicio():
 #
 #------------------------------------------------------------------------------
 
+# NO CONECTA LA DEPENDENCIA CON RESPONSABLE
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
     session.forget(response)
@@ -178,7 +180,6 @@ def ajax_ficha_servicio():
     else:
         funcion.append("")
 
-    
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 

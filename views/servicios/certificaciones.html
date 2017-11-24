@@ -18,17 +18,17 @@
   <span class="breadcrumb-item active">Certicaciones de Servicios</span>
   </div>
 </nav>
-
+<!--
 <div class="container">
     <div class="row">
         <div class="col-sm-6"></div>
         <div id="columnBotonAgregar" class="col-sm-6">
-            <!-- Boton que lleva al modal -->
+             Boton que lleva al modal
           <button type="button" id="botonCertificar" class="btn btn-info" data-toggle="modal" data-target="#modalServiceCertification">Certificar Servicio</button>
         </div>
     </div>
 </div>
-
+-->
 <div id="listadoContainer" class="container">
   <div class="row">
   	<div class="table-responsive" >
@@ -36,16 +36,23 @@
   		 <form>
           <thead>
             <tr id="titulosListado">
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_categoria_servicio">Numero de Registro</button></th>
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_tipo_servicio">Certificado por</button></th>
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_nombre_servicio">Responsable</button></th>
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_seccion_servicio">Orden de Compra / Fecha</button></th>
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_laboratorio_servicio">Autorización de Pago / Fecha</button></th>
-        <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_sede_servicio">Número Factura</button></th>
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="" id="f_sede_servicio">Fecha de certificación</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="fecha_aprobacion" id="fecha_aprobacion">Fecha de Solicitud</button></th>
+				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="registro" id="registro">Numero de Registro</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="servicio" id="servicio">Servicio</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="dependencia" id="dependencia">Solicitante</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="id_dependencia_ejecutora_solicitud" id="id_dependencia_ejecutora_solicitud">Dependencia Ejecutora</button></th>
   			</tr>
   		  </thead>
   	     <tbody>
+            {{for item in grid:}}
+              <tr>
+                  <th class="camposTabla">{{=item.fecha_aprobacion}}</th>
+                  <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}});">{{=item.registro}}</a></th>
+                  <th class="camposTabla">{{=item.id_servicio_solicitud}}</th>
+                  <th class="camposTabla">{{=item.dependencia}}</th>
+				  <th class="camposTabla">{{=item.id_dependencia_ejecutora_solicitud}}</th>
+              </tr>
+			{{pass}}
   		  </tbody>
   		 </form>
   		</table>
@@ -53,110 +60,25 @@
   </div>
 </div>
 
-<!-- Modal certificar un servicio -->
-  <div class="modal fade" id="modalServiceCertification" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header addHeader">
-          <div class="row addRow" id="rowHeader">
-            <div class="col-sm-1" id="col1Header">
-              <div class="container" id="ok">
-                <span class="glyphicon glyphicon-ok-sign"></span>
-              </div>
-            </div>
-            <div class="col-sm-11" id="col11Header">
-              <h4 class="modal-title" id="nuevoServicio">Certificación de Servicio de Laboratorio</h4>
-            </div>
-          </div>
-        </div>
-        <!-- Fin Modal Header -->
-        
-        <!-- Modal Body -->
-        <div class="modal-body addBody">
-          <div class="row addRow">
-            <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
-
-                    <!-- Primer Paso -->
-                    <fieldset class="formField">
-                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
-                        <!-- Aqui va la barra lateral -->
-                        
-                        <!-- Aqui va la informacion -->
-                        <div class="col-sm-12 col11Body" style="padding-left: 35px !important padding-bottom: 30px !important">
-                          <h4 class="titulosForm">Datos Básicos</h4>                
-                           	
-                           	<div class="mover">
-                           	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="numRegistro" placeholder="Número" required>
-                            </div>
-                            </div>
-
-                            <div class="mover">
-                            <label class="form-group" id="Proyecto" style="margin-bottom: 0px" style="">Proyecto</label>
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="Proyecto" placeholder="Proyecto" required>
-                            </div>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Elaborado Por</label> -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Elaborado Por" required>
-                            </div>
-
-							               <!-- <label class="form-group" id="" style="margin-bottom: 0px">C.I.</label> -->                            
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="C.I." required>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Nombre del Servicio</label>  --> 
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Nombre del Servicio" required>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Responsable del Servicio</label> -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Responsable del Servicio" required>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número de Solicitud</label> -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Número de Solicitud" required>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Número de Solicitud</label> -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Número de Solicitud" required>
-                            </div>
-
-                            <!-- <label class="form-group" id="" style="margin-bottom: 0px">Fecha de certificación</label> -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="" placeholder="Fecha de certificación" required>
-                            </div>                              
-                        </div>
-                      </div>
-                    </fieldset>
-                    <!-- Fin Primer Paso -->
-
-                </form>
-            </div>
-          </div>               
+<!-- Field Escondido para el modal-->
+<input type="hidden" id="solicitud" name="solicitud" value="">
+<!-- Inicio Modal ficha de Servicio -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div id="formcert" class="modal-content">
 
         </div>
-
-      <div class="modal-footer" style="border-color: white !important">
-        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Certificar</button>
-      </div> 
-
-      </div>
-
     </div>
-  </div>
+</div>
 
+<script language="javascript">
+
+  function abrirForm(solicitud) {
+		var x = document.getElementById("solicitud");
+			x.value = solicitud;
+		ajax('ajax_certificar_servicio', ['solicitud'], "formcert");
+	}
+</script>
 
 {{end}}
