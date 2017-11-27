@@ -1,0 +1,6 @@
+<select class="form-control" type="select" id="obtenerNombreServicio" name="nombreServicio" required>
+	<option selected hidden>Nombre Servicio</option>	
+		{{for servicio in servicios:}}
+			<option value="{{=servicio.id}}">{{=servicio.nombre}}</option>
+		{{pass}} 
+</select>

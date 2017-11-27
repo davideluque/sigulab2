@@ -178,6 +178,28 @@ def solicitudes():
     #----- LISTAR SOLICITUDES -----#
     listado_de_solicitudes = ListaSolicitudes(db, auth)
 
+    #----- DATOS DE SOLICITANTE -----#
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable]
+
+
     # Usuario solicita cambiar la pagina
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
@@ -199,7 +221,8 @@ def solicitudes():
         pages=listado_de_solicitudes.rango_paginas,
         actualpage=listado_de_solicitudes.pagina_central,
         nextpage=nextpage, prevpage=prevpage,
-        firstpage=firstpage, lastpage=lastpage)
+        firstpage=firstpage, lastpage=lastpage, datos_solicitud=datos_solicitud, 
+        categorias=listar_categorias(db), tipos=listar_tipos(db))
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -373,6 +396,17 @@ def ajax_obtener_responsable_editar():
     for l in responsable_query:
         responsables_a_mostrar.append(l)
     return dict(responsables=responsables_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_nombre_servicio():
+    session.forget(response)
+    servicio_query = db(db.servicios.tipo == int(request.vars.tipo) and db.servicios.categoria == int(request.vars.categoria)).select(db.servicios.ALL)
+
+    servicios_a_mostrar = []
+    for servicio in servicio_query:
+        servicios_a_mostrar.append(servicio)
+
+    return dict(servicios=servicios_a_mostrar)
 
 
 # Funcion para enviar un correo de notificacion 

@@ -429,7 +429,7 @@ class Solicitud(object):
 		# Dependencia solicitante		
 		self.nombre_dependencia_solicitante = dependencia.nombre
 
-		# Jefe Dependencia Solicitante
+		# Jefe Dependencia Solicitante ESTO ESTA MALO, EL JEFE DE DEPENDENCIA ES UN USUARIO PAPA
 		self.nombre_jefe_dependencia_solicitante = self.db(dependencia.id_jefe_dependencia == self.db.t_Personal.id).select(self.db.t_Personal.ALL)[0].f_nombre		
 
 		id_dependencia_ejecutora = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].dependencia
