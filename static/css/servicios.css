@@ -139,10 +139,10 @@ body{
 	background-size: contain;
 }*/
 
-.dropdown.servici.active{
+.dropdown.active-item.active{
 	background-color: transparent !important;
 	border-bottom: 3px solid #0300d7;
-	height: 45px;
+	height: 40%;
 	content: " ";
 	left: 0;
 	right: 0;

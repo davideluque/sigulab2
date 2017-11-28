@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {{extend 'layout_principal.html'}}
+  {{extend 'layout.html'}}
   
   {{block head}}
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modulos.css')}}"> 
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   {{end}}
-  {{block center}}
 </head>
 <body>
+{{block center}}
+  <div class="container">
+      <div id="fila1" class="row">
+      </div>
 
-</body>
-</html>
-
-
-<div class="container">
-    <div id="fila1" class="row">
-    </div>
-
-    <div id="fila2" class="row">
-
-      <div class="col-sm-2"></div>
-
-      <div class="col-sm-8">
-
-        <div class="col-sm-6 columnas">
-          <a href="{{=URL('..', 'sigulab2', 'personal')}}">
-            <img class="iconos" src="{{=URL('static', 'images/personal_icono.png')}}">
-            <h3 class="opciones">Personal</h3>
-          </a>
-        </div>
-
-        <div class="col-sm-6 columnas">
-          <a href="{{=URL('..','sigulab2', 'servicios') }}">
-            <img class="iconos" src="{{=URL('static', 'images/servicios_icono.png')}}" >
-            <h3 class="opciones">Servicios</h3>
-          </a>
-        </div>
+      <div id="fila2" class="row">
 
         <div class="col-sm-2"></div>
 
+        <div class="col-sm-8">
+
+          <div class="col-sm-6 columnas">
+            <a href="{{=URL('..', 'sigulab2', 'personal')}}">
+              <img class="iconos" src="{{=URL('static', 'images/personal_icono.png')}}">
+              <h3 class="opciones">Personal</h3>
+            </a>
+          </div>
+
+          <div class="col-sm-6 columnas">
+            <a href="{{=URL('..','sigulab2', 'servicios') }}">
+              <img class="iconos" src="{{=URL('static', 'images/servicios_icono.png')}}" >
+              <h3 class="opciones">Servicios</h3>
+            </a>
+          </div>
+
+          <div class="col-sm-2"></div>
+
+        </div>
       </div>
-    </div>
-</div>
+  </div>
+<script>
+document.getElementById("inicio").className += " active";
+</script>
+{{end}}
+</body>
+</html>

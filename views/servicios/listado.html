@@ -4,8 +4,8 @@
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
-<!--   <script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script> -->
 {{end}}
 
 {{block center}}
@@ -185,7 +185,7 @@
                         <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                           <!-- Aqui va la barra lateral -->
                           <div class="col-sm-1 col1Body">
-                            <span class="step">1</span>
+                            <span class="step ready">1</span>
                             <span class="step activePass">2</span>
                             <span class="step">3</span>
                             <span class="step">4</span> 
@@ -221,8 +221,8 @@
                       <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
-                          <span class="step">1</span>
-                          <span class="step">2</span>
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
                           <span class="step activePass">3</span>
                           <span class="step">4</span> 
                         </div>
@@ -277,9 +277,9 @@
                       <div class="form-row" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
-                          <span class="step">1</span>
-                          <span class="step">2</span>
-                          <span class="step">3</span>
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
                           <span class="step activePass">4</span> 
                         </div>
 
@@ -556,7 +556,7 @@
 <input type="hidden" id="ubicacion" name="ubicacion" value="">
 
 <script language="javascript">
-	
+document.getElementById("servicios").className += " active";	
   function abrirFicha(servicio) {
 		var x = document.getElementById("serv");
 			x.value = servicio;

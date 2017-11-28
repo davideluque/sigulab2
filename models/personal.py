@@ -61,7 +61,7 @@ db.define_table(
 
     #Referencias
     Field('f_usuario', 'reference auth_user',
-          requires=IS_IN_DB(db, db.auth_user.id, '%(email)s'), label=T('Usuario Asociado')),
+          requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
     Field('f_dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))

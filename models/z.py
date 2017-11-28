@@ -259,7 +259,7 @@ if db(db.tipos_servicios).isempty():
 # Categorias de servicios
 
 if db(db.categorias_servicios).isempty():
-  db.categorias_servicios.insert(nombre='Alimento')
+  db.categorias_servicios.insert(nombre='Alimentos')
   db.categorias_servicios.insert(nombre='Ambiente')
   db.categorias_servicios.insert(nombre='Arquitectura, Urbanismo y Arte')
   db.categorias_servicios.insert(nombre='Biología')
