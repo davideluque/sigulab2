@@ -311,6 +311,8 @@
 
 <!-- Ajax JavaScript-->
 <script type="text/javascript">
+document.getElementById("servicios").className += " active";
+
   function getServicio(){
     var opciones_categoria = document.getElementById("sel1");
     var opciones_tipo = document.getElementById("sel2");
@@ -335,9 +337,6 @@
   }
 
 </script>
-
-<!-- Controlador de pasos del modal de Solicitud de un Servicio -->
-<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->
 <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>

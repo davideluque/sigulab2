@@ -20,9 +20,7 @@ $(document).ready(function () {
         var next_step = true;
 
         parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
-            
-            
-            console.log($(this))
+                        
             if ($(this).val() == "") {
 
                 $(this).addClass('input-error');

@@ -87,6 +87,10 @@
 	  background: white;
 	  color: #505050;
 	}
+	
+	.ready {
+		background: #4CAF50;
+	}
 
 	#plus{
 		padding-left: 0;
