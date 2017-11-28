@@ -4,22 +4,31 @@
   <title>SIGULAB</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
+  <!-- Avoid search sites from indexing this website -->
+  <meta name="robots" content="noindex" />
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="{{=URL('static', 'js/web2py.js')}}"></script>
-    {{block head}}
-    {{end}} 
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  
+  {{block head}}
+  {{end}} 
 </head>
 <body>
 
 <!-- Barra de navegación principal -->
 <div class="container" id="logo">
-<a class="navbar-brand" href="{{=URL('..', 'sigulab2')}}"><div class="logotext">SIGULAB</div></a>
+<a class="navbar-brand" href="{{=URL()}}"><div class="logotext">SIGULAB</div></a>
 </div>
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -34,31 +43,44 @@
       <div class="collapse navbar-collapse" id="myNavbar">
 
         <ul class="nav navbar-nav">
-            <li class="dropdown"><a href="{{=URL('..', 'sigulab2', 'modulos')}}">INICIO</a></li>
+            <li class="dropdown" id="inicio"><a href="{{=URL('..', 'sigulab2', 'modulos')}}">INICIO</a></li>
 
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
               <ul class=" dropdown-menu">
-                <li><a href="#">Vacio</a></li>
-                <li><a href="#">Vacio</a></li>
-                <li><a href="#">Vacio</a></li>
+                <li><a href="{{=URL('personal','index')}}">Pagina Principal</a></li>
+                <li><a href="{{=URL('personal','listado')}}">Listado General de Personal</a></li>
+                <li><a href="#">Listado por Categorías de Personal</a></li>
+                <li><a href="#">Listado por Dependencias de Personal</a></li>
+                <li><a href="#">Listado por Años de Servicio de Personal</a></li>
               </ul>
             </li>
             
-
-            <li class="dropdown servici active">
+            <li class="dropdown servici">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVICIOS<span class="caret"></span></a>
                 <ul class=" dropdown-menu">
                 <li><a href="{{=URL('servicios','index')}}">Pagina Principal</a></li>
                 <li><a href="{{=URL('servicios','listado')}}">Listado de Servicios</a></li>
                 <li><a href="{{=URL('servicios','solicitudes')}}">Solicitudes de Servicios</a></li>
-                <li><a href="#">Certificar un servicio</a></li>
-                <li><a href="#">Historial de servicios</a></li>
+                <li><a href="{{=URL('servicios','certificaciones')}}">Certificar un servicio</a></li>
+                <li><a href="{{=URL('servicios','historial')}}">Historial de servicios</a></li>
               </ul>
             </li>
-        </ul>
 
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SMyDP<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{=URL('SIGULAB', 'front_page','sustancias')}}">Pagina Principal</a></li>
+                  <li><a href="{{=URL('SIGULAB', 'sustancias','sustanciapeligrosa_manage')}}">Listado de Sustancias</a></li>
+                  <li><a href="{{=URL('SIGULAB', 'sustancias','select_inventario')}}">Inventario</a></li>
+                  <li><a href="{{=URL('SIGULAB', 'sustancias','view_compras')}}">Facturación</a></li>
+                  <li><a href="{{=URL('SIGULAB', c='reportes',f='select_fecha')}}">Reportes Rl4</a></li>
+                  <li><a href="{{=URL('SIGULAB', c='reportes',f='select_fecha7')}}">Reportes Rl7</a></li>
+                 </ul>
+            </li> 
+
+        </ul>
 
       <ul class="nav navbar-nav navbar-right">
       {{if auth.has_membership('Administrador Personal') \
@@ -70,8 +92,8 @@
               <i id="iconoInfo" class="fa fa-info-circle" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="{{=URL('gestion','usuarios')}}">Usuarios</a></li>
-              <li><a href="{{=URL('gestion','dependencias')}}">Dependencias</a></li>
+              <li><a href="#">Usuarios</a></li>
+              <li><a href="#">Dependencias</a></li>
             </ul>
           </div>
         </li>
@@ -97,7 +119,7 @@
 <div class="fondoblanco"></div> 
 <div class="separador"></div>
 
-    {{block center}}
-    {{end}}
+{{block center}}
+{{end}}
 </body>
 </html>
