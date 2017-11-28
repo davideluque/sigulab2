@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-sm-6"></div>
         <div id="columnBotonAgregar" class="col-sm-6">
-          <button type="button" id="botonAgregar" class="btn btn-info" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
+          <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
         </div>
     </div>
 </div>
@@ -134,19 +134,19 @@
                       <!-- Dependencia Solicitante -->
                       <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
                       </div>
 
                       <!-- Jefe Dependencia Solicitante -->
                       <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
                       </div>
 
                       <!-- Responsable Solicitud -->
                       <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
                       <div class="form-group">
-                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" required>
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
                       </div>                         
                   </div>
                 </div>
@@ -171,23 +171,27 @@
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" required>
+                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Categoria</option>
-                      	<option value="True"></option> 
+                          {{for categoria in categorias:}}
+                        	<option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
+                          {{pass}} 
                         </select>
                       </div>
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel2" name="tipoServicio" required>
+                        <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Tipo</option>
-                     		<option value="True"></option>
+                          {{for tipo in tipos:}}
+                          <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
+                          {{pass}}
                         </select>
                       </div>
 
                       <!-- Nombre Servicio-->
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="" name="nombreServicio" placeholder="Nombre">
+                      <div class="form-group" id="obtenerNombreServicio">
+
                       </div>
 
                       <!-- Propósito -->
@@ -299,7 +303,38 @@
     <!-- Fin Modal content-->
   </div>
 </div>
-<!-- Inicio Modal Solicitar Servicio -->
+<!-- Fin Modal Solicitar Servicio -->
+
+<!-- Ajax obtenerServicio -->
+<input type="hidden" id="envioCategoria" name="categoria" value="">
+<input type="hidden" id="envioTipo" name="tipo" value="">
+
+<!-- Ajax JavaScript-->
+<script type="text/javascript">
+  function getServicio(){
+    var opciones_categoria = document.getElementById("sel1");
+    var opciones_tipo = document.getElementById("sel2");
+    var categoria_elegida = opciones_categoria.options[opciones_categoria.selectedIndex].value;
+    var tipo_elegido = opciones_tipo.options[opciones_tipo.selectedIndex].value;
+
+    if (categoria_elegida == ""){
+      return;
+    }
+
+    if (tipo_elegido == "") {
+      return;
+    }
+
+    var x = document.getElementById("envioCategoria");
+      x.value = categoria_elegida;
+
+    var y = document.getElementById("envioTipo");
+      y.value = tipo_elegido;  
+
+    ajax('ajax_obtener_nombre_servicio', ['categoria', 'tipo'], "obtenerNombreServicio");
+  }
+
+</script>
 
 <!-- Controlador de pasos del modal de Solicitud de un Servicio -->
 <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
