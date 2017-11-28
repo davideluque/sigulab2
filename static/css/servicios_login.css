@@ -4,6 +4,7 @@ html {
 
 body {
 	background-color: white !important;
+	padding-bottom:0px !important;
 } 
 
 .cabecera {
@@ -52,4 +53,10 @@ body {
 .pagina {
 	margin-top: 20px !important; 
 	margin-bottom: 0px !important;
+}
+
+.erroresLogin{
+	color:white;
+	list-style-type: none;
+	padding-left:0px;
 }

@@ -17,7 +17,7 @@ def recoverpassword():
 
 # Inicio de Sesion
 def login():
-    return redirect(URL('modulos', 'login', vars=dict(error='1')))
+    return redirect(URL('modulos', 'login', vars=dict(error='invalid_data')))
 
 #--------------------------------------
 # Otras Funcionalidades Basicas

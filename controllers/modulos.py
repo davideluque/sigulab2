@@ -27,7 +27,6 @@ def sigulab2():
 #-------------------------------------
 # Autenticacion y manejo de cuenta
 # ToDo login
-# ToDo Mostrar un error cuando ingrese alguien con una clave erronea
 # ToDo Mostrar errores mejor
 # ToDo Boton para volver a la pantalla de eleccion de modulos
 #
@@ -47,7 +46,6 @@ def sigulab2():
 # ToDo recoverpassword
 # ToDo Vistas enteras
 # ToDo Boton para ir al login
-# ToDo mostrar errores mejor
 # 
 #-------------------------------------
 
@@ -56,11 +54,12 @@ def login():
 	if auth.user:
 		return redirect(URL('index'))
 
-	# ToDo Si se ingresa con una clave incorrecta,  request.vars['error'] va a ser '1'
-	# Esto pasa porque la al equivocarse se pasa por la funcion login que esta en default
-	# ToDo Rehacer esto si hay tiempo...
 	form=auth.login()
-	return dict(form=form)
+	
+	if request.vars['error'] == 'invalid_data':
+		return dict(form=form, error="Datos de inicio de sesión incorrectos")
+	
+	return dict(form=form, error=None)
 
 # Perfil de Usuario
 @auth.requires_login(otherwise=URL('modulos', 'login'))
