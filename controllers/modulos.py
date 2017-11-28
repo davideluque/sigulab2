@@ -127,10 +127,11 @@ def ajax_registro_seccion():
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
 	site_url = URL('default', 'recoverpassword', host=True)
-	# pagina indicada en el email
+
+
 	# ToDo No escriban caracteres especiales! (clave en vez de contraseña) se muere por alguna razon...
-	auth.messages.reset_password = 'Por favor, ingrese en el siguiente enlace ' + site_url+ '/?key='+'%(key)s para ' + \
-								   'recuperar su clave de acceso.'
+	auth.messages.reset_password = 'Hola! Por favor, ingresa en el siguiente enlace ' + site_url+ '/?key='+'%(key)s para ' + \
+								   'recuperar tu clave de acceso.'
 	form = auth.request_reset_password()
 	return dict(form=form)
 
