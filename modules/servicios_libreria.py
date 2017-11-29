@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 
 #------------------------------------------------------------------------------
@@ -309,6 +310,8 @@ class Solicitud(object):
 		self.observaciones = observaciones
 		self.estado_solicitud = estado_solicitud
 
+		self.estado_solicitud_str = self.estado_string()
+
 		# Fuentes de datos
 		self.db = db
 		self.auth = auth
@@ -336,7 +339,8 @@ class Solicitud(object):
 		self.fecha_elaboracion = None
 		self.elaborada_por = None
 
-		self.conseguir_atributos()
+		if registro != None:
+			self.conseguir_atributos()
 		
 	def __str__(self):
 
@@ -362,11 +366,10 @@ class Solicitud(object):
 		return insercion
 
 	def instanciar(self, id):
-		
 		instanciacion = self.db(self.db.solicitudes.id == id).select(self.db.solicitudes.ALL)
 
-		if (len(instanciacion) == 1):
 
+		if (len(instanciacion) == 1):
 			self.id = id
 			self.registro = instanciacion[0].registro
 			self.id_responsable_solicitud = instanciacion[0].responsable
@@ -374,7 +377,7 @@ class Solicitud(object):
 			self.id_servicio_solicitud = instanciacion[0].id_servicio_solicitud
 			self.id_proposito_servicio = instanciacion[0].proposito
 			self.proposito_descripcion = instanciacion[0].proposito_descripcion
-			self.proposito_cliente_final = instanciacion[0].proposito_cliente_finalo
+			self.proposito_cliente_final = instanciacion[0].proposito_cliente_final
 			self.descripcion_servicio = instanciacion[0].descripcion
 			self.observaciones = instanciacion[0].observaciones
 			self.estado_solicitud = instanciacion[0].estado
@@ -382,6 +385,8 @@ class Solicitud(object):
 			self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
 			self.elaborada_por = instanciacion[0].elaborada_por
 			self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
+
+			self.estado_solicitud_str = self.estado_string()
 
 			self.conseguir_atributos()
 
@@ -436,7 +441,9 @@ class Solicitud(object):
 		personal = self.db(self.auth.user_id == self.db.t_Personal.f_usuario).select(self.db.t_Personal.ALL)[0]
 		self.telef_responsable_solicitud = personal.f_telefono
 
-		self.id_dependencia_solicitante = self.db(personal.f_dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+		dependencia = self.db(personal.f_dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+
+		self.id_dependencia_solicitante = dependencia.id
 
 		# Dependencia solicitante		
 		self.nombre_dependencia_solicitante = dependencia.nombre
@@ -474,7 +481,7 @@ class Solicitud(object):
 		self.tipo_servicio = self.db(id_tipo_servicio == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
 
 		id_categoria_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].categoria
-		self.categoria_servicio = self.db(id_categoria_servicio == self.db.categoria_servicios.id).select(self.db.categoria_servicios.ALL)[0].nombre
+		self.categoria_servicio = self.db(id_categoria_servicio == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre
 
 	def cambiar_estado(self, estado, request):
 		self.estado_solicitud = estado
@@ -489,16 +496,25 @@ class Solicitud(object):
 			self.fecha_aprobacion = request.now
 			# Persona responsable de la solicitud y Elaborado por
 			self.aprobada_por = self.auth.user.first_name + " " + self.auth.user.last_name
-		
 
+		self.estado_solicitud_str = self.estado_string()
 
+	def estado_string(self):
+
+		if self.estado_solicitud == -1:
+			return "Negada"
+		elif self.estado_solicitud == 0:
+			return "Pendiente por Ejecución"
+		elif self.estado_solicitud == 1:
+			return "En ejecución"
+		elif self.estado_solicitud == 2:
+			return "Pendiente por Certificación"
 
 class ListaSolicitudes(object):
 
 	def __init__(self, db, auth, orden=False, columna='id', central=1):
 		self.db = db
 		self.auth = auth
-
 		# Instanciacion de cada solicitud en la bd
 		self.set = self.db(self.db.solicitudes.id > 0)
 		self.filas = []
@@ -582,7 +598,7 @@ class ListaSolicitudes(object):
 		self.columna = columna
 
 	def capturar_objetos(self):
-		for solic in self.set.select(self.db.solicitudes.id):
+		for solic in self.set.select(self.db.solicitudes.ALL):
 			solicitud = Solicitud(self.db, self.auth)
 			solicitud.instanciar(solic.id)
 			self.filas.append(solicitud)

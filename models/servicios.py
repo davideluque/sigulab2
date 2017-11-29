@@ -133,18 +133,16 @@ db.define_table(
 	# estado=1 pendiente por ejecutar
 	# estado=2 pendiente por certificar
 
-	Field('estado','string', default='0', label=T('Estado de Solicitud')),
+	Field('estado','integer', default=0, label=T('Estado de Solicitud')),
 
 
 	Field('aprobada_por', 'string', label=T('Solicitud Aprobada Por')),
 
-	Field('fecha_aprobacion',   'date', 
-		  requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Aprobacion de Solicitud')),
+	Field('fecha_aprobacion',   'date',  label=T('Fecha de Aprobacion de Solicitud')),
 
-	Field('elaborada_por', 'string', label=T('Solicitud Aprobada Por')),
+	Field('elaborada_por', 'string', label=T('Solicitud Elaborada Por')),
 
-	Field('fecha_elaboracion',   'date', 
-		  requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Aprobacion de Solicitud')),
+	Field('fecha_elaboracion',   'date', label=T('Fecha de Elaboracion de Solicitud')),
 
 )
 
