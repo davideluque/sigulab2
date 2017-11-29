@@ -431,9 +431,6 @@ def ajax_listado_servicios():
     order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
     order_by_col = request.post_vars.ordenarPor
 
-    print(order_by_asc)
-    print(order_by_col)
-
     listado_de_servicios.cambiar_ordenamiento(order_by_asc)
     listado_de_servicios.cambiar_columna(order_by_col)
 
