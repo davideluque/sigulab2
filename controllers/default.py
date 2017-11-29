@@ -5,6 +5,9 @@
 # - download y call son ejemplos de aplicaciones basicas de web2py.
 # -------------------------------------------------------------------------
 
+def register():
+    return redirect(URL('modulos','register'))
+
 # Pagina principal (Boton de SMDP y otros modulos)
 def index():
     return dict()
@@ -14,10 +17,7 @@ def recoverpassword():
 
 # Inicio de Sesion
 def login():
-    if auth.user:
-        return redirect(URL('index'))
-    form=auth.login()
-    return dict(form=form)
+    return redirect(URL('modulos', 'login', vars=dict(error='invalid_data')))
 
 #--------------------------------------
 # Otras Funcionalidades Basicas

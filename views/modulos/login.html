@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
+    <title>SIGULAB | Iniciar sesión</title>
+    <meta charset="UTF-8">
+
+    <!-- Avoid search sites from indexing this website -->
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{=URL('static','css/core.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/components.css')}}" rel="stylesheet" type="text/css"/>
@@ -11,6 +17,11 @@
     <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/servicios_login.css')}}" rel="stylesheet" type="text/css"/>
     <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
@@ -53,16 +64,16 @@
                     </div>
                     </div></div>
 
-                <!-- Check box Recordar contrasena --> 
+                <!-- Check box Recordar contrasena 
                 <div class="form-group" id="auth_user_remember_me__row">    
                     <div class="col-xs-12 col-sm-offset-3">
                         <div class="checkbox checkbox-custom">
-    <!--                         <label class="" id="auth_user_remember_me__label">
-                            <input class="boolean" id="auth_user_remember_me" name="remember_me" type="checkbox" value="on"> Recordar mis datos</label> -->
+                           <label class="" id="auth_user_remember_me__label">
+                            <input class="boolean" id="auth_user_remember_me" name="remember_me" type="checkbox" value="on"> Recordar mis datos</label> 
                             <span class="help-block"></span>
                         </div>
                     </div>
-                </div>
+                </div>--> 
 
                 <!-- Boton Iniciar Sesion -->
                 <div class="form-group text-center m-t-30" id="submit_record__row">
@@ -79,14 +90,19 @@
                 </div>
                 {{=form.custom.begin}}
                 {{=form.custom.end}}
-                {{if form.errors:}}
-                  <ul>
-                  {{for fieldname in form.errors:}}
-                    <li> error: {{=form.errors[fieldname]}}</li>
-                  {{pass}}
-                  </ul>
-                  {{form.errors.clear()}}
-                {{pass}}
+                    <ul class="erroresLogin">
+                        {{if error:}}
+                            <li>{{=error}}</li>
+                        {{pass}}
+                        
+                        {{if form.errors:}}
+                            {{for fieldname in form.errors:}}
+                            <li>{{=form.errors[fieldname]}}</li>
+                            {{pass}}
+                            {{form.errors.clear()}}
+                        {{pass}}
+                    </ul>
+
             </form>
             <!-- Fin form login -->
         </div>

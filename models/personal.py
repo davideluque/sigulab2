@@ -61,10 +61,10 @@ db.define_table(
 
     #Referencias
     Field('f_usuario', 'reference auth_user',
-          requires=IS_IN_DB(db, db.auth_user, '%(email)s'), label=T('Usuario Asociado'))#,
+          requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
-    #Field('f_dependencia', 'reference dependencias',
-    #      requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
+    Field('f_dependencia', 'reference dependencias',
+          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
     )
 
 db.t_Personal._plural = 'Personal'
@@ -77,18 +77,6 @@ db.t_Personal._singular = 'Personal'
 #
 #######################################################################################################################
 
-# Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
-db.define_table(
-    'espacios_fisicos',
-    #Atributos;
-    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
-    Field('direccion', 'string', unique=True, notnull=True, label=T('Direccion')),
-    #Referencia (Revisar si el label es asistio o organizo)
-    Field('dependencia_adscrita', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Ubicacion')),
-    )
-db.espacios_fisicos._plural = 'Espacio Fisico'
-db.espacios_fisicos._singular = 'Espacio Fisico'
 
 #------------------------------------------------Modulo de Personal-----------------------------------------------------------------------------------------------------------------------------------------------------------
 

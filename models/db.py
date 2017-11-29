@@ -115,7 +115,6 @@ auth.settings.create_user_groups = None
 mail = auth.settings.mailer
 #mail.settings.server = myconf.get('smtp.server')
 mail.settings.server = 'logging'
-
 #mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
 mail.settings.sender = myconf.get('smtp.sender')
 mail.settings.login = myconf.get('smtp.login')
@@ -150,5 +149,3 @@ auth.settings.reset_password_requires_verification = True
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 # auth.enable_record_versioning(db)
-
-#db.define_table('person', Field('name', requires=IS_NOT_EMPTY()))

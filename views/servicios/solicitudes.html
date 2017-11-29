@@ -4,7 +4,7 @@
   
   <!-- Estilo del listado de Solicitudes de Servicios -->
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-sm-6"></div>
         <div id="columnBotonAgregar" class="col-sm-6">
-          <button type="button" id="botonAgregar" class="btn btn-info" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
+          <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
         </div>
     </div>
 </div>
@@ -41,12 +41,12 @@
           <!-- Titulos Tabla Solicitudes -->
           <thead>
             <tr id="titulosListado">
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="categoria" id="f_categoria_servicio">Numero de Registro</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="tipo" id="f_tipo_servicio">Dependencia Solicitante</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre" id="f_nombre_servicio">Dependencia Ejecutora</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="seccion" id="f_seccion_servicio">Servicio</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="sede" id="f_sede_servicio">Fecha de Solicitud</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="laboratorio" id="f_laboratorio_servicio">Estado</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="registro">Numero de Registro</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="dependencia">Dependencia Solicitante</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="id_dependenciaejecutora">Dependencia Ejecutora</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="servicio">Servicio</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="fechasolicitud">Fecha de Solicitud</button></th>
+      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="pendiente">Estado</button></th>
             </tr>
   		    </thead>
 
@@ -54,12 +54,12 @@
   	      <tbody>
       			{{for items in grid:}}
       				<tr>
-      					<th class="camposTabla">{{=items.noRegistro}}</th>
-      					<th class="camposTabla">{{=items.dependenciaSolicitante}}</th>
-      					<th class="camposTabla">{{=items.dependenciaEjecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombreServicio}});" >{{=items.nombreServicio}}</a></th>
-      					<th class="camposTabla">{{=item.categoriaServicio}}</th>
-      					<th class="camposTabla">{{=items.fechaSolicitud}}</th>
+      					<th class="camposTabla">{{=items.registro}}</th>
+      					<th class="camposTabla">{{=items.nombre_dependencia_solicitante}}</th>
+      					<th class="camposTabla">{{=items.nombre_dependencia_ejecutora}}</th>
+      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombre_servicio}});" >{{=items.nombreServicio}}</a></th>
+      					<th class="camposTabla">{{=item.categoria_servicio}}</th>
+      					<th class="camposTabla">{{=items.fecha_solicitud}}</th>
       				</tr>
       			{{pass}}
   		    </tbody>
@@ -69,26 +69,14 @@
   </div>
 
   <!-- Inicio botones pagina -->
-  {{if controls:}}
-	<div class="row">
-	  {{if controls['firstpage']:}}
-	    <button name="page" value="{{=controls.firstpage}}"> << </button>
-	  {{pass}}
-	  {{if controls['prevpg']:}}
-	    <button name="page" value="{{=controls.prevpage}}"> < </button>
-	  {{pass}}
-	  {{for page in controls['pages']:}}
-	    <button name="page" value="{{=page}}" {{if page == controls['actualpage']:}} class="active"{{pass}}>{{=page}}</button>
-	  {{pass}}
-	  {{if controls['nextpage']:}}
-	    <button name="page" value="{{=controls.nextpage}}"> > </button>
-	  {{pass}}
-	  {{if controls['lastpage']:}}
-	    <button name="page" value="{{=controls.lastpage}}"> >> </button>
-	  {{pass}}
-	</div>
-  {{pass}}
-   <!-- Fin botones pagina -->
+    <div class="row">
+      <form>
+        {{for page in pages:}}
+          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+        {{pass}}
+      </form>
+    </div>
+    <!-- Fin botones pagina -->
 </div>
 <!-- Fin Listado Solicitudes -->
 
@@ -129,7 +117,7 @@
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
-                    <span class="step">4</span>             
+                     <span class="step">4</span>
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
@@ -137,28 +125,28 @@
                      	
                       <!-- Numero Registro -->
                      	<div class="mover">
-                     	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
+                     	<label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="numRegistro" placeholder="Número de Registro" required>
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
                       </div>
                       </div>
 
                       <!-- Dependencia Solicitante -->
                       <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="dependenciaSolicitante" placeholder="Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
                       </div>
 
                       <!-- Jefe Dependencia Solicitante -->
                       <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" id="jefeDependencia" placeholder="Jefe de la Dependencia Solicitante" required>
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
                       </div>
 
                       <!-- Responsable Solicitud -->
                       <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
                       <div class="form-group">
-                        <input type="text" class="form-control" id="respSolicitud" placeholder="Persona Responsable de la Solicitud" required>
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
                       </div>                         
                   </div>
                 </div>
@@ -174,45 +162,38 @@
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
-                      <span class="step">4</span> 
+                       <span class="step">4</span>
                     </div>
 
                     <!-- Aqui va la informacion -->
-                    <div class="col-sm-11 col11Body">
+                    <div class="col-sm-11 col11Body" style="padding-top: 50px">
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" required>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Categoria</option>
-                      	<option value="True"></option> 
+                          {{for categoria in categorias:}}
+                        	<option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
+                          {{pass}} 
                         </select>
                       </div>
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <select type="select" class="form-control" id="sel2" name="tipoServicio" required>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+                        <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Tipo</option>
-                     		<option value="True"></option>
+                          {{for tipo in tipos:}}
+                          <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
+                          {{pass}}
                         </select>
                       </div>
 
                       <!-- Nombre Servicio-->
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Nombre">
-                      </div>
-
-                      <!-- Propósito -->
-                      <div class="form-group">
-                        <select type="select" class="form-control" id="sel3" name="" required>
-                          <option value="" selected hidden >Propósito</option>
-                     		<option value="True"></option>
-                        </select>
-                      </div>
-
-                      <!-- Descripción -->
-                      <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="descrip" name="" placeholder="Descripción"></textarea>
+                      <div class="form-group" id="obtenerNombreServicio">
+                        <!-- Ajax obtener nombre servicio -->
                       </div>
                     </div>
                   </div>
@@ -229,24 +210,27 @@
                     <span class="step">1</span>
                     <span class="step">2</span>
                     <span class="step activePass">3</span>
-                    <span class="step">4</span> 
+                     <span class="step">4</span>
                   </div>
                   
                   <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body col11Body3">
-                    <h4 class="titulosForm">Otros Datos</h4>
-
-                    <!-- Dependencia Ejecutora del Servicio -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Dependencia Ejecutora del Servicio">
-                    </div>
-                    <br>
-
-                    <!-- Jefe Dependencia Ejecutora del Servicio -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Jefe de la Dependencia Ejecutora">
+                  <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <!-- Propósito -->
+                    <div class="form-group" id="obtenerPropositoServicio">
+                      <!-- Ajax obtener proposito del servicio -->
                     </div>
 
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
+                        <input type="text" class="form-control" name="" placeholder="código materia / proyecto / (orden servicio - cliente final) / funcionamiento lab." required>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                    </div>
                   </div>
                 </div> 
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -257,7 +241,7 @@
               <!-- Cuarto Paso -->
               <fieldset class="formField">
                 <div class="form-row" data-step="4" data-title="Cuarto Paso">
-                <!-- Aqui va la barra lateral -->
+                  <!-- Aqui va la barra lateral -->
                   <div class="col-sm-1 col1Body">
                     <span class="step">1</span>
                     <span class="step">2</span>
@@ -265,32 +249,16 @@
                     <span class="step activePass">4</span> 
                   </div>
 
-                <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body col11Body4" >
-                  <h4 class="titulosForm">Otros Datos</h4>
-                    
-                    <!-- Servicio Elaborador por -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Elaborador por">
-                    </div>
-
-                    <!-- Servicio Aprobado por -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="" placeholder="Aprobado por">
-                    </div>
-
-                    <!-- Observaciones -->
-                    <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="obser" name="" placeholder="Observaciones"></textarea>
-                    </div>
-
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
+                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
+                    <!-- Ajax obtener datos dependencia ejecutora -->
                   </div>
                 </div>
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
                 <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
               </fieldset>
               <!-- Fin Cuarto Paso -->
-
             </form>
             <!-- Fin Form -->
           </div>
@@ -301,10 +269,66 @@
     <!-- Fin Modal content-->
   </div>
 </div>
-<!-- Inicio Modal Solicitar Servicio -->
+<!-- Fin Modal Solicitar Servicio -->
 
-<!-- Controlador de pasos del modal de Solicitud de un Servicio -->
-<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+<!-- Ajax obtenerServicio -->
+<input type="hidden" id="envioCategoria" name="categoria" value="">
+<input type="hidden" id="envioTipo" name="tipo" value="">
+
+<!-- Ajax obtener proposito servicio -->
+<input type="hidden" id="envioNombreServicio" name="idServicio" value="">
+
+<!-- Ajax obtener datos servicio -->
+<input type="hidden" id="envioNombreServicio2" name="idServicio2" value="">
+
+<!-- Ajax JavaScript-->
+<script type="text/javascript">
+  document.getElementById("servicios").className += " active";
+
+  function getServicio(){
+    var opciones_categoria = document.getElementById("sel1");
+    var opciones_tipo = document.getElementById("sel2");
+    var categoria_elegida = opciones_categoria.options[opciones_categoria.selectedIndex].value;
+    var tipo_elegido = opciones_tipo.options[opciones_tipo.selectedIndex].value;
+
+    if (categoria_elegida == ""){
+      return;
+    }
+
+    if (tipo_elegido == "") {
+      return;
+    }
+
+    var x = document.getElementById("envioCategoria");
+      x.value = categoria_elegida;
+
+    var y = document.getElementById("envioTipo");
+      y.value = tipo_elegido;  
+
+    ajax('ajax_obtener_nombre_servicio', ['categoria', 'tipo'], "obtenerNombreServicio");
+  }
+
+  function getProposito(){
+    var opcion_servicio = document.getElementById("sel3");
+    var servicio_seleccionado = opcion_servicio.options[opcion_servicio.selectedIndex].value;
+
+    var x = document.getElementById("envioNombreServicio");
+    x.value = servicio_seleccionado;
+
+    ajax('ajax_obtener_proposito_servicio', ['idServicio'], "obtenerPropositoServicio")
+  }
+
+  function getDatosDepenEjecutora(){
+    var opcion_servicio = document.getElementById("sel3");
+    var servicio_seleccionado = opcion_servicio.options[opcion_servicio.selectedIndex].value;
+
+    var x = document.getElementById("envioNombreServicio2");
+    x.value = servicio_seleccionado;
+
+    ajax('ajax_obtener_datos_depen_ejecutora', ['idServicio2'], "obtenerDependenciaEjecutora")
+  }
+
+</script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->
 <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>

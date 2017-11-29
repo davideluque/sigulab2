@@ -107,7 +107,7 @@ body{
 }
 
 .logotext {
-	padding-top: 10px;
+	padding-top: 15px;
 	padding-left: 60px;	
 	color: #0300d7;
 }
@@ -123,8 +123,9 @@ body{
 }
 
 .navbar-brand {
-	background:url(../images/logo-ulab.png) no-repeat;
-	width:170px;
+	background:url(../images/servicios/logo-ulab.png) no-repeat;
+	width:150px;
+	height: 85px;
 	left: 15px;
 	background-size: contain;
 	position: relative;
@@ -138,10 +139,10 @@ body{
 	background-size: contain;
 }*/
 
-.dropdown.servici.active{
+.dropdown.active-item.active{
 	background-color: transparent !important;
 	border-bottom: 3px solid #0300d7;
-	height: 45px;
+	height: 40%;
 	content: " ";
 	left: 0;
 	right: 0;
