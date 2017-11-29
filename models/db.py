@@ -114,9 +114,8 @@ auth.settings.create_user_groups = None
 # -------------------------------------------------------------------------
 mail = auth.settings.mailer
 #mail.settings.server = myconf.get('smtp.server')
-#mail.settings.server = 'logging'
-
-mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
+mail.settings.server = 'logging'
+#mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
 mail.settings.sender = myconf.get('smtp.sender')
 mail.settings.login = myconf.get('smtp.login')
 #mail.settings.ssl = myconf.get('smtp.ssl')

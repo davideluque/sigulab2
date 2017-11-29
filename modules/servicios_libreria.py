@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 
 #------------------------------------------------------------------------------
@@ -6,8 +7,6 @@ import random
 # accion del CRUD de una manera rapida y ordenada
 #
 #------------------------------------------------------------------------------
-
-import random
 
 class Servicio(object):
 
@@ -175,24 +174,34 @@ class Servicio(object):
 #
 #------------------------------------------------------------------------------
 
-
 class ListaServicios(object):
 
 	def __init__(self, db, orden=False, columna='id', central=1):
-		self.db = db
+		
+		#### Captura de datos desde la Base de Datos
 
-		# Instanciacion de cada servicio en la bd
+		self.db = db
+		
+		# 1. Tomar todos los servicios de la Base de Datos
 		self.set = self.db(self.db.servicios.id > 0)
+
+		# Aqui se introducen los servicios instanciados
 		self.filas = []
+		
+		# 2. Instanciar todos los servicios como objetos de la clase Servicio
 		self.capturar_objetos()
 
+		# Numero de servicios recuperados desde la base de datos
 		self.cuenta = self.set.count()
 
-		# Variables de Ordenamiento
+		#### Variables de Ordenamiento
+
 		# Esta indicara sobre que columna se ordenara
+		# Por defecto se ordenan por el ID
 		self.columna = columna
 
-		# False sera orden alfabetico, True sera su reverso
+		# False: A-Z..1-9..etc, True: Z-A..9-1..etc
+		# Por defecto es False
 		self.orden = orden
 
 		# Variables de Paginado
@@ -218,7 +227,6 @@ class ListaServicios(object):
 
 		self.posicionar_ultimo()
 
-
 		# Lista de cada fila, convertida en el objeto servicio
 		self.servicios_a_mostrar = []
 
@@ -242,29 +250,32 @@ class ListaServicios(object):
 		if self.pagina_central == self.ultima_pagina:
 			self.boton_siguiente = False
 
-
 	def cambiar_pagina(self, nueva_pagina):
 		self.pagina_central = nueva_pagina
 		self.configurar_botones()
 		self.posicionar_ultimo()
 
-
-	def posicionar_ultimo(self):
-		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
-
-
-	def invertir_ordenamiento(self):
-		self.orden = not(self.orden)
-
-
-	def cambiar_ordenamiento(self, orden):
-		self.orden = orden
-
 	# Estas pueden ser nombre, id, nombre_tipo, nombre_columna, laboratorio, seccion, sede
 	def cambiar_columna(self, columna):
 		self.columna = columna
 
+	def posicionar_ultimo(self):
+		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
+
+	def invertir_ordenamiento(self):
+		self.orden = not(self.orden)
+
+	def cambiar_ordenamiento(self, orden):
+		self.orden = orden
+
 	def capturar_objetos(self):
+		"""
+		Toma cada servicio de la base de datos, lo instancia como un objeto
+		de la clase "Servicio" y luego lo anade a "filas" que es una lista
+		tentativa de servicios. El listado final se encuentra en el arreglo 
+		"servicios_a_mostrar" pues son los servicios que ya pasaron por el 
+		filtro de 10 servicios por pagina mas por el ordenamiento. 
+		"""
 		for serv in self.set.select(self.db.servicios.id):
 			servicio = Servicio(self.db)
 			servicio.instanciar(serv.id)
@@ -283,23 +294,23 @@ class ListaServicios(object):
 
 class Solicitud(object):
 
-	def __init__(self, db, auth, registro = None, id_dependencia_solicitante = None,
-				 id_responsable_solicitud = None, id_servicio_solicitud = None,
-				 fecha_solicitud = None, id_proposito_servicio = None,
-				 proposito_cliente_final = None, descripcion_servicio = None,
-				 observaciones = None, id_dependencia_ejecutora = None, estado_solicitud = None):
+	def __init__(self, db, auth, registro = None, id_responsable_solicitud = None,
+		fecha_solicitud = None, id_servicio_solicitud = None,  id_proposito_servicio = None,
+		proposito_descripcion = None, proposito_cliente_final = None, descripcion_servicio = None,
+		observaciones = None, estado_solicitud = None):
 
 		self.registro = registro
-
 		self.id_responsable_solicitud = id_responsable_solicitud
 		self.fecha_solicitud = fecha_solicitud
 		self.id_servicio_solicitud = id_servicio_solicitud
 		self.id_proposito_servicio = id_proposito_servicio
+		self.proposito_descripcion = proposito_descripcion
 		self.proposito_cliente_final = proposito_cliente_final
 		self.descripcion_servicio = descripcion_servicio
 		self.observaciones = observaciones
-		self.id_dependencia_ejecutora = id_dependencia_ejecutora
 		self.estado_solicitud = estado_solicitud
+
+		self.estado_solicitud_str = self.estado_string()
 
 		# Fuentes de datos
 		self.db = db
@@ -307,26 +318,29 @@ class Solicitud(object):
 
 		# Variables Disponibles tras conseguir_atributos()
 		self.id = None
-		self.fecha_elaboracion = None
-		self.elaborada_por = None
+
 		self.email_responsable_solicitud = None
 		self.telef_responsable_solicitud = None
+		self.id_dependencia_solicitante = None
 		self.nombre_dependencia_solicitante = None
 		self.nombre_jefe_dependencia_solicitante = None
 		self.nombre_dependencia_ejecutora = None
 		self.jefe_dependencia_ejecutora = None
 		self.lugar_ejecucion_servicio = None
-		self.proposito_descripcion = None
 		self.nombre_servicio = None
 		self.tipo_servicio = None
 		self.categoria_servicio = None
 		
 		# Variables disponibles despues de aprobacion
 		self.aprobada_por = None
-		self.email_aprueba = None
 		self.fecha_aprobacion = None
 
-		self.conseguir_atributos()
+		# Variables disponibles despues de ejecucion
+		self.fecha_elaboracion = None
+		self.elaborada_por = None
+
+		if registro != None:
+			self.conseguir_atributos()
 		
 	def __str__(self):
 
@@ -334,35 +348,45 @@ class Solicitud(object):
 
 	def insertar(self):
 
-		insercion = self.db.solicitudes.insert(registro = self.registro, dependencia = self.id_dependencia_solicitante,
-												responsable = self.id_responsable_solicitud, fecha = self.fecha_solicitud,
+		insercion = self.db.solicitudes.insert( registro = self.registro,
+												responsable = self.id_responsable_solicitud,
+												fecha = self.fecha_solicitud,
 												id_servicio_solicitud = self.id_servicio_solicitud,
 												proposito = self.id_proposito_servicio,
+												proposito_descripcion = self.proposito_descripcion,
 												proposito_cliente_final = self.proposito_cliente_final,
-												descripcion = self.descripcion_servicio, observaciones = self.observaciones,
-												id_dependencia_ejecutora = self.id_dependencia_ejecutora,
-												estado = self.estado_solicitud)
+												descripcion = self.descripcion_servicio,
+												observaciones = self.observaciones,
+												estado = self.estado_solicitud,
+												aprobada_por = self.aprobada_por,
+												fecha_aprobacion = self.fecha_aprobacion,
+												elaborada_por = self.elaborada_por,
+												fecha_elaboracion = self.fecha_elaboracion)
 
 		return insercion
 
 	def instanciar(self, id):
-		
 		instanciacion = self.db(self.db.solicitudes.id == id).select(self.db.solicitudes.ALL)
 
-		if (len(instanciacion) == 1):
 
+		if (len(instanciacion) == 1):
 			self.id = id
 			self.registro = instanciacion[0].registro
-			self.id_dependencia_solicitante = instanciacion[0].dependencia
 			self.id_responsable_solicitud = instanciacion[0].responsable
 			self.fecha_solicitud = instanciacion[0].fecha
 			self.id_servicio_solicitud = instanciacion[0].id_servicio_solicitud
 			self.id_proposito_servicio = instanciacion[0].proposito
-			self.proposito_cliente_final = instanciacion[0].proposito_cliente_finalo
+			self.proposito_descripcion = instanciacion[0].proposito_descripcion
+			self.proposito_cliente_final = instanciacion[0].proposito_cliente_final
 			self.descripcion_servicio = instanciacion[0].descripcion
 			self.observaciones = instanciacion[0].observaciones
-			self.id_dependencia_ejecutora = instanciacion[0].id_dependencia_ejecutora
 			self.estado_solicitud = instanciacion[0].estado
+			self.aprobada_por = instanciacion[0].aprobada_por
+			self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
+			self.elaborada_por = instanciacion[0].elaborada_por
+			self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
+
+			self.estado_solicitud_str = self.estado_string()
 
 			self.conseguir_atributos()
 
@@ -372,23 +396,19 @@ class Solicitud(object):
 
 			return False
 
-	def editar(self, registro, id_dependencia_solicitante,
-				 id_responsable_solicitud, id_servicio_solicitud,
-				 fecha_solicitud, id_proposito_servicio,
-				 proposito_cliente_final, descripcion_servicio,
-				 observaciones, id_dependencia_ejecutora, estado_solicitud):
+	def editar(self, registro, id_responsable_solicitud, fecha_solicitud,
+		id_servicio_solicitud, id_proposito_servicio, proposito_descripcion,
+		proposito_cliente_final, descripcion_servicio, observaciones):
 
 		self.registro = registro
-		self.id_dependencia_solicitante = id_dependencia_solicitante
 		self.id_responsable_solicitud = id_responsable_solicitud
 		self.fecha_solicitud = fecha_solicitud
 		self.id_servicio_solicitud = id_servicio_solicitud
 		self.id_proposito_servicio = id_proposito_servicio
+		self.proposito_descripcion = proposito_descripcion
 		self.proposito_cliente_final = proposito_cliente_final
 		self.descripcion_servicio = descripcion_servicio
 		self.observaciones = observaciones
-		self.id_dependencia_ejecutora = id_dependencia_ejecutora
-		self.estado_solicitud = estado_solicitud
 
 		self.conseguir_atributos()
 
@@ -396,41 +416,42 @@ class Solicitud(object):
 	    
 	    actualizacion = self.db(self.db.solicitudes.id == id).update(
 												registro = self.registro,
-												dependencia = self.id_dependencia_solicitante,
 												responsable = self.id_responsable_solicitud,
 												fecha = self.fecha_solicitud,
 												id_servicio_solicitud = self.id_servicio_solicitud,
 												proposito = self.id_proposito_servicio,
+												proposito_descripcion = self.proposito_descripcion,
 												proposito_cliente_final = self.proposito_cliente_final,
 												descripcion = self.descripcion_servicio,
 												observaciones = self.observaciones,
-												id_dependencia_ejecutora = self.id_dependencia_ejecutora,
-												estado = self.estado_solicitud)
+												estado = self.estado_solicitud,
+												aprobada_por = self.aprobada_por,
+												fecha_aprobacion = self.fecha_aprobacion,
+												elaborada_por = self.elaborada_por,
+												fecha_elaboracion = self.fecha_elaboracion)
 
 	    return actualizacion
 
 	def conseguir_atributos(self):
-
-		# Fecha de elaboracion
-		self.fecha_elaboracion = "02-02-2017"
-		
-		# Persona responsable de la solicitud y Elaborado por
-		self.elaborada_por = self.auth.user.first_name + " " + self.auth.user.last_name
 		
 		# Correo electronico del responsable de la solicitud
 		self.email_responsable_solicitud = self.auth.user.email
 
 		# Extensiones telefonicas del responsable de la solicitud
-		personal = self.db(self.auth.user.id == self.db.t_Personal.f_usuario).select(self.db.t_Personal.ALL)[0]
+		personal = self.db(self.auth.user_id == self.db.t_Personal.f_usuario).select(self.db.t_Personal.ALL)[0]
 		self.telef_responsable_solicitud = personal.f_telefono
 
 		dependencia = self.db(personal.f_dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
+		self.id_dependencia_solicitante = dependencia.id
+
 		# Dependencia solicitante		
 		self.nombre_dependencia_solicitante = dependencia.nombre
 
-		# Jefe Dependencia Solicitante ESTO ESTA MALO, EL JEFE DE DEPENDENCIA ES UN USUARIO PAPA
-		self.nombre_jefe_dependencia_solicitante = self.db(dependencia.id_jefe_dependencia == self.db.t_Personal.id).select(self.db.t_Personal.ALL)[0].f_nombre		
+		# Jefe Dependencia Solicitante
+		usuario_jefe_dependencia_solicitante = self.db(dependencia.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+		self.nombre_jefe_dependencia_solicitante = usuario_jefe_dependencia_solicitante.first_name + " " + usuario_jefe_dependencia_solicitante.last_name
 
 		id_dependencia_ejecutora = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].dependencia
 
@@ -440,22 +461,60 @@ class Solicitud(object):
 		self.nombre_dependencia_ejecutora = dependencia_ejecutora_servicio.nombre
 
 		# Jefe de la Dependencia Ejecutora del Servicio
-		self.jefe_dependencia_ejecutora = self.db(dependencia_ejecutora_servicio.id_jefe_dependencia == self.db.t_Personal.id).select(self.db.t_Personal.ALL)[0].f_nombre	
+		usuario_jefe_dependencia_ejecutora = self.db(dependencia_ejecutora_servicio.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]	
 		
-		self.lugar_ejecucion_servicio = 'Casita'
-		self.proposito_descripcion = None
+		self.jefe_dependencia_ejecutora = usuario_jefe_dependencia_ejecutora.first_name + " " + usuario_jefe_dependencia_ejecutora.last_name
+		
+		# Lugar de Ejecucion de Servicio
+
+		id_ubicacion_ejecucion = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].ubicacion
+
+		self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].direccion
+
+		# Nombre de Servicio
 
 		self.nombre_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].nombre
-		self.tipo_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].tipo
-		self.categoria_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].categoria
+		
+		# Nombre Tipo de Servicio
 
+		id_tipo_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].tipo
+		self.tipo_servicio = self.db(id_tipo_servicio == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
+
+		id_categoria_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].categoria
+		self.categoria_servicio = self.db(id_categoria_servicio == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre
+
+	def cambiar_estado(self, estado, request):
+		self.estado_solicitud = estado
+		if estado == 2:
+			# Fecha de elaboracion del servicio
+			self.fecha_elaboracion = request.now
+			# Persona responsable de la solicitud y Elaborado por
+			self.elaborada_por = self.auth.user.first_name + " " + self.auth.user.last_name
+
+		elif estado == 1:
+			# Fecha de elaboracion del servicio
+			self.fecha_aprobacion = request.now
+			# Persona responsable de la solicitud y Elaborado por
+			self.aprobada_por = self.auth.user.first_name + " " + self.auth.user.last_name
+
+		self.estado_solicitud_str = self.estado_string()
+
+	def estado_string(self):
+
+		if self.estado_solicitud == -1:
+			return "Negada"
+		elif self.estado_solicitud == 0:
+			return "Pendiente por Ejecución"
+		elif self.estado_solicitud == 1:
+			return "En ejecución"
+		elif self.estado_solicitud == 2:
+			return "Pendiente por Certificación"
 
 class ListaSolicitudes(object):
 
 	def __init__(self, db, auth, orden=False, columna='id', central=1):
 		self.db = db
 		self.auth = auth
-
 		# Instanciacion de cada solicitud en la bd
 		self.set = self.db(self.db.solicitudes.id > 0)
 		self.filas = []
@@ -539,7 +598,7 @@ class ListaSolicitudes(object):
 		self.columna = columna
 
 	def capturar_objetos(self):
-		for solic in self.set.select(self.db.solicitudes.id):
+		for solic in self.set.select(self.db.solicitudes.ALL):
 			solicitud = Solicitud(self.db, self.auth)
 			solicitud.instanciar(solic.id)
 			self.filas.append(solicitud)
@@ -743,6 +802,17 @@ def generador_num_registro():
     digits = (len(str(max))-len(digit))*'0' + digit
 
     return digits
+
+def validador_registro_solicitudes(request, db):
+	anio = str(request.now)[2:4]
+	registro = 'UL-' + anio + '/' + generador_num_registro()
+
+	check = db(db.solicitudes.registro == registro).count()
+
+	if check != 0:
+		return validador_registro_solicitudes(request, db)
+	else:
+		return registro
 
 def validador_registro_certificaciones(request, db):
 	anio = str(request.now)[2:4]

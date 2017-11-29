@@ -1,10 +1,16 @@
-from servicios_libreria import *
-
 #------------------------------------------------------------------------------
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
+#
+# - Erick Flejan <12-1155@usb.ve>
+# - Amanda Camacho <12-10644@usb.ve>
+# - David Cabeza <13-10191@usb.ve>
+# - Fabiola Martínez <13-10838@usb.ve>
+# - Lautaro Villalon <12-10427@usb.ve>
+# - Yarima Luciani <13-10770@usb.ve>
 #------------------------------------------------------------------------------
+from servicios_libreria import *
 import re
 
 # Pagina principal del modulo
@@ -42,12 +48,30 @@ def listado():
 
         servicio_nuevo.insertar()
 
+
+        # Se envia el email de notificacion al agregar un servicio 
+
+        ########################### TO DO #############################################
+        #
+        #            NO TIENE POR QUE SER UN ASSERT Y SI L ES QUE SEA DE ERROR
+        #
+        ##############################################################################
+
+        # datos = __queries_enviar_correo()
+
+        # nombre_y_apellido = datos[0]
+        # nombre_anade = datos[1]
+        # dependencia = datos[2]
+        # jefe_dependencia = datos[3]
+
+        # OJO: VER QUE HACER CON EL TRY EXCEPT Y EL REDIRECT 
+
         try:
             idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
 
-            jefeDependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].id_jefe_dependencia
+            dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-            jefe_dependencia = db(jefeDependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
 
             assert(jefe_dependencia != None)
             
@@ -59,9 +83,7 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        dependencia = db(idDependencia == db.dependencias.id).select()[0].nombre
-
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s y pertenece a la dependencia %s.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
         __enviar_correo(jefe_dependencia.email, 'Se ha agregado un nuevo servicio', correo)
 
@@ -104,7 +126,30 @@ def listado():
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
-        redirect(URL('listado?order=id1&page=1'))
+        # Se envia el email de notificacion al editar un servicio 
+       
+        try:
+            idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+            dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+            jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+            assert(jefe_dependencia != None)
+            
+        except:
+
+            return redirect(URL('listado'))
+
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha editado un servicio', correo)
+
+
     #----- FIN EDITAR SERVICIO -----#
 
     #----- COMIENZO EDITAR SERVICIO -----#
@@ -123,46 +168,61 @@ def listado():
         db(db.servicios.id == request.post_vars.idFicha).update(
             visibilidad=eval(request.post_vars.visibilidad))
 
+        if request.post_vars.visibilidad == True:
+            estado_visibilidad = "mostrar"
+        else:
+            estado_visibilidad = "ocultar"
+
+        # Se envia el email de notificacion al ocultar/mostrar un servicio 
+
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+        dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+        jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha cambiado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha cambiado la visibilidad de un servicio', correo)
+
+
     #----- FIN EDITAR VISIBILIDAD -----#
 
     #----- ELIMINAR SERVICIO -----#
+
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
+
+        # Se envia el email de notificacion al eliminar un servicio 
+
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+        dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+        jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            
+
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
 
 
     #----- FIN ELIMINAR SERVICIO -----#
 
-
-    #----- LISTAR SERVICIOS -----#
-
-    listado_de_servicios = ListaServicios(db)
-
-    if request.vars.pagina:
-        listado_de_servicios.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_servicios.cambiar_columna(request.vars.columna)
-
-    listado_de_servicios.orden_y_filtrado()
-    firstpage=listado_de_servicios.boton_principio
-    lastpage=listado_de_servicios.boton_fin
-    nextpage=listado_de_servicios.boton_siguiente
-    prevpage=listado_de_servicios.boton_anterior
-
-    #----- FIN LISTAR SERVICIOS -----#
-
-    return dict(grid=listado_de_servicios.servicios_a_mostrar,
-                pages=listado_de_servicios.rango_paginas,
-                actualpage=listado_de_servicios.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage,
-                categorias=listar_categorias(db), tipos=listar_tipos(db),
+    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
@@ -179,6 +239,7 @@ def solicitudes():
     listado_de_solicitudes = ListaSolicitudes(db, auth)
 
     #----- DATOS DE SOLICITANTE -----#
+    num_registro = validador_registro_solicitudes(request,db)
 
     personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
 
@@ -197,7 +258,7 @@ def solicitudes():
     nombre_responsable = personal_usuario.f_nombre
     email_responsable = personal_usuario.f_email
 
-    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable]
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
 
     # Usuario solicita cambiar la pagina
@@ -267,8 +328,6 @@ def certificaciones():
                 firstpage=firstpage, lastpage=lastpage,
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
-
-
 
 
 #------------------------------------------------------------------------------
@@ -382,7 +441,6 @@ def ajax_obtener_ubicacion_editar():
     session.forget(response)
     ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
-
     for l in ubicacion_query:
         ubicaciones_a_mostrar.append(l)
     return dict(ubicaciones=ubicaciones_a_mostrar)
@@ -408,6 +466,45 @@ def ajax_obtener_nombre_servicio():
 
     return dict(servicios=servicios_a_mostrar)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_proposito_servicio():
+    session.forget(response)
+
+    servicio = db(db.servicios.id == int(request.vars.idServicio)).select(db.servicios.ALL)[0]
+
+    propositos_a_mostrar = []
+
+    if servicio.docencia == True:
+        propositoServicio = db("Docencia" == db.propositos.tipo).select(db.propositos.ALL)[0] 
+        propositos_a_mostrar.append(propositoServicio)
+
+    if servicio.investigacion == True:
+        propositoServicio = db("Investigación" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)
+
+    if servicio.extension == True:
+        propositoServicio = db("Extensión" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)    
+
+    if servicio.gestion == True:
+        propositoServicio = db("Gestión" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)
+
+    return dict(propositos=propositos_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_datos_depen_ejecutora():
+    session.forget(response)
+
+    servicio = db(db.servicios.id == int(request.vars.idServicio2)).select(db.servicios.ALL)[0]
+    dependencia_ejecutora = db(db.dependencias.id == servicio.dependencia).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia_ejecutora = db(db.auth_user.id == dependencia_ejecutora.id_jefe_dependencia).select(db.auth_user.ALL)[0]
+
+    datos_jefe_depen_ejecutora = [jefe_dependencia_ejecutora.first_name, jefe_dependencia_ejecutora.last_name, jefe_dependencia_ejecutora.email]
+
+    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
+
 
 # Funcion para enviar un correo de notificacion 
 
@@ -417,6 +514,21 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail.send(destinatario, asunto, cuerpo)
 
 
+def __queries_enviar_correo():
+
+    # OJO: QUITAR EL TRY EXCEPT 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -446,3 +558,38 @@ def ajax_certificar_servicio():
                 dependencia=dependencianombre,
                 proyecto='Proyecto ' + registro)
 
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_servicios():
+
+    #----- LISTAR SERVICIOS -----#
+    listado_de_servicios = ListaServicios(db)
+
+    order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
+    order_by_col = request.post_vars.ordenarPor
+
+    listado_de_servicios.cambiar_ordenamiento(order_by_asc)
+    listado_de_servicios.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiarPagina:
+        listado_de_servicios.cambiar_pagina(int(request.post_vars.cambiarPagina))
+
+    listado_de_servicios.orden_y_filtrado()
+    firstpage=listado_de_servicios.boton_principio
+    lastpage=listado_de_servicios.boton_fin
+    nextpage=listado_de_servicios.boton_siguiente
+    prevpage=listado_de_servicios.boton_anterior
+
+    #----- FIN LISTAR SERVICIOS -----#
+    return dict(grid=listado_de_servicios.servicios_a_mostrar,
+                pages=listado_de_servicios.rango_paginas,
+                actualpage=listado_de_servicios.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
