@@ -48,17 +48,30 @@ def listado():
 
         servicio_nuevo.insertar()
 
+
+        # Se envia el email de notificacion al agregar un servicio 
+
         ########################### TO DO #############################################
         #
         #            NO TIENE POR QUE SER UN ASSERT Y SI L ES QUE SEA DE ERROR
         #
         ##############################################################################
+
+        # datos = __queries_enviar_correo()
+
+        # nombre_y_apellido = datos[0]
+        # nombre_anade = datos[1]
+        # dependencia = datos[2]
+        # jefe_dependencia = datos[3]
+
+        # OJO: VER QUE HACER CON EL TRY EXCEPT Y EL REDIRECT 
+
         try:
             idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
 
-            jefeDependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].id_jefe_dependencia
+            dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-            jefe_dependencia = db(jefeDependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
 
             assert(jefe_dependencia != None)
             
@@ -70,9 +83,7 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        dependencia = db(idDependencia == db.dependencias.id).select()[0].nombre
-
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s y pertenece a la dependencia %s.</p><br><p>Para consultar dicha operación dirígase a la página web de Sigulab PAG WEB</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
         __enviar_correo(jefe_dependencia.email, 'Se ha agregado un nuevo servicio', correo)
 
@@ -115,7 +126,30 @@ def listado():
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
-        redirect(URL('listado'))
+        # Se envia el email de notificacion al editar un servicio 
+       
+        try:
+            idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+            dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+            jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+            assert(jefe_dependencia != None)
+            
+        except:
+
+            return redirect(URL('listado'))
+
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha editado un servicio', correo)
+
+
     #----- FIN EDITAR SERVICIO -----#
 
     #----- COMIENZO EDITAR SERVICIO -----#
@@ -134,12 +168,52 @@ def listado():
         db(db.servicios.id == request.post_vars.idFicha).update(
             visibilidad=eval(request.post_vars.visibilidad))
 
+        if request.post_vars.visibilidad == True:
+            estado_visibilidad = "mostrar"
+        else:
+            estado_visibilidad = "ocultar"
+
+        # Se envia el email de notificacion al ocultar/mostrar un servicio 
+
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+        dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+        jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha cambiado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha cambiado la visibilidad de un servicio', correo)
+
+
     #----- FIN EDITAR VISIBILIDAD -----#
 
     #----- ELIMINAR SERVICIO -----#
 
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
+
+        # Se envia el email de notificacion al eliminar un servicio 
+
+        idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+        dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+        jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+            
+
+        nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+        nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+
+        __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
+
 
     #----- FIN ELIMINAR SERVICIO -----#
 
@@ -149,7 +223,6 @@ def listado():
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
@@ -439,6 +512,24 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 
     mail.send(destinatario, asunto, cuerpo)
+
+
+def __queries_enviar_correo():
+
+    # OJO: QUITAR EL TRY EXCEPT 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():

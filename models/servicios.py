@@ -88,7 +88,7 @@ db.define_table(
 
 	Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
 	
-	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
+	#Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
 	#Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
@@ -101,7 +101,7 @@ db.define_table(
 
 	Field('proposito', 'reference propositos', requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'), label=T('Propósito del servicio solicitado')),
 
-	#Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
+	Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
 
 	# Si el propósito es extensión, este campo se llena con el cliente final.
 	Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
@@ -128,15 +128,22 @@ db.define_table(
 	#######################################################################################
 	#Field('pendiente',		'boolean', default=True, label=T('Pendiente')),
 
+	# estado=-1 rechazado
 	# estado=0 pendiente por aprobar
 	# estado=1 pendiente por ejecutar
+	# estado=2 pendiente por certificar
 
-	Field('estado','string', default='0', label=T('Pendiente por aprobar')),
+	Field('estado','string', default='0', label=T('Estado de Solicitud')),
 
 
-	Field('email_aprueba', 'string', label=T('Solicitud Aprobada Por')),
+	Field('aprobada_por', 'string', label=T('Solicitud Aprobada Por')),
 
 	Field('fecha_aprobacion',   'date', 
+		  requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Aprobacion de Solicitud')),
+
+	Field('elaborada_por', 'string', label=T('Solicitud Aprobada Por')),
+
+	Field('fecha_elaboracion',   'date', 
 		  requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Aprobacion de Solicitud')),
 
 )
