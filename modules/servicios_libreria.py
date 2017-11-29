@@ -7,8 +7,6 @@ import random
 #
 #------------------------------------------------------------------------------
 
-import random
-
 class Servicio(object):
 
 
@@ -175,24 +173,34 @@ class Servicio(object):
 #
 #------------------------------------------------------------------------------
 
-
 class ListaServicios(object):
 
 	def __init__(self, db, orden=False, columna='id', central=1):
-		self.db = db
+		
+		#### Captura de datos desde la Base de Datos
 
-		# Instanciacion de cada servicio en la bd
+		self.db = db
+		
+		# 1. Tomar todos los servicios de la Base de Datos
 		self.set = self.db(self.db.servicios.id > 0)
+
+		# Aqui se introducen los servicios instanciados
 		self.filas = []
+		
+		# 2. Instanciar todos los servicios como objetos de la clase Servicio
 		self.capturar_objetos()
 
+		# Numero de servicios recuperados desde la base de datos
 		self.cuenta = self.set.count()
 
-		# Variables de Ordenamiento
+		#### Variables de Ordenamiento
+
 		# Esta indicara sobre que columna se ordenara
+		# Por defecto se ordenan por el ID
 		self.columna = columna
 
-		# False sera orden alfabetico, True sera su reverso
+		# False: A-Z..1-9..etc, True: Z-A..9-1..etc
+		# Por defecto es False
 		self.orden = orden
 
 		# Variables de Paginado
@@ -218,7 +226,6 @@ class ListaServicios(object):
 
 		self.posicionar_ultimo()
 
-
 		# Lista de cada fila, convertida en el objeto servicio
 		self.servicios_a_mostrar = []
 
@@ -242,29 +249,32 @@ class ListaServicios(object):
 		if self.pagina_central == self.ultima_pagina:
 			self.boton_siguiente = False
 
-
 	def cambiar_pagina(self, nueva_pagina):
 		self.pagina_central = nueva_pagina
 		self.configurar_botones()
 		self.posicionar_ultimo()
 
-
-	def posicionar_ultimo(self):
-		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
-
-
-	def invertir_ordenamiento(self):
-		self.orden = not(self.orden)
-
-
-	def cambiar_ordenamiento(self, orden):
-		self.orden = orden
-
 	# Estas pueden ser nombre, id, nombre_tipo, nombre_columna, laboratorio, seccion, sede
 	def cambiar_columna(self, columna):
 		self.columna = columna
 
+	def posicionar_ultimo(self):
+		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
+
+	def invertir_ordenamiento(self):
+		self.orden = not(self.orden)
+
+	def cambiar_ordenamiento(self, orden):
+		self.orden = orden
+
 	def capturar_objetos(self):
+		"""
+		Toma cada servicio de la base de datos, lo instancia como un objeto
+		de la clase "Servicio" y luego lo anade a "filas" que es una lista
+		tentativa de servicios. El listado final se encuentra en el arreglo 
+		"servicios_a_mostrar" pues son los servicios que ya pasaron por el 
+		filtro de 10 servicios por pagina mas por el ordenamiento. 
+		"""
 		for serv in self.set.select(self.db.servicios.id):
 			servicio = Servicio(self.db)
 			servicio.instanciar(serv.id)
@@ -776,6 +786,17 @@ def generador_num_registro():
     digits = (len(str(max))-len(digit))*'0' + digit
 
     return digits
+
+def validador_registro_solicitudes(request, db):
+	anio = str(request.now)[2:4]
+	registro = 'UL-' + anio + '/' + generador_num_registro()
+
+	check = db(db.solicitudes.registro == registro).count()
+
+	if check != 0:
+		return validador_registro_solicitudes(request, db)
+	else:
+		return registro
 
 def validador_registro_certificaciones(request, db):
 	anio = str(request.now)[2:4]
