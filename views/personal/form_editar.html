@@ -1,0 +1,158 @@
+<button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
+
+<!-- Inicio Modal Editar -->
+{{if len(editar) != 0:}}
+  <script>
+
+      $(document).ready(function(){
+          document.getElementById("edito").click();
+      });
+
+  </script>
+
+<!-- Modal editar un -->
+<div class="modal fade" id="editservice" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoServicio">Editar Personal</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioEdit" class="registration-form" method="post">
+
+                  <!-- Primer Paso -->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step activePass">1</span>
+                        <span class="step">2</span> 
+                        <span class="step">3</span>           
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos Básicos</h4>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="nombre_edit" value="{{=gridedit['nombre']}}"  placeholder="Nombre" required>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="ci_edit" value="{{=gridedit['ci']}}"  placeholder="Cédula" required>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="email_edit" value="{{=gridedit['email']}}"  placeholder="Correo" required>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="telefono_edit" value="{{=gridedit['telefono']}}"  placeholder="Extension" required>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="pagina_web_edit" value="{{=gridedit['pagina_web']}}"  placeholder="Página Web" required>
+                          </div>
+
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                  </fieldset>
+                  <!-- Fin Primer Paso -->
+                  
+                  <!-- Segundo Paso -->
+                  <fieldset class="formField">
+                      <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step activePass">2</span>
+                          <span class="step">3</span>
+                        </div>
+
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos Laborales</h4>
+                            <div class="form-group">
+                              <select class="form-control" id="sel1" name="estatus_edit" required>
+                                <option value="1" selected hidden>Estatus</option>
+                                {{for estatus in estados:}}
+                                <option value="{{=estatus}}">{{=estatus}}</option>
+                                {{pass}} 
+                              </select>
+                            </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="fecha_ingreso_edit" value="{{=gridedit['fecha_ingreso']}}"  placeholder="Fecha de Ingreso">
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="fecha_salida_edit" value="{{=gridedit['fecha_salida']}}"  placeholder="Fecha de Salida">
+                          </div>
+                        </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                  </fieldset>
+                  <!-- Fin Segundo Paso -->
+
+                  <!-- Tercer Paso -->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Datos Laborales</h4>
+
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="cargo_edit" value="{{=gridedit['cargo']}}"  placeholder="Cargo">
+                      </div>
+
+                      <div class="form-group">
+                        <select class="form-control" id="sel1" name="categoria_edit" required>
+                          <option value="1" selected hidden>Categoria</option>
+                          {{for categoria in categorias:}}
+                          <option value="{{=categoria}}">{{=categoria}}</option>
+                          {{pass}} 
+                        </select>
+                      </div>
+
+                
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="submit" class="btn btn-submit botonForm" form="formularioEdit" name="envio" value="agregar" id="submit">Guardar Cambios</button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Tercer Paso -->
+
+              </form>
+          </div>
+        </div>               
+
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{{pass}}
