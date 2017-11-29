@@ -4,7 +4,7 @@
   
   <!-- Estilo del listado de Solicitudes de Servicios -->
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
@@ -117,7 +117,7 @@
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
-                    <span class="step">4</span>             
+                     <span class="step">4</span>
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
@@ -125,9 +125,9 @@
                      	
                       <!-- Numero Registro -->
                      	<div class="mover">
-                     	<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Registro</label>
+                     	<label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
                       <div class="form-group">
-                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="Número de Registro" required>
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
                       </div>
                       </div>
 
@@ -162,15 +162,16 @@
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
-                      <span class="step">4</span> 
+                       <span class="step">4</span>
                     </div>
 
                     <!-- Aqui va la informacion -->
-                    <div class="col-sm-11 col11Body">
+                    <div class="col-sm-11 col11Body" style="padding-top: 50px">
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                       
                       <!-- Categoria -->
                       <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
                         <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Categoria</option>
                           {{for categoria in categorias:}}
@@ -181,6 +182,7 @@
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
                         <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Tipo</option>
                           {{for tipo in tipos:}}
@@ -191,20 +193,7 @@
 
                       <!-- Nombre Servicio-->
                       <div class="form-group" id="obtenerNombreServicio">
-
-                      </div>
-
-                      <!-- Propósito -->
-                      <div class="form-group">
-                        <select type="select" class="form-control" id="sel3" name="propositoServicio" required>
-                          <option value="" selected hidden >Propósito</option>
-                     		<option value="True"></option>
-                        </select>
-                      </div>
-
-                      <!-- Descripción -->
-                      <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Descripción"></textarea>
+                        <!-- Ajax obtener nombre servicio -->
                       </div>
                     </div>
                   </div>
@@ -221,24 +210,27 @@
                     <span class="step">1</span>
                     <span class="step">2</span>
                     <span class="step activePass">3</span>
-                    <span class="step">4</span> 
+                     <span class="step">4</span>
                   </div>
                   
                   <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body col11Body3">
-                    <h4 class="titulosForm">Otros Datos</h4>
-
-                    <!-- Dependencia Ejecutora del Servicio -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" placeholder="Dependencia Ejecutora del Servicio">
-                    </div>
-                    <br>
-
-                    <!-- Jefe Dependencia Ejecutora del Servicio -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" placeholder="Jefe de la Dependencia Ejecutora">
+                  <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <!-- Propósito -->
+                    <div class="form-group" id="obtenerPropositoServicio">
+                      <!-- Ajax obtener proposito del servicio -->
                     </div>
 
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
+                        <input type="text" class="form-control" name="" placeholder="código materia / proyecto / (orden servicio - cliente final) / funcionamiento lab." required>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                    </div>
                   </div>
                 </div> 
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -249,7 +241,7 @@
               <!-- Cuarto Paso -->
               <fieldset class="formField">
                 <div class="form-row" data-step="4" data-title="Cuarto Paso">
-                <!-- Aqui va la barra lateral -->
+                  <!-- Aqui va la barra lateral -->
                   <div class="col-sm-1 col1Body">
                     <span class="step">1</span>
                     <span class="step">2</span>
@@ -257,42 +249,16 @@
                     <span class="step activePass">4</span> 
                   </div>
 
-                <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body col11Body4" >
-                  <h4 class="titulosForm">Otros Datos</h4>
-                    
-                    <!-- Servicio Elaborador por -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="elaboradoPor" placeholder="Elaborador por">
-                    </div>
-
-                    <!-- Fecha Elaboracion -->
-                    <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="" name="fechaElaboracion" placeholder="Fecha Elaboración"></textarea>
-                    </div>
-
-                    <!-- Servicio Aprobado por -->
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="" name="aprobadoPor" placeholder="Aprobado por">
-                    </div>
-
-                    <!-- Fecha Aprobacion -->
-                    <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="" name="fechaAprobacion" placeholder="Fecha Aprobación"></textarea>
-                    </div>
-
-                    <!-- Fecha Aprobacion -->
-                    <div class="form-group">
-                        <textarea class="form-control" type="textarea" id="" name="observaciones" placeholder="Observaciones"></textarea>
-                    </div>
-
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
+                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
+                    <!-- Ajax obtener datos dependencia ejecutora -->
                   </div>
                 </div>
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
                 <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
               </fieldset>
               <!-- Fin Cuarto Paso -->
-
             </form>
             <!-- Fin Form -->
           </div>
@@ -309,9 +275,15 @@
 <input type="hidden" id="envioCategoria" name="categoria" value="">
 <input type="hidden" id="envioTipo" name="tipo" value="">
 
+<!-- Ajax obtener proposito servicio -->
+<input type="hidden" id="envioNombreServicio" name="idServicio" value="">
+
+<!-- Ajax obtener datos servicio -->
+<input type="hidden" id="envioNombreServicio2" name="idServicio2" value="">
+
 <!-- Ajax JavaScript-->
 <script type="text/javascript">
-document.getElementById("servicios").className += " active";
+  document.getElementById("servicios").className += " active";
 
   function getServicio(){
     var opciones_categoria = document.getElementById("sel1");
@@ -334,6 +306,26 @@ document.getElementById("servicios").className += " active";
       y.value = tipo_elegido;  
 
     ajax('ajax_obtener_nombre_servicio', ['categoria', 'tipo'], "obtenerNombreServicio");
+  }
+
+  function getProposito(){
+    var opcion_servicio = document.getElementById("sel3");
+    var servicio_seleccionado = opcion_servicio.options[opcion_servicio.selectedIndex].value;
+
+    var x = document.getElementById("envioNombreServicio");
+    x.value = servicio_seleccionado;
+
+    ajax('ajax_obtener_proposito_servicio', ['idServicio'], "obtenerPropositoServicio")
+  }
+
+  function getDatosDepenEjecutora(){
+    var opcion_servicio = document.getElementById("sel3");
+    var servicio_seleccionado = opcion_servicio.options[opcion_servicio.selectedIndex].value;
+
+    var x = document.getElementById("envioNombreServicio2");
+    x.value = servicio_seleccionado;
+
+    ajax('ajax_obtener_datos_depen_ejecutora', ['idServicio2'], "obtenerDependenciaEjecutora")
   }
 
 </script>
