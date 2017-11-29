@@ -1,10 +1,16 @@
-from servicios_libreria import *
-
 #------------------------------------------------------------------------------
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
+#
+# - Erick Flejan <12-1155@usb.ve>
+# - Amanda Camacho <12-10644@usb.ve>
+# - David Cabeza <13-10191@usb.ve>
+# - Fabiola Martínez <13-10838@usb.ve>
+# - Lautaro Villalon <12-10427@usb.ve>
+# - Yarima Luciani <13-10770@usb.ve>
 #------------------------------------------------------------------------------
+from servicios_libreria import *
 import re
 
 # Pagina principal del modulo
@@ -42,6 +48,11 @@ def listado():
 
         servicio_nuevo.insertar()
 
+        ########################### TO DO #############################################
+        #
+        #            NO TIENE POR QUE SER UN ASSERT Y SI L ES QUE SEA DE ERROR
+        #
+        ##############################################################################
         try:
             idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
 
@@ -104,7 +115,7 @@ def listado():
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
-        redirect(URL('listado?order=id1&page=1'))
+        redirect(URL('listado'))
     #----- FIN EDITAR SERVICIO -----#
 
     #----- COMIENZO EDITAR SERVICIO -----#
@@ -126,37 +137,13 @@ def listado():
     #----- FIN EDITAR VISIBILIDAD -----#
 
     #----- ELIMINAR SERVICIO -----#
+
     if request.post_vars.eliminar:
         db(db.servicios.id == request.post_vars.idFicha).delete()
 
-
     #----- FIN ELIMINAR SERVICIO -----#
 
-
-    #----- LISTAR SERVICIOS -----#
-
-    listado_de_servicios = ListaServicios(db)
-
-    if request.vars.pagina:
-        listado_de_servicios.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_servicios.cambiar_columna(request.vars.columna)
-
-    listado_de_servicios.orden_y_filtrado()
-    firstpage=listado_de_servicios.boton_principio
-    lastpage=listado_de_servicios.boton_fin
-    nextpage=listado_de_servicios.boton_siguiente
-    prevpage=listado_de_servicios.boton_anterior
-
-    #----- FIN LISTAR SERVICIOS -----#
-
-    return dict(grid=listado_de_servicios.servicios_a_mostrar,
-                pages=listado_de_servicios.rango_paginas,
-                actualpage=listado_de_servicios.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage,
-                categorias=listar_categorias(db), tipos=listar_tipos(db),
+    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
@@ -268,8 +255,6 @@ def certificaciones():
                 firstpage=firstpage, lastpage=lastpage,
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
-
-
 
 
 #------------------------------------------------------------------------------
@@ -447,13 +432,13 @@ def ajax_obtener_datos_depen_ejecutora():
 
     return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
 
+
 # Funcion para enviar un correo de notificacion 
 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 
     mail.send(destinatario, asunto, cuerpo)
-
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
@@ -482,3 +467,38 @@ def ajax_certificar_servicio():
                 dependencia=dependencianombre,
                 proyecto='Proyecto ' + registro)
 
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_servicios():
+
+    #----- LISTAR SERVICIOS -----#
+    listado_de_servicios = ListaServicios(db)
+
+    order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
+    order_by_col = request.post_vars.ordenarPor
+
+    listado_de_servicios.cambiar_ordenamiento(order_by_asc)
+    listado_de_servicios.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiarPagina:
+        listado_de_servicios.cambiar_pagina(int(request.post_vars.cambiarPagina))
+
+    listado_de_servicios.orden_y_filtrado()
+    firstpage=listado_de_servicios.boton_principio
+    lastpage=listado_de_servicios.boton_fin
+    nextpage=listado_de_servicios.boton_siguiente
+    prevpage=listado_de_servicios.boton_anterior
+
+    #----- FIN LISTAR SERVICIOS -----#
+    return dict(grid=listado_de_servicios.servicios_a_mostrar,
+                pages=listado_de_servicios.rango_paginas,
+                actualpage=listado_de_servicios.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)

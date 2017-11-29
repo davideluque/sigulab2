@@ -17,7 +17,7 @@
   <span class="breadcrumb-item active">Listado</span>
   </div>
 </nav>
-<!-- Fin del Breadcrum de navegación --> 
+<!-- Fin del Breadcrumb de navegación --> 
 
 <!-- Inicio Boton Agregar Listado -->
 <div class="container" id="containerAgregar">
@@ -37,50 +37,13 @@
 
 <!-- Inicio Listado -->
 <div class="container" id="listadoContainer">
-	<div class="row">
-		<div class="table-responsive" >
-			<table id="tablaListado" class="table table-hover">
-				<form>
-					<!-- Titulos Listado -->
-					<thead>
-						<tr id="titulosListado">
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre_categoria" id="f_categoria_servicio">Categoría</button></th>
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre_tipo" id="f_tipo_servicio">Tipo de Servicio</button></th>
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre" id="f_nombre_servicio">Nombre del Servicio</button></th>
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio">Sección</button></th>
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio">Laboratorio</button></th>
-							<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio">Sede</button></th>
-						</tr>
-					</thead>
-		    		<!-- Contenido Listado -->
-		    		<tbody>
-						{{for item in grid:}}
-							<tr>
-								<th class="camposTabla">{{=item.nombre_categoria}}</th>
-								<th class="camposTabla">{{=item.nombre_tipo}}</th>
-								<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.nombre}}</a></th>
-								<th class="camposTabla">{{=item.seccion}}</th>
-								<th class="camposTabla">{{=item.laboratorio}}</th>
-								<th class="camposTabla">{{=item.sede}}</th>
-							</tr>
-						{{pass}}
-					</tbody>
-				</form>
-			</table>
-		</div>
-	</div>
-
-	<!-- Inicio botones pagina -->
-	<div class="row">
-		<form>
-			{{for page in pages:}}
-  			<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-			{{pass}}
-		</form>
-    </div>
-    <!-- Fin botones pagina -->
+         
 </div>
 <!-- Fin Listado --> 
+<!-- Ajax ordenar listado de servicios--> 
+<input type="hidden" id="ordenarPor" name="ordenarPor" value="">
+<input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
+<input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
 
 <!-- Ajax abrirFicha-->
 <input type="hidden" id="serv" name="serv" value="">
@@ -316,7 +279,6 @@
 <!-- Fin Modal Agregar Servicio -->
 
 <button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
-
 
 <!-- Inicio Modal Editar Servicio -->
 {{if len(editar) != 0:}}
@@ -557,6 +519,7 @@
 
 <script language="javascript">
 document.getElementById("servicios").className += " active";	
+
   function abrirFicha(servicio) {
 		var x = document.getElementById("serv");
 			x.value = servicio;
@@ -631,6 +594,51 @@ document.getElementById("servicios").className += " active";
         x.value = dependenciaelegida;
       ajax('ajax_obtener_responsable_editar', ['dependencia'], "responsablediv-edit");
    }
+
+  // Valores por defecto al cargar la página del listado de servicios
+  order_by_col = null
+  order_by_asc = null
+  order_by_pag = 1
+  function cambiarPagina(page){
+
+    order_by_pag = page
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_servicios', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+
+  }
+
+  function ordenarServicios(order_by){
+    
+    if (order_by_col == order_by){
+      order_by_asc = !order_by_asc
+    }
+    else{
+      order_by_col = order_by
+      order_by_asc = false
+    }
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_servicios', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+  }
+
+  window.onload = ordenarServicios("id");
 
 </script>
 {{end}}
