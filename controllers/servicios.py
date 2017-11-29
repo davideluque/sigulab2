@@ -162,7 +162,6 @@ def listado():
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,

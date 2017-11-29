@@ -54,12 +54,12 @@
   	      <tbody>
       			{{for items in grid:}}
       				<tr>
-      					<th class="camposTabla">{{=items.noRegistro}}</th>
-      					<th class="camposTabla">{{=items.dependenciaSolicitante}}</th>
-      					<th class="camposTabla">{{=items.dependenciaEjecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombreServicio}});" >{{=items.nombreServicio}}</a></th>
-      					<th class="camposTabla">{{=item.categoriaServicio}}</th>
-      					<th class="camposTabla">{{=items.fechaSolicitud}}</th>
+      					<th class="camposTabla">{{=items.registro}}</th>
+      					<th class="camposTabla">{{=items.nombre_dependencia_solicitante}}</th>
+      					<th class="camposTabla">{{=items.nombre_dependencia_ejecutora}}</th>
+      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombre_servicio}});" >{{=items.nombreServicio}}</a></th>
+      					<th class="camposTabla">{{=item.categoria_servicio}}</th>
+      					<th class="camposTabla">{{=items.fecha_solicitud}}</th>
       				</tr>
       			{{pass}}
   		    </tbody>
