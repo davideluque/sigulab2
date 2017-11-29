@@ -166,6 +166,7 @@ def solicitudes():
     listado_de_solicitudes = ListaSolicitudes(db, auth)
 
     #----- DATOS DE SOLICITANTE -----#
+    num_registro = validador_registro_solicitudes(request,db)
 
     personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
 
@@ -184,7 +185,7 @@ def solicitudes():
     nombre_responsable = personal_usuario.f_nombre
     email_responsable = personal_usuario.f_email
 
-    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable]
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
 
     # Usuario solicita cambiar la pagina
@@ -367,7 +368,6 @@ def ajax_obtener_ubicacion_editar():
     session.forget(response)
     ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
-
     for l in ubicacion_query:
         ubicaciones_a_mostrar.append(l)
     return dict(ubicaciones=ubicaciones_a_mostrar)
@@ -393,6 +393,52 @@ def ajax_obtener_nombre_servicio():
 
     return dict(servicios=servicios_a_mostrar)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_proposito_servicio():
+    session.forget(response)
+
+    servicio = db(db.servicios.id == int(request.vars.idServicio)).select(db.servicios.ALL)[0]
+
+    propositos_a_mostrar = []
+
+    if servicio.docencia == True:
+        propositoServicio = db("Docencia" == db.propositos.tipo).select(db.propositos.ALL)[0] 
+        propositos_a_mostrar.append(propositoServicio)
+
+    if servicio.investigacion == True:
+        propositoServicio = db("Investigación" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)
+
+    if servicio.extension == True:
+        propositoServicio = db("Extensión" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)    
+
+    if servicio.gestion == True:
+        propositoServicio = db("Gestión" == db.propositos.tipo).select(db.propositos.ALL)[0]
+        propositos_a_mostrar.append(propositoServicio)
+
+    return dict(propositos=propositos_a_mostrar)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_obtener_datos_depen_ejecutora():
+    session.forget(response)
+
+    servicio = db(db.servicios.id == int(request.vars.idServicio2)).select(db.servicios.ALL)[0]
+    dependencia_ejecutora = db(db.dependencias.id == servicio.dependencia).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia_ejecutora = db(db.auth_user.id == dependencia_ejecutora.id_jefe_dependencia).select(db.auth_user.ALL)[0]
+
+    datos_jefe_depen_ejecutora = [jefe_dependencia_ejecutora.first_name, jefe_dependencia_ejecutora.last_name, jefe_dependencia_ejecutora.email]
+
+    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
+
+
+# Funcion para enviar un correo de notificacion 
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
