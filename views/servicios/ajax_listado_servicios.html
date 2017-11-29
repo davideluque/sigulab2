@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="table-responsive" >
+    <table id="tablaListado" class="table table-hover">
+        <!-- Titulos Listado -->
+        <thead>
+          <tr id="titulosListado">
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" name="columna" value="nombre_categoria" id="f_categoria_servicio" onClick="ordenarServicios('nombre_categoria');">Categoría</button>
+            </th>
+            <th class="camposTabla">
+              <a class="btn-link linksNombres" name="columna" value="nombre_tipo" id="f_tipo_servicio" onClick="ordenarServicios('nombre_tipo');">Tipo de Servicio</a>
+            </th>
+            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="nombre" id="f_nombre_servicio" onClick="ordenarServicios('nombre');">Nombre del Servicio</a></th>
+            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio" onClick="ordenarServicios('seccion');">Sección</a></th>
+            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio" onClick="ordenarServicios('laboratorio');">Laboratorio</a></th>
+            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio" onClick="ordenarServicios('sede');">Sede</a></th>
+          </tr>
+        </thead>
+          <!-- Contenido Listado -->
+        <tbody>
+				{{for item in grid:}}
+					<tr>
+						<th class="camposTabla">{{=item.nombre_categoria}}</th>
+						<th class="camposTabla">{{=item.nombre_tipo}}</th>
+						<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.nombre}}</a></th>
+						<th class="camposTabla">{{=item.seccion}}</th>
+						<th class="camposTabla">{{=item.laboratorio}}</th>
+						<th class="camposTabla">{{=item.sede}}</th>
+					</tr>
+				{{pass}}
+        </tbody>
+        <!-- Fin Contenido del Listado -->
+    </table>
+  </div>
+</div>  
+				
+<!-- Inicio botones pagina -->
+<div class="row">
+	{{for page in pages:}}
+		<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
+	{{pass}}
+  </div>
+ <!-- Fin botones pagina -->
