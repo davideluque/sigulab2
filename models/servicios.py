@@ -90,7 +90,7 @@ db.define_table(
 	
 	Field('dependencia', 'reference dependencias', requires=IS_IN_DB(db, 'dependencias.id', '%(nombre)s'), label=T('Dependencia Solicitante')),
 
-	Field('jefe_dependencia', 'reference personal', requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
+	Field('jefe_dependencia', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Jefe de la Dependencia Solicitante')),
 
 	Field('responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Responsable de la Solicitud')),
 
@@ -162,8 +162,8 @@ db.define_table(
 
 	Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
 	Field('proyecto', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Poyecto')),
-	Field('elaborado_por', 'reference personal',
-		  requires=IS_IN_DB(db, db.personal.id, '%(nombre)s | %(email)s'), label=T('Elaborado Por')),
+	Field('elaborado_por', 'reference t_Personal',
+		  requires=IS_IN_DB(db, db.t_Personal.id, '%(nombre)s | %(email)s'), label=T('Elaborado Por')),
 	Field('servicio', 'reference servicios',
 		  requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), label=T('Servicio Solicitado')),
 	Field('solicitud', 'reference solicitudes',

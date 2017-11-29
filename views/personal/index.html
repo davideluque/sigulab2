@@ -2,7 +2,9 @@
 
 {{block head}}
   <!-- Hoja de estilos específica para la página de gestión de servicios -->
-  <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}">  
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}"> 
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}">  
+
 {{end}}
 
 {{block center}}
@@ -19,9 +21,9 @@
 <!-- Contenido principal de la página de gestión de servicios -->
 <div id="main" class="container">
     <div id="fila1" class="row">
-
-      <h2 id="tituloBienvenida">Gestión de Personal</h2>
-
+      <div class="col-sm-6 col-sm-offset-3">
+        <h2 id="tituloBienvenida">Gestión de Personal</h2>
+      </div>
     </div>
 
     <div id="fila2" class="row">
@@ -33,14 +35,14 @@
 
         <div class="col-sm-6 columnas">
           <a href="{{=URL('listado')}}">
-            <img class="iconos" src="{{=URL('static','images/servicios/clipboard.png')}}">
+            <img class="iconos" src="{{=URL('static','images/gen.png')}}">
             <h4 class="opciones">Listado General</h4>
           </a>
         </div>
 
         <div class="col-sm-6 columnas">
           <a href="#">
-            <img class="iconos" src="{{=URL('static','images/servicios/file.png')}}">
+            <img class="iconos" src="{{=URL('static','images/cat.jpg')}}">
             <h4 class="opciones">Listado por Categorias</h4>
           </a>
         </div>
@@ -61,14 +63,14 @@
 
         <div class="col-sm-6 columnas">
           <a href="#">
-            <img class="iconos" src="{{=URL('static','images/servicios/diploma.png')}}">
+            <img class="iconos" src="{{=URL('static','images/dep.png')}}">
             <h4 class="opciones">Listado por Dependencias</h4>
           </a>
         </div>
 
         <div class="col-sm-6 columnas">
           <a href="#">
-            <img class="iconos" src="{{=URL('static','images/servicios/history.png')}}">
+            <img class="iconos" src="{{=URL('static','images/serv.png')}}">
             <h4 class="opciones">Listado por Años de Servicio</h4>
           </a>
         </div>
