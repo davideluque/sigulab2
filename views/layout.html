@@ -48,7 +48,6 @@
               <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2', 'modulos')}}">INICIO</a>
             </li>
 
-
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
               <ul class=" dropdown-menu">
@@ -61,6 +60,7 @@
             </li>
             
             <li class="dropdown active-item" id="servicios">
+
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVICIOS<span class="caret"></span></a>
                 <ul class=" dropdown-menu">
                 <li><a href="{{=URL('servicios','index')}}">Pagina Principal</a></li>
@@ -126,3 +126,12 @@
 {{end}}
 </body>
 </html>
+
+<script type="text/javascript">
+  u = window.location.pathname.toString().split('/')[2]
+  if( u == 'personal' ){
+    $('li#personal').addClass("active");
+  }else if ( u == 'servicios'){
+    $('li#servicio').addClass("active");
+  }
+</script>

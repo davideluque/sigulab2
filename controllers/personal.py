@@ -76,7 +76,44 @@ def add_form():
                                 f_estatus = dic["estatus"]
                                 #f_dependencia = dic["dependencia"]
                                 )
-        redirect(URL('index'))
+        redirect(URL('listado'))
+
+#Funcion que toma las variables de la vista
+def edit_form():
+
+    edic = {"nombre" : request.post_vars.nombre_edit,
+            "ci" : request.post_vars.ci_edit,
+            "email" : request.post_vars.email_edit,
+            "telefono" : request.post_vars.telefono_edit,
+            "pagina_web" : request.post_vars.pagina_web_edit,
+            "categoria" : request.post_vars.categoria_edit,
+            "cargo" : request.post_vars.cargo_edit,
+            "fecha_ingreso" : request.post_vars.fecha_ingreso_edit,
+            "fecha_salida" : request.post_vars.fecha_salida_edit,
+            "estatus" : request.post_vars.estatus_edit,
+            #"dependencia" : request.post_vars.dependencia_edit
+            }
+
+    #if str(edic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
+    #Si el diccionario no esta vacio
+    if (not(None in edic.values())):
+
+        db(db.t_Personal.f_ci == edic["ci"]).delete()
+        #Insertamos en la base de datos
+        db.t_Personal.insert(f_nombre = edic["nombre"],
+                                f_ci = edic["ci"],
+                                f_email = edic["email"],
+                                f_telefono = edic["telefono"],
+                                f_pagina_web = edic["pagina_web"],
+                                f_categoria = edic["categoria"],
+                                f_cargo = edic["cargo"],
+                                f_fecha_ingreso = edic["fecha_ingreso"],
+                                f_fecha_salida = edic["fecha_salida"],
+                                f_estatus = edic["estatus"]
+                                #f_dependencia = edic["dependencia"]
+                                )
+                                
+        redirect(URL('listado'))
 
 def index():
     return dict()
@@ -86,47 +123,55 @@ def listado():
 
     #Obtenemos los datos para el listado
     tabla = tabla_categoria()
+
     #Obtenemos los elementos de los dropdowns
     temp = dropdowns()
     cat = temp[0]
     dep = temp[1]
     est = temp[2]
+
+    editar = []
+    cedit = request.vars.cedula_editar
+    if (cedit != None):
+        editar.append(cedit)
+        editdata = db(db.t_Personal.f_ci == cedit).select(db.t_Personal.ALL)
+        edic = {"nombre" : editdata[0].f_nombre,
+            "ci" : editdata[0].f_ci,
+            "email" : editdata[0].f_email,
+            "telefono" : editdata[0].f_telefono,
+            "pagina_web" : editdata[0].f_pagina_web,
+            "categoria" : editdata[0].f_categoria,
+            "cargo" : editdata[0].f_cargo,
+            "fecha_ingreso" : editdata[0].f_fecha_ingreso,
+            "fecha_salida" : editdata[0].f_fecha_salida,
+            "estatus" : editdata[0].f_estatus,
+            #"dependencia" : request.post_vars.dependencia_add
+            }
+    else:
+        edic = {"nombre" :None,
+            "ci" :None,
+            "email" :None,
+            "telefono" :None,
+            "pagina_web" :None,
+            "categoria" :None,
+            "cargo" :None,
+            "fecha_ingreso" :None,
+            "fecha_salida" :None,
+            "estatus" :None,
+            #"dependencia" : request.post_vars.dependencia_add
+            }
+
     #Agregamos los datos del formulario a la base de datos
     add_form()
 
-    datos_basicos = {}
+    #Agregamos los datos del formulario a la base de datos
+    edit_form()
 
-    #Obtenemos la cedula del usuario
-    ced = request.vars.cedula_modal
+    #Obtenemos la cedula del usuario desde el boton de eliminar
+    ced = request.vars.cedula_eliminar
     if (ced != None):
-        #Buscamos la tabla personal que posee esta cedula
-        pers = db(db.t_Personal.f_ci == ced).select(db.t_Personal.ALL)
-        print(ced)
-        #Creamos una instancia con los valores para enviar a la ficha
-        datos_basicos = {"nombre" : pers[0].f_nombre,
-                        "ci" : ced,
-                        "email" : pers[0].f_email,
-                        "telefono" : pers[0].f_telefono,
-                        "pagina_web" : pers[0].f_pagina_web,
-                        "categoria" : pers[0].f_categoria,
-                        "cargo" : pers[0].f_cargo,
-                        "fecha_ingreso" : pers[0].f_fecha_ingreso,
-                        "fecha_salida" : pers[0].f_fecha_salida,
-                        "estatus" : pers[0].f_estatus
-                        #"dependencia" : pers[0].f_dependencia_add
-                        }
-    else:
-        datos_basicos = {"nombre" : None,
-                "ci" : ced,
-                "email" : None,
-                "telefono" : None,
-                "pagina_web" : None,
-                "categoria" : None,
-                "cargo" : None,
-                "fecha_ingreso" : None,
-                "fecha_salida" : None,
-                "estatus" : None
-                #"dependencia" : None
-                }
+        db(db.t_Personal.f_ci == ced).delete()
+        redirect(URL('listado'))
 
-    return dict(basicos = datos_basicos, grid= tabla, categorias = cat,dependencias = dep, estados = est)
+
+    return dict(gridedit = edic, editar = editar, grid= tabla, categorias = cat,dependencias = dep, estados = est)
