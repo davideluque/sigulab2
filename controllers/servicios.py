@@ -435,7 +435,6 @@ def ajax_listado_servicios():
     listado_de_servicios.cambiar_columna(order_by_col)
 
     if request.post_vars.cambiarPagina:
-        print(request.post_vars.cambiarPagina)
         listado_de_servicios.cambiar_pagina(int(request.post_vars.cambiarPagina))
 
     listado_de_servicios.orden_y_filtrado()
