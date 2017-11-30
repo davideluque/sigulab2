@@ -66,6 +66,27 @@
 
 	}
 
+	#formularioEdit input{ 
+		border-top: 0px !important;
+		border-left: 0px !important;
+		border-right: 0px !important;
+		box-shadow: none !important;
+		border-bottom-width: 2px;
+		border-radius: 0px;
+		background-color: transparent;
+	}
+
+	#formularioEdit select{ 
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		box-shadow: none;
+		border-radius: 0px;
+		border-bottom-width: 2px;
+		background-color: transparent;
+
+	}
+
 
 	.step{
 	  background: #505050;
@@ -86,10 +107,6 @@
 	.activePass {
 	  background: white;
 	  color: #505050;
-	}
-	
-	.ready {
-		background: #4CAF50;
 	}
 
 	#plus{
