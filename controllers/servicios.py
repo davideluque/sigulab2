@@ -332,7 +332,7 @@ def solicitudes():
         datos_solicitud=datos_solicitud, 
         categorias=listar_categorias(db), tipos=listar_tipos(db))
 
-
+# ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
 
@@ -351,8 +351,7 @@ def certificaciones():
     #-------------------FIN------------------------
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
-
-    listado_de_solicitudes = ListaSolicitudes(db, auth)
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
 
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
