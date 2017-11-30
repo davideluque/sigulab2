@@ -324,6 +324,7 @@ class Solicitud(object):
 		self.id_dependencia_solicitante = None
 		self.nombre_dependencia_solicitante = None
 		self.nombre_jefe_dependencia_solicitante = None
+		self.id_dependencia_ejecutora = None
 		self.nombre_dependencia_ejecutora = None
 		self.jefe_dependencia_ejecutora = None
 		self.lugar_ejecucion_servicio = None
@@ -434,12 +435,16 @@ class Solicitud(object):
 
 	def conseguir_atributos(self):
 		
-		# Correo electronico del responsable de la solicitud
-		self.email_responsable_solicitud = self.auth.user.email
+
 
 		# Extensiones telefonicas del responsable de la solicitud
-		personal = self.db(self.auth.user_id == self.db.t_Personal.f_usuario).select(self.db.t_Personal.ALL)[0]
+		personal = self.db(self.id_responsable_solicitud == self.db.t_Personal.id).select(self.db.t_Personal.ALL)[0]
 		self.telef_responsable_solicitud = personal.f_telefono
+
+		responsable_usuario = self.db(personal.f_usuario == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+		# Correo electronico del responsable de la solicitud
+		self.email_responsable_solicitud = responsable_usuario.email
 
 		dependencia = self.db(personal.f_dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
@@ -453,9 +458,9 @@ class Solicitud(object):
 
 		self.nombre_jefe_dependencia_solicitante = usuario_jefe_dependencia_solicitante.first_name + " " + usuario_jefe_dependencia_solicitante.last_name
 
-		id_dependencia_ejecutora = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].dependencia
+		self.id_dependencia_ejecutora = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].dependencia
 
-		dependencia_ejecutora_servicio = self.db(id_dependencia_ejecutora == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+		dependencia_ejecutora_servicio = self.db(self.id_dependencia_ejecutora == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
 		# Dependencia Ejecutora del Servicio
 		self.nombre_dependencia_ejecutora = dependencia_ejecutora_servicio.nombre
@@ -512,9 +517,16 @@ class Solicitud(object):
 
 class ListaSolicitudes(object):
 
-	def __init__(self, db, auth, orden=False, columna='id', central=1):
+	def __init__(self, db, auth, tipo_listado, orden=False, columna='id', central=1):
 		self.db = db
 		self.auth = auth
+		self.tipo_listado = tipo_listado
+
+		# Dependencia del usuario para filtrar la lista
+		personal_usuario = db(auth.user_id==self.db.t_Personal.f_usuario).select(self.db.t_Personal.ALL)[0]
+
+		self.dependencia_usuario = personal_usuario.f_dependencia
+
 		# Instanciacion de cada solicitud en la bd
 		self.set = self.db(self.db.solicitudes.id > 0)
 		self.filas = []
@@ -601,7 +613,11 @@ class ListaSolicitudes(object):
 		for solic in self.set.select(self.db.solicitudes.ALL):
 			solicitud = Solicitud(self.db, self.auth)
 			solicitud.instanciar(solic.id)
-			self.filas.append(solicitud)
+
+			if (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
+				self.filas.append(solicitud)
+			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario):
+				self.filas.append(solicitud)
 
 	def orden_y_filtrado(self):
 		self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
