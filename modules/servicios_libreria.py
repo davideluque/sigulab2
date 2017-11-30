@@ -512,7 +512,6 @@ class Solicitud(object):
 		self.estado_solicitud_str = self.estado_string()
 
 	def estado_string(self):
-
 		if self.estado_solicitud == -1:
 			return "Negada"
 		elif self.estado_solicitud == 0:
@@ -521,6 +520,13 @@ class Solicitud(object):
 			return "En ejecución"
 		elif self.estado_solicitud == 2:
 			return "Pendiente por Certificación"
+		elif self.estado_solicitud == 3:
+			return "Certificada"
+
+	def certificar(self):
+		self.estado_solicitud = 3
+		self.estado_solicitud_str = self.estado_string()
+		self.actualizar(self.id)
 
 class ListaSolicitudes(object):
 
@@ -621,7 +627,9 @@ class ListaSolicitudes(object):
 			solicitud = Solicitud(self.db, self.auth)
 			solicitud.instanciar(solic.id)
 
-			if (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
+			if solicitud.estado_solicitud == 3:
+				pass
+			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
 				self.filas.append(solicitud)
 			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario):
 				self.filas.append(solicitud)

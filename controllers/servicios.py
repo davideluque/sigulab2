@@ -343,10 +343,14 @@ def certificaciones():
         elaborado_por = request.post_vars.usuarioid
         dependencia = request.post_vars.dependenciaid
         solicitud = request.post_vars.solicitudid
+
+        solicitud_a_actualizar = Solicitud(db,auth)
+        solicitud_a_actualizar.instanciar(solicitud)
+        solicitud_a_actualizar.certificar()
+
         fecha = request.post_vars.fecha
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
-
         certificado.insertar()
     #-------------------FIN------------------------
 

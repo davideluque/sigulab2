@@ -52,9 +52,10 @@ db.define_table(
     Field('nombre', 'string', notnull=True, label=T('Nombre')),
 
     Field('email', 'string', requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'), label=T('Correo')),
-    # Auto-Referencia
+
     Field('id_jefe_dependencia', 'reference auth_user', requires=IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s'), label=T('Responsable')),
-    
+
+    # Auto-Referencia
     Field('unidad_de_adscripcion', 'reference dependencias', requires=False, label=T('Unidad de Adscripción')),
 
     Field('id_sede', 'reference sedes', requires=IS_IN_DB(db, db.sedes.id, '%(nombre)s'), label=T('Sede')),
