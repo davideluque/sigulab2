@@ -233,6 +233,30 @@ def solicitudes():
 
         solicitud_nueva.insertar()
 
+    #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO
+
+        if request.post_vars.estado == "-1":
+            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+            # ENVIAR CORREO A SOLICITANTE PARA AVISAR SU RECHAZO
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
     #----- LISTAR SOLICITUDES -----#
     listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
@@ -394,6 +418,16 @@ def ajax_ficha_servicio():
     valores_de_ficha['funcion'] = funcion
 
     return dict(ficha=valores_de_ficha)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_solicitud():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():

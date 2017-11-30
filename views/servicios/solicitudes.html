@@ -24,7 +24,9 @@
 <!-- Boton que lleva al modal de Solicitud de un Servicio -->
 <div class="container">
     <div class="row">
-        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+          <h3> Solicitudes Generadas </h3>  
+        </div>
         <div id="columnBotonAgregar" class="col-sm-6">
           <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
         </div>
@@ -34,7 +36,6 @@
 
 <!-- Inicio Listado Solicitudes para Solicitante -->
 <div id="listadoContainer" class="container">
-  <h3> Solicitudes Generadas </h3>
   <div class="row">
   	<div class="table-responsive" >
   		<table id="tablaListado" class="table table-hover">
@@ -58,7 +59,7 @@
       					<th class="camposTabla">{{=item.registro}}</th>
       					<th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
       					<th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=item.id}});" >{{=item.nombre_servicio}}</a></th>
+      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.nombre_servicio}}</a></th>
       					<th class="camposTabla">{{=item.fecha_solicitud}}</th>
       					<th class="camposTabla">{{=item.estado_solicitud_str}}</th>
       				</tr>
@@ -107,7 +108,7 @@
                 <th class="camposTabla">{{=item.registro}}</th>
                 <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
                 <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=item.id}});" >{{=item.nombre_servicio}}</a></th>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.nombre_servicio}}</a></th>
                 <th class="camposTabla">{{=item.fecha_solicitud}}</th>
                 <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
               </tr>
@@ -322,6 +323,23 @@
 </div>
 <!-- Fin Modal Solicitar Servicio -->
 
+<!-- Ajax abrirFicha -->
+<input type="hidden" id="solicitud" name="solicitud" value="">
+<input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
+
+
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
 <!-- Ajax obtenerServicio -->
 <input type="hidden" id="envioCategoria" name="categoria" value="">
 <input type="hidden" id="envioTipo" name="tipo" value="">
@@ -334,7 +352,17 @@
 
 <!-- Ajax JavaScript-->
 <script type="text/javascript">
-  
+
+  function abrirFicha(solicitud, tipo_solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+  }
+
   function getServicio(){
     var opciones_categoria = document.getElementById("sel1");
     var opciones_tipo = document.getElementById("sel2");

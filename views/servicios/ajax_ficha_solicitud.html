@@ -23,10 +23,13 @@
 	    <a class="nav-link" data-toggle="tab" href="#datosServicio" role="tab" aria-controls="">Servicio Solicitado</a>
 	  </li>
 	  <li class="nav-item">
-	    <a class="nav-link" data-toggle="tab" href="datosEjecutora" role="tab" aria-controls="">Datos Dependencia Ejecutora</a>
+	    <a class="nav-link" data-toggle="tab" href="#datosEjecutora" role="tab" aria-controls="">Datos Dependencia Ejecutora</a>
 	  </li>
-	  
-	  <li id="botonesFicha" class="nav-item"></li>	
+	  {{if tipo_solicitud == "Ejecutante":}}
+		  <li class="nav-item">
+		    <a class="nav-link" data-toggle="tab" href="#cambiarEstado" role="tab" aria-controls="">Cambiar Estado</a>
+		  </li>	
+	  {{pass}}
 	</ul>
 
 	<!-- Inicio contenidos tab -->
@@ -37,76 +40,108 @@
 			<table class="table contenidoFicha">
 				<tbody>
 					<tr>
-		  			<td>Registro:</td><td></td>
+		  			<td>Registro:</td><td>{{=ficha.registro}}</td>
 		  		</tr>
 					<tr>
-		  			<td>Dependencia Solicitante:</td><td></td>
+		  			<td>Dependencia Solicitante:</td><td>{{=ficha.nombre_dependencia_solicitante}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Jefe Dependencia Solicitante:</td><td></td>
+		  			<td>Jefe Dependencia Solicitante:</td><td>{{=ficha.nombre_jefe_dependencia_solicitante}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Responsable Solicitud:</td><td></td>
+		  			<td>Responsable Solicitud:</td><td>{{=ficha.nombre_responsable_solicitud}}</td>
 		  		</tr>
 		  	</tbody>
 			</table>
 		</div>
 
 
-	<!-- Paso 2 y 3 Servicio Solicitado -->
-	<div class="tab-pane" id="datosServicio" role="tabpanel">
-		<table class="table contenidoFicha">
-	  	<tbody>
-	  		<tr>
-	  			<td>Categoria:</td><td></td>
-	  		</tr>
-	  		<tr>
-	  			<td>Tipo:</td><td></td>
-	  		</tr>
-	  		<tr>
-	  			<td>Nombre Servicio:</td><td></td>
-	  		</tr>
-	  		<tr>
-	  			<td>Propósito:</td><td>{{=ficha['dependencia']}}</td>
-	  		</tr>
-	  		<tr>
-	  			<td>Descripción Propósito:</td><td></td>
-	  		</tr>
-	  		<tr>
-	  			<td>Descripción:</td><td></td>
-	  		</tr>
-	  	</tbody>
-		</table>	  	
-	</div>
-
-	  <div class="tab-pane" id="datosEjecutora" role="tabpanel">
-	  	<table class="table contenidoFicha">
-	  		<tbody>
-	  			<tr>
-		  			<td>Nombre Dependencia Ejecutora:</td><td></td>
+		<!-- Paso 2 y 3 Servicio Solicitado -->
+		<div class="tab-pane" id="datosServicio" role="tabpanel">
+			<table class="table contenidoFicha">
+		  	<tbody>
+		  		<tr>
+		  			<td>Categoria:</td><td>{{=ficha.categoria_servicio}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Jefe Dependencia Ejecutora:</td><td></td>
+		  			<td>Tipo:</td><td>{{=ficha.tipo_servicio}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Observaciones:</td><td></td>
+		  			<td>Nombre Servicio:</td><td>{{=ficha.nombre_servicio}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Elaborado por:</td><td></td>
+		  			<td>Propósito:</td><td>{{=ficha.nombre_proposito}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Fecha Elaboración:</td><td></td>
+		  			<td>Descripción Propósito:</td><td>{{=ficha.proposito_descripcion}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Aprobado por:</td><td></td>
-		  		</tr>
-		  		<tr>
-		  			<td>Fecha Aprobación:</td><td></td>
+		  			<td>Descripción:</td><td>{{=ficha.descripcion_servicio}}</td>
 		  		</tr>
 		  	</tbody>
-	  	</table>	  	
-	  </div>
+			</table>	  	
+		</div>
 
+		<div class="tab-pane" id="datosEjecutora" role="tabpanel">
+		  	<table class="table contenidoFicha">
+		  		<tbody>
+		  			<tr>
+			  			<td>Nombre Dependencia Ejecutora:</td><td>{{=ficha.nombre_dependencia_ejecutora}}</td>
+			  		</tr>
+			  		<tr>
+			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora}}</td>
+			  		</tr>
+			  		<tr>
+			  			<td>Observaciones:</td><td></td>
+			  		</tr>
+			  		<tr>
+			  			<td>Elaborado por:</td><td></td>
+			  		</tr>
+			  		<tr>
+			  			<td>Fecha Elaboración:</td><td></td>
+			  		</tr>
+			  		<tr>
+			  			<td>Aprobado por:</td><td></td>
+			  		</tr>
+			  		<tr>
+			  			<td>Fecha Aprobación:</td><td></td>
+			  		</tr>
+			  	</tbody>
+		  	</table>	  	
+		</div>
+
+		{{if tipo_solicitud == "Ejecutante":}}
+			<div class="tab-pane" id="cambiarEstado" role="tabpanel">
+				<form method="post">
+	  				<input type="hidden" name="idFicha" value="{{=ficha.id}}">
+				{{if ficha.estado_solicitud == 0:}}
+					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>
+					<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
+
+					<!-- Modal del boton rechazar-->
+					<div class="modal fade" id="modalRechazar" role="dialog">
+					    <div class="modal-dialog">
+					    
+					      <!-- Modal content-->
+					      <div class="modal-content">
+					        <div class="modal-header">
+					          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea rechazar la solicitud?</h4>
+					        </div>
+					        <div id="cuerpoModalElim" class="modal-body">
+					          <button type="submit" class="btn botonesFichita botonEliminar" name="estado" value="-1">Rechazar</button>
+					          <button type="button" class="btn botonesFichita" data-dismiss="modal" onclick="cerrar();">Cancelar</button>				
+					        </div>
+					      </div>
+					  
+					    </div>
+					</div>
+
+				{{elif ficha.estado_solicitud == 1:}}
+					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="2">Finalizar Ejecución</button>
+				{{pass}}
+				</form>
+			</div>
+		{{pass}}
 	</div>
 	<!-- Fin tab contenidos -->
   </div>
@@ -114,9 +149,9 @@
 
   <div class="modal-footer">
 	  <form method="post">
-	  	
+	  	<input type="hidden" name="idFicha_eliminar" value="{{=ficha.id}}">
 	    <div class="btn-group botonesFicha">
-
+	    {{if tipo_solicitud == "Solicitante":}}
 		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
 
 		  <!-- Modal del boton eliminar-->
@@ -126,7 +161,7 @@
 		      <!-- Modal content-->
 		      <div class="modal-content">
 		        <div class="modal-header">
-		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar el servicio?</h4>
+		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar la solicitud?</h4>
 		        </div>
 		        <div id="cuerpoModalElim" class="modal-body">
 		          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
@@ -136,6 +171,7 @@
 		  
 		    </div>
 		  </div>
+		{{pass}}
 		</div>
 	</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>

@@ -319,6 +319,7 @@ class Solicitud(object):
 		# Variables Disponibles tras conseguir_atributos()
 		self.id = None
 
+		self.nombre_responsable_solicitud = None
 		self.email_responsable_solicitud = None
 		self.telef_responsable_solicitud = None
 		self.id_dependencia_solicitante = None
@@ -433,8 +434,12 @@ class Solicitud(object):
 
 	    return actualizacion
 
+	def eliminar(self, id):
+		self.db(self.db.solicitudes.id == id).delete()
+
 	def conseguir_atributos(self):
-		
+		# Nombre de Proposito del Servicio
+		self.nombre_proposito = self.db(self.id_proposito_servicio == self.db.propositos.id).select(self.db.propositos.ALL)[0].tipo
 
 
 		# Extensiones telefonicas del responsable de la solicitud
@@ -442,6 +447,8 @@ class Solicitud(object):
 		self.telef_responsable_solicitud = personal.f_telefono
 
 		responsable_usuario = self.db(personal.f_usuario == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+		self.nombre_responsable_solicitud = responsable_usuario.first_name + " " + responsable_usuario.last_name
 
 		# Correo electronico del responsable de la solicitud
 		self.email_responsable_solicitud = responsable_usuario.email
