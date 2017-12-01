@@ -40,18 +40,22 @@
 
                             <div class="form-group">
                               <input type="text" class="form-control" name="nombre_add" placeholder="Nombre" required>
+                              <font color="red"><div id="err_nombre" hidden></div></font>
                             </div>
 
                             <div class="form-group">
                               <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required>
+                              <font color="red"><div id="err_ci" hidden></div></font>
                             </div>
 
                             <div class="form-group">
                               <input type="text" class="form-control" name="email_add" placeholder="Correo" required>
+                              <font color="red"><div id="err_email" hidden></div></font>
                             </div>
 
                             <div class="form-group">
                               <input type="text" class="form-control" name="telefono_add" placeholder="Extension" required>
+                              <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
 
                             <div class="form-group">
@@ -86,7 +90,8 @@
                                 </select>
                               </div>
                             <div class="form-group">
-                              <input type="text" class="form-control" name="fecha_ingreso_add" placeholder="Fecha de Ingreso">
+                              <input type="text" class="form-control" name="fecha_ingreso_add" placeholder="Fecha de Ingreso" required>
+                              <font color="red"><div id="err_fecha_ingreso" hidden>></div></font
                             </div>
                             <div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
@@ -113,6 +118,7 @@
 
                         <div class="form-group">
                           <input type="text" class="form-control" name="cargo_add" placeholder="Cargo">
+                          <font color="red"><div id="err_cargo" hidden></div></font>
                         </div>
 
                         <div class="form-group">
