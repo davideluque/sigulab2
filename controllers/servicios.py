@@ -433,6 +433,16 @@ def ajax_ficha_solicitud():
     return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_certificacion():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)

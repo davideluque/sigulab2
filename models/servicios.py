@@ -132,6 +132,7 @@ db.define_table(
 	# estado=0 pendiente por aprobar
 	# estado=1 pendiente por ejecutar
 	# estado=2 pendiente por certificar
+	# estado=3 certificado
 
 	Field('estado','integer', default=0, label=T('Estado de Solicitud')),
 
