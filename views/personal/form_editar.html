@@ -53,22 +53,26 @@
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="nombre_edit" value="{{=gridedit['nombre']}}"  placeholder="Nombre" required>
+                            <font color="red"><div id="err_nombre" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="ci_edit" value="{{=gridedit['ci']}}"  placeholder="Cédula" required>
+                            <font color="red"><div id="err_cedula" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="email_edit" value="{{=gridedit['email']}}"  placeholder="Correo" required>
+                            <font color="red"><div id="err_email" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="telefono_edit" value="{{=gridedit['telefono']}}"  placeholder="Extension" required>
+                            <font color="red"><div id="err_telefono" hidden></div></font>
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" name="pagina_web_edit" value="{{=gridedit['pagina_web']}}"  placeholder="Página Web" required>
+                            <input type="text" class="form-control" name="pagina_web_edit" value="{{=gridedit['pagina_web']}}"  placeholder="Página Web">
                           </div>
 
                       </div>
@@ -99,7 +103,8 @@
                               </select>
                             </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="fecha_ingreso_edit" value="{{=gridedit['fecha_ingreso']}}"  placeholder="Fecha de Ingreso">
+                            <input type="text" class="form-control" name="fecha_ingreso_edit" value="{{=gridedit['fecha_ingreso']}}"  placeholder="Fecha de Ingreso" required>
+                            <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
                           </div>
                           <div class="form-group">
                             <input type="text" class="form-control" name="fecha_salida_edit" value="{{=gridedit['fecha_salida']}}"  placeholder="Fecha de Salida">
@@ -126,6 +131,7 @@
 
                       <div class="form-group">
                         <input type="text" class="form-control" name="cargo_edit" value="{{=gridedit['cargo']}}"  placeholder="Cargo">
+                        <font color="red"><div id="err_cargo" hidden></div></font>
                       </div>
 
                       <div class="form-group">
