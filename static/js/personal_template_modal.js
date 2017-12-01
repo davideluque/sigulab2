@@ -38,10 +38,10 @@ $(document).ready(function () {
                     $("#err_telefono").html("Este campo es obligatorio");
                     $("#err_telefono").show();
                 }
-                else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
-                    $("#err_fecha_ingreso").html("Este campo es obligatorio");
-                    $("#err_fecha_ingreso").show();
-                }
+                //else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
+                    //$("#err_fecha_ingreso").html("Este campo es obligatorio");
+                    //$("#err_fecha_ingreso").show();
+                //}
                 $(this).addClass('input-error');
                 next_step = false;
             } else {
@@ -93,18 +93,18 @@ $(document).ready(function () {
                         $("#err_telefono").hide();
                     }
                 }
-                else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
-                    if (!($(this).val().match(/^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/]\d{4}$/))) { // Fecha del tipo DD-MM-AAAA o DD/MM/AAAA
-                        $("#err_fecha_ingreso").html("La fecha debe seguir el formato DD/MM/AAAA");
-                        $("#err_fecha_ingreso").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_fecha_ingreso").hide();
-                    }
-                }
+                //else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
+                    //if (!($(this).val().match(/^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/]\d{4}$/))) { // Fecha del tipo DD-MM-AAAA o DD/MM/AAAA
+                        //$("#err_fecha_ingreso").html("La fecha debe seguir el formato DD/MM/AAAA");
+                        //$("#err_fecha_ingreso").show();
+                        //$(this).addClass('input-error');
+                        //next_step = false;
+                    //}
+                    //else {
+                        //$(this).removeClass('input-error');
+                        //$("#err_fecha_ingreso").hide();
+                    //}
+                //}
                 else {
                     $(this).removeClass('input-error');
                     $("#err_msg").hide();
