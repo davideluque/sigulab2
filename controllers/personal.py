@@ -58,6 +58,8 @@ def add_form():
             #"dependencia" : request.post_vars.dependencia_add
             }
 
+    print(dic)
+
     #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
 
     #Si el diccionario no esta vacio
