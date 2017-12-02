@@ -54,6 +54,10 @@
                             </div>
 
                             <div class="form-group">
+                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" required>
+                            </div>
+
+                            <div class="form-group">
                               <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required>
                               <font color="red"><div id="err_ci" hidden></div></font>
                             </div>
@@ -141,6 +145,14 @@
                           </select>
                         </div>
 
+                        <div class="form-group">
+                          <select class="form-control" id="sel1" name="dependencia_add" required>
+                            <option value="1" selected hidden>Dependencia</option>
+                            {{for dependencia in dependencias:}}
+                            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
+                            {{pass}} 
+                          </select>
+                        </div>
                   
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>

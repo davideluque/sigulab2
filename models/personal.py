@@ -36,6 +36,12 @@ db.define_table(
 
           notnull=True, label=T('Nombre')),
 
+    Field('f_apellido',         'string',
+          requires=IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)*$',
+                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'),
+
+          notnull=True, label=T('Apellido')),
+
     Field('f_categoria',      'string',
           requires=IS_IN_SET(['Docente', 'Administrativo', 'Técnico', 'Obrero']), notnull=True, label=T('Categoría')),
 
