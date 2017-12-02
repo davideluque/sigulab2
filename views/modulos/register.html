@@ -55,6 +55,15 @@
                 </div>
             </div>
 
+            <!-- Cedula de Identidad -->
+            <div class="form-group" id="auth_cedula__row">
+                <div class="col-xs-12">
+                    <input class="form-control number" id="cedula" name="cedula" type="number" placeholder="Cedula" value="" required>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+
+
             <!-- Email -->
             <div class="form-group" id="auth_user_email__row">
                 <div class="col-xs-12">
@@ -129,7 +138,7 @@
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
     function setMembership(){
-        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion'], 'hiddendiv');
+        ajax('ajax_membership', ['cedula','laboratorio', 'rol', 'seccion'], 'hiddendiv');
     }
 
     function getUnidad(){
@@ -146,6 +155,10 @@
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        
+        var cedula = document.getElementById("cedula");
+        console.log(cedula);
+
         var x = document.getElementById("dependenciahidden");
         x.value = rolelegida;
         var x = document.getElementById("seccionhidden");

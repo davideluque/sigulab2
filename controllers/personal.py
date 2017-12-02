@@ -20,6 +20,8 @@ def tabla_categoria():
         #Buscamos el nombre de la dependencia con el id que manda la vista
         named = db(db.dependencias.id == elm.f_dependencia).select(db.dependencias.ALL)
 
+        dep= named[0] if len(named) > 0 else None
+
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -32,7 +34,7 @@ def tabla_categoria():
             "fecha_ingreso" : elm.f_fecha_ingreso,
             "fecha_salida" : elm.f_fecha_salida,
             "estatus" : elm.f_estatus,
-            "dependencia" : named[0]
+            "dependencia" : dep
              })
         
     return jsns
