@@ -1,7 +1,26 @@
+# Usemos la siguiente convencion:
+#
+# Los nombres de cada tabla seran en minusculas, separados con _ y en plural.
+#
+# Los nombres de los atributos seran en minusculas y singular, a menos de que se trate de una lista, en ese caso
+# se intentara tomar un nombre distinto al de una tabla
+#
+# Si un atributo tiene como referencia a un record de otra tabla, se le agregara el sufijo _<tabla> si es dificil
+# identificar que se trata de una referencia, si no es asi, se adoptara la convencion normal de atributos
+
+######################################################################################################################
+#
+# Tablas principales de los modulos
+# Se definira antes que las tablas de autenticacion porque son necesarias para estas
+#
+######################################################################################################################
+
+# Tabla de Sedes, necesaria para las Dependencias
+
 
 db.define_table(
     'sedes',
-    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre de la Sede')),
+    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre de la Sede'))
 )
 
 # Tabla de Dependencias, Incluira la Direccion, los laboratorios y sus secciones y las coordinaciones
@@ -25,9 +44,46 @@ db.define_table(
 
     Field('fax', 'integer', label=T('Fax')),
 
-    Field('pagina_web', 'string', label=T('Pagina Web'))
+    Field('pagina_web', 'string', label=T('Pagina Web')),
 
+    Field('id_jefe_dependencia', 'integer', label=T('Responsable')),
 )
+
+# Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos
+# una dependencia tendra adscrita varias, pero cada dependencia tendra o ninguna o una dependencia 'jefe'
+
+# Se define fuera de la tabla para asegurar su existencia antes de ser referenciada
+
+db.dependencias.unidad_de_adscripcion.requires = IS_EMPTY_OR(IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None))
+db.dependencias._plural = 'Dependencias'
+db.dependencias._singular = 'Dependencia'
+
+#######################################################################################################################
+#
+# Tablas de Autenticacion de Usuarios
+#
+#######################################################################################################################
+
+# Aqui se crearan las tablas de autenticacion, antes de ser estas definidas por web2py.
+# Despues de auth = Auth(db) pero antes de auth.define_tables(username=True)
+# (En el archivo 'db.py', la linea auth.define_tables(username=True) fue eliminada para ser usada aqui)
+
+# La tabla de auth_membership funcionara como la tabla de roles, asociaremos a esta una referencia a las dependencias.
+auth.settings.extra_fields['auth_membership'] = [
+    Field('dependencia_asociada', 'string',
+          label=T('Dependencia Asociada al Rol')),
+    Field('f_personal_membership', 'string', label=T('Ci'))
+]
+
+
+# Definimos todas las tablas de web2py por defecto con las modificaciones hechas
+
+auth.define_tables()
+
+db.auth_membership.dependencia_asociada.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None)
+db.auth_membership.dependencia_asociada.type = 'reference dependencias'
+db.dependencias.id_jefe_dependencia.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.dependencias.id_jefe_dependencia.type = 'reference auth_user'
 
 #######################################################################################################################
 #
@@ -76,8 +132,8 @@ db.define_table(
     Field('f_fecha_salida',   'string', default='N/A', label=T('Fecha de Salida')),
 
     # #Referencias
-    # Field('f_usuario', 'reference auth_user',
-    #       requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
+     Field('f_usuario', 'reference auth_user',
+           requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
     Field('f_dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
@@ -85,84 +141,16 @@ db.define_table(
 
 db.t_Personal._plural = 'Personal'
 db.t_Personal._singular = 'Personal'
-# Usemos la siguiente convencion:
-#
-# Los nombres de cada tabla seran en minusculas, separados con _ y en plural.
-#
-# Los nombres de los atributos seran en minusculas y singular, a menos de que se trate de una lista, en ese caso
-# se intentara tomar un nombre distinto al de una tabla
-#
-# Si un atributo tiene como referencia a un record de otra tabla, se le agregara el sufijo _<tabla> si es dificil
-# identificar que se trata de una referencia, si no es asi, se adoptara la convencion normal de atributos
 
-######################################################################################################################
-#
-# Tablas principales de los modulos
-# Se definira antes que las tablas de autenticacion porque son necesarias para estas
-#
-######################################################################################################################
-
-# Tabla de Sedes, necesaria para las Dependencias
-
-
+db.auth_membership.f_personal_membership.type = 'reference t_Personal'
+db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None)
 
 #######################################################################################################################
 #
-# Tablas de Autenticacion de Usuarios
+# Tablas Generales
 #
 #######################################################################################################################
 
-# Aqui se crearan las tablas de autenticacion, antes de ser estas definidas por web2py.
-# Despues de auth = Auth(db) pero antes de auth.define_tables(username=True)
-# (En el archivo 'db.py', la linea auth.define_tables(username=True) fue eliminada para ser usada aqui)
-
-# La tabla de auth_membership funcionara como la tabla de roles, asociaremos a esta una referencia a las dependencias.
-auth.settings.extra_fields['auth_membership'] = [
-    Field('dependencia_asociada', 'string',
-          label=T('Dependencia Asociada al Rol')),
-    Field('f_personal_membership', 'reference t_Personal',
-          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None), label=T('Ci'))
-]
-
-
-# Definimos todas las tablas de web2py por defecto con las modificaciones hechas
-
-auth.define_tables()
-
-#######################################################################################################################
-#
-# Tablas de Autenticacion de Usuarios
-#
-#######################################################################################################################
-
-# Aqui se crearan las tablas de autenticacion, antes de ser estas definidas por web2py.
-# Despues de auth = Auth(db) pero antes de auth.define_tables(username=True)
-# (En el archivo 'db.py', la linea auth.define_tables(username=True) fue eliminada para ser usada aqui)
-
-# La tabla de auth_membership funcionara como la tabla de roles, asociaremos a esta una referencia a las dependencias.
-auth.settings.extra_fields['auth_membership'] = [
-    Field('dependencia_asociada', 'reference dependencias',
-          requires=IS_EMPTY_OR(IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None)),
-          label=T('Dependencia Asociada al Rol'))
-]
-
-# Definimos todas las tablas de web2py por defecto con las modificaciones hechas
-
-
-auth.define_tables()
-
-# Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos
-# una dependencia tendra adscrita varias, pero cada dependencia tendra o ninguna o una dependencia 'jefe'
-
-# Se define fuera de la tabla para asegurar su existencia antes de ser referenciada
-
-db.dependencias.unidad_de_adscripcion.requires = IS_EMPTY_OR(IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None))
-
-db.dependencias._plural = 'Dependencias'
-db.dependencias._singular = 'Dependencia'
-
-db.auth_membership.dependencia_asociada.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None)
-db.auth_membership.dependencia_asociada.type = 'reference dependencias'
 
 # Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
 db.define_table(
@@ -176,15 +164,6 @@ db.define_table(
     )
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
-
-
-
-
-#######################################################################################################################
-#
-# Tablas Generales
-#
-#######################################################################################################################
 
 
 #------------------------------------------------Modulo de Personal-----------------------------------------------------------------------------------------------------------------------------------------------------------

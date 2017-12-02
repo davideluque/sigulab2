@@ -827,7 +827,11 @@ class Certificacion(object):
 
 		return actualizacion
 
-# Funcion que genera numeros arbitrarios para el registro de certificaciones y solicitudes
+#------------------------------------------------------------------------------
+#
+# Funciones para generar numeros para el registro de certificaciones y solicitudes
+#
+#------------------------------------------------------------------------------
 
 def generador_num_registro():
 	min = 0
