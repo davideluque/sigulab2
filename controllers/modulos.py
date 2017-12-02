@@ -76,20 +76,21 @@ def register():
 
 def redireccionando():
 	user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
-	print(user)
+	
 	db.auth_membership.insert(user_id=user, group_id=session.rolid, dependencia_asociada=session.depid)
- # 	db.t_Personal.insert(f_nombre = user.first_name,
- #                                f_apellido = user.last_name,
- #                                f_ci = 0,
- #                                f_email = user.email,
- #                                f_telefono = 0,
- #                                f_pagina_web = "N/A",
- #                                f_categoria = "Administrativo",
- #                                f_cargo = "N/A",
- #                                f_fecha_ingreso = "1/01/1989",
- #                                f_fecha_salida = "1/02/1989",
- #                                f_dependencia = session.depid
- #                                )
+ 	
+ 	db.t_Personal.insert(f_nombre = user.first_name,
+                                f_apellido = user.last_name,
+                                f_ci = 0,
+                                f_email = user.email,
+                                f_telefono = 0,
+                                f_pagina_web = "N/A",
+                                f_categoria = "Administrativo",
+                                f_cargo = "N/A",
+                                f_fecha_ingreso = "1/01/1989",
+                                f_fecha_salida = "1/02/1989",
+                                f_dependencia = session.depid
+                                )
 	session.forget()
 	return redirect(URL('index'))
 

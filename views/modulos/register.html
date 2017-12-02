@@ -138,7 +138,7 @@
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
     function setMembership(){
-        ajax('ajax_membership', ['cedula','laboratorio', 'rol', 'seccion'], 'hiddendiv');
+        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion'], 'hiddendiv');
     }
 
     function getUnidad(){
@@ -155,10 +155,6 @@
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        
-        var cedula = document.getElementById("cedula");
-        console.log(cedula);
-
         var x = document.getElementById("dependenciahidden");
         x.value = rolelegida;
         var x = document.getElementById("seccionhidden");
