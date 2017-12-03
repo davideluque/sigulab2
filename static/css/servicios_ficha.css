@@ -63,9 +63,10 @@
 
 .botonesFichita:hover {
 	background-color: #808080;
+	color: white;
 }
 
-.botonEliminar {
+.botonRechazar {
 	margin-top: 15px;
 }
 
@@ -83,8 +84,8 @@
 	color: white;
 }
 
-#botonEliminarFichaSolicitud {
-	text-align: left;
+.botonEliminarImprimir{
+	text-align: left !important;
 }
 
 #botonCerrarFichaSolicitud {

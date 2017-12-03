@@ -1,13 +1,11 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-  
   <!-- Estilo del listado de Solicitudes de Servicios -->
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-
 {{end}}
 
 {{block center}}
@@ -32,103 +30,23 @@
 </div>
 <!-- Fin del boton que lleva al modal de Solicitud de un Servicio -->
 
-<!-- Inicio Listado Solicitudes para Solicitante -->
-<div id="listadoContainer" class="container">
-  <div class="row">
-    <h3> Solicitudes Generadas </h3>  
-  	<div class="table-responsive" >
-  		<table id="tablaListado" class="table table-hover">
-  		 <form>
-          <!-- Titulos Tabla Solicitudes -->
-          <thead>
-            <tr id="titulosListado">
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro">Numero de Registro</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante">Dependencia Solicitante</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora">Dependencia Ejecutora</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio">Servicio</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud">Fecha de Solicitud</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud">Estado</button></th>
-            </tr>
-  		    </thead>
-
-          <!-- Contenido Tabla Solicitudes -->
-  	      <tbody>
-      			{{for item in grid:}}
-      				<tr>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.registro}}</a></th>
-      					<th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-      					<th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-      					<th class="camposTabla">{{=item.nombre_servicio}}</th>
-      					<th class="camposTabla">{{=item.fecha_solicitud}}</th>
-      					<th class="camposTabla">{{=item.estado_solicitud_str}}</th>
-      				</tr>
-      			{{pass}}
-  		    </tbody>
-  		 </form>
-  		</table>
-  	</div>
-  </div>
-
-  <!-- Inicio botones pagina -->
-    <div class="row">
-      <form>
-        {{for page in pages:}}
-          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-        {{pass}}
-      </form>
-    </div>
-    <!-- Fin botones pagina -->
+<!-- Inicio Listado Solicitudes para solicitante -->
+<div id="listado_solic_generadas_container" class="container">
 </div>
+<!-- Ajax ordenar listado de solicitudes para solicitante--> 
+<input type="hidden" id="ordenar_solicitudes_generadas_por" name="ordenar_solicitudes_generadas_por" value="">
+<input type="hidden" id="ordenar_solicitudes_generadas_alfabeticamente" name="ordenar_solicitudes_generadas_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_solicitudes_generadas" name="cambiar_pagina_solicitudes_generadas" value="">
 <!-- Fin Listado Solicitudes para Solicitante-->
 
-<!-- Inicio Listado Solicitudes para Ejecutante-->
-<div id="listadoContainer" class="container">
-  <h3> Solicitudes Recibidas </h3>
-  <div class="row">
-    <div class="table-responsive" >
-      <table id="tablaListado" class="table table-hover">
-       <form>
-          <!-- Titulos Tabla Solicitudes -->
-          <thead>
-            <tr id="titulosListado">
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro">Numero de Registro</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante">Dependencia Solicitante</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora">Dependencia Ejecutora</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio">Servicio</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud">Fecha de Solicitud</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud">Estado</button></th>
-            </tr>
-          </thead>
-
-          <!-- Contenido Tabla Solicitudes -->
-          <tbody>
-            {{for item in grid_ejecutante:}}
-              <tr>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.registro}}</a></th>
-                <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-                <th class="camposTabla">{{=item.nombre_servicio}}</th>
-                <th class="camposTabla">{{=item.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
-              </tr>
-            {{pass}}
-          </tbody>
-       </form>
-      </table>
-    </div>
-  </div>
-
-  <!-- Inicio botones pagina -->
-    <div class="row">
-      <form>
-        {{for page in pages_ejecutante:}}
-          <button name="pagina_ejecutante" value="{{=page}}"{{if page == actualpage_ejecutante:}}class="active"{{pass}}> {{=page}} </button>
-        {{pass}}
-      </form>
-    </div>
-    <!-- Fin botones pagina -->
+<!-- Inicio Listado Solicitudes para ejecutante-->
+<!-- Ajax ordenar listado de solicitudes para ejecutante--> 
+<div id="listado_solic_recibidas_container" class="container">
 </div>
-<!-- Fin Listado Solicitudes para Ejecutante-->
+<input type="hidden" id="ordenar_solicitudes_recibidas_por" name="ordenar_solicitudes_recibidas_por" value="">
+<input type="hidden" id="ordenar_solicitudes_recibidas_alfabeticamente" name="ordenar_solicitudes_recibidas_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_solicitudes_recibidas" name="cambiar_pagina_solicitudes_recibidas" value="">
+<!-- Fin Listado Solicitudes para ejecutante-->
 
 <!-- Inicio Modal Solicitar Servicio -->
 <div class="modal fade" id="modalServiceRequest" role="dialog">
@@ -321,10 +239,231 @@
 </div>
 <!-- Fin Modal Solicitar Servicio -->
 
+{{if servicio_solicitud:}}
+<button class="hidden" type="hidden" id="solicito" data-toggle="modal" data-target="#modalServiceRequestSelected"></button>
+
+<!-- Inicio Modal Solicitar Servicio Seleccionado-->
+<div class="modal fade" id="modalServiceRequestSelected" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoServicio">Solicitud de Servicio de Laboratorio</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <!-- Inicio Form -->
+            <form id="formularioEdit" class="registration-form" method="post">
+
+              <!-- Primer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Datos Básicos</h4>                
+                      
+                      <!-- Numero Registro -->
+                      <div class="mover">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
+                      </div>
+                      </div>
+
+                      <!-- Dependencia Solicitante -->
+                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
+                      </div>
+
+                      <!-- Jefe Dependencia Solicitante -->
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
+                      </div>
+
+                      <!-- Responsable Solicitud -->
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
+                      </div>                         
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+              
+              <!-- Segundo Paso -->
+              <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                       <span class="step">4</span>
+                    </div>
+
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                      
+                      <!-- Categoria -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+
+                        <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
+                          <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
+                        </select>
+                      </div>
+
+                      <!-- Tipo Servicio -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+
+                        <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
+                          <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
+                        </select>
+                      </div>
+
+                      <!-- Nombre Servicio-->
+                      <div class="form-group" id="obtenerNombreServicio2">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+                        <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
+                          <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Segundo Paso -->
+
+              <!-- Tercer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step activePass">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <!-- Propósito -->
+                    <div class="form-group" id="obtenerPropositoServicio">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
+                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" required>
+                          <option selected value="" hidden>Propósito</option>
+                            {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
+                              <option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
+                            {{pass}}
+                      </select>
+                    </div>
+
+                    <!-- Descripcion propósito -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
+                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                    </div>
+                  </div>
+                </div> 
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Tercer Paso -->
+
+              <!-- Cuarto Paso -->
+              <fieldset class="formField">
+                <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step activePass">4</span> 
+                  </div>
+
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
+                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
+                    <!-- Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 450px;">Nombre</label>
+                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" value="{{=servicio_solicitud.seccion}}" required readonly>
+                    </div>
+                    <br>
+
+                    <!-- Jefe Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 490px;" style="">Jefe</label>
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.jefe_dependencia}} | {{=servicio_solicitud.email_jefe_dependencia}}" required readonly>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+              </fieldset>
+              <!-- Fin Cuarto Paso -->
+            </form>
+            <!-- Fin Form -->
+          </div>
+        </div>               
+      </div>
+      <!-- Fin Modal Body -->
+    </div>
+    <!-- Fin Modal content-->
+  </div>
+</div>
+<!-- Fin Modal Solicitar Servicio Seleccionado-->
+
+
+<script>
+    $(document).ready(function(){
+        document.getElementById("solicito").click();
+    });
+
+</script>
+
+{{pass}}
+
+
 <!-- Ajax abrirFicha -->
 <input type="hidden" id="solicitud" name="solicitud" value="">
 <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
-
 
 <!-- Inicio Modal ficha de Servicio -->
   <div id="myModal" class="modal fade" role="dialog">
@@ -404,6 +543,96 @@
     ajax('ajax_obtener_datos_depen_ejecutora', ['idServicio2'], "obtenerDependenciaEjecutora")
   }
 
+  // Valores por defecto para el listado de solicitudes recibidas al cargar
+  // el listado de solicitudes. Además estos valores permiten guardar los
+  // parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_solicitudes_recibidas = null;
+  order_by_asc_solicitudes_recibidas = null;
+  order_by_pag_solicitudes_recibidas = 1;
+  function cambiar_pagina_solicitudes_recibidas(page){
+    order_by_pag_solicitudes_recibidas = page
+
+    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
+      x.value = order_by_col_solicitudes_recibidas;
+
+    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_recibidas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
+      z.value = order_by_pag_solicitudes_recibidas
+
+    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas");
+  }
+
+  function ordenar_solicitudes_recibidas(order_by){
+    
+    if (order_by_col_solicitudes_recibidas == order_by){
+      order_by_asc_solicitudes_recibidas = !order_by_asc_solicitudes_recibidas
+    }
+    else{
+      order_by_col_solicitudes_recibidas = order_by
+      order_by_asc_solicitudes_recibidas = false
+    }
+
+    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
+      x.value = order_by_col_solicitudes_recibidas;
+
+    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_recibidas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
+      z.value = order_by_pag_solicitudes_recibidas
+
+    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas_container");
+  }
+
+  // Valores por defecto para el listado de solicitudes generadas al cargar
+  // el listado de solicitudes. Además estos valores permiten guardar los
+  // parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_solicitudes_generadas = null;
+  order_by_asc_solicitudes_generadas = null;
+  order_by_pag_solicitudes_generadas = 1;
+  function cambiar_pagina_solicitudes_generadas(page){
+    order_by_pag_solicitudes_generadas = page
+
+    var x = document.getElementById("ordenar_solicitudes_generadas_por");
+      x.value = order_by_col_solicitudes_generadas;
+
+    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_generadas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
+      z.value = order_by_pag_solicitudes_generadas
+
+    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
+  }
+
+  function ordenar_solicitudes_generadas(order_by){
+    
+    if (order_by_col_solicitudes_generadas == order_by){
+      order_by_asc_solicitudes_generadas = !order_by_asc_solicitudes_generadas
+    }
+    else{
+      order_by_col_solicitudes_generadas = order_by
+      order_by_asc_solicitudes_generadas = false
+    }
+
+    var x = document.getElementById("ordenar_solicitudes_generadas_por");
+      x.value = order_by_col_solicitudes_generadas;
+
+    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_generadas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
+      z.value = order_by_pag_solicitudes_generadas
+
+    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
+  }
+
+  window.onload = function(){
+    ordenar_solicitudes_generadas("id");
+    ordenar_solicitudes_recibidas("id");
+  }
 </script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->

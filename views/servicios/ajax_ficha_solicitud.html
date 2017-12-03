@@ -101,7 +101,7 @@
 			  			<td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Aprobado por:</td><td></td>
+			  			<td>Aprobado por:</td><td>{{=ficha.aprobada_por}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
@@ -116,7 +116,7 @@
 	  				<input type="hidden" name="idFicha" value="{{=ficha.id}}">
 				{{if ficha.estado_solicitud == 0:}}
 					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>
-					<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
+					<button type="button" class="btn botonesFichita botonEliminar botonRechazar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
 
 					<!-- Modal del boton rechazar-->
 					<div class="modal fade" id="modalRechazar" role="dialog">
@@ -156,29 +156,23 @@
 	  <form method="post">
 	  	<input type="hidden" name="idFicha_eliminar" value="{{=ficha.id}}">
 
-	    {{if tipo_solicitud == "Solicitante":}}
+	    {{if tipo_solicitud == "Solicitante" and ficha.estado_solicitud == 0:}}
 
 		<div id="botonEliminarFichaSolicitud" class="botonesFicha">
-			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
+			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="collapse" data-target="#collapseExample">Eliminar</button>
 
-			<!-- Modal del boton eliminar-->
-			  <div class="modal fade" id="modalEliminar" role="dialog">
-			    <div class="modal-dialog">
-			    
-			      <!-- Modal content-->
-			      <div class="modal-content">
-			        <div class="modal-header">
-			          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar la solicitud?</h4>
-			        </div>
-			        <div id="cuerpoModalElim" class="modal-body">
-			          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-			          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-			        </div>
-			      </div>
-			  
-			    </div>
-			  </div>
-			{{pass}}
+
+			<div class="collapse" id="collapseExample">
+				<div class="card card-body">
+				 ¿Seguro que deseas eliminar la solicitud?
+				 <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>
+				 <button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseExample">No</button>
+				</div>
+			</div>
+
+
+		{{pass}}
+
 		</form>
 			<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
 		</div>

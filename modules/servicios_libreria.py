@@ -11,11 +11,11 @@ import random
 class Servicio(object):
 
     def __init__(self, db, nombre = None, tipo = None, categoria = None,
-                objetivo = None, alcance = None, metodo = None, rango = None,
-                incertidumbre = None, item_ensayar = None, requisitos = None, 
-                resultados = None, docencia = None, investigacion = None,
-                gestion = None, extension = None, visibilidad = None, 
-                responsable = None, dependencia = None, ubicacion = None, id=None):
+                 objetivo = None, alcance = None, metodo = None, rango = None,
+                 incertidumbre = None, item_ensayar = None, requisitos = None, 
+                 resultados = None, docencia = None, investigacion = None,
+                 gestion = None, extension = None, visibilidad = None, 
+                 responsable = None, dependencia = None, ubicacion = None, id=None):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -28,10 +28,12 @@ class Servicio(object):
         self.item_ensayar = item_ensayar
         self.requisitos = requisitos
         self.resultados = resultados
+
         self.docencia = docencia
         self.investigacion = investigacion
         self.gestion = gestion
         self.extension = extension
+
         self.visibilidad = visibilidad
         self.responsable = responsable
         self.dependencia = dependencia
@@ -43,10 +45,11 @@ class Servicio(object):
         self.laboratorio = None
         self.seccion = None
         self.sede = None
-        self.id = None    
+        self.id = None
 
         self.db = db
 
+        self.obtenerListaPropositos()
 
     def __str__(self):
 
@@ -96,6 +99,8 @@ class Servicio(object):
 
             self.conseguir_categorias()
 
+            self.obtenerListaPropositos()
+
             return True
         
         else:
@@ -104,9 +109,9 @@ class Servicio(object):
 
 
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
-                rango, incertidumbre, item_ensayar, requisitos, resultados,
-                docencia, investigacion, gestion, extension, visibilidad, 
-                responsable, dependencia, ubicacion):
+               rango, incertidumbre, item_ensayar, requisitos, resultados,
+               docencia, investigacion, gestion, extension, visibilidad, 
+               responsable, dependencia, ubicacion):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -127,6 +132,8 @@ class Servicio(object):
         self.responsable = responsable
         self.dependencia = dependencia
         self.ubicacion = ubicacion
+
+        self.obtenerListaPropositos()
 
 
     def actualizar(self, id):
@@ -156,15 +163,42 @@ class Servicio(object):
 
 
     def conseguir_categorias(self):
-        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre        
-        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre        
-        
+        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
+        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre       
+
         seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
         self.seccion = seccion_fila.nombre
         self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
         self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
 
+        self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
+
+        usuario_jefe_dependencia = self.db(self.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+        self.jefe_dependencia = usuario_jefe_dependencia.first_name + " " + usuario_jefe_dependencia.last_name
+
+        self.email_jefe_dependencia = usuario_jefe_dependencia.email
+
+    def obtenerListaPropositos(self):
+        self.propositos_a_mostrar = []
+
+
+        if self.docencia == True:
+            propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.investigacion == True:
+            propositoServicio = self.db("Investigación" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.extension == True:
+            propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)    
+
+        if self.gestion == True:
+            propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
 
 #------------------------------------------------------------------------------
 #
@@ -389,7 +423,11 @@ class Solicitud(object):
             self.descripcion_servicio = instanciacion[0].descripcion
             self.observaciones = instanciacion[0].observaciones
             self.estado_solicitud = instanciacion[0].estado
-            self.aprobada_por = instanciacion[0].aprobada_por 
+
+            if instanciacion[0].aprobada_por:
+                self.aprobada_por = instanciacion[0].aprobada_por 
+            else:
+                self.aprobada_por = ""
             if instanciacion[0].fecha_aprobacion:
                 self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
             else:
@@ -468,7 +506,7 @@ class Solicitud(object):
 
         self.id_dependencia_solicitante = dependencia.id
 
-        # Dependencia solicitante        
+        # Dependencia solicitante
         self.nombre_dependencia_solicitante = dependencia.nombre
 
         # Jefe Dependencia Solicitante
@@ -484,10 +522,10 @@ class Solicitud(object):
         self.nombre_dependencia_ejecutora = dependencia_ejecutora_servicio.nombre
 
         # Jefe de la Dependencia Ejecutora del Servicio
-        usuario_jefe_dependencia_ejecutora = self.db(dependencia_ejecutora_servicio.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]    
-        
-        self.jefe_dependencia_ejecutora = usuario_jefe_dependencia_ejecutora.first_name + " " + usuario_jefe_dependencia_ejecutora.last_name
-        
+        self.usuario_jefe_dependencia_ejecutora = self.db(dependencia_ejecutora_servicio.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+        self.jefe_dependencia_ejecutora = self.usuario_jefe_dependencia_ejecutora.first_name + " " + self.usuario_jefe_dependencia_ejecutora.last_name
+
         # Lugar de Ejecucion de Servicio
 
         id_ubicacion_ejecucion = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].ubicacion
@@ -497,7 +535,7 @@ class Solicitud(object):
         # Nombre de Servicio
 
         self.nombre_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].nombre
-        
+
         # Nombre Tipo de Servicio
 
         id_tipo_servicio = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].tipo
@@ -548,6 +586,47 @@ class Solicitud(object):
         cert.estado = 0
 
         cert.insertar()
+
+    def correoHacerSolicitud(self):
+        nombre_jefe_dependencia = self.jefe_dependencia_ejecutora
+
+        email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
+
+        nombre_solicitante = self.nombre_responsable_solicitud
+
+        email_solicitante = self.email_responsable_solicitud
+
+        nombre_servicio = self.nombre_servicio
+
+        nombre_solicitante = self.nombre_responsable_solicitud
+
+        nombre_dependencia = self.nombre_dependencia_ejecutora
+
+        # Se le manda el email al jefe de la dependencia a la que pertenece el servicio 
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
+
+        enviar_correo(self.auth, email_jefe_dependencia,'Se ha solicitado un servicio', correo)
+
+        # Se le manda el email al responsable de la solicitud 
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
+
+        enviar_correo(self.auth, email_solicitante,'Se ha solicitado un servicio', correo)
+
+    def correoCambioEstadoSolicitud(self):
+        nombre_solicitante = self.nombre_responsable_solicitud
+
+        email_solicitante = self.email_responsable_solicitud
+
+        nombre_servicio = self.nombre_servicio
+
+        estado_solicitud = self.estado_solicitud 
+
+        nombre_estado_solicitud = self.estado_solicitud_str
+
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Su solicitud del servicio %s ha cambiado al estado a %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio, nombre_estado_solicitud)
+
+        enviar_correo(self.auth, email_solicitante,'Se ha cambiado el estado de su solicitud', correo)
+
 
 class ListaSolicitudes(object):
 
@@ -623,20 +702,17 @@ class ListaSolicitudes(object):
             self.boton_siguiente = False
 
         self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
-        
 
     def cambiar_pagina(self, nueva_pagina):
         self.pagina_central = nueva_pagina
         self.configurar_botones()
         self.posicionar_ultimo()
-
     
     def posicionar_ultimo(self):
         self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
 
     def invertir_ordenamiento(self):
         self.orden = not(self.orden)
-
 
     def cambiar_ordenamiento(self, orden):
         self.orden = orden
@@ -653,13 +729,13 @@ class ListaSolicitudes(object):
             if solicitud.estado_solicitud == 3:
                 pass
             elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
-                 solicitud.estado_solicitud < 2):
+                  solicitud.estado_solicitud < 2):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
-                 solicitud.estado_solicitud < 2):
+                  solicitud.estado_solicitud < 2):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
-                 solicitud.estado_solicitud == 2):
+                  solicitud.estado_solicitud == 2):
                 self.filas.append(solicitud)
 
     def orden_y_filtrado(self):
@@ -905,7 +981,6 @@ class ListaHistorial(object):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
         self.solicitudes_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
 
-
 #------------------------------------------------------------------------------
 #
 # Funciones para listar Categorias, Tipos y Sedes
@@ -980,21 +1055,21 @@ def query_ficha(db, idv):
     email = resprow[0].f_email
 
     ficha_con_queries = {"entrada": entrada,
-                        "categoria": categoria,
-                        "tipo": tipo,
-                        "dependencia": dependencia,
-                        "dependenciaid": dependenciaid,
-                        "adscripcion": adscripcion,
-                        "adscripcionid": adscripcionid,
-                        "sede": sede,
-                        "sedeid": sedeid,
-                        "ubicacion": ubicacion,
-                        "ubicacionid": ubicacionid,
-                        "responsable": responsable,
-                        "respid": respid,
-                        "telefono": telefono,
-                        "email": email
-                        }
+                         "categoria": categoria,
+                         "tipo": tipo,
+                         "dependencia": dependencia,
+                         "dependenciaid": dependenciaid,
+                         "adscripcion": adscripcion,
+                         "adscripcionid": adscripcionid,
+                         "sede": sede,
+                         "sedeid": sedeid,
+                         "ubicacion": ubicacion,
+                         "ubicacionid": ubicacionid,
+                         "responsable": responsable,
+                         "respid": respid,
+                         "telefono": telefono,
+                         "email": email
+                         }
 
     return ficha_con_queries
 
@@ -1048,4 +1123,15 @@ def validador_registro_certificaciones(request, db, registro):
     else:
         return registro
 
+#------------------------------------------------------------------------------
+#
+# Funcion para enviar correo
+#
+#------------------------------------------------------------------------------
+
+
+def enviar_correo(auth, destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+
+    mail.send(destinatario, asunto, cuerpo)
 
