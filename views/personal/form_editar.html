@@ -53,22 +53,31 @@
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="nombre_edit" value="{{=gridedit['nombre']}}"  placeholder="Nombre" required>
+                            <font color="red"><div id="err_nombre" hidden></div></font>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="apellido_edit" value="{{=gridedit['apellido']}}"  placeholder="Apellido" required>
+                            <font color="red"><div id="err_nombre" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="ci_edit" value="{{=gridedit['ci']}}"  placeholder="Cédula" required>
+                            <font color="red"><div id="err_cedula" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="email_edit" value="{{=gridedit['email']}}"  placeholder="Correo" required>
+                            <font color="red"><div id="err_email" hidden></div></font>
                           </div>
 
                           <div class="form-group">
                             <input type="text" class="form-control" name="telefono_edit" value="{{=gridedit['telefono']}}"  placeholder="Extension" required>
+                            <font color="red"><div id="err_telefono" hidden></div></font>
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" name="pagina_web_edit" value="{{=gridedit['pagina_web']}}"  placeholder="Página Web" required>
+                            <input type="text" class="form-control" name="pagina_web_edit" value="{{=gridedit['pagina_web']}}"  placeholder="Página Web">
                           </div>
 
                       </div>
@@ -92,14 +101,15 @@
                         <h4 class="titulosForm">Datos Laborales</h4>
                             <div class="form-group">
                               <select class="form-control" id="sel1" name="estatus_edit" required>
-                                <option value="1" selected hidden>Estatus</option>
+                                <option value="{{=gridedit['estatus']}}" selected hidden>{{=gridedit['estatus']}}</option>
                                 {{for estatus in estados:}}
                                 <option value="{{=estatus}}">{{=estatus}}</option>
                                 {{pass}} 
                               </select>
                             </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="fecha_ingreso_edit" value="{{=gridedit['fecha_ingreso']}}"  placeholder="Fecha de Ingreso">
+                            <input type="text" class="form-control" name="fecha_ingreso_edit" value="{{=gridedit['fecha_ingreso']}}"  placeholder="Fecha de Ingreso" required>
+                            <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
                           </div>
                           <div class="form-group">
                             <input type="text" class="form-control" name="fecha_salida_edit" value="{{=gridedit['fecha_salida']}}"  placeholder="Fecha de Salida">
@@ -126,16 +136,25 @@
 
                       <div class="form-group">
                         <input type="text" class="form-control" name="cargo_edit" value="{{=gridedit['cargo']}}"  placeholder="Cargo">
+                        <font color="red"><div id="err_cargo" hidden></div></font>
                       </div>
 
                       <div class="form-group">
                         <select class="form-control" id="sel1" name="categoria_edit" required>
-                          <option value="1" selected hidden>Categoria</option>
+                          <option value="{{=gridedit['categoria']}}" selected hidden>{{=gridedit['categoria']}}</option>
                           {{for categoria in categorias:}}
                           <option value="{{=categoria}}">{{=categoria}}</option>
                           {{pass}} 
                         </select>
                       </div>
+                        <div class="form-group">
+                          <select class="form-control" id="sel1" name="dependencia_edit" required>
+                            <option value="{{=gridedit['dependencia']['id']}}" selected hidden>{{=gridedit['dependencia']['nombre']}}</option>
+                            {{for d in dependencias:}}
+                            <option value="{{=d['id']}}">{{=d['nombre']}}</option>
+                            {{pass}} 
+                          </select>
+                        </div>
 
                 
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>

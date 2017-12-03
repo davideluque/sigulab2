@@ -70,6 +70,11 @@
 	color: white;
 }
 
+.botonAprobar:hover {
+	background-color: #46a049;
+	color: white;
+}
+
 #tituloModalElim {
 	text-align: center;
 }

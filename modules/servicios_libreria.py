@@ -131,8 +131,8 @@ class Servicio(object):
 
 
 	def actualizar(self, id):
-	    
-	    actualizacion = self.db(self.db.servicios.id == id).update(
+		
+		actualizacion = self.db(self.db.servicios.id == id).update(
 							nombre = self.nombre, 
 							tipo = self.tipo,
 							categoria = self.categoria, 
@@ -153,7 +153,7 @@ class Servicio(object):
 							dependencia = self.dependencia,
 							ubicacion = self.ubicacion)
 
-	    return actualizacion
+		return actualizacion
 
 
 	def conseguir_categorias(self):
@@ -319,6 +319,7 @@ class Solicitud(object):
 		# Variables Disponibles tras conseguir_atributos()
 		self.id = None
 
+		self.nombre_responsable_solicitud = None
 		self.email_responsable_solicitud = None
 		self.telef_responsable_solicitud = None
 		self.id_dependencia_solicitante = None
@@ -414,8 +415,8 @@ class Solicitud(object):
 		self.conseguir_atributos()
 
 	def actualizar(self, id):
-	    
-	    actualizacion = self.db(self.db.solicitudes.id == id).update(
+		
+		actualizacion = self.db(self.db.solicitudes.id == id).update(
 												registro = self.registro,
 												responsable = self.id_responsable_solicitud,
 												fecha = self.fecha_solicitud,
@@ -431,10 +432,14 @@ class Solicitud(object):
 												elaborada_por = self.elaborada_por,
 												fecha_elaboracion = self.fecha_elaboracion)
 
-	    return actualizacion
+		return actualizacion
+
+	def eliminar(self, id):
+		self.db(self.db.solicitudes.id == id).delete()
 
 	def conseguir_atributos(self):
-		
+		# Nombre de Proposito del Servicio
+		self.nombre_proposito = self.db(self.id_proposito_servicio == self.db.propositos.id).select(self.db.propositos.ALL)[0].tipo
 
 
 		# Extensiones telefonicas del responsable de la solicitud
@@ -442,6 +447,8 @@ class Solicitud(object):
 		self.telef_responsable_solicitud = personal.f_telefono
 
 		responsable_usuario = self.db(personal.f_usuario == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+		self.nombre_responsable_solicitud = responsable_usuario.first_name + " " + responsable_usuario.last_name
 
 		# Correo electronico del responsable de la solicitud
 		self.email_responsable_solicitud = responsable_usuario.email
@@ -505,7 +512,6 @@ class Solicitud(object):
 		self.estado_solicitud_str = self.estado_string()
 
 	def estado_string(self):
-
 		if self.estado_solicitud == -1:
 			return "Negada"
 		elif self.estado_solicitud == 0:
@@ -514,6 +520,13 @@ class Solicitud(object):
 			return "En ejecución"
 		elif self.estado_solicitud == 2:
 			return "Pendiente por Certificación"
+		elif self.estado_solicitud == 3:
+			return "Certificada"
+
+	def certificar(self):
+		self.estado_solicitud = 3
+		self.estado_solicitud_str = self.estado_string()
+		self.actualizar(self.id)
 
 class ListaSolicitudes(object):
 
@@ -614,9 +627,14 @@ class ListaSolicitudes(object):
 			solicitud = Solicitud(self.db, self.auth)
 			solicitud.instanciar(solic.id)
 
-			if (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
+			if solicitud.estado_solicitud == 3:
+				pass
+			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
 				self.filas.append(solicitud)
 			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario):
+				self.filas.append(solicitud)
+			elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
+				  solicitud.estado_solicitud == 2):
 				self.filas.append(solicitud)
 
 	def orden_y_filtrado(self):
@@ -653,68 +671,68 @@ def listar_sedes(db):
 
 
 def query_ficha(db, idv):
-    entrada = db(db.servicios.id == idv).select(db.servicios.ALL)
+	entrada = db(db.servicios.id == idv).select(db.servicios.ALL)
 
 
-    # Categoria
-    categrow = db(entrada[0].categoria == db.categorias_servicios.id).select(db.categorias_servicios.ALL)
-    categoria = categrow[0].nombre
+	# Categoria
+	categrow = db(entrada[0].categoria == db.categorias_servicios.id).select(db.categorias_servicios.ALL)
+	categoria = categrow[0].nombre
 
-    # Tipo
-    tiporow = db(entrada[0].tipo == db.tipos_servicios.id).select(db.tipos_servicios.ALL)
-    tipo = tiporow[0].nombre
+	# Tipo
+	tiporow = db(entrada[0].tipo == db.tipos_servicios.id).select(db.tipos_servicios.ALL)
+	tipo = tiporow[0].nombre
 
-    # Dependencia
-    dependrow = db(entrada[0].dependencia == db.dependencias.id).select(db.dependencias.ALL)
-    dependencia = dependrow[0].nombre
-    dependenciaid = dependrow[0].id
+	# Dependencia
+	dependrow = db(entrada[0].dependencia == db.dependencias.id).select(db.dependencias.ALL)
+	dependencia = dependrow[0].nombre
+	dependenciaid = dependrow[0].id
 
-    # Unidad de Adscripcion
-    adscripcionid = dependrow[0].unidad_de_adscripcion
+	# Unidad de Adscripcion
+	adscripcionid = dependrow[0].unidad_de_adscripcion
 
-    adsrow = db(adscripcionid == db.dependencias.id).select(db.dependencias.ALL)
-    adscripcion = adsrow[0].nombre
+	adsrow = db(adscripcionid == db.dependencias.id).select(db.dependencias.ALL)
+	adscripcion = adsrow[0].nombre
 
-    # Sede
-    sederow = db(adsrow[0].id_sede == db.sedes.id).select(db.sedes.ALL)
-    sede = sederow[0].nombre
-    sedeid = sederow[0].id
+	# Sede
+	sederow = db(adsrow[0].id_sede == db.sedes.id).select(db.sedes.ALL)
+	sede = sederow[0].nombre
+	sedeid = sederow[0].id
 
-    # Ubicacion Fisica
-    ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
-    ubicacion = ubicrow[0].nombre
-    ubicacionid = ubicrow[0].id
+	# Ubicacion Fisica
+	ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
+	ubicacion = ubicrow[0].nombre
+	ubicacionid = ubicrow[0].id
 
-    # Responsable
-    resprow = db(entrada[0].responsable == db.t_Personal.id).select(db.t_Personal.ALL)
+	# Responsable
+	resprow = db(entrada[0].responsable == db.t_Personal.id).select(db.t_Personal.ALL)
 
-    responsable = resprow[0].f_nombre
-    respid = resprow[0].id
+	responsable = resprow[0].f_nombre
+	respid = resprow[0].id
 
-    # Numeros
-    telefono = resprow[0].f_telefono
+	# Numeros
+	telefono = resprow[0].f_telefono
 
-    # Correo
-    email = resprow[0].f_email
+	# Correo
+	email = resprow[0].f_email
 
-    ficha_con_queries = {"entrada": entrada,
-                         "categoria": categoria,
-                         "tipo": tipo,
-                         "dependencia": dependencia,
-                         "dependenciaid": dependenciaid,
-                         "adscripcion": adscripcion,
-                         "adscripcionid": adscripcionid,
-                         "sede": sede,
-                         "sedeid": sedeid,
-                         "ubicacion": ubicacion,
-                         "ubicacionid": ubicacionid,
-                         "responsable": responsable,
-                         "respid": respid,
-                         "telefono": telefono,
-                         "email": email
-                         }
+	ficha_con_queries = {"entrada": entrada,
+						 "categoria": categoria,
+						 "tipo": tipo,
+						 "dependencia": dependencia,
+						 "dependenciaid": dependenciaid,
+						 "adscripcion": adscripcion,
+						 "adscripcionid": adscripcionid,
+						 "sede": sede,
+						 "sedeid": sedeid,
+						 "ubicacion": ubicacion,
+						 "ubicacionid": ubicacionid,
+						 "responsable": responsable,
+						 "respid": respid,
+						 "telefono": telefono,
+						 "email": email
+						 }
 
-    return ficha_con_queries
+	return ficha_con_queries
 
 
 #UNIDAD DE ADSCRIPCION:
@@ -809,15 +827,19 @@ class Certificacion(object):
 
 		return actualizacion
 
-# Funcion que genera numeros arbitrarios para el registro de certificaciones y solicitudes
+#------------------------------------------------------------------------------
+#
+# Funciones para generar numeros para el registro de certificaciones y solicitudes
+#
+#------------------------------------------------------------------------------
 
 def generador_num_registro():
-    min = 0
-    max = 500
-    digit = str(random.randint(min, max))
-    digits = (len(str(max))-len(digit))*'0' + digit
+	min = 0
+	max = 500
+	digit = str(random.randint(min, max))
+	digits = (len(str(max))-len(digit))*'0' + digit
 
-    return digits
+	return digits
 
 def validador_registro_solicitudes(request, db):
 	anio = str(request.now)[2:4]

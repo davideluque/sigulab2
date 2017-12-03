@@ -33,24 +33,23 @@
   <div class="row">
   	<div class="table-responsive" >
   		<table id="tablaListado" class="table table-hover">
-  		 <form>
           <thead>
             <tr id="titulosListado">
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="fecha_aprobacion" id="fecha_aprobacion">Fecha de Solicitud</button></th>
 				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="registro" id="registro">Numero de Registro</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_servicio" id="servicio">Servicio</button></th>
                 <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_solicitante" id="dependencia">Solicitante</button></th>
                 <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_dependencia_ejecutora" id="id_dependencia_ejecutora_solicitud">Dependencia Ejecutora</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_servicio" id="servicio">Servicio</button></th>
+                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="fecha_aprobacion" id="fecha_aprobacion">Fecha de Aprobación</button></th>
   			</tr>
   		  </thead>
   	     <tbody>
             {{for item in grid:}}
               <tr>
-                  <th class="camposTabla">{{=item.fecha_aprobacion}}</th>
-                  <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}});">{{=item.registro}}</a></th>
+                  <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}}, 'Certificante');">{{=item.registro}}</a></th>
                   <th class="camposTabla">{{=item.nombre_servicio}}</th>
-                  <th class="camposTabla">{{=item.nombre_solicitante}}</th>
+                  <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
 				  <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+                  <th class="camposTabla">{{=item.fecha_aprobacion}}</th>
               </tr>
 			{{pass}}
   		  </tbody>
@@ -58,12 +57,11 @@
              <th>
                 <form>
                     {{for page in pages:}}
-                    <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+                    <button name="pagina" value="{{=page}}" {{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
                     {{pass}}
                 </form>
              </th><th></th><th></th><th></th><th></th>
              </tfoot>
-  		 </form>
   		</table>
   	</div>
   </div>
@@ -71,7 +69,9 @@
 
 <!-- Field Escondido para el modal-->
 <input type="hidden" id="solicitud" name="solicitud" value="">
-<!-- Inicio Modal ficha de Servicio -->
+<input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
+
+<!-- Inicio Modal ficha de Certificacion -->
 <div class="modal fade" id="modalServiceCertification" role="dialog">
     <div class="modal-dialog">
         <div id="formcert" class="modal-content">
@@ -81,11 +81,21 @@
 
 <script language="javascript">
 
-  function abrirForm(solicitud) {
+  function abrirForm(solicitud, tipo_solicitud) {
 		var x = document.getElementById("solicitud");
 			x.value = solicitud;
 		ajax('ajax_certificar_servicio', ['solicitud'], "formcert");
 	}
+
+  function abrirFicha(solicitud, tipo_solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+  }
 </script>
 
 {{end}}

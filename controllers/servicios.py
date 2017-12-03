@@ -233,6 +233,30 @@ def solicitudes():
 
         solicitud_nueva.insertar()
 
+    #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO
+
+        if request.post_vars.estado == "-1":
+            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+            # ENVIAR CORREO A SOLICITANTE PARA AVISAR SU RECHAZO
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
     #----- LISTAR SOLICITUDES -----#
     listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
@@ -308,7 +332,7 @@ def solicitudes():
         datos_solicitud=datos_solicitud, 
         categorias=listar_categorias(db), tipos=listar_tipos(db))
 
-
+# ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
 
@@ -319,16 +343,19 @@ def certificaciones():
         elaborado_por = request.post_vars.usuarioid
         dependencia = request.post_vars.dependenciaid
         solicitud = request.post_vars.solicitudid
+
+        solicitud_a_actualizar = Solicitud(db,auth)
+        solicitud_a_actualizar.instanciar(solicitud)
+        solicitud_a_actualizar.certificar()
+
         fecha = request.post_vars.fecha
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
-
         certificado.insertar()
     #-------------------FIN------------------------
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
-
-    listado_de_solicitudes = ListaSolicitudes(db, auth)
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
 
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
@@ -394,6 +421,26 @@ def ajax_ficha_servicio():
     valores_de_ficha['funcion'] = funcion
 
     return dict(ficha=valores_de_ficha)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_solicitud():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_certificacion():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():
