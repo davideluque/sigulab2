@@ -176,14 +176,18 @@ class Servicio(object):
 
 class ListaServicios(object):
 
-	def __init__(self, db, orden=False, columna='id', central=1):
+	def __init__(self, db, visibilidad, orden=False, columna='id', central=1):
 		
 		#### Captura de datos desde la Base de Datos
 
 		self.db = db
 		
-		# 1. Tomar todos los servicios de la Base de Datos
-		self.set = self.db(self.db.servicios.id > 0)
+		# 1. Tomar servicios visibles o todos de la base de datos
+
+		if visibilidad == True:
+			self.set = self.db(self.db.servicios.id > 0)
+		else:
+			self.set = self.db(self.db.servicios.visibilidad == True)
 
 		# Aqui se introducen los servicios instanciados
 		self.filas = []
@@ -192,7 +196,7 @@ class ListaServicios(object):
 		self.capturar_objetos()
 
 		# Numero de servicios recuperados desde la base de datos
-		self.cuenta = self.set.count()
+		self.cuenta = len(self.filas)
 
 		#### Variables de Ordenamiento
 
@@ -553,7 +557,7 @@ class ListaSolicitudes(object):
 		self.filas = []
 		self.capturar_objetos()
 
-		self.cuenta = self.set.count()
+		self.cuenta = len(self.filas)
 
 		# Variables de Ordenamiento
 		# Esta indicara sobre que columna se ordenara
@@ -617,6 +621,7 @@ class ListaSolicitudes(object):
 		self.configurar_botones()
 		self.posicionar_ultimo()
 
+	
 	def posicionar_ultimo(self):
 		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
 
@@ -679,7 +684,6 @@ def listar_sedes(db):
 # Funcion para hacer query de Ficha de Servicio
 #
 #------------------------------------------------------------------------------
-
 
 def query_ficha(db, idv):
 	entrada = db(db.servicios.id == idv).select(db.servicios.ALL)
@@ -767,7 +771,6 @@ def query_ficha(db, idv):
 #------------------------------------------------------------------------------
 
 class Certificacion(object):
-
 
 	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
 				 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
@@ -863,9 +866,9 @@ def validador_registro_solicitudes(request, db, registro):
 	else:
 		return registro
 
-def validador_registro_certificaciones(request, db):
+def validador_registro_certificaciones(request, db, registro):
 	anio = str(request.now)[2:4]
-	registro = 'UL-' + anio + '/' + generador_num_registro()
+	registro = registro + "-" + anio + '/' + generador_num_registro()
 
 	check = db(db.certificaciones.registro == registro).count()
 
