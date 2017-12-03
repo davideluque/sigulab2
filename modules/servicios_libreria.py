@@ -386,7 +386,10 @@ class Solicitud(object):
 			self.descripcion_servicio = instanciacion[0].descripcion
 			self.observaciones = instanciacion[0].observaciones
 			self.estado_solicitud = instanciacion[0].estado
-			self.aprobada_por = instanciacion[0].aprobada_por 
+			if instanciacion[0].aprobada_por:
+				self.aprobada_por = instanciacion[0].aprobada_por 
+			else:
+				self.aprobada_por = ""
 			if instanciacion[0].fecha_aprobacion:
 				self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
 			else:

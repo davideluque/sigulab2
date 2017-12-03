@@ -263,11 +263,13 @@ def solicitudes():
 
         if request.post_vars.estado == "1":
             solicitud_a_cambiar.fecha_aprobacion = request.now
+            solicitud_a_cambiar.aprobada_por = auth.user.first_name
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            solicitud_a_cambiar.elaborada_por = auth.user.first_name
             solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
             #  ENVIAR CORREO SOLICITUD EJECUTADA
