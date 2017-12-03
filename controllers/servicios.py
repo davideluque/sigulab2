@@ -322,35 +322,8 @@ def solicitudes():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
-<<<<<<< HEAD
     return dict(datos_solicitud=datos_solicitud, 
         categorias=listar_categorias(db), tipos=listar_tipos(db))
-=======
-    # Ejecutante: Usuario solicita cambiar la pagina
-    if request.vars.pagina_ejecutante:
-        listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
-
-    # Ejecutante: Usuario solicita ordenar los servicios
-    if request.vars.columna_ejecutante:
-        listado_de_ejecutante.cambiar_columna(request.vars.columna_ejecutante)
-
-    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
-    listado_de_ejecutante.orden_y_filtrado()
-
-    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
-    firstpage_ejecutante=listado_de_ejecutante.boton_principio
-    lastpage_ejecutante=listado_de_ejecutante.boton_fin
-    nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
-    prevpage_ejecutante=listado_de_ejecutante.boton_anterior
-
-    return dict(grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
-        pages_ejecutante=listado_de_ejecutante.rango_paginas,
-        actualpage_ejecutante=listado_de_ejecutante.pagina_central,
-        nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
-        firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
-        datos_solicitud=datos_solicitud, categorias=listar_categorias(db), tipos=listar_tipos(db),
-        servicio_solicitud=servicio_solicitud)
->>>>>>> e3db975d6c67c66c1f70801f1e12d646465f4892
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
