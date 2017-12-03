@@ -10,198 +10,198 @@ import random
 
 class Servicio(object):
 
-	def __init__(self, db, nombre = None, tipo = None, categoria = None,
-				 objetivo = None, alcance = None, metodo = None, rango = None,
-				 incertidumbre = None, item_ensayar = None, requisitos = None, 
-				 resultados = None, docencia = None, investigacion = None,
-				 gestion = None, extension = None, visibilidad = None, 
-				 responsable = None, dependencia = None, ubicacion = None, id=None):
+    def __init__(self, db, nombre = None, tipo = None, categoria = None,
+                 objetivo = None, alcance = None, metodo = None, rango = None,
+                 incertidumbre = None, item_ensayar = None, requisitos = None, 
+                 resultados = None, docencia = None, investigacion = None,
+                 gestion = None, extension = None, visibilidad = None, 
+                 responsable = None, dependencia = None, ubicacion = None, id=None):
 
-		self.nombre = nombre
-		self.tipo = tipo
-		self.categoria = categoria
-		self.objetivo = objetivo
-		self.alcance = alcance
-		self.metodo = metodo
-		self.rango = rango
-		self.incertidumbre = incertidumbre
-		self.item_ensayar = item_ensayar
-		self.requisitos = requisitos
-		self.resultados = resultados
+        self.nombre = nombre
+        self.tipo = tipo
+        self.categoria = categoria
+        self.objetivo = objetivo
+        self.alcance = alcance
+        self.metodo = metodo
+        self.rango = rango
+        self.incertidumbre = incertidumbre
+        self.item_ensayar = item_ensayar
+        self.requisitos = requisitos
+        self.resultados = resultados
 
-		self.docencia = docencia
-		self.investigacion = investigacion
-		self.gestion = gestion
-		self.extension = extension
+        self.docencia = docencia
+        self.investigacion = investigacion
+        self.gestion = gestion
+        self.extension = extension
 
-		self.visibilidad = visibilidad
-		self.responsable = responsable
-		self.dependencia = dependencia
-		self.ubicacion = ubicacion
+        self.visibilidad = visibilidad
+        self.responsable = responsable
+        self.dependencia = dependencia
+        self.ubicacion = ubicacion
 
-		# Categorias de Ordenamiento, disponibles tras instanciacion
-		self.nombre_tipo = None
-		self.nombre_categoria = None
-		self.laboratorio = None
-		self.seccion = None
-		self.sede = None
-		self.id = None	
+        # Categorias de Ordenamiento, disponibles tras instanciacion
+        self.nombre_tipo = None
+        self.nombre_categoria = None
+        self.laboratorio = None
+        self.seccion = None
+        self.sede = None
+        self.id = None  
 
-		self.db = db
+        self.db = db
 
-		self.obtenerListaPropositos()
-
-
-	def __str__(self):
-
-		return self.nombre
+        self.obtenerListaPropositos()
 
 
-	def insertar(self):
-		
-		insercion = self.db.servicios.insert(nombre = self.nombre,
-			tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo, 
-			alcance = self.alcance, metodo = self.metodo, rango = self.rango, 
-			incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar, 
-			requisitos = self.requisitos, resultados = self.resultados, 
-			docencia = self.docencia, investigacion = self.investigacion, 
-			gestion = self.gestion, extension = self.extension, 
-			visibilidad = self.visibilidad, responsable = self.responsable, 
-			dependencia = self.dependencia, ubicacion = self.ubicacion)
+    def __str__(self):
 
-		return insercion
+        return self.nombre
 
 
-	def instanciar(self, id):
-		
-		instanciacion = self.db(self.db.servicios.id == id).select(self.db.servicios.ALL)
+    def insertar(self):
+        
+        insercion = self.db.servicios.insert(nombre = self.nombre,
+            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo, 
+            alcance = self.alcance, metodo = self.metodo, rango = self.rango, 
+            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar, 
+            requisitos = self.requisitos, resultados = self.resultados, 
+            docencia = self.docencia, investigacion = self.investigacion, 
+            gestion = self.gestion, extension = self.extension, 
+            visibilidad = self.visibilidad, responsable = self.responsable, 
+            dependencia = self.dependencia, ubicacion = self.ubicacion)
 
-		if (len(instanciacion) == 1):
-			self.id = id
-			self.nombre = instanciacion[0].nombre
-			self.tipo = instanciacion[0].tipo
-			self.categoria = instanciacion[0].categoria
-			self.objetivo = instanciacion[0].objetivo
-			self.alcance = instanciacion[0].alcance
-			self.metodo = instanciacion[0].metodo
-			self.rango = instanciacion[0].rango
-			self.incertidumbre = instanciacion[0].incertidumbre
-			self.item_ensayar = instanciacion[0].item_ensayar
-			self.requisitos = instanciacion[0].requisitos
-			self.resultados = instanciacion[0].resultados
-			self.docencia = instanciacion[0].docencia
-			self.investigacion = instanciacion[0].investigacion
-			self.gestion = instanciacion[0].gestion
-			self.extension = instanciacion[0].extension
-			self.visibilidad = instanciacion[0].visibilidad
-			self.responsable = instanciacion[0].responsable
-			self.dependencia = instanciacion[0].dependencia
-			self.ubicacion = instanciacion[0].ubicacion
-
-			self.conseguir_categorias()
-
-			self.obtenerListaPropositos()
+        return insercion
 
 
-			return True
-		
-		else:
+    def instanciar(self, id):
+        
+        instanciacion = self.db(self.db.servicios.id == id).select(self.db.servicios.ALL)
 
-			return False
+        if (len(instanciacion) == 1):
+            self.id = id
+            self.nombre = instanciacion[0].nombre
+            self.tipo = instanciacion[0].tipo
+            self.categoria = instanciacion[0].categoria
+            self.objetivo = instanciacion[0].objetivo
+            self.alcance = instanciacion[0].alcance
+            self.metodo = instanciacion[0].metodo
+            self.rango = instanciacion[0].rango
+            self.incertidumbre = instanciacion[0].incertidumbre
+            self.item_ensayar = instanciacion[0].item_ensayar
+            self.requisitos = instanciacion[0].requisitos
+            self.resultados = instanciacion[0].resultados
+            self.docencia = instanciacion[0].docencia
+            self.investigacion = instanciacion[0].investigacion
+            self.gestion = instanciacion[0].gestion
+            self.extension = instanciacion[0].extension
+            self.visibilidad = instanciacion[0].visibilidad
+            self.responsable = instanciacion[0].responsable
+            self.dependencia = instanciacion[0].dependencia
+            self.ubicacion = instanciacion[0].ubicacion
 
+            self.conseguir_categorias()
 
-	def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
-			   rango, incertidumbre, item_ensayar, requisitos, resultados,
-			   docencia, investigacion, gestion, extension, visibilidad, 
-			   responsable, dependencia, ubicacion):
-
-		self.nombre = nombre
-		self.tipo = tipo
-		self.categoria = categoria
-		self.objetivo = objetivo
-		self.alcance = alcance
-		self.metodo = metodo
-		self.rango = rango
-		self.incertidumbre = incertidumbre
-		self.item_ensayar = item_ensayar
-		self.requisitos = requisitos
-		self.resultados = resultados
-		self.docencia = docencia
-		self.investigacion = investigacion
-		self.gestion = gestion
-		self.extension = extension
-		self.visibilidad = visibilidad
-		self.responsable = responsable
-		self.dependencia = dependencia
-		self.ubicacion = ubicacion
-
-		self.obtenerListaPropositos()
+            self.obtenerListaPropositos()
 
 
+            return True
+        
+        else:
 
-	def actualizar(self, id):
-		
-		actualizacion = self.db(self.db.servicios.id == id).update(
-							nombre = self.nombre, 
-							tipo = self.tipo,
-							categoria = self.categoria, 
-							objetivo = self.objetivo,
-							alcance = self.alcance,
-							metodo = self.metodo,
-							rango = self.rango,
-							incertidumbre = self.incertidumbre,
-							item_ensayar = self.item_ensayar,
-							requisitos = self.requisitos,
-							resultados = self.resultados,
-							docencia = self.docencia,
-							investigacion = self.investigacion,
-							gestion = self.gestion,
-							extension = self.extension,
-							visibilidad = self.visibilidad,
-							responsable = self.responsable,
-							dependencia = self.dependencia,
-							ubicacion = self.ubicacion)
-
-		return actualizacion
+            return False
 
 
-	def conseguir_categorias(self):
-		self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre		
-		self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre		
-		
-		seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+    def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
+               rango, incertidumbre, item_ensayar, requisitos, resultados,
+               docencia, investigacion, gestion, extension, visibilidad, 
+               responsable, dependencia, ubicacion):
 
-		self.seccion = seccion_fila.nombre
-		self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
-		self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+        self.nombre = nombre
+        self.tipo = tipo
+        self.categoria = categoria
+        self.objetivo = objetivo
+        self.alcance = alcance
+        self.metodo = metodo
+        self.rango = rango
+        self.incertidumbre = incertidumbre
+        self.item_ensayar = item_ensayar
+        self.requisitos = requisitos
+        self.resultados = resultados
+        self.docencia = docencia
+        self.investigacion = investigacion
+        self.gestion = gestion
+        self.extension = extension
+        self.visibilidad = visibilidad
+        self.responsable = responsable
+        self.dependencia = dependencia
+        self.ubicacion = ubicacion
 
-		self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
-
-		usuario_jefe_dependencia = self.db(self.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
-
-		self.jefe_dependencia = usuario_jefe_dependencia.first_name + " " + usuario_jefe_dependencia.last_name
-
-		self.email_jefe_dependencia = usuario_jefe_dependencia.email
-
-	def obtenerListaPropositos(self):
-	    self.propositos_a_mostrar = []
+        self.obtenerListaPropositos()
 
 
-	    if self.docencia == True:
-	        propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
-	        self.propositos_a_mostrar.append(propositoServicio)
 
-	    if self.investigacion == True:
-	        propositoServicio = self.db("Investigación" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
-	        self.propositos_a_mostrar.append(propositoServicio)
+    def actualizar(self, id):
+        
+        actualizacion = self.db(self.db.servicios.id == id).update(
+                            nombre = self.nombre, 
+                            tipo = self.tipo,
+                            categoria = self.categoria, 
+                            objetivo = self.objetivo,
+                            alcance = self.alcance,
+                            metodo = self.metodo,
+                            rango = self.rango,
+                            incertidumbre = self.incertidumbre,
+                            item_ensayar = self.item_ensayar,
+                            requisitos = self.requisitos,
+                            resultados = self.resultados,
+                            docencia = self.docencia,
+                            investigacion = self.investigacion,
+                            gestion = self.gestion,
+                            extension = self.extension,
+                            visibilidad = self.visibilidad,
+                            responsable = self.responsable,
+                            dependencia = self.dependencia,
+                            ubicacion = self.ubicacion)
 
-	    if self.extension == True:
-	        propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
-	        self.propositos_a_mostrar.append(propositoServicio)    
+        return actualizacion
 
-	    if self.gestion == True:
-	        propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
-	        self.propositos_a_mostrar.append(propositoServicio)
+
+    def conseguir_categorias(self):
+        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre       
+        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre       
+        
+        seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+
+        self.seccion = seccion_fila.nombre
+        self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
+        self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+
+        self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
+
+        usuario_jefe_dependencia = self.db(self.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+        self.jefe_dependencia = usuario_jefe_dependencia.first_name + " " + usuario_jefe_dependencia.last_name
+
+        self.email_jefe_dependencia = usuario_jefe_dependencia.email
+
+    def obtenerListaPropositos(self):
+        self.propositos_a_mostrar = []
+
+
+        if self.docencia == True:
+            propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.investigacion == True:
+            propositoServicio = self.db("Investigación" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.extension == True:
+            propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)    
+
+        if self.gestion == True:
+            propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
 
 
 #------------------------------------------------------------------------------
