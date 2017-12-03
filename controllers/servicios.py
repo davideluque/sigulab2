@@ -405,10 +405,6 @@ def certificaciones():
 def historial():
     return dict()
 
-
-def historial():
-	return dict()
-
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
