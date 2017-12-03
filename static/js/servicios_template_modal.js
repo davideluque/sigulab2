@@ -17,13 +17,17 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     });
 
+    $('.registration-form input[name="itemServicio"]').on('focus', function () {
+        $(this).removeClass('input-error');
+    });
+
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
 
-        parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"], textarea[name="propositoDescripcion"]').each(function () {
+        parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"], textarea[name="propositoDescripcion"], input[name="itemServicio"]').each(function () {
                         
             if ($(this).val() == "") {
 

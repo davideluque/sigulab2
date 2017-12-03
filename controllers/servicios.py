@@ -16,7 +16,14 @@ import re
 # Pagina principal del modulo
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
-    return dict()
+
+    solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
+    certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
+
+    print(solicitud_nueva)
+    print(certificacion_nueva)
+
+    return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -77,7 +84,8 @@ def listado():
             
         except:
 
-            return redirect(URL('servicios', 'listado'))
+            return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+            
 
         nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
 
@@ -98,7 +106,9 @@ def listado():
         # Variable dependencia de la persona que realizo la operacion
         # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
 
-        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE 
+        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #----- FIN AGREGAR SERVICIO -----#
 
@@ -149,6 +159,8 @@ def listado():
 
         __enviar_correo(jefe_dependencia.email, 'Se ha editado un servicio', correo)
 
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
     #----- FIN EDITAR SERVICIO -----#
 
@@ -189,6 +201,8 @@ def listado():
 
         __enviar_correo(jefe_dependencia.email, 'Se ha cambiado la visibilidad de un servicio', correo)
 
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
     #----- FIN EDITAR VISIBILIDAD -----#
 
@@ -214,6 +228,7 @@ def listado():
 
         __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
 
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True))     
 
     #----- FIN ELIMINAR SERVICIO -----#
 
@@ -229,26 +244,27 @@ def solicitudes():
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
             request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
-            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, None, 0)
+            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
 
         solicitud_nueva.insertar()
 
     # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD 
 
-    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+    # idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
 
-    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+    # dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+    # jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
         
 
-    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+    # nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
 
-    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+    # nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-#    correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
+    # correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
 
-#    __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
+    # __enviar_correo(jefe_dependencia.email, responsable solicitud 'Se ha eliminado un servicio', correo)
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
@@ -260,9 +276,23 @@ def solicitudes():
         solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
 
+        if request.post_vars.estado == "1":
+            solicitud_a_cambiar.fecha_aprobacion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+            #  ENVIAR CORREO SOLICITUD EJECUTADA
+
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
             # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL RECHAZO DE SU SOLICITUD 
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
     #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
 
@@ -272,16 +302,19 @@ def solicitudes():
         id_a_eliminar = int(request.post_vars.idFicha_eliminar)
         db(id_a_eliminar == db.solicitudes.id).delete()
 
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+
     #----- FIN DE ELIMINAR SOLICITUD -----#
 
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
-    num_registro = validador_registro_solicitudes(request,db)
-
     personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    num_registro = validador_registro_solicitudes(request, db, dependencia_usuario.codigo_registro)
 
     nombre_dependencia = dependencia_usuario.nombre
 
@@ -343,6 +376,7 @@ def certificaciones():
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
         certificado.insertar()
+
     #-------------------FIN------------------------
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
@@ -384,6 +418,9 @@ def historial():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
     session.forget(response)
+
+    if request.vars.serv is None:
+        return redirect(URL('modulos', 'login'))
 
     # Servicio
     entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
@@ -521,7 +558,7 @@ def ajax_obtener_responsable_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_nombre_servicio():
     session.forget(response)
-    servicio_query = db(db.servicios.tipo == int(request.vars.tipo) and db.servicios.categoria == int(request.vars.categoria)).select(db.servicios.ALL)
+    servicio_query = db(db.servicios.tipo == int(request.vars.tipo) and db.servicios.categoria == int(request.vars.categoria) and db.servicios.visibilidad == True).select(db.servicios.ALL)
 
     servicios_a_mostrar = []
     for servicio in servicio_query:
@@ -603,13 +640,14 @@ def ajax_certificar_servicio():
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
+    codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
         #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    registro = validador_registro_certificaciones(request, db)
+    registro = validador_registro_certificaciones(request, db, codigo_registro)
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
@@ -626,7 +664,7 @@ def ajax_certificar_servicio():
 def ajax_listado_servicios():
 
     #----- LISTAR SERVICIOS -----#
-    listado_de_servicios = ListaServicios(db)
+    listado_de_servicios = ListaServicios(db, auth.has_membership(group_id='WebMaster'))
 
     order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
     order_by_col = request.post_vars.ordenarPor
@@ -638,6 +676,7 @@ def ajax_listado_servicios():
         listado_de_servicios.cambiar_pagina(int(request.post_vars.cambiarPagina))
 
     listado_de_servicios.orden_y_filtrado()
+
     firstpage=listado_de_servicios.boton_principio
     lastpage=listado_de_servicios.boton_fin
     nextpage=listado_de_servicios.boton_siguiente
