@@ -83,9 +83,9 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">Sigulab</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha agregado un nuevo servicio', correo)
+        __enviar_correo(jefe_dependencia.email, 'Se ha añadido un nuevo servicio', correo)
 
         # Variable nombre persona que recibe el email
 
