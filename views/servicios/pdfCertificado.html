@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8"> 
+	<script src="jspdf.js"></script>
+	<script src="jquery-2.1.3.js"></script>
+	<script src="pdfFromHTML.js"></script>
+	<script>
+		function myFunction() {
+    	window.print();
+	}
+</script>
+<style>
+
+	@media print {
+		#tablaSolicitud{
+			border-style: none;
+			border-collapse: collapse;
+			height: 2900px;
+			width: 1000px;
+		}
+		.titulos{
+			background-color: lightgray;
+			-webkit-print-color-adjust: exact;
+		}		
+	}
+
+	body {
+		font-size: 0.8em;
+	}
+
+	#tablaSolicitud{
+		border-style: none;
+		border-collapse: collapse;
+		height: 900px;
+		width: 1000px;
+	}
+	.titulos{
+		background-color: lightgray;
+		-webkit-print-color-adjust: exact;
+	}	
+
+</style>		
+</head>
+<body>
+	
+	<div id="">
+		<div id="img" >
+			<img src="logo-usb.jpg" width="200px" style="text-align: right">
+			<img src="logo-ulab.png" width="200px" style="text-align: left">
+		</div>
+
+		<table id="tablaSolicitud" border="1">
+
+		<tr>
+			<th colspan="4" rowspan="2" class="titulos">CERTIFICACIÓN DE SERVICIO DE LABORATORIO</th>
+			<th colspan="2" class="titulos">Registro</th>
+		</tr>
+
+		<tr>
+			<td colspan="6">Variable registro</td>
+		</tr>	
+		
+		<tr>
+			<td colspan="6">
+				<p>Quien suscribe, VARIABLE, C.I. No. VARIABLE, como responsable de la VARIABLE, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la VARIABLE, correspondientes a la solicitud/orden de servicio identificad como: VARIABLE, de fecha VARIABLE.</p>
+				<p>Certificación que se expida a los VARIABLE días del mes de VARIABLE de los VARIABLE.</p>
+				<br>
+				<br>
+				<p>Responsable:</p>
+				<p>Cargo:</p>
+			</td>
+		<tr>
+
+		<tr>
+			<th colspan="6" class="titulos">Para uso de la Unidad ejecutante del servicio:</th>
+		</tr>
+		<tr>
+			<th colspan="2" class="titulos">Fecha de recepción</th>
+			<th colspan="2" class="titulos">Recibido por</th>
+			<th colspan="2"></th>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="3">Variable fecha de recepción</td>
+			<td colspan="2" rowspan="3">Variable recibido por</td>
+		</tr>
+		<tr>
+			<th>Firma</th>
+		</tr>
+		<tr>
+			<td>Variable firma</td>
+		</tr>
+
+	<tr>
+		<td colspan="6">
+			<p style="text-align: center">Universidad Simón Bolivar, Valle de Sartenejas, Baruta, Caracas, Edo Miranda, Venezuela, 89000</p>
+			<p style="text-align: center">www.ulab.usb.ve</p>
+		</td>
+	</tr>
+
+	</table>
+
+	</div>
+
+	<button onclick="myFunction()">Print this page</button>
+	
+</body>
+</html>

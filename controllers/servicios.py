@@ -274,11 +274,13 @@ def solicitudes():
 
         if request.post_vars.estado == "1":
             solicitud_a_cambiar.fecha_aprobacion = request.now
+            solicitud_a_cambiar.aprobada_por = auth.user.first_name
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            solicitud_a_cambiar.elaborada_por = auth.user.first_name
             solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
             #  ENVIAR CORREO SOLICITUD EJECUTADA
@@ -398,6 +400,10 @@ def certificaciones():
                 firstpage=firstpage, lastpage=lastpage,
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def historial():
+    return dict()
 
 
 def historial():
@@ -690,6 +696,9 @@ def ajax_listado_solicitudes_generadas():
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
+<<<<<<< HEAD
+    mail.send(destinatario, asunto, cuerpo)
+=======
 
     mail.send(destinatario, asunto, cuerpo)
 
@@ -710,3 +719,4 @@ def __queries_enviar_correo():
 
     return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
 
+>>>>>>> 3230092f88d14b88151b2ca64e1759b3c1ebaee4

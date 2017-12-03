@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>&nbsp</title>
+	<meta charset="UTF-8"> 
+	<script src="jspdf.js"></script>
+	<script src="jquery-2.1.3.js"></script>
+	<!-- <script src="pdfFromHTML.js"></script> -->
+	<script>
+		window.onload = function() {
+    	window.print();
+	}
+</script>
+<style>
+	@media print {
+		#tablaSolicitud{
+			border-style: none;
+			border-collapse: collapse;
+			height: 2900px;
+			width: 1000px;
+		}
+		.titulos{
+			background-color: lightgray;
+			-webkit-print-color-adjust: exact;
+		}		
+	}
+
+	body {
+		font-size: 0.8em;
+	}
+
+	#tablaSolicitud{
+		border-style: none;
+		border-collapse: collapse;
+		height: 900px;
+		width: 1000px;
+	}
+
+	.logos {
+		width: 200px;
+	}
+
+	.titulos{
+		background-color: lightgray;
+		-webkit-print-color-adjust: exact;
+	}	
+</style>
+</head>
+<body>
+	
+	<div id="">
+		<div id="img" >
+			<img src="logo-usb.jpg" class="logos">
+			<!-- PONER EL LOGO QUE ES -->
+			<img src="logo-ulab.png" class="logos">
+		</div>
+
+		<table id="tablaSolicitud" border="1">
+		<tr>
+			<th colspan="5" class="titulos" rowspan="2">SOLICITUD DE SERVICIO DE LABORATORIO</th>
+			<th class="titulos">Registro</th>
+		</tr>
+		
+		<tr>
+			<td>Variable fecha</td>
+		</tr>
+
+		<tr>
+			<th colspan="3" class="titulos">DEPENDENCIA SOLICITANTE:</th>
+			<th colspan="3" class="titulos">JEFE DE LA DEPEND. SOLICITANTE:</th>
+		</tr>
+
+		<tr>
+			<td colspan="3"><p>Variable dependencia solicitante</p></td>
+			<td colspan="3"><p>Variable jefe depend solicitante</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="4" class="titulos">PERSONA RESPONSABLE DE LA SOLICITUD:</th>
+			<th colspan="1" class="titulos">CORREO ELECTRÓNICO:</th>
+			<th class="titulos">EXTENSIONES:</th>
+		</tr>
+		<tr>
+			<td colspan="4"><p>Variable persona responsable</p></td>
+			<td colspan="1"><p>Variable email</p></td>
+			<td><p>Variable extensiones</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="6" class="titulos">SERVICIO SOLICITADO</th>
+		</tr>
+		<tr>
+			<th class="titulos">Categoría</th>
+			<th class="titulos">Tipo</th>
+			<th colspan="4" class="titulos">Nombre</th>
+		</tr>
+		<tr>
+			<td><p>Variable categoria</p></td>
+			<td><p>Variable tipo</p></td>
+			<td colspan="4"><p>Variable nombre</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="3" class="titulos">PROPÓSITO</th>
+			<th colspan="3" class="titulos">DESCRIPCIÓN (MUESTRAS/EQUIPOS, SERIALES, N° BN/FALLAS/ESPECIFICACIONES/MATERIAL/N° PARTICIPANTES)</th>
+		</tr>
+
+		<tr>
+			<th class="titulos">Docencia:</th>
+			<td colspan="2"><p>Variable docencia</p></td>
+			<td colspan="3" rowspan="4"><p>Variable descripcion</p></td>
+		</tr>
+		<tr>
+			<th class="titulos">Investigación:</th>
+			<td colspan="2"><p>Variable investigacion</p></td>
+		</tr>
+		<tr>
+			<th class="titulos">Extensión:</th>
+			<td colspan="2"><p>Variable investigacion</p></td>
+		</tr>
+		<tr>
+			<th class="titulos">Gestión:</th>
+			<td colspan="2"><p>Variable gestion</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="3" class="titulos">DEPENDENCIA EJECUTORA DEL SERVICIO</th>
+			<th colspan="3" class="titulos">JEFE DE LA DEPEND. EJECUTORA</th>
+		</tr>
+		<tr>
+			<td colspan="3"><p>Variable depend ejecutora del serv</p></td>
+			<td colspan="3"><p>Variable jefe de la depend ejecutora</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="4" class="titulos">OBSERVACIONES</th>
+			<th class="titulos">Elaborado por:</th>
+			<th class="titulos">Solicitud aprobada por:</th>
+		</tr>
+		<tr>
+			<td colspan="4" rowspan="3"><p>Variable observaciones</p></td>
+			<td><p>Variable elaborado por</p></td>
+			<td><p>Variable solicitud aprobada por</p></td>
+		</tr>
+		<tr>
+			<th><p>Fecha</p></th>
+			<th><p>Fecha</p></th>
+		</tr>
+		<tr>
+			<td><p>Variable fecha</p></td>
+			<td><p>Variable fecha</p></td>
+		</tr>
+		<tr>
+			<th colspan="6" class="titulos">Solo para ser llenado por la Dependencia Ejecutora:</th>
+		</tr>
+		<tr>
+			<th colspan="2" class="titulos">Lugar de ejecución del Serv.:</th>
+			<th colspan="2" class="titulos">Recibido por:</th>
+			<th colspan="2" class="titulos">Aprobado por:</th>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="5"><p>Variable lugar de ejecucion del serv</p></td>
+			<td colspan="2"><p>Variable recibido por</p></td>
+			<td colspan="2"><p>Variable aprobado por</p></td>
+		</tr>
+		<tr>
+			<th colspan="2">Nombre, Firma y Sello</th>
+			<th colspan="2">Nombre, Firma y Sello</th>
+		</tr>
+		<tr>
+			<td colspan="2"><p>Variable nombre, firma y sello</p></td>
+			<td colspan="2"><p>Variable nombre, firma y sello</p></td>
+		</tr>
+		<tr>
+			<th colspan="2">Fecha</th>
+			<th colspan="2">Fecha</th>
+		</tr>
+		<tr>
+			<td colspan="2"><p>Variable fecha</p></td>
+			<td colspan="2"><p>Variable fecha</p></td>
+		</tr>
+
+	</table>
+	</div>
+	
+</body>
+</html>
