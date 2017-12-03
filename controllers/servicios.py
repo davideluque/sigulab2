@@ -97,8 +97,6 @@ def listado():
         # Variable dependencia de la persona que realizo la operacion
         # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
 
-        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE
-
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #----- FIN AGREGAR SERVICIO -----#
@@ -278,19 +276,18 @@ def solicitudes():
             solicitud_a_cambiar.aprobada_por = auth.user.first_name
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
-
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
             solicitud_a_cambiar.elaborada_por = auth.user.first_name
             solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
-            #  ENVIAR CORREO SOLICITUD EJECUTADA
+
+            solicitud_a_cambiar.elaborar_certificacion()
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
-
 
     #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
 
@@ -302,10 +299,7 @@ def solicitudes():
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
-
     #----- FIN DE ELIMINAR SOLICITUD -----#
-
-    listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
     personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
@@ -329,30 +323,8 @@ def solicitudes():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
-    # Ejecutante: Usuario solicita cambiar la pagina
-    if request.vars.pagina_ejecutante:
-        listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
-
-    # Ejecutante: Usuario solicita ordenar los servicios
-    if request.vars.columna_ejecutante:
-        listado_de_ejecutante.cambiar_columna(request.vars.columna_ejecutante)
-
-    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
-    listado_de_ejecutante.orden_y_filtrado()
-
-    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
-    firstpage_ejecutante=listado_de_ejecutante.boton_principio
-    lastpage_ejecutante=listado_de_ejecutante.boton_fin
-    nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
-    prevpage_ejecutante=listado_de_ejecutante.boton_anterior
-
-    return dict(grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
-        pages_ejecutante=listado_de_ejecutante.rango_paginas,
-        actualpage_ejecutante=listado_de_ejecutante.pagina_central,
-        nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
-        firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
-        datos_solicitud=datos_solicitud, categorias=listar_categorias(db), tipos=listar_tipos(db),
-        servicio_solicitud=servicio_solicitud)
+    return dict(datos_solicitud=datos_solicitud, 
+        categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -411,7 +383,6 @@ def historial():
 # Controladores de los Ajax del modulo de Servicios
 #
 #------------------------------------------------------------------------------
-
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
@@ -613,6 +584,15 @@ def ajax_certificar_servicio():
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
     codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+
+    proyecto = "N/A"
+    print(solicitud_info.proposito)
+    proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
+
+
+    if proposito == "Investigacion":
+        proyecto = solicitud_info.proposito_descripcion
+
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
@@ -629,7 +609,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto='Proyecto ' + registro)
+                proyecto=proyecto)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -690,6 +670,33 @@ def ajax_listado_solicitudes_generadas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_solicitudes_recibidas():
+
+    #----- LISTAR SOLICITUDES -----#
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Ejecutante")
+
+    order_by_asc = eval(request.post_vars.ordenar_solicitudes_recibidas_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_solicitudes_recibidas_por
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_solicitudes_recibidas:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiar_pagina_solicitudes_recibidas))
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    #----- FIN LISTAR SERVICIOS -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
 
 #------------------------------------------------------------------------------
 #
@@ -699,9 +706,23 @@ def ajax_listado_solicitudes_generadas():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdfSolicitud():
-    if request.vars.culito:
-        print(request.vars.culito)
+    session.forget(response)
+    # Solicitud
 
+    solicitud = Solicitud(db, auth)
+
+    try:
+        solicitud.instanciar(int(request.vars.solicitud))
+    except:
+        solicitud.instanciar(0)
+
+
+    return dict(solicitud = solicitud)
+
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def pdfCertificado():
     return dict()
 
 # Funcion para enviar un correo de notificacion 
