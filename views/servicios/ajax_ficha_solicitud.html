@@ -116,7 +116,7 @@
 	  				<input type="hidden" name="idFicha" value="{{=ficha.id}}">
 				{{if ficha.estado_solicitud == 0:}}
 					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>
-					<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
+					<button type="button" class="btn botonesFichita botonEliminar botonRechazar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
 
 					<!-- Modal del boton rechazar-->
 					<div class="modal fade" id="modalRechazar" role="dialog">

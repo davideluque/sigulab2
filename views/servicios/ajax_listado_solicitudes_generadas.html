@@ -1,0 +1,44 @@
+  <div class="row">
+    <h3> Solicitudes Generadas </h3>  
+    <div class="table-responsive" >
+      <table id="tablaListado" class="table table-hover">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro" onclick="ordenar_solicitudes_generadas('registro');">Numero de Registro</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante" onclick="ordenar_solicitudes_generadas('nombre_dependencia_solicitante');">Dependencia Solicitante</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora" onclick="ordenar_solicitudes_generadas('nombre_dependencia_ejecutora');">Dependencia Ejecutora</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio" onclick="ordenar_solicitudes_generadas('nombre_servicio');">Servicio</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud" onclick="ordenar_solicitudes_generadas('fecha_solicitud');">Fecha de Solicitud</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud" onclick="ordenar_solicitudes_generadas('estado_solicitud');">Estado</button></th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for item in grid:}}
+              <tr>
+                <th class="camposTabla">{{=item.registro}}</th>
+                <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
+                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.nombre_servicio}}</a></th>
+                <th class="camposTabla">{{=item.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+       </form>
+      </table>
+    </div>
+  </div>
+
+  <!-- Inicio botones pagina -->
+    <div class="row">
+      <form>
+        {{for page in pages:}}
+          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
+        {{pass}}
+      </form>
+    </div>
+    <!-- Fin botones pagina -->
