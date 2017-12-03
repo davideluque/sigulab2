@@ -645,6 +645,7 @@ def ajax_listado_servicios():
         listado_de_servicios.cambiar_pagina(int(request.post_vars.cambiarPagina))
 
     listado_de_servicios.orden_y_filtrado()
+
     firstpage=listado_de_servicios.boton_principio
     lastpage=listado_de_servicios.boton_fin
     nextpage=listado_de_servicios.boton_siguiente
