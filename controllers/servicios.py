@@ -229,7 +229,7 @@ def solicitudes():
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
             request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
-            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, None, 0)
+            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
 
         solicitud_nueva.insertar()
 
@@ -260,6 +260,17 @@ def solicitudes():
         solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
         solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
+
+        if request.post_vars.estado == "1":
+            solicitud_a_cambiar.fecha_aprobacion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+            #  ENVIAR CORREO SOLICITUD EJECUTADA
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
