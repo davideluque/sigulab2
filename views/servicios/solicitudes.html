@@ -24,7 +24,9 @@
 <!-- Boton que lleva al modal de Solicitud de un Servicio -->
 <div class="container">
     <div class="row">
-        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+          <h3> Solicitudes Generadas </h3>  
+        </div>
         <div id="columnBotonAgregar" class="col-sm-6">
           <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Servicio</button>
         </div>
@@ -32,7 +34,7 @@
 </div>
 <!-- Fin del boton que lleva al modal de Solicitud de un Servicio -->
 
-<!-- Inicio Listado Solicitudes -->
+<!-- Inicio Listado Solicitudes para Solicitante -->
 <div id="listadoContainer" class="container">
   <div class="row">
   	<div class="table-responsive" >
@@ -41,25 +43,25 @@
           <!-- Titulos Tabla Solicitudes -->
           <thead>
             <tr id="titulosListado">
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="registro">Numero de Registro</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="dependencia">Dependencia Solicitante</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="id_dependenciaejecutora">Dependencia Ejecutora</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="servicio">Servicio</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="fechasolicitud">Fecha de Solicitud</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="pendiente">Estado</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro">Numero de Registro</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante">Dependencia Solicitante</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora">Dependencia Ejecutora</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio">Servicio</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud">Fecha de Solicitud</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud">Estado</button></th>
             </tr>
   		    </thead>
 
           <!-- Contenido Tabla Solicitudes -->
   	      <tbody>
-      			{{for items in grid:}}
+      			{{for item in grid:}}
       				<tr>
-      					<th class="camposTabla">{{=items.noRegistro}}</th>
-      					<th class="camposTabla">{{=items.dependenciaSolicitante}}</th>
-      					<th class="camposTabla">{{=items.dependenciaEjecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombreServicio}});" >{{=items.nombreServicio}}</a></th>
-      					<th class="camposTabla">{{=item.categoriaServicio}}</th>
-      					<th class="camposTabla">{{=items.fechaSolicitud}}</th>
+      					<th class="camposTabla">{{=item.registro}}</th>
+      					<th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
+      					<th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.nombre_servicio}}</a></th>
+      					<th class="camposTabla">{{=item.fecha_solicitud}}</th>
+      					<th class="camposTabla">{{=item.estado_solicitud_str}}</th>
       				</tr>
       			{{pass}}
   		    </tbody>
@@ -78,7 +80,56 @@
     </div>
     <!-- Fin botones pagina -->
 </div>
-<!-- Fin Listado Solicitudes -->
+<!-- Fin Listado Solicitudes para Solicitante-->
+
+<!-- Inicio Listado Solicitudes para Ejecutante-->
+<div id="listadoContainer" class="container">
+  <h3> Solicitudes Recibidas </h3>
+  <div class="row">
+    <div class="table-responsive" >
+      <table id="tablaListado" class="table table-hover">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro">Numero de Registro</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante">Dependencia Solicitante</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora">Dependencia Ejecutora</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio">Servicio</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud">Fecha de Solicitud</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud">Estado</button></th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for item in grid_ejecutante:}}
+              <tr>
+                <th class="camposTabla">{{=item.registro}}</th>
+                <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
+                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.nombre_servicio}}</a></th>
+                <th class="camposTabla">{{=item.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+       </form>
+      </table>
+    </div>
+  </div>
+
+  <!-- Inicio botones pagina -->
+    <div class="row">
+      <form>
+        {{for page in pages_ejecutante:}}
+          <button name="pagina_ejecutante" value="{{=page}}"{{if page == actualpage_ejecutante:}}class="active"{{pass}}> {{=page}} </button>
+        {{pass}}
+      </form>
+    </div>
+    <!-- Fin botones pagina -->
+</div>
+<!-- Fin Listado Solicitudes para Ejecutante-->
 
 <!-- Inicio Modal Solicitar Servicio -->
 <div class="modal fade" id="modalServiceRequest" role="dialog">
@@ -221,9 +272,10 @@
                       <!-- Ajax obtener proposito del servicio -->
                     </div>
 
+                    <!-- Descripcion propósito -->
                     <div class="form-group">
                         <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
-                        <input type="text" class="form-control" name="" placeholder="código materia / proyecto / (orden servicio - cliente final) / funcionamiento lab." required>
+                        <textarea rows="1" cols="5" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
                     </div>
 
                     <!-- Descripción -->
@@ -271,6 +323,23 @@
 </div>
 <!-- Fin Modal Solicitar Servicio -->
 
+<!-- Ajax abrirFicha -->
+<input type="hidden" id="solicitud" name="solicitud" value="">
+<input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
+
+
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
 <!-- Ajax obtenerServicio -->
 <input type="hidden" id="envioCategoria" name="categoria" value="">
 <input type="hidden" id="envioTipo" name="tipo" value="">
@@ -283,7 +352,16 @@
 
 <!-- Ajax JavaScript-->
 <script type="text/javascript">
-  document.getElementById("servicios").className += " active";
+
+  function abrirFicha(solicitud, tipo_solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+  }
 
   function getServicio(){
     var opciones_categoria = document.getElementById("sel1");

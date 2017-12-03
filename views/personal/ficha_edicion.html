@@ -11,7 +11,7 @@
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
               </div>
               <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading">{{=basicos['nombre']}}</h4>
+                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre"></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
           </div>
@@ -30,22 +30,25 @@
               <table class="table contenidoFicha">
                 <tbody>
                   <tr>
-                    <td>Cedula:</td><td id="field_ci"></td>
+                    <td>Cédula:</td><td id="field_ci"></td>
                   </tr>
                   <tr>
-                    <td>Correo Electronico:</td><td id="field_email"></td>
+                    <td>Correo Electrónico:</td><td id="field_email"></td>
                   </tr>
                   <tr>
-                    <td>Extencion:</td><td id="field_telefono"></td>
+                    <td>Extensión:</td><td id="field_telefono"></td>
                   </tr>
                   <tr>
-                    <td>Pagina Web:</td><td id="field_pagina_web"></td>
+                    <td>Página Web:</td><td id="field_pagina_web"></td>
                   </tr>
                   <tr>
-                    <td>Categoria:</td><td id="field_categoria"></td>
+                    <td>Categoría:</td><td id="field_categoria"></td>
                   </tr>
                   <tr>
                     <td>Cargo:</td><td id="field_cargo"></td>
+                  </tr>
+                  <tr>
+                    <td>Dependencia:</td><td id="field_dependencia"></td>
                   </tr>
                   <tr>
                     <td>Fecha de Ingreso:</td><td id="field_fecha_i"></td>
@@ -66,9 +69,9 @@
           <form method="post">
 
             <div class="btn-group botonesFicha">
-            <button type="submit" class="btn btn-primary btn-success" name="edit" value="True" onclick="ejecutate();">Editar</button>
+            <button type="submit" class="btn btn-primary btn-success" id = "editar" name = "cedula_editar" value="True">Editar</button>
 
-            <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name="eliminar" value="True">Eliminar</button>
+            <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name = "cedula_eliminar">Eliminar</button>
 
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
@@ -76,19 +79,7 @@
       </div>
     </div>
   </div>
-
-  <!--Script para ventana de confirmacion-->
-  <script>
-    $('#eliminar').on('click',function(e){
-        var answer=confirm('¿Seguro que desea eliminar el servicio?');
-        if(answer){
-          alert('Servicio eliminado!');
-        }
-        else{
-          e.preventDefault();      
-        }
-    });
-  </script>
+</div>
 
   <script type="text/javascript">
       $('#ficha_edicion').on('show.bs.modal', function(e){
@@ -98,27 +89,47 @@
           var fecha_s = $(e.relatedTarget).data('fecha_s');
           var fecha_i = $(e.relatedTarget).data('fecha_i');
           var nombre = $(e.relatedTarget).data('nombre');
+          var apellido = $(e.relatedTarget).data('apellido');
           var cargo = $(e.relatedTarget).data('cargo');
+          var dep_name = $(e.relatedTarget).data('dep-name');
           var estatus = $(e.relatedTarget).data('estatus');
           var telefono = $(e.relatedTarget).data('telefono');
           var pagina_web = $(e.relatedTarget).data('pagina_web');
 
-       
+          f = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
+
           $("#field_ci").html(ci);
           $("#field_categoria").html(categoria);
+          $("#field_dependencia").html(dep_name);
           $("#field_email").html(email);
           $("#field_fecha_s").html(fecha_s);
           $("#field_fecha_i").html(fecha_i);
           $("#field_nombre").html(nombre);
+          $("#field_apellido").html(apellido);
           $("#field_cargo").html(cargo);
           $("#field_estatus").html(estatus);
           $("#field_telefono").html(telefono);
           $("#field_pagina_web").html(pagina_web);
 
-          fields = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web]
+          $('#eliminar').on('click',function(f){
+            var answer=confirm('¿Seguro que desea eliminar esta persona?');
+            if(answer){
+              alert('Persona eliminada!');
+              this.value = $(e.relatedTarget).data('ci');
+            }
+            else{
+              f.preventDefault();      
+            }
+          });
+
+          $('#editar').on('click',function(){
+            this.value = $(e.relatedTarget).data('ci');
+          });
+
+          fields = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
           console.log(fields);
           //$("#field_ci").html(item);
           //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
-
       });
   </script>
+

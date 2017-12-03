@@ -223,21 +223,43 @@ def listado():
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
-        solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, request.post_vars.dependenciaSolicitante,
-                        request.post_vars.jefeDependenciaSolicitante, request.post_vars.responsableSolicitud,
-                        request.post_vars.categoriaServicio, request.post_vars.tipoServicio, request.post_vars.nombreServicio, 
-                        request.post_vars.propositoServicio, request.post_vars.descripcionSolicitud, 
-                        request.post_vars.dependenciaEjecutoraServicio, request.post_vars.jefeDependenciaEjecutoraServicios, 
-                        request.post_vars.servicioElaboradoPor, request.post_vars.fechaElaboracion, request.post_vars.servicioAprobadoPor, 
-                        request.post_vars.fechaAprobacion, request.post_vars.observaciones)
+        id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
+
+        solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
+            request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
+            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, None, 0)
 
         solicitud_nueva.insertar()
 
+    #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO
+
+        if request.post_vars.estado == "-1":
+            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+            # ENVIAR CORREO A SOLICITANTE PARA AVISAR SU RECHAZO
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
     #----- LISTAR SOLICITUDES -----#
-    listado_de_solicitudes = ListaSolicitudes(db, auth)
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
+    listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
     num_registro = validador_registro_solicitudes(request,db)
@@ -262,31 +284,55 @@ def solicitudes():
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
 
-    # Usuario solicita cambiar la pagina
+    # Solicitante: Usuario solicita cambiar la pagina
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
 
-    # Usuario solicita ordenar los servicios
+    # Solicitante: Usuario solicita ordenar los servicios
     if request.vars.columna:
         listado_de_solicitudes.cambiar_columna(request.vars.columna)
 
-    # Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
+    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
     listado_de_solicitudes.orden_y_filtrado()
 
-    # Se recuperan las paginas calculadas en base a lo solicitado
+    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
     firstpage=listado_de_solicitudes.boton_principio
     lastpage=listado_de_solicitudes.boton_fin
     nextpage=listado_de_solicitudes.boton_siguiente
     prevpage=listado_de_solicitudes.boton_anterior
 
+
+    # Ejecutante: Usuario solicita cambiar la pagina
+    if request.vars.pagina_ejecutante:
+        listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
+
+    # Ejecutante: Usuario solicita ordenar los servicios
+    if request.vars.columna_ejecutante:
+        listado_de_ejecutante.cambiar_columna(request.vars.columna_ejecutante)
+
+    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
+    listado_de_ejecutante.orden_y_filtrado()
+
+    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
+    firstpage_ejecutante=listado_de_ejecutante.boton_principio
+    lastpage_ejecutante=listado_de_ejecutante.boton_fin
+    nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
+    prevpage_ejecutante=listado_de_ejecutante.boton_anterior
+
     return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar, 
         pages=listado_de_solicitudes.rango_paginas,
         actualpage=listado_de_solicitudes.pagina_central,
         nextpage=nextpage, prevpage=prevpage,
-        firstpage=firstpage, lastpage=lastpage, datos_solicitud=datos_solicitud, 
+        firstpage=firstpage, lastpage=lastpage, 
+        grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
+        pages_ejecutante=listado_de_ejecutante.rango_paginas,
+        actualpage_ejecutante=listado_de_ejecutante.pagina_central,
+        nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
+        firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
+        datos_solicitud=datos_solicitud, 
         categorias=listar_categorias(db), tipos=listar_tipos(db))
 
-
+# ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def certificaciones():
 
@@ -297,16 +343,19 @@ def certificaciones():
         elaborado_por = request.post_vars.usuarioid
         dependencia = request.post_vars.dependenciaid
         solicitud = request.post_vars.solicitudid
+
+        solicitud_a_actualizar = Solicitud(db,auth)
+        solicitud_a_actualizar.instanciar(solicitud)
+        solicitud_a_actualizar.certificar()
+
         fecha = request.post_vars.fecha
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
-
         certificado.insertar()
     #-------------------FIN------------------------
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
-
-    listado_de_solicitudes = ListaSolicitudes(db, auth)
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
 
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
@@ -372,6 +421,26 @@ def ajax_ficha_servicio():
     valores_de_ficha['funcion'] = funcion
 
     return dict(ficha=valores_de_ficha)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_solicitud():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_certificacion():
+    session.forget(response)
+    # Solicitud
+    solicitud = Solicitud(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():
