@@ -47,6 +47,8 @@ db.define_table(
     Field('pagina_web', 'string', label=T('Pagina Web')),
 
     Field('id_jefe_dependencia', 'integer', label=T('Responsable')),
+
+    Field("codigo_registro", "string", label=T("Código de Registro")),
 )
 
 # Auto-Referencia, se definira cual dependencia es la unidad de adscripcion, esta sera una relacion de 0-1 a muchos

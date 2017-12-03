@@ -280,11 +280,11 @@ def solicitudes():
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
-    num_registro = validador_registro_solicitudes(request,db)
-
     personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    num_registro = validador_registro_solicitudes(request, db, dependencia_usuario.codigo_registro)
 
     nombre_dependencia = dependencia_usuario.nombre
 

@@ -847,9 +847,9 @@ def generador_num_registro():
 
 	return digits
 
-def validador_registro_solicitudes(request, db):
+def validador_registro_solicitudes(request, db, registro):
 	anio = str(request.now)[2:4]
-	registro = 'UL-' + anio + '/' + generador_num_registro()
+	registro = registro + "-" + anio + '/' + generador_num_registro()
 
 	check = db(db.solicitudes.registro == registro).count()
 
