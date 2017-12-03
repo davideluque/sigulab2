@@ -261,6 +261,7 @@ def solicitudes():
         servicio_solicitud = Servicio(db)
         servicio_solicitud.instanciar(int(request.vars.idServicio))
 
+    #----- FIN AGREGAR SOLICITUD DESDE SERVICIO -----#
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
@@ -698,6 +699,9 @@ def ajax_listado_solicitudes_generadas():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdfSolicitud():
+    if request.vars.culito:
+        print(request.vars.culito)
+
     return dict()
 
 # Funcion para enviar un correo de notificacion 

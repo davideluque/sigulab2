@@ -376,6 +376,7 @@ class Solicitud(object):
         self.nombre_servicio = None
         self.tipo_servicio = None
         self.categoria_servicio = None
+        self.nombre_proposito = None
         
         # Variables disponibles despues de aprobacion
         self.aprobada_por = None
