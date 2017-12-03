@@ -403,7 +403,6 @@ def certificaciones():
 
         certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
         certificado.insertar()
-        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #-------------------FIN------------------------
 
@@ -673,7 +672,7 @@ def ajax_certificar_servicio():
         dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    registro = validador_registro_certificaciones(request, db, cod)
+    registro = validador_registro_certificaciones(request, db, codigo_registro)
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,

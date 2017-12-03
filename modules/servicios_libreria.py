@@ -10,7 +10,6 @@ import random
 
 class Servicio(object):
 
-
 	def __init__(self, db, nombre = None, tipo = None, categoria = None,
 				 objetivo = None, alcance = None, metodo = None, rango = None,
 				 incertidumbre = None, item_ensayar = None, requisitos = None, 
@@ -659,6 +658,84 @@ class ListaSolicitudes(object):
 
 #------------------------------------------------------------------------------
 #
+# Clase certificacion de servicio
+#
+#------------------------------------------------------------------------------
+
+class Certificacion(object):
+
+	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
+				 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
+
+		self.registro = registro
+		self.proyecto = proyecto
+		self.elaborado_por = elaborado_por
+		self.dependencia = dependencia
+		self.solicitud = solicitud
+		self.fecha_certificacion = fecha_certificacion
+
+		self.db = db
+		# viene de la instanciacion
+		self.id = id
+
+	def __str__(self):
+
+		return self.registro + " " + self.proyecto
+
+	def insertar(self):
+
+		insercion = self.db.certificaciones.insert(registro=self.registro,
+											 proyecto=self.proyecto,
+											 elaborado_por=self.elaborado_por,
+											 dependencia=self.dependencia,
+											 solicitud=self.solicitud,
+											 fecha_certificacion=self.fecha_certificacion)
+
+		return insercion
+
+	def instanciar(self, id):
+
+		instanciacion = self.db(self.db.certificaciones.id == id).select(self.db.certificaciones.ALL)
+
+		if (len(instanciacion) == 1):
+			self.id = id
+			self.registro = instanciacion.registro
+			self.proyecto = instanciacion.proyecto
+			self.elaborado_por = instanciacion.elaborado_por
+			self.dependencia = instanciacion.servicio
+			self.solicitud = instanciacion.solicitud
+			self.fecha_certificacion = instanciacion.fecha_certificacion
+
+			return True
+
+		else:
+			return False
+
+	def editar(self, registro, proyecto, elaborado_por,
+				 dependencia, solicitud, fecha_certificacion):
+
+		self.registro = registro
+		self.proyecto = proyecto
+		self.elaborado_por = elaborado_por
+		self.dependencia = dependencia
+		self.solicitud = solicitud
+		self.fecha_certificacion = fecha_certificacion
+
+	def actualizar(self, id):
+
+		actualizacion = self.db(self.db.certificaciones.id == id).update(
+			registro=self.registro,
+			proyecto=self.proyecto,
+			elaborado_por=self.elaborado_por,
+			dependencia=self.dependencia,
+			solicitud=self.solicitud,
+			fecha_certificacion=self.fecha_certificacion)
+
+		return actualizacion
+
+
+#------------------------------------------------------------------------------
+#
 # Funciones para listar Categorias, Tipos y Sedes
 # funciones de paginado y ordenamiento.
 #
@@ -762,84 +839,6 @@ def query_ficha(db, idv):
 #RESPONSABLE:
 #A PARTIR DE DEPENDENCIA2: PERSONAL QUE TENGA COMO DEPENDENCIA A DEPENDENCIA2
 
-
-
-#------------------------------------------------------------------------------
-#
-# Clase certificacion de servicio
-#
-#------------------------------------------------------------------------------
-
-class Certificacion(object):
-
-	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
-				 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
-
-		self.registro = registro
-		self.proyecto = proyecto
-		self.elaborado_por = elaborado_por
-		self.dependencia = dependencia
-		self.solicitud = solicitud
-		self.fecha_certificacion = fecha_certificacion
-
-		self.db = db
-		# viene de la instanciacion
-		self.id = id
-
-	def __str__(self):
-
-		return self.registro + " " + self.proyecto
-
-	def insertar(self):
-
-		insercion = self.db.certificaciones.insert(registro=self.registro,
-											 proyecto=self.proyecto,
-											 elaborado_por=self.elaborado_por,
-											 dependencia=self.dependencia,
-											 solicitud=self.solicitud,
-											 fecha_certificacion=self.fecha_certificacion)
-
-		return insercion
-
-	def instanciar(self, id):
-
-		instanciacion = self.db(self.db.certificaciones.id == id).select(self.db.certificaciones.ALL)
-
-		if (len(instanciacion) == 1):
-			self.id = id
-			self.registro = instanciacion.registro
-			self.proyecto = instanciacion.proyecto
-			self.elaborado_por = instanciacion.elaborado_por
-			self.dependencia = instanciacion.servicio
-			self.solicitud = instanciacion.solicitud
-			self.fecha_certificacion = instanciacion.fecha_certificacion
-
-			return True
-
-		else:
-			return False
-
-	def editar(self, registro, proyecto, elaborado_por,
-				 dependencia, solicitud, fecha_certificacion):
-
-		self.registro = registro
-		self.proyecto = proyecto
-		self.elaborado_por = elaborado_por
-		self.dependencia = dependencia
-		self.solicitud = solicitud
-		self.fecha_certificacion = fecha_certificacion
-
-	def actualizar(self, id):
-
-		actualizacion = self.db(self.db.certificaciones.id == id).update(
-			registro=self.registro,
-			proyecto=self.proyecto,
-			elaborado_por=self.elaborado_por,
-			dependencia=self.dependencia,
-			solicitud=self.solicitud,
-			fecha_certificacion=self.fecha_certificacion)
-
-		return actualizacion
 
 #------------------------------------------------------------------------------
 #
