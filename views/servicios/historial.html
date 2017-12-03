@@ -1,0 +1,79 @@
+{{extend "layout.html"}}
+
+{{block head}}
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+{{end}}
+
+{{block center}}
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'servicios')}}">Servicios</a>
+  <span class="breadcrumb-item active">Historial de Servicios</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Inicio Listado -->
+<div class="container" id="listadoContainer">
+<!-- ajax_listado_historial -->      
+</div>
+<!-- Fin Listado --> 
+
+<!-- Ajax ordenar listado de servicios--> 
+<input type="hidden" id="ordenarPor" name="ordenarPor" value="">
+<input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
+<input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
+
+<script language="javascript">
+  
+  /// Valores por defecto al cargar la página del listado de servicios
+  order_by_col = null
+  order_by_asc = null
+  order_by_pag = 1
+  function cambiarPagina(page){
+
+    order_by_pag = page
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_servicios', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "historialContainer");
+
+  }
+
+  function ordenarHistorial(order_by){
+    
+    if (order_by_col == order_by){
+      order_by_asc = !order_by_asc
+    }
+    else{
+      order_by_col = order_by
+      order_by_asc = false
+    }
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_historial', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+  }
+
+  window.onload = ordenarHistorial("id");
+</script>

@@ -433,6 +433,10 @@ def certificaciones():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def historial():
+    return dict()
+
 
 #------------------------------------------------------------------------------
 #
@@ -720,5 +724,4 @@ def ajax_listado_servicios():
 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
-
     mail.send(destinatario, asunto, cuerpo)
