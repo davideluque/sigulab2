@@ -250,6 +250,9 @@ class ListaServicios(object):
 		if self.pagina_central == self.ultima_pagina:
 			self.boton_siguiente = False
 
+		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+
+
 	def cambiar_pagina(self, nueva_pagina):
 		self.pagina_central = nueva_pagina
 		self.configurar_botones()
@@ -574,6 +577,7 @@ class ListaSolicitudes(object):
 		self.boton_anterior = self.pagina_central - 1
 
 		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+
 		# Configuraremos estos botones
 		self.configurar_botones()
 
@@ -605,16 +609,16 @@ class ListaSolicitudes(object):
 		if self.pagina_central == self.ultima_pagina:
 			self.boton_siguiente = False
 
+		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+		
 
 	def cambiar_pagina(self, nueva_pagina):
 		self.pagina_central = nueva_pagina
 		self.configurar_botones()
 		self.posicionar_ultimo()
 
-
 	def posicionar_ultimo(self):
 		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
-
 
 	def invertir_ordenamiento(self):
 		self.orden = not(self.orden)
@@ -634,9 +638,11 @@ class ListaSolicitudes(object):
 
 			if solicitud.estado_solicitud == 3:
 				pass
-			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
+			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
+				  solicitud.estado_solicitud < 2):
 				self.filas.append(solicitud)
-			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario):
+			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
+				  solicitud.estado_solicitud < 2):
 				self.filas.append(solicitud)
 			elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
 				  solicitud.estado_solicitud == 2):
@@ -840,7 +846,7 @@ class Certificacion(object):
 
 def generador_num_registro():
 	min = 0
-	max = 500
+	max = 999
 	digit = str(random.randint(min, max))
 	digits = (len(str(max))-len(digit))*'0' + digit
 
