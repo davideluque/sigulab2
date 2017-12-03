@@ -323,7 +323,7 @@ def solicitudes():
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
     return dict(datos_solicitud=datos_solicitud, 
-        categorias=listar_categorias(db), tipos=listar_tipos(db))
+        categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
