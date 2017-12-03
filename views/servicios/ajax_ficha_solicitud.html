@@ -159,25 +159,19 @@
 	    {{if tipo_solicitud == "Solicitante":}}
 
 		<div id="botonEliminarFichaSolicitud" class="botonesFicha">
-			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
+			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="collapse" data-target="#collapseExample">Eliminar</button>
+
+
+			<div class="collapse" id="collapseExample">
+				<div class="card card-body">
+				 ¿Seguro que deseas eliminar la solicitud?
+				 <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>
+				 <button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseExample">No</button>
+				</div>
+			</div>
 
 			<!-- Modal del boton eliminar-->
-			  <div class="modal fade" id="modalEliminar" role="dialog">
-			    <div class="modal-dialog">
-			    
-			      <!-- Modal content-->
-			      <div class="modal-content">
-			        <div class="modal-header">
-			          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar la solicitud?</h4>
-			        </div>
-			        <div id="cuerpoModalElim" class="modal-body">
-			          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-			          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-			        </div>
-			      </div>
-			  
-			    </div>
-			  </div>
+	
 			{{pass}}
 		</form>
 			<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
