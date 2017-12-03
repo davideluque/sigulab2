@@ -159,31 +159,23 @@
 	    {{if tipo_solicitud == "Solicitante" and ficha.estado_solicitud == 0:}}
 
 		<div class="botonesFicha botonEliminarImprimir">
-			<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
+			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="collapse" data-target="#collapseExample">Eliminar</button>
 
 			<!-- Modal del boton eliminar-->
-			  <div class="modal fade" id="modalEliminar" role="dialog">
-			    <div class="modal-dialog">
-			    
-			      <!-- Modal content-->
-			      <div class="modal-content">
-			        <div class="modal-header">
-			          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar la solicitud?</h4>
-			        </div>
-			        <div id="cuerpoModalElim" class="modal-body">
-			          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-			          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-			        </div>
-			      </div>
-			  
-			    </div>
-			  </div>
+			<div class="collapse" id="collapseExample">
+				<div class="card card-body">
+				 ¿Seguro que deseas eliminar la solicitud?
+				 <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>
+				 <button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseExample">No</button>
+				</div>
+			</div>
 
 		{{elif ficha.estado_solicitud > 0:}}
 		<div class="botonesFicha botonEliminarImprimir">
 			<a href="{{=URL('servicios','pdfSolicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir PDF</button></a>
 
 		{{pass}}
+
 		</form>
 			<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
 		</div>
