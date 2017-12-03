@@ -633,9 +633,11 @@ class ListaSolicitudes(object):
 
 			if solicitud.estado_solicitud == 3:
 				pass
-			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario):
+			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
+				  solicitud.estado_solicitud < 2):
 				self.filas.append(solicitud)
-			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario):
+			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
+				  solicitud.estado_solicitud < 2):
 				self.filas.append(solicitud)
 			elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
 				  solicitud.estado_solicitud == 2):

@@ -55,10 +55,10 @@
   	      <tbody>
       			{{for item in grid:}}
       				<tr>
-      					<th class="camposTabla">{{=item.registro}}</th>
+      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.registro}}</a></th>
       					<th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
       					<th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Solicitante');" >{{=item.nombre_servicio}}</a></th>
+      					<th class="camposTabla">{{=item.nombre_servicio}}</th>
       					<th class="camposTabla">{{=item.fecha_solicitud}}</th>
       					<th class="camposTabla">{{=item.estado_solicitud_str}}</th>
       				</tr>
