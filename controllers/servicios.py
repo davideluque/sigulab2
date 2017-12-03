@@ -689,6 +689,18 @@ def ajax_listado_solicitudes_generadas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+
+#------------------------------------------------------------------------------
+#
+# Controladores de los reportes
+#
+#------------------------------------------------------------------------------
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def pdfSolicitud():
+    return dict()
+
+
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
