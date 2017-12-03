@@ -70,13 +70,13 @@
         <div class="col-sm-6 columnas">
           <a href="{{=URL('certificaciones')}}">
             <img class="iconos" src="{{=URL('static','images/diploma.png')}}">
-            <h4 class="opciones">Certificar un Servicio{{if certificacion_nueva:}}*{{pass}}</h4>
+            <h4 class="opciones">Certificar un Servicio {{if certificacion_nueva:}}*{{pass}}</h4>
           </a>
         </div>
 
         <!-- Boton Historial Servicios -->
         <div class="col-sm-6 columnas">
-          <a href="#">
+          <a href="{{=URL('historial')}}">
             <img class="iconos" src="{{=URL('static','images/history.png')}}">
             <h4 class="opciones">Historial de Servicios</h4>
           </a>

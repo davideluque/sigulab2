@@ -283,6 +283,228 @@
 </div>
 <!-- Fin Modal Solicitar Servicio -->
 
+{{if servicio_solicitud:}}
+<button class="hidden" type="hidden" id="solicito" data-toggle="modal" data-target="#modalServiceRequestSelected"></button>
+
+<!-- Inicio Modal Solicitar Servicio Seleccionado-->
+<div class="modal fade" id="modalServiceRequestSelected" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoServicio">Solicitud de Servicio de Laboratorio</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <!-- Inicio Form -->
+            <form id="formularioEdit" class="registration-form" method="post">
+
+              <!-- Primer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Datos Básicos</h4>                
+                      
+                      <!-- Numero Registro -->
+                      <div class="mover">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
+                      </div>
+                      </div>
+
+                      <!-- Dependencia Solicitante -->
+                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
+                      </div>
+
+                      <!-- Jefe Dependencia Solicitante -->
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
+                      </div>
+
+                      <!-- Responsable Solicitud -->
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
+                      </div>                         
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+              
+              <!-- Segundo Paso -->
+              <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                       <span class="step">4</span>
+                    </div>
+
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                      
+                      <!-- Categoria -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+
+                        <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
+                          <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
+                        </select>
+                      </div>
+
+                      <!-- Tipo Servicio -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+
+                        <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
+                          <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
+                        </select>
+                      </div>
+
+                      <!-- Nombre Servicio-->
+                      <div class="form-group" id="obtenerNombreServicio2">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+                        <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
+                          <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Segundo Paso -->
+
+              <!-- Tercer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step activePass">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <!-- Propósito -->
+                    <div class="form-group" id="obtenerPropositoServicio">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
+                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" required>
+                          <option selected value="" hidden>Propósito</option>
+                            {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
+                              <option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
+                            {{pass}}
+                      </select>
+                    </div>
+
+                    <!-- Descripcion propósito -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
+                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                    </div>
+                  </div>
+                </div> 
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Tercer Paso -->
+
+              <!-- Cuarto Paso -->
+              <fieldset class="formField">
+                <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step activePass">4</span> 
+                  </div>
+
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
+                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
+                    <!-- Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 450px;">Nombre</label>
+                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" value="{{=servicio_solicitud.seccion}}" required readonly>
+                    </div>
+                    <br>
+
+                    <!-- Jefe Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 490px;" style="">Jefe</label>
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.jefe_dependencia}} | {{=servicio_solicitud.email_jefe_dependencia}}" required readonly>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+              </fieldset>
+              <!-- Fin Cuarto Paso -->
+            </form>
+            <!-- Fin Form -->
+          </div>
+        </div>               
+      </div>
+      <!-- Fin Modal Body -->
+    </div>
+    <!-- Fin Modal content-->
+  </div>
+</div>
+<!-- Fin Modal Solicitar Servicio Seleccionado-->
+
+
+<script>
+    $(document).ready(function(){
+        document.getElementById("solicito").click();
+    });
+
+</script>
+
+{{pass}}
+
+
 <!-- Ajax abrirFicha -->
 <input type="hidden" id="solicitud" name="solicitud" value="">
 <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
