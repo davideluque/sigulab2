@@ -246,10 +246,9 @@ def solicitudes():
 
     nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
+#    correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
 
-    correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
-
-    __enviar_correo(jefe_dependencia.email, responsable solicitud 'Se ha eliminado un servicio', correo)
+#    __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
@@ -275,8 +274,6 @@ def solicitudes():
 
     #----- FIN DE ELIMINAR SOLICITUD -----#
 
-    #----- LISTAR SOLICITUDES -----#
-    listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
@@ -301,25 +298,6 @@ def solicitudes():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
-
-    # Solicitante: Usuario solicita cambiar la pagina
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    # Solicitante: Usuario solicita ordenar los servicios
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
-    listado_de_solicitudes.orden_y_filtrado()
-
-    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
-    firstpage=listado_de_solicitudes.boton_principio
-    lastpage=listado_de_solicitudes.boton_fin
-    nextpage=listado_de_solicitudes.boton_siguiente
-    prevpage=listado_de_solicitudes.boton_anterior
-
-
     # Ejecutante: Usuario solicita cambiar la pagina
     if request.vars.pagina_ejecutante:
         listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
@@ -337,12 +315,7 @@ def solicitudes():
     nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
     prevpage_ejecutante=listado_de_ejecutante.boton_anterior
 
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar, 
-        pages=listado_de_solicitudes.rango_paginas,
-        actualpage=listado_de_solicitudes.pagina_central,
-        nextpage=nextpage, prevpage=prevpage,
-        firstpage=firstpage, lastpage=lastpage, 
-        grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
+    return dict(grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
         pages_ejecutante=listado_de_ejecutante.rango_paginas,
         actualpage_ejecutante=listado_de_ejecutante.pagina_central,
         nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
@@ -398,6 +371,9 @@ def certificaciones():
                 sedes=listar_sedes(db))
 
 
+def historial():
+	return dict()
+
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
@@ -411,7 +387,6 @@ def ajax_ficha_servicio():
 
     # Servicio
     entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
-
 
     # Funciones
     funcion = []
@@ -631,7 +606,7 @@ def ajax_certificar_servicio():
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
-        dependencianombre = "Laboratorio A"
+        #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
     registro = validador_registro_certificaciones(request, db)
@@ -675,8 +650,35 @@ def ajax_listado_servicios():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
-# Funcion para enviar un correo de notificacion 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_solicitudes_generadas():
 
+    #----- LISTAR SOLICITUDES -----#
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
+
+    order_by_asc = eval(request.post_vars.ordenar_solicitudes_generadas_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_solicitudes_generadas_por
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_solicitudes_generadas:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiar_pagina_solicitudes_generadas))
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    #----- FIN LISTAR SERVICIOS -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+# Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 

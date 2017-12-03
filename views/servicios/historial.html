@@ -1,0 +1,642 @@
+{{extend "layout.html"}}
+
+{{block head}}
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+{{end}}
+
+{{block center}}
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'servicios')}}">Servicios</a>
+  <span class="breadcrumb-item active">Listado</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Inicio Boton Agregar Listado -->
+<div class="container" id="containerAgregar">
+	<div class="row">
+		<div class="col-sm-6"></div>
+		<div id="columnBotonAgregar" class="col-sm-6">
+			<div class="col-sm-6"></div>
+
+			<div class="col-sm-6">
+                <!-- Boton que lleva al modal -->
+              <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addservice">Agregar Servicio</button>
+            </div>
+        </div>
+	</div>
+</div>
+<!-- Fin Boton Agregar Listado -->
+
+<!-- Inicio Listado -->
+<div class="container" id="listadoContainer">
+         
+</div>
+<!-- Fin Listado --> 
+<!-- Ajax ordenar listado de servicios--> 
+<input type="hidden" id="ordenarPor" name="ordenarPor" value="">
+<input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
+<input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
+
+<!-- Ajax abrirFicha-->
+<input type="hidden" id="serv" name="serv" value="">
+
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
+<!-- Modal añadir un servicio -->
+  <div class="modal fade" id="addservice" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Nuevo Servicio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                            <div class="col-sm-1 col1Body">
+                              <span class="step activePass">1</span>
+                              <span class="step">2</span>
+                              <span class="step">3</span>
+                              <span class="step">4</span>             
+                            </div>
+                          <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>                
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
+                                <option value="" selected hidden >Categoria</option>
+		                        {{for categoria in categorias:}}
+
+		                        <option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
+		                        {{pass}} 
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="sel2" name="tipoServicio" required>
+                                <option value="" selected hidden >Tipo</option>
+		                        {{for tipo in tipos:}}
+
+		                        <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
+		                        {{pass}}
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <h6>Función</h6>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="docenciaServicio" value="True">Docencia</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="investigacionServicio" value="True">Investigación</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="extensionServicio" value="True">Extensión</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="gestionServicio" value="True">Gestión</label>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                    <!-- Segundo Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                          <!-- Aqui va la barra lateral -->
+                          <div class="col-sm-1 col1Body">
+                            <span class="step ready">1</span>
+                            <span class="step activePass">2</span>
+                            <span class="step">3</span>
+                            <span class="step">4</span> 
+                          </div>
+
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" placeholder="Objetivo">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" placeholder="Alcance">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="metodo" name="metodoServicio" placeholder="Método">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="rango" name="rangoServicio" placeholder="Rango">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" placeholder="Incertidumbre">
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step activePass">3</span>
+                          <span class="step">4</span> 
+                        </div>
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Responsable y Área</h4>
+
+                          <!--<div class="form-group">
+                            <select class="form-control" id="sel10" name="responsableServicio" required>
+                              <option value="1" selected hidden>Responsable</option>
+                                {for responsable in responsables:}}
+                                <option id="responsablechoice" value="{=responsable.id}}">{=responsable.f_nombre}} | {=responsable.f_email}}</option>
+                              {pass}}
+                            </select>                            
+                          </div>-->
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="sel6" onchange="getAdscripcion(); getDependencia(); getUbicacion(); getResponsable();" name="sedeServicio" required>
+                              <option value="" selected hidden >Sede</option>
+		                      {{for sede in sedes:}}
+		                      <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
+		                      {{pass}}
+                            </select>
+                          </div>
+
+	                      <div id="adscripciondiv" class="form-group">
+	                    
+	                      </div>
+
+	                      <div id="dependenciadiv" class="form-group">
+	                    
+	                      </div>
+	                    
+	                      <div id="ubicaciondiv" class="form-group">
+	                    
+	                      </div>
+
+                          <div id="responsablediv" class="form-group">
+
+	                      </div>
+
+                        </div>
+                      </div> 
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step activePass">4</span> 
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm">Especificaciones</h4>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="item" name="itemServicio" placeholder="Item a ensayar" required>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="resultados" name="resultadosServicio" placeholder="Resultados"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                </form>
+            </div>
+          </div>               
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- Fin Modal Agregar Servicio -->
+
+<button class="hidden" type="hidden" id="edito" data-toggle="modal" data-target="#editservice"></button>
+
+<!-- Inicio Modal Editar Servicio -->
+{{if len(editar) != 0:}}
+    <script>
+        $(document).ready(function(){
+            document.getElementById("edito").click();
+        });
+
+    </script>
+
+<!-- Modal editar un servicio -->
+  <div class="modal fade" id="editservice" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Editar Servicio</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioEdit" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step activePass">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>             
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>                
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nombreServicio" value="{{=editar[0].nombre}}" required>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" id="sel1.1" name="categoriaServicio" required>
+                                <option value="{{=editar[0].categoria}}" selected hidden>{{=db(db.categorias_servicios.id == editar[0].categoria).select(db.categorias_servicios.nombre)[0].nombre}}</option>
+		                        {{for categoria in categorias:}}
+		                        <option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
+		                        {{pass}} 
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="sel2.1" name="tipoServicio" required>
+                                <option value="{{=editar[0].tipo}}" selected hidden >{{=db(db.tipos_servicios.id == editar[0].tipo).select(db.tipos_servicios.nombre)[0].nombre}}</option>
+		                        {{for tipo in tipos:}}
+		                        <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
+		                        {{pass}}
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <h6>Función</h6>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="docenciaServicio" value="True" {{if editar[0].docencia:}} checked {{pass}}>Docencia</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="investigacionServicio" value="True" {{if editar[0].investigacion:}} checked {{pass}}>Investigación</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="extensionServicio" value="True" {{if editar[0].extension:}} checked {{pass}}>Extensión</label>
+                              </div>
+                              <div class="checkbox">
+                                <label><input type="checkbox" name="gestionServicio" value="True" {{if editar[0].gestion:}} checked {{pass}}>Gestión</label>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                    <!-- Segundo Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                          <!-- Aqui va la barra lateral -->
+                          <div class="col-sm-1 col1Body">
+                            <span class="step">1</span>
+                            <span class="step activePass">2</span>
+                            <span class="step">3</span>
+                            <span class="step">4</span> 
+                          </div>
+
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" value="{{=editar[0].objetivo}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" value="{{=editar[0].alcance}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="metodo" name="metodoServicio" value="{{=editar[0].metodo}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="rango" name="rangoServicio" value="{{=editar[0].rango}}">
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" value="{{=editar[0].incertidumbre}}">
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step activePass">3</span>
+                          <span class="step">4</span> 
+                        </div>
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Responsable y Área</h4>
+
+
+
+                          <div class="form-group">
+
+                              <select class="form-control" id="sel6-edit"  onchange="getAdscripcionEdit();" name="sedeServicio" required>
+                                  <option value="{{=request.post_vars.sedeIdFicha}}" selected hidden >{{=request.post_vars.sedeFicha}}</option>
+                                  {{for sede in sedes:}}
+                                  <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
+                                  {{pass}}
+                              </select>
+                          </div>
+
+
+	                      <div id="adscripciondiv-edit" class="form-group">
+                              <select class="form-control" id="sel4-edit" onclick="getAdscripcionEdit();" name="laboratorioServicio" required>
+                                  <option value="{{=request.post_vars.adscripcionIdFicha}}" selected hidden >{{=request.post_vars.adscripcionFicha}}</option>
+                              </select>
+	                      </div>
+
+	                      <div id="dependenciadiv-edit" class="form-group">
+	                        <select class="form-control" id="sel3-edit" onclick="getDependenciaEdit();" name="dependenciaServicio" required>
+							                 <option value="{{=request.post_vars.dependenciaIdFicha}}" selected hidden>{{=request.post_vars.dependenciaFicha}} </option>
+							             </select>
+	                      </div>
+	                    
+	                      <div id="ubicaciondiv-edit" class="form-group">
+						              <select class="form-control" id="sel5-edit" onclick="getUbicacionEdit();" name="ubicacionServicio" required>
+ 							              <option value="{{=request.post_vars.ubicacionIdFicha}}" selected hidden>{{=request.post_vars.ubicacionFicha}}</option>
+ 							            </select>	                    
+	                      </div>
+
+                        <div id="responsablediv-edit" class="form-group">
+						              <select class="form-control" id="selresp-edit" onclick="getResponsableEdit();" name="responsableServicio" required>
+ 							              <option value="{{=request.post_vars.responsableIdFicha}}" selected hidden>{{=request.post_vars.responsableNombreFicha}} | {{=request.post_vars.responsableEmailFicha}}</option>
+ 							            </select>
+	                      </div>
+
+                        </div>
+                      </div> 
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span> 
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm">Especificaciones</h4>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="item" name="itemServicio" value="{{=editar[0].item_ensayar}}" required>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" value="{{=editar[0].requisitos}}">{{=editar[0].requisitos}}</textarea>
+                          </div>
+                          <div class="form-group">
+                            <textarea class="form-control" id="resultados" name="resultadosServicio" value="{{=editar[0].resultados}}">{{=editar[0].resultados}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button> 
+
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+                </form>
+            </div>
+          </div>               
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- Fin Modal Editar Servicio -->
+{{pass}}
+<!-- Ajax getLabs--> 
+<input type="hidden" id="sede" name="sede" value="">
+<!-- Ajax getSecc--> 
+<input type="hidden" id="adscripcion" name="adscripcion" value="">
+<!-- Ajax getUbic--> 
+<input type="hidden" id="dependencia" name="dependencia" value="">
+<!-- Ajax getResp--> 
+<input type="hidden" id="ubicacion" name="ubicacion" value="">
+
+<script language="javascript">
+  
+  function abrirFicha(servicio) {
+		var x = document.getElementById("serv");
+			x.value = servicio;
+		ajax('ajax_ficha_servicio', ['serv'], "ficha");
+	}
+
+  function getAdscripcion(){
+    var opcionessede = document.getElementById("sel6");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+    var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
+  }
+
+  function getDependencia(){
+      var opcionesads = document.getElementById("sel4");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
+
+   }
+
+  function getUbicacion(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
+
+   }
+
+  function getResponsable(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
+   }
+
+  // AJAX EDICION
+  function getAdscripcionEdit(){
+    var opcionessede = document.getElementById("sel6-edit");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+    var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('ajax_obtener_adscripcion_editar', ['sede'], "adscripciondiv-edit");
+  }
+
+  function getDependenciaEdit(){
+      var opcionesads = document.getElementById("sel4-edit");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia_editar', ['adscripcion'], "dependenciadiv-edit");
+
+   }
+
+  function getUbicacionEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion_editar', ['dependencia'], "ubicaciondiv-edit");
+
+   }
+
+  function getResponsableEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable_editar', ['dependencia'], "responsablediv-edit");
+   }
+
+  // Valores por defecto al cargar la página del listado de servicios
+  order_by_col = null
+  order_by_asc = null
+  order_by_pag = 1
+  function cambiarPagina(page){
+
+    order_by_pag = page
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_servicios', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+
+  }
+
+  function ordenarServicios(order_by){
+    
+    if (order_by_col == order_by){
+      order_by_asc = !order_by_asc
+    }
+    else{
+      order_by_col = order_by
+      order_by_asc = false
+    }
+
+    var x = document.getElementById("ordenarPor");
+      x.value = order_by_col;
+
+    var y = document.getElementById("ordenarAlfabeticamente");
+      y.value = order_by_asc
+
+    var z = document.getElementById("cambiarPagina")
+      z.value = order_by_pag
+
+    ajax('ajax_listado_servicios', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+  }
+
+  window.onload = ordenarServicios("id");
+
+</script>
+{{end}}
