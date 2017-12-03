@@ -217,12 +217,21 @@ def listado():
 
     #----- FIN ELIMINAR SERVICIO -----#
 
+    #----- SOLICITAR SERVICIO -----#
+
+    if request.post_vars.solicitar:
+        redirect(URL('solicitudes', vars=dict(idServicio=request.post_vars.solicitar)))
+
+    #----- FIN SOLICITAR SERVICIO -----#
+
     return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+    servicio_solicitud = None
+
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
         id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
@@ -234,6 +243,12 @@ def solicitudes():
         solicitud_nueva.insertar()
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- AGREGAR SOLICITUD DESDE SERVICIO -----#
+    if request.vars.idServicio:
+        servicio_solicitud = Servicio(db)
+        servicio_solicitud.instanciar(int(request.vars.idServicio))
+
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
@@ -329,8 +344,8 @@ def solicitudes():
         actualpage_ejecutante=listado_de_ejecutante.pagina_central,
         nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
         firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
-        datos_solicitud=datos_solicitud, 
-        categorias=listar_categorias(db), tipos=listar_tipos(db))
+        datos_solicitud=datos_solicitud, categorias=listar_categorias(db), tipos=listar_tipos(db),
+        servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))

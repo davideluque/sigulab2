@@ -29,10 +29,12 @@ class Servicio(object):
 		self.item_ensayar = item_ensayar
 		self.requisitos = requisitos
 		self.resultados = resultados
+
 		self.docencia = docencia
 		self.investigacion = investigacion
 		self.gestion = gestion
 		self.extension = extension
+
 		self.visibilidad = visibilidad
 		self.responsable = responsable
 		self.dependencia = dependencia
@@ -47,6 +49,8 @@ class Servicio(object):
 		self.id = None	
 
 		self.db = db
+
+		self.obtenerListaPropositos()
 
 
 	def __str__(self):
@@ -97,6 +101,9 @@ class Servicio(object):
 
 			self.conseguir_categorias()
 
+			self.obtenerListaPropositos()
+
+
 			return True
 		
 		else:
@@ -128,6 +135,9 @@ class Servicio(object):
 		self.responsable = responsable
 		self.dependencia = dependencia
 		self.ubicacion = ubicacion
+
+		self.obtenerListaPropositos()
+
 
 
 	def actualizar(self, id):
@@ -165,6 +175,34 @@ class Servicio(object):
 		self.seccion = seccion_fila.nombre
 		self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
 		self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+
+		self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
+
+		usuario_jefe_dependencia = self.db(self.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+		self.jefe_dependencia = usuario_jefe_dependencia.first_name + " " + usuario_jefe_dependencia.last_name
+
+		self.email_jefe_dependencia = usuario_jefe_dependencia.email
+
+	def obtenerListaPropositos(self):
+	    self.propositos_a_mostrar = []
+
+
+	    if self.docencia == True:
+	        propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
+	        self.propositos_a_mostrar.append(propositoServicio)
+
+	    if self.investigacion == True:
+	        propositoServicio = self.db("Investigación" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+	        self.propositos_a_mostrar.append(propositoServicio)
+
+	    if self.extension == True:
+	        propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+	        self.propositos_a_mostrar.append(propositoServicio)    
+
+	    if self.gestion == True:
+	        propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+	        self.propositos_a_mostrar.append(propositoServicio)
 
 
 #------------------------------------------------------------------------------
