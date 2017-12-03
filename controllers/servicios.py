@@ -698,7 +698,20 @@ def ajax_listado_solicitudes_generadas():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdfSolicitud():
-    return dict()
+    session.forget(response)
+    # Solicitud
+
+    solicitud = Solicitud(db, auth)
+
+    try:
+        solicitud.instanciar(int(request.vars.solicitud))
+    except:
+        solicitud.instanciar(0)
+
+
+    return dict(solicitud = solicitud)
+
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdfCertificado():
