@@ -83,8 +83,8 @@
 	color: white;
 }
 
-#botonEliminarFichaSolicitud {
-	text-align: left;
+.botonEliminarImprimir{
+	text-align: left !important;
 }
 
 #botonCerrarFichaSolicitud {
