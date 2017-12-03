@@ -692,7 +692,7 @@ def ajax_listado_solicitudes_generadas():
 
 #------------------------------------------------------------------------------
 #
-# Controladores de los reportes
+# Controladores de los Reportes a Imprimir
 #
 #------------------------------------------------------------------------------
 
@@ -700,6 +700,9 @@ def ajax_listado_solicitudes_generadas():
 def pdfSolicitud():
     return dict()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def pdfCertificado():
+    return dict()
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):

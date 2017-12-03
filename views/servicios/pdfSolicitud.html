@@ -44,15 +44,27 @@
 		background-color: lightgray;
 		-webkit-print-color-adjust: exact;
 	}	
+
+	.imagenes{
+		height: 120px;
+	}
+
+	#ulab{
+		float: right;
+	}
+
+	#img{
+		width:1000px;
+	}
 </style>
 </head>
 <body>
 	
 	<div id="">
 		<div id="img" >
-			<img src="logo-usb.jpg" class="logos">
+			<img class="imagenes" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
 			<!-- PONER EL LOGO QUE ES -->
-			<img src="logo-ulab.png" class="logos">
+			<img id="ulab" class="imagenes" src="{{=URL('static','images/servicios/logo-ulab.png')}}" class="logos">
 		</div>
 
 		<table id="tablaSolicitud" border="1">
