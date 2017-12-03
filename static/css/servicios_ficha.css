@@ -65,14 +65,31 @@
 	background-color: #808080;
 }
 
+.botonEliminar {
+	margin-top: 15px;
+}
+
 .botonEliminar:hover {
 	background-color: #DC143C;
 	color: white;
 }
 
+.botonAprobar {
+	margin-top: 15px;
+}
+
 .botonAprobar:hover {
 	background-color: #46a049;
 	color: white;
+}
+
+#botonEliminarFichaSolicitud {
+	text-align: left;
+}
+
+#botonCerrarFichaSolicitud {
+	text-align: right !important;
+	float: right !important;
 }
 
 #tituloModalElim {
