@@ -106,8 +106,6 @@ def listado():
         # Variable dependencia de la persona que realizo la operacion
         # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
 
-        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE
-
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #----- FIN AGREGAR SERVICIO -----#
@@ -288,6 +286,8 @@ def solicitudes():
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
             #  ENVIAR CORREO SOLICITUD EJECUTADA
 
+            solicitud_a_cambiar.elaborar_certificacion()
+
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
             # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL RECHAZO DE SU SOLICITUD 
@@ -430,6 +430,11 @@ def certificaciones():
                 firstpage=firstpage, lastpage=lastpage,
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
+
+# ---- LISTADO DE HISTORIAL ---- #
+def historial():
+
+    return dict()
 
 
 #------------------------------------------------------------------------------
@@ -666,6 +671,15 @@ def ajax_certificar_servicio():
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
     codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+
+    proyecto = "N/A"
+    print(solicitud_info.proposito)
+    proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
+
+
+    if proposito == "Investigacion":
+        proyecto = solicitud_info.proposito_descripcion
+
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
@@ -682,7 +696,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto='Proyecto ' + registro)
+                proyecto=proyecto)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))

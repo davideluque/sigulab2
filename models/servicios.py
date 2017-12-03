@@ -118,8 +118,7 @@ db.define_table(
     #Field('lugar_ejecucion', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Lugar de Ejecución de Servicio')),
 
     #Field('jefe_dependencia_ejecutora', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), label=T('Jefe de la Dependencia Ejecutora')),
-    
-    
+
 
     #
     # Esto en vez de el email quizá pueda tener el id de la persona que aprobo la solicitud
@@ -135,7 +134,6 @@ db.define_table(
     # estado=3 certificado
 
     Field('estado','integer', default=0, label=T('Estado de Solicitud')),
-
 
     Field('aprobada_por', 'string', label=T('Solicitud Aprobada Por')),
 
@@ -169,4 +167,58 @@ db.define_table(
           requires=IS_IN_DB(db, db.solicitudes.id, '%(registro))s'), label=T('Solicitud a Certificar')),
     Field('fecha_certificacion',   'date',
           requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Certificacion de Solicitud')),
+)
+
+##################################################################################################
+#                                                           TABLA: HISTORIAL DE SERVICIOS
+#
+# Tabla de servicios solicitados ya ejecutados y certificados, tabla final para una solicitud
+# de servicio (Solicitud estado 3). Combinacion de las tablas de certificacion y solicitud.
+#
+#################################################################################################
+
+db.define_table(
+    "historial_servicios",
+
+    Field('id_servicio', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'),
+          label=T('Servicio Solicitado')),
+
+    # Datos basicos de una solicitud
+    Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
+
+    Field('responsable_solicitud', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'),
+          label=T('Responsable de la Solicitud')),
+
+    Field('fecha_solicitud', 'date',
+          requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
+
+    Field('proposito', 'reference propositos', requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'),
+          label=T('Propósito del servicio solicitado')),
+
+    Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
+
+    Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
+
+    Field('descripcion', 'string', label=T('Descripción de la Solicitud')),
+
+    Field('observaciones', 'string', label=T('Observaciones de la Solicitud')),
+
+    Field('aprobada_por', 'string', label=T('Solicitud Aprobada Por')),
+
+    Field('fecha_aprobacion', 'date', label=T('Fecha de Aprobacion de Solicitud')),
+
+    Field('elaborada_por', 'string', label=T('Solicitud Elaborada Por')),
+
+    Field('fecha_elaboracion', 'date', label=T('Fecha de Elaboracion de Solicitud')),
+
+    # Datos basicos de una certificacion
+
+    Field('proyecto', 'string', label=T('Número de Poyecto')),
+
+    Field('fecha_certificacion',   'date',
+          requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, label=T('Fecha de Certificacion de Solicitud')),
+
+    # 0 por certificar
+    # 1 certificada
+    Field("estado", "integer", default = 0, label=T("Estado de la Certificacion"))
 )
