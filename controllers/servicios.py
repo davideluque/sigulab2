@@ -233,6 +233,24 @@ def solicitudes():
 
         solicitud_nueva.insertar()
 
+    # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+
+    correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
+
+    __enviar_correo(jefe_dependencia.email, responsable solicitud 'Se ha eliminado un servicio', correo)
+
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
@@ -241,11 +259,11 @@ def solicitudes():
         solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
         solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
         solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
-        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
-            # ENVIAR CORREO A SOLICITANTE PARA AVISAR SU RECHAZO
+            # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL RECHAZO DE SU SOLICITUD 
 
     #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
 

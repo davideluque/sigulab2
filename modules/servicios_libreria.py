@@ -835,7 +835,7 @@ class Certificacion(object):
 
 def generador_num_registro():
 	min = 0
-	max = 500
+	max = 999
 	digit = str(random.randint(min, max))
 	digits = (len(str(max))-len(digit))*'0' + digit
 
