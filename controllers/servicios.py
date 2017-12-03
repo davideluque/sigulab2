@@ -234,6 +234,7 @@ def solicitudes():
 
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
+
         id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
@@ -263,7 +264,7 @@ def solicitudes():
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
     #----- AGREGAR SOLICITUD DESDE SERVICIO -----#
-    if request.vars.idServicio:
+    if request.post_vars.idServicio:
         servicio_solicitud = Servicio(db)
         servicio_solicitud.instanciar(int(request.vars.idServicio))
 
@@ -619,32 +620,6 @@ def ajax_obtener_datos_depen_ejecutora():
 
     return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
 
-
-# Funcion para enviar un correo de notificacion 
-
-def __enviar_correo(destinatario, asunto, cuerpo):
-    mail = auth.settings.mailer
-
-    mail.send(destinatario, asunto, cuerpo)
-
-
-def __queries_enviar_correo():
-
-    # OJO: QUITAR EL TRY EXCEPT 
-
-    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
-
-    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
-
-    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
-        
-    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
-
-    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
-
-    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
-
-
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
     solicitudesid = request.post_vars.solicitud
@@ -702,9 +677,28 @@ def ajax_listado_servicios():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+
 # Funcion para enviar un correo de notificacion 
 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 
     mail.send(destinatario, asunto, cuerpo)
+
+
+def __queries_enviar_correo():
+
+    # OJO: QUITAR EL TRY EXCEPT 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
+

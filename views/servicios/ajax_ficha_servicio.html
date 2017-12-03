@@ -110,7 +110,7 @@
   </div>
 
   <div class="modal-footer">
-	  <form method="post">
+	  <form method="post" id="formularioModificar">
 	  	<input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}">
 	  	<input type="hidden" name="dependenciaFicha" value="{{=ficha['dependencia']}}">
         <input type="hidden" name="dependenciaIdFicha" value="{{=ficha['dependenciaid']}}">
@@ -123,10 +123,14 @@
         <input type="hidden" name="responsableIdFicha" value="{{=ficha['respid']}}">
         <input type="hidden" name="responsableNombreFicha" value="{{=ficha['responsable']}}">
         <input type="hidden" name="responsableEmailFicha" value="{{=ficha['email']}}">
+      </form>
+      <form method="POST" id="formularioSolicitar" action="{{=URL('solicitudes')}}">
+        <input type="hidden" name="idServicio" value="{{=ficha['entrada'][0].id}}">
+      </form>
 
         {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
 	    <div class="btn-group botonesFicha">
-		  <button type="submit" class="btn botonesFichita" name="edit" value="True">Editar</button>
+		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
 
 		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
 
@@ -140,7 +144,7 @@
 		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar el servicio?</h4>
 		        </div>
 		        <div id="cuerpoModalElim" class="modal-body">
-		          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
+		          <button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
 		          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
 		        </div>
 		      </div>  
@@ -148,14 +152,14 @@
 		  </div>
 
 		  {{if ficha['entrada'][0].visibilidad: }}
-		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
+		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
 		  {{else: }}
-		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
+		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
 		  {{pass}}
 
 
 	  	  <!-- <input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}"> -->
-	  	  <button class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}">Solicitar</button>
+	  	  <button type="submit" form="formularioSolicitar" class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}">Solicitar</button>
 		</div>
       {{pass}}
 

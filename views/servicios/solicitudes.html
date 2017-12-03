@@ -351,7 +351,7 @@
         <div class="row addRow">
           <div class="col-md-12 form-box">
             <!-- Inicio Form -->
-            <form id="formularioCarga" class="registration-form" method="post">
+            <form id="formularioEdit" class="registration-form" method="post">
 
               <!-- Primer Paso -->
               <fieldset class="formField">
@@ -416,19 +416,27 @@
                       <!-- Categoria -->
                       <div class="form-group">
                         <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
-                         <input type="text" class="form-control" id="categoriaServicio" name="categoriaServicio2" placeholder="Categoria" value="{{=servicio_solicitud.nombre_categoria}}" required readonly>
+
+                        <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
+                          <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
+                        </select>
                       </div>
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
                         <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
-                         <input type="text" class="form-control" id="tipoServicio" name="tipoServicio2" placeholder="Tipo" value="{{=servicio_solicitud.nombre_tipo}}" required readonly>
+
+                        <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
+                          <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
+                        </select>
                       </div>
 
                       <!-- Nombre Servicio-->
-                      <div class="form-group" id="obtenerNombreServicio">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Nombre de Servicio</label>
-                        <input type="text" class="form-control" id="nombreServicio" name="nombreServicio2" placeholder="Servicio" value="{{=servicio_solicitud.nombre}}" required readonly>
+                      <div class="form-group" id="obtenerNombreServicio2">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+                        <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
+                          <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -454,7 +462,7 @@
                     <!-- Propósito -->
                     <div class="form-group" id="obtenerPropositoServicio">
                       <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
-                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio2" required>
+                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" required>
                           <option selected value="" hidden>Propósito</option>
                             {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
                               <option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
@@ -465,13 +473,13 @@
                     <!-- Descripcion propósito -->
                     <div class="form-group">
                         <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
-                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion2" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
+                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
                     </div>
 
                     <!-- Descripción -->
                     <div class="form-group">
                       <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud2" ></textarea>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
                     </div>
                   </div>
                 </div> 
@@ -509,7 +517,7 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+                <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
               </fieldset>
               <!-- Fin Cuarto Paso -->
             </form>
