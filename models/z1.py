@@ -159,37 +159,37 @@ if db(db.sedes).isempty():
 if db(db.dependencias).isempty():
 	# Direccion
 	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Dirección', id_sede=1, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Dirección', id_sede=1, id_jefe_dependencia=user, codigo_registro="UL")
 
 	direccionid = db(db.dependencias.nombre == 'Dirección').select()[0].id
 
 	# Laboratorios
 	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio A', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio A', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLA")
 	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio B', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio B', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLB")
 	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio C', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio C', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLC")
 	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio D', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio D', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLD")
 	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio E', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio E', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLE")
 	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio F', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio F', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLF")
 	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Laboratorio G', id_sede=2, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Laboratorio G', id_sede=2, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="ULLG")
 
 	# Coordinaciones
 	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Unidad de Administración', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Unidad de Administración', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="UL03")
 	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Coordinación de Adquisiciones', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Coordinación de Adquisiciones', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="UL01")
 	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Coordinación de Importaciones', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Coordinación de Importaciones', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="UL02")
 	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Coordinación de la Calidad', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Coordinación de la Calidad', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="UL04")
 	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Oficina de Protección Radiológica', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Oficina de Protección Radiológica', id_sede=1, unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, codigo_registro="UL05")
 
 	# Secciones
 	user = db(db.auth_user.email == 'jefsecc@usb.ve').select()[0].id
@@ -198,92 +198,91 @@ if db(db.dependencias).isempty():
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio A').select()[0].id
 
 	usere = db(db.auth_user.email == 'sat-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Alta Tensión', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Alta Tensión', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UAAT")
 	usere = db(db.auth_user.email == 'scee-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Conversión de Energía Eléctrica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Conversión de Energía Eléctrica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UAEE")
 
-	db.dependencias.insert(nombre='Conversión de Energía Mecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Desarrollo de Modelos y Prototipos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Dinámica de Máquinas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Fenómenos de Transporte', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Mecánica Computacional', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Mecánica de Fluidos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Operaciones Unitarias', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Sistemas de Potencia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Conversión de Energía Mecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAEM")
+	db.dependencias.insert(nombre='Desarrollo de Modelos y Prototipos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAMP")
+	db.dependencias.insert(nombre='Dinámica de Máquinas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UADM")
+	db.dependencias.insert(nombre='Fenómenos de Transporte', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAFT")
+	db.dependencias.insert(nombre='Mecánica Computacional', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAMC")
+	db.dependencias.insert(nombre='Mecánica de Fluidos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAMF")
+	db.dependencias.insert(nombre='Operaciones Unitarias', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UAOU")
+	db.dependencias.insert(nombre='Sistemas de Potencia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UASP")
 
 	# Laboratorio B
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio B').select()[0].id
 
 	usere = db(db.auth_user.email == 'labb-alimentos@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Alimentos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Alimentos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UBAL")
 	usere = db(db.auth_user.email == 'labb-bioterio@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Bioterio', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
-	db.dependencias.insert(nombre='Biología Celular', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Biología de Organismos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Biología Marina', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Ecología', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Físico Química', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Nutrición', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Polímeros', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Procesos Químicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Química Analítica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Química General', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Química Inorgánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Química Orgánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Bioterio', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UBBI")
+	db.dependencias.insert(nombre='Biología Celular', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBBC")
+	db.dependencias.insert(nombre='Biología de Organismos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBBO")
+	db.dependencias.insert(nombre='Biología Marina', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBBM")
+	db.dependencias.insert(nombre='Ecología', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBEC")
+	db.dependencias.insert(nombre='Físico Química', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBFQ")
+	db.dependencias.insert(nombre='Nutrición', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBNT")
+	db.dependencias.insert(nombre='Polímeros', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBPO")
+	db.dependencias.insert(nombre='Procesos Químicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBPQ")
+	db.dependencias.insert(nombre='Química Analítica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBQA")
+	db.dependencias.insert(nombre='Química General', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBQG")
+	db.dependencias.insert(nombre='Química Inorgánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBQI")
+	db.dependencias.insert(nombre='Química Orgánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UBQO")
 
 
 	# Laboratorio C
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio C').select()[0].id
 
 	usere = db(db.auth_user.email == 'labc-read@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Redes, Electrónica Analógica y Digital', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Redes, Electrónica Analógica y Digital', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UCRE")
 	usere = db(db.auth_user.email == 'labc-pss@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Procesamiento de Señales y Sistemas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
-	db.dependencias.insert(nombre='Comunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Instrumentación y Control de Procesos y Sistemas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Centro de Automatización Industrial', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Electrónica de Potencia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Sistemas Digitales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Telecomunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Mecatrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Control Automático', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Acústica y Comunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Estado Sólido', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Biomecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Sistemas Biomédicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Procesamiento de Señales y Sistemas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Redes Electrónicas y Telemática Aplicada (GRETA)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Procesamiento de Señales (GPS)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Telecomunicaciones (GTEL)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Centro y Automatización Industrial (CAI)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Sistemas Industriales de Electrónica de Potencia (SIEP)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Laboratorio de Investigación en Sistemas de Información (LISI)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Mecatrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Biomecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Laboratorio de Control Automático (LCA).', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Energía Alternativa (GEA)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Laboratorio de Electrónica de Estados Sólidos (LEES)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Grupo de Biomecánica, Rehabilitación y Procesamiento de Señales (GBRPS)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Procesamiento de Señales y Sistemas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UCPS")
+	db.dependencias.insert(nombre='Comunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCCO")
+	db.dependencias.insert(nombre='Instrumentación y Control de Procesos y Sistemas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCIC")
+	db.dependencias.insert(nombre='Centro de Automatización Industrial', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCCI")
+	db.dependencias.insert(nombre='Electrónica de Potencia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCEP")
+	db.dependencias.insert(nombre='Sistemas Digitales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCSD")
+	db.dependencias.insert(nombre='Telecomunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCTE")
+	db.dependencias.insert(nombre='Mecatrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCME")
+	db.dependencias.insert(nombre='Control Automático', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCCA")
+	db.dependencias.insert(nombre='Acústica y Comunicaciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCAC")
+	db.dependencias.insert(nombre='Estado Sólido', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCES")
+	db.dependencias.insert(nombre='Biomecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCBI")
+	db.dependencias.insert(nombre='Sistemas Biomédicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCSB")
+	db.dependencias.insert(nombre='Grupo de Redes Electrónicas y Telemática Aplicada (GRETA)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGE")
+	db.dependencias.insert(nombre='Grupo de Procesamiento de Señales (GPS)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGP")
+	db.dependencias.insert(nombre='Grupo de Telecomunicaciones (GTEL)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGT")
+	db.dependencias.insert(nombre='Grupo de Centro y Automatización Industrial (CAI)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGC")
+	db.dependencias.insert(nombre='Grupo de Sistemas Industriales de Electrónica de Potencia (SIEP)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGS")
+	db.dependencias.insert(nombre='Grupo de Laboratorio de Investigación en Sistemas de Información (LISI)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGL")
+	db.dependencias.insert(nombre='Grupo de Mecatrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGM")
+	db.dependencias.insert(nombre='Grupo de Biomecánica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCGB")
+	db.dependencias.insert(nombre='Laboratorio de Control Automático (LCA).', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UC")
+	db.dependencias.insert(nombre='Grupo de Energía Alternativa (GEA)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UC")
+	db.dependencias.insert(nombre='Grupo de Laboratorio de Electrónica de Estados Sólidos (LEES)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCLC")
+	db.dependencias.insert(nombre='Grupo de Biomecánica, Rehabilitación y Procesamiento de Señales (GBRPS)', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UCLE")
 
 
 	# Laboratorio D
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio D').select()[0].id
 
 	usere = db(db.auth_user.email == 'labd-biofisica@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Biofísica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Biofísica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UDBI")
 	usere = db(db.auth_user.email == 'labd-espectrocopia@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Espectroscopía Laser', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
-	db.dependencias.insert(nombre='Física de Estado Sólido', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Física Nuclear', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Geofísica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Laboratorio de Demostraciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Simulaciones de la Materia Condensada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Óptica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Óptica e Interferometría', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Óptica Moderna y Aplicada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Plasma Contínua y Pulsada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Psicofisiología y Conducta Humana', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Fabricación y Caracterización de Nanomateriales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Espectroscopía Laser', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UDEL")
+	db.dependencias.insert(nombre='Física de Estado Sólido', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDFS")
+	db.dependencias.insert(nombre='Física Nuclear', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDFN")
+	db.dependencias.insert(nombre='Geofísica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDGF")
+	db.dependencias.insert(nombre='Laboratorio de Demostraciones', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDLD")
+	db.dependencias.insert(nombre='Simulaciones de la Materia Condensada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDMC")
+	db.dependencias.insert(nombre='Óptica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDOP")
+	db.dependencias.insert(nombre='Óptica e Interferometría', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDOI")
+	db.dependencias.insert(nombre='Óptica Moderna y Aplicada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDOM")
+	db.dependencias.insert(nombre='Plasma Contínua y Pulsada', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDPC")
+	db.dependencias.insert(nombre='Psicofisiología y Conducta Humana', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDCH")
+	db.dependencias.insert(nombre='Fabricación y Caracterización de Nanomateriales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UDFC")
 
 
 	# Laboratorio E
@@ -291,67 +290,67 @@ if db(db.dependencias).isempty():
 
 	usere = db(db.auth_user.email == 'labe-cat@usb.ve').select()[0].id
 	db.dependencias.insert(nombre='Coordinación de Actividades Técnicas', id_sede=1, unidad_de_adscripcion=laboratorioid,
-												 id_jefe_dependencia=usere)
+												 id_jefe_dependencia=usere, codigo_registro="UECA")
 	usere = db(db.auth_user.email == 'labe-calidad@usb.ve').select()[0].id
 	db.dependencias.insert(nombre='Coordinación de Aseguramiento de la Calidad', id_sede=1, unidad_de_adscripcion=laboratorioid,
-												 id_jefe_dependencia=usere)
-	db.dependencias.insert(nombre='Cerámica y Suelos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Corrosión', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Materiales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Metalurgia Química', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Metrología Dimensional', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Microscopía Electrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Polímeros', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Procesos Metalmecánicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Procesos Metalúrgicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+												 id_jefe_dependencia=usere, codigo_registro="UECC")
+	db.dependencias.insert(nombre='Cerámica y Suelos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UECS")
+	db.dependencias.insert(nombre='Corrosión', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UECR")
+	db.dependencias.insert(nombre='Materiales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEMA")
+	db.dependencias.insert(nombre='Metalurgia Química', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEMQ")
+	db.dependencias.insert(nombre='Metrología Dimensional', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEMD")
+	db.dependencias.insert(nombre='Microscopía Electrónica', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEME")
+	db.dependencias.insert(nombre='Polímeros', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEPO")
+	db.dependencias.insert(nombre='Procesos Metalmecánicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEPM")
+	db.dependencias.insert(nombre='Procesos Metalúrgicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UEPR")
 
 
 	# Laboratorio F
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio F').select()[0].id
 
 	usere = db(db.auth_user.email == 'labf-ac@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Aulas Computarizadas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
+	db.dependencias.insert(nombre='Aulas Computarizadas', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UFAC")
 	usere = db(db.auth_user.email == 'labf-ccp@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Computacional de Ciencia Política', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere)
-	db.dependencias.insert(nombre='Informática Educativa', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Lengua - José Santos Urriola', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Computación', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Redes y Bases de Datos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Diseño Asistido por Computadora', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Matemáticas y Estadísticas Computacionales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Centro de Estadística y Software Matemático', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Bases de Datos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Computación Gráfica y Multimedia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Geomática Urbana', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Inteligencia Artificial', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Investigación en Sistemas de Información', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Lenguajes y Algoritmos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Digital de Música', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Sistemas Paralelos y Distribuidos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Computación de Alto Rendimiento', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Estudios Tecnológicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Idiomas Asistido por Computadoras', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Computacional de Ciencia Política', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=usere, codigo_registro="UFCP")
+	db.dependencias.insert(nombre='Informática Educativa', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFIE")
+	db.dependencias.insert(nombre='Lengua - José Santos Urriola', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFLJ")
+	db.dependencias.insert(nombre='Computación', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFCO")
+	db.dependencias.insert(nombre='Redes y Bases de Datos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFRB")
+	db.dependencias.insert(nombre='Diseño Asistido por Computadora', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFDC")
+	db.dependencias.insert(nombre='Matemáticas y Estadísticas Computacionales', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFME")
+	db.dependencias.insert(nombre='Centro de Estadística y Software Matemático', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFCS")
+	db.dependencias.insert(nombre='Bases de Datos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFBD")
+	db.dependencias.insert(nombre='Computación Gráfica y Multimedia', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFCG")
+	db.dependencias.insert(nombre='Geomática Urbana', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFGU")
+	db.dependencias.insert(nombre='Inteligencia Artificial', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFIA")
+	db.dependencias.insert(nombre='Investigación en Sistemas de Información', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFIS")
+	db.dependencias.insert(nombre='Lenguajes y Algoritmos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFLA")
+	db.dependencias.insert(nombre='Digital de Música', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFDM")
+	db.dependencias.insert(nombre='Sistemas Paralelos y Distribuidos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFSP")
+	db.dependencias.insert(nombre='Computación de Alto Rendimiento', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFCA")
+	db.dependencias.insert(nombre='Estudios Tecnológicos', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFET")
+	db.dependencias.insert(nombre='Idiomas Asistido por Computadoras', id_sede=1, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UFIA")
 
 
 	# Laboratorio G
 	laboratorioid = db(db.dependencias.nombre == 'Laboratorio G').select()[0].id
 
 	usere = db(db.auth_user.email == 'labg-cee@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Conversión de Energía Eléctrica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Conversión de Energía Eléctrica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGCE")
 	usere = db(db.auth_user.email == 'labg-cem@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='Conversión de Energía Mecánica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Aeronaves', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Procesos Mecánicos de Fabricación y Materiales', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Física', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Fundamentos de Circuitos Eléctricos', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Digitales', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Intrumentación y Control', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Biomédica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Tecnologías de la Información', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Telemática', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Comunicaciones', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Idiomas', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
-	db.dependencias.insert(nombre='Alimentos y Bebidas', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user)
+	db.dependencias.insert(nombre='Conversión de Energía Mecánica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGCM")
+	db.dependencias.insert(nombre='Aeronaves', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGAE")
+	db.dependencias.insert(nombre='Procesos Mecánicos de Fabricación y Materiales', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGPM")
+	db.dependencias.insert(nombre='Física', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGFI")
+	db.dependencias.insert(nombre='Fundamentos de Circuitos Eléctricos', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGFC")
+	db.dependencias.insert(nombre='Digitales', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGDG")
+	db.dependencias.insert(nombre='Intrumentación y Control', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGIC")
+	db.dependencias.insert(nombre='Biomédica', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGBI")
+	db.dependencias.insert(nombre='Tecnologías de la Información', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGTI")
+	db.dependencias.insert(nombre='Telemática', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGTE")
+	db.dependencias.insert(nombre='Comunicaciones', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGCO")
+	db.dependencias.insert(nombre='Idiomas', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGID")
+	db.dependencias.insert(nombre='Alimentos y Bebidas', id_sede=2, unidad_de_adscripcion=laboratorioid, id_jefe_dependencia=user, codigo_registro="UGAB")
 
 # Cargos
 

@@ -92,19 +92,19 @@
 			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Observaciones:</td><td></td>
+			  			<td>Observaciones:</td><td>{{=ficha.observaciones}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Elaborado por:</td><td></td>
 			  		</tr>
 			  		<tr>
-			  			<td>Fecha Elaboración:</td><td></td>
+			  			<td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Aprobado por:</td><td></td>
 			  		</tr>
 			  		<tr>
-			  			<td>Fecha Aprobación:</td><td></td>
+			  			<td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
 			  		</tr>
 			  	</tbody>
 		  	</table>	  	
@@ -137,6 +137,11 @@
 					</div>
 
 				{{elif ficha.estado_solicitud == 1:}}
+					<br>
+					<label class="form-group" id="" style="margin-bottom: 8px">Observaciones</label>
+					<br>
+					<textarea type="text" class="form-control" id="" name="observaciones" value=""></textarea>
+					<br>
 					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="2">Finalizar Ejecución</button>
 				{{pass}}
 				</form>
