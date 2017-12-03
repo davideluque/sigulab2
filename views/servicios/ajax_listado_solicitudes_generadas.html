@@ -34,11 +34,21 @@
   </div>
 
   <!-- Inicio botones pagina -->
-    <div class="row">
-      <form>
-        {{for page in pages:}}
-          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-        {{pass}}
-      </form>
-    </div>
-    <!-- Fin botones pagina -->
+  <div class="row">
+    {{if firstpage:}}
+      <button name="primera_pagina" value="{{=firstpage}}" onclick="cambiarPagina(this.value)"> << </button>
+    {{pass}}
+    {{if prevpage:}}
+      <button name="pagina_anterior" value="{{=prevpage}}" onclick="cambiarPagina(this.value)"> < </button>
+    {{pass}}
+    {{for page in pages:}}
+      <button type="button" name="pagina" value="{{=page}}" {{if page == actualpage:}} class="btn active" {{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
+    {{pass}}
+    {{if nextpage:}}
+      <button name="pagina_siguiente" value="{{=nextpage}}" onclick="cambiarPagina(this.value)"> > </button>
+    {{pass}}
+    {{if lastpage:}}
+      <button name="ultima_pagina" value="{{=lastpage}}" onclick="cambiarPagina(this.value)"> >> </button>
+    {{pass}}
+  </div>
+   <!-- Fin botones pagina -->
