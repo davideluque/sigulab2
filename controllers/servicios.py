@@ -64,15 +64,6 @@ def listado():
         #
         ##############################################################################
 
-        # datos = __queries_enviar_correo()
-
-        # nombre_y_apellido = datos[0]
-        # nombre_anade = datos[1]
-        # dependencia = datos[2]
-        # jefe_dependencia = datos[3]
-
-        # OJO: VER QUE HACER CON EL TRY EXCEPT Y EL REDIRECT 
-
         try:
             idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
 
@@ -232,14 +223,24 @@ def listado():
 
     #----- FIN ELIMINAR SERVICIO -----#
 
+    #----- SOLICITAR SERVICIO -----#
+
+    if request.post_vars.solicitar:
+        redirect(URL('solicitudes', vars=dict(idServicio=request.post_vars.solicitar)))
+
+    #----- FIN SOLICITAR SERVICIO -----#
+
     return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+    servicio_solicitud = None
+
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
+
         id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
@@ -248,26 +249,18 @@ def solicitudes():
 
         solicitud_nueva.insertar()
 
-    # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD 
+        # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD
+        solicitud_nueva.correoHacerSolicitud()
 
-    # idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
-
-    # dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
-
-    # jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
-        
-
-    # nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
-
-    # nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
-
-
-    # correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_servicio, nombre_anade, dependencia.nombre)
-
-    # __enviar_correo(jefe_dependencia.email, responsable solicitud 'Se ha eliminado un servicio', correo)
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- AGREGAR SOLICITUD DESDE SERVICIO -----#
+    if request.post_vars.idServicio:
+        servicio_solicitud = Servicio(db)
+        servicio_solicitud.instanciar(int(request.vars.idServicio))
+
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
@@ -275,7 +268,9 @@ def solicitudes():
         solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
         solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
         solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
+        solicitud_a_cambiar.correoCambioEstadoSolicitud()
 
         if request.post_vars.estado == "1":
             solicitud_a_cambiar.fecha_aprobacion = request.now
@@ -292,7 +287,6 @@ def solicitudes():
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
-            # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL RECHAZO DE SU SOLICITUD 
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -310,8 +304,6 @@ def solicitudes():
 
     #----- FIN DE ELIMINAR SOLICITUD -----#
 
-    #----- LISTAR SOLICITUDES -----#
-    listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
     listado_de_ejecutante = ListaSolicitudes(db, auth, "Ejecutante")
 
     #----- DATOS DE SOLICITANTE -----#
@@ -336,25 +328,6 @@ def solicitudes():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
-
-    # Solicitante: Usuario solicita cambiar la pagina
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    # Solicitante: Usuario solicita ordenar los servicios
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
-    listado_de_solicitudes.orden_y_filtrado()
-
-    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
-    firstpage=listado_de_solicitudes.boton_principio
-    lastpage=listado_de_solicitudes.boton_fin
-    nextpage=listado_de_solicitudes.boton_siguiente
-    prevpage=listado_de_solicitudes.boton_anterior
-
-
     # Ejecutante: Usuario solicita cambiar la pagina
     if request.vars.pagina_ejecutante:
         listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
@@ -372,18 +345,13 @@ def solicitudes():
     nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
     prevpage_ejecutante=listado_de_ejecutante.boton_anterior
 
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar, 
-        pages=listado_de_solicitudes.rango_paginas,
-        actualpage=listado_de_solicitudes.pagina_central,
-        nextpage=nextpage, prevpage=prevpage,
-        firstpage=firstpage, lastpage=lastpage, 
-        grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
+    return dict(grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
         pages_ejecutante=listado_de_ejecutante.rango_paginas,
         actualpage_ejecutante=listado_de_ejecutante.pagina_central,
         nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
         firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
-        datos_solicitud=datos_solicitud, 
-        categorias=listar_categorias(db), tipos=listar_tipos(db))
+        datos_solicitud=datos_solicitud, categorias=listar_categorias(db), tipos=listar_tipos(db),
+        servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -438,6 +406,9 @@ def historial():
     return dict()
 
 
+def historial():
+	return dict()
+
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios
@@ -454,7 +425,6 @@ def ajax_ficha_servicio():
 
     # Servicio
     entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
-
 
     # Funciones
     funcion = []
@@ -636,32 +606,6 @@ def ajax_obtener_datos_depen_ejecutora():
 
     return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
 
-
-# Funcion para enviar un correo de notificacion 
-
-def __enviar_correo(destinatario, asunto, cuerpo):
-    mail = auth.settings.mailer
-
-    mail.send(destinatario, asunto, cuerpo)
-
-
-def __queries_enviar_correo():
-
-    # OJO: QUITAR EL TRY EXCEPT 
-
-    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
-
-    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
-
-    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
-        
-    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
-
-    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
-
-    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
-
-
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
     solicitudesid = request.post_vars.solicitud
@@ -675,7 +619,7 @@ def ajax_certificar_servicio():
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
-        dependencianombre = "Laboratorio A"
+        #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
     registro = validador_registro_certificaciones(request, db, codigo_registro)
@@ -720,8 +664,59 @@ def ajax_listado_servicios():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
-# Funcion para enviar un correo de notificacion 
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_solicitudes_generadas():
+
+    #----- LISTAR SOLICITUDES -----#
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Solicitante")
+
+    order_by_asc = eval(request.post_vars.ordenar_solicitudes_generadas_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_solicitudes_generadas_por
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_solicitudes_generadas:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiar_pagina_solicitudes_generadas))
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    #----- FIN LISTAR SERVICIOS -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+# Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
+<<<<<<< HEAD
     mail.send(destinatario, asunto, cuerpo)
+=======
+
+    mail.send(destinatario, asunto, cuerpo)
+
+
+def __queries_enviar_correo():
+
+    # OJO: QUITAR EL TRY EXCEPT 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
+
+>>>>>>> 3230092f88d14b88151b2ca64e1759b3c1ebaee4
