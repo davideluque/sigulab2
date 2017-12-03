@@ -223,14 +223,24 @@ def listado():
 
     #----- FIN ELIMINAR SERVICIO -----#
 
+    #----- SOLICITAR SERVICIO -----#
+
+    if request.post_vars.solicitar:
+        redirect(URL('solicitudes', vars=dict(idServicio=request.post_vars.solicitar)))
+
+    #----- FIN SOLICITAR SERVICIO -----#
+
     return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db), editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+    servicio_solicitud = None
+
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
+
         id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
@@ -246,6 +256,12 @@ def solicitudes():
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
+    #----- AGREGAR SOLICITUD DESDE SERVICIO -----#
+    if request.post_vars.idServicio:
+        servicio_solicitud = Servicio(db)
+        servicio_solicitud.instanciar(int(request.vars.idServicio))
+
+
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
         solicitud_a_cambiar = Solicitud(db, auth)
@@ -258,10 +274,12 @@ def solicitudes():
 
         if request.post_vars.estado == "1":
             solicitud_a_cambiar.fecha_aprobacion = request.now
+            solicitud_a_cambiar.aprobada_por = auth.user.first_name
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            solicitud_a_cambiar.elaborada_por = auth.user.first_name
             solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
@@ -304,8 +322,35 @@ def solicitudes():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
+<<<<<<< HEAD
     return dict(datos_solicitud=datos_solicitud, 
         categorias=listar_categorias(db), tipos=listar_tipos(db))
+=======
+    # Ejecutante: Usuario solicita cambiar la pagina
+    if request.vars.pagina_ejecutante:
+        listado_de_ejecutante.cambiar_pagina(int(request.vars.pagina_ejecutante))
+
+    # Ejecutante: Usuario solicita ordenar los servicios
+    if request.vars.columna_ejecutante:
+        listado_de_ejecutante.cambiar_columna(request.vars.columna_ejecutante)
+
+    # Solicitante: Se ordenan y se filtran los servicios dependiendo de lo que el usuario solicito
+    listado_de_ejecutante.orden_y_filtrado()
+
+    # Solicitante: Se recuperan las paginas calculadas en base a lo solicitado
+    firstpage_ejecutante=listado_de_ejecutante.boton_principio
+    lastpage_ejecutante=listado_de_ejecutante.boton_fin
+    nextpage_ejecutante=listado_de_ejecutante.boton_siguiente
+    prevpage_ejecutante=listado_de_ejecutante.boton_anterior
+
+    return dict(grid_ejecutante=listado_de_ejecutante.solicitudes_a_mostrar, 
+        pages_ejecutante=listado_de_ejecutante.rango_paginas,
+        actualpage_ejecutante=listado_de_ejecutante.pagina_central,
+        nextpage_ejecutante=nextpage_ejecutante, prevpage_ejecutante=prevpage_ejecutante,
+        firstpage_ejecutante=firstpage_ejecutante, lastpage_ejecutante=lastpage_ejecutante,
+        datos_solicitud=datos_solicitud, categorias=listar_categorias(db), tipos=listar_tipos(db),
+        servicio_solicitud=servicio_solicitud)
+>>>>>>> e3db975d6c67c66c1f70801f1e12d646465f4892
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -355,8 +400,9 @@ def certificaciones():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-	return dict()
+    return dict()
 
 #------------------------------------------------------------------------------
 #
@@ -554,7 +600,6 @@ def ajax_obtener_datos_depen_ejecutora():
 
     return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
 
-
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
     solicitudesid = request.post_vars.solicitud
@@ -613,6 +658,7 @@ def ajax_listado_servicios():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_solicitudes_generadas():
 
@@ -669,9 +715,39 @@ def ajax_listado_solicitudes_recibidas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+#------------------------------------------------------------------------------
+#
+# Controladores de los Reportes a Imprimir
+#
+#------------------------------------------------------------------------------
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def pdfSolicitud():
+    return dict()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def pdfCertificado():
+    return dict()
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
-
     mail.send(destinatario, asunto, cuerpo)
+
+
+def __queries_enviar_correo():
+
+    # OJO: QUITAR EL TRY EXCEPT 
+
+    idDependencia = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].f_dependencia
+
+    dependencia = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    jefe_dependencia = db(dependencia.id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+        
+    nombre_y_apellido = "%s %s" % (jefe_dependencia.first_name, jefe_dependencia.last_name)
+
+    nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
+
+    return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
+

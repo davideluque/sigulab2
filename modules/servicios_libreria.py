@@ -10,160 +10,198 @@ import random
 
 class Servicio(object):
 
-	def __init__(self, db, nombre = None, tipo = None, categoria = None,
-				 objetivo = None, alcance = None, metodo = None, rango = None,
-				 incertidumbre = None, item_ensayar = None, requisitos = None, 
-				 resultados = None, docencia = None, investigacion = None,
-				 gestion = None, extension = None, visibilidad = None, 
-				 responsable = None, dependencia = None, ubicacion = None, id=None):
+    def __init__(self, db, nombre = None, tipo = None, categoria = None,
+                 objetivo = None, alcance = None, metodo = None, rango = None,
+                 incertidumbre = None, item_ensayar = None, requisitos = None, 
+                 resultados = None, docencia = None, investigacion = None,
+                 gestion = None, extension = None, visibilidad = None, 
+                 responsable = None, dependencia = None, ubicacion = None, id=None):
 
-		self.nombre = nombre
-		self.tipo = tipo
-		self.categoria = categoria
-		self.objetivo = objetivo
-		self.alcance = alcance
-		self.metodo = metodo
-		self.rango = rango
-		self.incertidumbre = incertidumbre
-		self.item_ensayar = item_ensayar
-		self.requisitos = requisitos
-		self.resultados = resultados
-		self.docencia = docencia
-		self.investigacion = investigacion
-		self.gestion = gestion
-		self.extension = extension
-		self.visibilidad = visibilidad
-		self.responsable = responsable
-		self.dependencia = dependencia
-		self.ubicacion = ubicacion
+        self.nombre = nombre
+        self.tipo = tipo
+        self.categoria = categoria
+        self.objetivo = objetivo
+        self.alcance = alcance
+        self.metodo = metodo
+        self.rango = rango
+        self.incertidumbre = incertidumbre
+        self.item_ensayar = item_ensayar
+        self.requisitos = requisitos
+        self.resultados = resultados
 
-		# Categorias de Ordenamiento, disponibles tras instanciacion
-		self.nombre_tipo = None
-		self.nombre_categoria = None
-		self.laboratorio = None
-		self.seccion = None
-		self.sede = None
-		self.id = None	
+        self.docencia = docencia
+        self.investigacion = investigacion
+        self.gestion = gestion
+        self.extension = extension
 
-		self.db = db
+        self.visibilidad = visibilidad
+        self.responsable = responsable
+        self.dependencia = dependencia
+        self.ubicacion = ubicacion
 
+        # Categorias de Ordenamiento, disponibles tras instanciacion
+        self.nombre_tipo = None
+        self.nombre_categoria = None
+        self.laboratorio = None
+        self.seccion = None
+        self.sede = None
+        self.id = None  
 
-	def __str__(self):
+        self.db = db
 
-		return self.nombre
-
-
-	def insertar(self):
-		
-		insercion = self.db.servicios.insert(nombre = self.nombre,
-			tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo, 
-			alcance = self.alcance, metodo = self.metodo, rango = self.rango, 
-			incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar, 
-			requisitos = self.requisitos, resultados = self.resultados, 
-			docencia = self.docencia, investigacion = self.investigacion, 
-			gestion = self.gestion, extension = self.extension, 
-			visibilidad = self.visibilidad, responsable = self.responsable, 
-			dependencia = self.dependencia, ubicacion = self.ubicacion)
-
-		return insercion
+        self.obtenerListaPropositos()
 
 
-	def instanciar(self, id):
-		
-		instanciacion = self.db(self.db.servicios.id == id).select(self.db.servicios.ALL)
+    def __str__(self):
 
-		if (len(instanciacion) == 1):
-			self.id = id
-			self.nombre = instanciacion[0].nombre
-			self.tipo = instanciacion[0].tipo
-			self.categoria = instanciacion[0].categoria
-			self.objetivo = instanciacion[0].objetivo
-			self.alcance = instanciacion[0].alcance
-			self.metodo = instanciacion[0].metodo
-			self.rango = instanciacion[0].rango
-			self.incertidumbre = instanciacion[0].incertidumbre
-			self.item_ensayar = instanciacion[0].item_ensayar
-			self.requisitos = instanciacion[0].requisitos
-			self.resultados = instanciacion[0].resultados
-			self.docencia = instanciacion[0].docencia
-			self.investigacion = instanciacion[0].investigacion
-			self.gestion = instanciacion[0].gestion
-			self.extension = instanciacion[0].extension
-			self.visibilidad = instanciacion[0].visibilidad
-			self.responsable = instanciacion[0].responsable
-			self.dependencia = instanciacion[0].dependencia
-			self.ubicacion = instanciacion[0].ubicacion
-
-			self.conseguir_categorias()
-
-			return True
-		
-		else:
-
-			return False
+        return self.nombre
 
 
-	def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
-			   rango, incertidumbre, item_ensayar, requisitos, resultados,
-			   docencia, investigacion, gestion, extension, visibilidad, 
-			   responsable, dependencia, ubicacion):
+    def insertar(self):
+        
+        insercion = self.db.servicios.insert(nombre = self.nombre,
+            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo, 
+            alcance = self.alcance, metodo = self.metodo, rango = self.rango, 
+            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar, 
+            requisitos = self.requisitos, resultados = self.resultados, 
+            docencia = self.docencia, investigacion = self.investigacion, 
+            gestion = self.gestion, extension = self.extension, 
+            visibilidad = self.visibilidad, responsable = self.responsable, 
+            dependencia = self.dependencia, ubicacion = self.ubicacion)
 
-		self.nombre = nombre
-		self.tipo = tipo
-		self.categoria = categoria
-		self.objetivo = objetivo
-		self.alcance = alcance
-		self.metodo = metodo
-		self.rango = rango
-		self.incertidumbre = incertidumbre
-		self.item_ensayar = item_ensayar
-		self.requisitos = requisitos
-		self.resultados = resultados
-		self.docencia = docencia
-		self.investigacion = investigacion
-		self.gestion = gestion
-		self.extension = extension
-		self.visibilidad = visibilidad
-		self.responsable = responsable
-		self.dependencia = dependencia
-		self.ubicacion = ubicacion
+        return insercion
 
 
-	def actualizar(self, id):
-		
-		actualizacion = self.db(self.db.servicios.id == id).update(
-							nombre = self.nombre, 
-							tipo = self.tipo,
-							categoria = self.categoria, 
-							objetivo = self.objetivo,
-							alcance = self.alcance,
-							metodo = self.metodo,
-							rango = self.rango,
-							incertidumbre = self.incertidumbre,
-							item_ensayar = self.item_ensayar,
-							requisitos = self.requisitos,
-							resultados = self.resultados,
-							docencia = self.docencia,
-							investigacion = self.investigacion,
-							gestion = self.gestion,
-							extension = self.extension,
-							visibilidad = self.visibilidad,
-							responsable = self.responsable,
-							dependencia = self.dependencia,
-							ubicacion = self.ubicacion)
+    def instanciar(self, id):
+        
+        instanciacion = self.db(self.db.servicios.id == id).select(self.db.servicios.ALL)
 
-		return actualizacion
+        if (len(instanciacion) == 1):
+            self.id = id
+            self.nombre = instanciacion[0].nombre
+            self.tipo = instanciacion[0].tipo
+            self.categoria = instanciacion[0].categoria
+            self.objetivo = instanciacion[0].objetivo
+            self.alcance = instanciacion[0].alcance
+            self.metodo = instanciacion[0].metodo
+            self.rango = instanciacion[0].rango
+            self.incertidumbre = instanciacion[0].incertidumbre
+            self.item_ensayar = instanciacion[0].item_ensayar
+            self.requisitos = instanciacion[0].requisitos
+            self.resultados = instanciacion[0].resultados
+            self.docencia = instanciacion[0].docencia
+            self.investigacion = instanciacion[0].investigacion
+            self.gestion = instanciacion[0].gestion
+            self.extension = instanciacion[0].extension
+            self.visibilidad = instanciacion[0].visibilidad
+            self.responsable = instanciacion[0].responsable
+            self.dependencia = instanciacion[0].dependencia
+            self.ubicacion = instanciacion[0].ubicacion
+
+            self.conseguir_categorias()
+
+            self.obtenerListaPropositos()
 
 
-	def conseguir_categorias(self):
-		self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre		
-		self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre		
-		
-		seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+            return True
+        
+        else:
 
-		self.seccion = seccion_fila.nombre
-		self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
-		self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+            return False
+
+
+    def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
+               rango, incertidumbre, item_ensayar, requisitos, resultados,
+               docencia, investigacion, gestion, extension, visibilidad, 
+               responsable, dependencia, ubicacion):
+
+        self.nombre = nombre
+        self.tipo = tipo
+        self.categoria = categoria
+        self.objetivo = objetivo
+        self.alcance = alcance
+        self.metodo = metodo
+        self.rango = rango
+        self.incertidumbre = incertidumbre
+        self.item_ensayar = item_ensayar
+        self.requisitos = requisitos
+        self.resultados = resultados
+        self.docencia = docencia
+        self.investigacion = investigacion
+        self.gestion = gestion
+        self.extension = extension
+        self.visibilidad = visibilidad
+        self.responsable = responsable
+        self.dependencia = dependencia
+        self.ubicacion = ubicacion
+
+        self.obtenerListaPropositos()
+
+
+
+    def actualizar(self, id):
+        
+        actualizacion = self.db(self.db.servicios.id == id).update(
+                            nombre = self.nombre, 
+                            tipo = self.tipo,
+                            categoria = self.categoria, 
+                            objetivo = self.objetivo,
+                            alcance = self.alcance,
+                            metodo = self.metodo,
+                            rango = self.rango,
+                            incertidumbre = self.incertidumbre,
+                            item_ensayar = self.item_ensayar,
+                            requisitos = self.requisitos,
+                            resultados = self.resultados,
+                            docencia = self.docencia,
+                            investigacion = self.investigacion,
+                            gestion = self.gestion,
+                            extension = self.extension,
+                            visibilidad = self.visibilidad,
+                            responsable = self.responsable,
+                            dependencia = self.dependencia,
+                            ubicacion = self.ubicacion)
+
+        return actualizacion
+
+
+    def conseguir_categorias(self):
+        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre       
+        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre       
+        
+        seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
+
+        self.seccion = seccion_fila.nombre
+        self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
+        self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+
+        self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
+
+        usuario_jefe_dependencia = self.db(self.id_jefe_dependencia == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+        self.jefe_dependencia = usuario_jefe_dependencia.first_name + " " + usuario_jefe_dependencia.last_name
+
+        self.email_jefe_dependencia = usuario_jefe_dependencia.email
+
+    def obtenerListaPropositos(self):
+        self.propositos_a_mostrar = []
+
+
+        if self.docencia == True:
+            propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.investigacion == True:
+            propositoServicio = self.db("Investigación" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
+
+        if self.extension == True:
+            propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)    
+
+        if self.gestion == True:
+            propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
+            self.propositos_a_mostrar.append(propositoServicio)
 
 
 #------------------------------------------------------------------------------
@@ -175,18 +213,18 @@ class Servicio(object):
 
 class ListaServicios(object):
 
-	def __init__(self, db, visibilidad, orden=False, columna='id', central=1):
-		
-		#### Captura de datos desde la Base de Datos
+    def __init__(self, db, visibilidad, orden=False, columna='id', central=1):
+        
+        #### Captura de datos desde la Base de Datos
 
-		self.db = db
-		
-		# 1. Tomar servicios visibles o todos de la base de datos
+        self.db = db
+        
+        # 1. Tomar servicios visibles o todos de la base de datos
 
-		if visibilidad == True:
-			self.set = self.db(self.db.servicios.id > 0)
-		else:
-			self.set = self.db(self.db.servicios.visibilidad == True)
+        if visibilidad == True:
+            self.set = self.db(self.db.servicios.id > 0)
+        else:
+            self.set = self.db(self.db.servicios.visibilidad == True)
 
         # Aqui se introducen los servicios instanciados
         self.filas = []
@@ -194,8 +232,8 @@ class ListaServicios(object):
         # 2. Instanciar todos los servicios como objetos de la clase Servicio
         self.capturar_objetos()
 
-		# Numero de servicios recuperados desde la base de datos
-		self.cuenta = len(self.filas)
+        # Numero de servicios recuperados desde la base de datos
+        self.cuenta = len(self.filas)
 
         #### Variables de Ordenamiento
 
@@ -253,13 +291,13 @@ class ListaServicios(object):
         if self.pagina_central == self.ultima_pagina:
             self.boton_siguiente = False
 
-		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+        self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
 
 
-	def cambiar_pagina(self, nueva_pagina):
-		self.pagina_central = nueva_pagina
-		self.configurar_botones()
-		self.posicionar_ultimo()
+    def cambiar_pagina(self, nueva_pagina):
+        self.pagina_central = nueva_pagina
+        self.configurar_botones()
+        self.posicionar_ultimo()
 
     # Estas pueden ser nombre, id, nombre_tipo, nombre_columna, laboratorio, seccion, sede
     def cambiar_columna(self, columna):
@@ -300,153 +338,156 @@ class ListaServicios(object):
 
 class Solicitud(object):
 
-	def __init__(self, db, auth, registro = None, id_responsable_solicitud = None,
-		fecha_solicitud = None, id_servicio_solicitud = None,  id_proposito_servicio = None,
-		proposito_descripcion = None, proposito_cliente_final = None, descripcion_servicio = None,
-		observaciones = None, estado_solicitud = None):
+    def __init__(self, db, auth, registro = None, id_responsable_solicitud = None,
+        fecha_solicitud = None, id_servicio_solicitud = None,  id_proposito_servicio = None,
+        proposito_descripcion = None, proposito_cliente_final = None, descripcion_servicio = None,
+        observaciones = None, estado_solicitud = None):
 
-		self.registro = registro
-		self.id_responsable_solicitud = id_responsable_solicitud
-		self.fecha_solicitud = fecha_solicitud
-		self.id_servicio_solicitud = id_servicio_solicitud
-		self.id_proposito_servicio = id_proposito_servicio
-		self.proposito_descripcion = proposito_descripcion
-		self.proposito_cliente_final = proposito_cliente_final
-		self.descripcion_servicio = descripcion_servicio
-		self.observaciones = observaciones
-		self.estado_solicitud = estado_solicitud
+        self.registro = registro
+        self.id_responsable_solicitud = id_responsable_solicitud
+        self.fecha_solicitud = fecha_solicitud
+        self.id_servicio_solicitud = id_servicio_solicitud
+        self.id_proposito_servicio = id_proposito_servicio
+        self.proposito_descripcion = proposito_descripcion
+        self.proposito_cliente_final = proposito_cliente_final
+        self.descripcion_servicio = descripcion_servicio
+        self.observaciones = observaciones
+        self.estado_solicitud = estado_solicitud
 
-		self.estado_solicitud_str = self.estado_string()
+        self.estado_solicitud_str = self.estado_string()
 
-		# Fuentes de datos
-		self.db = db
-		self.auth = auth
+        # Fuentes de datos
+        self.db = db
+        self.auth = auth
 
-		# Variables Disponibles tras conseguir_atributos()
-		self.id = None
+        # Variables Disponibles tras conseguir_atributos()
+        self.id = None
 
-		self.nombre_responsable_solicitud = None
-		self.email_responsable_solicitud = None
-		self.telef_responsable_solicitud = None
-		self.id_dependencia_solicitante = None
-		self.nombre_dependencia_solicitante = None
-		self.nombre_jefe_dependencia_solicitante = None
-		self.id_dependencia_ejecutora = None
-		self.nombre_dependencia_ejecutora = None
-		self.jefe_dependencia_ejecutora = None
-		self.lugar_ejecucion_servicio = None
-		self.nombre_servicio = None
-		self.tipo_servicio = None
-		self.categoria_servicio = None
-		
-		# Variables disponibles despues de aprobacion
-		self.aprobada_por = None
-		self.fecha_aprobacion = None
+        self.nombre_responsable_solicitud = None
+        self.email_responsable_solicitud = None
+        self.telef_responsable_solicitud = None
+        self.id_dependencia_solicitante = None
+        self.nombre_dependencia_solicitante = None
+        self.nombre_jefe_dependencia_solicitante = None
+        self.id_dependencia_ejecutora = None
+        self.nombre_dependencia_ejecutora = None
+        self.jefe_dependencia_ejecutora = None
+        self.lugar_ejecucion_servicio = None
+        self.nombre_servicio = None
+        self.tipo_servicio = None
+        self.categoria_servicio = None
+        
+        # Variables disponibles despues de aprobacion
+        self.aprobada_por = None
+        self.fecha_aprobacion = None
 
-		# Variables disponibles despues de ejecucion
-		self.fecha_elaboracion = None
-		self.elaborada_por = None
+        # Variables disponibles despues de ejecucion
+        self.fecha_elaboracion = None
+        self.elaborada_por = None
 
-		if registro != None:
-			self.conseguir_atributos()
-		
-	def __str__(self):
+        if registro != None:
+            self.conseguir_atributos()
+        
+    def __str__(self):
 
-		return self.registro 
+        return self.registro 
 
-	def insertar(self):
+    def insertar(self):
 
-		insercion = self.db.solicitudes.insert( registro = self.registro,
-												responsable = self.id_responsable_solicitud,
-												fecha = self.fecha_solicitud,
-												id_servicio_solicitud = self.id_servicio_solicitud,
-												proposito = self.id_proposito_servicio,
-												proposito_descripcion = self.proposito_descripcion,
-												proposito_cliente_final = self.proposito_cliente_final,
-												descripcion = self.descripcion_servicio,
-												observaciones = self.observaciones,
-												estado = self.estado_solicitud,
-												aprobada_por = self.aprobada_por,
-												fecha_aprobacion = self.fecha_aprobacion,
-												elaborada_por = self.elaborada_por,
-												fecha_elaboracion = self.fecha_elaboracion)
+        insercion = self.db.solicitudes.insert( registro = self.registro,
+                                                responsable = self.id_responsable_solicitud,
+                                                fecha = self.fecha_solicitud,
+                                                id_servicio_solicitud = self.id_servicio_solicitud,
+                                                proposito = self.id_proposito_servicio,
+                                                proposito_descripcion = self.proposito_descripcion,
+                                                proposito_cliente_final = self.proposito_cliente_final,
+                                                descripcion = self.descripcion_servicio,
+                                                observaciones = self.observaciones,
+                                                estado = self.estado_solicitud,
+                                                aprobada_por = self.aprobada_por,
+                                                fecha_aprobacion = self.fecha_aprobacion,
+                                                elaborada_por = self.elaborada_por,
+                                                fecha_elaboracion = self.fecha_elaboracion)
 
-		return insercion
+        return insercion
 
-	def instanciar(self, id):
-		instanciacion = self.db(self.db.solicitudes.id == id).select(self.db.solicitudes.ALL)
+    def instanciar(self, id):
+        instanciacion = self.db(self.db.solicitudes.id == id).select(self.db.solicitudes.ALL)
 
 
-		if (len(instanciacion) == 1):
-			self.id = id
-			self.registro = instanciacion[0].registro
-			self.id_responsable_solicitud = instanciacion[0].responsable
-			self.fecha_solicitud = instanciacion[0].fecha
-			self.id_servicio_solicitud = instanciacion[0].id_servicio_solicitud
-			self.id_proposito_servicio = instanciacion[0].proposito
-			self.proposito_descripcion = instanciacion[0].proposito_descripcion
-			self.proposito_cliente_final = instanciacion[0].proposito_cliente_final
-			self.descripcion_servicio = instanciacion[0].descripcion
-			self.observaciones = instanciacion[0].observaciones
-			self.estado_solicitud = instanciacion[0].estado
-			self.aprobada_por = instanciacion[0].aprobada_por 
-			if instanciacion[0].fecha_aprobacion:
-				self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
-			else:
-				self.fecha_aprobacion = ""
-			self.elaborada_por = instanciacion[0].elaborada_por
-			if instanciacion[0].fecha_elaboracion:
-				self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
-			else:
-				self.fecha_elaboracion = "" 
-			self.estado_solicitud_str = self.estado_string()
+        if (len(instanciacion) == 1):
+            self.id = id
+            self.registro = instanciacion[0].registro
+            self.id_responsable_solicitud = instanciacion[0].responsable
+            self.fecha_solicitud = instanciacion[0].fecha
+            self.id_servicio_solicitud = instanciacion[0].id_servicio_solicitud
+            self.id_proposito_servicio = instanciacion[0].proposito
+            self.proposito_descripcion = instanciacion[0].proposito_descripcion
+            self.proposito_cliente_final = instanciacion[0].proposito_cliente_final
+            self.descripcion_servicio = instanciacion[0].descripcion
+            self.observaciones = instanciacion[0].observaciones
+            self.estado_solicitud = instanciacion[0].estado
+            if instanciacion[0].aprobada_por:
+                self.aprobada_por = instanciacion[0].aprobada_por 
+            else:
+                self.aprobada_por = ""
+            if instanciacion[0].fecha_aprobacion:
+                self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
+            else:
+                self.fecha_aprobacion = ""
+            self.elaborada_por = instanciacion[0].elaborada_por
+            if instanciacion[0].fecha_elaboracion:
+                self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
+            else:
+                self.fecha_elaboracion = "" 
+            self.estado_solicitud_str = self.estado_string()
 
-			self.conseguir_atributos()
+            self.conseguir_atributos()
 
-			return True
-		
-		else:
+            return True
+        
+        else:
 
-			return False
+            return False
 
-	def editar(self, registro, id_responsable_solicitud, fecha_solicitud,
-		id_servicio_solicitud, id_proposito_servicio, proposito_descripcion,
-		proposito_cliente_final, descripcion_servicio, observaciones):
+    def editar(self, registro, id_responsable_solicitud, fecha_solicitud,
+        id_servicio_solicitud, id_proposito_servicio, proposito_descripcion,
+        proposito_cliente_final, descripcion_servicio, observaciones):
 
-		self.registro = registro
-		self.id_responsable_solicitud = id_responsable_solicitud
-		self.fecha_solicitud = fecha_solicitud
-		self.id_servicio_solicitud = id_servicio_solicitud
-		self.id_proposito_servicio = id_proposito_servicio
-		self.proposito_descripcion = proposito_descripcion
-		self.proposito_cliente_final = proposito_cliente_final
-		self.descripcion_servicio = descripcion_servicio
-		self.observaciones = observaciones
+        self.registro = registro
+        self.id_responsable_solicitud = id_responsable_solicitud
+        self.fecha_solicitud = fecha_solicitud
+        self.id_servicio_solicitud = id_servicio_solicitud
+        self.id_proposito_servicio = id_proposito_servicio
+        self.proposito_descripcion = proposito_descripcion
+        self.proposito_cliente_final = proposito_cliente_final
+        self.descripcion_servicio = descripcion_servicio
+        self.observaciones = observaciones
 
-		self.conseguir_atributos()
+        self.conseguir_atributos()
 
-	def actualizar(self, id):
-		
-		actualizacion = self.db(self.db.solicitudes.id == id).update(
-												registro = self.registro,
-												responsable = self.id_responsable_solicitud,
-												fecha = self.fecha_solicitud,
-												id_servicio_solicitud = self.id_servicio_solicitud,
-												proposito = self.id_proposito_servicio,
-												proposito_descripcion = self.proposito_descripcion,
-												proposito_cliente_final = self.proposito_cliente_final,
-												descripcion = self.descripcion_servicio,
-												observaciones = self.observaciones,
-												estado = self.estado_solicitud,
-												aprobada_por = self.aprobada_por,
-												fecha_aprobacion = self.fecha_aprobacion,
-												elaborada_por = self.elaborada_por,
-												fecha_elaboracion = self.fecha_elaboracion)
+    def actualizar(self, id):
+        
+        actualizacion = self.db(self.db.solicitudes.id == id).update(
+                                                registro = self.registro,
+                                                responsable = self.id_responsable_solicitud,
+                                                fecha = self.fecha_solicitud,
+                                                id_servicio_solicitud = self.id_servicio_solicitud,
+                                                proposito = self.id_proposito_servicio,
+                                                proposito_descripcion = self.proposito_descripcion,
+                                                proposito_cliente_final = self.proposito_cliente_final,
+                                                descripcion = self.descripcion_servicio,
+                                                observaciones = self.observaciones,
+                                                estado = self.estado_solicitud,
+                                                aprobada_por = self.aprobada_por,
+                                                fecha_aprobacion = self.fecha_aprobacion,
+                                                elaborada_por = self.elaborada_por,
+                                                fecha_elaboracion = self.fecha_elaboracion)
 
-		return actualizacion
+        return actualizacion
 
-	def eliminar(self, id):
-		self.db(self.db.solicitudes.id == id).delete()
+    def eliminar(self, id):
+        self.db(self.db.solicitudes.id == id).delete()
 
     def conseguir_atributos(self):
         # Nombre de Proposito del Servicio
@@ -598,7 +639,7 @@ class ListaSolicitudes(object):
         self.filas = []
         self.capturar_objetos()
 
-		self.cuenta = len(self.filas)
+        self.cuenta = len(self.filas)
 
         # Variables de Ordenamiento
         # Esta indicara sobre que columna se ordenara
@@ -621,10 +662,10 @@ class ListaSolicitudes(object):
         self.boton_siguiente = self.pagina_central + 1
         self.boton_anterior = self.pagina_central - 1
 
-		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+        self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
 
-		# Configuraremos estos botones
-		self.configurar_botones()
+        # Configuraremos estos botones
+        self.configurar_botones()
 
         # Posicion del ultimo elemento segun la pagina actual (Lo posicionamos)
         self.ultimo_elemento = self.cuenta
@@ -654,19 +695,19 @@ class ListaSolicitudes(object):
         if self.pagina_central == self.ultima_pagina:
             self.boton_siguiente = False
 
-		self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
-		
+        self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
+        
 
     def cambiar_pagina(self, nueva_pagina):
         self.pagina_central = nueva_pagina
         self.configurar_botones()
         self.posicionar_ultimo()
-	
-	def posicionar_ultimo(self):
-		self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
+    
+    def posicionar_ultimo(self):
+        self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
 
-	def invertir_ordenamiento(self):
-		self.orden = not(self.orden)
+    def invertir_ordenamiento(self):
+        self.orden = not(self.orden)
 
     def cambiar_ordenamiento(self, orden):
         self.orden = orden
@@ -680,17 +721,17 @@ class ListaSolicitudes(object):
             solicitud = Solicitud(self.db, self.auth)
             solicitud.instanciar(solic.id)
 
-			if solicitud.estado_solicitud == 3:
-				pass
-			elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
-				  solicitud.estado_solicitud < 2):
-				self.filas.append(solicitud)
-			elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
-				  solicitud.estado_solicitud < 2):
-				self.filas.append(solicitud)
-			elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
-				  solicitud.estado_solicitud == 2):
-				self.filas.append(solicitud)
+            if solicitud.estado_solicitud == 3:
+                pass
+            elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
+                  solicitud.estado_solicitud < 2):
+                self.filas.append(solicitud)
+            elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
+                  solicitud.estado_solicitud < 2):
+                self.filas.append(solicitud)
+            elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
+                  solicitud.estado_solicitud == 2):
+                self.filas.append(solicitud)
 
     def orden_y_filtrado(self):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
@@ -704,74 +745,74 @@ class ListaSolicitudes(object):
 
 class Certificacion(object):
 
-	def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
-				 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
+    def __init__(self, db, registro=None, proyecto=None, elaborado_por=None,
+                 dependencia=None, solicitud=None, fecha_certificacion=None, id=None):
 
-		self.registro = registro
-		self.proyecto = proyecto
-		self.elaborado_por = elaborado_por
-		self.dependencia = dependencia
-		self.solicitud = solicitud
-		self.fecha_certificacion = fecha_certificacion
+        self.registro = registro
+        self.proyecto = proyecto
+        self.elaborado_por = elaborado_por
+        self.dependencia = dependencia
+        self.solicitud = solicitud
+        self.fecha_certificacion = fecha_certificacion
 
-		self.db = db
-		# viene de la instanciacion
-		self.id = id
+        self.db = db
+        # viene de la instanciacion
+        self.id = id
 
-	def __str__(self):
+    def __str__(self):
 
-		return self.registro + " " + self.proyecto
+        return self.registro + " " + self.proyecto
 
-	def insertar(self):
+    def insertar(self):
 
-		insercion = self.db.certificaciones.insert(registro=self.registro,
-											 proyecto=self.proyecto,
-											 elaborado_por=self.elaborado_por,
-											 dependencia=self.dependencia,
-											 solicitud=self.solicitud,
-											 fecha_certificacion=self.fecha_certificacion)
+        insercion = self.db.certificaciones.insert(registro=self.registro,
+                                             proyecto=self.proyecto,
+                                             elaborado_por=self.elaborado_por,
+                                             dependencia=self.dependencia,
+                                             solicitud=self.solicitud,
+                                             fecha_certificacion=self.fecha_certificacion)
 
-		return insercion
+        return insercion
 
-	def instanciar(self, id):
+    def instanciar(self, id):
 
-		instanciacion = self.db(self.db.certificaciones.id == id).select(self.db.certificaciones.ALL)
+        instanciacion = self.db(self.db.certificaciones.id == id).select(self.db.certificaciones.ALL)
 
-		if (len(instanciacion) == 1):
-			self.id = id
-			self.registro = instanciacion.registro
-			self.proyecto = instanciacion.proyecto
-			self.elaborado_por = instanciacion.elaborado_por
-			self.dependencia = instanciacion.servicio
-			self.solicitud = instanciacion.solicitud
-			self.fecha_certificacion = instanciacion.fecha_certificacion
+        if (len(instanciacion) == 1):
+            self.id = id
+            self.registro = instanciacion.registro
+            self.proyecto = instanciacion.proyecto
+            self.elaborado_por = instanciacion.elaborado_por
+            self.dependencia = instanciacion.servicio
+            self.solicitud = instanciacion.solicitud
+            self.fecha_certificacion = instanciacion.fecha_certificacion
 
-			return True
+            return True
 
-		else:
-			return False
+        else:
+            return False
 
-	def editar(self, registro, proyecto, elaborado_por,
-				 dependencia, solicitud, fecha_certificacion):
+    def editar(self, registro, proyecto, elaborado_por,
+                 dependencia, solicitud, fecha_certificacion):
 
-		self.registro = registro
-		self.proyecto = proyecto
-		self.elaborado_por = elaborado_por
-		self.dependencia = dependencia
-		self.solicitud = solicitud
-		self.fecha_certificacion = fecha_certificacion
+        self.registro = registro
+        self.proyecto = proyecto
+        self.elaborado_por = elaborado_por
+        self.dependencia = dependencia
+        self.solicitud = solicitud
+        self.fecha_certificacion = fecha_certificacion
 
-	def actualizar(self, id):
+    def actualizar(self, id):
 
-		actualizacion = self.db(self.db.certificaciones.id == id).update(
-			registro=self.registro,
-			proyecto=self.proyecto,
-			elaborado_por=self.elaborado_por,
-			dependencia=self.dependencia,
-			solicitud=self.solicitud,
-			fecha_certificacion=self.fecha_certificacion)
+        actualizacion = self.db(self.db.certificaciones.id == id).update(
+            registro=self.registro,
+            proyecto=self.proyecto,
+            elaborado_por=self.elaborado_por,
+            dependencia=self.dependencia,
+            solicitud=self.solicitud,
+            fecha_certificacion=self.fecha_certificacion)
 
-		return actualizacion
+        return actualizacion
 
 
 #------------------------------------------------------------------------------
@@ -895,8 +936,8 @@ def generador_num_registro():
     return digits
 
 def validador_registro_solicitudes(request, db, registro):
-	anio = str(request.now)[2:4]
-	registro = registro + "-" + anio + '/' + generador_num_registro()
+    anio = str(request.now)[2:4]
+    registro = registro + "-" + anio + '/' + generador_num_registro()
 
     check = db(db.solicitudes.registro == registro).count()
 
