@@ -696,10 +696,6 @@ def ajax_listado_solicitudes_generadas():
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
-<<<<<<< HEAD
-    mail.send(destinatario, asunto, cuerpo)
-=======
-
     mail.send(destinatario, asunto, cuerpo)
 
 
@@ -719,4 +715,3 @@ def __queries_enviar_correo():
 
     return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
 
->>>>>>> 3230092f88d14b88151b2ca64e1759b3c1ebaee4
