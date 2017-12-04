@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title hidden>Reporte {{=solicitud.registro}}</title>
+	<meta charset="UTF-8"> 
+
+	<script>
+		window.onload = function() {
+    	window.print();
+	}
+</script>
+<style>
+	@media print {
+		#tablaSolicitud{
+			border-style: none;
+			border-collapse: collapse;
+			height: 2900px;
+			width: 1000px;
+		}
+		.titulos{
+			background-color: lightgray;
+			-webkit-print-color-adjust: exact;
+		}		
+	}
+
+	body {
+		font-size: 0.8em;
+	}
+
+	#tablaSolicitud{
+		border-style: none;
+		border-collapse: collapse;
+		height: 900px;
+		width: 1000px;
+	}
+
+	.logos {
+		width: 200px;
+	}
+
+	.titulos{
+		background-color: lightgray;
+		-webkit-print-color-adjust: exact;
+	}	
+
+	.imagenes{
+		height: 120px;
+	}
+
+	#ulab{
+		float: right;
+	}
+
+	#img{
+		width:1000px;
+	}
+</style>
+</head>
+<body>
+	
+	<div id="">
+		<div id="img" >
+			<img class="imagenes" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
+			<!-- PONER EL LOGO QUE ES -->
+			<img id="ulab" class="imagenes" src="{{=URL('static','images/servicios/logo-ulab.png')}}" class="logos">
+		</div>
+
+		<table id="tablaSolicitud" border="1">
+		<tr>
+			<th colspan="5" class="titulos" rowspan="2">SOLICITUD DE SERVICIO DE LABORATORIO</th>
+			<th class="titulos">REGISTRO</th> 
+		</tr>
+		
+		<tr>
+			<td>{{=solicitud.registro}}</td>
+		</tr>
+
+		<tr>
+			<th colspan="3" class="titulos">DEPENDENCIA SOLICITANTE:</th>
+			<th colspan="3" class="titulos">JEFE DE LA DEPEND. SOLICITANTE:</th>
+		</tr>
+
+		<tr>
+			<td colspan="3"><p>{{=solicitud.nombre_dependencia_solicitante}}</p></td>
+			<td colspan="3"><p>{{=solicitud.nombre_jefe_dependencia_solicitante}}</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="4" class="titulos">PERSONA RESPONSABLE DE LA SOLICITUD:</th>
+			<th colspan="1" class="titulos">CORREO ELECTRÓNICO:</th>
+			<th class="titulos">EXTENSIONES:</th>
+		</tr>
+		<tr>
+			<td colspan="4"><p>{{=solicitud.nombre_responsable_solicitud}}</p></td>
+			<td colspan="1"><p>{{=solicitud.email_responsable_solicitud}}</p></td>
+			<td><p>{{=solicitud.telef_responsable_solicitud}}</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="6" class="titulos">SERVICIO SOLICITADO</th>
+		</tr>
+		<tr>
+			<th class="titulos">Categoría</th>
+			<th class="titulos">Tipo</th>
+			<th colspan="4" class="titulos">Nombre</th>
+		</tr>
+		<tr>
+			<td><p>{{=solicitud.categoria_servicio}}</p></td>
+			<td><p>{{=solicitud.tipo_servicio}}</p></td>
+			<td colspan="4"><p>{{=solicitud.nombre_servicio}}</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="3" class="titulos">PROPÓSITO</th>
+			<th colspan="3" class="titulos">DESCRIPCIÓN (MUESTRAS/EQUIPOS, SERIALES, N° BN/FALLAS/ESPECIFICACIONES/MATERIAL/N° PARTICIPANTES)</th>
+		</tr>
+
+		<tr>
+			<td colspan="1" rowspan="1"><p>{{=solicitud.nombre_proposito}}</p></td>
+			<td colspan="2" rowspan="1"><p>{{=solicitud.proposito_descripcion}}</p></td>
+			<td colspan="3" rowspan="1"><p>{{=solicitud.descripcion_servicio}}</p></td>
+		<tr>
+			<th colspan="3" class="titulos">DEPENDENCIA EJECUTORA DEL SERVICIO</th>
+			<th colspan="3" class="titulos">JEFE DE LA DEPEND. EJECUTORA</th>
+		</tr>
+		<tr>
+			<td colspan="3"><p>{{=solicitud.nombre_dependencia_ejecutora}}</p></td>
+			<td colspan="3"><p>{{=solicitud.jefe_dependencia_ejecutora}}</p></td>
+		</tr>
+
+		<tr>
+			<th colspan="4" class="titulos">OBSERVACIONES</th>
+			<th class="titulos">Elaborado por:</th>
+			<th class="titulos">Solicitud aprobada por:</th>
+		</tr>
+		<tr>
+			<td colspan="4" rowspan="3"><p>{{=solicitud.observaciones}}</p></td>
+			<td><p>{{=solicitud.elaborada_por}}</p></td>
+			<td><p>{{=solicitud.aprobada_por}}</p></td>
+		</tr>
+		<tr>
+			<th><p>Fecha</p></th>
+			<th><p>Fecha</p></th>
+		</tr>
+		<tr>
+			<td><p>{{=solicitud.fecha_elaboracion}}</p></td>
+			<td><p>{{=solicitud.fecha_aprobacion}}</p></td>
+		</tr>
+		<tr>
+			<th colspan="6" class="titulos">Solo para ser llenado por la Dependencia Ejecutora:</th>
+		</tr>
+		<tr>
+			<th colspan="2" class="titulos">Lugar de ejecución del Serv.:</th>
+			<th colspan="2" class="titulos">Recibido por:</th>
+			<th colspan="2" class="titulos">Aprobado por:</th>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="5"><p>{{=solicitud.lugar_ejecucion_servicio}}</p></td>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
+		</tr>
+		<tr>
+			<th colspan="2">Nombre, Firma y Sello</th>
+			<th colspan="2">Nombre, Firma y Sello</th>
+		</tr>
+		<tr>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
+		</tr>
+		<tr>
+			<th colspan="2">Fecha</th>
+			<th colspan="2">Fecha</th>
+		</tr>
+		<tr>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
+		</tr>
+
+	</table>
+	</div>
+	
+</body>
+</html>

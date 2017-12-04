@@ -1,3 +1,13 @@
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+      $( "#datepicker2" ).datepicker();
+    } );
+  </script>
+
   <div class="modal fade" id="addservice" role="dialog">
     <div class="modal-dialog">
 
@@ -41,6 +51,10 @@
                             <div class="form-group">
                               <input type="text" class="form-control" name="nombre_add" placeholder="Nombre" required>
                               <font color="red"><div id="err_nombre" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" required>
                             </div>
 
                             <div class="form-group">
@@ -89,44 +103,11 @@
                                   {{pass}} 
                                 </select>
                               </div>
-                          <html lang="en"> <!-- Inicio del jquery de la fecha -->
-                            <head>
-                              <meta charset="utf-8">
-                                <meta name="viewport" content="width=device-width, initial-scale=1">
-                                  <title>jQuery UI Datepicker - Default functionality</title>
-                                  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-                                  <link rel="stylesheet" href="/resources/demos/style.css">
-                                  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-                                  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-                                  <script>
-                                    $( function() {
-                                      $( "#datepicker" ).datepicker();
-                                    } );
-                                  </script>
-                            </head>
-                            <body>
-                              <p>Fecha de Ingreso: <input type="text" id="datepicker" required></p>
-                            </body>
-                          </html> <!-- Fin del jquery de la fecha -->
-                          <html lang="en"> <!-- Inicio del jquery de la fecha -->
-                            <head>
-                              <meta charset="utf-8">
-                                <meta name="viewport" content="width=device-width, initial-scale=1">
-                                  <title>jQuery UI Datepicker - Default functionality</title>
-                                  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-                                  <link rel="stylesheet" href="/resources/demos/style.css">
-                                  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-                                  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-                                  <script>
-                                    $( function() {
-                                      $( "#datepicker2" ).datepicker();
-                                    } );
-                                  </script>
-                            </head>
-                            <body>
-                              <p>Fecha de Salida: <input type="text" id="datepicker2"></p>
-                            </body>
-                          </html> <!-- Fin del jquery de la fecha -->
+
+                              <p>Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" required></p>
+
+                              <p>Fecha de Salida: <input name = "fecha_salida_add" type="text" id="datepicker2"></p>
+
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
                             </div>-->
@@ -164,6 +145,14 @@
                           </select>
                         </div>
 
+                        <div class="form-group">
+                          <select class="form-control" id="sel1" name="dependencia_add" required>
+                            <option value="1" selected hidden>Dependencia</option>
+                            {{for dependencia in dependencias:}}
+                            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
+                            {{pass}} 
+                          </select>
+                        </div>
                   
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>

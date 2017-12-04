@@ -15,7 +15,8 @@
 			          	{{if not item["nombre"] == "Ninguno":}}
 						<tr>
 							<form id="formularioDummy" class="registration-form" method="post">
-					            <th><button data-toggle="modal" data-target="#ficha_edicion" type="button" 
+					            <th><button data-toggle="modal" data-target="#ficha_edicion" type="button"
+					            	data-apellido="{{=item['apellido']}}" 
 					            	data-ci="{{=item['ci']}}" 
 					            	data-categoria="{{=item['categoria']}}" 
 					            	data-email="{{=item['email']}}" 
@@ -25,7 +26,8 @@
 					            	data-estatus="{{=item['estatus']}}" 
 					            	data-telefono="{{=item['telefono']}}" 
 					            	data-pagina_web="{{=item['pagina_web']}}" 
-					            	data-cargo="{{=item['cargo']}}" 
+					            	data-cargo="{{=item['cargo']}}"
+					            	data-dep-name="{{=item['dependencia']['nombre']}}"
 					            	value="{{=item['ci']}}">{{=item["nombre"]}}</button></th>
 				              	
 				              	<th>{{= item["email"]}}</th>

@@ -92,19 +92,19 @@
 			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Observaciones:</td><td></td>
+			  			<td>Observaciones:</td><td>{{=ficha.observaciones}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Elaborado por:</td><td></td>
 			  		</tr>
 			  		<tr>
-			  			<td>Fecha Elaboración:</td><td></td>
+			  			<td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Aprobado por:</td><td></td>
+			  			<td>Aprobado por:</td><td>{{=ficha.aprobada_por}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Fecha Aprobación:</td><td></td>
+			  			<td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
 			  		</tr>
 			  	</tbody>
 		  	</table>	  	
@@ -116,7 +116,7 @@
 	  				<input type="hidden" name="idFicha" value="{{=ficha.id}}">
 				{{if ficha.estado_solicitud == 0:}}
 					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>
-					<button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
+					<button type="button" class="btn botonesFichita botonEliminar botonRechazar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
 
 					<!-- Modal del boton rechazar-->
 					<div class="modal fade" id="modalRechazar" role="dialog">
@@ -137,6 +137,11 @@
 					</div>
 
 				{{elif ficha.estado_solicitud == 1:}}
+					<br>
+					<label class="form-group" id="" style="margin-bottom: 8px">Observaciones</label>
+					<br>
+					<textarea type="text" class="form-control" id="" name="observaciones" value=""></textarea>
+					<br>
 					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="2">Finalizar Ejecución</button>
 				{{pass}}
 				</form>
@@ -150,31 +155,30 @@
   <div class="modal-footer">
 	  <form method="post">
 	  	<input type="hidden" name="idFicha_eliminar" value="{{=ficha.id}}">
-	    <div class="btn-group botonesFicha">
-	    {{if tipo_solicitud == "Solicitante":}}
-		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
 
-		  <!-- Modal del boton eliminar-->
-		  <div class="modal fade" id="modalEliminar" role="dialog">
-		    <div class="modal-dialog">
-		    
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar la solicitud?</h4>
-		        </div>
-		        <div id="cuerpoModalElim" class="modal-body">
-		          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-		          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-		        </div>
-		      </div>
-		  
-		    </div>
-		  </div>
-		{{pass}}
-		</div>
-	</form>
-	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+	    {{if tipo_solicitud == "Solicitante" and ficha.estado_solicitud == 0:}}
+
+		<div class="botonesFicha botonEliminarImprimir">
+			<button type="button" class="btn botonesFichita botonEliminar" data-toggle="collapse" data-target="#collapseSolicitud">Eliminar</button>
+
+			<!-- Modal del boton eliminar-->
+			<div class="collapse" id="collapseSolicitud">
+				<div class="card card-body">
+				 ¿Seguro que deseas eliminar la solicitud?
+				 <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>
+				 <button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseSolicitud">No</button>
+				</div>
+			</div>
+
+		{{elif ficha.estado_solicitud > 0:}}
+		<div class="botonesFicha botonEliminarImprimir">
+			<a target="_blank" href="{{=URL('servicios','pdf_solicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir PDF</button></a>
+
+					{{pass}}
+
+			</form>
+				<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+			</div>
   </div>
 
 

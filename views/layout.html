@@ -129,9 +129,6 @@
 
 <script type="text/javascript">
   u = window.location.pathname.toString().split('/')[2]
-  if( u == 'personal' ){
-    $('li#personal').addClass("active");
-  }else if ( u == 'servicios'){
-    $('li#servicio').addClass("active");
-  }
+  $('li#'+u).addClass("active");
+  
 </script>

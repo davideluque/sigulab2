@@ -1,4 +1,5 @@
 <div class="row">
+  <h3> Listado de Servicios </h3>
   <div class="table-responsive" >
     <table id="tablaListado" class="table table-hover">
         <!-- Titulos Listado -->
@@ -8,12 +9,12 @@
               <button class="btn-link linksNombres" name="columna" value="nombre_categoria" id="f_categoria_servicio" onClick="ordenarServicios('nombre_categoria');">Categoría</button>
             </th>
             <th class="camposTabla">
-              <a class="btn-link linksNombres" name="columna" value="nombre_tipo" id="f_tipo_servicio" onClick="ordenarServicios('nombre_tipo');">Tipo de Servicio</a>
+              <button class="btn-link linksNombres" name="columna" value="nombre_tipo" id="f_tipo_servicio" onClick="ordenarServicios('nombre_tipo');">Tipo de Servicio</button>
             </th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="nombre" id="f_nombre_servicio" onClick="ordenarServicios('nombre');">Nombre del Servicio</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio" onClick="ordenarServicios('seccion');">Sección</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio" onClick="ordenarServicios('laboratorio');">Laboratorio</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio" onClick="ordenarServicios('sede');">Sede</a></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="nombre" id="f_nombre_servicio" onClick="ordenarServicios('nombre');">Nombre del Servicio</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio" onClick="ordenarServicios('seccion');">Sección</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio" onClick="ordenarServicios('laboratorio');">Laboratorio</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio" onClick="ordenarServicios('sede');">Sede</button></th>
           </tr>
         </thead>
           <!-- Contenido Listado -->
@@ -29,6 +30,9 @@
 					</tr>
 				{{pass}}
         </tbody>
+        <tfoot>
+            <tr></tr>
+        </tfoot>
         <!-- Fin Contenido del Listado -->
     </table>
   </div>
@@ -36,8 +40,20 @@
 				
 <!-- Inicio botones pagina -->
 <div class="row">
+  {{if firstpage:}}
+    <button name="primera_pagina" value="{{=firstpage}}" onclick="cambiarPagina(this.value)"> << </button>
+  {{pass}}
+  {{if prevpage:}}
+    <button name="pagina_anterior" value="{{=prevpage}}" onclick="cambiarPagina(this.value)"> < </button>
+  {{pass}}
 	{{for page in pages:}}
-		<button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
+		<button type="button" name="pagina" value="{{=page}}" {{if page == actualpage:}} class="btn active" {{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
 	{{pass}}
-  </div>
+  {{if nextpage:}}
+    <button name="pagina_siguiente" value="{{=nextpage}}" onclick="cambiarPagina(this.value)"> > </button>
+  {{pass}}
+  {{if lastpage:}}
+    <button name="ultima_pagina" value="{{=lastpage}}" onclick="cambiarPagina(this.value)"> >> </button>
+  {{pass}}
+</div>
  <!-- Fin botones pagina -->
