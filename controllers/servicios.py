@@ -341,7 +341,13 @@ def certificaciones():
 
         fecha = request.post_vars.fecha
 
-        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
+        certificado = Certificacion(db, solicitud_a_actualizar.registro, solicitud_a_actualizar.id_responsable_solicitud,
+                        solicitud_a_actualizar.fecha_solicitud, solicitud_a_actualizar.id_servicio_solicitud,
+                        solicitud_a_actualizar.id_proposito_servicio, solicitud_a_actualizar.proposito_descripcion,
+                        solicitud_a_actualizar.proposito_cliente_final, solicitud_a_actualizar.descripcion_servicio,
+                        solicitud_a_actualizar.observaciones, solicitud_a_actualizar.aprobada_por, 
+                        solicitud_a_actualizar.fecha_aprobacion, solicitud_a_actualizar.elaborada_por, 
+                        solicitud_a_actualizar.fecha_elaboracion, request.now)
         certificado.insertar()
 
     #-------------------FIN------------------------

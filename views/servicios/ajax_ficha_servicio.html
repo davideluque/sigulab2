@@ -132,13 +132,6 @@
 	    <div class="btn-group botonesFicha">
 					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
 					
-									<div class="collapse botonEliminarImprimir " id="collapseServicio">
-										<div class="card card-body">
-											¿Seguro que deseas eliminar el servicio?
-											<button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>									
-											<button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseServicio">No</button>
-										</div>
-									</div>
 
 		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
 		
@@ -156,6 +149,14 @@
 
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+	<br><br>
+	<div class="collapse botonEliminarImprimir " id="collapseServicio"">
+		<div class="card card-body">
+			¿Seguro que deseas eliminar el servicio?
+			<button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>									
+			<button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseServicio">No</button>
+		</div>
+	</div>
   </div>
 
 
