@@ -352,7 +352,7 @@ def certificaciones():
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
 
-    listado_de_solicitudes = ListaSolicitudes(db, auth)
+    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
 
     if request.vars.pagina:
         listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
