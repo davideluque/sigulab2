@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>&nbsp</title>
+	<title hidden>Reporte {{=solicitud.registro}}</title>
 	<meta charset="UTF-8"> 
-	<script src="jspdf.js"></script>
-	<script src="jquery-2.1.3.js"></script>
-	<!-- <script src="pdfFromHTML.js"></script> -->
+
 	<script>
 		window.onload = function() {
     	window.print();
@@ -70,11 +68,11 @@
 		<table id="tablaSolicitud" border="1">
 		<tr>
 			<th colspan="5" class="titulos" rowspan="2">SOLICITUD DE SERVICIO DE LABORATORIO</th>
-			<th class="titulos">Registro</th>
+			<th class="titulos">REGISTRO</th> 
 		</tr>
 		
 		<tr>
-			<td>Variable fecha</td>
+			<td>{{=solicitud.registro}}</td>
 		</tr>
 
 		<tr>
@@ -83,8 +81,8 @@
 		</tr>
 
 		<tr>
-			<td colspan="3"><p>Variable dependencia solicitante</p></td>
-			<td colspan="3"><p>Variable jefe depend solicitante</p></td>
+			<td colspan="3"><p>{{=solicitud.nombre_dependencia_solicitante}}</p></td>
+			<td colspan="3"><p>{{=solicitud.nombre_jefe_dependencia_solicitante}}</p></td>
 		</tr>
 
 		<tr>
@@ -93,9 +91,9 @@
 			<th class="titulos">EXTENSIONES:</th>
 		</tr>
 		<tr>
-			<td colspan="4"><p>Variable persona responsable</p></td>
-			<td colspan="1"><p>Variable email</p></td>
-			<td><p>Variable extensiones</p></td>
+			<td colspan="4"><p>{{=solicitud.nombre_responsable_solicitud}}</p></td>
+			<td colspan="1"><p>{{=solicitud.email_responsable_solicitud}}</p></td>
+			<td><p>{{=solicitud.telef_responsable_solicitud}}</p></td>
 		</tr>
 
 		<tr>
@@ -107,9 +105,9 @@
 			<th colspan="4" class="titulos">Nombre</th>
 		</tr>
 		<tr>
-			<td><p>Variable categoria</p></td>
-			<td><p>Variable tipo</p></td>
-			<td colspan="4"><p>Variable nombre</p></td>
+			<td><p>{{=solicitud.categoria_servicio}}</p></td>
+			<td><p>{{=solicitud.tipo_servicio}}</p></td>
+			<td colspan="4"><p>{{=solicitud.nombre_servicio}}</p></td>
 		</tr>
 
 		<tr>
@@ -118,30 +116,16 @@
 		</tr>
 
 		<tr>
-			<th class="titulos">Docencia:</th>
-			<td colspan="2"><p>Variable docencia</p></td>
-			<td colspan="3" rowspan="4"><p>Variable descripcion</p></td>
-		</tr>
-		<tr>
-			<th class="titulos">Investigación:</th>
-			<td colspan="2"><p>Variable investigacion</p></td>
-		</tr>
-		<tr>
-			<th class="titulos">Extensión:</th>
-			<td colspan="2"><p>Variable investigacion</p></td>
-		</tr>
-		<tr>
-			<th class="titulos">Gestión:</th>
-			<td colspan="2"><p>Variable gestion</p></td>
-		</tr>
-
+			<td colspan="1" rowspan="1"><p>{{=solicitud.nombre_proposito}}</p></td>
+			<td colspan="2" rowspan="1"><p>{{=solicitud.proposito_descripcion}}</p></td>
+			<td colspan="3" rowspan="1"><p>{{=solicitud.descripcion_servicio}}</p></td>
 		<tr>
 			<th colspan="3" class="titulos">DEPENDENCIA EJECUTORA DEL SERVICIO</th>
 			<th colspan="3" class="titulos">JEFE DE LA DEPEND. EJECUTORA</th>
 		</tr>
 		<tr>
-			<td colspan="3"><p>Variable depend ejecutora del serv</p></td>
-			<td colspan="3"><p>Variable jefe de la depend ejecutora</p></td>
+			<td colspan="3"><p>{{=solicitud.nombre_dependencia_ejecutora}}</p></td>
+			<td colspan="3"><p>{{=solicitud.jefe_dependencia_ejecutora}}</p></td>
 		</tr>
 
 		<tr>
@@ -150,17 +134,17 @@
 			<th class="titulos">Solicitud aprobada por:</th>
 		</tr>
 		<tr>
-			<td colspan="4" rowspan="3"><p>Variable observaciones</p></td>
-			<td><p>Variable elaborado por</p></td>
-			<td><p>Variable solicitud aprobada por</p></td>
+			<td colspan="4" rowspan="3"><p>{{=solicitud.observaciones}}</p></td>
+			<td><p>{{=solicitud.elaborada_por}}</p></td>
+			<td><p>{{=solicitud.aprobada_por}}</p></td>
 		</tr>
 		<tr>
 			<th><p>Fecha</p></th>
 			<th><p>Fecha</p></th>
 		</tr>
 		<tr>
-			<td><p>Variable fecha</p></td>
-			<td><p>Variable fecha</p></td>
+			<td><p>{{=solicitud.fecha_elaboracion}}</p></td>
+			<td><p>{{=solicitud.fecha_aprobacion}}</p></td>
 		</tr>
 		<tr>
 			<th colspan="6" class="titulos">Solo para ser llenado por la Dependencia Ejecutora:</th>
@@ -171,25 +155,25 @@
 			<th colspan="2" class="titulos">Aprobado por:</th>
 		</tr>
 		<tr>
-			<td colspan="2" rowspan="5"><p>Variable lugar de ejecucion del serv</p></td>
-			<td colspan="2"><p>Variable recibido por</p></td>
-			<td colspan="2"><p>Variable aprobado por</p></td>
+			<td colspan="2" rowspan="5"><p>{{=solicitud.lugar_ejecucion_servicio}}</p></td>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
 		</tr>
 		<tr>
 			<th colspan="2">Nombre, Firma y Sello</th>
 			<th colspan="2">Nombre, Firma y Sello</th>
 		</tr>
 		<tr>
-			<td colspan="2"><p>Variable nombre, firma y sello</p></td>
-			<td colspan="2"><p>Variable nombre, firma y sello</p></td>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
 		</tr>
 		<tr>
 			<th colspan="2">Fecha</th>
 			<th colspan="2">Fecha</th>
 		</tr>
 		<tr>
-			<td colspan="2"><p>Variable fecha</p></td>
-			<td colspan="2"><p>Variable fecha</p></td>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
 		</tr>
 
 	</table>

@@ -20,9 +20,6 @@ def index():
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
-    print(solicitud_nueva)
-    print(certificacion_nueva)
-
     return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
 
 
@@ -96,8 +93,6 @@ def listado():
 
         # Variable dependencia de la persona que realizo la operacion
         # dependenciaUsuario = db(idDependencia == db.dependencias.id).select(db.dependencias.ALL)[0].nombre
-
-        # SI NO HAY UN PERSONAL ASOCIADO AL AUTH.USER TODO MUEREEE
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -261,6 +256,7 @@ def solicitudes():
         servicio_solicitud = Servicio(db)
         servicio_solicitud.instanciar(int(request.vars.idServicio))
 
+    #----- FIN AGREGAR SOLICITUD DESDE SERVICIO -----#
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
@@ -272,16 +268,18 @@ def solicitudes():
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
         solicitud_a_cambiar.correoCambioEstadoSolicitud()
 
-        if request.post_vars.estado == "1":
-            solicitud_a_cambiar.fecha_aprobacion = request.now
-            solicitud_a_cambiar.aprobada_por = auth.user.first_name
-            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
-            solicitud_a_cambiar.elaborada_por = auth.user.first_name
-            solicitud_a_cambiar.fecha_elaboracion = request.now
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+            solicitud_a_cambiar.elaborar_certificacion()
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
@@ -583,6 +581,15 @@ def ajax_certificar_servicio():
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
     codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+
+    proyecto = "N/A"
+    print(solicitud_info.proposito)
+    proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
+
+
+    if proposito == "Investigacion":
+        proyecto = solicitud_info.proposito_descripcion
+
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
@@ -599,7 +606,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto='Proyecto ' + registro)
+                proyecto=proyecto)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -695,11 +702,24 @@ def ajax_listado_solicitudes_recibidas():
 #------------------------------------------------------------------------------
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfSolicitud():
-    return dict()
+def pdf_solicitud():
+    session.forget(response)
+    # Solicitud
+
+    solicitud = Solicitud(db, auth)
+
+    try:
+        solicitud.instanciar(int(request.vars.solicitud))
+    except:
+        solicitud.instanciar(0)
+
+
+    return dict(solicitud = solicitud)
+
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfCertificado():
+def pdf_certificado():
     return dict()
 
 # Funcion para enviar un correo de notificacion 
