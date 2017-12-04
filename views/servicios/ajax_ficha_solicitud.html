@@ -115,26 +115,16 @@
 				<form method="post">
 	  				<input type="hidden" name="idFicha" value="{{=ficha.id}}">
 				{{if ficha.estado_solicitud == 0:}}
-					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>
-					<button type="button" class="btn botonesFichita botonEliminar botonRechazar" data-toggle="modal" data-target="#modalRechazar">Rechazar Solicitud</button>
-
-					<!-- Modal del boton rechazar-->
-					<div class="modal fade" id="modalRechazar" role="dialog">
-					    <div class="modal-dialog">
-					    
-					      <!-- Modal content-->
-					      <div class="modal-content">
-					        <div class="modal-header">
-					          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea rechazar la solicitud?</h4>
-					        </div>
-					        <div id="cuerpoModalElim" class="modal-body">
-					          <button type="submit" class="btn botonesFichita botonEliminar" name="estado" value="-1">Rechazar</button>
-					          <button type="button" class="btn botonesFichita" data-dismiss="modal" onclick="cerrar();">Cancelar</button>				
-					        </div>
-					      </div>
-					  
-					    </div>
-					</div>
+					<button type="submit" class="btn botonesFichita botonAprobar" name="estado" value="1">Aprobar Solicitud</button>					
+					<button type="button" class="btn botonesFichita botonEliminar botonRechazar" data-toggle="collapse" data-target="#collapseServicio">Rechazar Solicitud</button>
+				
+							<div class="collapse botonEliminarImprimir " id="collapseServicio">
+								<div class="card card-body">
+									¿Seguro que deseas rechazar la solicitud?
+									<button type="submit" class="btn botonesFichita botonEliminar" name="estado" value="-1">Si</button>
+									<button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseServicio">No</button>
+								</div>
+							</div>
 
 				{{elif ficha.estado_solicitud == 1:}}
 					<br>
