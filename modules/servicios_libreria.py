@@ -758,10 +758,10 @@ class ListaSolicitudes(object):
 
 class Certificacion(object):
 
-    def __init__(self, db, id_servicio=None, registro=None, responsable_solicitud=None, fecha_solicitud=None,
-                proposito=None, proposito_descripcion=None, proposito_cliente_final=None, descripcion=None,
-                observaciones=None, aprobada_por=None, fecha_aprobacion=None, elaborada_por=None,
-                fecha_elaboracion=None, proyecto=None, fecha_certificacion=None, estado=None):
+    def __init__(self, db, registro=None, responsable_solicitud=None, fecha_solicitud=None,
+        id_servicio=None, proposito=None, proposito_descripcion=None, proposito_cliente_final=None, descripcion=None,
+        observaciones=None, aprobada_por=None, fecha_aprobacion=None, elaborada_por=None,
+        fecha_elaboracion=None, fecha_certificacion=None, proyecto=None, estado=None):
         
         self.db = db
         
