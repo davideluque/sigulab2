@@ -20,9 +20,6 @@ def index():
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
-    print(solicitud_nueva)
-    print(certificacion_nueva)
-
     return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
 
 
@@ -271,15 +268,15 @@ def solicitudes():
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
         solicitud_a_cambiar.correoCambioEstadoSolicitud()
 
-        if request.post_vars.estado == "1":
-            solicitud_a_cambiar.fecha_aprobacion = request.now
-            solicitud_a_cambiar.aprobada_por = auth.user.first_name
-            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
-            solicitud_a_cambiar.elaborada_por = auth.user.first_name
-            solicitud_a_cambiar.fecha_elaboracion = request.now
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
             solicitud_a_cambiar.elaborar_certificacion()
@@ -705,7 +702,7 @@ def ajax_listado_solicitudes_recibidas():
 #------------------------------------------------------------------------------
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfSolicitud():
+def pdf_solicitud():
     session.forget(response)
     # Solicitud
 
@@ -722,7 +719,7 @@ def pdfSolicitud():
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfCertificado():
+def pdf_certificado():
     return dict()
 
 # Funcion para enviar un correo de notificacion 

@@ -172,7 +172,7 @@
 
 		{{elif ficha.estado_solicitud > 0:}}
 		<div class="botonesFicha botonEliminarImprimir">
-			<a href="{{=URL('servicios','pdfSolicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir PDF</button></a>
+			<a target="_blank" href="{{=URL('servicios','pdf_solicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir PDF</button></a>
 
 		{{pass}}
 

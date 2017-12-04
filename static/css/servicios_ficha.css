@@ -100,3 +100,7 @@
 #cuerpoModalElim {
 	margin-left: 50% !important;
 }
+
+a{
+	color:inherit;
+}

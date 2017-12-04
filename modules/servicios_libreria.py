@@ -429,15 +429,22 @@ class Solicitud(object):
                 self.aprobada_por = instanciacion[0].aprobada_por 
             else:
                 self.aprobada_por = ""
+
             if instanciacion[0].fecha_aprobacion:
                 self.fecha_aprobacion = instanciacion[0].fecha_aprobacion
             else:
                 self.fecha_aprobacion = ""
-            self.elaborada_por = instanciacion[0].elaborada_por
+
+            if instanciacion[0].elaborada_por:
+                self.elaborada_por = instanciacion[0].elaborada_por
+            else:
+                self.elaborada_por = ""
+
             if instanciacion[0].fecha_elaboracion:
                 self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
             else:
                 self.fecha_elaboracion = "" 
+
             self.estado_solicitud_str = self.estado_string()
 
             self.conseguir_atributos()
@@ -551,7 +558,7 @@ class Solicitud(object):
             # Fecha de elaboracion del servicio
             self.fecha_elaboracion = request.now
             # Persona responsable de la solicitud y Elaborado por
-            self.elaborada_por = self.auth.user.first_name + " " + self.auth.user.last_name
+            self.elaborada_por = "%s %s" % (self.auth.user.first_name, self.auth.user.last_name)
 
         elif estado == 1:
             # Fecha de elaboracion del servicio
