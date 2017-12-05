@@ -339,7 +339,6 @@ def certificaciones():
 
     # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
     if request.post_vars.registro:
-        # TODO mandar esto a la tabla de historial en vez de a la vieja de certificaciones
 
         registro = request.post_vars.registro
         proyecto = request.post_vars.proyecto
@@ -356,33 +355,9 @@ def certificaciones():
         solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
-
-    # TODO quitar esto
-
-    #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
-
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    listado_de_solicitudes.orden_y_filtrado()
-    firstpage = listado_de_solicitudes.boton_principio
-    lastpage = listado_de_solicitudes.boton_fin
-    nextpage = listado_de_solicitudes.boton_siguiente
-    prevpage = listado_de_solicitudes.boton_anterior
-
-    # ----- FIN LISTAR SOLICITUDES -----#
-
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
-                pages=listado_de_solicitudes.rango_paginas,
-                actualpage=listado_de_solicitudes.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage,
-                categorias=listar_categorias(db), tipos=listar_tipos(db),
-                sedes=listar_sedes(db))
+  
+    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
+        sedes=listar_sedes(db))
 
 
 # ---- GESTIONAR HISTORIAL ---- #
@@ -817,6 +792,63 @@ def ajax_listado_solicitudes_recibidas():
                 actualpage=listado_de_solicitudes.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_generar():
+
+     #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_generar_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_generar_por
+
+    listado_de_certificaciones_a_generar.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_generar.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_generar:
+        listado_de_certificaciones_a_generar.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_generar))
+
+    listado_de_certificaciones_a_generar.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_generar.boton_principio
+    lastpage=listado_de_certificaciones_a_generar.boton_fin
+    nextpage=listado_de_certificaciones_a_generar.boton_siguiente
+    prevpage=listado_de_certificaciones_a_generar.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_generar.solicitudes_a_mostrar,
+                pages=listado_de_certificaciones_a_generar.rango_paginas,
+                actualpage=listado_de_certificaciones_a_generar.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_recibir():
+  #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_recibir_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_recibir_por
+
+    listado_de_certificaciones_a_recibir.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_recibir.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_recibir:
+        listado_de_certificaciones_a_recibir.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_recibir))
+
+    listado_de_certificaciones_a_recibir.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_recibir.boton_principio
+    lastpage=listado_de_certificaciones_a_recibir.boton_fin
+    nextpage=listado_de_certificaciones_a_recibir.boton_siguiente
+    prevpage=listado_de_certificaciones_a_recibir.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_recibir.solicitudes_a_mostrar,
+                pages=listado_de_certificaciones_a_recibir.rango_paginas,
+                actualpage=listado_de_certificaciones_a_recibir.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_historial():
