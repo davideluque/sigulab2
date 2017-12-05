@@ -442,6 +442,7 @@ class Solicitud(object):
         self.elaborada_por = None
 
         # Variables para Certificacion
+        self.cargo_responsable_solicitud = None
         self.ci_responsable_solicitud = None
         self.proyecto = proyecto
         self.fecha_certificacion = fecha_certificacion
@@ -570,6 +571,10 @@ class Solicitud(object):
         self.ci_responsable_solicitud = personal.f_ci
 
         responsable_usuario = self.db(personal.f_usuario == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
+
+        cargo_id = self.db(personal.f_usuario == self.db.auth_membership.user_id).select(self.db.auth_membership.ALL)[0].group_id
+
+        self.cargo_responsable_solicitud = self.db(cargo_id == self.db.auth_group.id).select(self.db.auth_group.ALL)[0].role
 
         self.nombre_responsable_solicitud = responsable_usuario.first_name + " " + responsable_usuario.last_name
 
@@ -982,7 +987,8 @@ class Historial(object):
 
 
             # VARIABLES PARA CERTIFICACION
-
+            self.fecha_solicitud = solicitud.fecha_solicitud
+            self.cargo_responsable_solicitud = solicitud.cargo_responsable_solicitud
             self.ci_responsable_solicitud = solicitud.ci_responsable_solicitud
 
             self.fecha_certificacion = solicitud.fecha_certificacion
@@ -1012,8 +1018,10 @@ class Historial(object):
                                                        ci_responsable_solicitud = self.ci_responsable_solicitud,
                                                        email_responsable_solicitud = self.email_responsable_solicitud,
                                                        telefono_responsable_solicitud = self.telefono_responsable_solicitud,
+                                                       cargo_responsable_solicitud = self.cargo_responsable_solicitud,
                                                        nombre_dependencia_solicitante = self.nombre_dependencia_solicitante,
                                                        nombre_jefe_dependencia_solicitante = self.nombre_jefe_dependencia_solicitante,
+                                                       fecha_solicitud = self.fecha_solicitud,
                                                        nombre_dependencia_ejecutora = self.nombre_dependencia_ejecutora,
                                                        nombre_jefe_dependencia_ejecutora = self.nombre_jefe_dependencia_ejecutora,
                                                        lugar_ejecucion_servicio = self.lugar_ejecucion_servicio,
@@ -1050,8 +1058,10 @@ class Historial(object):
             self.ci_responsable_solicitud = instanciacion[0].ci_responsable_solicitud
             self.email_responsable_solicitud = instanciacion[0].email_responsable_solicitud
             self.telefono_responsable_solicitud = instanciacion[0].telefono_responsable_solicitud
+            self.cargo_responsable_solicitud = instanciacion[0].cargo_responsable_solicitud
             self.nombre_dependencia_solicitante = instanciacion[0].nombre_dependencia_solicitante
             self.nombre_jefe_dependencia_solicitante = instanciacion[0].nombre_jefe_dependencia_solicitante
+            self.fecha_solicitud = instanciacion[0].fecha_solicitud
             self.nombre_dependencia_ejecutora = instanciacion[0].nombre_dependencia_ejecutora
             self.nombre_jefe_dependencia_ejecutora = instanciacion[0].nombre_jefe_dependencia_ejecutora
             self.lugar_ejecucion_servicio = instanciacion[0].lugar_ejecucion_servicio
@@ -1063,6 +1073,8 @@ class Historial(object):
             self.numero_de_proyecto = instanciacion[0].numero_de_proyecto
             self.adscripcion_dependencia_solicitante = instanciacion[0].adscripcion_dependencia_solicitante
             self.adscripcion_dependencia_ejecutora = instanciacion[0].adscripcion_dependencia_ejecutora   
+
+
     
 
 

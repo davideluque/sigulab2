@@ -516,7 +516,7 @@ def ajax_ficha_certificacion():
 
     solicitud.instanciar(int(request.vars.solicitud))
 
-    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipo_solicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_historial():
@@ -690,6 +690,8 @@ def ajax_certificar_servicio():
     # TODO el numero de registro viene es de la misma solicitud
     registro = solicitud_info.registro
 
+    print(request.vars.tipo_solicitud)
+
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
                 servicio=servicio,
@@ -698,7 +700,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto)
+                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
 
 #------------------------------------------------------------------------------
 #
