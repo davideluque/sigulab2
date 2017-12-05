@@ -1339,16 +1339,21 @@ def generador_num_registro():
 
     return digits
 
-def validador_registro_solicitudes(request, db, registro):
+def validador_registro_solicitudes(request, db, registro, contador=0):
     anio = str(request.now)[2:4]
-    registro = 'SIG-' + registro + "-" + anio + '/' + generador_num_registro()
+    contador = 1 + contador
+    digits = (3 - len(str(contador))) * '0' + str(contador)
 
-    check = db(db.solicitudes.registro == registro).count()
+    registronum = 'SIG-' + registro + "-" + anio + '/' + digits
 
-    if check != 0:
-        return validador_registro_solicitudes(request, db)
+    check = db(db.solicitudes.registro == registronum).count()
+
+    check2 = db(db.historial_solicitudes.registro_solicitud == registronum).count()
+
+    if check + check2 != 0:
+        return validador_registro_solicitudes(request, db, registro, contador)
     else:
-        return registro
+        return registronum
 
 #------------------------------------------------------------------------------
 #
