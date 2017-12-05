@@ -31,7 +31,7 @@
           <div class="col-md-5">
             <ul>
                 {{for servicio in ensayo:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
           </div>
@@ -46,7 +46,7 @@
         <div class="col-md-5">
             <ul>
                 {{for servicio in inspeccion:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
         </div>
@@ -61,7 +61,7 @@
           <div class="col-md-5">
             <ul>
                 {{for servicio in calibracion:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
           </div>
@@ -71,12 +71,12 @@
 
       <div class="row featurette">
         <div class="col-md-7 columnasIzq">
-          <h2 class="featurette-heading">Desarrollo de prototipos y piezas</h2>
+          <h2 class="featurette-heading" style="font-size: 35px;">Desarrollo de prototipos y piezas</h2>
         </div>
         <div class="col-md-5">
             <ul>
                 {{for servicio in desarrollo_prototipo_piezas:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
         </div>
@@ -86,12 +86,12 @@
         <hr class="featurette-divider">
         <div class="row featurette">
           <div class="col-md-7 columnasIzq">
-            <h2 class="featurette-heading">Consultoría/Asesoría Técnica y proyectos</h2>
+            <h2 class="featurette-heading big">Consultoría <br> Asesoría Técnica <br> Proyectos</h2>
           </div>
           <div class="col-md-5">
             <ul>
                 {{for servicio in consultoria_asesoria:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
           </div>
@@ -101,12 +101,12 @@
 
       <div class="row featurette">
         <div class="col-md-7 columnasIzq">
-          <h2 class="featurette-heading">Formación/Capacitación/Transferencia tecnológica</h2>
+          <h2 class="featurette-heading big">Formación <br> Capacitación <br> Transferencia tecnológica</h2>
         </div>
         <div class="col-md-5">
             <ul>
                 {{for servicio in formacion_capacitacion_transferencia:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
         </div>
@@ -121,7 +121,7 @@
           <div class="col-md-5">
             <ul>
                 {{for servicio in sala_computadoras:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
           </div>
@@ -136,7 +136,7 @@
         <div class="col-md-5">
             <ul>
                 {{for servicio in sala_videos:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
         </div>
@@ -151,7 +151,7 @@
           <div class="col-md-5">
             <ul>
                 {{for servicio in verificacion:}}
-                    <li>{{=servicio.nombre}}</li>
+                    <li class="nombreServicio">{{=servicio.nombre}}</li>
                 {{pass}}
             </ul>
           </div>
