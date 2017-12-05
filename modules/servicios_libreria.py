@@ -538,7 +538,7 @@ class Solicitud(object):
 
         id_ubicacion_ejecucion = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].ubicacion
 
-        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].direccion
+        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].uso
 
         # Nombre de Servicio
 
@@ -924,7 +924,7 @@ class ListaHistorial(object):
         self.posicionar_ultimo()
 
         # Lista de cada fila, convertida en el objeto servicio
-        self.solicitudes_a_mostrar = []
+        self.certificaciones_a_mostrar = []
 
     # Configurara la visibilidad y posicion de cada boton
 
@@ -979,7 +979,7 @@ class ListaHistorial(object):
                 self.filas.append(certificacion)
 
             elif (certificacion.estado == 0 and certificacion.dependencia_ejecutora_id == self.id_dependencia_usuario and
-                "Ejecutor" == self.tipo_listado):
+                "Ejecutante" == self.tipo_listado):
                 self.filas.append(certificacion)
 
             elif (certificacion.estado == 1 and "Historial" == self.tipo_listado):
@@ -987,7 +987,7 @@ class ListaHistorial(object):
 
     def orden_y_filtrado(self):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
-        self.solicitudes_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
+        self.certificaciones_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
 
 #------------------------------------------------------------------------------
 #
@@ -1047,7 +1047,7 @@ def query_ficha(db, idv):
 
     # Ubicacion Fisica
     ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
-    ubicacion = ubicrow[0].nombre
+    ubicacion = ubicrow[0].codigo
     ubicacionid = ubicrow[0].id
 
     # Responsable
@@ -1111,23 +1111,12 @@ def generador_num_registro():
 
 def validador_registro_solicitudes(request, db, registro):
     anio = str(request.now)[2:4]
-    registro = registro + "-" + anio + '/' + generador_num_registro()
+    registro = 'SIG-' + registro + "-" + anio + '/' + generador_num_registro()
 
     check = db(db.solicitudes.registro == registro).count()
 
     if check != 0:
         return validador_registro_solicitudes(request, db)
-    else:
-        return registro
-
-def validador_registro_certificaciones(request, db, registro):
-    anio = str(request.now)[2:4]
-    registro = registro + "-" + anio + '/' + generador_num_registro()
-
-    check = db(db.certificaciones.registro == registro).count()
-
-    if check != 0:
-        return validador_registro_certificaciones(request, db)
     else:
         return registro
 
