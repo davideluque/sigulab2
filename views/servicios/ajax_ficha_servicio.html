@@ -130,27 +130,11 @@
 
         {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
 	    <div class="btn-group botonesFicha">
+					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
+					
+
 		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
-
-		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
-
-		  <!-- Modal del boton eliminar-->
-		  <div class="modal fade" id="modalEliminar" role="dialog">
-		    <div class="modal-dialog">
-		    
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar el servicio?</h4>
-		        </div>
-		        <div id="cuerpoModalElim" class="modal-body">
-		          <button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-		          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-		        </div>
-		      </div>  
-		    </div>
-		  </div>
-
+		
 		  {{if ficha['entrada'][0].visibilidad: }}
 		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
 		  {{else: }}
@@ -165,6 +149,14 @@
 
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+	<br><br>
+	<div class="collapse botonEliminarImprimir " id="collapseServicio"">
+		<div class="card card-body">
+			¿Seguro que deseas eliminar el servicio?
+			<button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>									
+			<button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseServicio">No</button>
+		</div>
+	</div>
   </div>
 
 

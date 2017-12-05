@@ -20,9 +20,6 @@ def index():
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
-    print(solicitud_nueva)
-    print(certificacion_nueva)
-
     return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
 
 
@@ -259,6 +256,7 @@ def solicitudes():
         servicio_solicitud = Servicio(db)
         servicio_solicitud.instanciar(int(request.vars.idServicio))
 
+    #----- FIN AGREGAR SOLICITUD DESDE SERVICIO -----#
 
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
@@ -270,15 +268,15 @@ def solicitudes():
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
         solicitud_a_cambiar.correoCambioEstadoSolicitud()
 
-        if request.post_vars.estado == "1":
-            solicitud_a_cambiar.fecha_aprobacion = request.now
-            solicitud_a_cambiar.aprobada_por = auth.user.first_name
-            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
         if request.post_vars.estado == "2":
             solicitud_a_cambiar.observaciones = request.post_vars.observaciones
-            solicitud_a_cambiar.elaborada_por = auth.user.first_name
-            solicitud_a_cambiar.fecha_elaboracion = request.now
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
             solicitud_a_cambiar.elaborar_certificacion()
@@ -343,7 +341,13 @@ def certificaciones():
 
         fecha = request.post_vars.fecha
 
-        certificado = Certificacion(db, registro, proyecto, elaborado_por, dependencia, solicitud, fecha)
+        certificado = Certificacion(db, solicitud_a_actualizar.registro, solicitud_a_actualizar.id_responsable_solicitud,
+                        solicitud_a_actualizar.fecha_solicitud, solicitud_a_actualizar.id_servicio_solicitud,
+                        solicitud_a_actualizar.id_proposito_servicio, solicitud_a_actualizar.proposito_descripcion,
+                        solicitud_a_actualizar.proposito_cliente_final, solicitud_a_actualizar.descripcion_servicio,
+                        solicitud_a_actualizar.observaciones, solicitud_a_actualizar.aprobada_por, 
+                        solicitud_a_actualizar.fecha_aprobacion, solicitud_a_actualizar.elaborada_por, 
+                        solicitud_a_actualizar.fecha_elaboracion, request.now)
         certificado.insertar()
 
     #-------------------FIN------------------------
@@ -704,7 +708,7 @@ def ajax_listado_solicitudes_recibidas():
 #------------------------------------------------------------------------------
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfSolicitud():
+def pdf_solicitud():
     session.forget(response)
     # Solicitud
 
@@ -721,7 +725,7 @@ def pdfSolicitud():
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def pdfCertificado():
+def pdf_certificado():
     return dict()
 
 # Funcion para enviar un correo de notificacion 

@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>&nbsp</title>
+	<title hidden>Reporte {{=solicitud.registro}}</title>
 	<meta charset="UTF-8"> 
-	<script src="jspdf.js"></script>
-	<script src="jquery-2.1.3.js"></script>
-	<!-- <script src="pdfFromHTML.js"></script> -->
+
 	<script>
 		window.onload = function() {
     	window.print();
@@ -70,11 +68,11 @@
 		<table id="tablaSolicitud" border="1">
 		<tr>
 			<th colspan="5" class="titulos" rowspan="2">SOLICITUD DE SERVICIO DE LABORATORIO</th>
-			<th class="titulos">{{=solicitud.registro}}</th> 
+			<th class="titulos">REGISTRO</th> 
 		</tr>
 		
 		<tr>
-			<td>{{=solicitud.fecha_solicitud}}</td>
+			<td>{{=solicitud.registro}}</td>
 		</tr>
 
 		<tr>
@@ -108,7 +106,7 @@
 		</tr>
 		<tr>
 			<td><p>{{=solicitud.categoria_servicio}}</p></td>
-			<td><p>{{=solicitud.tipo_servicio}}/p></td>
+			<td><p>{{=solicitud.tipo_servicio}}</p></td>
 			<td colspan="4"><p>{{=solicitud.nombre_servicio}}</p></td>
 		</tr>
 
@@ -158,8 +156,8 @@
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="5"><p>{{=solicitud.lugar_ejecucion_servicio}}</p></td>
-			<td colspan="2"><p>Variable recibido por</p></td>
-			<td colspan="2"><p>Variable aprobado por</p></td>
+			<td colspan="2"><p></p></td>
+			<td colspan="2"><p></p></td>
 		</tr>
 		<tr>
 			<th colspan="2">Nombre, Firma y Sello</th>

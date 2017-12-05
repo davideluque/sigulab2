@@ -100,3 +100,7 @@
 #cuerpoModalElim {
 	margin-left: 50% !important;
 }
+
+#botonImprimir {
+	color: inherit;
+}
