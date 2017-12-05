@@ -453,9 +453,6 @@ def catalogoServicios():
 def ajax_ficha_servicio():
     session.forget(response)
 
-    if request.vars.serv is None:
-        return redirect(URL('modulos', 'login'))
-
     # Servicio
     entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
 
@@ -484,7 +481,27 @@ def ajax_ficha_servicio():
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 
-    return dict(ficha=valores_de_ficha)
+    edicion = False
+    privilegios = __obtener_priviliegios()
+    rol = privilegios[0]
+    dependencia = privilegios[1]
+
+    if rol == 2:
+        edicion = True
+
+    elif rol == 1:
+        if int(dependencia) != int(entrada[0].dependencia):
+            secciones = []
+            dep = db(db.dependencias.unidad_de_adscripcion == dependencia).select(db.dependencias.id)
+
+            for d in dep:
+                secciones.append(int(d.id))
+            if entrada[0].dependencia in secciones:
+                edicion = True
+        else:
+            edicion = True
+
+    return dict(ficha=valores_de_ficha, edicion = edicion)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_solicitud():
@@ -651,7 +668,6 @@ def ajax_certificar_servicio():
     codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
 
     proyecto = "N/A"
-    print(solicitud_info.proposito)
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
 
 
@@ -701,15 +717,12 @@ def ajax_listado_servicios():
     user_group_id = info_membership.group_id
 
     dependencia = info_membership.dependencia_asociada
-    print(dependencia)
 
     rol = 0
     if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
         rol = 2
     elif user_group_id == grupo_lab:
         rol = 1
-
-    print(rol)
 
     listado_de_servicios = ListaServicios(db, dependencia, rol)
 
@@ -851,3 +864,26 @@ def __queries_enviar_correo():
 
     return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
 
+def __obtener_priviliegios():
+    # Obtener Privilegios del usuario (rol y dependencia)
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+    grupo_secc = db(db.auth_group.role == "Jefe de Sección").select(db.auth_group.id)[0].id
+    grupo_coord = db(db.auth_group.role == "Coordinador").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+        rol = 2
+    elif user_group_id == grupo_lab or user_group_id == grupo_secc or user_group_id == grupo_coord:
+        rol = 1
+    if request.vars.serv is None:
+        return redirect(URL('modulos', 'login'))
+
+    return [rol, dependencia]

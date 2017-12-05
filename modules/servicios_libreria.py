@@ -316,8 +316,6 @@ class ListaServicios(object):
                 for d in dep:
                     secciones.append(int(d.id))
 
-                print(secciones)
-
                 return self.db((any((self.db.servicios.dependencia == s) for s in secciones)) or (self.db.servicios.visibilidad == True))
 
         else:
@@ -1030,8 +1028,6 @@ class ListaHistorial(object):
         for cert in self.set.select(self.db.historial_servicios.ALL):
             certificacion = Certificacion(self.db, self.auth)
             certificacion.instanciar(cert.id)
-
-            print(certificacion.estado)
 
             if (certificacion.estado == 0 and certificacion.responsable_solicitud == self.id_personal and
                 "Solicitante" == self.tipo_listado):
