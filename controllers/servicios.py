@@ -18,6 +18,9 @@ import re
 def index():
 
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
+
+    # TODO Sacar esto de la nueva tabla de historial
+
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
     return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
@@ -279,6 +282,8 @@ def solicitudes():
             # solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
+
             solicitud_a_cambiar.elaborar_certificacion()
 
         if request.post_vars.estado == "-1":
@@ -303,7 +308,12 @@ def solicitudes():
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-    num_registro = validador_registro_solicitudes(request, db, dependencia_usuario.codigo_registro)
+    if auth.has_membership(group_id="Cliente Interno"):
+        registro = "FUSB"
+    else:
+        registro = dependencia_usuario.codigo_registro
+
+    num_registro = validador_registro_solicitudes(request, db, registro)
 
     nombre_dependencia = dependencia_usuario.nombre
 
@@ -329,6 +339,8 @@ def certificaciones():
 
     # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
     if request.post_vars.registro:
+        # TODO mandar esto a la tabla de historial en vez de a la vieja de certificaciones
+
         registro = request.post_vars.registro
         proyecto = request.post_vars.proyecto
         elaborado_por = request.post_vars.usuarioid
@@ -351,6 +363,8 @@ def certificaciones():
         certificado.insertar()
 
     #-------------------FIN------------------------
+
+    # TODO quitar esto
 
     #------ ACCION LISTAR SOLICITUDES DE SERV -----
     listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
@@ -486,7 +500,7 @@ def ajax_obtener_dependencia():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_ubicacion():
     session.forget(response)
-    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicacion_query = db((db.espacios_fisicos.dependencia == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
 
     for l in ubicacion_query:
@@ -528,7 +542,7 @@ def ajax_obtener_dependencia_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_ubicacion_editar():
     session.forget(response)
-    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicacion_query = db((db.espacios_fisicos.dependencia == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
     for l in ubicacion_query:
         ubicaciones_a_mostrar.append(l)
@@ -619,7 +633,8 @@ def ajax_certificar_servicio():
         #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    registro = validador_registro_certificaciones(request, db, codigo_registro)
+    # TODO el numero de registro viene es de la misma solicitud
+    registro = solicitud_info.registro
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
@@ -631,12 +646,41 @@ def ajax_certificar_servicio():
                 dependencia=dependencianombre,
                 proyecto=proyecto)
 
+#------------------------------------------------------------------------------
+#
+# Ajax de Listados
+#
+#------------------------------------------------------------------------------
+
+# Servicios
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_servicios():
 
     #----- LISTAR SERVICIOS -----#
-    listado_de_servicios = ListaServicios(db, auth.has_membership(group_id='WebMaster'))
+
+    # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
+
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+    print(dependencia)
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+        rol = 2
+    elif user_group_id == grupo_lab:
+        rol = 1
+
+    print(rol)
+
+    listado_de_servicios = ListaServicios(db, dependencia, rol)
 
     order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
     order_by_col = request.post_vars.ordenarPor
@@ -661,6 +705,7 @@ def ajax_listado_servicios():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+# Solicitudes Generadas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_solicitudes_generadas():
@@ -690,6 +735,8 @@ def ajax_listado_solicitudes_generadas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+# Solicitudes Recibidas
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_solicitudes_recibidas():
 
@@ -717,6 +764,12 @@ def ajax_listado_solicitudes_recibidas():
                 actualpage=listado_de_solicitudes.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
+
+# Certificaciones de Terceros
+
+# Certificaciones Personales
+
+# Historial de Servicios Ejecutados/Certificados
 
 #------------------------------------------------------------------------------
 #

@@ -128,10 +128,12 @@
         <input type="hidden" name="idServicio" value="{{=ficha['entrada'][0].id}}">
       </form>
 
-        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
-	    <div class="btn-group botonesFicha">
+        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Cliente Interno")):}}
+
+        <div class="btn-group botonesFicha">
+            {{if auth.has_membership("WebMaster"):}}
 					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
-					
+                {{pass}}
 
 		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
 		
