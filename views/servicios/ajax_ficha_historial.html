@@ -119,7 +119,7 @@
 		<div class="botonesFicha botonEliminarImprimir">
 			<a target="_blank" id="botonImprimir" href="{{=URL('servicios','pdf_certificado', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir Certificado</button></a>
 
-			<a target="_blank" id="botonImprimir" href="{{=URL('servicios','pdf_solicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir Reporte Solicitud</button></a>
+			<a target="_blank" id="botonImprimir" href="{{=URL('servicios','pdf_solicitud', vars=dict(historial=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir Reporte Solicitud</button></a>
 
 			<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
 		</div>
