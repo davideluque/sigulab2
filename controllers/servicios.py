@@ -647,24 +647,18 @@ def ajax_certificar_servicio():
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
 
-
-    if proposito == "Investigacion":
-        proyecto = solicitud_info.proposito_descripcion
-
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
-        #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
 
     registro = solicitud_info.registro
 
-    print(request.vars.tipo_solicitud)
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
@@ -674,7 +668,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
+                proyecto=proyecto)
 
 #------------------------------------------------------------------------------
 #
