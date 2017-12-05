@@ -59,6 +59,14 @@ body {
   margin-left: 150px !important;
 }
 
+.nombreServicio{
+  font-size: 25px;
+}
+
+.big{
+  font-size: 40px !important;
+}
+
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 
