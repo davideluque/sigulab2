@@ -815,11 +815,7 @@ def ajax_listado_certificaciones_a_generar():
     nextpage=listado_de_certificaciones_a_generar.boton_siguiente
     prevpage=listado_de_certificaciones_a_generar.boton_anterior
 
-    return dict(grid=listado_de_certificaciones_a_generar.solicitudes_a_mostrar,
-                pages=listado_de_certificaciones_a_generar.rango_paginas,
-                actualpage=listado_de_certificaciones_a_generar.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+    return dict(grid=listado_de_certificaciones_a_generar.solicitudes_a_mostrar, pages=listado_de_certificaciones_a_generar.rango_paginas, actualpage=listado_de_certificaciones_a_generar.pagina_central, nextpage=nextpage, prevpage=prevpage, firstpage=firstpage, lastpage=lastpage)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
