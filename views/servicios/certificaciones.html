@@ -14,7 +14,7 @@
 <!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..')}}">Servicios</a>
   <span class="breadcrumb-item active">Certificar un Servicio</span>
   </div>
@@ -102,7 +102,7 @@
     var z = document.getElementById("cambiar_pagina_certificaciones_a_generar")
       z.value = order_by_pag_certificaciones_a_generar
 
-    ajax('ajax_listado_certificaciones_a_generar', ['ordenar_certificaciones_a_generar_por', 'ordenar_certificaciones_a_generar_alfabeticamente', 'cambiar_pagina_certificaciones_a_generar'], "listado_solic_recibidas_container");
+    ajax('ajax_listado_certificaciones_a_generar', ['ordenar_certificaciones_a_generar_por', 'ordenar_certificaciones_a_generar_alfabeticamente', 'cambiar_pagina_certificaciones_a_generar'], "listado_certif_solicitante_container");
   }
 
   // Valores por defecto para el listado de certificaciones como ejecutante 
