@@ -84,7 +84,11 @@
   function abrirForm(solicitud, tipo_solicitud) {
 		var x = document.getElementById("solicitud");
 			x.value = solicitud;
-		ajax('ajax_certificar_servicio', ['solicitud'], "formcert");
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+		ajax('ajax_certificar_servicio', ['solicitud', 'tipoSolicitud'], "formcert");
 	}
 
   function abrirFicha(solicitud, tipo_solicitud) {
