@@ -286,8 +286,8 @@ def solicitudes():
 
             #solicitud_a_cambiar.elaborar_certificacion()
 
-        if request.post_vars.estado == "-1":
-            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -339,7 +339,6 @@ def certificaciones():
 
     # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
     if request.post_vars.registro:
-        # TODO mandar esto a la tabla de historial en vez de a la vieja de certificaciones
 
         registro = request.post_vars.registro
         proyecto = request.post_vars.proyecto
@@ -356,33 +355,9 @@ def certificaciones():
         solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
-
-    # TODO quitar esto
-
-    #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
-
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    listado_de_solicitudes.orden_y_filtrado()
-    firstpage = listado_de_solicitudes.boton_principio
-    lastpage = listado_de_solicitudes.boton_fin
-    nextpage = listado_de_solicitudes.boton_siguiente
-    prevpage = listado_de_solicitudes.boton_anterior
-
-    # ----- FIN LISTAR SOLICITUDES -----#
-
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
-                pages=listado_de_solicitudes.rango_paginas,
-                actualpage=listado_de_solicitudes.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage,
-                categorias=listar_categorias(db), tipos=listar_tipos(db),
-                sedes=listar_sedes(db))
+  
+    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
+        sedes=listar_sedes(db))
 
 
 # ---- GESTIONAR HISTORIAL ---- #
@@ -515,6 +490,18 @@ def ajax_ficha_certificacion():
     solicitud = Solicitud(db, auth)
 
     solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipo_solicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_historial():
+    session.forget(response)
+    # Solicitud
+    solicitud = Historial(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    solicitud.generacion_pdf()
 
     return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
@@ -653,14 +640,14 @@ def ajax_obtener_datos_depen_ejecutora():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
+    solicitudesid = int(request.post_vars.solicitud)
     solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
     usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
     servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
@@ -678,6 +665,8 @@ def ajax_certificar_servicio():
     # TODO el numero de registro viene es de la misma solicitud
     registro = solicitud_info.registro
 
+    print(request.vars.tipo_solicitud)
+
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
                 servicio=servicio,
@@ -686,7 +675,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto)
+                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
 
 #------------------------------------------------------------------------------
 #
@@ -742,7 +731,7 @@ def ajax_listado_servicios():
                 pages=listado_de_servicios.rango_paginas,
                 actualpage=listado_de_servicios.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+                firstpage=firstpage, lastpage=lastpage, rol=rol)
 
 # Solicitudes Generadas
 
@@ -803,6 +792,63 @@ def ajax_listado_solicitudes_recibidas():
                 actualpage=listado_de_solicitudes.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_generar():
+
+     #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_generar_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_generar_por
+
+    listado_de_certificaciones_a_generar.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_generar.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_generar:
+        listado_de_certificaciones_a_generar.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_generar))
+
+    listado_de_certificaciones_a_generar.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_generar.boton_principio
+    lastpage=listado_de_certificaciones_a_generar.boton_fin
+    nextpage=listado_de_certificaciones_a_generar.boton_siguiente
+    prevpage=listado_de_certificaciones_a_generar.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_generar.solicitudes_a_mostrar,
+                pages=listado_de_certificaciones_a_generar.rango_paginas,
+                actualpage=listado_de_certificaciones_a_generar.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_recibir():
+  #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_recibir_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_recibir_por
+
+    listado_de_certificaciones_a_recibir.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_recibir.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_recibir:
+        listado_de_certificaciones_a_recibir.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_recibir))
+
+    listado_de_certificaciones_a_recibir.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_recibir.boton_principio
+    lastpage=listado_de_certificaciones_a_recibir.boton_fin
+    nextpage=listado_de_certificaciones_a_recibir.boton_siguiente
+    prevpage=listado_de_certificaciones_a_recibir.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_recibir.solicitudes_a_mostrar,
+                pages=listado_de_certificaciones_a_recibir.rango_paginas,
+                actualpage=listado_de_certificaciones_a_recibir.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_historial():
@@ -876,7 +922,19 @@ def pdf_solicitud():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdf_certificado():
-    return dict()
+    session.forget(response)
+    # Certificacion
+    if request.vars.solicitud:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
+    return dict(solicitud = solicitud)
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):

@@ -15,6 +15,9 @@
             <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="seccion" id="f_seccion_servicio" onClick="ordenarServicios('seccion');">Sección</button></th>
             <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="laboratorio" id="f_laboratorio_servicio" onClick="ordenarServicios('laboratorio');">Laboratorio</button></th>
             <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="sede" id="f_sede_servicio" onClick="ordenarServicios('sede');">Sede</button></th>
+            {{if rol == 2:}}
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="visibilidad" id="visibilidad" onClick="ordenarServicios('visibilidad');">Visibilidad</button></th>
+            {{pass}}
           </tr>
         </thead>
           <!-- Contenido Listado -->
@@ -27,6 +30,9 @@
 						<th class="camposTabla">{{=item.seccion}}</th>
 						<th class="camposTabla">{{=item.laboratorio}}</th>
 						<th class="camposTabla">{{=item.sede}}</th>
+            {{if rol == 2:}}
+              <th class="camposTabla">{{if item.visibilidad:}}Visible{{else:}}Oculto{{pass}}</th>
+            {{pass}}
 					</tr>
 				{{pass}}
         </tbody>
