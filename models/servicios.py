@@ -64,7 +64,7 @@ db.define_table(
 
     # Ubicacion Fisica
     Field('ubicacion',          'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Ubicación Física')),
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), label=T('Ubicación Física')),
 )
 
 db.servicios._plural = 'Servicios'
@@ -185,7 +185,7 @@ db.define_table(
         label=T('Número de Registro de la Solicitud')),
 
     Field('nombre_servicio', 'string', requires=IS_NOT_EMPTY(), 
-        label=T('Nombre del Servicio'))
+        label=T('Nombre del Servicio')),
 
     Field('tipo_servicio', 'string', requires=IS_NOT_EMPTY(),
         label=T('Tipo del Servicio')),
@@ -211,10 +211,13 @@ db.define_table(
         label=T('Cédula del Responsable de la Solicitud')),
 
     Field('email_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
-        label=T('Cédula del Responsable de la Solicitud')),
+        label=T('Correo del Responsable de la Solicitud')),
 
     Field('telefono_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Teléfono del Responsable de la Solicitud')),
+
+    Field('cargo_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Cargo del Responsable de la Solicitud')),
 
     Field('nombre_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Nombre de la Dependencia Solicitante')),
@@ -224,6 +227,10 @@ db.define_table(
 
     Field('adscripcion_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Unidad de Adscripción de la Dependencia Solicitante')),
+
+    Field('fecha_solicitud', 'date', 
+        requires=IS_DATE(format=('%d-%m-%Y')), 
+        label=T('Fecha de Solicitud')),
 
     Field('nombre_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Nombre de la Dependencia Ejecutora')),

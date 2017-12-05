@@ -284,10 +284,10 @@ def solicitudes():
 
             # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
 
-            solicitud_a_cambiar.elaborar_certificacion()
+            #solicitud_a_cambiar.elaborar_certificacion()
 
-        if request.post_vars.estado == "-1":
-            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -348,7 +348,7 @@ def certificaciones():
 
         solicitud_a_actualizar = Solicitud(db,auth)
         solicitud_a_actualizar.instanciar(int(solicitud))
-        solicitud_a_actualizar.certificar()
+        solicitud_a_actualizar.certificar(request)
 
         fecha = request.post_vars.fecha
 
@@ -363,29 +363,7 @@ def certificaciones():
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-
-    #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
-
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    listado_de_solicitudes.orden_y_filtrado()
-    firstpage = listado_de_solicitudes.boton_principio
-    lastpage = listado_de_solicitudes.boton_fin
-    nextpage = listado_de_solicitudes.boton_siguiente
-    prevpage = listado_de_solicitudes.boton_anterior
-
-    # ----- FIN LISTAR SOLICITUDES -----#
-
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
-                pages=listado_de_solicitudes.rango_paginas,
-                actualpage=listado_de_solicitudes.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+    return dict()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detallesServicios():
@@ -512,6 +490,18 @@ def ajax_ficha_certificacion():
     solicitud = Solicitud(db, auth)
 
     solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipo_solicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_historial():
+    session.forget(response)
+    # Solicitud
+    solicitud = Historial(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    solicitud.generacion_pdf()
 
     return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
@@ -650,14 +640,14 @@ def ajax_obtener_datos_depen_ejecutora():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
+    solicitudesid = int(request.post_vars.solicitud)
     solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
     usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
     servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
@@ -675,6 +665,8 @@ def ajax_certificar_servicio():
     # TODO el numero de registro viene es de la misma solicitud
     registro = solicitud_info.registro
 
+    print(request.vars.tipo_solicitud)
+
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
                 servicio=servicio,
@@ -683,7 +675,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto)
+                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
 
 #------------------------------------------------------------------------------
 #
@@ -739,7 +731,7 @@ def ajax_listado_servicios():
                 pages=listado_de_servicios.rango_paginas,
                 actualpage=listado_de_servicios.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+                firstpage=firstpage, lastpage=lastpage, rol=rol)
 
 # Solicitudes Generadas
 
@@ -861,7 +853,32 @@ def ajax_listado_certificaciones_a_recibir():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_historial():
 
-    return dict()
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
+    order_by_col = request.post_vars.ordenarPor
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiarPagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiarPagina))
+
+    listado_de_solicitudes.orden_y_filtrado()
+
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
 
 # Certificaciones de Terceros
 
@@ -905,7 +922,19 @@ def pdf_solicitud():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdf_certificado():
-    return dict()
+    session.forget(response)
+    # Certificacion
+    if request.vars.solicitud:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
+    return dict(solicitud = solicitud)
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):

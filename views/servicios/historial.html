@@ -21,12 +21,34 @@
 </div>
 <!-- Fin Listado --> 
 
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
+
+<!-- Ajax ficha historial--> 
+<input type="hidden" id="solicitud" name="solicitud" value="">
+
 <!-- Ajax ordenar listado de servicios--> 
 <input type="hidden" id="ordenarPor" name="ordenarPor" value="">
 <input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
 <input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
 
 <script language="javascript">
+  function abrirFicha(solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    ajax('ajax_ficha_historial', ['solicitud'], "ficha");
+  }
   
   /// Valores por defecto al cargar la página del listado de servicios
   order_by_col = null;

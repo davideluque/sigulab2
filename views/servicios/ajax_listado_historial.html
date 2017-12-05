@@ -1,5 +1,6 @@
 <!-- Inicio Tabla Historial Servicios -->
 <div class="row">
+  <h3> Historial de Servicios </h3>
   <div class="table-responsive" >
     <table id="tablaListado" class="table table-hover">
         <!-- Titulos Listado -->
@@ -28,12 +29,12 @@
           <!-- Contenido Listado -->
           {{for item in grid:}}
           <tr>
-            <th class="camposTabla">{{=item.registro}}</th>
+            <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.registro_solicitud}}</a></th>
             <th class="camposTabla">{{=item.fecha_certificacion}}</th>
             <th class="camposTabla">{{=item.nombre_servicio}}</th>
-            <th class="camposTabla">{{=item.solicitante}}</th>
-            <th class="camposTabla">{{=item.dependencia_ejecutora}}</th>
-            <th class="camposTabla">{{=item.unidad_adscripcion}}</th>
+            <th class="camposTabla">{{=item.responsable_solicitud}}</th>
+            <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+            <th class="camposTabla">{{=item.adscripcion_dependencia_ejecutora}}</th>
           </tr>
         {{pass}}
         <tbody>

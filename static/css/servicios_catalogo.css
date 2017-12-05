@@ -46,8 +46,13 @@ body {
   border-radius: 10px;
 }
 
+.botones {
+  background-color: lightgrey;
+}
+
 .botones:hover {
   background-color: grey;
+  color: white;
 }
 
 .filasDetalles {
