@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
@@ -9,7 +9,7 @@
 # - Fabiola Martínez <13-10838@usb.ve>
 # - Lautaro Villalon <12-10427@usb.ve>
 # - Yarima Luciani <13-10770@usb.ve>
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 from servicios_libreria import *
 import re
 
@@ -348,19 +348,12 @@ def certificaciones():
         solicitud = request.post_vars.solicitudid
 
         solicitud_a_actualizar = Solicitud(db,auth)
-        solicitud_a_actualizar.instanciar(solicitud)
+        solicitud_a_actualizar.instanciar(int(solicitud))
         solicitud_a_actualizar.certificar()
 
         fecha = request.post_vars.fecha
 
-        certificado = Certificacion(db, solicitud_a_actualizar.registro, solicitud_a_actualizar.id_responsable_solicitud,
-                        solicitud_a_actualizar.fecha_solicitud, solicitud_a_actualizar.id_servicio_solicitud,
-                        solicitud_a_actualizar.id_proposito_servicio, solicitud_a_actualizar.proposito_descripcion,
-                        solicitud_a_actualizar.proposito_cliente_final, solicitud_a_actualizar.descripcion_servicio,
-                        solicitud_a_actualizar.observaciones, solicitud_a_actualizar.aprobada_por, 
-                        solicitud_a_actualizar.fecha_aprobacion, solicitud_a_actualizar.elaborada_por, 
-                        solicitud_a_actualizar.fecha_elaboracion, request.now)
-        certificado.insertar()
+        solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
 
@@ -391,9 +384,33 @@ def certificaciones():
                 categorias=listar_categorias(db), tipos=listar_tipos(db),
                 sedes=listar_sedes(db))
 
+
+# ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-    return dict()
+
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+
+    if request.vars.pagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
+
+    if request.vars.columna:
+        listado_de_solicitudes.cambiar_columna(request.vars.columna)
+
+    listado_de_solicitudes.orden_y_filtrado()
+    firstpage = listado_de_solicitudes.boton_principio
+    lastpage = listado_de_solicitudes.boton_fin
+    nextpage = listado_de_solicitudes.boton_siguiente
+    prevpage = listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detallesServicios():
@@ -809,6 +826,11 @@ def ajax_listado_solicitudes_recibidas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_historial():
+
+    return dict()
+
 # Certificaciones de Terceros
 
 # Certificaciones Personales
@@ -825,13 +847,24 @@ def ajax_listado_solicitudes_recibidas():
 def pdf_solicitud():
     session.forget(response)
     # Solicitud
+    if request.vars.solicitud:
+        solicitud = Solicitud(db, auth)
 
-    solicitud = Solicitud(db, auth)
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
 
-    try:
-        solicitud.instanciar(int(request.vars.solicitud))
-    except:
-        solicitud.instanciar(0)
+    elif request.vars.historial:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.historial))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
 
 
     return dict(solicitud = solicitud)
