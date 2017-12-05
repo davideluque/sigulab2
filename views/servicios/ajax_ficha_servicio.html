@@ -128,26 +128,23 @@
         <input type="hidden" name="idServicio" value="{{=ficha['entrada'][0].id}}">
       </form>
 
-        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Cliente Interno")):}}
 
         <div class="btn-group botonesFicha">
             {{if auth.has_membership("WebMaster"):}}
 					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
-                {{pass}}
+            {{pass}}
 
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
-		
-		  {{if ficha['entrada'][0].visibilidad: }}
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
-		  {{else: }}
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
-		  {{pass}}
+            {{if edicion:}}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
+		        {{if ficha['entrada'][0].visibilidad: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
+		        {{else: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
+		        {{pass}}
+            {{pass}}
 
-
-	  	  <!-- <input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}"> -->
 	  	  <button type="submit" form="formularioSolicitar" class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}">Solicitar</button>
 		</div>
-      {{pass}}
 
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
