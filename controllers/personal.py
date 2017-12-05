@@ -130,7 +130,7 @@ def edit_form():
         redirect(URL('listado'))
 
 def index():
-    return dict()
+    return redirect(URL('listado'))
 
 #Funcion que envia los datos a la vista
 def listado():
