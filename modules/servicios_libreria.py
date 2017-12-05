@@ -12,9 +12,9 @@ class Servicio(object):
 
     def __init__(self, db, nombre = None, tipo = None, categoria = None,
                  objetivo = None, alcance = None, metodo = None, rango = None,
-                 incertidumbre = None, item_ensayar = None, requisitos = None, 
+                 incertidumbre = None, item_ensayar = None, requisitos = None,
                  resultados = None, docencia = None, investigacion = None,
-                 gestion = None, extension = None, visibilidad = None, 
+                 gestion = None, extension = None, visibilidad = None,
                  responsable = None, dependencia = None, ubicacion = None, id=None):
 
         self.nombre = nombre
@@ -57,22 +57,22 @@ class Servicio(object):
 
 
     def insertar(self):
-        
+
         insercion = self.db.servicios.insert(nombre = self.nombre,
-            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo, 
-            alcance = self.alcance, metodo = self.metodo, rango = self.rango, 
-            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar, 
-            requisitos = self.requisitos, resultados = self.resultados, 
-            docencia = self.docencia, investigacion = self.investigacion, 
-            gestion = self.gestion, extension = self.extension, 
-            visibilidad = self.visibilidad, responsable = self.responsable, 
+            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo,
+            alcance = self.alcance, metodo = self.metodo, rango = self.rango,
+            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar,
+            requisitos = self.requisitos, resultados = self.resultados,
+            docencia = self.docencia, investigacion = self.investigacion,
+            gestion = self.gestion, extension = self.extension,
+            visibilidad = self.visibilidad, responsable = self.responsable,
             dependencia = self.dependencia, ubicacion = self.ubicacion)
 
         return insercion
 
 
     def instanciar(self, id):
-        
+
         instanciacion = self.db(self.db.servicios.id == id).select(self.db.servicios.ALL)
 
         if (len(instanciacion) == 1):
@@ -102,7 +102,7 @@ class Servicio(object):
             self.obtenerListaPropositos()
 
             return True
-        
+
         else:
 
             return False
@@ -110,7 +110,7 @@ class Servicio(object):
 
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
                rango, incertidumbre, item_ensayar, requisitos, resultados,
-               docencia, investigacion, gestion, extension, visibilidad, 
+               docencia, investigacion, gestion, extension, visibilidad,
                responsable, dependencia, ubicacion):
 
         self.nombre = nombre
@@ -137,11 +137,11 @@ class Servicio(object):
 
 
     def actualizar(self, id):
-        
+
         actualizacion = self.db(self.db.servicios.id == id).update(
-                            nombre = self.nombre, 
+                            nombre = self.nombre,
                             tipo = self.tipo,
-                            categoria = self.categoria, 
+                            categoria = self.categoria,
                             objetivo = self.objetivo,
                             alcance = self.alcance,
                             metodo = self.metodo,
@@ -164,7 +164,7 @@ class Servicio(object):
 
     def conseguir_categorias(self):
         self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
-        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre       
+        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre
 
         seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
@@ -185,7 +185,7 @@ class Servicio(object):
 
 
         if self.docencia == True:
-            propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0] 
+            propositoServicio = self.db("Docencia" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
             self.propositos_a_mostrar.append(propositoServicio)
 
         if self.investigacion == True:
@@ -194,7 +194,7 @@ class Servicio(object):
 
         if self.extension == True:
             propositoServicio = self.db("Extensión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
-            self.propositos_a_mostrar.append(propositoServicio)    
+            self.propositos_a_mostrar.append(propositoServicio)
 
         if self.gestion == True:
             propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
@@ -209,22 +209,19 @@ class Servicio(object):
 
 class ListaServicios(object):
 
-    def __init__(self, db, visibilidad, orden=False, columna='id', central=1):
-        
+    def __init__(self, db, dependencia, rol, orden=False, columna='id', central=1):
+
         #### Captura de datos desde la Base de Datos
 
         self.db = db
-        
+
         # 1. Tomar servicios visibles o todos de la base de datos
 
-        if visibilidad == True:
-            self.set = self.db(self.db.servicios.id > 0)
-        else:
-            self.set = self.db(self.db.servicios.visibilidad == True)
+        self.set = self.capturar_conjunto_por_rol(dependencia, rol)
 
         # Aqui se introducen los servicios instanciados
         self.filas = []
-        
+
         # 2. Instanciar todos los servicios como objetos de la clase Servicio
         self.capturar_objetos()
 
@@ -308,13 +305,29 @@ class ListaServicios(object):
     def cambiar_ordenamiento(self, orden):
         self.orden = orden
 
+    def capturar_conjunto_por_rol(self, dependencia, rol):
+        if rol:
+            if rol == 2:
+                return self.db(self.db.servicios.id > 0)
+            else:
+                secciones = []
+                dep = self.db(self.db.dependencias.unidad_de_adscripcion == dependencia).select(self.db.dependencias.id)
+
+                for d in dep:
+                    secciones.append(int(d.id))
+
+                return self.db((any((self.db.servicios.dependencia == s) for s in secciones)) or (self.db.servicios.visibilidad == True))
+
+        else:
+            return self.db(self.db.servicios.visibilidad == True)
+
     def capturar_objetos(self):
         """
         Toma cada servicio de la base de datos, lo instancia como un objeto
         de la clase "Servicio" y luego lo anade a "filas" que es una lista
-        tentativa de servicios. El listado final se encuentra en el arreglo 
-        "servicios_a_mostrar" pues son los servicios que ya pasaron por el 
-        filtro de 10 servicios por pagina mas por el ordenamiento. 
+        tentativa de servicios. El listado final se encuentra en el arreglo
+        "servicios_a_mostrar" pues son los servicios que ya pasaron por el
+        filtro de 10 servicios por pagina mas por el ordenamiento.
         """
         for serv in self.set.select(self.db.servicios.id):
             servicio = Servicio(self.db)
@@ -324,6 +337,50 @@ class ListaServicios(object):
     def orden_y_filtrado(self):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
         self.servicios_a_mostrar = self.filas[(self.pagina_central - 1)*10:self.ultimo_elemento]
+
+    def catalogo(self, categoria):
+        lista_de_servicios_catalogo = []
+        ensayo = []
+        inspeccion = []
+        calibracion = []
+        desarrollo_prototipo_piezas = []
+        consultoria_asesoria = []
+        formacion_capacitacion_transferencia = []
+        sala_computadoras = []
+        sala_videos = []
+        verificacion = []
+
+        servicios_por_categoria = self.db(categoria == self.db.servicios.categoria).select(self.db.servicios.ALL)
+
+        for servicio in servicios_por_categoria:
+            serv = Servicio(self.db)
+            serv.instanciar(servicio.id)
+            lista_de_servicios_catalogo.append(serv)
+
+        for servicio in lista_de_servicios_catalogo:
+            if servicio.tipo == 1:
+                ensayo.append(servicio)
+            elif servicio.tipo == 2:
+                inspeccion.append(servicio)
+            elif servicio.tipo == 3:
+                calibracion.append(servicio)
+            elif servicio.tipo == 4:
+                desarrollo_prototipo_piezas.append(servicio)
+            elif servicio.tipo == 5:
+                consultoria_asesoria.append(servicio)
+            elif servicio.tipo == 6:
+                formacion_capacitacion_transferencia.append(servicio)
+            elif servicio.tipo == 7:
+                sala_computadoras.append(servicio)
+            elif servicio.tipo == 8:
+                sala_videos.append(servicio)
+            elif servicio.tipo == 9:
+                verificacion.append(servicio)
+
+        servicios_categoria_tipo = [ensayo, inspeccion, calibracion, desarrollo_prototipo_piezas, consultoria_asesoria, formacion_capacitacion_transferencia, sala_computadoras, sala_videos, verificacion]
+
+
+        return servicios_categoria_tipo
 
 
 #------------------------------------------------------------------------------
@@ -337,7 +394,7 @@ class Solicitud(object):
     def __init__(self, db, auth, registro = None, id_responsable_solicitud = None,
         fecha_solicitud = None, id_servicio_solicitud = None,  id_proposito_servicio = None,
         proposito_descripcion = None, proposito_cliente_final = None, descripcion_servicio = None,
-        observaciones = None, estado_solicitud = None):
+        observaciones = None, estado_solicitud = None, proyecto = None, fecha_certificacion = None):
 
         self.registro = registro
         self.id_responsable_solicitud = id_responsable_solicitud
@@ -373,7 +430,9 @@ class Solicitud(object):
         self.tipo_servicio = None
         self.categoria_servicio = None
         self.nombre_proposito = None
-        
+        self.adscripcion_dependencia_solicitante = None
+        self.adscripcion_dependencia_ejecutora = None       
+
         # Variables disponibles despues de aprobacion
         self.aprobada_por = None
         self.fecha_aprobacion = None
@@ -382,12 +441,17 @@ class Solicitud(object):
         self.fecha_elaboracion = None
         self.elaborada_por = None
 
+        # Variables para Certificacion
+        self.ci_responsable_solicitud = None
+        self.proyecto = proyecto
+        self.fecha_certificacion = fecha_certificacion
+
         if registro != None:
             self.conseguir_atributos()
-        
+
     def __str__(self):
 
-        return self.registro 
+        return self.registro
 
     def insertar(self):
 
@@ -426,7 +490,7 @@ class Solicitud(object):
             self.estado_solicitud = instanciacion[0].estado
 
             if instanciacion[0].aprobada_por:
-                self.aprobada_por = instanciacion[0].aprobada_por 
+                self.aprobada_por = instanciacion[0].aprobada_por
             else:
                 self.aprobada_por = ""
 
@@ -443,14 +507,14 @@ class Solicitud(object):
             if instanciacion[0].fecha_elaboracion:
                 self.fecha_elaboracion = instanciacion[0].fecha_elaboracion
             else:
-                self.fecha_elaboracion = "" 
+                self.fecha_elaboracion = ""
 
             self.estado_solicitud_str = self.estado_string()
 
             self.conseguir_atributos()
 
             return True
-        
+
         else:
 
             return False
@@ -472,7 +536,7 @@ class Solicitud(object):
         self.conseguir_atributos()
 
     def actualizar(self, id):
-        
+
         actualizacion = self.db(self.db.solicitudes.id == id).update(
                                                 registro = self.registro,
                                                 responsable = self.id_responsable_solicitud,
@@ -492,6 +556,7 @@ class Solicitud(object):
         return actualizacion
 
     def eliminar(self, id):
+
         self.db(self.db.solicitudes.id == id).delete()
 
     def conseguir_atributos(self):
@@ -502,6 +567,7 @@ class Solicitud(object):
         # Extensiones telefonicas del responsable de la solicitud
         personal = self.db(self.id_responsable_solicitud == self.db.t_Personal.id).select(self.db.t_Personal.ALL)[0]
         self.telef_responsable_solicitud = personal.f_telefono
+        self.ci_responsable_solicitud = personal.f_ci
 
         responsable_usuario = self.db(personal.f_usuario == self.db.auth_user.id).select(self.db.auth_user.ALL)[0]
 
@@ -513,6 +579,14 @@ class Solicitud(object):
         dependencia = self.db(personal.f_dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
         self.id_dependencia_solicitante = dependencia.id
+
+        self.id_adscripcion_dependencia_solicitante = dependencia.unidad_de_adscripcion
+
+        if self.id_adscripcion_dependencia_solicitante != None:
+            self.adscripcion_dependencia_solicitante = self.db(self.id_adscripcion_dependencia_solicitante == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
+
+        else:
+            self.adscripcion_dependencia_solicitante = "Vicerrectorado Académico"
 
         # Dependencia solicitante
         self.nombre_dependencia_solicitante = dependencia.nombre
@@ -526,6 +600,14 @@ class Solicitud(object):
 
         dependencia_ejecutora_servicio = self.db(self.id_dependencia_ejecutora == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
+        self.id_adscripcion_dependencia_ejecutora = dependencia_ejecutora_servicio.unidad_de_adscripcion
+
+        if self.id_adscripcion_dependencia_ejecutora != None:
+            self.adscripcion_dependencia_ejecutora = self.db(self.id_adscripcion_dependencia_ejecutora == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
+
+        else:
+            self.adscripcion_dependencia_ejecutora = "Vicerrectorado Académico"       
+
         # Dependencia Ejecutora del Servicio
         self.nombre_dependencia_ejecutora = dependencia_ejecutora_servicio.nombre
 
@@ -538,7 +620,7 @@ class Solicitud(object):
 
         id_ubicacion_ejecucion = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].ubicacion
 
-        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].direccion
+        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].uso
 
         # Nombre de Servicio
 
@@ -576,24 +658,20 @@ class Solicitud(object):
         elif self.estado_solicitud == 1:
             return "En ejecución"
         elif self.estado_solicitud == 2:
-            return "Pendiente por Certificación"
+            return "Pendiente por certificacion"
         elif self.estado_solicitud == 3:
             return "Certificada"
 
     def certificar(self):
         self.estado_solicitud = 3
+        self.fecha_certificacion = request.now
         self.estado_solicitud_str = self.estado_string()
         self.actualizar(self.id)
 
-    def elaborar_certificacion(self):
-        cert = Certificacion(self.db, self.id_servicio_solicitud, self.registro, self.id_responsable_solicitud,
-                             self.fecha_solicitud, self.id_proposito_servicio, self.proposito_descripcion,
-                             self.proposito_cliente_final, self.descripcion_servicio, self.observaciones,
-                             self.aprobada_por, self.fecha_aprobacion, self.elaborada_por, self.fecha_elaboracion)
+    def guardar_en_historial(self):
+        historial = Historial(self.db, self.auth, self)
 
-        cert.estado = 0
-
-        cert.insertar()
+        historial.insertar()
 
     def correoHacerSolicitud(self):
         nombre_jefe_dependencia = self.jefe_dependencia_ejecutora
@@ -610,12 +688,12 @@ class Solicitud(object):
 
         nombre_dependencia = self.nombre_dependencia_ejecutora
 
-        # Se le manda el email al jefe de la dependencia a la que pertenece el servicio 
+        # Se le manda el email al jefe de la dependencia a la que pertenece el servicio
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
 
         enviar_correo(self.auth, email_jefe_dependencia,'Se ha solicitado un servicio', correo)
 
-        # Se le manda el email al responsable de la solicitud 
+        # Se le manda el email al responsable de la solicitud
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
 
         enviar_correo(self.auth, email_solicitante,'Se ha solicitado un servicio', correo)
@@ -627,7 +705,7 @@ class Solicitud(object):
 
         nombre_servicio = self.nombre_servicio
 
-        estado_solicitud = self.estado_solicitud 
+        estado_solicitud = self.estado_solicitud
 
         nombre_estado_solicitud = self.estado_solicitud_str
 
@@ -715,7 +793,7 @@ class ListaSolicitudes(object):
         self.pagina_central = nueva_pagina
         self.configurar_botones()
         self.posicionar_ultimo()
-    
+
     def posicionar_ultimo(self):
         self.ultimo_elemento = min(self.pagina_central * 10, self.cuenta)
 
@@ -762,9 +840,9 @@ class Certificacion(object):
         id_servicio=None, proposito=None, proposito_descripcion=None, proposito_cliente_final=None, descripcion=None,
         observaciones=None, aprobada_por=None, fecha_aprobacion=None, elaborada_por=None,
         fecha_elaboracion=None, fecha_certificacion=None, proyecto=None, estado=None):
-        
+
         self.db = db
-        
+
         # Solicitud
         self.id_servicio = id_servicio
         self.registro = registro
@@ -799,7 +877,7 @@ class Certificacion(object):
         self.unidad_adscripcion = None
 
     def instanciar(self, id):
-        instanciacion = self.db(self.db.historial_servicios.id == id).select(self.db.historial_servicios.ALL)
+        instanciacion = self.db(self.db.historial_solicitudes.id == id).select(self.db.historial_solicitudes.ALL)
 
         if (len(instanciacion) == 1):
             # Solicitud
@@ -838,7 +916,7 @@ class Certificacion(object):
 
     def insertar(self):
 
-        insercion = self.db.historial_servicios.insert(id_servicio = self.id_servicio,
+        insercion = self.db.historial_solicitudes.insert(id_servicio = self.id_servicio,
                                         registro = self.registro,
                                         responsable_solicitud = self.responsable_solicitud,
                                         fecha_solicitud = self.fecha_solicitud,
@@ -858,7 +936,7 @@ class Certificacion(object):
         return insercion
 
     def certificar(self):
-        certificar = self.db(self.db.historial_servicios.id == self.id).update(
+        certificar = self.db(self.db.historial_solicitudes.id == self.id).update(
             estado = 1)
 
         self.instanciar(self.id)
@@ -869,6 +947,157 @@ class Certificacion(object):
 
     def __str__(self):
         return self.registro
+
+
+class Historial(object):
+
+    def __init__(self, db, auth, solicitud = None):
+
+        
+        if solicitud:
+            # VARIABLES PARA SOLICITUD
+
+            self.registro_solicitud = solicitud.registro
+            self.proposito_solicitud = solicitud.nombre_proposito
+            self.proposito_solicitud_descripcion = solicitud.proposito_descripcion
+            self.descripcion_solicitud = solicitud.descripcion_servicio
+            self.observaciones_solicitud = solicitud.observaciones
+            self.responsable_solicitud = solicitud.nombre_responsable_solicitud
+            self.email_responsable_solicitud = solicitud.email_responsable_solicitud
+            self.telefono_responsable_solicitud = solicitud.telef_responsable_solicitud
+            self.nombre_dependencia_solicitante = solicitud.nombre_dependencia_solicitante
+            self.nombre_jefe_dependencia_solicitante = solicitud.nombre_jefe_dependencia_solicitante
+            self.nombre_dependencia_ejecutora = solicitud.nombre_dependencia_ejecutora
+            self.nombre_jefe_dependencia_ejecutora = solicitud.jefe_dependencia_ejecutora
+            self.lugar_ejecucion_servicio = solicitud.lugar_ejecucion_servicio
+            self.nombre_servicio = solicitud.nombre_servicio
+            self.tipo_servicio = solicitud.tipo_servicio
+            self.categoria_servicio = solicitud.categoria_servicio
+            self.solicitud_aprobada_por = solicitud.aprobada_por
+            self.fecha_aprobacion_solicitud = solicitud.fecha_aprobacion
+            self.fecha_elaboracion_solicitud = solicitud.fecha_elaboracion
+            self.solicitud_elaborada_por = solicitud.elaborada_por
+            self.adscripcion_dependencia_solicitante = solicitud.adscripcion_dependencia_solicitante
+            self.adscripcion_dependencia_ejecutora = solicitud.adscripcion_dependencia_ejecutora      
+
+
+            # VARIABLES PARA CERTIFICACION
+
+            self.ci_responsable_solicitud = solicitud.ci_responsable_solicitud
+
+            self.fecha_certificacion = solicitud.fecha_certificacion
+            self.numero_de_proyecto = solicitud.proyecto
+            
+
+        # VARIABLES DE INSTANCIACION
+        self.id = None
+        self.db = db
+        self.auth = auth
+    
+    def __str__(self):
+       
+        return self.registro 
+
+    def insertar(self):
+
+        insercion = self.db.historial_solicitudes.insert(registro_solicitud = self.registro_solicitud,
+                                                       nombre_servicio = self.nombre_servicio,
+                                                       tipo_servicio = self.tipo_servicio,
+                                                       categoria_servicio = self.categoria_servicio,
+                                                       proposito_solicitud = self.proposito_solicitud,
+                                                       proposito_solicitud_descripcion = self.proposito_solicitud_descripcion,
+                                                       descripcion_solicitud = self.descripcion_solicitud,
+                                                       observaciones_solicitud = self.observaciones_solicitud,
+                                                       responsable_solicitud = self.responsable_solicitud,
+                                                       ci_responsable_solicitud = self.ci_responsable_solicitud,
+                                                       email_responsable_solicitud = self.email_responsable_solicitud,
+                                                       telefono_responsable_solicitud = self.telefono_responsable_solicitud,
+                                                       nombre_dependencia_solicitante = self.nombre_dependencia_solicitante,
+                                                       nombre_jefe_dependencia_solicitante = self.nombre_jefe_dependencia_solicitante,
+                                                       nombre_dependencia_ejecutora = self.nombre_dependencia_ejecutora,
+                                                       nombre_jefe_dependencia_ejecutora = self.nombre_jefe_dependencia_ejecutora,
+                                                       lugar_ejecucion_servicio = self.lugar_ejecucion_servicio,
+                                                       solicitud_aprobada_por = self.solicitud_aprobada_por,
+                                                       fecha_aprobacion_solicitud = self.fecha_aprobacion_solicitud,
+                                                       fecha_elaboracion_solicitud = self.fecha_elaboracion_solicitud,
+                                                       solicitud_elaborada_por = self.solicitud_elaborada_por,
+                                                       fecha_certificacion = self.fecha_certificacion,
+                                                       numero_de_proyecto = self.numero_de_proyecto,
+                                                       adscripcion_dependencia_solicitante = self.adscripcion_dependencia_solicitante,
+                                                       adscripcion_dependencia_ejecutora = self.adscripcion_dependencia_ejecutora )
+
+                                    
+
+        return insercion
+
+    def instanciar(self, id):
+        instanciacion = self.db(self.db.historial_solicitudes.id == id).select(self.db.historial_solicitudes.ALL)
+
+
+        if (len(instanciacion) == 1):
+
+            self.id = instanciacion[0].id
+
+            self.registro_solicitud = instanciacion[0].registro_solicitud
+            self.nombre_servicio = instanciacion[0].nombre_servicio
+            self.tipo_servicio = instanciacion[0].tipo_servicio
+            self.categoria_servicio = instanciacion[0].categoria_servicio
+            self.proposito_solicitud = instanciacion[0].proposito_solicitud
+            self.proposito_solicitud_descripcion = instanciacion[0].proposito_solicitud_descripcion
+            self.descripcion_solicitud = instanciacion[0].descripcion_solicitud
+            self.observaciones_solicitud = instanciacion[0].observaciones_solicitud
+            self.responsable_solicitud = instanciacion[0].responsable_solicitud
+            self.ci_responsable_solicitud = instanciacion[0].ci_responsable_solicitud
+            self.email_responsable_solicitud = instanciacion[0].email_responsable_solicitud
+            self.telefono_responsable_solicitud = instanciacion[0].telefono_responsable_solicitud
+            self.nombre_dependencia_solicitante = instanciacion[0].nombre_dependencia_solicitante
+            self.nombre_jefe_dependencia_solicitante = instanciacion[0].nombre_jefe_dependencia_solicitante
+            self.nombre_dependencia_ejecutora = instanciacion[0].nombre_dependencia_ejecutora
+            self.nombre_jefe_dependencia_ejecutora = instanciacion[0].nombre_jefe_dependencia_ejecutora
+            self.lugar_ejecucion_servicio = instanciacion[0].lugar_ejecucion_servicio
+            self.solicitud_aprobada_por = instanciacion[0].solicitud_aprobada_por
+            self.fecha_aprobacion_solicitud = instanciacion[0].fecha_aprobacion_solicitud
+            self.fecha_elaboracion_solicitud = instanciacion[0].fecha_elaboracion_solicitud
+            self.solicitud_elaborada_por = instanciacion[0].solicitud_elaborada_por
+            self.fecha_certificacion = instanciacion[0].fecha_certificacion
+            self.numero_de_proyecto = instanciacion[0].numero_de_proyecto
+            self.adscripcion_dependencia_solicitante = instanciacion[0].adscripcion_dependencia_solicitante
+            self.adscripcion_dependencia_ejecutora = instanciacion[0].adscripcion_dependencia_ejecutora   
+    
+
+
+            return True
+        else:
+            return False
+
+    def eliminar(self, id):
+        
+        self.db(self.db.historial_solicitudes.id == id).delete()
+
+    def generacion_pdf(self):
+        self.registro = self.registro_solicitud
+        self.nombre_proposito = self.proposito_solicitud
+        self.proposito_descripcion = self.proposito_solicitud_descripcion
+        self.descripcion_servicio = self.descripcion_solicitud
+        self.observaciones = self.observaciones_solicitud
+        self.nombre_responsable_solicitud = self.responsable_solicitud
+        self.email_responsable_solicitud = self.email_responsable_solicitud
+        self.telef_responsable_solicitud = self.telefono_responsable_solicitud
+        self.nombre_dependencia_solicitante = self.nombre_dependencia_solicitante
+        self.nombre_jefe_dependencia_solicitante = self.nombre_jefe_dependencia_solicitante
+        self.nombre_dependencia_ejecutora = self.nombre_dependencia_ejecutora
+        self.jefe_dependencia_ejecutora = self.nombre_jefe_dependencia_ejecutora
+        self.lugar_ejecucion_servicio = self.lugar_ejecucion_servicio
+        self.nombre_servicio = self.nombre_servicio
+        self.tipo_servicio = self.tipo_servicio
+        self.categoria_servicio = self.categoria_servicio
+        self.aprobada_por = self.solicitud_aprobada_por
+        self.fecha_aprobacion = self.fecha_aprobacion_solicitud
+        self.fecha_elaboracion = self.fecha_elaboracion_solicitud
+        self.elaborada_por = self.solicitud_elaborada_por
+        self.ci_responsable_solicitud = self.ci_responsable_solicitud
+        self.fecha_certificacion = self.fecha_certificacion
+        self.proyecto = self.numero_de_proyecto
 
 
 class ListaHistorial(object):
@@ -885,7 +1114,7 @@ class ListaHistorial(object):
         self.id_dependencia_usuario = personal_del_usuario.f_dependencia
 
         # Instanciacion de cada solicitud en la bd
-        self.set = self.db(self.db.historial_servicios.id > 0)
+        self.set = self.db(self.db.historial_solicitudes.id > 0)
         self.filas = []
         self.capturar_objetos()
 
@@ -924,7 +1153,7 @@ class ListaHistorial(object):
         self.posicionar_ultimo()
 
         # Lista de cada fila, convertida en el objeto servicio
-        self.solicitudes_a_mostrar = []
+        self.certificaciones_a_mostrar = []
 
     # Configurara la visibilidad y posicion de cada boton
 
@@ -968,26 +1197,15 @@ class ListaHistorial(object):
         self.columna = columna
 
     def capturar_objetos(self):
-        for cert in self.set.select(self.db.historial_servicios.ALL):
-            certificacion = Certificacion(self.db, self.auth)
-            certificacion.instanciar(cert.id)
+        for hist in self.set.select(self.db.historial_solicitudes.ALL):
+            historial = Historial(self.db, self.auth)
+            historial.instanciar(hist.id)
 
-            print(certificacion.estado)
-
-            if (certificacion.estado == 0 and certificacion.responsable_solicitud == self.id_personal and
-                "Solicitante" == self.tipo_listado):
-                self.filas.append(certificacion)
-
-            elif (certificacion.estado == 0 and certificacion.dependencia_ejecutora_id == self.id_dependencia_usuario and
-                "Ejecutor" == self.tipo_listado):
-                self.filas.append(certificacion)
-
-            elif (certificacion.estado == 1 and "Historial" == self.tipo_listado):
-                self.filas.append(certificacion)
+            self.filas.append(historial)
 
     def orden_y_filtrado(self):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
-        self.solicitudes_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
+        self.certificaciones_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
 
 #------------------------------------------------------------------------------
 #
@@ -1047,7 +1265,7 @@ def query_ficha(db, idv):
 
     # Ubicacion Fisica
     ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
-    ubicacion = ubicrow[0].nombre
+    ubicacion = ubicrow[0].codigo
     ubicacionid = ubicrow[0].id
 
     # Responsable
@@ -1111,23 +1329,12 @@ def generador_num_registro():
 
 def validador_registro_solicitudes(request, db, registro):
     anio = str(request.now)[2:4]
-    registro = registro + "-" + anio + '/' + generador_num_registro()
+    registro = 'SIG-' + registro + "-" + anio + '/' + generador_num_registro()
 
     check = db(db.solicitudes.registro == registro).count()
 
     if check != 0:
         return validador_registro_solicitudes(request, db)
-    else:
-        return registro
-
-def validador_registro_certificaciones(request, db, registro):
-    anio = str(request.now)[2:4]
-    registro = registro + "-" + anio + '/' + generador_num_registro()
-
-    check = db(db.certificaciones.registro == registro).count()
-
-    if check != 0:
-        return validador_registro_certificaciones(request, db)
     else:
         return registro
 

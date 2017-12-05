@@ -222,11 +222,17 @@ db.define_table(
     Field('nombre_jefe_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Nombre del Jefe de la Dependencia Solicitante')),
 
+    Field('adscripcion_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Unidad de Adscripción de la Dependencia Solicitante')),
+
     Field('nombre_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Nombre de la Dependencia Ejecutora')),
 
     Field('nombre_jefe_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Nombre del Jefe de la Dependencia Ejecutora')),
+
+    Field('adscripcion_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Unidad de Adscripción de la Dependencia Ejecutora')),
 
     Field('lugar_ejecucion_servicio', 'string', requires=IS_NOT_EMPTY(), 
         label=T('Lugar de Ejecución del Servicio')),
