@@ -159,7 +159,7 @@ db.define_table(
     'espacios_fisicos',
     #Atributos;
     Field('codigo', 'string', unique=True, notnull=True, label=T('Código del espacio físico')),
-    Field('uso', 'string', unique=True, notnull=True, label=T('Uso del espacio físico')),
+    Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
     #Referencia (Revisar si el label es asistio o organizo)
     Field('dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')),
