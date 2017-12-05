@@ -286,8 +286,8 @@ def solicitudes():
 
             #solicitud_a_cambiar.elaborar_certificacion()
 
-        if request.post_vars.estado == "-1":
-            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -519,6 +519,18 @@ def ajax_ficha_certificacion():
     return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_historial():
+    session.forget(response)
+    # Solicitud
+    solicitud = Historial(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    solicitud.generacion_pdf()
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_adscripcion():
     session.forget(response)
     adscripcion_query = db((db.dependencias.id_sede == int(request.vars.sede))).select(db.dependencias.ALL)
@@ -653,14 +665,14 @@ def ajax_obtener_datos_depen_ejecutora():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
+    solicitudesid = int(request.post_vars.solicitud)
     solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
     usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
     servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
@@ -742,7 +754,7 @@ def ajax_listado_servicios():
                 pages=listado_de_servicios.rango_paginas,
                 actualpage=listado_de_servicios.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+                firstpage=firstpage, lastpage=lastpage, rol=rol)
 
 # Solicitudes Generadas
 

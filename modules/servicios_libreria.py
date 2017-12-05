@@ -652,15 +652,15 @@ class Solicitud(object):
 
     def estado_string(self):
         if self.estado_solicitud == -1:
-            return "Negada"
+            return "Denegada"
         elif self.estado_solicitud == 0:
-            return "Pendiente por Ejecución"
+            return "Por Aprobación"
         elif self.estado_solicitud == 1:
             return "En ejecución"
         elif self.estado_solicitud == 2:
-            return "Pendiente por certificacion"
+            return "Por certificación"
         elif self.estado_solicitud == 3:
-            return "Certificada"
+            return "Ejecutado"
 
     def certificar(self, request):
         self.estado_solicitud = 3
@@ -818,7 +818,7 @@ class ListaSolicitudes(object):
                   solicitud.estado_solicitud <= 2):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
-                  solicitud.estado_solicitud <= 2):
+                  solicitud.estado_solicitud <= 2 and solicitud.estado_solicitud >= 0):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
                   solicitud.estado_solicitud == 2):

@@ -410,11 +410,13 @@ if db(db.categorias_servicios).isempty():
 if db(db.auth_membership).isempty():
 	# Asignacion de roles
 	user = db(db.auth_user.email == 'cinterno@usb.ve').select()[0].id
+	dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
 	role = db(db.auth_group.role == 'Cliente Interno').select()[0].id
 
 	db.auth_membership.insert(user_id=user, group_id=role)
 
 	user = db(db.auth_user.email == 'webmaster@usb.ve').select()[0].id
+	dep = db(db.dependencias.nombre == 'Dirección').select()[0].id
 	role = db(db.auth_group.role == 'WebMaster').select()[0].id
 
 	db.auth_membership.insert(user_id=user, group_id=role)

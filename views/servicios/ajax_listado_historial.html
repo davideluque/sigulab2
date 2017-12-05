@@ -29,7 +29,7 @@
           <!-- Contenido Listado -->
           {{for item in grid:}}
           <tr>
-            <th class="camposTabla">{{=item.registro_solicitud}}</th>
+            <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.registro_solicitud}}</a></th>
             <th class="camposTabla">{{=item.fecha_certificacion}}</th>
             <th class="camposTabla">{{=item.nombre_servicio}}</th>
             <th class="camposTabla">{{=item.responsable_solicitud}}</th>
