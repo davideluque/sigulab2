@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
@@ -9,7 +9,7 @@
 # - Fabiola Martínez <13-10838@usb.ve>
 # - Lautaro Villalon <12-10427@usb.ve>
 # - Yarima Luciani <13-10770@usb.ve>
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 from servicios_libreria import *
 import re
 
@@ -701,6 +701,11 @@ def ajax_listado_solicitudes_recibidas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_historial():
+
+    return dict()
 #------------------------------------------------------------------------------
 #
 # Controladores de los Reportes a Imprimir

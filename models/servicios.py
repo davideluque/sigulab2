@@ -169,56 +169,84 @@ db.define_table(
           requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, notnull=True, label=T('Fecha de Certificacion de Solicitud')),
 )
 
-##################################################################################################
-#                                                           TABLA: HISTORIAL DE SERVICIOS
+##############################################################################
+#                     TABLA: HISTORIAL DE SERVICIOS
 #
-# Tabla de servicios solicitados ya ejecutados y certificados, tabla final para una solicitud
-# de servicio (Solicitud estado 3). Combinacion de las tablas de certificacion y solicitud.
+# Tabla de servicios solicitados ya ejecutados y certificados. 
+# Tabla final para una solicitud de servicio (Solicitud estado 3). 
+# Combinacion de las tablas de certificacion y solicitud.
 #
-#################################################################################################
+##############################################################################
 
 db.define_table(
-    "historial_servicios",
+    "historial_solicitudes",
 
-    Field('id_servicio', 'reference servicios', requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'),
-          label=T('Servicio Solicitado')),
+    Field('registro_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Número de Registro de la Solicitud')),
 
-    # Datos basicos de una solicitud
-    Field('registro', 'string', requires=IS_NOT_EMPTY(), label=T('Número de Registro')),
+    Field('nombre_servicio', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Nombre del Servicio'))
 
-    Field('responsable_solicitud', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'),
-          label=T('Responsable de la Solicitud')),
+    Field('tipo_servicio', 'string', requires=IS_NOT_EMPTY(),
+        label=T('Tipo del Servicio')),
 
-    Field('fecha_solicitud', 'date',
-          requires=IS_DATE(format=('%d-%m-%Y')), default=request.now, notnull=True, label=T('Fecha de Solicitud')),
+    Field('categoria_servicio', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Categoría del Servicio')),
 
-    Field('proposito', 'reference propositos', requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'),
-          label=T('Propósito del servicio solicitado')),
+   Field('proposito_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+    label=T('Propósito del Servicio Solicitado')),
 
-    Field('proposito_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),
+    Field('proposito_solicitud_descripcion', 'string', requires=IS_NOT_EMPTY(), label=T('Descripción del Propósito del Servicio Solicitado')),
 
-    Field('proposito_cliente_final', 'string', label=T('Cliente final del propósito')),
+    Field('descripcion_solicitud', 'string', 
+        label=T('Descripción de la Solicitud')),
 
-    Field('descripcion', 'string', label=T('Descripción de la Solicitud')),
+    Field('observaciones_solicitud', 'string', 
+        label=T('Observaciones de la Solicitud')),
 
-    Field('observaciones', 'string', label=T('Observaciones de la Solicitud')),
+    Field('responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Responsable de la Solicitud')),
 
-    Field('aprobada_por', 'string', label=T('Solicitud Aprobada Por')),
+    Field('ci_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Cédula del Responsable de la Solicitud')),
 
-    Field('fecha_aprobacion', 'date', label=T('Fecha de Aprobacion de Solicitud')),
+    Field('email_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Cédula del Responsable de la Solicitud')),
 
-    Field('elaborada_por', 'string', label=T('Solicitud Elaborada Por')),
+    Field('telefono_responsable_solicitud', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Teléfono del Responsable de la Solicitud')),
 
-    Field('fecha_elaboracion', 'date', label=T('Fecha de Elaboracion de Solicitud')),
+    Field('nombre_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Nombre de la Dependencia Solicitante')),
 
-    # Datos basicos de una certificacion
+    Field('nombre_jefe_dependencia_solicitante', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Nombre del Jefe de la Dependencia Solicitante')),
 
-    Field('proyecto', 'string', label=T('Número de Poyecto')),
+    Field('nombre_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Nombre de la Dependencia Ejecutora')),
 
-    Field('fecha_certificacion',   'date',
-          requires=IS_DATE(format=('%d-%m-%Y')), default = request.now, label=T('Fecha de Certificacion de Solicitud')),
+    Field('nombre_jefe_dependencia_ejecutora', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Nombre del Jefe de la Dependencia Ejecutora')),
 
-    # 0 por certificar
-    # 1 certificada
-    Field("estado", "integer", default = 0, label=T("Estado de la Certificacion"))
+    Field('lugar_ejecucion_servicio', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Lugar de Ejecución del Servicio')),
+
+    Field('solicitud_aprobada_por', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Solicitud Aprobada Por')),
+
+    Field('fecha_aprobacion_solicitud', 'date', 
+        requires=IS_DATE(format=('%d-%m-%Y')), 
+        label=T('Fecha de Aprobación de la Solicitud')),
+
+    Field('fecha_elaboracion_solicitud', 'date', 
+        requires=IS_DATE(format=('%d-%m-%Y')), 
+        label=T('Fecha de Elaboración de la Solicitud')),
+
+    Field('solicitud_elaborada_por', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Solicitud Elaborada por')),
+
+    Field('fecha_certificacion', 'date', requires=IS_DATE(format=('%d-%m-%Y')), label=T('Fecha de Certificación de la Solicitud')),
+
+    Field('numero_de_proyecto', 'string', requires=IS_NOT_EMPTY(), 
+        label=T('Número de Proyecto'))
 )
