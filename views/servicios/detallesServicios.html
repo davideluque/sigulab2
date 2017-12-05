@@ -5,8 +5,8 @@
 	<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="servicios_catalogo.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="{{=URL('static', 'css/servicios_catalogo.css')}}" rel="stylesheet">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 	<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -18,90 +18,148 @@
 <body>
 
 <header>
-	<h2 id="titulo" class="featurette-heading" align="center">Nombre categoría</h2>
-</header>
+	<h2 id="titulo" class="featurette-heading" align="center">{{=nombre_categoria}}</h2>
 
 <div id="contenedor" class="container">
+
+  <div class="filas">
     <hr class="featurette-divider">
-        <div class="row featurette filasDetalles">
-          <div class="col-sm-4">
-            <p class="lead text-muted">Calibración:</p>
-            <br>
-            <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
-            </ul>
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading">Ensayo</h2>
           </div>
-
-          <div class="col-sm-4">
-            <p class="lead text-muted">Inspección:</p>
-            <br>
+          <div class="col-md-5">
             <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
-            </ul>
-          </div>
-
-          <div class="col-sm-4">
-            <p class="lead text-muted">Desarrollo de prototipos y piezas:</p>
-            <br>
-            <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
+                {{for servicio in ensayo:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
             </ul>
           </div>
         </div>
+        <hr class="featurette-divider">
     </div>
 
-    <hr class="featurette-divider">
-    <div class="row featurette filasDetalles">
-          <div class="col-md-4">
-            <p class="lead text-muted">Consultoría/Asesoría Técnica y proyectos:</p>
-            <br>
+      <div class="row featurette">
+        <div class="col-md-7 columnasIzq">
+          <h2 class="featurette-heading">Inspección</h2>
+        </div>
+        <div class="col-md-5">
             <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
+                {{for servicio in inspeccion:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
+            </ul>
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading">Calibración</h2>
+          </div>
+          <div class="col-md-5">
+            <ul>
+                {{for servicio in calibracion:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
             </ul>
           </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
 
-        <div class="col-sm-4">
-            <p class="lead text-muted"> Formación/Capacitación/Transferencia tecnológica:</p>
-            <br>
+      <div class="row featurette">
+        <div class="col-md-7 columnasIzq">
+          <h2 class="featurette-heading">
+          Desarrollo de prototipos y piezas</h2>
+        </div>
+        <div class="col-md-5">
             <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
+                {{for servicio in desarrollo_prototipo_piezas:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
+            </ul>
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading">Consultoría/Asesoría Técnica y proyectos</h2>
+          </div>
+          <div class="col-md-5">
+            <ul>
+                {{for servicio in consultoria_asesoria:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
             </ul>
           </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
 
-        <div class="col-sm-4">
-            <p class="lead text-muted">Sala de Computadoras:</p>
-            <br>
+      <div class="row featurette">
+        <div class="col-md-7 columnasIzq">
+          <h2 class="featurette-heading">Formación/Capacitación/Transferencia tecnológica</h2>
+        </div>
+        <div class="col-md-5">
             <ul>
-            	<li>Servicio 1</li>
-            	<li>Servicio 2</li>
-            	<li>Servicio n</li>
+                {{for servicio in formacion_capacitacion_transferencia:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
+            </ul>
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading">Sala de Computadoras</h2>
+          </div>
+          <div class="col-md-5">
+            <ul>
+                {{for servicio in sala_computadoras:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
             </ul>
           </div>
-    </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
 
-
-    <hr class="featurette-divider">
-    <div class="row featurette filasDetalles">
-          <div class="col-md-4">
-            <p class="lead text-muted">Sala de Videos:</p>
-            <br>
+      <div class="row featurette">
+        <div class="col-md-7 columnasIzq">
+          <h2 class="featurette-heading">Sala de Videos</h2>
+        </div>
+        <div class="col-md-5">
             <ul>
-                <li>Servicio 1</li>
-                <li>Servicio 2</li>
-                <li>Servicio n</li>
+                {{for servicio in sala_videos:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
+            </ul>
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading">Verificación</h2>
+          </div>
+          <div class="col-md-5">
+            <ul>
+                {{for servicio in verificacion:}}
+                    <li>{{=servicio.nombre}}</li>
+                {{pass}}
             </ul>
           </div>
-    </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
 
 </body>
 </html>
+
