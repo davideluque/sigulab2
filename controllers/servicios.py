@@ -284,7 +284,7 @@ def solicitudes():
 
             # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
 
-            solicitud_a_cambiar.elaborar_certificacion()
+            #solicitud_a_cambiar.elaborar_certificacion()
 
         if request.post_vars.estado == "-1":
             solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
@@ -349,7 +349,7 @@ def certificaciones():
 
         solicitud_a_actualizar = Solicitud(db,auth)
         solicitud_a_actualizar.instanciar(int(solicitud))
-        solicitud_a_actualizar.certificar()
+        solicitud_a_actualizar.certificar(request)
 
         fecha = request.post_vars.fecha
 
@@ -388,29 +388,7 @@ def certificaciones():
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-
-    #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
-
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    listado_de_solicitudes.orden_y_filtrado()
-    firstpage = listado_de_solicitudes.boton_principio
-    lastpage = listado_de_solicitudes.boton_fin
-    nextpage = listado_de_solicitudes.boton_siguiente
-    prevpage = listado_de_solicitudes.boton_anterior
-
-    # ----- FIN LISTAR SOLICITUDES -----#
-
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
-                pages=listado_de_solicitudes.rango_paginas,
-                actualpage=listado_de_solicitudes.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+    return dict()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detallesServicios():
@@ -829,7 +807,32 @@ def ajax_listado_solicitudes_recibidas():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_historial():
 
-    return dict()
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
+    order_by_col = request.post_vars.ordenarPor
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiarPagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiarPagina))
+
+    listado_de_solicitudes.orden_y_filtrado()
+
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
 
 # Certificaciones de Terceros
 

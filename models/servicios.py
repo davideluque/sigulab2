@@ -64,7 +64,7 @@ db.define_table(
 
     # Ubicacion Fisica
     Field('ubicacion',          'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s'), label=T('Ubicación Física')),
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), label=T('Ubicación Física')),
 )
 
 db.servicios._plural = 'Servicios'
@@ -185,7 +185,7 @@ db.define_table(
         label=T('Número de Registro de la Solicitud')),
 
     Field('nombre_servicio', 'string', requires=IS_NOT_EMPTY(), 
-        label=T('Nombre del Servicio'))
+        label=T('Nombre del Servicio')),
 
     Field('tipo_servicio', 'string', requires=IS_NOT_EMPTY(),
         label=T('Tipo del Servicio')),

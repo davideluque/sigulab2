@@ -620,7 +620,7 @@ class Solicitud(object):
 
         id_ubicacion_ejecucion = self.db(self.id_servicio_solicitud == self.db.servicios.id).select(self.db.servicios.ALL)[0].ubicacion
 
-        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].uso
+        self.lugar_ejecucion_servicio = self.db(id_ubicacion_ejecucion == self.db.espacios_fisicos.id).select(self.db.espacios_fisicos.ALL)[0].codigo
 
         # Nombre de Servicio
 
@@ -662,7 +662,7 @@ class Solicitud(object):
         elif self.estado_solicitud == 3:
             return "Certificada"
 
-    def certificar(self):
+    def certificar(self, request):
         self.estado_solicitud = 3
         self.fecha_certificacion = request.now
         self.estado_solicitud_str = self.estado_string()
@@ -815,10 +815,10 @@ class ListaSolicitudes(object):
             if solicitud.estado_solicitud == 3:
                 pass
             elif (self.tipo_listado == "Solicitante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
-                  solicitud.estado_solicitud < 2):
+                  solicitud.estado_solicitud <= 2):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Ejecutante" and solicitud.id_dependencia_ejecutora == self.dependencia_usuario and
-                  solicitud.estado_solicitud < 2):
+                  solicitud.estado_solicitud <= 2):
                 self.filas.append(solicitud)
             elif (self.tipo_listado == "Certificante" and solicitud.id_dependencia_solicitante == self.dependencia_usuario and
                   solicitud.estado_solicitud == 2):
@@ -1153,7 +1153,7 @@ class ListaHistorial(object):
         self.posicionar_ultimo()
 
         # Lista de cada fila, convertida en el objeto servicio
-        self.certificaciones_a_mostrar = []
+        self.solicitudes_a_mostrar = []
 
     # Configurara la visibilidad y posicion de cada boton
 
@@ -1205,7 +1205,7 @@ class ListaHistorial(object):
 
     def orden_y_filtrado(self):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
-        self.certificaciones_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
+        self.solicitudes_a_mostrar = self.filas[(self.pagina_central - 1) * 10:self.ultimo_elemento]
 
 #------------------------------------------------------------------------------
 #
