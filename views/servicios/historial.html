@@ -1,11 +1,7 @@
 {{extend "layout.html"}}
 
 {{block head}}
-  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-  
-  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">  
 {{end}}
 
 {{block center}}
@@ -25,38 +21,57 @@
 </div>
 <!-- Fin Listado --> 
 
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
+
+<!-- Ajax ficha historial--> 
+<input type="hidden" id="solicitud" name="solicitud" value="">
+
 <!-- Ajax ordenar listado de servicios--> 
 <input type="hidden" id="ordenarPor" name="ordenarPor" value="">
 <input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
 <input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
 
 <script language="javascript">
+  function abrirFicha(solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    ajax('ajax_ficha_historial', ['solicitud'], "ficha");
+  }
   
   /// Valores por defecto al cargar la página del listado de servicios
-  order_by_col = null
-  order_by_asc = null
-  order_by_pag = 1
+  order_by_col = null;
+  order_by_asc = null;
+  order_by_pag = 1;
   function cambiarPagina(page){
-
-    order_by_pag = page
+    order_by_pag = page;
 
     var x = document.getElementById("ordenarPor");
       x.value = order_by_col;
 
     var y = document.getElementById("ordenarAlfabeticamente");
-      y.value = order_by_asc
+      y.value = order_by_asc;
 
     var z = document.getElementById("cambiarPagina")
-      z.value = order_by_pag
+      z.value = order_by_pag;
 
     ajax('ajax_listado_historial', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
-
   }
 
-  function ordenarHistorial(order_by){
-    
+  function ordenarHistorial(order_by){ 
     if (order_by_col == order_by){
-      order_by_asc = !order_by_asc
+      order_by_asc = !order_by_asc;
     }
     else{
       order_by_col = order_by
@@ -67,10 +82,10 @@
       x.value = order_by_col;
 
     var y = document.getElementById("ordenarAlfabeticamente");
-      y.value = order_by_asc
+      y.value = order_by_asc;
 
     var z = document.getElementById("cambiarPagina")
-      z.value = order_by_pag
+      z.value = order_by_pag;
 
     ajax('ajax_listado_historial', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
   }

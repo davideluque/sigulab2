@@ -1,31 +1,40 @@
 <!-- Inicio Tabla Historial Servicios -->
 <div class="row">
+  <h3> Historial de Servicios </h3>
   <div class="table-responsive" >
     <table id="tablaListado" class="table table-hover">
         <!-- Titulos Listado -->
         <thead>
           <tr id="titulosListado">
             <th class="camposTabla">
-              <button class="btn-link linksNombres" name="columna" value="registro" id="" onClick="ordenarHistorial('');">Número de Registro</button>
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('registro_solicitud');">Número de Registro</button>
             </th>
             <th class="camposTabla">
-              <a class="btn-link linksNombres" name="columna" value="fecha_certificacion" id="" onClick="ordenarHistorial('');">Fecha de Certificación</a>
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('fecha_certificacion');">Fecha de Certificación</button>
             </th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="nombre_servicio" id="" onClick="ordenarHistorial('');">Nombre del Servicio</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="solicitante" id="" onClick="ordenarHistorial('');">Nombre del Solicitante</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="dependencia_ejecutora" id="" onClick="ordenarHistorial('');">Dependencia Ejecutora</a></th>
-            <th class="camposTabla"><a class="btn-link linksNombres" name="columna" value="unidad_adscripcion" id="" onClick="ordenarHistorial('');">Unidad de Adscripción</a></th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('nombre_servicio');">Nombre del Servicio</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('responsable_solicitud');">Nombre del Solicitante</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('nombre_dependencia_ejecutora');">Dependencia Ejecutora</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('adscripcion_dependencia_ejecutora');">Unidad de Adscripción</button>
+            </th>
           </tr>
         </thead>
           <!-- Contenido Listado -->
           {{for item in grid:}}
           <tr>
-            <th class="camposTabla">{{=item.registro}}</th>
+            <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.registro_solicitud}}</a></th>
             <th class="camposTabla">{{=item.fecha_certificacion}}</th>
             <th class="camposTabla">{{=item.nombre_servicio}}</th>
-            <th class="camposTabla">{{=item.solicitante}}</th>
-            <th class="camposTabla">{{=item.dependencia_ejecutora}}</th>
-            <th class="camposTabla">{{=item.unidad_adscripcion}}</th>
+            <th class="camposTabla">{{=item.responsable_solicitud}}</th>
+            <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+            <th class="camposTabla">{{=item.adscripcion_dependencia_ejecutora}}</th>
           </tr>
         {{pass}}
         <tbody>

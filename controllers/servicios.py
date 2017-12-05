@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
@@ -9,7 +9,7 @@
 # - Fabiola Martínez <13-10838@usb.ve>
 # - Lautaro Villalon <12-10427@usb.ve>
 # - Yarima Luciani <13-10770@usb.ve>
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 from servicios_libreria import *
 import re
 
@@ -18,6 +18,9 @@ import re
 def index():
 
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
+
+    # TODO Sacar esto de la nueva tabla de historial
+
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
     return dict(solicitud_nueva=solicitud_nueva, certificacion_nueva=certificacion_nueva)
@@ -279,10 +282,12 @@ def solicitudes():
             # solicitud_a_cambiar.fecha_elaboracion = request.now
             solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
 
-            solicitud_a_cambiar.elaborar_certificacion()
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
 
-        if request.post_vars.estado == "-1":
-            solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+            #solicitud_a_cambiar.elaborar_certificacion()
+
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -303,7 +308,12 @@ def solicitudes():
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-    num_registro = validador_registro_solicitudes(request, db, dependencia_usuario.codigo_registro)
+    if auth.has_membership(group_id="Cliente Interno"):
+        registro = "FUSB"
+    else:
+        registro = dependencia_usuario.codigo_registro
+
+    num_registro = validador_registro_solicitudes(request, db, registro)
 
     nombre_dependencia = dependencia_usuario.nombre
 
@@ -329,6 +339,7 @@ def certificaciones():
 
     # ---- ACCION DE CERTIFICACION DEL SERVICIO ----
     if request.post_vars.registro:
+
         registro = request.post_vars.registro
         proyecto = request.post_vars.proyecto
         elaborado_por = request.post_vars.usuarioid
@@ -336,50 +347,69 @@ def certificaciones():
         solicitud = request.post_vars.solicitudid
 
         solicitud_a_actualizar = Solicitud(db,auth)
-        solicitud_a_actualizar.instanciar(solicitud)
-        solicitud_a_actualizar.certificar()
+        solicitud_a_actualizar.instanciar(int(solicitud))
+        solicitud_a_actualizar.certificar(request)
 
         fecha = request.post_vars.fecha
 
-        certificado = Certificacion(db, solicitud_a_actualizar.registro, solicitud_a_actualizar.id_responsable_solicitud,
-                        solicitud_a_actualizar.fecha_solicitud, solicitud_a_actualizar.id_servicio_solicitud,
-                        solicitud_a_actualizar.id_proposito_servicio, solicitud_a_actualizar.proposito_descripcion,
-                        solicitud_a_actualizar.proposito_cliente_final, solicitud_a_actualizar.descripcion_servicio,
-                        solicitud_a_actualizar.observaciones, solicitud_a_actualizar.aprobada_por, 
-                        solicitud_a_actualizar.fecha_aprobacion, solicitud_a_actualizar.elaborada_por, 
-                        solicitud_a_actualizar.fecha_elaboracion, request.now)
-        certificado.insertar()
+        solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
+  
+    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
+        sedes=listar_sedes(db))
 
-    #------ ACCION LISTAR SOLICITUDES DE SERV -----
-
-    listado_de_solicitudes = ListaSolicitudes(db, auth, "Certificante")
-
-    if request.vars.pagina:
-        listado_de_solicitudes.cambiar_pagina(int(request.vars.pagina))
-
-    if request.vars.columna:
-        listado_de_solicitudes.cambiar_columna(request.vars.columna)
-
-    listado_de_solicitudes.orden_y_filtrado()
-    firstpage = listado_de_solicitudes.boton_principio
-    lastpage = listado_de_solicitudes.boton_fin
-    nextpage = listado_de_solicitudes.boton_siguiente
-    prevpage = listado_de_solicitudes.boton_anterior
-
-    # ----- FIN LISTAR SOLICITUDES -----#
-
-    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
-                pages=listado_de_solicitudes.rango_paginas,
-                actualpage=listado_de_solicitudes.pagina_central,
-                nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage,
-                categorias=listar_categorias(db), tipos=listar_tipos(db),
-                sedes=listar_sedes(db))
-
+# ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
+    return dict()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detallesServicios():
+
+    nombre_categoria = ""
+
+    listado_de_servicios_catalogo = ListaServicios(db, False, None, None)
+    if request.vars.categoria:
+        categoria = int(request.vars.categoria)
+        servicios_mostrar_catalogo = listado_de_servicios_catalogo.catalogo(categoria)
+
+    if categoria == 1:
+        nombre_categoria = "Alimentos"
+    elif categoria == 2: 
+        nombre_categoria = "Ambiente"
+    elif categoria == 3: 
+        nombre_categoria = "Arquitectura, Urbanismo y Arte"
+    elif categoria == 4:
+        nombre_categoria = "Biología"
+    elif categoria == 5: 
+        nombre_categoria = "Energía"
+    elif categoria == 6: 
+        nombre_categoria = "Manufactura, Instrumentación y Control"
+    elif categoria == 7:
+        nombre_categoria = "Matemáticas y Estadísticas"
+    elif categoria == 8: 
+        nombre_categoria = "Mecánica y Materiales"
+    elif categoria == 9: 
+        nombre_categoria = "Química"
+    elif categoria == 10:
+        nombre_categoria = "Física"
+    elif categoria == 11: 
+        nombre_categoria = "Informática, Computación, Comunicación e Información"
+    elif categoria == 12: 
+        nombre_categoria = "Música"
+    elif categoria == 13:
+        nombre_categoria = "Salud"
+    elif categoria == 14:
+        nombre_categoria = "Otros"
+
+    return dict(nombre_categoria=nombre_categoria, ensayo=servicios_mostrar_catalogo[0], inspeccion=servicios_mostrar_catalogo[1], calibracion=servicios_mostrar_catalogo[2], 
+        desarrollo_prototipo_piezas=servicios_mostrar_catalogo[3], consultoria_asesoria=servicios_mostrar_catalogo[4],
+        formacion_capacitacion_transferencia=servicios_mostrar_catalogo[5], sala_computadoras=servicios_mostrar_catalogo[6], 
+        sala_videos=servicios_mostrar_catalogo[7], verificacion=servicios_mostrar_catalogo[8])
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def catalogoServicios():
     return dict()
 
 #------------------------------------------------------------------------------
@@ -391,9 +421,6 @@ def historial():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
     session.forget(response)
-
-    if request.vars.serv is None:
-        return redirect(URL('modulos', 'login'))
 
     # Servicio
     entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
@@ -423,7 +450,27 @@ def ajax_ficha_servicio():
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
 
-    return dict(ficha=valores_de_ficha)
+    edicion = False
+    privilegios = __obtener_priviliegios()
+    rol = privilegios[0]
+    dependencia = privilegios[1]
+
+    if rol == 2:
+        edicion = True
+
+    elif rol == 1:
+        if int(dependencia) != int(entrada[0].dependencia):
+            secciones = []
+            dep = db(db.dependencias.unidad_de_adscripcion == dependencia).select(db.dependencias.id)
+
+            for d in dep:
+                secciones.append(int(d.id))
+            if entrada[0].dependencia in secciones:
+                edicion = True
+        else:
+            edicion = True
+
+    return dict(ficha=valores_de_ficha, edicion = edicion)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_solicitud():
@@ -442,6 +489,18 @@ def ajax_ficha_certificacion():
     solicitud = Solicitud(db, auth)
 
     solicitud.instanciar(int(request.vars.solicitud))
+
+    return dict(ficha = solicitud, tipo_solicitud = request.vars.tipo_solicitud)
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_historial():
+    session.forget(response)
+    # Solicitud
+    solicitud = Historial(db, auth)
+
+    solicitud.instanciar(int(request.vars.solicitud))
+
+    solicitud.generacion_pdf()
 
     return dict(ficha = solicitud, tipo_solicitud = request.vars.tipoSolicitud)
 
@@ -470,7 +529,7 @@ def ajax_obtener_dependencia():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_ubicacion():
     session.forget(response)
-    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicacion_query = db((db.espacios_fisicos.dependencia == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
 
     for l in ubicacion_query:
@@ -512,7 +571,7 @@ def ajax_obtener_dependencia_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_ubicacion_editar():
     session.forget(response)
-    ubicacion_query = db((db.espacios_fisicos.dependencia_adscrita == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
+    ubicacion_query = db((db.espacios_fisicos.dependencia == int(request.vars.dependencia))).select(db.espacios_fisicos.ALL)
     ubicaciones_a_mostrar = []
     for l in ubicacion_query:
         ubicaciones_a_mostrar.append(l)
@@ -580,17 +639,16 @@ def ajax_obtener_datos_depen_ejecutora():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
-    solicitudesid = request.post_vars.solicitud
+    solicitudesid = int(request.post_vars.solicitud)
     solicitud_info = db(db.solicitudes.id == solicitudesid).select()[0]
     usuario = db(db.t_Personal.f_usuario == auth.user_id).select()[0]
     servicio = db(db.servicios.id == solicitud_info.id_servicio_solicitud).select()[0]
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == dependencia).select()[0].codigo_registro
+    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
-    print(solicitud_info.proposito)
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
 
 
@@ -603,7 +661,10 @@ def ajax_certificar_servicio():
         #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    registro = validador_registro_certificaciones(request, db, codigo_registro)
+    # TODO el numero de registro viene es de la misma solicitud
+    registro = solicitud_info.registro
+
+    print(request.vars.tipo_solicitud)
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
@@ -613,14 +674,40 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto)
+                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
 
+#------------------------------------------------------------------------------
+#
+# Ajax de Listados
+#
+#------------------------------------------------------------------------------
+
+# Servicios
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_servicios():
 
     #----- LISTAR SERVICIOS -----#
-    listado_de_servicios = ListaServicios(db, auth.has_membership(group_id='WebMaster'))
+
+    # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
+
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+        rol = 2
+    elif user_group_id == grupo_lab:
+        rol = 1
+
+    listado_de_servicios = ListaServicios(db, dependencia, rol)
 
     order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
     order_by_col = request.post_vars.ordenarPor
@@ -643,8 +730,9 @@ def ajax_listado_servicios():
                 pages=listado_de_servicios.rango_paginas,
                 actualpage=listado_de_servicios.pagina_central,
                 nextpage=nextpage, prevpage=prevpage,
-                firstpage=firstpage, lastpage=lastpage)
+                firstpage=firstpage, lastpage=lastpage, rol=rol)
 
+# Solicitudes Generadas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_solicitudes_generadas():
@@ -674,6 +762,8 @@ def ajax_listado_solicitudes_generadas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+# Solicitudes Recibidas
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_solicitudes_recibidas():
 
@@ -702,6 +792,95 @@ def ajax_listado_solicitudes_recibidas():
                 nextpage=nextpage, prevpage=prevpage,
                 firstpage=firstpage, lastpage=lastpage)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_generar():
+
+     #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_generar_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_generar_por
+
+    listado_de_certificaciones_a_generar.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_generar.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_generar:
+        listado_de_certificaciones_a_generar.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_generar))
+
+    listado_de_certificaciones_a_generar.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_generar.boton_principio
+    lastpage=listado_de_certificaciones_a_generar.boton_fin
+    nextpage=listado_de_certificaciones_a_generar.boton_siguiente
+    prevpage=listado_de_certificaciones_a_generar.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_generar.solicitudes_a_mostrar, pages=listado_de_certificaciones_a_generar.rango_paginas, actualpage=listado_de_certificaciones_a_generar.pagina_central, nextpage=nextpage, prevpage=prevpage, firstpage=firstpage, lastpage=lastpage)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_certificaciones_a_recibir():
+  #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_recibir_alfabeticamente.title())
+    order_by_col = request.post_vars.ordenar_certificaciones_a_recibir_por
+
+    listado_de_certificaciones_a_recibir.cambiar_ordenamiento(order_by_asc)
+    listado_de_certificaciones_a_recibir.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiar_pagina_certificaciones_a_recibir:
+        listado_de_certificaciones_a_recibir.cambiar_pagina(int(request.post_vars.cambiar_pagina_certificaciones_a_recibir))
+
+    listado_de_certificaciones_a_recibir.orden_y_filtrado()
+
+    firstpage=listado_de_certificaciones_a_recibir.boton_principio
+    lastpage=listado_de_certificaciones_a_recibir.boton_fin
+    nextpage=listado_de_certificaciones_a_recibir.boton_siguiente
+    prevpage=listado_de_certificaciones_a_recibir.boton_anterior
+
+    return dict(grid=listado_de_certificaciones_a_recibir.solicitudes_a_mostrar,
+                pages=listado_de_certificaciones_a_recibir.rango_paginas,
+                actualpage=listado_de_certificaciones_a_recibir.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_listado_historial():
+
+    #------ ACCION LISTAR SOLICITUDES DE SERV -----
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+
+    order_by_asc = eval(request.post_vars.ordenarAlfabeticamente.title())
+    order_by_col = request.post_vars.ordenarPor
+
+    listado_de_solicitudes.cambiar_ordenamiento(order_by_asc)
+    listado_de_solicitudes.cambiar_columna(order_by_col)
+
+    if request.post_vars.cambiarPagina:
+        listado_de_solicitudes.cambiar_pagina(int(request.post_vars.cambiarPagina))
+
+    listado_de_solicitudes.orden_y_filtrado()
+
+    firstpage=listado_de_solicitudes.boton_principio
+    lastpage=listado_de_solicitudes.boton_fin
+    nextpage=listado_de_solicitudes.boton_siguiente
+    prevpage=listado_de_solicitudes.boton_anterior
+
+    # ----- FIN LISTAR SOLICITUDES -----#
+    return dict(grid=listado_de_solicitudes.solicitudes_a_mostrar,
+                pages=listado_de_solicitudes.rango_paginas,
+                actualpage=listado_de_solicitudes.pagina_central,
+                nextpage=nextpage, prevpage=prevpage,
+                firstpage=firstpage, lastpage=lastpage)
+
+
+# Certificaciones de Terceros
+
+# Certificaciones Personales
+
+# Historial de Servicios Ejecutados/Certificados
+
 #------------------------------------------------------------------------------
 #
 # Controladores de los Reportes a Imprimir
@@ -712,13 +891,24 @@ def ajax_listado_solicitudes_recibidas():
 def pdf_solicitud():
     session.forget(response)
     # Solicitud
+    if request.vars.solicitud:
+        solicitud = Solicitud(db, auth)
 
-    solicitud = Solicitud(db, auth)
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
 
-    try:
-        solicitud.instanciar(int(request.vars.solicitud))
-    except:
-        solicitud.instanciar(0)
+    elif request.vars.historial:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.historial))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
 
 
     return dict(solicitud = solicitud)
@@ -727,7 +917,19 @@ def pdf_solicitud():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdf_certificado():
-    return dict()
+    session.forget(response)
+    # Certificacion
+    if request.vars.solicitud:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
+    return dict(solicitud = solicitud)
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
@@ -751,3 +953,26 @@ def __queries_enviar_correo():
 
     return [nombre_y_apellido, nombre_anade, dependencia, jefe_dependencia]
 
+def __obtener_priviliegios():
+    # Obtener Privilegios del usuario (rol y dependencia)
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+    grupo_secc = db(db.auth_group.role == "Jefe de Sección").select(db.auth_group.id)[0].id
+    grupo_coord = db(db.auth_group.role == "Coordinador").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+        rol = 2
+    elif user_group_id == grupo_lab or user_group_id == grupo_secc or user_group_id == grupo_coord:
+        rol = 1
+    if request.vars.serv is None:
+        return redirect(URL('modulos', 'login'))
+
+    return [rol, dependencia]
