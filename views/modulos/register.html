@@ -58,7 +58,7 @@
             <!-- Cedula de Identidad -->
             <div class="form-group" id="auth_cedula__row">
                 <div class="col-xs-12">
-                    <input class="form-control number" id="cedula" name="cedula" type="number" placeholder="Cedula" value="" required>
+                    <input class="form-control number" id="cedula" name="cedula" type="number" placeholder="Cedula" required>
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -138,7 +138,8 @@
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
     function setMembership(){
-        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion'], 'hiddendiv');
+        console.log('cedula')
+        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion','cedula'], 'hiddendiv');
     }
 
     function getUnidad(){
