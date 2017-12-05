@@ -308,7 +308,12 @@ def solicitudes():
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-    num_registro = validador_registro_solicitudes(request, db, dependencia_usuario.codigo_registro)
+    if auth.has_membership(group_id="Cliente Interno"):
+        registro = "FUSB"
+    else:
+        registro = dependencia_usuario.codigo_registro
+
+    num_registro = validador_registro_solicitudes(request, db, registro)
 
     nombre_dependencia = dependencia_usuario.nombre
 
