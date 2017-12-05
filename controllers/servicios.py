@@ -888,7 +888,19 @@ def pdf_solicitud():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def pdf_certificado():
-    return dict()
+    session.forget(response)
+    # Certificacion
+    if request.vars.solicitud:
+        solicitud = Historial(db, auth)
+
+        try:
+            solicitud.instanciar(int(request.vars.solicitud))
+        except:
+            solicitud.instanciar(0)
+
+        solicitud.generacion_pdf()
+
+    return dict(solicitud = solicitud)
 
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
