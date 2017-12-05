@@ -381,6 +381,23 @@ def certificaciones():
 def historial():
     return dict()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detallesServicios():
+
+    listado_de_servicios_catalogo = ListaServicios(db, False)
+    if request.post_vars.categoria:
+        categoria = int(request.post_vars.categoria)
+        servicios_mostrar_catalogo = listado_de_servicios_catalogo.catalogo(categoria)
+    
+    return dict(ensayo=servicios_mostrar_catalogo[0], inspeccion=servicios_mostrar_catalogo[1], calibracion=servicios_mostrar_catalogo[3], 
+        desarrollo_prototipo_piezas=servicios_mostrar_catalogo[4], consultoria_asesoria=servicios_mostrar_catalogo[5],
+        formacion_capacitacion_transferencia=servicios_mostrar_catalogo[6], sala_computadoras=servicios_mostrar_catalogo[7], 
+        sala_videos=servicios_mostrar_catalogo[8], verificacion=servicios_mostrar_catalogo[9])
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def catalogoServicios():
+    return dict()
+
 #------------------------------------------------------------------------------
 #
 # Controladores de los Ajax del modulo de Servicios

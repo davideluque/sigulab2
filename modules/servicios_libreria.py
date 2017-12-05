@@ -325,6 +325,50 @@ class ListaServicios(object):
         self.filas.sort(key=lambda serv: getattr(serv, self.columna), reverse=self.orden)
         self.servicios_a_mostrar = self.filas[(self.pagina_central - 1)*10:self.ultimo_elemento]
 
+    def catalogo(self, categoria):
+        lista_de_servicios_catalogo = []
+        ensayo = []
+        inspeccion = []
+        calibracion = []
+        desarrollo_prototipo_piezas = []
+        consultoria_asesoria = []
+        formacion_capacitacion_transferencia = []
+        sala_computadoras = []
+        sala_videos = []
+        verificacion = []
+
+        servicios_por_categoria = self.db(categoria == db.servicios.categoria).select(db.servicios.ALL)
+        for servicio in servicios_por_categoria:
+            serv = Servicio(self.db)
+            serv.instanciar(servicio.id)
+            lista_de_servicios_catalogo.append(serv)
+
+        for servicio in lista_de_servicios_catalogo:
+            if servicio.tipo == 1:
+                ensayo.append(servicio)
+            else if servicio.tipo == 2:
+                inspeccion.append(servicio)
+            else if servicio.tipo == 3:
+                calibracion.append(servicio)
+            else if servicio.tipo == 4:
+                desarrollo_prototipo_piezas.append(servicio)
+            else if servicio.tipo == 5:
+                consultoria_asesoria.append(servicio)
+            else if servicio.tipo == 6:
+                formacion_capacitacion_transferencia.append(servicio)
+            else if servicio.tipo == 7:
+                sala_computadoras.append(servicio)
+            else if servicio.tipo == 8:
+                sala_videos.append(servicio)
+            else if servicio.tipo == 9:
+                verificacion.append(servicio)
+
+        servicios_categoria_tipo = [ensayo, inspeccion, calibracion, desarrollo_prototipo_piezas, consultoria_asesoria,
+        formacion_capacitacion_transferencia, sala_computadoras, sala_videos, verificacion]
+
+
+        return servicios_categoria_tipo
+
 
 #------------------------------------------------------------------------------
 #
