@@ -17,7 +17,7 @@
         <tbody>
           {{for item in grid:}}
             <tr>
-              <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}}, 'Certificado');">{{=item.registro}}</a></th>
+              <th class="camposTabla">{{=item.registro}}</th>
               <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
               <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
               <th class="camposTabla">{{=item.nombre_servicio}}</th>

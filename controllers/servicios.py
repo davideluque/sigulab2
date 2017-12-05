@@ -19,7 +19,7 @@ def index():
 
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
 
-    # TODO Sacar esto de la nueva tabla de historial
+    # TODO Sacar esto de la nueva tabla de historial?
 
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
@@ -662,7 +662,6 @@ def ajax_certificar_servicio():
         #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
 
-    # TODO el numero de registro viene es de la misma solicitud
     registro = solicitud_info.registro
 
     print(request.vars.tipo_solicitud)
@@ -821,7 +820,7 @@ def ajax_listado_certificaciones_a_generar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_certificaciones_a_recibir():
   #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Certificante")
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Ejecutante")
 
     order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_recibir_alfabeticamente.title())
     order_by_col = request.post_vars.ordenar_certificaciones_a_recibir_por
