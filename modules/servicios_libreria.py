@@ -202,8 +202,12 @@ class Servicio(object):
 
     def checkear_tags(self, tags, string):
         for tag in tags:
-            if similar(getattr(self, tag).decode('utf-8').upper(), string) > 0.6:
-                return True
+            if tag == "laboratorio":
+                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.9:
+                    return True
+            else:
+                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.6:
+                    return True
 
         return False
 
