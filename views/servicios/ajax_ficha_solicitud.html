@@ -43,13 +43,13 @@
 		  			<td>Registro:</td><td>{{=ficha.registro}}</td>
 		  		</tr>
 					<tr>
-		  			<td>Dependencia Solicitante:</td><td>{{=ficha.nombre_dependencia_solicitante}}</td>
+		  			<td>Dependencia Solicitante:</td><td>{{=ficha.nombre_dependencia_solicitante.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Jefe Dependencia Solicitante:</td><td>{{=ficha.nombre_jefe_dependencia_solicitante}}</td>
+		  			<td>Jefe Dependencia Solicitante:</td><td>{{=ficha.nombre_jefe_dependencia_solicitante.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Responsable Solicitud:</td><td>{{=ficha.nombre_responsable_solicitud}}</td>
+		  			<td>Responsable Solicitud:</td><td>{{=ficha.nombre_responsable_solicitud.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 			</table>
@@ -61,22 +61,22 @@
 			<table class="table contenidoFicha">
 		  	<tbody>
 		  		<tr>
-		  			<td>Categoria:</td><td>{{=ficha.categoria_servicio}}</td>
+		  			<td>Categoria:</td><td>{{=ficha.categoria_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Tipo:</td><td>{{=ficha.tipo_servicio}}</td>
+		  			<td>Tipo:</td><td>{{=ficha.tipo_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Nombre Servicio:</td><td>{{=ficha.nombre_servicio}}</td>
+		  			<td>Nombre Servicio:</td><td>{{=ficha.nombre_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Propósito:</td><td>{{=ficha.nombre_proposito}}</td>
+		  			<td>Propósito:</td><td>{{=ficha.nombre_proposito.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Descripción Propósito:</td><td>{{=ficha.proposito_descripcion}}</td>
+		  			<td>Descripción Propósito:</td><td>{{=ficha.proposito_descripcion.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Descripción:</td><td>{{=ficha.descripcion_servicio}}</td>
+		  			<td>Descripción:</td><td>{{=ficha.descripcion_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 			</table>	  	
@@ -86,22 +86,22 @@
 		  	<table class="table contenidoFicha">
 		  		<tbody>
 		  			<tr>
-			  			<td>Nombre Dependencia Ejecutora:</td><td>{{=ficha.nombre_dependencia_ejecutora}}</td>
+			  			<td>Nombre Dependencia Ejecutora:</td><td>{{=ficha.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora}}</td>
+			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Observaciones:</td><td>{{=ficha.observaciones}}</td>
+			  			<td>Observaciones:</td><td>{{=ficha.observaciones.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Elaborado por:</td><td></td>
+			  			<td>Elaborado por:</td><td>{{=ficha.elaborada_por.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Aprobado por:</td><td>{{=ficha.aprobada_por}}</td>
+			  			<td>Aprobado por:</td><td>{{=ficha.aprobada_por.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
 			  			<td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
