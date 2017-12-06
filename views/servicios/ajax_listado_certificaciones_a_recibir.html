@@ -1,5 +1,5 @@
   <div class="row">
-    <h3> Solicitudes en Espera por Certificación del Solicitante </h3>  
+    <h3> Servicios Ofrecidos </h3>
     <div class="table-responsive" >
       <table id="tablaListado" class="table table-hover">
         <!-- Titulos Solicitudes en Espera por Certificación del Solicitante -->
@@ -16,6 +16,7 @@
         <!-- Contenido Solicitudes en Espera por Certificación del Solicitante -->
         <tbody>
           {{for item in grid:}}
+            {{if item.estado_solicitud_str.upper() == "POR CERTIFICACIóN":}}
             <tr>
               <th class="camposTabla">{{=item.registro}}</th>
               <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
@@ -24,6 +25,8 @@
               <th class="camposTabla">{{=item.fecha_elaboracion}}</th>
               <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
             </tr>
+
+            {{pass}}
           {{pass}}
         </tbody>
       </table>
