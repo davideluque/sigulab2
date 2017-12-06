@@ -234,6 +234,8 @@ def listado():
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+
+
     servicio_solicitud = None
 
     #----- AGREGAR SOLICITUDES -----#
@@ -329,8 +331,7 @@ def solicitudes():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
-
-    return dict(datos_solicitud=datos_solicitud, 
+    return dict(datos_solicitud=datos_solicitud,
         categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
@@ -636,7 +637,9 @@ def ajax_obtener_datos_depen_ejecutora():
 
     datos_jefe_depen_ejecutora = [jefe_dependencia_ejecutora.first_name, jefe_dependencia_ejecutora.last_name, jefe_dependencia_ejecutora.email]
 
-    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
+    unidad_de_adscripcion = db(db.dependencias.id == dependencia_ejecutora.unidad_de_adscripcion).select(db.dependencias.nombre)[0].nombre
+
+    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora, unidad_de_adscripcion = unidad_de_adscripcion)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
