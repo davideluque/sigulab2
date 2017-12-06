@@ -1,6 +1,6 @@
 <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
 <select type="select" class="form-control" id="sel4" name="propositoServicio" onchange="" required>
-    <option selected value="" hidden>Propósito</option>
+    <option selected value="" hidden>Propósito del Servicio</option>
     	{{for proposito in propositos:}}
     		<option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
     	{{pass}}

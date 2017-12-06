@@ -106,13 +106,13 @@
                       </div>
 
                       <!-- Jefe Dependencia Solicitante -->
-                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe de la Dependencia Solicitante</label>
                       <div class="form-group">
                         <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
                       </div>
 
                       <!-- Responsable Solicitud -->
-                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable de la Solicitud</label>
                       <div class="form-group">
                         <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
                       </div>                         
@@ -135,7 +135,7 @@
 
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body" style="padding-top: 50px">
-                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <h4 class="titulosForm">Servicio a Solicitar</h4>
                       
                       <!-- Categoria -->
                       <div class="form-group">
@@ -183,7 +183,7 @@
                   
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body" style="padding-top: 50px">
-                    <h4 class="titulosForm">Servicio Solicitado</h4>
+                    <h4 class="titulosForm">Servicio a Solicitar</h4>
                     <!-- Propósito -->
                     <div class="form-group" id="obtenerPropositoServicio">
                       <!-- Ajax obtener proposito del servicio -->
@@ -191,14 +191,13 @@
 
                     <!-- Descripcion propósito -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción Propósito</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción del Propósito del Servicio</label>
                         <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
                     </div>
 
                     <!-- Descripción -->
                     <div class="form-group">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción</label>
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Observaciones"></textarea>
                     </div>
                   </div>
                 </div> 
