@@ -21,24 +21,23 @@
           </tr>
         </thead>
           <!-- Contenido Listado -->
-        <tbody>
-				{{for item in grid:}}
+        {{for item in grid:}}
 					<tr>
-						<th class="camposTabla">{{=item.nombre_categoria}}</th>
-						<th class="camposTabla">{{=item.nombre_tipo}}</th>
-						<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.nombre}}</a></th>
-						<th class="camposTabla">{{=item.seccion}}</th>
-						<th class="camposTabla">{{=item.laboratorio}}</th>
-						<th class="camposTabla">{{=item.sede}}</th>
+						<th class="camposTabla">{{=item.nombre_categoria.decode('utf-8').upper()}}</th>
+						<th class="camposTabla">{{=item.nombre_tipo.decode('utf-8').upper()}}</th>
+						<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.nombre.decode('utf-8').upper()}}</a></th>
+						<th class="camposTabla">{{=item.seccion.decode('utf-8').upper()}}</th>
+						<th class="camposTabla">{{=item.laboratorio.decode('utf-8').upper()}}</th>
+						<th class="camposTabla">{{=item.sede.decode('utf-8').upper()}}</th>
             {{if rol == 2:}}
-              <th class="camposTabla">{{if item.visibilidad:}}Visible{{else:}}Oculto{{pass}}</th>
+              <th class="camposTabla">{{if item.visibilidad:}}VISIBLE{{else:}}OCULTO{{pass}}</th>
             {{pass}}
 					</tr>
 				{{pass}}
+        <tbody>
+
         </tbody>
-        <tfoot>
-            <tr></tr>
-        </tfoot>
+
         <!-- Fin Contenido del Listado -->
     </table>
   </div>

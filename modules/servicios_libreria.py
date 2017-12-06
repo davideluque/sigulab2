@@ -457,7 +457,7 @@ class Solicitud(object):
         self.categoria_servicio = None
         self.nombre_proposito = None
         self.adscripcion_dependencia_solicitante = None
-        self.adscripcion_dependencia_ejecutora = None       
+        self.adscripcion_dependencia_ejecutora = None
 
         # Variables disponibles despues de aprobacion
         self.aprobada_por = None
@@ -466,7 +466,6 @@ class Solicitud(object):
         # Variables disponibles despues de ejecucion
         self.fecha_elaboracion = None
         self.elaborada_por = None
-
         # Variables para Certificacion
         self.cargo_responsable_solicitud = None
         self.ci_responsable_solicitud = None

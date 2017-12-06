@@ -18,12 +18,12 @@
           {{for item in grid:}}
             {{if item.estado_solicitud_str.upper() == "POR CERTIFICACIóN":}}
             <tr>
-              <th class="camposTabla">{{=item.registro}}</th>
-              <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-              <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-              <th class="camposTabla">{{=item.nombre_servicio}}</th>
+              <th class="camposTabla">{{=item.registro.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.nombre_servicio.decode('utf-8').upper()}}</th>
               <th class="camposTabla">{{=item.fecha_elaboracion}}</th>
-              <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
+              <th class="camposTabla">{{=item.estado_solicitud_str.decode('utf-8').upper()}}</th>
             </tr>
 
             {{pass}}
