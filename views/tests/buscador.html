@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table style="width:100%">
+        <tr>
+            <th>Categoria</th>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Seccion</th>
+            <th>Laboratorio</th>
+            <th>Sede</th>
+        </tr>
+    {{for s in grid:}}
+        <tr><th>{{=s.nombre_categoria}}</th><th>{{=s.nombre_tipo}}</th>
+            <th>{{=s}}</th>
+            <th>{{=s.seccion}}</th><th>{{=s.laboratorio}}</th><th>{{=s.sede}}</th>
+        </tr>
+    {{pass}}
+    </table>
+</body>
+</html>

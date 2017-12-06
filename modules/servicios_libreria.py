@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
+from difflib import SequenceMatcher
 
 #------------------------------------------------------------------------------
 #
@@ -161,7 +162,6 @@ class Servicio(object):
 
         return actualizacion
 
-
     def conseguir_categorias(self):
         self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
         self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre
@@ -199,6 +199,16 @@ class Servicio(object):
         if self.gestion == True:
             propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
             self.propositos_a_mostrar.append(propositoServicio)
+
+    def checkear_tags(self, tags, string):
+        for tag in tags:
+            if similar(getattr(self, tag).decode('utf-8').upper(), string) > 0.6:
+                return True
+
+        return False
+
+
+
 
 #------------------------------------------------------------------------------
 #
@@ -285,7 +295,6 @@ class ListaServicios(object):
             self.boton_siguiente = False
 
         self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
-
 
     def cambiar_pagina(self, nueva_pagina):
         self.pagina_central = nueva_pagina
@@ -381,6 +390,19 @@ class ListaServicios(object):
 
 
         return servicios_categoria_tipo
+
+    # Estas pueden ser nombre, nombre_tipo, nombre_columna, laboratorio, seccion, sede
+    def filtrar_por_tags(self, filtro, tags=None):
+        filtro = filtro.decode('utf-8').upper()
+        if tags is None:
+            tags = ["nombre", "nombre_tipo", "nombre_categoria", "laboratorio", "seccion", "sede"]
+
+        nueva_lista = [fila for fila in self.filas if fila.checkear_tags(tags, filtro)]
+
+        self.filas = nueva_lista
+        self.orden_y_filtrado()
+
+
 
 
 #------------------------------------------------------------------------------
@@ -1367,3 +1389,7 @@ def enviar_correo(auth, destinatario, asunto, cuerpo):
 
     mail.send(destinatario, asunto, cuerpo)
 
+# Funcion para encontrar un radio de similitud entre 2 strings
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
