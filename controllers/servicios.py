@@ -590,7 +590,7 @@ def ajax_obtener_responsable_editar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_obtener_nombre_servicio():
     session.forget(response)
-    servicio_query = db(db.servicios.tipo == int(request.vars.tipo) and db.servicios.categoria == int(request.vars.categoria) and db.servicios.visibilidad == True).select(db.servicios.ALL)
+    servicio_query = db((db.servicios.tipo == int(request.vars.tipo))&(db.servicios.categoria == int(request.vars.categoria))&(db.servicios.visibilidad == True)).select(db.servicios.ALL)
 
     servicios_a_mostrar = []
     for servicio in servicio_query:
