@@ -139,7 +139,7 @@
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria&#42;</label>
                         <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Categoria</option>
                           {{for categoria in categorias:}}
@@ -150,7 +150,7 @@
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
                         <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Tipo</option>
                           {{for tipo in tipos:}}
@@ -332,7 +332,7 @@
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria*</label>
 
                         <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
                           <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
@@ -341,7 +341,7 @@
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
 
                         <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
                           <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
@@ -350,7 +350,7 @@
 
                       <!-- Nombre Servicio-->
                       <div class="form-group" id="obtenerNombreServicio2">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio*</label>
                         <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
                           <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
                         </select>

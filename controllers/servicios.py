@@ -84,7 +84,9 @@ def listado():
 
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">SIGULAB</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha añadido un nuevo servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha añadido un nuevo servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         # Variable nombre persona que recibe el email
 
@@ -146,7 +148,9 @@ def listado():
 
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha editado un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha editado un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -188,7 +192,9 @@ def listado():
 
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha modificado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha modificado la visibilidad de un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha modificado la visibilidad de un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -215,7 +221,9 @@ def listado():
 
         correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha eliminado un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha eliminado un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True))     
 
@@ -272,6 +280,7 @@ def solicitudes():
 
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
         solicitud_a_cambiar.correoCambioEstadoSolicitud()
+        solicitud_a_cambiar.correoSolicitudFinalizada()
 
         # if request.post_vars.estado == "1":
         #     solicitud_a_cambiar.fecha_aprobacion = request.now
@@ -350,6 +359,7 @@ def certificaciones():
         solicitud_a_actualizar = Solicitud(db,auth)
         solicitud_a_actualizar.instanciar(int(solicitud))
         solicitud_a_actualizar.certificar(request)
+        solicitud_a_actualizar.correoCertificacionFinalizada()
 
         fecha = request.post_vars.fecha
 
