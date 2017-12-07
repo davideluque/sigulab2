@@ -82,9 +82,9 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">Sigulab</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">SIGULAB</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha añadido un nuevo servicio', correo)
+        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha añadido un nuevo servicio', correo)
 
         # Variable nombre persona que recibe el email
 
@@ -144,9 +144,9 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha editado un servicio', correo)
+        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha editado un servicio', correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -186,9 +186,9 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha cambiado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha modificado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha cambiado la visibilidad de un servicio', correo)
+        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha modificado la visibilidad de un servicio', correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -213,9 +213,9 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
+        __enviar_correo(jefe_dependencia.email, '[SIGULAB] ' + 'Se ha eliminado un servicio', correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True))     
 
@@ -931,6 +931,7 @@ def pdf_certificado():
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
+    mail.settings.sender = 'sat-laba@usb.ve'
     mail.send(destinatario, asunto, cuerpo)
 
 

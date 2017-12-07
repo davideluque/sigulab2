@@ -718,15 +718,17 @@ class Solicitud(object):
 
         nombre_dependencia = self.nombre_dependencia_ejecutora
 
-        # Se le manda el email al jefe de la dependencia a la que pertenece el servicio
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
+        numero_registro = self.registro 
 
-        enviar_correo(self.auth, email_jefe_dependencia,'Se ha solicitado un servicio', correo)
+        # Se le manda el email al jefe de la dependencia a la que pertenece el servicio
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
+
+        enviar_correo(self.auth, email_jefe_dependencia, numero_registro + ' [SIGULAB] ' + 'Se ha solicitado un servicio', correo)
 
         # Se le manda el email al responsable de la solicitud
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
 
-        enviar_correo(self.auth, email_solicitante,'Se ha solicitado un servicio', correo)
+        enviar_correo(self.auth, email_solicitante,  numero_registro + '[SIGULAB] ' + 'Se ha solicitado un servicio', correo)
 
     def correoCambioEstadoSolicitud(self):
         nombre_solicitante = self.nombre_responsable_solicitud
@@ -739,7 +741,7 @@ class Solicitud(object):
 
         nombre_estado_solicitud = self.estado_solicitud_str
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Su solicitud del servicio %s ha cambiado al estado a %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio, nombre_estado_solicitud)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Su solicitud del servicio %s ha cambiado al estado a %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio, nombre_estado_solicitud)
 
         enviar_correo(self.auth, email_solicitante,'Se ha cambiado el estado de su solicitud', correo)
 
@@ -1391,6 +1393,8 @@ def enviar_correo(auth, destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 
     mail.send(destinatario, asunto, cuerpo)
+    # reply_to = "yari.luciani95@gmail.com")
+
 
 # Funcion para encontrar un radio de similitud entre 2 strings
 
