@@ -59,11 +59,11 @@ class Servicio(object):
 
     def insertar(self):
 
-        insercion = self.db.servicios.insert(nombre = self.nombre,
-            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo,
-            alcance = self.alcance, metodo = self.metodo, rango = self.rango,
-            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar,
-            requisitos = self.requisitos, resultados = self.resultados,
+        insercion = self.db.servicios.insert(nombre = self.nombre.upper(),
+            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo.upper(),
+            alcance = self.alcance.upper(), metodo = self.metodo.upper(), rango = self.rango.upper(),
+            incertidumbre = self.incertidumbre.upper(), item_ensayar = self.item_ensayar.upper(),
+            requisitos = self.requisitos.upper(), resultados = self.resultados.upper(),
             docencia = self.docencia, investigacion = self.investigacion,
             gestion = self.gestion, extension = self.extension,
             visibilidad = self.visibilidad, responsable = self.responsable,
@@ -140,17 +140,17 @@ class Servicio(object):
     def actualizar(self, id):
 
         actualizacion = self.db(self.db.servicios.id == id).update(
-                            nombre = self.nombre,
+                            nombre = self.nombre.upper(),
                             tipo = self.tipo,
                             categoria = self.categoria,
-                            objetivo = self.objetivo,
-                            alcance = self.alcance,
-                            metodo = self.metodo,
-                            rango = self.rango,
-                            incertidumbre = self.incertidumbre,
-                            item_ensayar = self.item_ensayar,
-                            requisitos = self.requisitos,
-                            resultados = self.resultados,
+                            objetivo = self.objetivo.upper(),
+                            alcance = self.alcance.upper(),
+                            metodo = self.metodo.upper(),
+                            rango = self.rango.upper(),
+                            incertidumbre = self.incertidumbre.upper(),
+                            item_ensayar = self.item_ensayar.upper(),
+                            requisitos = self.requisitos.upper(),
+                            resultados = self.resultados.upper(),
                             docencia = self.docencia,
                             investigacion = self.investigacion,
                             gestion = self.gestion,

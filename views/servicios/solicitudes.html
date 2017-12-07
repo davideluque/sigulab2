@@ -89,7 +89,7 @@
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Datos Básicos</h4>                
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>                
                      	
                       <!-- Numero Registro -->
                      	<div class="mover">
@@ -192,12 +192,13 @@
                     <!-- Descripcion propósito -->
                     <div class="form-group">
                         <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción del Propósito del Servicio</label>
-                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
+                        <textarea rows="1" cols="5" id="descripcionProposito" class="form-control" name="propositoDescripcion" placeholder="" required></textarea>
                     </div>
 
                     <!-- Descripción -->
                     <div class="form-group">
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Observaciones"></textarea>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Observaciones</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Fecha y Hora para Ejecutar el Servicio"></textarea>
                     </div>
                   </div>
                 </div> 
@@ -282,7 +283,7 @@
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Datos Básicos</h4>                
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>                
                       
                       <!-- Numero Registro -->
                       <div class="mover">
@@ -377,8 +378,8 @@
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                     <!-- Propósito -->
                     <div class="form-group" id="obtenerPropositoServicio">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
-                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" required>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito del Servicio</label>
+                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" onchange="placeholder_descripcion_proposito(this.value, 'Seleccionado')" required>
                           <option selected value="" hidden>Propósito</option>
                             {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
                               <option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
@@ -388,14 +389,15 @@
 
                     <!-- Descripcion propósito -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
-                        <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción del Propósito del Servicio</label>
+                        <textarea rows="1" cols="5" id="descripcionPropositoSeleccionado" class="form-control" name="propositoDescripcion" placeholder="" required></textarea>
                     </div>
 
-                    <!-- Descripción -->
+
+                    <!-- Observ -->
                     <div class="form-group">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Observaciones</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Fecha y Hora para Ejecutar el Servicio"></textarea>
                     </div>
                   </div>
                 </div> 
@@ -417,17 +419,20 @@
 
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
-                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
+                    <h4 class="titulosForm">Datos de la Dependencia Ejecutora</h4>
                     <!-- Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 450px;">Nombre</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; float:left;">Nombre</label>
                         <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" value="{{=servicio_solicitud.seccion}}" required readonly>
                     </div>
-                    <br>
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 345px;">Unidad de Adscripción</label>
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.laboratorio}}" required readonly>
+                    </div>
 
                     <!-- Jefe Dependencia Ejecutora del Servicio -->
                     <div class="form-group">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 490px;" style="">Jefe</label>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px; float:left;" style="">Responsable de la Dependencia Ejecutora</label>
                         <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.jefe_dependencia}} | {{=servicio_solicitud.email_jefe_dependencia}}" required readonly>
                     </div>
                   </div>
@@ -539,6 +544,29 @@
     x.value = servicio_seleccionado;
 
     ajax('ajax_obtener_datos_depen_ejecutora', ['idServicio2'], "obtenerDependenciaEjecutora")
+  }
+
+  function placeholder_descripcion_proposito(value, seleccionado) {
+
+    if (seleccionado == "Ninguno") {
+      var x = document.getElementById("descripcionProposito")
+    } else {
+      var x = document.getElementById("descripcionPropositoSeleccionado")
+    }
+
+    if (value == "1") {
+      x.placeholder = "Código de la Materia"
+
+    }else if (value == "2") {
+      x.placeholder = "Código del Proyecto"
+
+    }else if (value == "3") {
+      x.placeholder = "Código de Solicitud / Orden de Servicio y Cliente Final"
+
+    }else if (value == "4") {
+      x.placeholder = "Operatividad de la Dependencia"
+
+    }
   }
 
   // Valores por defecto para el listado de solicitudes recibidas al cargar

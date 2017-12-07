@@ -1,5 +1,5 @@
-<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
-<select type="select" class="form-control" id="sel4" name="propositoServicio" onchange="" required>
+<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito del Servicio</label>
+<select type="select" class="form-control" id="sel4" name="propositoServicio" onchange="placeholder_descripcion_proposito(this.value, 'Ninguno')" required>
     <option selected value="" hidden>Propósito del Servicio</option>
     	{{for proposito in propositos:}}
     		<option value="{{=proposito.id}}">{{=proposito.tipo}}</option>

@@ -89,15 +89,18 @@
       <ul class="nav navbar-nav navbar-right">
       {{if auth.has_membership('Administrador Personal') \
         or auth.has_membership('WebMaster')\
-        or auth.has_membership('Director'): }}
+        or auth.has_membership('Director')\
+        or (auth.user.email == "ulab-calidad@usb.ve"): }}
         <li class="dropdown">
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
               <i id="iconoInfo" class="fa fa-info-circle" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="#">Usuarios</a></li>
-              <li><a href="#">Dependencias</a></li>
+              <li><a href="{{=URL('gestion','usuarios')}}">Usuarios</a></li>
+              <li><a href="{{=URL('gestion','dependencias')}}">Dependencias</a></li>
+              <li><a href="{{=URL('gestion','espacios_fisicos')}}">Espacios Físicos</a></li>
+
             </ul>
           </div>
         </li>

@@ -364,6 +364,7 @@ def certificaciones():
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
+    print(auth.user.email)
     return dict()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -699,7 +700,7 @@ def ajax_listado_servicios():
     dependencia = info_membership.dependencia_asociada
 
     rol = 0
-    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
         rol = 2
     elif user_group_id == grupo_lab:
         rol = 1
@@ -792,7 +793,7 @@ def ajax_listado_solicitudes_recibidas():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_certificaciones_a_generar():
 
-     #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
+    #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
     listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
 
     order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_generar_alfabeticamente.title())
@@ -966,7 +967,7 @@ def __obtener_priviliegios():
     dependencia = info_membership.dependencia_asociada
 
     rol = 0
-    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
         rol = 2
     elif user_group_id == grupo_lab or user_group_id == grupo_secc or user_group_id == grupo_coord:
         rol = 1
