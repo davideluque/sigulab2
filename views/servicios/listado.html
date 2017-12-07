@@ -103,11 +103,11 @@
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>                
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre" required>
+                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre&#42;" required>
                             </div>
                             <div class="form-group">
                               <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
-                                <option value="" selected hidden >Categoria</option>
+                                <option value="" selected hidden >Categoria*</option>
 		                        {{for categoria in categorias:}}
 
 		                        <option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="form-group">
                               <select class="form-control" type="select" id="sel2" name="tipoServicio" required>
-                                <option value="" selected hidden >Tipo</option>
+                                <option value="" selected hidden >Tipo*</option>
 		                        {{for tipo in tipos:}}
 
 		                        <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
@@ -124,7 +124,7 @@
                               </select>
                             </div>
                             <div class="form-group" >
-                              <h6>Función</h6>
+                              <h6 style="margin-top: 25px; font-size: 15px;">Función*</h6>
                               <div class="checkbox">
                                 <label><input type="checkbox" name="docenciaServicio" value="True" >Docencia</label>
                               </div>
@@ -159,19 +159,19 @@
                           <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" placeholder="Objetivo">
+                              <input type="text" class="form-control" id="objetivo" name="objetivoServicio" placeholder="Objetivo*">
                             </div>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" placeholder="Alcance">
+                              <input type="text" class="form-control" id="alcance" name="alcanceServicio" placeholder="Alcance*">
                             </div>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="metodo" name="metodoServicio" placeholder="Método">
+                              <input type="text" class="form-control" id="metodo" name="metodoServicio" placeholder="Método*">
                             </div>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="rango" name="rangoServicio" placeholder="Rango">
+                              <input type="text" class="form-control" id="rango" name="rangoServicio" placeholder="Rango*">
                             </div>
                             <div class="form-group">
-                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" placeholder="Incertidumbre">
+                              <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" placeholder="Incertidumbre*">
                             </div>
                           </div>
                         </div>
@@ -206,7 +206,7 @@
 
                           <div class="form-group">
                             <select class="form-control" type="select" id="sel6" onchange="getAdscripcion(); getDependencia(); getUbicacion(); getResponsable();" name="sedeServicio" required>
-                              <option value="" selected hidden >Sede</option>
+                              <option value="" selected hidden >Sede&#42;</option>
 		                      {{for sede in sedes:}}
 		                      <option id="sedechoice" value="{{=sede.id}}">{{=sede.nombre}}</option>
 		                      {{pass}}
@@ -251,7 +251,7 @@
                         <div class="col-sm-11 col11Body" >
                         <h4 class="titulosForm">Especificaciones</h4>
                           <div class="form-group">
-                            <input type="text" class="form-control" id="item" name="itemServicio" placeholder="Item a ensayar" value="" required>
+                            <input type="text" class="form-control" id="item" name="itemServicio" placeholder="Item a ensayar*" value="" required>
                           </div>
                           <div class="form-group">
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>

@@ -139,7 +139,7 @@
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria&#42;</label>
                         <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Categoria</option>
                           {{for categoria in categorias:}}
@@ -150,7 +150,7 @@
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
                         <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
                           <option value="" selected hidden >Tipo</option>
                           {{for tipo in tipos:}}
@@ -191,7 +191,7 @@
 
                     <!-- Descripcion propósito -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción del Propósito del Servicio</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción del Propósito del Servicio&#42;</label>
                         <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
                     </div>
 
@@ -331,7 +331,7 @@
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria*</label>
 
                         <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
                           <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
@@ -340,7 +340,7 @@
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
 
                         <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
                           <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
@@ -349,7 +349,7 @@
 
                       <!-- Nombre Servicio-->
                       <div class="form-group" id="obtenerNombreServicio2">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio*</label>
                         <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
                           <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
                         </select>
@@ -377,7 +377,7 @@
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                     <!-- Propósito -->
                     <div class="form-group" id="obtenerPropositoServicio">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito</label>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito*</label>
                       <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" required>
                           <option selected value="" hidden>Propósito</option>
                             {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
@@ -388,14 +388,14 @@
 
                     <!-- Descripcion propósito -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito*</label>
                         <textarea rows="1" cols="5" id="validame" class="form-control" name="propositoDescripcion" placeholder="código materia / proyecto / orden servicio - cliente final / funcionamiento lab." required></textarea>
                     </div>
 
                     <!-- Descripción -->
                     <div class="form-group">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                      <!-- <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label> -->
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Observaciones"></textarea>
                     </div>
                   </div>
                 </div> 
