@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import random
 from difflib import SequenceMatcher
+from fuzzywuzzy import fuzz
 
-#------------------------------------------------------------------------------
 #
 # Clase que permite tomar un record de la tabla servicios y realizar cada 
 # accion del CRUD de una manera rapida y ordenada
@@ -202,13 +202,22 @@ class Servicio(object):
 
     def checkear_tags(self, tags, string):
         for tag in tags:
-            if tag == "laboratorio":
-                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.9:
+            string_compare = getattr(self, tag).decode('utf-8').upper()
+
+            if tag == "laboratorio" and "LABORATORIO" in string_compare:
+                ratio_str = fuzz.token_set_ratio(string_compare, string)
+                if ratio_str >= 95:
+                    print(ratio_str, string, string_compare)
                     return True
             else:
-                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.6:
+                ratio_str = fuzz.token_set_ratio(string_compare, string)
+                if ratio_str >= 80:
+                    print(ratio_str, string, string_compare)
                     return True
 
+            print(ratio_str, string, string_compare)
+
+        print("NO MATCH")
         return False
 
 

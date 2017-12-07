@@ -377,7 +377,6 @@ def historial():
     print(auth.user.email)
     return dict()
 
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detallesServicios():
 
     nombre_categoria = ""
@@ -421,7 +420,6 @@ def detallesServicios():
         formacion_capacitacion_transferencia=servicios_mostrar_catalogo[5], sala_computadoras=servicios_mostrar_catalogo[6], 
         sala_videos=servicios_mostrar_catalogo[7], verificacion=servicios_mostrar_catalogo[8])
 
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 def catalogoServicios():
     return dict()
 

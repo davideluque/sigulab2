@@ -23,6 +23,6 @@ def buscador():
 
 	listado_de_servicios = ListaServicios(db, dependencia, rol)
 
-	listado_de_servicios.filtrar_por_tags("laboratorio a")
+	listado_de_servicios.filtrar_por_tags("laboratorio b", ["nombre", "laboratorio"])
 
 	return dict(grid = listado_de_servicios.filas)
