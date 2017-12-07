@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 from difflib import SequenceMatcher
-from fuzzywuzzy import fuzz
+#from fuzzywuzzy import fuzz
 
 #
 # Clase que permite tomar un record de la tabla servicios y realizar cada 
