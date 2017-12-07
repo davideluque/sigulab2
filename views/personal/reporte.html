@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"> 
+
+    <script>
+        window.onload = function() {
+        window.print();
+    }
+</script>
+<style>
+    @media print {
+    	#cabecera{
+            border-style: none;
+            border-collapse: collapse;
+            height: auto;
+            width: 95%;
+            margin-top: 20px;
+            white-space: pre;
+            margin-left:auto;
+    	}
+        #reporte{
+            border-style: none;
+            border-collapse: collapse;
+            height: auto;
+            width: 95%;
+            margin-top: 30px;
+            margin-left:auto;
+        }
+
+        .titulos{
+            background-color: lightgray;
+            -webkit-print-color-adjust: exact;
+        }       
+    }
+
+    body {
+        font-size: 0.8em;
+    }
+
+    #reporte{
+        border-style: none;
+        border-collapse: collapse;
+        height: auto;
+        width: 95%;
+        margin-top: 30px;
+        margin-left:auto;
+    }
+
+    #cabecera{
+        border-style: none;
+        border-collapse: collapse;
+        height: auto;
+        width: 95%;
+        margin-top: 20px;
+        white-space: pre;
+        margin-left:auto;
+    }
+
+    .titulos{
+        background-color: lightgray;
+        -webkit-print-color-adjust: exact
+    }   
+
+    #usb {
+        height: 120px;
+    }
+
+</style>
+</head>
+<body>
+    
+    <div id="">
+        <div id="img" >
+            <img id="usb" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
+        </div>
+        <table id="cabecera" border="1">
+        	<tr>
+            	<th class="titulos" rowspan="2">LISTADO DE PERSONAL ULAB
+"Dependencia"</th>
+            	<th class="titulos">Fecha</th> 
+        	</tr>
+            <tr>
+                <td align="center">
+                	<p id="fecha_actual"></p>
+                	<script>
+                		d = new Date();
+                		document.getElementById("fecha_actual").innerHTML = d.toLocaleFormat('%B %e, %Y');
+
+                	</script>
+                </td>
+            </tr>
+        </table>
+        <table id="reporte" border="1">
+        	<thead>
+        		<tr>
+        			<th class="titulos">Nombre</th>
+        			<th class="titulos">Correo</th>
+        			<th class="titulos">Extensión</th>
+        			<th class="titulos">Gremio</th>
+        			<th class="titulos">Años Serv.</th>
+        		</tr>
+        		{{
+        			personas=db(db.t_Personal.f_nombre != None).select()
+        			for persona in personas:
+        		}}
+        		<tr>
+        			<td>{{=persona.f_nombre}} {{=persona.f_apellido}}</td><td>{{=persona.f_email}}</td><td>persona.f_telefono</td><td>{{persona.f_categoria}}</td><td>{{=persona.f_fecha_ingreso}} hasta {{if persona.f_fecha_salida!=None:}}
+        				{{=f.fecha_salida}}
+        			{{else:
+        			    pass}}</td>
+        		</tr>
+        	</thead>
+        	<tbody></tbody>
+        </table>
+        <div align="center" style="white-space: pre; margin-top: 30px;">Universidad Simón Bolívar, Edif. Energética, Planta Baja. Valle de Sartenejas, Baruta, Caracas, Edo. Miranda, Venezuela, 890000
+Telef.: 58 212 906-3708 / 3709 / 3710 / 3711 Fax: 58 212 906-3712 <a href="www.ulab.usb.ve">www.ulab.usb.ve</a></div>
+    	</div>
+</body>
+</html>

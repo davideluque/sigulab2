@@ -1,5 +1,5 @@
 <select class="form-control" type="select" id="sel4" name="adscripcionServicio" onchange="getDependencia(); getUbicacion(); getResponsable();" required>
-	<option value="" selected hidden>Unidad de Adscripción</option>
+	<option value="" selected hidden>Unidad de Adscripción&#42;</option>
 	{{for dep in dependencias:}}
 	<option value="{{=dep.id}}">{{=dep.nombre}}</option>
 	{{pass}}
