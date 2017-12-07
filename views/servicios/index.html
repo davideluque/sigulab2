@@ -48,7 +48,10 @@
         <div class="col-sm-6 columnas">
           <a href="{{=URL('solicitudes')}}">
             <img class="iconos" src="{{=URL('static','images/file.png')}}">
-            <div style="display: -webkit-inline-box;"><h4 class="opciones">Solicitudes de Servicios</h4><div style="font-size: 30px; color: red">{{if solicitud_nueva:}}*{{pass}}</div></div>
+            <div>
+              <h4 class="opciones" style="">Solicitudes de Servicios<tag style="font-size: 20px; color: red;">{{if solicitud_nueva:}}*{{pass}}</tag></h4>
+              
+            </div>
           </a>
         </div>
 
@@ -70,7 +73,9 @@
         <div class="col-sm-6 columnas">
           <a href="{{=URL('certificaciones')}}">
             <img class="iconos" src="{{=URL('static','images/diploma.png')}}">
-              <div style="display: -webkit-inline-box;"><h4 class="opciones">Certificaciones de Servicios</h4><div style="font-size: 30px; color: red">{{if certificacion_nueva:}}*{{pass}}</div></div>
+            <div>
+              <h4 class="opciones" style="display:;">Certificaciones de Servicios <tag style="font-size: 20px; color: red">{{if certificacion_nueva:}}*{{pass}}</tag></h4>
+            </div>
           </a>
         </div>
 
