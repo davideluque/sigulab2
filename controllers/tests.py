@@ -4,36 +4,25 @@ from servicios_libreria import *
 # Controlador que no sera implementado en la aplicacion final, pueden hacerse pruebas aca
 # ----------------------------------------------------------------------------------------
 
-# Prueba en mini tabla de personas
-def display_form():
-   form = SQLFORM(db.person)
-   if form.process().accepted:
-       response.flash = 'form accepted'
-   elif form.errors:
-       response.flash = 'form has errors'
-   else:
-       response.flash = 'please fill out the form'
-   return dict(form=form)
+def buscador():
+	grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+	grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+	grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+	grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
 
+	info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+	user_group_id = info_membership.group_id
 
-def prueba_lista_servicios():
-    lista = ListaServicios(db)
-    print
-    lista.invertir_ordenamiento()
-    lista.cambiar_columna('sede')
-    lista.orden_y_filtrado()
-    for i in lista.servicios_a_mostrar:
-        print i.sede
+	dependencia = info_membership.dependencia_asociada
 
-    return dict()
+	rol = 0
+	if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+		rol = 2
+	elif user_group_id == grupo_lab:
+		rol = 1
 
-def prueba_lista_historial():
-    lista = ListaHistorial(db, auth, "Solicitante")
+	listado_de_servicios = ListaServicios(db, dependencia, rol)
 
-    print(lista.filas)
+	listado_de_servicios.filtrar_por_tags("laboratorio a")
 
-    lista2 = ListaHistorial(db, auth, "Ejecutor")
-    print("Baby i dont know what im gonna do with you")
-    print(lista2.filas)
-
-    return dict()
+	return dict(grid = listado_de_servicios.filas)

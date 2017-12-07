@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title hidden>Reporte {{=solicitud.registro}}</title>
+	<title>Solicitud {{=solicitud.registro}}</title>
 	<meta charset="UTF-8"> 
 
 	<script>
@@ -16,7 +16,9 @@
 			border-collapse: collapse;
 			height: 2900px;
 			width: 1000px;
+			margin-top: 70px;
 		}
+
 		.titulos{
 			background-color: lightgray;
 			-webkit-print-color-adjust: exact;
@@ -32,10 +34,7 @@
 		border-collapse: collapse;
 		height: 900px;
 		width: 1000px;
-	}
-
-	.logos {
-		width: 200px;
+		margin-top: 70px;
 	}
 
 	.titulos{
@@ -43,26 +42,28 @@
 		-webkit-print-color-adjust: exact;
 	}	
 
-	.imagenes{
+	#usb {
 		height: 120px;
 	}
 
-	#ulab{
+	#ulab {
+		height: 80px;
 		float: right;
+		margin-top: 110px;
 	}
 
-	#img{
+	#img {
 		width:1000px;
 	}
+
 </style>
 </head>
 <body>
 	
 	<div id="">
 		<div id="img" >
-			<img class="imagenes" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
-			<!-- PONER EL LOGO QUE ES -->
-			<img id="ulab" class="imagenes" src="{{=URL('static','images/servicios/logo-ulab.png')}}" class="logos">
+			<img id="usb" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
+			<img id="ulab" src="{{=URL('static','images/servicios/logo-ulab.png')}}" class="logos">
 		</div>
 
 		<table id="tablaSolicitud" border="1">
@@ -135,8 +136,8 @@
 		</tr>
 		<tr>
 			<td colspan="4" rowspan="3" align="center"><p>{{=solicitud.observaciones}}</p></td>
-			<td align="center"><p>{{=solicitud.elaborada_por}}</p></td>
-			<td align="center"><p>{{=solicitud.aprobada_por}}</p></td>
+			<td align="center"><p>{{=solicitud.elaborada_por}}</p><br><br></td>
+			<td align="center"><p>{{=solicitud.aprobada_por}}</p><br><br></td>
 		</tr>
 		<tr>
 			<th class="titulos"><p>Fecha</p></th>
@@ -155,7 +156,7 @@
 			<th colspan="2" class="titulos">Aprobado por:</th>
 		</tr>
 		<tr>
-			<td colspan="2" rowspan="5" align="center"><p>{{=solicitud.lugar_ejecucion_servicio}}</p></td>
+			<td colspan="2" rowspan="5" align="center"><p></p></td>
 			<td colspan="2"><p></p><br></td>
 			<td colspan="2"><p></p><br></td>
 		</tr>

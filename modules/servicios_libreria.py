@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
+from difflib import SequenceMatcher
 
 #------------------------------------------------------------------------------
 #
@@ -58,11 +59,11 @@ class Servicio(object):
 
     def insertar(self):
 
-        insercion = self.db.servicios.insert(nombre = self.nombre,
-            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo,
-            alcance = self.alcance, metodo = self.metodo, rango = self.rango,
-            incertidumbre = self.incertidumbre, item_ensayar = self.item_ensayar,
-            requisitos = self.requisitos, resultados = self.resultados,
+        insercion = self.db.servicios.insert(nombre = self.nombre.upper(),
+            tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo.upper(),
+            alcance = self.alcance.upper(), metodo = self.metodo.upper(), rango = self.rango.upper(),
+            incertidumbre = self.incertidumbre.upper(), item_ensayar = self.item_ensayar.upper(),
+            requisitos = self.requisitos.upper(), resultados = self.resultados.upper(),
             docencia = self.docencia, investigacion = self.investigacion,
             gestion = self.gestion, extension = self.extension,
             visibilidad = self.visibilidad, responsable = self.responsable,
@@ -139,17 +140,17 @@ class Servicio(object):
     def actualizar(self, id):
 
         actualizacion = self.db(self.db.servicios.id == id).update(
-                            nombre = self.nombre,
+                            nombre = self.nombre.upper(),
                             tipo = self.tipo,
                             categoria = self.categoria,
-                            objetivo = self.objetivo,
-                            alcance = self.alcance,
-                            metodo = self.metodo,
-                            rango = self.rango,
-                            incertidumbre = self.incertidumbre,
-                            item_ensayar = self.item_ensayar,
-                            requisitos = self.requisitos,
-                            resultados = self.resultados,
+                            objetivo = self.objetivo.upper(),
+                            alcance = self.alcance.upper(),
+                            metodo = self.metodo.upper(),
+                            rango = self.rango.upper(),
+                            incertidumbre = self.incertidumbre.upper(),
+                            item_ensayar = self.item_ensayar.upper(),
+                            requisitos = self.requisitos.upper(),
+                            resultados = self.resultados.upper(),
                             docencia = self.docencia,
                             investigacion = self.investigacion,
                             gestion = self.gestion,
@@ -160,7 +161,6 @@ class Servicio(object):
                             ubicacion = self.ubicacion)
 
         return actualizacion
-
 
     def conseguir_categorias(self):
         self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
@@ -199,6 +199,20 @@ class Servicio(object):
         if self.gestion == True:
             propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
             self.propositos_a_mostrar.append(propositoServicio)
+
+    def checkear_tags(self, tags, string):
+        for tag in tags:
+            if tag == "laboratorio":
+                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.9:
+                    return True
+            else:
+                if similar(getattr(self, tag).decode('utf-8').upper(), string) >= 0.6:
+                    return True
+
+        return False
+
+
+
 
 #------------------------------------------------------------------------------
 #
@@ -285,7 +299,6 @@ class ListaServicios(object):
             self.boton_siguiente = False
 
         self.rango_paginas = range(max(self.primera_pagina, self.pagina_central - 2), min(self.pagina_central + 2, self.ultima_pagina)+1)
-
 
     def cambiar_pagina(self, nueva_pagina):
         self.pagina_central = nueva_pagina
@@ -382,6 +395,19 @@ class ListaServicios(object):
 
         return servicios_categoria_tipo
 
+    # Estas pueden ser nombre, nombre_tipo, nombre_columna, laboratorio, seccion, sede
+    def filtrar_por_tags(self, filtro, tags=None):
+        filtro = filtro.decode('utf-8').upper()
+        if tags is None:
+            tags = ["nombre", "nombre_tipo", "nombre_categoria", "laboratorio", "seccion", "sede"]
+
+        nueva_lista = [fila for fila in self.filas if fila.checkear_tags(tags, filtro)]
+
+        self.filas = nueva_lista
+        self.orden_y_filtrado()
+
+
+
 
 #------------------------------------------------------------------------------
 #
@@ -431,7 +457,7 @@ class Solicitud(object):
         self.categoria_servicio = None
         self.nombre_proposito = None
         self.adscripcion_dependencia_solicitante = None
-        self.adscripcion_dependencia_ejecutora = None       
+        self.adscripcion_dependencia_ejecutora = None
 
         # Variables disponibles despues de aprobacion
         self.aprobada_por = None
@@ -440,7 +466,6 @@ class Solicitud(object):
         # Variables disponibles despues de ejecucion
         self.fecha_elaboracion = None
         self.elaborada_por = None
-
         # Variables para Certificacion
         self.cargo_responsable_solicitud = None
         self.ci_responsable_solicitud = None
@@ -680,43 +705,96 @@ class Solicitud(object):
 
     def correoHacerSolicitud(self):
         nombre_jefe_dependencia = self.jefe_dependencia_ejecutora
-
         email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
-
         nombre_solicitante = self.nombre_responsable_solicitud
-
         email_solicitante = self.email_responsable_solicitud
-
         nombre_servicio = self.nombre_servicio
-
         nombre_solicitante = self.nombre_responsable_solicitud
-
         nombre_dependencia = self.nombre_dependencia_ejecutora
+        numero_registro = self.registro 
 
         # Se le manda el email al jefe de la dependencia a la que pertenece el servicio
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho una solicitud del servicio %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_jefe_dependencia, nombre_servicio, nombre_solicitante, nombre_dependencia)
 
-        enviar_correo(self.auth, email_jefe_dependencia,'Se ha solicitado un servicio', correo)
+        asunto = numero_registro + ' [SIGULAB] ' + 'Se ha solicitado un servicio'
+
+        enviar_correo(self.auth, email_jefe_dependencia, asunto, correo)
 
         # Se le manda el email al responsable de la solicitud
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha hecho su solicitud del servicio %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio)
 
-        enviar_correo(self.auth, email_solicitante,'Se ha solicitado un servicio', correo)
+        asunto =  numero_registro + '[SIGULAB] ' + 'Se ha solicitado un servicio'
+
+        enviar_correo(self.auth, email_solicitante, asunto, correo)
 
     def correoCambioEstadoSolicitud(self):
         nombre_solicitante = self.nombre_responsable_solicitud
-
         email_solicitante = self.email_responsable_solicitud
-
         nombre_servicio = self.nombre_servicio
-
         estado_solicitud = self.estado_solicitud
-
         nombre_estado_solicitud = self.estado_solicitud_str
+        numero_registro = self.registro 
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Su solicitud del servicio %s ha cambiado al estado a %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio, nombre_estado_solicitud)
+        if estado_solicitud != 2:
+            correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Su solicitud del servicio %s ha cambiado al estado a %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, nombre_servicio, nombre_estado_solicitud)
 
-        enviar_correo(self.auth, email_solicitante,'Se ha cambiado el estado de su solicitud', correo)
+            asunto = numero_registro + ' [SIGULAB] ' + 'Se ha cambiado el estado de su solicitud'
+
+            enviar_correo(self.auth, email_solicitante, asunto, correo)
+
+    def correoSolicitudFinalizada(self):
+        estado_solicitud = self.estado_solicitud
+        email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
+        nombre_servicio = self.nombre_servicio
+        nombre_dependencia_solicitante = self.nombre_dependencia_solicitante
+        nombre_jefe_dependencia_solicitante = self.nombre_jefe_dependencia_solicitante
+        nombre_solicitante = self.nombre_responsable_solicitud
+        email_solicitante = self.email_responsable_solicitud
+        extensiones_solicitante = self.telef_responsable_solicitud
+        categoria_servicio = self.categoria_servicio
+        tipo_servicio = self.tipo_servicio
+        proposito_servicio = self.nombre_proposito
+        descripcion_proposito_servicio = self.proposito_descripcion
+        descripcion_servicio = self.descripcion_servicio
+        nombre_dependencia_ejecutora = self.nombre_dependencia_ejecutora
+        nombre_jefe_dependencia_ejecutora = self.jefe_dependencia_ejecutora
+        observaciones_solicitud = self.observaciones
+        solicitud_elaborada_por = self.elaborada_por
+        solicitud_aprobada_por = self.aprobada_por
+        fecha_elaboracion_solicitud = self.fecha_elaboracion
+        fecha_aprobacion_solicitud = self.fecha_aprobacion
+        numero_registro = self.registro 
+
+        if estado_solicitud == 2:
+            correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Servicio solicitado: %s<p><p>Dependencia del solicitante: %s</p><p>Jefe de la dependencia del solicitante: %s</p><p>Responsable de la solicitud: %s</p><p>Email del respponsable de la solicitud: %s</p><p>Telf. del responsable de la solicitud: %d</p><p>Categoría del servicio: %s</p><p>Tipo del servicio: %s</p><p>Propósito del servicio: %s<p>Descripción del propósito del servicio: %s</p><p>Descripción del servicio: %s</p><p>Dependencia ejecutora del servicio: %s</p><p>Jefe de la dependencia ejecutora del servicio: %s</p><p>Observaciones: %s</p><p>Solicitud elaborada por: %s</p><p>Fecha de elaboración de la solicitud: %s</p><p>Solicitud aprobada por: %s</p><p>Fecha de aprobación de la solicitud: %s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_servicio, nombre_dependencia_solicitante, nombre_jefe_dependencia_solicitante, nombre_solicitante, email_solicitante, extensiones_solicitante, categoria_servicio, tipo_servicio, proposito_servicio, descripcion_proposito_servicio, descripcion_servicio, nombre_dependencia_ejecutora, nombre_jefe_dependencia_ejecutora, observaciones_solicitud, solicitud_elaborada_por, fecha_elaboracion_solicitud, solicitud_aprobada_por, fecha_aprobacion_solicitud)
+
+            asunto = numero_registro + ' [SIGULAB] ' + 'Solicitud de Servicio'
+
+            enviar_correo(self.auth, email_jefe_dependencia, asunto, correo)
+
+
+    def correoCertificacionFinalizada(self):
+        print('hola')
+        estado_solicitud = self.estado_solicitud
+        email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
+        nombre_solicitante = self.nombre_responsable_solicitud
+        email_solicitante = self.email_responsable_solicitud
+        nombre_dependencia_solicitante = self.nombre_dependencia_solicitante
+        nombre_dependencia_ejecutora = self.nombre_dependencia_ejecutora
+        nombre_servicio = self.nombre_servicio
+        registro = self.registro
+        fecha_solicitud = self.fecha_solicitud
+        fecha_certificacion = self.fecha_certificacion
+        cargo_solicitante = self.cargo_responsable_solicitud
+        numero_registro = self.registro 
+
+        if estado_solicitud == 3:
+            print('chao')
+            correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Quien suscribe, %s (%s), como responsable de la %s, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la %s, correspondiente a la Solicitud/orden de servicio identificado como %s, de fecha %s.</p><br><p>%s</p><br><p>%s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, email_solicitante, nombre_dependencia_solicitante, nombre_dependencia_ejecutora, registro, fecha_solicitud, nombre_solicitante, nombre_dependencia_solicitante)
+
+            asunto = numero_registro + ' [SIGULAB] ' + 'Certificación de Servicio'
+
+            enviar_correo(self.auth, email_jefe_dependencia, asunto, correo)
 
 
 class ListaSolicitudes(object):
@@ -1339,16 +1417,21 @@ def generador_num_registro():
 
     return digits
 
-def validador_registro_solicitudes(request, db, registro):
+def validador_registro_solicitudes(request, db, registro, contador=0):
     anio = str(request.now)[2:4]
-    registro = 'SIG-' + registro + "-" + anio + '/' + generador_num_registro()
+    contador = 1 + contador
+    digits = (3 - len(str(contador))) * '0' + str(contador)
 
-    check = db(db.solicitudes.registro == registro).count()
+    registronum = 'SIG-' + registro + "-" + anio + '/' + digits
 
-    if check != 0:
-        return validador_registro_solicitudes(request, db)
+    check = db(db.solicitudes.registro == registronum).count()
+
+    check2 = db(db.historial_solicitudes.registro_solicitud == registronum).count()
+
+    if check + check2 != 0:
+        return validador_registro_solicitudes(request, db, registro, contador)
     else:
-        return registro
+        return registronum
 
 #------------------------------------------------------------------------------
 #
@@ -1361,4 +1444,10 @@ def enviar_correo(auth, destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
 
     mail.send(destinatario, asunto, cuerpo)
+    # reply_to = "yari.luciani95@gmail.com")
 
+
+# Funcion para encontrar un radio de similitud entre 2 strings
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()

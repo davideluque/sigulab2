@@ -17,13 +17,13 @@
 
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 	  <li class="nav-item active">
-	    <a class="nav-link" data-toggle="tab" href="#datosSolicitante" role="tab" aria-controls="">Datos Básicos</a>
+	    <a class="nav-link" data-toggle="tab" href="#datosSolicitante" role="tab" aria-controls="">Datos de la Solicitud</a>
 	  </li>
 	  <li class="nav-item">
 	    <a class="nav-link" data-toggle="tab" href="#datosServicio" role="tab" aria-controls="">Servicio Solicitado</a>
 	  </li>
 	  <li class="nav-item">
-	    <a class="nav-link" data-toggle="tab" href="#datosEjecutora" role="tab" aria-controls="">Datos Dependencia Ejecutora</a>
+	    <a class="nav-link" data-toggle="tab" href="#datosEjecutora" role="tab" aria-controls="">Dependencia Ejecutora</a>
 	  </li>
 	  {{if tipo_solicitud == "Ejecutante":}}
 		  <li class="nav-item">
@@ -43,14 +43,29 @@
 		  			<td>Registro:</td><td>{{=ficha.registro}}</td>
 		  		</tr>
 					<tr>
-		  			<td>Dependencia Solicitante:</td><td>{{=ficha.nombre_dependencia_solicitante}}</td>
+		  			<td>Dependencia Solicitante:</td><td>{{=ficha.nombre_dependencia_solicitante.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Jefe Dependencia Solicitante:</td><td>{{=ficha.nombre_jefe_dependencia_solicitante}}</td>
+		  			<td>Responsable de la Dependencia Solicitante:</td><td>{{=ficha.nombre_jefe_dependencia_solicitante.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Responsable Solicitud:</td><td>{{=ficha.nombre_responsable_solicitud}}</td>
+		  			<td>Responsable Solicitud:</td><td>{{=ficha.nombre_responsable_solicitud.decode('utf-8').upper()}}</td>
 		  		</tr>
+                <tr>
+                    <td>Observaciones:</td><td>{{=ficha.observaciones.decode('utf-8').upper()}}</td>
+                </tr>
+                <tr>
+                    <td>Elaborado por:</td><td>{{=ficha.elaborada_por.decode('utf-8').upper()}}</td>
+                </tr>
+                <tr>
+                    <td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
+                </tr>
+                <tr>
+                    <td>Aprobado por:</td><td>{{=ficha.aprobada_por.decode('utf-8').upper()}}</td>
+                </tr>
+                <tr>
+                    <td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
+                </tr>
 		  	</tbody>
 			</table>
 		</div>
@@ -60,23 +75,23 @@
 		<div class="tab-pane" id="datosServicio" role="tabpanel">
 			<table class="table contenidoFicha">
 		  	<tbody>
-		  		<tr>
-		  			<td>Categoria:</td><td>{{=ficha.categoria_servicio}}</td>
+                <tr>
+		  			<td>Nombre:</td><td>{{=ficha.nombre_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Tipo:</td><td>{{=ficha.tipo_servicio}}</td>
+		  			<td>Categoria:</td><td>{{=ficha.categoria_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Nombre Servicio:</td><td>{{=ficha.nombre_servicio}}</td>
+		  			<td>Tipo:</td><td>{{=ficha.tipo_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Propósito:</td><td>{{=ficha.nombre_proposito}}</td>
+		  			<td>Propósito:</td><td>{{=ficha.nombre_proposito.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Descripción Propósito:</td><td>{{=ficha.proposito_descripcion}}</td>
+		  			<td>Descripción Propósito:</td><td>{{=ficha.proposito_descripcion.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Descripción:</td><td>{{=ficha.descripcion_servicio}}</td>
+		  			<td>Descripción:</td><td>{{=ficha.descripcion_servicio.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 			</table>	  	
@@ -86,25 +101,13 @@
 		  	<table class="table contenidoFicha">
 		  		<tbody>
 		  			<tr>
-			  			<td>Nombre Dependencia Ejecutora:</td><td>{{=ficha.nombre_dependencia_ejecutora}}</td>
+			  			<td>Nombre:</td><td>{{=ficha.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</td>
+			  		</tr>
+                    <tr>
+			  			<td>Unidad de Adscripción:</td><td>{{=ficha.adscripcion_dependencia_ejecutora.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  		<tr>
-			  			<td>Jefe Dependencia Ejecutora:</td><td>{{=ficha.jefe_dependencia_ejecutora}}</td>
-			  		</tr>
-			  		<tr>
-			  			<td>Observaciones:</td><td>{{=ficha.observaciones}}</td>
-			  		</tr>
-			  		<tr>
-			  			<td>Elaborado por:</td><td></td>
-			  		</tr>
-			  		<tr>
-			  			<td>Fecha Elaboración:</td><td>{{=ficha.fecha_elaboracion}}</td>
-			  		</tr>
-			  		<tr>
-			  			<td>Aprobado por:</td><td>{{=ficha.aprobada_por}}</td>
-			  		</tr>
-			  		<tr>
-			  			<td>Fecha Aprobación:</td><td>{{=ficha.fecha_aprobacion}}</td>
+			  			<td>Responsable:</td><td>{{=ficha.jefe_dependencia_ejecutora.decode('utf-8').upper()}}</td>
 			  		</tr>
 			  	</tbody>
 		  	</table>	  	
@@ -160,10 +163,11 @@
 			</div>
 
 		{{elif ficha.estado_solicitud > 0:}}
+            {{if not(tipo_solicitud == "Ejecutante"):}}
 		<div class="botonesFicha botonEliminarImprimir">
 			<a target="_blank" id="botonImprimir" href="{{=URL('servicios','pdf_solicitud', vars=dict(solicitud=ficha.id))}}"><button type="button" class="btn botonesFichita botonEliminarImprimir">Imprimir Reporte Solicitud</button></a>
 
-					{{pass}}
+					{{pass}}{{pass}}
 
 			</form>
 				<button type="button" id="botonCerrarFichaSolicitud" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>

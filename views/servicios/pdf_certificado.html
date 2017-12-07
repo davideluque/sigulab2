@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Certificación {{=solicitud.registro}}</title>
 	<meta charset="UTF-8"> 
 	<script src="jspdf.js"></script>
 	<script src="jquery-2.1.3.js"></script>
@@ -36,6 +36,7 @@
 		border-collapse: collapse;
 		height: 900px;
 		width: 1000px;
+		margin-top: 70px;
 	}
 
 	.titulos{
@@ -47,12 +48,14 @@
 		width: 1000px;
 	}
 
-	.imagenes {
+	#usb {
 		height: 120px;
 	}
 
 	#ulab {
+		height: 80px;
 		float: right;
+		margin-top: 80px;
 	}
 
 	#piePagina {
@@ -66,24 +69,20 @@
 	
 	<div id="">
 		<div id="img" >
-			<img class="imagenes" src="{{=URL('static','images/logo-usb.jpg')}}">
-			<img id="ulab" class="imagenes" src="{{=URL('static','images/servicios/logo-ulab.png')}}">
+			<img id="usb" src="{{=URL('static','images/logo-usb.jpg')}}">
+			<img id="ulab" src="{{=URL('static','images/servicios/logo-ulab.png')}}">
 		</div>
 
 		<table id="tablaSolicitud" border="1">
 
 			<tr>
-				<th colspan="4" rowspan="2" class="titulos">CERTIFICACIÓN DE SERVICIO DE LABORATORIO</th>
-				<th colspan="2" class="titulos">Registro</th>
+				<th colspan="4" class="titulos">CERTIFICACIÓN DE SERVICIO DE LABORATORIO</th>
+				<th colspan="2" class="titulos">{{=solicitud.registro}}</th>
 			</tr>
 
 			<tr>
-				<td colspan="6" align="center">{{=solicitud.registro}}</td>
-			</tr>	
-			
-			<tr>
 				<td colspan="6">
-					<p>Quien suscribe, {{=solicitud.nombre_responsable_solicitud}}, C.I. No. {{=solicitud.ci_responsable_solicitud}}, como responsable de la {{=solicitud.nombre_dependencia_solicitante}}, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la {{=solicitud.nombre_dependencia_ejecutora}}, correspondientes a la solicitud/orden de servicio identificado  como: {{=solicitud.nombre_servicio}}, de fecha {{=solicitud.fecha_solicitud}}.</p>
+					<p>Quien suscribe, {{=solicitud.nombre_responsable_solicitud}} ({{=solicitud.email_responsable_solicitud}}), como responsable de la {{=solicitud.nombre_dependencia_solicitante}}, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la {{=solicitud.nombre_dependencia_ejecutora}}, correspondientes a la solicitud/orden de servicio identificado  como: {{=solicitud.nombre_servicio}}, de fecha {{=solicitud.fecha_solicitud}}.</p>
 					<p>Certificación que se expide en la fecha: {{=solicitud.fecha_certificacion}}.</p>
 					<br>
 					<br>

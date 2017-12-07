@@ -19,7 +19,7 @@ def index():
 
     solicitud_nueva = ListaSolicitudes(db, auth, "Ejecutante").cuenta > 0
 
-    # TODO Sacar esto de la nueva tabla de historial
+    # TODO Sacar esto de la nueva tabla de historial?
 
     certificacion_nueva = ListaSolicitudes(db, auth, "Certificante").cuenta > 0
 
@@ -82,9 +82,11 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">Sigulab</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><p>Se ha añadido un nuevo servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><p>Para consultar dicha operación diríjase a la página web de <a href="159.90.171.24">SIGULAB</a>.</p><p>Saludos.</p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha añadido un nuevo servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha añadido un nuevo servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         # Variable nombre persona que recibe el email
 
@@ -144,9 +146,11 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha editado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha editado un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha editado un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -186,9 +190,11 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha cambiado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha modificado la visibilidad de un servicio a %s. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, estado_visibilidad, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha cambiado la visibilidad de un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha modificado la visibilidad de un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -213,9 +219,11 @@ def listado():
 
         nombre_anade = "%s %s" % (auth.user.first_name, auth.user.last_name)
 
-        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">Sigulab</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
+        correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Hola, %s.</p><br><p>Se ha eliminado un servicio. La operación fue realizada por %s, el/la cual pertenece a la dependencia de %s.</p><br><p>Para consultar dicha operación diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_y_apellido, nombre_anade, dependencia.nombre)
 
-        __enviar_correo(jefe_dependencia.email, 'Se ha eliminado un servicio', correo)
+        asunto = '[SIGULAB] ' + 'Se ha eliminado un servicio'
+
+        __enviar_correo(jefe_dependencia.email, asunto, correo)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True))     
 
@@ -234,6 +242,8 @@ def listado():
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
+
+
     servicio_solicitud = None
 
     #----- AGREGAR SOLICITUDES -----#
@@ -270,6 +280,7 @@ def solicitudes():
 
         # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
         solicitud_a_cambiar.correoCambioEstadoSolicitud()
+        solicitud_a_cambiar.correoSolicitudFinalizada()
 
         # if request.post_vars.estado == "1":
         #     solicitud_a_cambiar.fecha_aprobacion = request.now
@@ -329,8 +340,7 @@ def solicitudes():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
-
-    return dict(datos_solicitud=datos_solicitud, 
+    return dict(datos_solicitud=datos_solicitud,
         categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
@@ -349,6 +359,7 @@ def certificaciones():
         solicitud_a_actualizar = Solicitud(db,auth)
         solicitud_a_actualizar.instanciar(int(solicitud))
         solicitud_a_actualizar.certificar(request)
+        solicitud_a_actualizar.correoCertificacionFinalizada()
 
         fecha = request.post_vars.fecha
 
@@ -362,6 +373,7 @@ def certificaciones():
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
+    print(auth.user.email)
     return dict()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -635,7 +647,9 @@ def ajax_obtener_datos_depen_ejecutora():
 
     datos_jefe_depen_ejecutora = [jefe_dependencia_ejecutora.first_name, jefe_dependencia_ejecutora.last_name, jefe_dependencia_ejecutora.email]
 
-    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora)
+    unidad_de_adscripcion = db(db.dependencias.id == dependencia_ejecutora.unidad_de_adscripcion).select(db.dependencias.nombre)[0].nombre
+
+    return dict(nombreDepenEjecutora= dependencia_ejecutora.nombre, jefeDepenEjecutora = datos_jefe_depen_ejecutora, unidad_de_adscripcion = unidad_de_adscripcion)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_certificar_servicio():
@@ -646,25 +660,18 @@ def ajax_certificar_servicio():
     responsable = db(db.t_Personal.id == servicio.responsable).select()[0]
     fecha = request.now
     dependencia = db(auth.user_id == db.auth_membership.user_id).select()[0].dependencia_asociada
-    codigo_registro = db(db.dependencias.id == int(dependencia)).select()[0].codigo_registro
 
     proyecto = "N/A"
     proposito = db(solicitud_info.proposito == db.propositos.id).select()[0].tipo
 
-
-    if proposito == "Investigacion":
-        proyecto = solicitud_info.proposito_descripcion
-
     if not(dependencia is None):
         dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
     else:
-        #dependencianombre = "Laboratorio A"
         dependencia = db(db.dependencias.id > 0).select()[0].id
+        dependencianombre = db(db.dependencias.id == dependencia).select()[0].nombre
 
-    # TODO el numero de registro viene es de la misma solicitud
     registro = solicitud_info.registro
 
-    print(request.vars.tipo_solicitud)
 
     return dict(solicitud=solicitud_info,
                 usuario=usuario,
@@ -674,7 +681,7 @@ def ajax_certificar_servicio():
                 registro=registro,
                 dependenciaid=dependencia,
                 dependencia=dependencianombre,
-                proyecto=proyecto, tipo_solicitud = request.vars.tipoSolicitud)
+                proyecto=proyecto)
 
 #------------------------------------------------------------------------------
 #
@@ -702,7 +709,7 @@ def ajax_listado_servicios():
     dependencia = info_membership.dependencia_asociada
 
     rol = 0
-    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
         rol = 2
     elif user_group_id == grupo_lab:
         rol = 1
@@ -795,7 +802,7 @@ def ajax_listado_solicitudes_recibidas():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_certificaciones_a_generar():
 
-     #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
+    #------ ACCION LISTAR CERTIFICACIONES A GENERAR -----#
     listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
 
     order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_generar_alfabeticamente.title())
@@ -820,7 +827,7 @@ def ajax_listado_certificaciones_a_generar():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_listado_certificaciones_a_recibir():
   #------ ACCION LISTAR SOLICITUDES DE SERV -----
-    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Certificante")
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Ejecutante")
 
     order_by_asc = eval(request.post_vars.ordenar_certificaciones_a_recibir_alfabeticamente.title())
     order_by_col = request.post_vars.ordenar_certificaciones_a_recibir_por
@@ -934,6 +941,7 @@ def pdf_certificado():
 # Funcion para enviar un correo de notificacion 
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
+    mail.settings.sender = 'sat-laba@usb.ve'
     mail.send(destinatario, asunto, cuerpo)
 
 
@@ -968,7 +976,7 @@ def __obtener_priviliegios():
     dependencia = info_membership.dependencia_asociada
 
     rol = 0
-    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin:
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
         rol = 2
     elif user_group_id == grupo_lab or user_group_id == grupo_secc or user_group_id == grupo_coord:
         rol = 1

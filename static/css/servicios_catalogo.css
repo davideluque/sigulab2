@@ -26,8 +26,27 @@ body {
 }
 
 #titulo {
+  margin-top: -80px !important;
+  margin-bottom: 0 !important;
+}
+
+#titulo2 {
   margin-top: 50px !important;
   margin-bottom: 0 !important;
+}
+
+.titulosBlancos {
+  color: white;
+}
+
+#usb {
+    height: 100px;
+    margin-left: 15px;
+}
+
+#ulab {
+    height: 80px;
+    margin-top: 110px;
 }
 
 .columnasIzq {
@@ -59,11 +78,16 @@ body {
   margin-left: 150px !important;
 }
 
-.nombreServicio{
+.nombreServicio {
   font-size: 25px;
+  color: white;
 }
 
-.big{
+.letrasBlancas {
+  color: white;
+}
+
+.big {
   font-size: 40px !important;
 }
 
