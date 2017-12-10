@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Certificación {{=solicitud.registro}}</title>
 	<meta charset="UTF-8"> 
 	<script src="jspdf.js"></script>
 	<script src="jquery-2.1.3.js"></script>
@@ -36,6 +36,7 @@
 		border-collapse: collapse;
 		height: 900px;
 		width: 1000px;
+		margin-top: 70px;
 	}
 
 	.titulos{
@@ -47,14 +48,19 @@
 		width: 1000px;
 	}
 
-	.imagenes {
+	#usb {
 		height: 120px;
 	}
 
 	#ulab {
+		height: 80px;
 		float: right;
+		margin-top: 80px;
 	}
 
+	#piePagina {
+		width: 1000px;
+	}
 
 
 </style>		
@@ -63,59 +69,51 @@
 	
 	<div id="">
 		<div id="img" >
-			<img class="imagenes" src="{{=URL('static','images/logo-usb.jpg')}}">
-			<img id="ulab" class="imagenes" src="{{=URL('static','images/servicios/logo-ulab.png')}}">
+			<img id="usb" src="{{=URL('static','images/logo-usb.jpg')}}">
+			<img id="ulab" src="{{=URL('static','images/servicios/logo-ulab.png')}}">
 		</div>
 
 		<table id="tablaSolicitud" border="1">
 
-		<tr>
-			<th colspan="4" rowspan="2" class="titulos">CERTIFICACIÓN DE SERVICIO DE LABORATORIO</th>
-			<th colspan="2" class="titulos">Registro</th>
-		</tr>
+			<tr>
+				<th colspan="4" class="titulos">CERTIFICACIÓN DE SERVICIO DE LABORATORIO</th>
+				<th colspan="2" class="titulos">{{=solicitud.registro}}</th>
+			</tr>
 
-		<tr>
-			<td colspan="6">Variable registro</td>
-		</tr>	
-		
-		<tr>
-			<td colspan="6">
-				<p>Quien suscribe, VARIABLE, C.I. No. VARIABLE, como responsable de la VARIABLE, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la VARIABLE, correspondientes a la solicitud/orden de servicio identificad como: VARIABLE, de fecha VARIABLE.</p>
-				<p>Certificación que se expida a los VARIABLE días del mes de VARIABLE de los VARIABLE.</p>
-				<br>
-				<br>
-				<p>Responsable:</p>
-				<p>Cargo:</p>
-			</td>
-		<tr>
+			<tr>
+				<td colspan="6">
+					<p>Quien suscribe, {{=solicitud.nombre_responsable_solicitud}} ({{=solicitud.email_responsable_solicitud}}), como responsable de la {{=solicitud.nombre_dependencia_solicitante}}, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la {{=solicitud.nombre_dependencia_ejecutora}}, correspondientes a la solicitud/orden de servicio identificado  como: {{=solicitud.nombre_servicio}}, de fecha {{=solicitud.fecha_solicitud}}.</p>
+					<p>Certificación que se expide en la fecha: {{=solicitud.fecha_certificacion}}.</p>
+					<br>
+					<br>
+					<br>
+					<br>
+					<p align="center">{{=solicitud.nombre_responsable_solicitud}}</p>
+					<p align="center">{{=solicitud.cargo_responsable_solicitud}} de {{=solicitud.nombre_dependencia_solicitante}}</p>
+				</td>
+			<tr>
 
-		<tr>
-			<th colspan="6" class="titulos">Para uso de la Unidad ejecutante del servicio:</th>
-		</tr>
-		<tr>
-			<th colspan="2" class="titulos">Fecha de recepción</th>
-			<th colspan="2" class="titulos">Recibido por</th>
-			<th colspan="2"></th>
-		</tr>
-		<tr>
-			<td colspan="2" rowspan="3">Variable fecha de recepción</td>
-			<td colspan="2" rowspan="3">Variable recibido por</td>
-		</tr>
-		<tr>
-			<th>Firma</th>
-		</tr>
-		<tr>
-			<td>Variable firma</td>
-		</tr>
+			<tr>
+				<th colspan="6" class="titulos">Para uso de la Unidad ejecutante del servicio:</th>
+			</tr>
+			<tr>
+				<th colspan="2" class="titulos">Fecha de recepción</th>
+				<th colspan="2" class="titulos">Recibido por</th>
+				<th colspan="2" class="titulos">Firma</th>
+			</tr>
+			<tr>
+				<td colspan="2" rowspan="2"><br></td>
+				<td colspan="2" rowspan="2"><br></td>
+				<td colspan="2" rowspan="2"><br></td>
+			</tr>
+			<tr>
 
-	<tr>
-		<td colspan="6">
-			<p style="text-align: center">Universidad Simón Bolivar, Valle de Sartenejas, Baruta, Caracas, Edo Miranda, Venezuela, 89000</p>
-			<p style="text-align: center">www.ulab.usb.ve</p>
-		</td>
-	</tr>
+		</table>
 
-	</table>
+		<div id="piePagina">
+			<p align="center">Universidad Simón Bolivar, Valle de Sartenejas, Baruta, Caracas, Edo Miranda, Venezuela, 89000</p>
+			<p align="center">www.ulab.usb.ve</p>
+		</div>
 
 	</div>
 	

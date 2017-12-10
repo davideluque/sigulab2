@@ -57,7 +57,7 @@ $(document).ready(function () {
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
 
-        parent_fieldset.find('input[type="text"]').each(function () {
+        parent_fieldset.find('input[name="itemServicio"]').each(function () {
             if ($(this).val() == "") {
                 $(this).addClass('input-error');
                 e.preventDefault();

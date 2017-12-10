@@ -11,90 +11,146 @@
 {{end}}
 
 {{block center}}
+<!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..')}}">Servicios</a>
-  <span class="breadcrumb-item active">Certicaciones de Servicios</span>
+  <span class="breadcrumb-item active">Certificaciones de Servicios</span>
   </div>
 </nav>
-<!--
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6"></div>
-        <div id="columnBotonAgregar" class="col-sm-6">
-             Boton que lleva al modal
-          <button type="button" id="botonCertificar" class="btn btn-info" data-toggle="modal" data-target="#modalServiceCertification">Certificar Servicio</button>
-        </div>
-    </div>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+<!-- Inicio Listado Certificaciones que debo certificar -->
+<div id="listado_certif_solicitante_container" class="container">
 </div>
--->
-<div id="listadoContainer" class="container">
-  <div class="row">
-  	<div class="table-responsive" >
-  		<table id="tablaListado" class="table table-hover">
-          <thead>
-            <tr id="titulosListado">
-				<th class="camposTabla"><button class="btn-link linksNombres" name="order" value="registro" id="registro">Numero de Registro</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_solicitante" id="dependencia">Solicitante</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_dependencia_ejecutora" id="id_dependencia_ejecutora_solicitud">Dependencia Ejecutora</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="nombre_servicio" id="servicio">Servicio</button></th>
-                <th class="camposTabla"><button class="btn-link linksNombres" name="order" value="fecha_elaboracion" id="fecha_elaboracion">Fecha de Elaboración</button></th>
-  			</tr>
-  		  </thead>
-  	     <tbody>
-            {{for item in grid:}}
-              <tr>
-                  <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}}, 'Certificante');">{{=item.registro}}</a></th>
-                  <th class="camposTabla">{{=item.nombre_servicio}}</th>
-                  <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-				  <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-                  <th class="camposTabla">{{=item.fecha_elaboracion}}</th>
-              </tr>
-			{{pass}}
-  		  </tbody>
-             <tfoot>
-             <th>
-                <form>
-                    {{for page in pages:}}
-                    <button name="pagina" value="{{=page}}" {{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-                    {{pass}}
-                </form>
-             </th><th></th><th></th><th></th><th></th>
-             </tfoot>
-  		</table>
-  	</div>
-  </div>
+<!-- Ajax Listado Certificaciones que debo certificar --> 
+<input type="hidden" id="ordenar_certificaciones_a_generar_por" name="ordenar_certificaciones_a_generar_por" value="">
+<input type="hidden" id="ordenar_certificaciones_a_generar_alfabeticamente" name="ordenar_certificaciones_a_generar_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_certificaciones_a_generar" name="cambiar_pagina_certificaciones_a_generar" value="">
+<!-- Fin Listado Certificaciones que debo certificar -->
+
+<!-- Inicio Listado Certificaciones que me deben certificar -->
+<div id="listado_certif_ejecutante_container" class="container">
 </div>
+<!-- Ajax Listado Certificaciones que me deben certificar --> 
+<input type="hidden" id="ordenar_certificaciones_a_recibir_por" name="ordenar_certificaciones_a_recibir_por" value="">
+<input type="hidden" id="ordenar_certificaciones_a_recibir_alfabeticamente" name="ordenar_certificaciones_a_recibir_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_certificaciones_a_recibir" name="cambiar_pagina_certificaciones_a_recibir" value="">
+<!-- Fin Listado Certificaciones que me deben certificar -->
 
 <!-- Field Escondido para el modal-->
 <input type="hidden" id="solicitud" name="solicitud" value="">
 <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
 
-<!-- Inicio Modal ficha de Certificacion -->
+<!-- Inicio Modal Ficha de Certificacion -->
 <div class="modal fade" id="modalServiceCertification" role="dialog">
-    <div class="modal-dialog">
-        <div id="formcert" class="modal-content">
-
-    </div></div>
+  <div class="modal-dialog">
+    <div id="formcert" class="modal-content">
+    </div>
+  </div>
 </div>
 
 <script language="javascript">
-
   function abrirForm(solicitud, tipo_solicitud) {
 		var x = document.getElementById("solicitud");
 			x.value = solicitud;
-		ajax('ajax_certificar_servicio', ['solicitud'], "formcert");
-	}
-
-  function abrirFicha(solicitud, tipo_solicitud) {
-    var x = document.getElementById("solicitud");
-      x.value = solicitud;
 
     var y = document.getElementById("tipoSolicitud");
       y.value = tipo_solicitud;
 
-    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+		ajax('ajax_certificar_servicio', ['solicitud', 'tipoSolicitud'], "formcert");
+	}
+
+  // Valores por defecto para el listado de certificaciones como solicitante 
+  // al cargar el listado de certificaciones. Además estos valores permiten 
+  // guardar los parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_certificaciones_a_generar= null;
+  order_by_asc_certificaciones_a_generar = null;
+  order_by_pag_certificaciones_a_generar = 1;
+  function cambiar_pagina_certificaciones_a_generar(page){
+    order_by_pag_certificaciones_a_generar = page
+
+    var x = document.getElementById("ordenar_certificaciones_a_generar_por");
+      x.value = order_by_col_certificaciones_a_generar;
+
+    var y = document.getElementById("ordenar_certificaciones_a_generar_alfabeticamente");
+      y.value = order_by_asc_certificaciones_a_generar
+
+    var z = document.getElementById("cambiar_pagina_certificaciones_a_generar")
+      z.value = order_by_pag_certificaciones_a_generar
+
+    ajax('ajax_listado_certificaciones_a_generar', ['ordenar_certificaciones_a_generar_por', 'ordenar_certificaciones_a_generar_alfabeticamente', 'cambiar_pagina_certificaciones_a_generar'], "listado_certif_solicitante_container");
+  }
+
+  function ordenar_certificaciones_a_generar(order_by){
+
+    if (order_by_col_certificaciones_a_generar == order_by){
+      order_by_asc_certificaciones_a_generar = !order_by_asc_certificaciones_a_generar
+    }
+    else{
+      order_by_col_certificaciones_a_generar = order_by
+      order_by_asc_certificaciones_a_generar = false
+    }
+
+    var x = document.getElementById("ordenar_certificaciones_a_generar_por");
+      x.value = order_by_col_certificaciones_a_generar;
+
+    var y = document.getElementById("ordenar_certificaciones_a_generar_alfabeticamente");
+      y.value = order_by_asc_certificaciones_a_generar
+
+    var z = document.getElementById("cambiar_pagina_certificaciones_a_generar")
+      z.value = order_by_pag_certificaciones_a_generar
+
+    ajax('ajax_listado_certificaciones_a_generar', ['ordenar_certificaciones_a_generar_por', 'ordenar_certificaciones_a_generar_alfabeticamente', 'cambiar_pagina_certificaciones_a_generar'], "listado_certif_solicitante_container");
+  }
+
+  // Valores por defecto para el listado de certificaciones como ejecutante 
+  // al cargar el listado de certificaciones. Además estos valores permiten 
+  // guardar los parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_certificaciones_a_recibir = null;
+  order_by_asc_certificaciones_a_recibir = null;
+  order_by_pag_certificaciones_a_recibir = 1;
+  function cambiar_pagina_certificaciones_a_recibir(page){
+    order_by_pag_certificaciones_a_recibir = page
+
+    var x = document.getElementById("ordenar_certificaciones_a_recibir_por");
+      x.value = order_by_col_certificaciones_a_recibir;
+
+    var y = document.getElementById("ordenar_certificaciones_a_recibir_alfabeticamente");
+      y.value = order_by_asc_certificaciones_a_recibir
+
+    var z = document.getElementById("cambiar_pagina_certificaciones_a_recibir")
+      z.value = order_by_pag_certificaciones_a_recibir
+
+    ajax('ajax_listado_certificaciones_a_recibir', ['ordenar_certificaciones_a_recibir_por', 'ordenar_certificaciones_a_recibir_alfabeticamente', 'cambiar_pagina_certificaciones_a_recibir'], "listado_solic_generadas_container");
+  }
+
+  function ordenar_certificaciones_a_recibir(order_by){
+    
+    if (order_by_col_certificaciones_a_recibir == order_by){
+      order_by_asc_certificaciones_a_recibir = !order_by_asc_certificaciones_a_recibir
+    }
+    else{
+      order_by_col_certificaciones_a_recibir = order_by
+      order_by_asc_certificaciones_a_recibir = false
+    }
+
+    var x = document.getElementById("ordenar_certificaciones_a_recibir_por");
+      x.value = order_by_col_certificaciones_a_recibir;
+
+    var y = document.getElementById("ordenar_certificaciones_a_recibir_alfabeticamente");
+      y.value = order_by_asc_certificaciones_a_recibir
+
+    var z = document.getElementById("cambiar_pagina_certificaciones_a_recibir")
+      z.value = order_by_pag_certificaciones_a_recibir
+
+    ajax('ajax_listado_certificaciones_a_recibir', ['ordenar_certificaciones_a_recibir_por', 'ordenar_certificaciones_a_recibir_alfabeticamente', 'cambiar_pagina_certificaciones_a_recibir'], "listado_certif_ejecutante_container");
+  }
+
+  window.onload = function(){
+    ordenar_certificaciones_a_generar("id");
+    ordenar_certificaciones_a_recibir("id");
   }
 </script>
 

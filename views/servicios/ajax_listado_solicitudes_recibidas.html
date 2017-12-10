@@ -6,7 +6,7 @@
           <!-- Titulos Tabla Solicitudes -->
           <thead>
             <tr id="titulosListado">
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro" onclick="ordenar_solicitudes_recibidas('registro');">Numero de Registro</button></th>
+              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro" onclick="ordenar_solicitudes_recibidas('registro');">Número de Registro</button></th>
               <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante" onclick="ordenar_solicitudes_recibidas('nombre_dependencia_solicitante');">Dependencia Solicitante</button></th>
               <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora" onclick="ordenar_solicitudes_recibidas('nombre_dependencia_ejecutora');">Dependencia Ejecutora</button></th>
               <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio" onclick="ordenar_solicitudes_recibidas('nombre_servicio');">Servicio</button></th>
@@ -19,12 +19,12 @@
           <tbody>
             {{for item in grid:}}
               <tr>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.registro}}</a></th>
-                <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-                <th class="camposTabla">{{=item.nombre_servicio}}</th>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.registro.decode('utf-8').upper()}}</a></th>
+                <th class="camposTabla">{{=item.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=item.nombre_servicio.decode('utf-8').upper()}}</th>
                 <th class="camposTabla">{{=item.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
+                <th class="camposTabla">{{=item.estado_solicitud_str.decode('utf-8').upper()}}</th>
               </tr>
             {{pass}}
           </tbody>

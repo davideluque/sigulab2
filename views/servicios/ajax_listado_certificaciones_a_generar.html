@@ -1,34 +1,32 @@
-  <h3> Solicitudes que debo certificar </h3>
   <div class="row">
+    <h3> Servicios Recibidos </h3>
     <div class="table-responsive" >
       <table id="tablaListado" class="table table-hover">
-       <form>
-          <!-- Titulos Tabla Solicitudes -->
-          <thead>
-            <tr id="titulosListado">
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="registro">Numero de Registro</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_solicitante">Dependencia Solicitante</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_dependencia_ejecutora">Dependencia Ejecutora</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="nombre_servicio">Servicio</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="fecha_solicitud">Fecha de Solicitud</button></th>
-              <th class="camposTabla"><button class="btn-link linksNombres" name="columna_ejecutante" value="estado_solicitud">Estado</button></th>
-            </tr>
-          </thead>
+        <!-- Titulos Solicitudes en Espera por mi Certificación -->
+        <thead>
+          <tr id="titulosListado">
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('registro')">Numero de Registro</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('nombre_dependencia_solicitante')">Dependencia Solicitante</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('nombre_dependencia_ejecutora')">Dependencia Ejecutora</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('nombre_servicio')">Servicio</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('fecha_elaboracion')">Fecha de Elaboración</button></th>
+            <th class="camposTabla"><button class="btn-link linksNombres" onclick="ordenar_certificaciones_a_generar('estado_solicitud_str')">Estado</button></th>
+          </tr>
+        </thead>
 
-          <!-- Contenido Tabla Solicitudes -->
-          <tbody>
-            {{for item in grid:}}
-              <tr>
-                <th class="camposTabla">{{=item.registro}}</th>
-                <th class="camposTabla">{{=item.nombre_dependencia_solicitante}}</th>
-                <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}}, 'Ejecutante');" >{{=item.nombre_servicio}}</a></th>
-                <th class="camposTabla">{{=item.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=item.estado_solicitud_str}}</th>
-              </tr>
-            {{pass}}
-          </tbody>
-       </form>
+        <!-- Contenido Solicitudes en Espera por mi Certificación -->
+        <tbody>
+          {{for item in grid:}}
+            <tr>
+              <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=item.id}}, 'Certificante');">{{=item.registro}}</a></th>
+              <th class="camposTabla">{{=item.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.nombre_servicio.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=item.fecha_elaboracion}}</th>
+              <th class="camposTabla">{{=item.estado_solicitud_str.decode('utf-8').upper()}}</th>
+            </tr>
+          {{pass}}
+        </tbody>
       </table>
     </div>
   </div>
@@ -36,19 +34,19 @@
   <!-- Inicio botones pagina -->
   <div class="row">
     {{if firstpage:}}
-      <button name="primera_pagina" value="{{=firstpage}}" onclick="cambiarPagina(this.value)"> << </button>
+      <button name="primera_pagina" value="{{=firstpage}}" onclick="cambiar_pagina_certificaciones_a_generar(this.value)"> << </button>
     {{pass}}
     {{if prevpage:}}
-      <button name="pagina_anterior" value="{{=prevpage}}" onclick="cambiarPagina(this.value)"> < </button>
+      <button name="pagina_anterior" value="{{=prevpage}}" onclick="cambiar_pagina_certificaciones_a_generar(this.value)"> < </button>
     {{pass}}
     {{for page in pages:}}
-      <button type="button" name="pagina" value="{{=page}}" {{if page == actualpage:}} class="btn active" {{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
+      <button type="button" name="pagina" value="{{=page}}" {{if page == actualpage:}} class="btn active" {{pass}} onclick="cambiar_pagina_certificaciones_a_generar(this.value)"> {{=page}} </button>
     {{pass}}
     {{if nextpage:}}
-      <button name="pagina_siguiente" value="{{=nextpage}}" onclick="cambiarPagina(this.value)"> > </button>
+      <button name="pagina_siguiente" value="{{=nextpage}}" onclick="cambiar_pagina_certificaciones_a_generar(this.value)"> > </button>
     {{pass}}
     {{if lastpage:}}
-      <button name="ultima_pagina" value="{{=lastpage}}" onclick="cambiarPagina(this.value)"> >> </button>
+      <button name="ultima_pagina" value="{{=lastpage}}" onclick="cambiar_pagina_certificaciones_a_generar(this.value)"> >> </button>
     {{pass}}
   </div>
    <!-- Fin botones pagina -->

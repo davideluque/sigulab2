@@ -1,7 +1,7 @@
 <select class="form-control" type="select" id="sel5-edit" name="ubicacionServicio" onchange="getResponsableEdit();" required>
-    <option value="" selected hidden>Espacio Físico</option>
+    <option value="" selected hidden>Espacio Físico&#42;</option>
   {{for ubicacion in ubicaciones:}}
-  <option value="{{=ubicacion.id}}">{{=ubicacion.nombre}}</option>
+  <option value="{{=ubicacion.id}}">{{=ubicacion.codigo}} | {{=ubicacion.uso}}</option>
   {{pass}}
 </select>
 

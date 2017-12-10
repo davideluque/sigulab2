@@ -191,3 +191,10 @@ def listado():
 
 
     return dict(gridedit = edic, editar = editar, grid= tabla, categorias = cat,dependencias = dep, estados = est)
+
+def reporte():
+    tabla=tabla_categoria()
+    personas=[]
+    for persona in tabla:
+        personas.append(persona)
+    return dict(personas=personas)

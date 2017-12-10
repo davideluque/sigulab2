@@ -32,31 +32,31 @@
 	  	<table class="table contenidoFicha">
 	  		<tbody>
 	  			<tr>
-		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre}}</td>
+		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre.upper()}}</td>
 		  		</tr>
 	  			<tr>
-		  			<td>Categoría:</td><td>{{=ficha['categoria']}}</td>
+		  			<td>Categoría:</td><td>{{=ficha['categoria'].upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo']}}</td>
+		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun}}{{pass}}</td>
+		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun.decode('utf-8').upper()}}{{pass}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo}}</td>
+		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance}}</td>
+		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo}}</td>
+		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango}}</td>
+		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre}}</td>
+		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>
@@ -66,7 +66,7 @@
 	  	<table class="table contenidoFicha">
 		  	<tbody>
 		  		<tr>
-		  			<td>Responsable:</td><td>{{=ficha['responsable']}}</td>
+		  			<td>Responsable:</td><td>{{=ficha['responsable'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
 		  			<td>Teléfonos(extensiones):</td><td>{{=ficha['telefono']}}</td>
@@ -75,16 +75,16 @@
 		  			<td>Correo electrónico:</td><td>{{=ficha['email']}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Dependencia:</td><td>{{=ficha['dependencia']}}</td>
+		  			<td>Dependencia:</td><td>{{=ficha['dependencia'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Unidad de Adscripción:</td><td>{{=ficha['adscripcion']}}</td>
+		  			<td>Unidad de Adscripción:</td><td>{{=ficha['adscripcion'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Ubicación Física:</td><td>{{=ficha['ubicacion']}}</td>
+		  			<td>Ubicación Física:</td><td>{{=ficha['ubicacion'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Sede:</td><td>{{=ficha['sede']}}</td>
+		  			<td>Sede:</td><td>{{=ficha['sede'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>	  	
@@ -94,13 +94,13 @@
 	  	<table class="table contenidoFicha">
 	  		<tbody>
 	  			<tr>
-		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar}}</td>
+		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos}}</td>
+		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados}}</td>
+		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>	  	
@@ -126,26 +126,26 @@
       </form>
       <form method="POST" id="formularioSolicitar" action="{{=URL('solicitudes')}}">
         <input type="hidden" name="idServicio" value="{{=ficha['entrada'][0].id}}">
+        <input type="hidden" name="fuenteListado" value="1">
       </form>
 
-        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
-	    <div class="btn-group botonesFicha">
+
+        <div class="btn-group botonesFicha">
+            {{if auth.has_membership("WebMaster") or (auth.user.email == "ulab-calidad@usb.ve"):}}
 					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
-					
+            {{pass}}
 
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
-		
-		  {{if ficha['entrada'][0].visibilidad: }}
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
-		  {{else: }}
-		  <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
-		  {{pass}}
+            {{if edicion:}}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
+		        {{if ficha['entrada'][0].visibilidad: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
+		        {{else: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
+		        {{pass}}
+            {{pass}}
 
-
-	  	  <!-- <input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}"> -->
 	  	  <button type="submit" form="formularioSolicitar" class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}">Solicitar</button>
 		</div>
-      {{pass}}
 
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
