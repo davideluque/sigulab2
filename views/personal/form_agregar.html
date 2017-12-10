@@ -3,8 +3,8 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
     $( function() {
-      $( "#datepicker" ).datepicker();
-      $( "#datepicker2" ).datepicker();
+      var d1=$( "#datepicker" ).datepicker({maxDate:'0'});
+      $( "#datepicker2" ).datepicker({maxDate:'0'});
     } );
   </script>
 
@@ -55,6 +55,7 @@
 
                             <div class="form-group">
                               <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" required>
+                              <font color="red"><div id="err_apellido" hidden></div></font>
                             </div>
 
                             <div class="form-group">
@@ -105,8 +106,10 @@
                               </div>
 
                               <p>Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" required></p>
+                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p>Fecha de Salida: <input name = "fecha_salida_add" type="text" id="datepicker2"></p>
+                              <p id="fsalida" hidden>Fecha de Egreso: <input name = "fecha_salida_add" type="text" id="datepicker2"></p>
+                              <font color="red"><div id="err_fecha_salida" hidden></div></font>
 
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
@@ -138,7 +141,7 @@
 
                         <div class="form-group">
                           <select class="form-control" id="sel1" name="categoria_add" required>
-                            <option value="1" selected hidden>Categoria</option>
+                            <option value="1" selected hidden>Gremio</option>
                             {{for categoria in categorias:}}
                             <option value="{{=categoria}}">{{=categoria}}</option>
                             {{pass}} 
