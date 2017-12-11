@@ -24,7 +24,7 @@
 		      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
 		    </div>
 		    <div class="col-sm-4">
-	          <select class="form-control" id="fil_categoria" name="categoria_add" onchange="filter('categoria')" required>
+	          <select class="form-control" id="fil_categoria" name="categoria_add" onchange="filter('categoria')" style="margin-left:30px" required>
 	            <option value="1" selected hidden>Categoria</option>
 	            {{for categoria in categorias:}}
 	            <option id="categoria_opt" value="{{=categoria}}">{{=categoria}}</option>
@@ -33,7 +33,7 @@
 	        </div>
 
 	        <div class="col-sm-4">
-	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" required>
+	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" style="margin-left:10px" required>
 	            <option value="1" selected hidden>Dependencia</option>
 	            {{for dependencia in dependencias:}}
 	            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
@@ -74,5 +74,16 @@ function filter(type){
 	}
 }
 </script>
+
+	<div class="container">
+	    <div class="row">
+	        <div class="col-sm-12">
+	        <!-- Boton que lleva al modal -->
+	    	<a href="reporte">
+	      		<button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Generar Reporte</button>
+	  		</a>
+	    </div>
+	    </div>
+	</div>
 
 {{end}}
