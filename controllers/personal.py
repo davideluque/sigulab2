@@ -130,7 +130,7 @@ def edit_form():
         redirect(URL('listado'))
 
 def index():
-    return redirect(URL('listado'))
+    return dict()
 
 #Funcion que envia los datos a la vista
 def listado():
@@ -198,3 +198,21 @@ def reporte():
     for persona in tabla:
         personas.append(persona)
     return dict(personas=personas)
+
+# def reporte(tipo,filtro):
+#     tabla=tabla_categoria()
+#     personas=[]
+#     if (tipo=="categoria"):
+#         for persona in tabla:
+#             if (persona["categoria"]==filtro):
+#                 personas.append(persona)
+#     elif (tipo=="dependencia"):
+#         named = db(db.dependencias.id == filtro).select(db.dependencias.ALL)
+#         dep= named[0] if len(named) > 0 else None
+#         for persona in tabla:
+#             if (persona["dependencia"]==dep)
+#                 personas.append(persona)
+#     else:
+#         for persona in tabla:
+#             personas.append(persona)
+#     return dict(personas=personas)

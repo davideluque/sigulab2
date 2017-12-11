@@ -72,6 +72,12 @@ function filter(type){
 	    }
 	
 	}
+	if (type=='categoria'){
+		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.value);
+	}
+	else {
+		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.innerHTML);
+	}
 }
 </script>
 
@@ -79,7 +85,7 @@ function filter(type){
 	    <div class="row">
 	        <div class="col-sm-12">
 	        <!-- Boton que lleva al modal -->
-	    	<a href="reporte">
+	    	<a id="botonreporte" href="reporte">
 	      		<button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Generar Reporte</button>
 	  		</a>
 	    </div>
