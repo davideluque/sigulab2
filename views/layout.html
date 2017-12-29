@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <title>SIGULAB</title>
   <meta charset="utf-8">
@@ -8,12 +8,12 @@
   <!-- Avoid search sites from indexing this website -->
   <meta name="robots" content="noindex" />
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
   
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+  <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
   <!--[if lt IE 9]>
@@ -128,10 +128,10 @@
 </html>
 
 <script type="text/javascript">
-  u = window.location.pathname.toString().split('/')[2]
-  if( u == 'personal' ){
+  if(window.location.pathname.includes('personal')){
     $('li#personal').addClass("active");
-  }else if ( u == 'servicios'){
-    $('li#servicio').addClass("active");
+  }
+  else if (window.location.pathname.includes('servicios')){
+    $('li#servicios').addClass("active");
   }
 </script>
