@@ -1,13 +1,16 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-	<script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
-	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
   <script src="{{=URL('static', 'js/modal-steps.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 {{end}}
 
 {{block center}}

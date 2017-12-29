@@ -14,7 +14,6 @@
   
   <script src="{{=URL('static','js/jquery.min.js')}}"></script>
   <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
-  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -128,10 +127,14 @@
 
 {{block center}}
 {{end}}
-</body>
-</html>
 
 <script type="text/javascript">
-  u = window.location.pathname.toString().split('/')[2]
-  $('li#'+u).addClass("active");
+  if(window.location.pathname.includes('personal')){
+    $('li#personal').addClass("active");
+  }
+  else if (window.location.pathname.includes('servicios')){
+    $('li#servicios').addClass("active");
+  }
 </script>
+</body>
+</html>
