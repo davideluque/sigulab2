@@ -1,0 +1,67 @@
+<!-- Inicio Tabla Historial Servicios -->
+<div class="row">
+  <h3> Historial de Servicios </h3>
+  <div class="table-responsive" >
+    <table id="tablaListado" class="table table-hover">
+        <!-- Titulos Listado -->
+        <thead>
+          <tr id="titulosListado">
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('registro_solicitud');">Número de Registro</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('fecha_certificacion');">Fecha de Certificación</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('nombre_servicio');">Nombre del Servicio</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('responsable_solicitud');">Nombre del Solicitante</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('nombre_dependencia_ejecutora');">Dependencia Ejecutora</button>
+            </th>
+            <th class="camposTabla">
+              <button class="btn-link linksNombres" onclick="ordenarHistorial('adscripcion_dependencia_ejecutora');">Unidad de Adscripción</button>
+            </th>
+          </tr>
+        </thead>
+          <!-- Contenido Listado -->
+          {{for item in grid:}}
+          <tr>
+            <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=item.id}});" >{{=item.registro_solicitud}}</a></th>
+            <th class="camposTabla">{{=item.fecha_certificacion}}</th>
+            <th class="camposTabla">{{=item.nombre_servicio}}</th>
+            <th class="camposTabla">{{=item.responsable_solicitud}}</th>
+            <th class="camposTabla">{{=item.nombre_dependencia_ejecutora}}</th>
+            <th class="camposTabla">{{=item.adscripcion_dependencia_ejecutora}}</th>
+          </tr>
+        {{pass}}
+        <tbody>
+				
+        </tbody>
+        <!-- Fin Contenido del Listado -->
+    </table>
+  </div>
+</div>  
+<!-- Fin Tabla Historial Servicios -->
+				
+<!-- Inicio botones pagina -->
+<div class="row">
+  {{if firstpage:}}
+    <button name="primera_pagina" value="{{=firstpage}}" onclick="cambiarPagina(this.value)"> << </button>
+  {{pass}}
+  {{if prevpage:}}
+    <button name="pagina_anterior" value="{{=prevpage}}" onclick="cambiarPagina(this.value)"> < </button>
+  {{pass}}
+	{{for page in pages:}}
+		<button type="button" name="pagina" value="{{=page}}" {{if page == actualpage:}} class="btn active" {{pass}} onclick="cambiarPagina(this.value)"> {{=page}} </button>
+	{{pass}}
+  {{if nextpage:}}
+    <button name="pagina_siguiente" value="{{=nextpage}}" onclick="cambiarPagina(this.value)"> > </button>
+  {{pass}}
+  {{if lastpage:}}
+    <button name="ultima_pagina" value="{{=lastpage}}" onclick="cambiarPagina(this.value)"> >> </button>
+  {{pass}}
+</div>
+ <!-- Fin botones pagina -->

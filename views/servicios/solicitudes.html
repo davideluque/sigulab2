@@ -1,20 +1,18 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-  
   <!-- Estilo del listado de Solicitudes de Servicios -->
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-
 {{end}}
 
 {{block center}}
 <!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..')}}">Servicios</a>
   <span class="breadcrumb-item active">Solicitudes de Servicios</span>
   </div>
@@ -32,53 +30,23 @@
 </div>
 <!-- Fin del boton que lleva al modal de Solicitud de un Servicio -->
 
-<!-- Inicio Listado Solicitudes -->
-<div id="listadoContainer" class="container">
-  <div class="row">
-  	<div class="table-responsive" >
-  		<table id="tablaListado" class="table table-hover">
-  		 <form>
-          <!-- Titulos Tabla Solicitudes -->
-          <thead>
-            <tr id="titulosListado">
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="registro">Numero de Registro</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="dependencia">Dependencia Solicitante</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="id_dependenciaejecutora">Dependencia Ejecutora</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="servicio">Servicio</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="fechasolicitud">Fecha de Solicitud</button></th>
-      				<th class="camposTabla"><button class="btn-link linksNombres" name="columna" value="pendiente">Estado</button></th>
-            </tr>
-  		    </thead>
-
-          <!-- Contenido Tabla Solicitudes -->
-  	      <tbody>
-      			{{for items in grid:}}
-      				<tr>
-      					<th class="camposTabla">{{=items.registro}}</th>
-      					<th class="camposTabla">{{=items.nombre_dependencia_solicitante}}</th>
-      					<th class="camposTabla">{{=items.nombre_dependencia_ejecutora}}</th>
-      					<th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="changeTabs({{=items.nombre_servicio}});" >{{=items.nombreServicio}}</a></th>
-      					<th class="camposTabla">{{=item.categoria_servicio}}</th>
-      					<th class="camposTabla">{{=items.fecha_solicitud}}</th>
-      				</tr>
-      			{{pass}}
-  		    </tbody>
-  		 </form>
-  		</table>
-  	</div>
-  </div>
-
-  <!-- Inicio botones pagina -->
-    <div class="row">
-      <form>
-        {{for page in pages:}}
-          <button name="pagina" value="{{=page}}"{{if page == actualpage:}}class="active"{{pass}}> {{=page}} </button>
-        {{pass}}
-      </form>
-    </div>
-    <!-- Fin botones pagina -->
+<!-- Inicio Listado Solicitudes para solicitante -->
+<div id="listado_solic_generadas_container" class="container">
 </div>
-<!-- Fin Listado Solicitudes -->
+<!-- Ajax ordenar listado de solicitudes para solicitante--> 
+<input type="hidden" id="ordenar_solicitudes_generadas_por" name="ordenar_solicitudes_generadas_por" value="">
+<input type="hidden" id="ordenar_solicitudes_generadas_alfabeticamente" name="ordenar_solicitudes_generadas_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_solicitudes_generadas" name="cambiar_pagina_solicitudes_generadas" value="">
+<!-- Fin Listado Solicitudes para Solicitante-->
+
+<!-- Inicio Listado Solicitudes para ejecutante-->
+<!-- Ajax ordenar listado de solicitudes para ejecutante--> 
+<div id="listado_solic_recibidas_container" class="container">
+</div>
+<input type="hidden" id="ordenar_solicitudes_recibidas_por" name="ordenar_solicitudes_recibidas_por" value="">
+<input type="hidden" id="ordenar_solicitudes_recibidas_alfabeticamente" name="ordenar_solicitudes_recibidas_alfabeticamente" value="">
+<input type="hidden" id="cambiar_pagina_solicitudes_recibidas" name="cambiar_pagina_solicitudes_recibidas" value="">
+<!-- Fin Listado Solicitudes para ejecutante-->
 
 <!-- Inicio Modal Solicitar Servicio -->
 <div class="modal fade" id="modalServiceRequest" role="dialog">
@@ -121,11 +89,205 @@
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Datos Básicos</h4>                
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>                
                      	
                       <!-- Numero Registro -->
                      	<div class="mover">
                      	<label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
+                      </div>
+                      </div>
+
+                      <!-- Dependencia Solicitante -->
+                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
+                      </div>
+
+                      <!-- Jefe Dependencia Solicitante -->
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe de la Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
+                      </div>
+
+                      <!-- Responsable Solicitud -->
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable de la Solicitud</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
+                      </div>                         
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+              
+              <!-- Segundo Paso -->
+              <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                       <span class="step">4</span>
+                    </div>
+
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio a Solicitar</h4>
+                      
+                      <!-- Categoria -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria&#42;</label>
+                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
+                          <option value="" selected hidden >Categoria</option>
+                          {{for categoria in categorias:}}
+                        	<option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
+                          {{pass}} 
+                        </select>
+                      </div>
+
+                      <!-- Tipo Servicio -->
+                      <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
+                        <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
+                          <option value="" selected hidden >Tipo</option>
+                          {{for tipo in tipos:}}
+                          <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
+                          {{pass}}
+                        </select>
+                      </div>
+
+                      <!-- Nombre Servicio-->
+                      <div class="form-group" id="obtenerNombreServicio">
+                        <!-- Ajax obtener nombre servicio -->
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Segundo Paso -->
+
+              <!-- Tercer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step activePass">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                    <h4 class="titulosForm">Servicio a Solicitar</h4>
+                    <!-- Propósito -->
+                    <div class="form-group" id="obtenerPropositoServicio">
+                      <!-- Ajax obtener proposito del servicio -->
+                    </div>
+
+                    <!-- Descripcion propósito -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Descripción del Propósito del Servicio</label>
+                        <textarea rows="1" cols="5" id="descripcionProposito" class="form-control" name="propositoDescripcion" placeholder="" required></textarea>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Observaciones</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Fecha y Hora para Ejecutar el Servicio"></textarea>
+                    </div>
+                  </div>
+                </div> 
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Tercer Paso -->
+
+              <!-- Cuarto Paso -->
+              <fieldset class="formField">
+                <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step activePass">4</span> 
+                  </div>
+
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
+                    <!-- Ajax obtener datos dependencia ejecutora -->
+                  </div>
+                </div>
+                <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+              </fieldset>
+              <!-- Fin Cuarto Paso -->
+            </form>
+            <!-- Fin Form -->
+          </div>
+        </div>               
+      </div>
+      <!-- Fin Modal Body -->
+    </div>
+    <!-- Fin Modal content-->
+  </div>
+</div>
+<!-- Fin Modal Solicitar Servicio -->
+
+{{if servicio_solicitud:}}
+<button class="hidden" type="hidden" id="solicito" data-toggle="modal" data-target="#modalServiceRequestSelected"></button>
+
+<!-- Inicio Modal Solicitar Servicio Seleccionado-->
+<div class="modal fade" id="modalServiceRequestSelected" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoServicio">Solicitud de Servicio de Laboratorio</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <!-- Inicio Form -->
+            <form id="formularioEdit" class="registration-form" method="post">
+
+              <!-- Primer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                     <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>                
+                      
+                      <!-- Numero Registro -->
+                      <div class="mover">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
                       <div class="form-group">
                         <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
                       </div>
@@ -164,36 +326,34 @@
                       <span class="step">3</span>
                        <span class="step">4</span>
                     </div>
-
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body" style="padding-top: 50px">
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                       
                       <!-- Categoria -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria</label>
-                        <select type="select" class="form-control" id="sel1" name="categoriaServicio" onchange="getServicio();" required>
-                          <option value="" selected hidden >Categoria</option>
-                          {{for categoria in categorias:}}
-                        	<option value="{{=categoria.id}}">{{=categoria.nombre}}</option>
-                          {{pass}} 
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categoria*</label>
+
+                        <select type="select" class="form-control" id="sel1.1" name="categoriaServicio2"  required readonly>
+                          <option value="{{=servicio_solicitud.categoria}}" selected >{{=servicio_solicitud.nombre_categoria}}</option>
                         </select>
                       </div>
 
                       <!-- Tipo Servicio -->
                       <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo</label>
-                        <select type="select" class="form-control" id="sel2" name="tipoServicio" onchange="getServicio();" required>
-                          <option value="" selected hidden >Tipo</option>
-                          {{for tipo in tipos:}}
-                          <option value="{{=tipo.id}}">{{=tipo.nombre}}</option>
-                          {{pass}}
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Tipo*</label>
+
+                        <select type="select" class="form-control" id="sel2.1" name="tipoServicio"  required >
+                          <option value="{{=servicio_solicitud.tipo}}" selected >{{=servicio_solicitud.nombre_tipo}}</option>
                         </select>
                       </div>
 
                       <!-- Nombre Servicio-->
-                      <div class="form-group" id="obtenerNombreServicio">
-                        <!-- Ajax obtener nombre servicio -->
+                      <div class="form-group" id="obtenerNombreServicio2">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio*</label>
+                        <select class="form-control" type="select" id="sel3.1" name="nombreServicio" required readonly>
+                          <option selected value="{{=servicio_solicitud.id}}">{{=servicio_solicitud.nombre}}</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -218,18 +378,26 @@
                     <h4 class="titulosForm">Servicio Solicitado</h4>
                     <!-- Propósito -->
                     <div class="form-group" id="obtenerPropositoServicio">
-                      <!-- Ajax obtener proposito del servicio -->
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Propósito del Servicio</label>
+                      <select type="select" class="form-control" id="propositoServicio" name="propositoServicio" onchange="placeholder_descripcion_proposito(this.value, 'Seleccionado')" required>
+                          <option selected value="" hidden>Propósito</option>
+                            {{for proposito in servicio_solicitud.propositos_a_mostrar:}}
+                              <option value="{{=proposito.id}}">{{=proposito.tipo}}</option>
+                            {{pass}}
+                      </select>
                     </div>
 
+                    <!-- Descripcion propósito -->
                     <div class="form-group">
-                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción Propósito</label>
-                        <input type="text" class="form-control" name="" placeholder="código materia / proyecto / (orden servicio - cliente final) / funcionamiento lab." required>
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción del Propósito del Servicio</label>
+                        <textarea rows="1" cols="5" id="descripcionPropositoSeleccionado" class="form-control" name="propositoDescripcion" placeholder="" required></textarea>
                     </div>
 
-                    <!-- Descripción -->
+
+                    <!-- Observ -->
                     <div class="form-group">
-                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Descripción</label>
-                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" ></textarea>
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 8px">Observaciones</label>
+                      <textarea rows="1" cols="5" class="form-control" type="textarea" id="descrip" name="descripcionSolicitud" placeholder="Fecha y Hora para Ejecutar el Servicio"></textarea>
                     </div>
                   </div>
                 </div> 
@@ -251,12 +419,26 @@
 
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body col11Body3" id="obtenerDependenciaEjecutora">
-                    <h4 class="titulosForm">Datos Dependencia Ejecutora</h4>
-                    <!-- Ajax obtener datos dependencia ejecutora -->
+                    <h4 class="titulosForm">Datos de la Dependencia Ejecutora</h4>
+                    <!-- Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; float:left;">Nombre</label>
+                        <input type="text" class="form-control" id="" name="dependenciaEjecutoraServicio" value="{{=servicio_solicitud.seccion}}" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group" id="numRegistro" style="margin-bottom: 0px; padding-right: 345px;">Unidad de Adscripción</label>
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.laboratorio}}" required readonly>
+                    </div>
+
+                    <!-- Jefe Dependencia Ejecutora del Servicio -->
+                    <div class="form-group">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px; float:left;" style="">Responsable de la Dependencia Ejecutora</label>
+                        <input type="text" class="form-control" id="" name="jefeDependenciaEjecutoraServicio" value="{{=servicio_solicitud.jefe_dependencia}} | {{=servicio_solicitud.email_jefe_dependencia}}" required readonly>
+                    </div>
                   </div>
                 </div>
                 <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+                <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
               </fieldset>
               <!-- Fin Cuarto Paso -->
             </form>
@@ -269,7 +451,34 @@
     <!-- Fin Modal content-->
   </div>
 </div>
-<!-- Fin Modal Solicitar Servicio -->
+<!-- Fin Modal Solicitar Servicio Seleccionado-->
+
+
+<script>
+    $(document).ready(function(){
+        document.getElementById("solicito").click();
+    });
+
+</script>
+
+{{pass}}
+
+
+<!-- Ajax abrirFicha -->
+<input type="hidden" id="solicitud" name="solicitud" value="">
+<input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
+
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
 
 <!-- Ajax obtenerServicio -->
 <input type="hidden" id="envioCategoria" name="categoria" value="">
@@ -283,7 +492,17 @@
 
 <!-- Ajax JavaScript-->
 <script type="text/javascript">
-  
+
+  function abrirFicha(solicitud, tipo_solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+  }
+
   function getServicio(){
     var opciones_categoria = document.getElementById("sel1");
     var opciones_tipo = document.getElementById("sel2");
@@ -327,6 +546,119 @@
     ajax('ajax_obtener_datos_depen_ejecutora', ['idServicio2'], "obtenerDependenciaEjecutora")
   }
 
+  function placeholder_descripcion_proposito(value, seleccionado) {
+
+    if (seleccionado == "Ninguno") {
+      var x = document.getElementById("descripcionProposito")
+    } else {
+      var x = document.getElementById("descripcionPropositoSeleccionado")
+    }
+
+    if (value == "1") {
+      x.placeholder = "Código de la Materia"
+
+    }else if (value == "2") {
+      x.placeholder = "Código del Proyecto"
+
+    }else if (value == "3") {
+      x.placeholder = "Código de Solicitud / Orden de Servicio y Cliente Final"
+
+    }else if (value == "4") {
+      x.placeholder = "Operatividad de la Dependencia"
+
+    }
+  }
+
+  // Valores por defecto para el listado de solicitudes recibidas al cargar
+  // el listado de solicitudes. Además estos valores permiten guardar los
+  // parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_solicitudes_recibidas = null;
+  order_by_asc_solicitudes_recibidas = null;
+  order_by_pag_solicitudes_recibidas = 1;
+  function cambiar_pagina_solicitudes_recibidas(page){
+    order_by_pag_solicitudes_recibidas = page
+
+    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
+      x.value = order_by_col_solicitudes_recibidas;
+
+    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_recibidas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
+      z.value = order_by_pag_solicitudes_recibidas
+
+    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas");
+  }
+
+  function ordenar_solicitudes_recibidas(order_by){
+    
+    if (order_by_col_solicitudes_recibidas == order_by){
+      order_by_asc_solicitudes_recibidas = !order_by_asc_solicitudes_recibidas
+    }
+    else{
+      order_by_col_solicitudes_recibidas = order_by
+      order_by_asc_solicitudes_recibidas = false
+    }
+
+    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
+      x.value = order_by_col_solicitudes_recibidas;
+
+    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_recibidas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
+      z.value = order_by_pag_solicitudes_recibidas
+
+    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas_container");
+  }
+
+  // Valores por defecto para el listado de solicitudes generadas al cargar
+  // el listado de solicitudes. Además estos valores permiten guardar los
+  // parametros de ordenamiento para utilizarlos al cambiar de pagina
+  order_by_col_solicitudes_generadas = null;
+  order_by_asc_solicitudes_generadas = null;
+  order_by_pag_solicitudes_generadas = 1;
+  function cambiar_pagina_solicitudes_generadas(page){
+    order_by_pag_solicitudes_generadas = page
+
+    var x = document.getElementById("ordenar_solicitudes_generadas_por");
+      x.value = order_by_col_solicitudes_generadas;
+
+    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_generadas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
+      z.value = order_by_pag_solicitudes_generadas
+
+    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
+  }
+
+  function ordenar_solicitudes_generadas(order_by){
+    
+    if (order_by_col_solicitudes_generadas == order_by){
+      order_by_asc_solicitudes_generadas = !order_by_asc_solicitudes_generadas
+    }
+    else{
+      order_by_col_solicitudes_generadas = order_by
+      order_by_asc_solicitudes_generadas = false
+    }
+
+    var x = document.getElementById("ordenar_solicitudes_generadas_por");
+      x.value = order_by_col_solicitudes_generadas;
+
+    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
+      y.value = order_by_asc_solicitudes_generadas
+
+    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
+      z.value = order_by_pag_solicitudes_generadas
+
+    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
+  }
+
+  window.onload = function(){
+    ordenar_solicitudes_generadas("id");
+    ordenar_solicitudes_recibidas("id");
+  }
 </script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Catalogo</title>
+  <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link href="{{=URL('static', 'css/servicios_catalogo.css')}}" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  <!-- Bootstrap core CSS -->
+  <link href="./Carousel Template for Bootstrap_files/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+</head>
+
+<header id="up">
+  <img id="usb" src="{{=URL('static','images/logo-usb.jpg')}}" class="logos">
+  <img id="ulab" src="{{=URL('static','images/servicios/logo-ulab.png')}}" class="logos">
+  <h2 id="titulo" class="featurette-heading" align="center">Catálogo de Servicios</h2>
+</header>
+
+<form action="{{=URL('servicios','detallesServicios')}}" method="GET">
+
+<div id="contenedor" class="container">
+  <div class="filas">
+    <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Alimentos</h2>
+            <br>
+            <br>
+              <button type="submit" name="categoria" value="1" class="btn botones">Ver detalles</button>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Alimentos" src="{{=URL('static','images/alimentos.jpg')}}" data-holder-rendered="true">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Ambiente</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+            <button type="submit" name="categoria" value="2" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Ambiente" src="{{=URL('static','images/ambiente.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Biología</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="3" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Biología" src="{{=URL('static','images/biologia.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Energía</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="4" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Energía" src="{{=URL('static','images/energia.jpg')}}"" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Manufactura, Instrumentación <br> y Control</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="5" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Manufactura" src="{{=URL('static','images/manufactura.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Matemáticas y Estadísticas</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="6" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Matemáticas y Estadísticas" src="{{=URL('static','images/matematicas.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Mecánica y Materiales</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="7" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Mecánica y Materiales" src="{{=URL('static','images/mecanica_materiales.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Química</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="8" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Química" src="{{=URL('static','images/quimica.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Física</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="9" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Física" src="{{=URL('static','images/fisica.jpg')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Informática, Computación, <br> Comunicación e Información</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="10" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Informática, Computación, Comunicación e Información" src="{{=URL('static','images/informatica.JPG')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Música</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="11" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Música" src="{{=URL('static','images/musica.JPG')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <h2 class="featurette-heading">Salud</h2>
+          <br>
+          <br>
+          <a href="{{=URL('servicios','detallesServicios')}}">
+            <button type="submit" name="categoria" value="12" class="btn botones">Ver detalles</button>
+          </a>
+        </div>
+        <div class="col-md-5 order-md-1 columnasIzq">
+          <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Salud" src="{{=URL('static','images/salud.JPG')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+        </div>
+      </div>
+
+
+      <div class="filas">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 columnasIzq">
+            <h2 class="featurette-heading titulosBlancos">Otros</h2>
+            <br>
+            <br>
+            <a href="{{=URL('servicios','detallesServicios')}}">
+              <button type="submit" name="categoria" value="13" class="btn botones">Ver detalles</button>
+            </a>
+          </div>
+          <div class="col-md-5">
+            <img class="featurette-image img-fluid mx-auto imagenes" data-src="holder.js/500x500/auto" alt="Otros" src="{{=URL('static','images/otros.JPG')}}" data-holder-rendered="true" style="width: 400px; height: 350px;">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+      </div>
+
+      <!-- /END THE FEATURETTES -->
+
+      </div><!-- /.container -->
+
+  </form>
+
+ <!-- FOOTER -->
+<footer class="container">
+  <p class="float-right"><a href="#up">Volver arriba</a></p>
+  <p>ULAB · <a href="http://www.ulab.usb.ve/">  Página web</a> · SIGULAB · <a href="159.90.171.24">  Página web</p>
+</footer>

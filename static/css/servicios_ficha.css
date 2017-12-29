@@ -63,11 +63,34 @@
 
 .botonesFichita:hover {
 	background-color: #808080;
+	color: white;
+}
+
+.botonRechazar {
+	margin-top: 15px;
 }
 
 .botonEliminar:hover {
 	background-color: #DC143C;
 	color: white;
+}
+
+.botonAprobar {
+	margin-top: 15px;
+}
+
+.botonAprobar:hover {
+	background-color: #46a049;
+	color: white;
+}
+
+.botonEliminarImprimir{
+	text-align: left !important;
+}
+
+#botonCerrarFichaSolicitud {
+	text-align: right !important;
+	float: right !important;
 }
 
 #tituloModalElim {
@@ -76,4 +99,8 @@
 
 #cuerpoModalElim {
 	margin-left: 50% !important;
+}
+
+#botonImprimir {
+	color: inherit;
 }

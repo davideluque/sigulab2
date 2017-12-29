@@ -1,6 +1,6 @@
-<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio</label>
+<label class="form-group" id="numRegistro" style="margin-bottom: 0px" style="">Nombre Servicio&#42;</label>
 <select class="form-control" type="select" id="sel3" name="nombreServicio" onchange="getProposito(); getDatosDepenEjecutora();" required>
-	<option selected hidden>Nombre Servicio</option>	
+	<option selected hidden value="">Nombre Servicio</option>	
 		{{for servicio in servicios:}}
 			<option value="{{=servicio.id}}">{{=servicio.nombre}}</option>
 		{{pass}} 

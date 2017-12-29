@@ -42,10 +42,13 @@
                     <td>Página Web:</td><td id="field_pagina_web"></td>
                   </tr>
                   <tr>
-                    <td>Categoría:</td><td id="field_categoria"></td>
+                    <td>Gremio:</td><td id="field_categoria"></td>
                   </tr>
                   <tr>
                     <td>Cargo:</td><td id="field_cargo"></td>
+                  </tr>
+                  <tr>
+                    <td>Dependencia:</td><td id="field_dependencia"></td>
                   </tr>
                   <tr>
                     <td>Fecha de Ingreso:</td><td id="field_fecha_i"></td>
@@ -86,17 +89,23 @@
           var fecha_s = $(e.relatedTarget).data('fecha_s');
           var fecha_i = $(e.relatedTarget).data('fecha_i');
           var nombre = $(e.relatedTarget).data('nombre');
+          var apellido = $(e.relatedTarget).data('apellido');
           var cargo = $(e.relatedTarget).data('cargo');
+          var dep_name = $(e.relatedTarget).data('dep-name');
           var estatus = $(e.relatedTarget).data('estatus');
           var telefono = $(e.relatedTarget).data('telefono');
           var pagina_web = $(e.relatedTarget).data('pagina_web');
 
+          f = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
+
           $("#field_ci").html(ci);
           $("#field_categoria").html(categoria);
+          $("#field_dependencia").html(dep_name);
           $("#field_email").html(email);
           $("#field_fecha_s").html(fecha_s);
           $("#field_fecha_i").html(fecha_i);
           $("#field_nombre").html(nombre);
+          $("#field_apellido").html(apellido);
           $("#field_cargo").html(cargo);
           $("#field_estatus").html(estatus);
           $("#field_telefono").html(telefono);

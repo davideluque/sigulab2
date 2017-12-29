@@ -24,16 +24,6 @@
 	  <li class="nav-item">
 	    <a class="nav-link" data-toggle="tab" href="#especificaciones" role="tab" aria-controls="especificaciones">Especificaciones</a>
 	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link" data-toggle="tab" href="#historial" role="tab" aria-controls="historial">Historial</a>
-	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link" data-toggle="tab" href="#solicitud" role="tab" aria-controls="solicitud">Solicitud</a>
-	  </li>	
-	  <li id="botonesFicha" class="nav-item">
-
-	  </li>	
-
 	</ul>
 
 	<div class="tab-content">
@@ -42,31 +32,31 @@
 	  	<table class="table contenidoFicha">
 	  		<tbody>
 	  			<tr>
-		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre}}</td>
+		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre.upper()}}</td>
 		  		</tr>
 	  			<tr>
-		  			<td>Categoría:</td><td>{{=ficha['categoria']}}</td>
+		  			<td>Categoría:</td><td>{{=ficha['categoria'].upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo']}}</td>
+		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun}}{{pass}}</td>
+		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun.decode('utf-8').upper()}}{{pass}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo}}</td>
+		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance}}</td>
+		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo}}</td>
+		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango}}</td>
+		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre}}</td>
+		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>
@@ -76,7 +66,7 @@
 	  	<table class="table contenidoFicha">
 		  	<tbody>
 		  		<tr>
-		  			<td>Responsable:</td><td>{{=ficha['responsable']}}</td>
+		  			<td>Responsable:</td><td>{{=ficha['responsable'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
 		  			<td>Teléfonos(extensiones):</td><td>{{=ficha['telefono']}}</td>
@@ -85,16 +75,16 @@
 		  			<td>Correo electrónico:</td><td>{{=ficha['email']}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Dependencia:</td><td>{{=ficha['dependencia']}}</td>
+		  			<td>Dependencia:</td><td>{{=ficha['dependencia'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Unidad de Adscripción:</td><td>{{=ficha['adscripcion']}}</td>
+		  			<td>Unidad de Adscripción:</td><td>{{=ficha['adscripcion'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Ubicación Física:</td><td>{{=ficha['ubicacion']}}</td>
+		  			<td>Ubicación Física:</td><td>{{=ficha['ubicacion'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Sede:</td><td>{{=ficha['sede']}}</td>
+		  			<td>Sede:</td><td>{{=ficha['sede'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>	  	
@@ -104,44 +94,23 @@
 	  	<table class="table contenidoFicha">
 	  		<tbody>
 	  			<tr>
-		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar}}</td>
+		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos}}</td>
+		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados}}</td>
+		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	</tbody>
 	  	</table>	  	
-	  </div>
-
-
-		  <div class="tab-pane" id="historial" role="tabpanel">
-		  	<div class="table-responsive">
-			  	<table class="contenidoFicha table" border="1px">
-			  		<thead>
-				  		<tr>
-				  			<th id="fichaTabla">Fecha Inicio</th>
-				  			<th id="fichaTabla">Fecha Culminación</th>
-				  			<th id="fichaTabla">No. Muestras</th>
-				  			<th id="fichaTabla">Cliente</th>
-				  			<th id="fichaTabla">Orden de Servicio</th>
-				  		</tr>
-				  	<thead>
-			  	</table>
-			</div>
-		  </div>
-
-
-	  <div class="tab-pane" id="solicitud" role="tabpanel">
 	  </div>
 
 	</div>
   </div>
 
   <div class="modal-footer">
-	  <form method="post">
+	  <form method="post" id="formularioModificar">
 	  	<input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}">
 	  	<input type="hidden" name="dependenciaFicha" value="{{=ficha['dependencia']}}">
         <input type="hidden" name="dependenciaIdFicha" value="{{=ficha['dependenciaid']}}">
@@ -154,46 +123,40 @@
         <input type="hidden" name="responsableIdFicha" value="{{=ficha['respid']}}">
         <input type="hidden" name="responsableNombreFicha" value="{{=ficha['responsable']}}">
         <input type="hidden" name="responsableEmailFicha" value="{{=ficha['email']}}">
+      </form>
+      <form method="POST" id="formularioSolicitar" action="{{=URL('solicitudes')}}">
+        <input type="hidden" name="idServicio" value="{{=ficha['entrada'][0].id}}">
+        <input type="hidden" name="fuenteListado" value="1">
+      </form>
 
-        {{if not(auth.has_membership("Gestor de SMyDP") or auth.has_membership("Personal de Coordinacion") or auth.has_membership("Usuario Normal")):}}
-	    <div class="btn-group botonesFicha">
-		  <button type="submit" class="btn botonesFichita" name="edit" value="True">Editar</button>
 
-		  <button type="button" class="btn botonesFichita botonEliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button>
+        <div class="btn-group botonesFicha">
+            {{if auth.has_membership("WebMaster") or (auth.user.email == "ulab-calidad@usb.ve"):}}
+					<button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseServicio">Eliminar</button>
+            {{pass}}
 
-		  <form method="post" >
-		  	<!-- <input type="hidden" name="idFicha" value="{{=ficha['entrada'][0].id}}"> -->
-		  	<button type="submit" class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}" ="">Solicitar</button>
-		  </form>
+            {{if edicion:}}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="edit" value="True">Editar</button>
+		        {{if ficha['entrada'][0].visibilidad: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
+		        {{else: }}
+		        <button type="submit" form="formularioModificar" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
+		        {{pass}}
+            {{pass}}
 
-		  <!-- Modal del boton eliminar-->
-		  <div class="modal fade" id="modalEliminar" role="dialog">
-		    <div class="modal-dialog">
-		    
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <h4 id="tituloModalElim" class="modal-title">¿Está seguro de que desea eliminar el servicio?</h4>
-		        </div>
-		        <div id="cuerpoModalElim" class="modal-body">
-		          <button type="submit" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Eliminar</button>
-		          <button class="btn botonesFichita" onclick="cerrar();">Cancelar</button>				
-		        </div>
-		      </div>
-		  
-		    </div>
-		  </div>
-
-		  {{if ficha['entrada'][0].visibilidad: }}
-		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="False">Ocultar</button>
-		  {{else: }}
-		  <button type="submit" class="btn botonesFichita" name="visibilidad" value="True">Mostrar</button>
-		  {{pass}}
+	  	  <button type="submit" form="formularioSolicitar" class="btn botonesFichita" name="solicitar" value="{{=ficha['entrada'][0].id}}">Solicitar</button>
 		</div>
-      {{pass}}
 
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+	<br><br>
+	<div class="collapse botonEliminarImprimir " id="collapseServicio"">
+		<div class="card card-body">
+			¿Seguro que deseas eliminar el servicio?
+			<button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>									
+			<button type="button" class="btn botonesFichita " data-toggle="collapse" data-target="#collapseServicio">No</button>
+		</div>
+	</div>
   </div>
 
 

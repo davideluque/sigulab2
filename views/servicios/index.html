@@ -12,20 +12,20 @@
 </head>
 
 <body>
-<!-- Breadcrumb de navegación -->
+<!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
   <span class="breadcrumb-item active">Servicios</span>
   </div>
 </nav>
-<!-- Fin del Breadcrum de navegación --> 
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
 <!-- Contenido principal de la página de gestión de servicios -->
 <div id="main" class="container">
     <div id="fila1" class="row">
 
-      <h2 id="tituloBienvenida">Gestión de Servicios de Laboratorios</h2>
+      <h2 id="tituloBienvenida">Gestión de Servicios de Laboratorios </h2>
 
     </div>
 
@@ -48,7 +48,10 @@
         <div class="col-sm-6 columnas">
           <a href="{{=URL('solicitudes')}}">
             <img class="iconos" src="{{=URL('static','images/file.png')}}">
-            <h4 class="opciones">Solicitudes de Servicios</h4>
+            <div>
+              <h4 class="opciones" style="">Solicitudes de Servicios<tag style="font-size: 20px; color: red;">{{if solicitud_nueva:}}*{{pass}}</tag></h4>
+              
+            </div>
           </a>
         </div>
 
@@ -70,13 +73,15 @@
         <div class="col-sm-6 columnas">
           <a href="{{=URL('certificaciones')}}">
             <img class="iconos" src="{{=URL('static','images/diploma.png')}}">
-            <h4 class="opciones">Certificar un Servicio</h4>
+            <div>
+              <h4 class="opciones" style="display:;">Certificaciones de Servicios <tag style="font-size: 20px; color: red">{{if certificacion_nueva:}}*{{pass}}</tag></h4>
+            </div>
           </a>
         </div>
 
         <!-- Boton Historial Servicios -->
         <div class="col-sm-6 columnas">
-          <a href="#">
+          <a href="{{=URL('historial')}}">
             <img class="iconos" src="{{=URL('static','images/history.png')}}">
             <h4 class="opciones">Historial de Servicios</h4>
           </a>

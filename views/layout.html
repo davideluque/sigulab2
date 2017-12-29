@@ -28,7 +28,7 @@
 
 <!-- Barra de navegación principal -->
 <div class="container" id="logo">
-<a class="navbar-brand" href="{{=URL()}}"><div class="logotext">SIGULAB</div></a>
+<a class="navbar-brand" href="{{=URL('..', 'sigulab2')}}"><div class="logotext">SIGULAB</div></a>
 </div>
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -51,7 +51,7 @@
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
               <ul class=" dropdown-menu">
-                <li><a href="{{=URL('personal','index')}}">Pagina Principal</a></li>
+                <li><a href="{{=URL('personal','index')}}">Página Principal</a></li>
                 <li><a href="{{=URL('personal','listado')}}">Listado General de Personal</a></li>
                 <li><a href="#">Listado por Categorías de Personal</a></li>
                 <li><a href="#">Listado por Dependencias de Personal</a></li>
@@ -63,8 +63,9 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVICIOS<span class="caret"></span></a>
                 <ul class=" dropdown-menu">
-                <li><a href="{{=URL('servicios','index')}}">Pagina Principal</a></li>
+                <li><a href="{{=URL('servicios','index')}}">Página Principal</a></li>
                 <li><a href="{{=URL('servicios','listado')}}">Listado de Servicios</a></li>
+                <li><a href="{{=URL('servicios','catalogoServicios')}}">Catálogo de Servicios</a></li>
                 <li><a href="{{=URL('servicios','solicitudes')}}">Solicitudes de Servicios</a></li>
                 <li><a href="{{=URL('servicios','certificaciones')}}">Certificar un servicio</a></li>
                 <li><a href="{{=URL('servicios','historial')}}">Historial de servicios</a></li>
@@ -74,7 +75,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SMyDP<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="{{=URL('SIGULAB', 'front_page','sustancias')}}">Pagina Principal</a></li>
+                <li><a href="{{=URL('SIGULAB', 'front_page','sustancias')}}">Página Principal</a></li>
                   <li><a href="{{=URL('SIGULAB', 'sustancias','sustanciapeligrosa_manage')}}">Listado de Sustancias</a></li>
                   <li><a href="{{=URL('SIGULAB', 'sustancias','select_inventario')}}">Inventario</a></li>
                   <li><a href="{{=URL('SIGULAB', 'sustancias','view_compras')}}">Facturación</a></li>
@@ -88,15 +89,18 @@
       <ul class="nav navbar-nav navbar-right">
       {{if auth.has_membership('Administrador Personal') \
         or auth.has_membership('WebMaster')\
-        or auth.has_membership('Director'): }}
+        or auth.has_membership('Director')\
+        or (auth.user.email == "ulab-calidad@usb.ve"): }}
         <li class="dropdown">
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
               <i id="iconoInfo" class="fa fa-info-circle" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="#">Usuarios</a></li>
-              <li><a href="#">Dependencias</a></li>
+              <li><a href="{{=URL('gestion','usuarios')}}">Usuarios</a></li>
+              <li><a href="{{=URL('gestion','dependencias')}}">Dependencias</a></li>
+              <li><a href="{{=URL('gestion','espacios_fisicos')}}">Espacios Físicos</a></li>
+
             </ul>
           </div>
         </li>
@@ -128,10 +132,6 @@
 </html>
 
 <script type="text/javascript">
-  if(window.location.pathname.includes('personal')){
-    $('li#personal').addClass("active");
-  }
-  else if (window.location.pathname.includes('servicios')){
-    $('li#servicios').addClass("active");
-  }
+  u = window.location.pathname.toString().split('/')[2]
+  $('li#'+u).addClass("active");
 </script>

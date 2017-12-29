@@ -5,33 +5,33 @@
 					<tr>
 							<th><button class="btn-link" name="order" value="nombre" 	id="f_nombre">Nombre</button></th>
 							<th><button class="btn-link" name="order" value="email" 	id="f_email">Correo Electrónico</button></th>
-							<th><button class="btn-link" name="order" value="seccion" 	id="f_dependencia">Cédula</button></th>
+							<th><button class="btn-link" name="order" value="seccion" 	id="f_dependencia">Unidad de Adscripción</button></th>
 							<th><button class="btn-link" name="order" value="telefono" 	id="f_telefono">Extensión</button></th>
 					</tr>
 				</thead>
 			    
-			    <tbody>
+			    <tbody id="dummyID">
 					{{for item in grid:}}
 			          	{{if not item["nombre"] == "Ninguno":}}
-						<tr>
-							<form id="formularioDummy" class="registration-form" method="post">
-					            <th><button data-toggle="modal" data-target="#ficha_edicion" type="button" 
-					            	data-ci="{{=item['ci']}}" 
-					            	data-categoria="{{=item['categoria']}}" 
-					            	data-email="{{=item['email']}}" 
-					            	data-nombre="{{=item['nombre']}}" 
-					            	data-fecha_i="{{=item['fecha_ingreso']}}" 
-					            	data-fecha_s="{{=item['fecha_salida']}}" 
-					            	data-estatus="{{=item['estatus']}}" 
-					            	data-telefono="{{=item['telefono']}}" 
-					            	data-pagina_web="{{=item['pagina_web']}}" 
-					            	data-cargo="{{=item['cargo']}}" 
-					            	value="{{=item['ci']}}">{{=item["nombre"]}}</button></th>
-				              	
-				              	<th>{{= item["email"]}}</th>
-				              	<th>{{= item["ci"]}}</th>
-				              	<th>{{= item["telefono"]}}</th>
-							</form>
+						<tr id="{{=item['dependencia']['nombre']}}_{{=item['categoria']}}">
+				            <td><button data-toggle="modal" data-target="#ficha_edicion" type="button"
+				            	data-apellido="{{=item['apellido']}}" 
+				            	data-ci="{{=item['ci']}}" 
+				            	data-categoria="{{=item['categoria']}}" 
+				            	data-email="{{=item['email']}}" 
+				            	data-nombre="{{=item['nombre']}}" 
+				            	data-fecha_i="{{=item['fecha_ingreso']}}" 
+				            	data-fecha_s="{{=item['fecha_salida']}}" 
+				            	data-estatus="{{=item['estatus']}}" 
+				            	data-telefono="{{=item['telefono']}}" 
+				            	data-pagina_web="{{=item['pagina_web']}}" 
+				            	data-cargo="{{=item['cargo']}}"
+				            	data-dep-name="{{=item['dependencia']['nombre']}}"
+				            	value="{{=item['ci']}}">{{=item["nombre"]}}</button></td>
+			              	
+			              	<td>{{= item["email"]}}</td>
+			              	<td>{{= item["dependencia"]["nombre"]}}</td>
+			              	<td>{{= item["telefono"]}}</td>
 						</tr>
 			          	{{pass}}
 					{{pass}}
@@ -47,3 +47,4 @@
 			</table>
 		</div>
 	</div>
+

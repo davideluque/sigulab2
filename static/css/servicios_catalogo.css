@@ -1,0 +1,107 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  color: #5a5a5a;
+}
+
+/* Featurettes
+------------------------- */
+#contenedor {
+  max-width: 100% !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.featurette-divider {
+  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+}
+
+#titulo {
+  margin-top: -80px !important;
+  margin-bottom: 0 !important;
+}
+
+#titulo2 {
+  margin-top: 50px !important;
+  margin-bottom: 0 !important;
+}
+
+.titulosBlancos {
+  color: white;
+}
+
+#usb {
+    height: 100px;
+    margin-left: 15px;
+}
+
+#ulab {
+    height: 80px;
+    margin-top: 110px;
+}
+
+.columnasIzq {
+  padding-left: 80px !important;
+}
+
+.filas {
+  background-color: #6887c9;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+}
+
+.imagenes {
+  width: 450px !important;
+  height: 350px !important;
+  border-radius: 10px;
+}
+
+.botones {
+  background-color: lightgrey;
+}
+
+.botones:hover {
+  background-color: grey;
+  color: white;
+}
+
+.filasDetalles {
+  margin-left: 150px !important;
+}
+
+.nombreServicio {
+  font-size: 25px;
+  color: white;
+}
+
+.letrasBlancas {
+  color: white;
+}
+
+.big {
+  font-size: 40px !important;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 40em) {
+   .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 62em) {
+  .featurette-heading {
+    margin-top: 7rem;
+  }
+}

@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+        {{block center}}
+<body>
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="#">Gestión</a>
+  <span class="breadcrumb-item active">Espacios Físicos</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+<!-- Inicio Listado -->
+<div class="container" id="listadoContainer">
+{{=table}}
+</div>
+</body>
+{{end block}}
