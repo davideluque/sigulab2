@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+
+  <div class="modal-header fichaHeader">
+  	<div class="media">
+  		<div class="media-left media-middle">
+      		<img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
+      	</div>
+      	<div class="media-body fichaMedia">
+      		<h4 class="modal-title media-heading fichaHeading"><b>Ficha de Servicio</b></h4>
+      		<button type="button" class="close" data-dismiss="modal">&times;</button>
+      	</div>
+    </div>
+  </div> 
+
+  <div class="modal-body">
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+	  <li class="nav-item active">
+	    <a class="nav-link" data-toggle="tab" href="#datos" role="tab" aria-controls="datos">Datos Básicos</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#especificaciones" role="tab" aria-controls="especificaciones">Especificaciones</a>
+	  </li>
+	</ul>
+
+	<div class="tab-content">
+
+	  <div class="tab-pane active" id="datos" role="tabpanel">
+	  	<table class="table contenidoFicha">
+	  		<tbody>
+	  			<tr>
+		  			<td>Nombre:</td><td>{{=ficha['entrada'][0].nombre.upper()}}</td>
+		  		</tr>
+	  			<tr>
+		  			<td>Categoría:</td><td>{{=ficha['categoria'].upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Tipo de Servicio:</td><td>{{=ficha['tipo'].decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Función:</td><td>{{for fun in ficha['funcion']:}}{{=fun.decode('utf-8').upper()}}{{pass}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Objetivo:</td><td>{{=ficha['entrada'][0].objetivo.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Alcance:</td><td>{{=ficha['entrada'][0].alcance.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Método:</td><td>{{=ficha['entrada'][0].metodo.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  	</tbody>
+	  	</table>
+	  </div>
+
+	  <div class="tab-pane" id="especificaciones" role="tabpanel">
+	  	<table class="table contenidoFicha">
+	  		<tbody>
+	  			<tr>
+		  			<td>Ítem a ensayar:</td><td>{{=ficha['entrada'][0].item_ensayar.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados.decode('utf-8').upper()}}</td>
+		  		</tr>
+		  	</tbody>
+	  	</table>	  	
+	  </div>
+
+	</div>
+  </div>
+
+  <div class="modal-footer">
+
+	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
+	<br><br>
+
+  </div>
+
+
+<script type="text/javascript">
+	function cerrar() {
+		$("#modalEliminar").modal("hide")
+	}
+</script>

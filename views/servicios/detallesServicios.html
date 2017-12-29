@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<header>
+<header id="up">
 	<h2 id="titulo2" class="featurette-heading" align="center">{{=nombre_categoria}}</h2>
 </header>
 
@@ -32,7 +32,11 @@
           <div class="col-md-5">
             <ul>
                 {{for servicio in ensayo:}}
-                    <li class="nombreServicio letrasBlancas">{{=servicio.nombre}}</li>
+                    <li class="nombreServicio letrasBlancas">
+                      <a data-toggle="modal" data-target="#myModal" onclick="abrirFichaCatalogo({{=servicio.id}});">
+                        {{=servicio.nombre}} 
+                      </a>
+                    </li>
                 {{pass}}
             </ul>
           </div>
@@ -160,6 +164,22 @@
         <hr class="featurette-divider">
       </div>
 </div>
+
+ <!-- FOOTER -->
+<footer class="container">
+  <p class="float-right"><a href="#up">Volver arriba</a></p>
+  <p>Para solicitar un servicio debe contactar a FUNINDES · <a href="http://funindes.usb.ve/contact/">  Página web</a></p>
+</footer>
+
 </body>
+
+<script language="javascript" >
+    function abrirFichaCatalogo(servicio) {
+      var x = document.getElementById("serv");
+        x.value = servicio;
+      ajax('ajax_ficha_servicio_catalogo', ['serv'], "ficha");
+  }
+</script>
 </html>
+
 
