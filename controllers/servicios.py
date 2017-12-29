@@ -390,29 +390,27 @@ def detallesServicios():
         nombre_categoria = "Alimentos"
     elif categoria == 2: 
         nombre_categoria = "Ambiente"
-    elif categoria == 3: 
-        nombre_categoria = "Arquitectura, Urbanismo y Arte"
-    elif categoria == 4:
+    elif categoria == 3:
         nombre_categoria = "Biología"
-    elif categoria == 5: 
+    elif categoria == 4: 
         nombre_categoria = "Energía"
-    elif categoria == 6: 
+    elif categoria == 5: 
         nombre_categoria = "Manufactura, Instrumentación y Control"
-    elif categoria == 7:
+    elif categoria == 6:
         nombre_categoria = "Matemáticas y Estadísticas"
-    elif categoria == 8: 
+    elif categoria == 7: 
         nombre_categoria = "Mecánica y Materiales"
-    elif categoria == 9: 
+    elif categoria == 8: 
         nombre_categoria = "Química"
-    elif categoria == 10:
+    elif categoria == 9:
         nombre_categoria = "Física"
-    elif categoria == 11: 
+    elif categoria == 10: 
         nombre_categoria = "Informática, Computación, Comunicación e Información"
-    elif categoria == 12: 
+    elif categoria == 11: 
         nombre_categoria = "Música"
-    elif categoria == 13:
+    elif categoria == 12:
         nombre_categoria = "Salud"
-    elif categoria == 14:
+    elif categoria == 13:
         nombre_categoria = "Otros"
 
     return dict(nombre_categoria=nombre_categoria, ensayo=servicios_mostrar_catalogo[0], inspeccion=servicios_mostrar_catalogo[1], calibracion=servicios_mostrar_catalogo[2], 
