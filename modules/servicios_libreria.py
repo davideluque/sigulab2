@@ -404,6 +404,7 @@ class ListaServicios(object):
 
         return servicios_categoria_tipo
 
+
     # Estas pueden ser nombre, nombre_tipo, nombre_columna, laboratorio, seccion, sede
     def filtrar_por_tags(self, filtro, tags=None):
         filtro = filtro.decode('utf-8').upper()
