@@ -85,22 +85,7 @@
                         <input id="botonLogin" class="btn btn-primary botones" type="submit" value="Iniciar sesion">
                     </div>
                 </div>
-
-                {{=form.custom.begin}}
-                {{=form.custom.end}}
-                    <ul class="erroresLogin">
-                        {{if error:}}
-                            <li>{{=error}}</li>
-                        {{pass}}
-                        
-                        {{if form.errors:}}
-                            {{for fieldname in form.errors:}}
-                            <li>{{=form.errors[fieldname]}}</li>
-                            {{pass}}
-                            {{form.errors.clear()}}
-                        {{pass}}
-                    </ul>
-                    <div id="authdiv"></div>
+                <div id="authdiv" class="authdiv"></div>
             </form>
             <!-- Fin form login -->
         </div>
@@ -109,23 +94,37 @@
     <!-- Fin Card Box -->
 </div>
 <!-- Fin Wrapper -->
-
-
-
+                  
+{{=form.custom.begin}}
+{{=form.custom.end}}
 <input type="hidden" name="email_send" id="email_send" value="">
 <input type="hidden" name="pass_send" id="pass_send" value="">
+<input type="hidden" name="token_send" id="token_send" value="">
 
 <script>
 function authenticate(){
+    var csrf_token = document.getElementsByName("_formkey")[0]; 
+
+    if (!csrf_token){
+        document.getElementById("authdiv").innerHTML = "Esta conexión no es segura. Prueba entrando a la página de nuevo. Si continuas viendo esto contacta al administrador</p>";
+        return;
+    }
+
     var email = document.getElementById("auth_user_email").value;
     var password = document.getElementById("auth_user_password").value;
+
+    csrf_token = csrf_token.value
+
     var email_send = document.getElementById("email_send");
     var password_send = document.getElementById("pass_send");
+    var token_send = document.getElementById("token_send");
 
     email_send.value = email;
     password_send.value = password;
+    token_send.value = csrf_token;
 
-    ajax('authenticate', ['email_send', 'pass_send'], "authdiv");
+    ajax('authenticate', ['email_send', 'pass_send', 'token_send'], "authdiv");
+    $('#auth_user_password').val('');
 }
 
 </script>

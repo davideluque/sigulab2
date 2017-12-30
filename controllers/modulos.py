@@ -7,6 +7,8 @@
   
 #sys.setdefaultencoding('utf8')
 
+import re
+
 #-------------------------------------
 #
 # Controladores integrados/en conjunto
@@ -50,13 +52,18 @@ def sigulab2():
 #-------------------------------------
 
 def authenticate():
+
+	if not 'token_send' in request.post_vars:
+		return "Esta conexión no es segura. Prueba entrando a la página de nuevo. \
+		Si continuas viendo este mensaje, contacta al administrador del sitio."
+
 	if not '@' in request.post_vars.email_send:
 		return "Correo inválido. Formato: algo@ejemplo.com"
 
 	user = auth.login_bare(request.post_vars.email_send, request.post_vars.pass_send)
 	
 	if not user:
-		return "Datos de inicio de sesión inválidos"
+		return "Datos de inicio de sesión incorrectos."
 	else:
 		url = URL('index')
 		return '<meta http-equiv="refresh" content="0; url='+ url + '">'
@@ -69,9 +76,9 @@ def login():
 	form=auth.login()
 	
 	if request.vars['error'] == 'invalid_data':
-		return dict(form=form, error="Datos de inicio de sesión incorrectos", logged_in=False)
+		return dict(form=form, error="Datos de inicio de sesión incorrectos")
 	
-	return dict(form=form, error=None, logged_in=False)
+	return dict(form=form, error=None)
 
 # Perfil de Usuario
 @auth.requires_login(otherwise=URL('modulos', 'login'))
