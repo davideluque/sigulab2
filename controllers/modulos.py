@@ -192,8 +192,8 @@ def resetpassword():
                 <table style="width: 570px;margin: 0 auto;padding: 0;-premailer-width: 570px;-premailer-cellpadding: 0;-premailer-cellspacing: 0;background-color: #FFFFFF;" align="center" width="570" cellpadding="0" cellspacing="0">\
                   <tr>\
                     <td style="padding: 35px;">\
-                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Hola '+ user.first_name + ' ' + user.last_name +'. Recientemente recibimos una petición para reiniciar la contraseña para acceder a SIGULAB con tu correo electrónico.</p>\
-                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Para cambiar tu contraseña por favor haz clic en el botón de abajo.</p>\
+                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Hola '+ user.first_name + ' ' + user.last_name +'. Recientemente recibimos una petición de reiniciar la contraseña para acceder a SIGULAB con tu correo electrónico.</p>\
+                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Para cambiar tu contraseña por favor haz clic en el siguiente botón:</p>\
                       <table style="width: 100%%;margin: 30px auto;padding: 0;-premailer-width: 100%%;-premailer-cellpadding: 0;-premailer-cellspacing: 0;text-align: center;" align="center" width="100%%" cellpadding="0" cellspacing="0">\
                         <tr>\
                           <td align="center">\
@@ -213,13 +213,13 @@ def resetpassword():
                           </td>\
                         </tr>\
                       </table>\
-                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Si no utiliza SIGULAB o no solicitó restablecer su contraseña, por favor ignore este correo.</p>\
+                      <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Si no utilizas SIGULAB o no solicitaste restablecer tu contraseña, por favor ignora este correo.</p>\
                       <p style="margin-top: 0; color: #74787E;font-size: 16px;line-height: 1.5em;">Saludos Cordiales,\
                         <br>El equipo SIGULAB</p>\
                       <table style="margin-top: 25px;padding-top: 25px;border-top: 1px solid #EDEFF2;">\
                         <tr>\
                           <td>\
-                            <p style="font-size: 12px;">Si está teniendo dificultades con el botón de arriba, copie y pegue el enlace de abajo en su navegador.</p>\
+                            <p style="font-size: 12px;">Si estás teniendo dificultades con el botón de arriba, copia y pega el enlace de abajo en tu navegador.</p>\
                             <p style="font-size: 12px;">'+site_url+'/?key='+'%(key)s</p>\
                           </td>\
                         </tr>\
@@ -237,6 +237,7 @@ def resetpassword():
                       <p style="font-size: 12px;text-align: center;">&copy; 2017 SIGULAB.</p>\
                       <p style="font-size: 12px;text-align: center;">\
                         Unidad de Laboratorios\
+                        <br>Universidad Simón Bolívar\
                         <br>Sede Sartenejas, Baruta, Edo. Miranda - Apartado 89000 - Cable Unibolivar - Caracas Venezuela. Teléfono +58 0212-9063111\
                         <br>Sede Litoral, Camurí Grande, Edo. Vargas Parroquia Naiguatá. Teléfono +58 0212-9069000\
                       </p>\
