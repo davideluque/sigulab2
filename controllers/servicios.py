@@ -483,12 +483,11 @@ def ajax_ficha_servicio():
 
     return dict(ficha=valores_de_ficha, edicion = edicion)
 
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio_catalogo():
     session.forget(response)
 
     # Servicio
-    entrada = db(db.servicios.id == int(request.vars.serv)).select(db.servicios.ALL)
+    entrada = db(db.servicios.id == int(request.vars.servicio)).select(db.servicios.ALL)
 
     # Funciones
     funcion = []
@@ -512,30 +511,10 @@ def ajax_ficha_servicio_catalogo():
     else:
         funcion.append("")
 
-    valores_de_ficha = query_ficha(db, int(request.vars.serv))
+    valores_de_ficha = query_ficha(db, int(request.vars.servicio))
     valores_de_ficha['funcion'] = funcion
 
-    edicion = False
-    privilegios = __obtener_priviliegios()
-    rol = privilegios[0]
-    dependencia = privilegios[1]
-
-    if rol == 2:
-        edicion = True
-
-    elif rol == 1:
-        if int(dependencia) != int(entrada[0].dependencia):
-            secciones = []
-            dep = db(db.dependencias.unidad_de_adscripcion == dependencia).select(db.dependencias.id)
-
-            for d in dep:
-                secciones.append(int(d.id))
-            if entrada[0].dependencia in secciones:
-                edicion = True
-        else:
-            edicion = True
-
-    return dict(ficha=valores_de_ficha, edicion = edicion)
+    return dict(ficha=valores_de_ficha)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_solicitud():
