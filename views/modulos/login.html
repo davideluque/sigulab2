@@ -17,6 +17,10 @@
     <link href="{{=URL('static','css/servicios_login.css')}}" rel="stylesheet" type="text/css"/>
     <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
 
+    <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -36,7 +40,7 @@
         <!-- Inicio panel -->
         <div class="panel-body">
             <!-- Inicio form login -->
-            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <form onsubmit="authenticate(); return false;" class="form-horizontal">
 
                 <!-- Correo Electronico -->
                 <div class="form-group" id="auth_user_email__row">
@@ -61,7 +65,8 @@
                             <a href="resetpassword" class="text-muted"><p id="mensaje">¿Has olvidado tu contraseña?</p></a>
                         </div>
                     </div>
-                    </div></div>
+                    </div>
+                </div>
 
                 <!-- Check box Recordar contrasena 
                 <div class="form-group" id="auth_user_remember_me__row">    
@@ -95,7 +100,7 @@
                             {{form.errors.clear()}}
                         {{pass}}
                     </ul>
-
+                    <div id="authdiv"></div>
             </form>
             <!-- Fin form login -->
         </div>
@@ -104,4 +109,25 @@
     <!-- Fin Card Box -->
 </div>
 <!-- Fin Wrapper -->
+
+
+
+<input type="hidden" name="email_send" id="email_send" value="">
+<input type="hidden" name="pass_send" id="pass_send" value="">
+
+<script>
+function authenticate(){
+    var email = document.getElementById("auth_user_email").value;
+    var password = document.getElementById("auth_user_password").value;
+    var email_send = document.getElementById("email_send");
+    var password_send = document.getElementById("pass_send");
+
+    email_send.value = email;
+    password_send.value = password;
+
+    ajax('authenticate', ['email_send', 'pass_send'], "authdiv");
+}
+
+</script>
 </body>
+</html>

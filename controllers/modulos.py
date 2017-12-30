@@ -49,6 +49,18 @@ def sigulab2():
 # 
 #-------------------------------------
 
+def authenticate():
+	if not '@' in request.post_vars.email_send:
+		return "Correo inválido. Formato: algo@ejemplo.com"
+
+	user = auth.login_bare(request.post_vars.email_send, request.post_vars.pass_send)
+	
+	if not user:
+		return "Datos de inicio de sesión inválidos"
+	else:
+		url = URL('index')
+		return '<meta http-equiv="refresh" content="0; url='+ url + '">'
+
 # Inicio de Sesion
 def login():
 	if auth.user:
@@ -57,9 +69,9 @@ def login():
 	form=auth.login()
 	
 	if request.vars['error'] == 'invalid_data':
-		return dict(form=form, error="Datos de inicio de sesión incorrectos")
+		return dict(form=form, error="Datos de inicio de sesión incorrectos", logged_in=False)
 	
-	return dict(form=form, error=None)
+	return dict(form=form, error=None, logged_in=False)
 
 # Perfil de Usuario
 @auth.requires_login(otherwise=URL('modulos', 'login'))
