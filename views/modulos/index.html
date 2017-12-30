@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  {{extend 'layout.html'}}
+{{extend 'layout.html'}}
   
-  {{block head}}
+{{block head}}
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modulos.css')}}"> 
-  {{end}}
-</head>
-<body>
+{{end}}
+
 {{block center}}
   <div class="container">
       <div id="fila1" class="row">
@@ -39,8 +35,7 @@
       </div>
   </div>
 <script>
-document.getElementById("inicio").className += " active";
+  // Set blue bar below INICIO text.
+  document.getElementById("inicio").className += " active";
 </script>
 {{end}}
-</body>
-</html>
