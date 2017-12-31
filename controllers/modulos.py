@@ -117,9 +117,7 @@ def register():
   if request.vars and request.vars.registrar == "do_register":
     db.auth_user.insert(first_name=request.vars.first_name, 
       last_name=request.vars.last_name, email=request.vars.email, 
-      password=pbkdf2_hex(request.vars.password, 'salt', iterations=1000, keylen=24, hashfunc=sha512))
-
-
+      password=pbkdf2_hex(request.vars.password, 'salt', iterations=1000, keylen=20, hashfunc=sha512))
 
   roles=list(db(db.auth_group.role != 'WebMaster').select(db.auth_group.ALL))
 
