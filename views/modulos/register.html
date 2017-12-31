@@ -1,138 +1,129 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <title>SIGULAB | Registrarse</title>
-    <meta charset="UTF-8" />
+{{extend 'layout.html'}}
 
-    <!-- Avoid search sites from indexing this website -->
-    <meta name="robots" content="noindex" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{block center}}
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="#">Gestión</a>
+  <span class="breadcrumb-item active">Registrar Usuario</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
-    <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static','css/core.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/components.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/icons.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/pages.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/servicios_login.css')}}" rel="stylesheet" type="text/css"/>
-    <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
-
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-<!-- Inicio Wrapper -->
-<div class="wrapper-page pagina">
-
-    <!-- Inicio card box -->
-    <div id="boxRegister" class="m-t-40 card-box boxes">
-        <div class="text-center">
-            <h4 id="titulo" class="text-uppercase font-bold m-b-0">Registro</h4>
-        </div>
-        
-        <!-- Inicio panel -->
-        <div class="panel-body">
-
-        <!-- Inicio form de registro -->
-        <form action="#" class="form-horizontal form-horizontal m-t-20" enctype="multipart/form-data" method="post">
-
-            <!-- Nombre -->
-            <div class="form-group" id="auth_user_first_name__row">
-                <div class="col-xs-12">
-                    <input class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" value="" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <!-- Apellido -->
-            <div class="form-group" id="auth_user_last_name__row">
-                <div class="col-xs-12">
-                    <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellido" value="" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <!-- Cedula de Identidad -->
-            <div class="form-group" id="auth_cedula__row">
-                <div class="col-xs-12">
-                    <input class="form-control number" id="cedula" name="cedula" type="number" placeholder="Cedula" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-
-            <!-- Email -->
-            <div class="form-group" id="auth_user_email__row">
-                <div class="col-xs-12">
-                    <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" value="" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <!-- Contraseña -->
-            <div class="form-group" id="auth_user_password__row">
-                <div class="col-xs-12">
-                    <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <!-- Confirmar contraseña --> 
-            <div class="form-group" id="auth_user_password_two__row">
-                <div class="col-xs-12">
-                    <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder=" Confirmar Contraseña" value="" required>
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <!-- Tipos de Rol -->
-            <div class="form-group">
-                <div class="col-xs-12">
-                    <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
-                        <option value="" selected hidden disabled>Rol</option>
-                        {{for rol in roles:}}
-                        <option value='{{=rol.id}}'>{{=rol.role}}</option>
-                        {{pass}}
-                    </select>
-                </div>
-            </div>
-
-            <div id="unidaddiv" class="form-group"></div>
-
-            <div id="secciondiv" class="form-group"></div>
-
-            <div class="form-group text-center m-t-40" id="submit_record__row">
-
-                <div class="col-xs-12 col-sm-offset-3" onclick="setMembership();">
-                    <input class="btn btn-primary" type="submit" value="Registrarse">
-                </div>
-            </div>
-            {{=form.custom.begin}}
-            {{=form.custom.end}}
-            {{if form.errors:}}
-              <ul class="erroresLogin">
-              {{for fieldname in form.errors:}}
-                <li> {{=form.errors[fieldname]}}</li>
-              {{pass}}
-              </ul>
-              {{form.errors.clear()}}
-            {{pass}}
-        </form>
-        <!-- Fin form de registro -->
-        </div>
-        <!-- Fin Panel -->
-    </div>
-    <!-- Fin card-box -->
+<div class="col-sm-4">
 </div>
-<!-- Fin Wrapper -->
-<input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
-</body>
 
+<div class="col-sm-4">
+<!-- Inicio Wrapper -->
+    <div class="wrapper-page pagina">
+
+        <!-- Inicio card box -->
+        <div id="boxRegister" class="m-t-40 card-box boxes">
+            <div class="text-center">
+                <h4 id="titulo" class="text-uppercase font-bold m-b-0">Nuevo Usuario</h4>
+            </div>
+            
+            <!-- Inicio panel -->
+            <div class="panel-body">
+
+            <!-- Inicio form de registro -->
+            <form action="#" class="form-horizontal form-horizontal m-t-20" enctype="multipart/form-data" method="post">
+
+                <!-- Nombre -->
+                <div class="form-group" id="auth_user_first_name__row">
+                    <div class="col-xs-12">
+                        <input class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Apellido -->
+                <div class="form-group" id="auth_user_last_name__row">
+                    <div class="col-xs-12">
+                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellido" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Cedula de Identidad -->
+                <div class="form-group" id="auth_cedula__row">
+                    <div class="col-xs-12">
+                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cedula" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+
+                <!-- Email -->
+                <div class="form-group" id="auth_user_email__row">
+                    <div class="col-xs-12">
+                        <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group" id="auth_user_password__row">
+                    <div class="col-xs-12">
+                        <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Confirmar contraseña --> 
+                <div class="form-group" id="auth_user_password_two__row">
+                    <div class="col-xs-12">
+                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder=" Confirmar Contraseña" value="" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+
+                <!-- Tipos de Rol -->
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
+                            <option value="" selected hidden disabled>Rol</option>
+                            {{for rol in roles:}}
+                            <option value='{{=rol.id}}'>{{=rol.role}}</option>
+                            {{pass}}
+                        </select>
+                    </div>
+                </div>
+
+                <div id="unidaddiv" class="form-group"></div>
+
+                <div id="secciondiv" class="form-group"></div>
+
+                <div class="form-group text-center m-t-40" id="submit_record__row">
+
+                    <div class="col-sm-3">
+                        <a class="btn btn-primary" href="{{=URL('index')}}">Cancelar</a>
+                    </div>
+
+                    <div class="col-sm-6">
+                    </div>
+
+                    <div class="col-sm-3" onclick="setMembership();">
+                        <button class="btn btn-primary" type="submit" name="registrar" value="do_register">Registrar</button>
+                    </div>
+                </div>
+
+            </form>
+            <!-- Fin form de registro -->
+            </div>
+            <!-- Fin Panel -->
+        </div>
+        <!-- Fin card-box -->
+    </div>
+<!-- Fin Wrapper -->
+</div>
+<div class="col-sm-4">
+</div>
+
+<input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
-</body>
+
 
 <script language="javascript" src="{{=URL('static', 'js/jquery.js')}}"></script>
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -164,4 +155,4 @@
     }
 
 </script>
-</html>
+{{end}}
