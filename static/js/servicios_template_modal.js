@@ -65,13 +65,13 @@ $(document).ready(function () {
 
         });
 
-        if (!testcheck()){
-            jQuery("#funcion").addClass('input-error');
-            next_step = false;
-        }
-        else{
-             jQuery("#funcion").removeClass('input-error');
-        }
+        // if (!testcheck()){
+        //     jQuery("#funcion").addClass('input-error');
+        //     next_step = false;
+        // }
+        // else{
+        //      jQuery("#funcion").removeClass('input-error');
+        // }
 
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
