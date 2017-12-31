@@ -19,6 +19,7 @@ body {
 
 #boxLogin {
 	margin-top: 50px !important;
+	opacity: 0.9;
 }
 
 #boxRegister {

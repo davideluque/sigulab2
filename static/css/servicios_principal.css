@@ -24,10 +24,12 @@
 
 	#cuadrado1 {
 		background-color: #808080;
+		opacity: 0.9;
 	}
 
 	#cuadrado2 {
 		background-color: #303f9f;
+		opacity: 0.9;
 	}
 
 }
