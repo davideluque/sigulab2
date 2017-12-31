@@ -105,8 +105,9 @@
                           <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>                
+                          <label>Campos marcados con * son obligatorios.</label>
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre&#42;" required>
+                              <input type="text" class="form-control" name="nombreServicio" placeholder="Nombre*" required>
                             </div>
                             <div class="form-group">
                               <select class="form-control" type="select" id="sel1" name="categoriaServicio" required>
@@ -127,18 +128,18 @@
                               </select>
                             </div>
                             <div class="form-group" >
-                              <h6 style="margin-top: 25px; font-size: 15px;">Función*</h6>
+                              <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Función*</h6>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="docenciaServicio" value="True" >Docencia</label>
+                                <label><input type="checkbox" id="checkbox1" name="docenciaServicio" value="True" >Docencia</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="investigacionServicio" value="True" >Investigación</label>
+                                <label><input type="checkbox" id="checkbox2" name="investigacionServicio" value="True" >Investigación</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="extensionServicio" value="True" >Extensión</label>
+                                <label><input type="checkbox" id="checkbox3" name="extensionServicio" value="True" >Extensión</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" name="gestionServicio" value="True" >Gestión</label>
+                                <label><input type="checkbox" id="checkbox4" name="gestionServicio" value="True" >Gestión</label>
                               </div>
                             </div>
                         </div>
