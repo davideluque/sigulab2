@@ -19,8 +19,20 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     });
 
-    $('.registration-form input[type="checkbox"]').on('focus', function () {
-        $(this).removeClass('input-error');
+    $("#checkbox1").click(function() {
+        jQuery("#funcion").removeClass('input-error');
+    });
+
+    $("#checkbox2").click(function() {
+        jQuery("#funcion").removeClass('input-error');
+    });
+
+    $("#checkbox3").click(function() {
+        jQuery("#funcion").removeClass('input-error');
+    });
+
+    $("#checkbox4").click(function() {
+        jQuery("#funcion").removeClass('input-error');
     });
 
     $('.registration-form select[type="select"]').on('focus', function () {
@@ -82,8 +94,9 @@ $(document).ready(function () {
 
         parent_fieldset.find('input[name="itemServicio"]').each(function () {
             if ($(this).val() == "") {
-                $(this).addClass('input-error');
+                jQuery("#item_ensayar").addClass('input-error');
                 e.preventDefault();
+                return false;
             } else {
                 $(this).removeClass('input-error');
             }
