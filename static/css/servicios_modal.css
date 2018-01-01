@@ -33,6 +33,12 @@
 		border-top-right-radius: 5px;
 	}
 
+	.close {
+		color: #FFF;
+		opacity: 1;
+		padding-top: 3px !important;
+	}
+
 	.col1Body{
 		padding-left: 10px !important;
 		background-color: #505050;
