@@ -28,7 +28,7 @@
 
 	<div class="tab-content">
 
-	  <div class="tab-pane active" id="datos" role="tabpanel">
+	  <div class="tab-pane active" id="datos" role="tabpanel">	
 	  	<table class="table contenidoFicha">
 	  		<tbody>
 	  			<tr>
@@ -99,9 +99,7 @@
 		  		<tr>
 		  			<td>Requisitos:</td><td>{{=ficha['entrada'][0].requisitos.decode('utf-8').upper()}}</td>
 		  		</tr>
-		  		<tr>
-		  			<td>Resultados:</td><td>{{=ficha['entrada'][0].resultados.decode('utf-8').upper()}}</td>
-		  		</tr>
+		  	
 		  	</tbody>
 	  	</table>	  	
 	  </div>
@@ -150,7 +148,7 @@
 		</form>
 	<button type="button" class="btn botonesFichita" data-dismiss="modal">Cerrar</button>
 	<br><br>
-	<div class="collapse botonEliminarImprimir " id="collapseServicio"">
+	<div class="collapse botonEliminarImprimir " id="collapseServicio">
 		<div class="card card-body">
 			¿Seguro que deseas eliminar el servicio?
 			<button type="submit" form="formularioModificar" class="btn botonesFichita botonEliminar" name="eliminar" value="True">Si</button>									

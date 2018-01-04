@@ -14,7 +14,9 @@ class Servicio(object):
     def __init__(self, db, nombre = None, tipo = None, categoria = None,
                  objetivo = None, alcance = None, metodo = None, rango = None,
                  incertidumbre = None, item_ensayar = None, requisitos = None,
-                 resultados = None, docencia = None, investigacion = None,
+                 entregaResultados=None,ensayoCalibracion=None,certificadoConformidadProducto=None,
+                 certificadoCalibracion=None,otro=None,
+                 docencia = None, investigacion = None,
                  gestion = None, extension = None, visibilidad = None,
                  responsable = None, dependencia = None, ubicacion = None, id=None):
 
@@ -27,8 +29,14 @@ class Servicio(object):
         self.rango = rango
         self.incertidumbre = incertidumbre
         self.item_ensayar = item_ensayar
-        self.requisitos = requisitos
-        self.resultados = resultados
+        self.requisitos=requisitos
+
+        #Checklist de la lista de producto 
+        self.entregaResultados=entregaResultados
+        self.ensayoCalibracion=ensayoCalibracion
+        self.certificadoConformidadProducto=certificadoConformidadProducto
+        self.certificadoCalibracion=certificadoCalibracion
+        self.otro=otro
 
         self.docencia = docencia
         self.investigacion = investigacion
@@ -63,7 +71,10 @@ class Servicio(object):
             tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo.upper(),
             alcance = self.alcance.upper(), metodo = self.metodo.upper(), rango = self.rango.upper(),
             incertidumbre = self.incertidumbre.upper(), item_ensayar = self.item_ensayar.upper(),
-            requisitos = self.requisitos.upper(), resultados = self.resultados.upper(),
+            requisitos = self.requisitos.upper(), 
+            entregaResultados=self.entregaResultados,ensayoCalibracion=self.ensayoCalibracion,
+            certificadoConformidadProducto=self.certificadoConformidadProducto,
+            certificadoCalibracion=self.certificadoCalibracion,otro=self.otro,
             docencia = self.docencia, investigacion = self.investigacion,
             gestion = self.gestion, extension = self.extension,
             visibilidad = self.visibilidad, responsable = self.responsable,
@@ -88,7 +99,13 @@ class Servicio(object):
             self.incertidumbre = instanciacion[0].incertidumbre
             self.item_ensayar = instanciacion[0].item_ensayar
             self.requisitos = instanciacion[0].requisitos
-            self.resultados = instanciacion[0].resultados
+
+            self.entregaResultados=instanciacion[0].entregaResultados
+            self.ensayoCalibracion=instanciacion[0].ensayoCalibracion
+            self.certificadoConformidadProducto=instanciacion[0].certificadoConformidadProducto
+            self.certificadoCalibracion=instanciacion[0].certificadoCalibracion
+            self.otro=instanciacion[0].otro
+
             self.docencia = instanciacion[0].docencia
             self.investigacion = instanciacion[0].investigacion
             self.gestion = instanciacion[0].gestion
@@ -110,7 +127,9 @@ class Servicio(object):
 
 
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
-               rango, incertidumbre, item_ensayar, requisitos, resultados,
+               rango, incertidumbre, item_ensayar, requisitos, entregaResultados,
+               ensayoCalibracion,certificadoConformidadProducto,
+               certificadoCalibracion,otro,
                docencia, investigacion, gestion, extension, visibilidad,
                responsable, dependencia, ubicacion):
 
@@ -124,7 +143,13 @@ class Servicio(object):
         self.incertidumbre = incertidumbre
         self.item_ensayar = item_ensayar
         self.requisitos = requisitos
-        self.resultados = resultados
+
+        self.entregaResultados=entregaResultados
+        self.ensayoCalibracion=ensayoCalibracion
+        self.certificadoConformidadProducto=certificadoConformidadProducto
+        self.certificadoCalibracion=certificadoCalibracion
+        self.otro=otro
+
         self.docencia = docencia
         self.investigacion = investigacion
         self.gestion = gestion
@@ -150,7 +175,13 @@ class Servicio(object):
                             incertidumbre = self.incertidumbre.upper(),
                             item_ensayar = self.item_ensayar.upper(),
                             requisitos = self.requisitos.upper(),
-                            resultados = self.resultados.upper(),
+
+                            entregaResultados=self.entregaResultados,
+                            ensayoCalibracion=self.ensayoCalibracion,
+                            certificadoConformidadProducto=self.certificadoConformidadProducto,
+                            certificadoCalibracion=self.certificadoCalibracion,
+                            otro=self.otro,
+
                             docencia = self.docencia,
                             investigacion = self.investigacion,
                             gestion = self.gestion,
@@ -200,6 +231,7 @@ class Servicio(object):
             propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
             self.propositos_a_mostrar.append(propositoServicio)
 
+
     def checkear_tags(self, tags, string):
         for tag in tags:
             string_compare = getattr(self, tag).decode('utf-8').upper()
@@ -218,7 +250,7 @@ class Servicio(object):
             print(ratio_str, string, string_compare)
 
         print("NO MATCH")
-        return False
+        return False   
 
 
 
