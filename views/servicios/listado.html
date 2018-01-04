@@ -262,8 +262,23 @@
                           <div class="form-group">
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
                           </div>
-                          <div class="form-group">
-                            <textarea class="form-control" id="resultados" name="resultadosServicio" placeholder="Resultados"></textarea>
+                          <div class="form-group" >
+                            <h6 id="producto" style="margin-top: 25px; font-size: 15px;">Producto*</h6>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="checkbox5" name="entregadeResultadosServicio" value="True" >Entrega de Resultados</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="checkbox6" name="informedeEnsayoCalibracionServicio" value="True" >Informe de ensayo o calibración</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="checkbox7" name="certificadoConformidadServicio" value="True" >Certificado de conformidad del producto (ensayado o calibrado)</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="checkbox8" name="certificadoCalibracionServicio" value="True" >Certificado de calibración</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="checkbox9" name="otroServicio" value="True" >Otro</label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -474,7 +489,7 @@
 
                     <!-- Cuarto Paso -->
                     <fieldset class="formField">
-                      <div class="form-row" data-step="4" data-title="Cuarto Paso">
+                      <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
                           <span class="step">1</span>
@@ -493,10 +508,26 @@
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" value="{{=editar[0].requisitos}}">{{=editar[0].requisitos}}</textarea>
                           </div>
                           <div class="form-group">
-                            <textarea class="form-control" id="resultados" name="resultadosServicio" value="{{=editar[0].resultados}}">{{=editar[0].resultados}}</textarea>
+                            <h6 id="funcion_editar" style="margin-top: 25px; font-size: 15px;">Producto</h6>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="#checkbox1e" name="entregadeResultadosServicio" value="True" {{if editar[0].entregaResultados:}} checked {{pass}}>Entrega de Resultados</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="#checkbox6e" name="informedeEnsayoCalibracionServicio" value="True" {{if editar[0].ensayoCalibracion:}} checked {{pass}}>Informe de ensayo o calibración</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="#checkbox7e" name="certificadoConformidadServicio" value="True" {{if editar[0].certificadoConformidadProducto:}} checked {{pass}}>Certificado de conformidad del producto (ensayado o calibrado)</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="#checkbox8e" name="certificadoCalibracionServicio" value="True" {{if editar[0].certificadoCalibracion:}} checked {{pass}}>Certificado de calibración</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" id="#checkbox9e" name="otroServicio" value="True" {{if editar[0].otro:}} checked {{pass}}>Otro</label>
+                            </div>
                           </div>
                         </div>
                       </div>
+                      
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
                       <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button> 

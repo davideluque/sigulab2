@@ -43,13 +43,23 @@ def listado():
         extension = False if not request.post_vars.extensionServicio else True
         gestion = False if not request.post_vars.gestionServicio else True
 
+
+        entregaResultados=  False if not request.post_vars.entregadeResultadosServicio else True
+        ensayoCalibracion=  False if not request.post_vars.informedeEnsayoCalibracionServicio else True
+        certificadoConformidadProducto=  False if not request.post_vars.certificadoConformidadServicio else True
+        certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
+        otro=  False if not request.post_vars.otroServicio else True
+
+
+
         servicio_nuevo = Servicio(db, request.post_vars.nombreServicio, request.post_vars.tipoServicio,
                    request.post_vars.categoriaServicio, request.post_vars.objetivoServicio,
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
-                   request.post_vars.resultadosServicio, docencia,
-                   investigacion, gestion, extension, True,
+                   entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
+                   otro,
+                   docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio)
 
@@ -112,6 +122,12 @@ def listado():
         extension = False if not request.post_vars.extensionServicio else True
         gestion = False if not request.post_vars.gestionServicio else True      
 
+        entregaResultados=  False if not request.post_vars.entregadeResultadosServicio else True
+        ensayoCalibracion=  False if not request.post_vars.informedeEnsayoCalibracionServicio else True
+        certificadoConformidadProducto=  False if not request.post_vars.certificadoConformidadServicio else True
+        certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
+        otro=  False if not request.post_vars.otroServicio else True
+
         servicio_edicion = Servicio(db)
         servicio_edicion.instanciar(request.vars.idServicioEdit)
 
@@ -120,10 +136,12 @@ def listado():
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
-                   request.post_vars.resultadosServicio, docencia,
-                   investigacion, gestion, extension, True,
+                   entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
+                   otro,
+                   docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio)
+
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
