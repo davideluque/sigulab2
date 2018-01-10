@@ -22,9 +22,6 @@ db.tipos_servicios._singular = 'Tipo'
 ##############################################################################
 #                     TABLA: CATEGORIAS DE SERVICIOS
 #
-# Tabla de servicios solicitados ya ejecutados y certificados. 
-# Tabla final para una solicitud de servicio (Solicitud estado 3). 
-# Combinacion de las tablas de certificacion y solicitud.
 #
 ##############################################################################
 
@@ -43,7 +40,7 @@ db.categorias_servicios._singular = 'Categoría'
 ##############################################################################
 
 db.define_table(
-    'servicios', # Nombre de la entidad
+    'servicios',
     # Atributos; Datos puntuales, Nombre, Objetivo, etc
     Field('nombre',             'string', notnull=True, label=T('Nombre')),
     Field('objetivo',           'string', notnull=True, label=T('Objetivo')),
@@ -54,7 +51,6 @@ db.define_table(
     Field('item_ensayar',       'string', notnull=True, label=T('Item a Ensayar')),
     Field('requisitos',         'text', notnull=True, label=T('Requisitos')),
    
-
     # Fecha de Agregacion.
     Field('fecha_de_agregacion', 'datetime', requires=IS_DATETIME(), default=request.now),
 
@@ -64,7 +60,6 @@ db.define_table(
 
     Field('categoria',          'reference categorias_servicios',
           requires=IS_IN_DB(db, db.categorias_servicios, '%(nombre)s'), label=T('Categoría')),
-
 
     # Funciones
     Field('docencia',           'boolean', default=False, label=T('Docencia')),
@@ -88,12 +83,18 @@ db.define_table(
     Field('ubicacion',          'reference espacios_fisicos',
           requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), 
           label=T('Ubicación Física')),
-    # Producto (Anteriormente resultado)
-    Field('entregaResultados',                  'boolean', default=False, label=T('Entrega de Resultados')),
-    Field('ensayoCalibracion',                  'boolean', default=False, label=T('Informe de ensayo o calibración')),
-    Field('certificadoConformidadProducto',     'boolean', default=False, label=T('Certificado de conformidad del producto (ensayado o calibrado)   ')),
-    Field('certificadoCalibracion',             'boolean', default=False, label=T('Certificado de calibración')),
-    Field('otro',                               'boolean', default=False, label=T('Otro')),
+    
+    # Checklist de Producto. Este campo anteriormente se llamaba Resultado
+    # y era un campo de texto largo.
+    Field('entregaResultados', 'boolean', default=False, 
+        label=T('Entrega de Resultados')),
+    Field('ensayoCalibracion', 'boolean', default=False, 
+        label=T('Informe de ensayo o calibración')),
+    Field('certificadoConformidadProducto', 'boolean', default=False, 
+        label=T('Certificado de conformidad del producto (ensayado o calibrado)')),
+    Field('certificadoCalibracion', 'boolean', default=False,
+        label=T('Certificado de calibración')),
+    Field('otro','boolean', default=False, label=T('Otro')),
 )
 
 db.servicios._plural = 'Servicios'
@@ -173,8 +174,7 @@ db.define_table(
 #                     TABLA: HISTORIAL DE SERVICIOS
 #
 # Tabla de servicios solicitados ya ejecutados y certificados. 
-# Tabla final para una solicitud de servicio (Solicitud estado 3). 
-# Combinacion de las tablas de certificacion y solicitud.
+# Tabla final para una solicitud de servicio (Solicitud estado 3).
 #
 ##############################################################################
 
