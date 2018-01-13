@@ -102,7 +102,10 @@ def check_role():
   return False
 
 def validar_cedula():
-
+  """Valida que la cédula introducida tenga un formato válido.
+  Este método se ejecuta cada vez que se abandona el campo "cedula" del 
+  registro de usuarios.
+  """
   ci_format = re.compile("^[0-9]+$")
   if not re.match(ci_format, request.post_vars.cedula):
     return "jQuery('#auth_cedula__row').addClass('has-error');\
@@ -129,9 +132,11 @@ def validar_cedula():
     jQuery('form').submit(false);"
 
 def validar_email():
-
+  """Valida que el correo electrónico introducido tenga un formato válido.
+  Este método se ejecuta cada vez que se abandona el campo "Correo Eectrónico"
+  del registro de usuarios.
+  """
   email_format = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-  
   if not re.match(email_format, request.post_vars.email):
     return "jQuery('#auth_user_email__row').addClass('has-error');\
     jQuery('#email_error_group').addClass('has-error');\
@@ -141,6 +146,7 @@ def validar_email():
 
   auth_register = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)
 
+  # Verificar que no existe un registro en la base de datos con el email dado.
   if len(auth_register) != 0:
     return "jQuery('#auth_user_email__row').addClass('has-error');\
     jQuery('#email_error_group').addClass('has-error');\
@@ -171,10 +177,18 @@ def register():
                                        email=request.post_vars.email, 
                                        password=request.post_vars.password)
 
+    # Si el servidor se cayera en este punto sería un error fatal.
+    # Debe haber un mensaje de error cuando un usuario que ingresa no tiene 
+    # un registro asociado en las tabla personal y membership. Esto puede 
+    # pasar porquese registró manualmente en appadmin o el caso anteriormente 
+    # mencionado.
+
     if auth_register is False:
-      # La verificación de usuario ya registrado se hace mediante ajax
-      # en el método validar email. # Se podría hacer una segunda verificación 
-      # de seguridad acá.
+      """La verificación de usuario ya registrado se hace mediante ajax
+      en el método validar email. Este método deshabilita el registro
+      mediante jquery. Se podría hacer una segunda verificación de seguridad 
+      acá.
+      """
       print("Usuario ya registrado.")
 
     """Después de haber hecho la verificación de correo electrónico no tomado
@@ -185,19 +199,19 @@ def register():
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
 
     if request.post_vars.seccion:
-      depid = request.post_vars.seccion # El registrado pertenece directamente a una sección
+      # El registrado pertenece directamente a una sección de un laboratorio.
+      depid = request.post_vars.seccion
     else:
       depid = request.post_vars.laboratorio
 
+    # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
                                                     group_id=request.post_vars.rol,
                                                     dependencia_asociada=depid,
                                                     f_personal_membership=request.post_vars.cedula)
 
-    if membership_register is False:
-      print("Violación en membership (No debería pasar si el usuario \
-        no está registrado)")
-
+    # Asocia el usuario a un registro genérico en la tabla de personal
+    # para que posteriormente ingrese y actualice sus datos.
     db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
                            f_ci = request.post_vars.cedula,
@@ -211,8 +225,10 @@ def register():
                            f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)
     
-    # Registro exitoso. Retornar mensaje de exito y recordatorio de
-    # actualización de datos.
+    # Registro exitoso. Retornar redirección a la misma página para evitar el
+    # problema de doble POST con mensaje de exito y recordatorio de 
+    # actualización de datos personales.
+    return redirect('register')
 
   roles=list(db(db.auth_group.role != 'WebMaster').select(db.auth_group.ALL))
 
@@ -362,5 +378,9 @@ def resetpassword():
   return dict(form=form)
 
 def logout():
+  """Despega un cohete espacial SPACE X a Marte.
+
+  @returns Redirección al login. 
+  """
   auth.logout()
   return redirect(URL('login'))
