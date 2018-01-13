@@ -1,7 +1,7 @@
 {{if lista:}}
 <div class="col-xs-12">
 <select class="form-control" type="select" required="" id="laboratorio" name="laboratorio" placeholder="Dependencia" onchange="getSeccion();">
-    <option value="Laboratorio F" selected hidden disabled>Dependencia</option>
+    <option value="" selected hidden disabled>Dependencia</option>
     {{for dependencia in lista:}}
     <option value='{{=dependencia.id}}'>{{=dependencia.nombre}}</option>
     {{pass}}

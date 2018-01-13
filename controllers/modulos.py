@@ -4,11 +4,8 @@
 # Caracteres especiales dentro de campos secretos (agregados por web2py)
 # no son aceptados por ciertos navegadores/terminales
 #import sys  
-  
 #sys.setdefaultencoding('utf8')
-
-from gluon.contrib.pbkdf2 import pbkdf2_hex
-from hashlib import sha512
+import re  
 
 #-------------------------------------
 #
@@ -37,7 +34,7 @@ def authenticate():
   """
   if not 'token_send' in request.post_vars:
     return "Esta conexión no es segura. Prueba entrando a la página de nuevo. \
-    Si continúa viendo este mensaje, contacte al administrador del sitio."
+    Si continúas viendo este mensaje, contacta al administrador del sitio."
 
   if not '@' in request.post_vars.email_send:
     return "Correo inválido. Formato: algo@ejemplo.com"
@@ -104,6 +101,61 @@ def check_role():
 
   return False
 
+def validar_cedula():
+
+  ci_format = re.compile("^[0-9]+$")
+  if not re.match(ci_format, request.post_vars.cedula):
+    return "jQuery('#auth_cedula__row').addClass('has-error');\
+    jQuery('#cedula_error_group').addClass('has-error');\
+    jQuery('#cedula_error').html('La cédula debe contener únicamente números. Ej: 12345678');\
+    jQuery('#cedula_error_group').show();\
+    jQuery('form').submit(false);"
+
+  personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
+  
+  if len(personal_register) != 0:
+    return "jQuery('#auth_cedula__row').addClass('has-error');\
+    jQuery('#cedula_error_group').addClass('has-error');\
+    jQuery('#cedula_error').html('Ya existe un usuario con esta cédula.');\
+    jQuery('#cedula_error_group').show();\
+    jQuery('form').submit(false);"
+  elif request.post_vars.cedula != "":
+    return "jQuery('#auth_cedula__row').addClass('has-success');\
+    jQuery('#cedula_error_group').hide();\
+    jQuery('form').unbind('submit');"
+  else:
+    return "jQuery('#auth_cedula__row').addClass('has-error');\
+    jQuery('#cedula_error_group').addClass('has-error');\
+    jQuery('form').submit(false);"
+
+def validar_email():
+
+  email_format = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+  
+  if not re.match(email_format, request.post_vars.email):
+    return "jQuery('#auth_user_email__row').addClass('has-error');\
+    jQuery('#email_error_group').addClass('has-error');\
+    jQuery('#email_error').html('Introduce un correo válido');\
+    jQuery('#email_error_group').show();\
+    jQuery('form').submit(false);"
+
+  auth_register = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)
+
+  if len(auth_register) != 0:
+    return "jQuery('#auth_user_email__row').addClass('has-error');\
+    jQuery('#email_error_group').addClass('has-error');\
+    jQuery('#email_error').html('Ya existe un usuario con este correo electrónico.');\
+    jQuery('#email_error_group').show();\
+    jQuery('form').submit(false);"    
+  elif request.post_vars.email != "":
+    return "jQuery('#auth_user_email__row').addClass('has-success');\
+    jQuery('#email_error_group').hide();\
+    jQuery('form').unbind('submit');"
+  else:
+    return "jQuery('#auth_user_email__row').addClass('has-error');\
+    jQuery('#email_error_group').addClass('has-error');\
+    jQuery('form').submit(false);"
+
 @auth.requires(lambda: check_role())
 def register():
   """ El registro de usuarios está habilitado únicamente para los 
@@ -120,7 +172,11 @@ def register():
                                        password=request.post_vars.password)
 
     if auth_register is False:
+      # La verificación de usuario ya registrado se hace mediante ajax
+      # en el método validar email. # Se podría hacer una segunda verificación 
+      # de seguridad acá.
       print("Usuario ya registrado.")
+
     """Después de haber hecho la verificación de correo electrónico no tomado
     y que la verificación de contraseñas coincide. Es decir, cuando el
     registro fue satisfactorio, se hace una conexión entre el usuario recién
@@ -139,12 +195,8 @@ def register():
                                                     f_personal_membership=request.post_vars.cedula)
 
     if membership_register is False:
-      print("Violación en membership (No debería pasar si el usuario está registrado)")
-
-    personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
-
-    if len(personal_register) != 0:
-      print("Ya existe un usuario personal con esta cédula")
+      print("Violación en membership (No debería pasar si el usuario \
+        no está registrado)")
 
     db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
@@ -165,26 +217,6 @@ def register():
   roles=list(db(db.auth_group.role != 'WebMaster').select(db.auth_group.ALL))
 
   return dict(roles=roles)
-
-def redireccionando():
-  #user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
-  
-  #db.auth_membership.insert(user_id=user, group_id=session.rolid, dependencia_asociada=session.depid, f_personal_membership = session.ci)
-  
-  db.t_Personal.insert(f_nombre = user.first_name,
-                                f_apellido = user.last_name,
-                                f_ci = session.ci,
-                                f_email = user.email,
-                                f_telefono = 0,
-                                f_pagina_web = "N/A",
-                                f_categoria = "N/A",
-                                f_cargo = "N/A",
-                                f_fecha_ingreso = "1/01/1989",
-                                f_fecha_salida = "1/02/1989",
-                                f_dependencia = session.depid
-                                )
-  session.forget()
-  return redirect(URL('index'))
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():

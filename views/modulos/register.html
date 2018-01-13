@@ -34,7 +34,7 @@
                 <!-- Nombre -->
                 <div class="form-group" id="auth_user_first_name__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" value="" required>
+                        <input class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 <!-- Apellido -->
                 <div class="form-group" id="auth_user_last_name__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellido" value="" required>
+                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellido" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -50,8 +50,10 @@
                 <!-- Cedula de Identidad -->
                 <div class="form-group" id="auth_cedula__row">
                     <div class="col-xs-12">
-                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" required>
-                        <span class="help-block"></span>
+                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
+                        <div id="cedula_error_group" style="display:none;">
+                            <label class="control-label text-center" id="cedula_error"></label>
+                        </div>
                     </div>
                 </div>
 
@@ -59,15 +61,17 @@
                 <!-- Email -->
                 <div class="form-group" id="auth_user_email__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" value="" required>
-                        <span class="help-block"></span>
+                        <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" onfocusout="ajax('validar_email', ['email'], ':eval')" onfocus="limpiar_email()" required>
+                        <div id="email_error_group" style="display:none;">
+                            <label class="control-label" id="email_error"></label>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Contraseña -->
                 <div class="form-group" id="auth_user_password__row">
                     <div class="col-xs-12">
-                        <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" required>
+                        <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -75,8 +79,10 @@
                 <!-- Confirmar contraseña --> 
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
-                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder=" Confirmar Contraseña" value="" required>
-                        <span class="help-block"></span>
+                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder=" Confirmar Contraseña" value="" onfocusout="v_c()" required>
+                        <div id="password_error_group" style="display:none;">
+                            <label class="control-label" id="password_error"></label>
+                        </div>
                     </div>
                 </div>
 
@@ -125,13 +131,67 @@
 <input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
 
-
-<script language="javascript" src="{{=URL('static', 'js/jquery.js')}}"></script>
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
-    function setMembership(){
-        console.log('cedula')
-        ajax('ajax_membership', ['laboratorio', 'rol', 'seccion','cedula'], 'hiddendiv');
+
+    function limpiar_cedula(){
+        jQuery('#auth_cedula__row').removeClass('has-error');
+        jQuery('#cedula_error_group').removeClass('has-error');
+        jQuery('#cedula_error_group').removeClass('has-success');
+        jQuery('#auth_cedula__row').removeClass('has-success');
+        jQuery('form').unbind('submit');
+    }
+
+    function limpiar_email(){
+        jQuery('#auth_user_email__row').removeClass('has-error');
+        jQuery('#email_error_group').removeClass('has-error');
+        jQuery('#email_error_group').removeClass('has-success');
+        jQuery('#auth_user_email__row').removeClass('has-success');
+        jQuery('form').unbind('submit');
+    }
+
+    function isEmpty(value, id){
+        id = "#" + id + "__row";
+        if (value == null || value == ""){
+            jQuery(id).removeClass('has-success');
+            jQuery(id).addClass('has-error');
+        }
+        else{
+            jQuery(id).removeClass('has-error');
+            jQuery(id).addClass('has-success');
+        }
+    }
+
+    function v_c(){
+        // To-Do: Move to controller :)
+        c1 = $('#auth_user_password').val();
+        c2 = $('#auth_user_password_two').val();
+        if (c2 != "" && c1 != c2){
+            $('#auth_user_password__row').addClass('has-error');
+            $('#auth_user_password_two__row').addClass('has-error');
+            $('#password_error_group').addClass('has-error');
+            $('#password_error').addClass('has-error');
+            $('#password_error').html('Las contraseñas no coinciden.');
+            $('#password_error_group').show();
+            $('form').submit(false);;
+        }
+        else if (c1 == c2 && c1 == " "){
+            $('#auth_user_password__row').addClass('has-error');
+            $('#auth_user_password_two__row').addClass('has-error');
+            $('#password_error_group').addClass('has-error');
+            $('#password_error').addClass('has-error');
+            $('#password_error').html('La contraseña no puede ser un espacio.');
+            $('#password_error_group').show();
+            $('form').submit(false);;            
+        }
+        else if (c2 != "" && c1 == c2){
+            $('#password_error_group').hide();
+            $('#auth_user_password__row').removeClass('has-error');
+            $('#auth_user_password_two__row').removeClass('has-error');
+            $('#auth_user_password__row').addClass('has-success');
+            $('#auth_user_password_two__row').addClass('has-success');
+            $('form').unbind('submit')
+        }
     }
 
     function getUnidad(){
