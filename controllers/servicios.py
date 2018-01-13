@@ -262,8 +262,15 @@ def listado():
 
     #----- FIN SOLICITAR SERVICIO -----#
 
-    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
-                sedes=listar_sedes(db), editar=editar)
+    listado_de_servicios = ListaServicios(db, __obtener_jerarquia()[1], 
+        __obtener_jerarquia()[0])
+
+    return dict(servicios=listado_de_servicios.filas,
+                rol=__obtener_jerarquia()[0],
+                categorias=listar_categorias(db),
+                tipos=listar_tipos(db),
+                sedes=listar_sedes(db), 
+                editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -1060,5 +1067,27 @@ def __obtener_priviliegios():
         rol = 1
     if request.vars.serv is None:
         return redirect(URL('modulos', 'login'))
+
+    return [rol, dependencia]
+
+def __obtener_jerarquia():
+
+    # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or \
+     user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
+        rol = 2
+    elif user_group_id == grupo_lab:
+        rol = 1
 
     return [rol, dependencia]
