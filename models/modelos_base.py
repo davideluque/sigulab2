@@ -117,7 +117,7 @@ db.define_table(
           requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
 
     Field('f_ci',             'integer',
-          requires=IS_INT_IN_RANGE(minimum=1,maximum=100000000, error_message='Número de cedula no válido.'),
+          requires=IS_INT_IN_RANGE(minimum=1,maximum=999999999, error_message='Número de cedula no válido.'),
           notnull=True, label=T('Cédula')),
 
     Field('f_email',          'string',

@@ -48,6 +48,7 @@ def authenticate():
     return "Datos de inicio de sesión incorrectos."
   else:
     url = URL('index')
+    # Change to success message and redirect in JS.
     return '<meta http-equiv="refresh" content="0; url='+ url + '">'
 
 def login():
@@ -80,8 +81,7 @@ def editprofile():
   return dict(form=auth.profile(), form2=auth.change_password())
 
 def check_role():
-  """
-  @description Método que verifica el grupo del usuario que intenta acceder
+  """Método que verifica el grupo del usuario que intenta acceder
   a la página de registro.
 
   @returns True en caso de que el usuario pertenezca a alguno de los grupos
@@ -106,8 +106,7 @@ def check_role():
 
 @auth.requires(lambda: check_role())
 def register():
-  """
-  @description El registro de usuarios está habilitado únicamente para los 
+  """ El registro de usuarios está habilitado únicamente para los 
   administradores del sitio que son aquellos que pertecen a uno de los
   siguientes grupos: Grupo Webmaster, grupo Director, grupo Asistente del 
   Director o Coordinadora de la Calidad.
@@ -115,20 +114,62 @@ def register():
 
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
-    db.auth_user.insert(first_name=request.vars.first_name, 
-      last_name=request.vars.last_name, email=request.vars.email, 
-      password=pbkdf2_hex(request.vars.password, 'salt', iterations=1000, keylen=20, hashfunc=sha512))
+    auth_register = auth.register_bare(username=request.post_vars.first_name, 
+                                       last_name=request.post_vars.last_name,
+                                       email=request.post_vars.email, 
+                                       password=request.post_vars.password)
+
+    if auth_register is False:
+      print("Usuario ya registrado.")
+    """Después de haber hecho la verificación de correo electrónico no tomado
+    y que la verificación de contraseñas coincide. Es decir, cuando el
+    registro fue satisfactorio, se hace una conexión entre el usuario recién
+    registrado y las tablas membership y personal.
+    """
+    user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
+
+    if request.post_vars.seccion:
+      depid = request.post_vars.seccion # El registrado pertenece directamente a una sección
+    else:
+      depid = request.post_vars.laboratorio
+
+    membership_register = db.auth_membership.insert(user_id=user.id, 
+                                                    group_id=request.post_vars.rol,
+                                                    dependencia_asociada=depid,
+                                                    f_personal_membership=request.post_vars.cedula)
+
+    if membership_register is False:
+      print("Violación en membership (No debería pasar si el usuario está registrado)")
+
+    personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
+
+    if len(personal_register) != 0:
+      print("Ya existe un usuario personal con esta cédula")
+
+    db.t_Personal.insert(f_nombre = request.post_vars.first_name,
+                           f_apellido = request.post_vars.last_name,
+                           f_ci = request.post_vars.cedula,
+                           f_email = request.post_vars.email,
+                           f_usuario = user.id,
+                           f_telefono = 0,
+                           f_pagina_web = "N/A",
+                           f_categoria = "N/A",
+                           f_cargo = "N/A",
+                           f_fecha_ingreso = "1/01/1989",
+                           f_fecha_salida = "1/02/1989",
+                           f_dependencia = depid)
+    
+    # Registro exitoso. Retornar mensaje de exito y recordatorio de
+    # actualización de datos.
 
   roles=list(db(db.auth_group.role != 'WebMaster').select(db.auth_group.ALL))
 
   return dict(roles=roles)
 
 def redireccionando():
-  user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
+  #user = db(db.auth_user.id > 0).select(db.auth_user.ALL)[-1]
   
-  print(session.ci)
-
-  db.auth_membership.insert(user_id=user, group_id=session.rolid, dependencia_asociada=session.depid, f_personal_membership = session.ci)
+  #db.auth_membership.insert(user_id=user, group_id=session.rolid, dependencia_asociada=session.depid, f_personal_membership = session.ci)
   
   db.t_Personal.insert(f_nombre = user.first_name,
                                 f_apellido = user.last_name,
@@ -136,7 +177,7 @@ def redireccionando():
                                 f_email = user.email,
                                 f_telefono = 0,
                                 f_pagina_web = "N/A",
-                                f_categoria = "Administrativo",
+                                f_categoria = "N/A",
                                 f_cargo = "N/A",
                                 f_fecha_ingreso = "1/01/1989",
                                 f_fecha_salida = "1/02/1989",
