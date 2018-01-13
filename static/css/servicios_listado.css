@@ -1,3 +1,20 @@
+select{ 
+	height: 40px;
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-radius: 0px !important;
+	border-bottom-width: 2px !important;
+	background-color: transparent !important;
+
+}
+
+#collapseFiltros {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 #columnBotonAgregar {
 	text-align: right;
 }
