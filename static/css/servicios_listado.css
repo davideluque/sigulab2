@@ -20,7 +20,7 @@
 	padding-top: 25px;
 }
 
-#tablaListado {
+.tablaListado {
  border: 1.5px !important; 
  border-style: solid !important; 
  border-color: #ddd !important;
