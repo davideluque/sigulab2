@@ -135,7 +135,7 @@ def validar_email():
   if not re.match(email_format, request.post_vars.email):
     return "jQuery('#auth_user_email__row').addClass('has-error');\
     jQuery('#email_error_group').addClass('has-error');\
-    jQuery('#email_error').html('Introduce un correo válido');\
+    jQuery('#email_error').html('Introduce un correo válido. Ej: ejemplo@dominio.com');\
     jQuery('#email_error_group').show();\
     jQuery('form').submit(false);"
 
