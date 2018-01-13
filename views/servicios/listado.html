@@ -50,7 +50,7 @@
 <div class="row">
   <h3> Listado de Servicios </h3>
   <div class="table-responsive">
-    <table id="datatable-buttons" class="table table-hover table-striped tablaListado">
+    <table id="datatable" class="table table-hover table-striped tablaListado">
   <thead>
       <tr id="titulosListado">
           <th class="camposTabla linksNombres">Categoría</th>
@@ -730,12 +730,14 @@
  
 <script language="javascript">
   $('#datatable').DataTable({
+    buttons:true,
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    }
+    },
+    buttons: [
+      'copy', 'pdf', 'excel', 'csv'
+   ]
   });
-
-  TableManageButtons.init();
 
   var w2p_ajax_confirm_message =
         "{{=T('')}}";
