@@ -103,6 +103,7 @@
                               <span class="step">2</span>
                               <span class="step">3</span>
                               <span class="step">4</span>             
+                              <span class="step">5</span>
                             </div>
                           <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -159,6 +160,7 @@
                             <span class="step activePass">2</span>
                             <span class="step">3</span>
                             <span class="step">4</span> 
+                            <span class="step">5</span>
                           </div>
 
                           <!-- Aqui va la informacion -->
@@ -179,6 +181,25 @@
                             <div class="form-group">
                               <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" placeholder="Incertidumbre*">
                             </div>
+
+                            <div class="form-group" >
+                              <h6 id="ambito" style="margin-top: 25px; font-size: 15px;">Ámbito de aplicación*</h6>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="checkbox_ambito_in_situ" name="ambito_in_situ" value="True">In Situ</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="checkbox_ambito_en_campo" name="ambito_en_campo" value="True">En Campo</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="checkbox_ambito_otro" name="ambito_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))">Otro</label>
+                              </div>
+
+                              <input type="text" class="form-control" style="display:none;" id="input_ambito_otro_detalle" name="ambito_otro_detalle" placeholder="Otro, Especifique:*" value=" ">
+                          </div>
+
                           </div>
                         </div>
                         <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -195,6 +216,7 @@
                           <span class="step ready">2</span>
                           <span class="step activePass">3</span>
                           <span class="step">4</span> 
+                          <span class="step">5</span>
                         </div>
                         
                         <!-- Aqui va la informacion -->
@@ -251,6 +273,7 @@
                           <span class="step ready">2</span>
                           <span class="step ready">3</span>
                           <span class="step activePass">4</span> 
+                          <span class="step">5</span>
                         </div>
 
                       <!-- Aqui va la informacion -->
@@ -282,10 +305,47 @@
                           </div>
                         </div>
                       </div>
+                    
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>                     
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                    <!-- Quinto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span> 
+                          <span class="step activePass">5</span>
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+
+                        <h4 class="titulosForm">Recursos</h4>
+
+<!--                           <div class="form-group">
+                            <input type="text" class="form-control" id="item_ensayar" name="itemServicio" placeholder="Item a ensayar*">
+                          </div>
+
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
+                          </div> -->
+
+                          <div class="form-group" >
+                            <h6 id="SOON" style="margin-top: 25px; font-size: 15px;">En Construcción</h6>
+                          </div>
+
+                        </div>
+                      </div>
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
                     </fieldset>
-                    <!-- Fin Cuarto Paso -->
+                    <!-- Fin Quinto Paso -->
 
                 </form>
             </div>
@@ -348,6 +408,7 @@
                           <span class="step">2</span>
                           <span class="step">3</span>
                           <span class="step">4</span>             
+                          <span class="step">5</span>             
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -374,16 +435,16 @@
                             <div class="form-group">
                               <h6 id="funcion_editar" style="margin-top: 25px; font-size: 15px;">Función*</h6>
                               <div class="checkbox">
-                                <label><input type="checkbox" id="#checkbox1e" name="docenciaServicio" value="True" {{if editar[0].docencia:}} checked {{pass}}>Docencia</label>
+                                <label><input type="checkbox" id="checkbox1e" name="docenciaServicio" value="True" {{if editar[0].docencia:}} checked {{pass}}>Docencia</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" id="#checkbox2e" name="investigacionServicio" value="True" {{if editar[0].investigacion:}} checked {{pass}}>Investigación</label>
+                                <label><input type="checkbox" id="checkbox2e" name="investigacionServicio" value="True" {{if editar[0].investigacion:}} checked {{pass}}>Investigación</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" id="#checkbox3e" name="extensionServicio" value="True" {{if editar[0].extension:}} checked {{pass}}>Extensión</label>
+                                <label><input type="checkbox" id="checkbox3e" name="extensionServicio" value="True" {{if editar[0].extension:}} checked {{pass}}>Extensión</label>
                               </div>
                               <div class="checkbox">
-                                <label><input type="checkbox" id="#checkbox4e" name="gestionServicio" value="True" {{if editar[0].gestion:}} checked {{pass}}>Gestión</label>
+                                <label><input type="checkbox" id="checkbox4e" name="gestionServicio" value="True" {{if editar[0].gestion:}} checked {{pass}}>Gestión</label>
                               </div>
                             </div>
                         </div>
@@ -401,6 +462,7 @@
                             <span class="step activePass">2</span>
                             <span class="step">3</span>
                             <span class="step">4</span> 
+                            <span class="step">5</span>
                           </div>
 
                           <!-- Aqui va la informacion -->
@@ -421,6 +483,27 @@
                             <div class="form-group">
                               <input type="text" class="form-control" id="incertidumbre" name="incertidumbreServicio" value="{{=editar[0].incertidumbre}}">
                             </div>
+
+                            <div class="form-group">
+                              <h6 id="ambito_editar" style="margin-top: 25px; font-size: 15px;">Ámbito de Aplicación:*</h6>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="editar_checkbox_ambito_in_situ" name="ambito_in_situ" value="True" {{if editar[0].ambito_in_situ:}} checked {{pass}}>In Situ</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="editar_checkbox_ambito_en_campo" name="ambito_en_campo" value="True" {{if editar[0].ambito_en_campo:}} checked {{pass}}>En Campo</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="editar_checkbox_ambito_otro" name="ambito_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))" {{if editar[0].ambito_otro:}} checked {{pass}}>Otro</label>
+                              </div>
+                              
+                              <div class="form-group">
+                                <input type="text" {{if not editar[0].ambito_otro:}}style="display:none;" placeholder="Otro, Especifique:*" value=" "{{else:}}value="{{=editar[0].ambito_otro_detalle}}"{{pass}} class="form-control" id="editar_input_ambito_otro_detalle" name="ambito_otro_detalle" >
+                              </div>
+                          </div>
+
                           </div>
                         </div>
                         <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -436,7 +519,8 @@
                           <span class="step">1</span>
                           <span class="step">2</span>
                           <span class="step activePass">3</span>
-                          <span class="step">4</span> 
+                          <span class="step">4</span>
+                          <span class="step">5</span> 
                         </div>
                         
                         <!-- Aqui va la informacion -->
@@ -495,7 +579,8 @@
                           <span class="step">1</span>
                           <span class="step">2</span>
                           <span class="step">3</span>
-                          <span class="step activePass">4</span> 
+                          <span class="step activePass">4</span>
+                          <span class="step">5</span> 
                         </div>
 
                       <!-- Aqui va la informacion -->
@@ -529,11 +614,42 @@
                       </div>
                       
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                    <!-- Quinto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>
+                          <span class="step activePass">5</span>
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm">Recursos</h4>
+                          
+                          <div class="form-group">
+                            <h6 id="SOON" style="margin-top: 25px; font-size: 15px;">En Construción</h6>
+                        </div>
+
+                      </div>
+                      
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
                       <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button> 
 
                     </fieldset>
-                    <!-- Fin Cuarto Paso -->
+                    <!-- Fin Quinto Paso -->
+
+
+
                 </form>
             </div>
           </div>               
@@ -679,5 +795,26 @@
 
   window.onload = ordenarServicios("id");
 
+  function cambiar_estado_detalle_ambito(is_otro_checked, id){
+    if (id == 'checkbox_ambito_otro'){
+      if (is_otro_checked){
+        $("#input_ambito_otro_detalle").show();
+      }
+      else{
+        $("#input_ambito_otro_detalle").hide();
+        $("#input_ambito_otro_detalle").val(' ');
+      }
+    }
+    else if (id == 'editar_checkbox_ambito_otro'){
+      if (is_otro_checked){
+        $("#editar_input_ambito_otro_detalle").show();
+      }
+      else{
+        $("#editar_input_ambito_otro_detalle").hide();
+        $("#editar_input_ambito_otro_detalle").val(' ');
+        $("#editar_input_ambito_otro_detalle").attr("placeholder", "Otro, Especifique:*");
+      }   
+    }
+  }
 </script>
 {{end}}

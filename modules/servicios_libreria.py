@@ -3,14 +3,14 @@ import random
 from difflib import SequenceMatcher
 #from fuzzywuzzy import fuzz
 
-#
-# Clase que permite tomar un record de la tabla servicios y realizar cada 
-# accion del CRUD de una manera rapida y ordenada
-#
-#------------------------------------------------------------------------------
-
 class Servicio(object):
+    """ Clase que permite tomar un record de la tabla servicios y realizar cada 
+    accion del CRUD de una manera rapida y ordenada
 
+    Inicialización con None es necesaria para que estos atributos 
+    puedan ser cargados con informacióm al momento de instanciar un objeto 
+    servicio con el método instanciar()
+    """    
     def __init__(self, db, nombre = None, tipo = None, categoria = None,
                  objetivo = None, alcance = None, metodo = None, rango = None,
                  incertidumbre = None, item_ensayar = None, requisitos = None,
@@ -18,7 +18,9 @@ class Servicio(object):
                  certificadoCalibracion=None,otro=None,
                  docencia = None, investigacion = None,
                  gestion = None, extension = None, visibilidad = None,
-                 responsable = None, dependencia = None, ubicacion = None, id=None):
+                 responsable = None, dependencia = None, ubicacion = None, id=None,
+                 ambito_in_situ=None, ambito_en_campo=None, ambito_otro=None, 
+                 ambito_otro_detalle=None):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -48,6 +50,9 @@ class Servicio(object):
         self.dependencia = dependencia
         self.ubicacion = ubicacion
 
+        self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro,
+            ambito_otro_detalle)
+
         # Categorias de Ordenamiento, disponibles tras instanciacion
         self.nombre_tipo = None
         self.nombre_categoria = None
@@ -59,6 +64,15 @@ class Servicio(object):
         self.db = db
 
         self.obtenerListaPropositos()
+
+    def inicializar_ambito(self, ambito_in_situ, ambito_en_campo, ambito_otro,
+        ambito_otro_detalle):
+        self.ambito_in_situ = ambito_in_situ
+        self.ambito_en_campo = ambito_en_campo
+        self.ambito_otro = ambito_otro
+        self.ambito_otro_detalle = ambito_otro_detalle
+
+        return True
 
     def __str__(self):
 
@@ -78,7 +92,10 @@ class Servicio(object):
             docencia = self.docencia, investigacion = self.investigacion,
             gestion = self.gestion, extension = self.extension,
             visibilidad = self.visibilidad, responsable = self.responsable,
-            dependencia = self.dependencia, ubicacion = self.ubicacion)
+            dependencia = self.dependencia, ubicacion = self.ubicacion,
+            ambito_in_situ=self.ambito_in_situ, ambito_en_campo=self.ambito_en_campo,
+            ambito_otro=self.ambito_otro, 
+            ambito_otro_detalle=self.ambito_otro_detalle)
 
         return insercion
 
@@ -115,6 +132,8 @@ class Servicio(object):
             self.dependencia = instanciacion[0].dependencia
             self.ubicacion = instanciacion[0].ubicacion
 
+            self.instanciacion_ambito(instanciacion[0])
+
             self.conseguir_categorias()
 
             self.obtenerListaPropositos()
@@ -125,13 +144,19 @@ class Servicio(object):
 
             return False
 
+    def instanciacion_ambito(self, instancia):
+        self.ambito_in_situ = instancia.ambito_in_situ
+        self.ambito_en_campo = instancia.ambito_en_campo
+        self.ambito_otro = instancia.ambito_otro
+        self.ambito_otro_detalle = instancia.ambito_otro_detalle
 
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
                rango, incertidumbre, item_ensayar, requisitos, entregaResultados,
                ensayoCalibracion,certificadoConformidadProducto,
                certificadoCalibracion,otro,
                docencia, investigacion, gestion, extension, visibilidad,
-               responsable, dependencia, ubicacion):
+               responsable, dependencia, ubicacion, ambito_in_situ, ambito_en_campo,
+               ambito_otro, ambito_otro_detalle):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -149,6 +174,9 @@ class Servicio(object):
         self.certificadoConformidadProducto=certificadoConformidadProducto
         self.certificadoCalibracion=certificadoCalibracion
         self.otro=otro
+
+        self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro, 
+            ambito_otro_detalle)
 
         self.docencia = docencia
         self.investigacion = investigacion
@@ -189,7 +217,11 @@ class Servicio(object):
                             visibilidad = self.visibilidad,
                             responsable = self.responsable,
                             dependencia = self.dependencia,
-                            ubicacion = self.ubicacion)
+                            ubicacion = self.ubicacion,
+                            ambito_in_situ=self.ambito_in_situ, 
+                            ambito_en_campo=self.ambito_en_campo,
+                            ambito_otro=self.ambito_otro,
+                            ambito_otro_detalle=self.ambito_otro_detalle)
 
         return actualizacion
 
@@ -251,8 +283,6 @@ class Servicio(object):
 
         print("NO MATCH")
         return False   
-
-
 
 
 #------------------------------------------------------------------------------
@@ -816,7 +846,6 @@ class Solicitud(object):
 
 
     def correoCertificacionFinalizada(self):
-        print('hola')
         estado_solicitud = self.estado_solicitud
         email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
         nombre_solicitante = self.nombre_responsable_solicitud
@@ -831,7 +860,6 @@ class Solicitud(object):
         numero_registro = self.registro 
 
         if estado_solicitud == 3:
-            print('chao')
             correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Quien suscribe, %s (%s), como responsable de la %s, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la %s, correspondiente a la Solicitud/orden de servicio identificado como %s, de fecha %s.</p><br><p>%s</p><br><p>%s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, email_solicitante, nombre_dependencia_solicitante, nombre_dependencia_ejecutora, registro, fecha_solicitud, nombre_solicitante, nombre_dependencia_solicitante)
 
             asunto = numero_registro + ' [SIGULAB] ' + 'Certificación de Servicio'
@@ -1193,10 +1221,6 @@ class Historial(object):
             self.numero_de_proyecto = instanciacion[0].numero_de_proyecto
             self.adscripcion_dependencia_solicitante = instanciacion[0].adscripcion_dependencia_solicitante
             self.adscripcion_dependencia_ejecutora = instanciacion[0].adscripcion_dependencia_ejecutora   
-
-
-    
-
 
             return True
         else:

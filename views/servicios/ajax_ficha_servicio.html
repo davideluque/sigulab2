@@ -24,6 +24,9 @@
 	  <li class="nav-item">
 	    <a class="nav-link" data-toggle="tab" href="#especificaciones" role="tab" aria-controls="especificaciones">Especificaciones</a>
 	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#recursos" role="tab" aria-controls="recursos">Recursos</a>
+	  </li>
 	</ul>
 
 	<div class="tab-content">
@@ -56,8 +59,12 @@
 		  			<td>Rango:</td><td>{{=ficha['entrada'][0].rango.decode('utf-8').upper()}}</td>
 		  		</tr>
 		  		<tr>
-		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre.decode('utf-8').upper()}}</td>
+		  			<td>Incertidumbre:</td><td>{{=ficha['entrada'][0].incertidumbre.decode('utf-8').upper()}}</td>		  			
 		  		</tr>
+		  		<tr>
+		  			<td>Ámbito de Aplicación:</td>
+		  			<td><p><i {{if ficha['ambito_in_situ']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> In Situ</p><p><i {{if ficha['ambito_en_campo']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> En Campo</p><p><i {{if ficha['ambito_otro']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> Otro{{if ficha['ambito_otro']:}}: {{=ficha['ambito_otro_detalle'].upper()}}{{pass}}</p></td>
+		  		</tr>		  		
 		  	</tbody>
 	  	</table>
 	  </div>
@@ -103,6 +110,17 @@
 		  			<td>Producto:</td><td>{{=ficha['producto'].decode('utf-8').upper()}}</td>
 		  		</tr>
 		  	
+		  	</tbody>
+	  	</table>	  	
+	  </div>
+
+	  <div class="tab-pane" id="recursos" role="tabpanel">
+	  	<table class="table contenidoFicha">
+	  		<tbody>
+		  		<tr>
+		  			<td>En Construcción</td>
+		  			<td>En Construcción</td>	  			
+		  		</tr>
 		  	</tbody>
 	  	</table>	  	
 	  </div>

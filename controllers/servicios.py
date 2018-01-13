@@ -50,7 +50,9 @@ def listado():
         certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
         otro=  False if not request.post_vars.otroServicio else True
 
-
+        ambito_in_situ = False if not request.post_vars.ambito_in_situ else True
+        ambito_en_campo =  False if not request.post_vars.ambito_en_campo else True
+        ambito_otro =  False if not request.post_vars.ambito_otro else True
 
         servicio_nuevo = Servicio(db, request.post_vars.nombreServicio, request.post_vars.tipoServicio,
                    request.post_vars.categoriaServicio, request.post_vars.objetivoServicio,
@@ -61,7 +63,9 @@ def listado():
                    otro,
                    docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
-                   request.post_vars.ubicacionServicio)
+                   request.post_vars.ubicacionServicio, ambito_in_situ=ambito_in_situ, 
+                   ambito_en_campo=ambito_en_campo, ambito_otro=ambito_otro, 
+                   ambito_otro_detalle=request.post_vars.ambito_otro_detalle)
 
         servicio_nuevo.insertar()
 
@@ -128,6 +132,10 @@ def listado():
         certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
         otro=  False if not request.post_vars.otroServicio else True
 
+        ambito_in_situ = False if not request.post_vars.ambito_in_situ else True
+        ambito_en_campo =  False if not request.post_vars.ambito_en_campo else True
+        ambito_otro =  False if not request.post_vars.ambito_otro else True
+
         servicio_edicion = Servicio(db)
         servicio_edicion.instanciar(request.vars.idServicioEdit)
 
@@ -140,8 +148,8 @@ def listado():
                    otro,
                    docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
-                   request.post_vars.ubicacionServicio)
-
+                   request.post_vars.ubicacionServicio, ambito_in_situ, 
+                   ambito_en_campo, ambito_otro, request.post_vars.ambito_otro_detalle)
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
@@ -486,13 +494,18 @@ def ajax_ficha_servicio():
     if entrada[0].otro:
         producto = producto + "Otro"
 
-    if producto[-1] == ' ' and producto[-2] == ',':
+    if len(producto) > 0 and producto[-1] == ' ' and producto[-2] == ',':
         # El producto no termino con "Otro". Debemos eliminar el espacio y la coma
         producto = producto.rstrip(', ')
 
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
     valores_de_ficha['producto'] = producto
+
+    valores_de_ficha['ambito_in_situ'] = entrada[0].ambito_in_situ
+    valores_de_ficha['ambito_en_campo'] = entrada[0].ambito_en_campo
+    valores_de_ficha['ambito_otro'] = entrada[0].ambito_otro
+    valores_de_ficha['ambito_otro_detalle'] = entrada[0].ambito_otro_detalle
 
     edicion = False
     privilegios = __obtener_priviliegios()

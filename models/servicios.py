@@ -95,6 +95,12 @@ db.define_table(
     Field('certificadoCalibracion', 'boolean', default=False,
         label=T('Certificado de calibración')),
     Field('otro','boolean', default=False, label=T('Otro')),
+
+    # Ámbito de aplicación de un servicio. Checklist.
+    Field('ambito_in_situ', 'boolean', default=False, label=T('Ámbito: In Situ')),
+    Field('ambito_en_campo', 'boolean', default=False, label=T('Ámbito: En Campo')),
+    Field('ambito_otro', 'boolean', default=False, label=T('Ámbito: Otro')),
+    Field('ambito_otro_detalle', 'string', label=T('Ámbito es otro, especifique:'))
 )
 
 db.servicios._plural = 'Servicios'
