@@ -111,7 +111,7 @@ function authenticate(){
     var csrf_token = document.getElementsByName("_formkey")[0]; 
 
     if (!csrf_token){
-        document.getElementById("authdiv").innerHTML = "Esta conexión no es segura. Prueba entrando a la página de nuevo. Si continuas viendo esto contacta al administrador</p>";
+        document.getElementById("authdiv").innerHTML = "Esta conexión no es segura. Prueba entrando a la página de nuevo. Si continuas viendo esto contacta al administrador";
         return;
     }
 
