@@ -52,62 +52,12 @@
 <div class="row">
   <h3> Listado de Servicios </h3>
   <!-- Filtrado -->
-    <button type="button" class="btn botonesFichita botonEliminar botonEliminarImprimir" data-toggle="collapse" data-target="#collapseFiltros">Filtrado</button>
-    <div class="collapse row" id="collapseFiltros">
+    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn botonesFichita botonEliminar botonEliminarImprimir">Filtrado</button>
 
-      <div class="col-sm-2">
-        <select class="form-control" type="select" name="categoriaServicio" required>
-          <option value="" selected hidden >Categoria</option>
-          <option value="a">Categoria a</option>
-          <option value="b">Categoria b</option>
-          <option value="c">Categoria c</option>
-          <option value="d">Categoria d</option>
-        </select>
-      </div>
-
-      <div class="col-sm-2">
-        <select class="form-control" type="select" name="tipoServicio" required>
-          <option value="" selected hidden >Tipo</option>
-          <option value="a">Tipo a</option>
-          <option value="b">Tipo b</option>
-          <option value="c">Tipo c</option>
-          <option value="d">Tipo d</option>
-        </select>
-      </div>
-
-      <div class="col-sm-2">
-        <select class="form-control" type="select" name="tipoServicio" required>
-          <option value="" selected hidden >Dependencia</option>
-          <option value="a">Dependencia a</option>
-          <option value="b">Dependencia b</option>
-          <option value="c">Dependencia c</option>
-          <option value="d">Dependencia d</option>
-        </select>
-      </div>
-
-      <div class="col-sm-2">
-        <select class="form-control" type="select" name="tipoServicio" required>
-          <option value="" selected hidden >Sede</option>
-          <option value="SARTENEJAS">Sartenejas</option>
-          <option value="LITORAL">Litoral</option>
-        </select>
-      </div>
-
-      {{if rol == 2:}}
-      <div class="col-sm-2">
-        <select class="form-control" type="select" name="tipoServicio" required>
-          <option value="" selected hidden >Visibilidad</option>
-          <option value="FALSE">Oculto</option>
-          <option value="TRUE">Visible</option>
-        </select>
-      </div>
-      {{pass}}
-
-    </div>
-  <!-- Filtrado -->
+  <!-- Fin Filtrado -->
   <br><br>
   <div class="table-responsive">
-    <table id="datatable-buttons" class="table table-hover table-striped tablaListado">
+    <table id="datatable" class="table table-hover table-striped tablaListado">
   <thead>
       <tr id="titulosListado">
           <th class="camposTabla linksNombres">Categoría</th>
@@ -137,6 +87,19 @@
       </tr>
     {{pass}}           
   </tbody>
+
+  <tfoot id="collapseFiltros">
+      <tr>
+          <th class="camposTabla linksNombres">Categoría</th>
+          <th class="camposTabla linksNombres">Tipo</th>
+          <th class="camposTabla linksNombres">Nombre</th>
+          <th class="camposTabla linksNombres">Dependencia</th>
+          <th class="camposTabla linksNombres">U. de Adscripción</th>
+          <th class="camposTabla linksNombres">Sede</th>
+          <th class="camposTabla linksNombres">Visibilidad</th>
+      </tr>
+  </tfoot>
+
 </table>
 </div>
 </div>
@@ -782,8 +745,53 @@
 <script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
 
+
+
 <!-- Datatable init js -->
 <script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
  
 <script language="javascript">
   $('#datatable').DataTable({
