@@ -1,5 +1,5 @@
 select{ 
-	height: 40px;
+	height: 30px !important;
 	border-top: 0px !important;
 	border-left: 0px !important;
 	border-right: 0px !important;
@@ -8,6 +8,10 @@ select{
 	border-bottom-width: 2px !important;
 	background-color: transparent !important;
 
+}
+
+.row.table-responsive.no-padding.no-margin{
+	margin-right: 0px !important;
 }
 
 #collapseFiltros {
