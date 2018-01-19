@@ -1,5 +1,4 @@
 select{ 
-	height: 30px !important;
 	border-top: 0px !important;
 	border-left: 0px !important;
 	border-right: 0px !important;
@@ -10,8 +9,24 @@ select{
 
 }
 
-.row.table-responsive.no-padding.no-margin{
-	margin-right: 0px !important;
+th input[type=text]{ 
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-bottom-width: 2px !important;
+	border-radius: 0px;
+	background-color: transparent;
+	height: 35px !important;
+	width: 100%;
+}
+
+th {
+	width: 150px;
+}
+
+#datatable_length select {
+	height: 30px;
 }
 
 #collapseFiltros {
