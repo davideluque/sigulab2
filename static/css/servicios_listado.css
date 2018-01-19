@@ -1,5 +1,4 @@
 select{ 
-	height: 40px;
 	border-top: 0px !important;
 	border-left: 0px !important;
 	border-right: 0px !important;
@@ -10,7 +9,7 @@ select{
 
 }
 
-input{ 
+th input[type=text]{ 
 	border-top: 0px !important;
 	border-left: 0px !important;
 	border-right: 0px !important;
@@ -20,6 +19,14 @@ input{
 	background-color: transparent;
 	height: 35px !important;
 	width: 100%;
+}
+
+th {
+	width: 150px;
+}
+
+#datatable_length select {
+	height: 30px;
 }
 
 #collapseFiltros {

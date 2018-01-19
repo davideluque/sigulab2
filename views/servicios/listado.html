@@ -15,6 +15,11 @@
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
 {{end}}
 
 {{block center}}
@@ -45,71 +50,68 @@
 </div>
 <!-- Fin Boton Agregar Listado -->
 
-
-
 <!-- Inicio Listado -->
 <div class="container">
 <div class="row">
   <h3> Listado de Servicios </h3>
   <!-- Filtrado -->
-    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn botonesFichita botonEliminar botonEliminarImprimir">Filtrado</button>
+    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn botonesFichita">Filtrado</button>
+    <br><br>
+  <!-- Filtrado -->
 
-  <!-- Fin Filtrado -->
-  <br><br>
-  <div class="table-responsive">
-    <table id="datatable" class="table table-hover table-striped tablaListado">
-  <thead>
-      <tr id="titulosListado">
-          <th class="camposTabla linksNombres">Categoría</th>
-          <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">Dependencia</th>
-          <th class="camposTabla linksNombres">U. de Adscripción</th>
-          <th class="camposTabla linksNombres">Sede</th>
-          <th class="camposTabla linksNombres">Visibilidad</th>
-      </tr>
-  </thead>
+    <div id="buttons"></div>
+    <br>
 
-  <tbody>
-    {{for servicio in servicios:}}
-      <tr>
-          <td class="camposTabla">{{=servicio.nombre_categoria.upper()}}</td>
-          <td class="camposTabla">{{=servicio.nombre_tipo.upper()}}</td>
-          <td class="camposTabla"><a data-toggle="modal" data-target="#myModal" 
-            onclick="abrirFicha({{=servicio.id}});">{{=servicio.nombre.upper()}}
-          </a></td>
-          <td class="camposTabla">{{=servicio.seccion.upper()}}</td>
-          <td class="camposTabla">{{=servicio.laboratorio.upper()}}</td>
-          <td class="camposTabla">{{=servicio.sede.upper()}}</td>
-          {{if rol == 2:}}
-          <td class="camposTabla">{{if servicio.visibilidad:}}VISIBLE{{else:}}OCULTO{{pass}}</td>
-          {{pass}}
-      </tr>
-    {{pass}}           
-  </tbody>
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Categoría</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">Dependencia</th>
+                <th class="camposTabla linksNombres">U. de Adscripción</th>
+                <th class="camposTabla linksNombres">Sede</th>
+                <th class="camposTabla linksNombres">Visibilidad</th>
+            </tr>
+        </thead>
 
-  <tfoot id="collapseFiltros">
-      <tr>
-          <th class="camposTabla linksNombres">Categoría</th>
-          <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">Dependencia</th>
-          <th class="camposTabla linksNombres">U. de Adscripción</th>
-          <th class="camposTabla linksNombres">Sede</th>
-          <th class="camposTabla linksNombres">Visibilidad</th>
-      </tr>
-  </tfoot>
+        <tbody>
+          {{for servicio in servicios:}}
+            <tr>
+                <td class="camposTabla">{{=servicio.nombre_categoria.upper()}}</td>
+                <td class="camposTabla">{{=servicio.nombre_tipo.upper()}}</td>
+                <td class="camposTabla"><a data-toggle="modal" data-target="#myModal" 
+                  onclick="abrirFicha({{=servicio.id}});">{{=servicio.nombre.upper()}}
+                </a></td>
+                <td class="camposTabla">{{=servicio.seccion.upper()}}</td>
+                <td class="camposTabla">{{=servicio.laboratorio.upper()}}</td>
+                <td class="camposTabla">{{=servicio.sede.upper()}}</td>
+                {{if rol == 2:}}
+                <td class="camposTabla">{{if servicio.visibilidad:}}VISIBLE{{else:}}OCULTO{{pass}}</td>
+                {{pass}}
+            </tr>
+          {{pass}}           
+        </tbody>
 
-</table>
-</div>
-</div>
-</div>
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Categoría</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">Dependencia</th>
+                <th class="camposTabla linksNombres">U. de Adscripción</th>
+                <th class="camposTabla linksNombres">Sede</th>
+                <th class="camposTabla linksNombres">Visibilidad</th>
+            </tr>
+        </tfoot>
 
+      </table>
+    </div>
+  </div>
+</div>  
 <!-- Fin Listado --> 
-<!-- Ajax ordenar listado de servicios--> 
-<input type="hidden" id="ordenarPor" name="ordenarPor" value="">
-<input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
-<input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
+
 
 <!-- Ajax abrirFicha-->
 <input type="hidden" id="serv" name="serv" value="">
@@ -794,13 +796,21 @@
 </script>
  
 <script language="javascript">
-  $('#datatable').DataTable({
+  var table = $('#datatable').DataTable({
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    }
-  });
+    },
+   initComplete: function(){
+      var api = this.api();
 
-  TableManageButtons.init();
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
 
   var w2p_ajax_confirm_message =
         "{{=T('')}}";
