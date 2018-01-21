@@ -130,7 +130,7 @@ function authenticate(){
     password_send.value = password;
     token_send.value = csrf_token;
 
-    ajax('authenticate', ['email_send', 'pass_send', 'token_send'], "authdiv");
+    ajax('authenticate', ['email_send', 'pass_send', 'token_send'], ':eval')
     $('#auth_user_password').val('');
 }
 

@@ -33,20 +33,19 @@ def authenticate():
   satisfactoria.
   """
   if not 'token_send' in request.post_vars:
-    return "Esta conexión no es segura. Prueba entrando a la página de nuevo. \
-    Si continúas viendo este mensaje, contacta al administrador del sitio."
+    return "$('#authdiv').html('Esta conexión no es segura. Prueba entrando a la página de nuevo. \
+    Si continúas viendo este mensaje, contacta al administrador del sitio.')"
 
   if not '@' in request.post_vars.email_send:
-    return "Correo inválido. Formato: algo@ejemplo.com"
+    return "$('#authdiv').html('Correo inválido. Formato: algo@ejemplo.com')"
 
   user = auth.login_bare(request.post_vars.email_send, request.post_vars.pass_send)
   
   if not user:
-    return "Datos de inicio de sesión incorrectos."
+    return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
     url = URL('index')
-    # Change to success message and redirect in JS.
-    return '<meta http-equiv="refresh" content="0; url='+ url + '">'
+    return '$(location).attr("href", "' + str(url) + '")'
 
 def login():
   """
