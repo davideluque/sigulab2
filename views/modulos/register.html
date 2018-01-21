@@ -1,5 +1,14 @@
 {{extend 'layout.html'}}
 
+{{block head}}
+    <link href="{{=URL('static','css/core.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/components.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/pages.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/servicios_registro.css')}}" rel="stylesheet" type="text/css"/>
+{{end}}
+
 {{block center}}
 
 <!-- Bloque de navegación secundaria (breadcrumb) -->
@@ -20,7 +29,7 @@
     <div class="wrapper-page pagina">
 
         <!-- Inicio card box -->
-        <div id="boxRegister" class="m-t-40 card-box boxes">
+        <div id="boxRegister" class="card-box boxes">
             <div class="text-center">
                 <h4 id="titulo" class="text-uppercase font-bold m-b-0">Nuevo Usuario</h4>
             </div>
@@ -42,7 +51,7 @@
                 <!-- Apellido -->
                 <div class="form-group" id="auth_user_last_name__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellido" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
+                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellidos" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -52,7 +61,7 @@
                     <div class="col-xs-12">
                         <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
                         <div id="cedula_error_group" style="display:none;">
-                            <label class="control-label text-center" id="cedula_error"></label>
+                            <label class="control-label" id="cedula_error"></label>
                         </div>
                     </div>
                 </div>
@@ -72,6 +81,7 @@
                 <div class="form-group" id="auth_user_password__row">
                     <div class="col-xs-12">
                         <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
+                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password')">Mostrar contraseña
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -79,7 +89,8 @@
                 <!-- Confirmar contraseña --> 
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
-                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder=" Confirmar Contraseña" value="" onfocusout="v_c()" required>
+                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder="Confirmar Contraseña" value="" onfocusout="v_c()" required>
+                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password_two')">Mostrar contraseña 
                         <div id="password_error_group" style="display:none;">
                             <label class="control-label" id="password_error"></label>
                         </div>
@@ -102,10 +113,10 @@
 
                 <div id="secciondiv" class="form-group"></div>
 
-                <div class="form-group text-center m-t-40" id="submit_record__row">
+                <div class="form-group text-center" id="submit_record__row">
 
                     <div class="col-sm-3">
-                        <a class="btn btn-primary" href="{{=URL('index')}}">Cancelar</a>
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#cancelar_registo_modal">Cancelar</a>
                     </div>
 
                     <div class="col-sm-6">
@@ -127,6 +138,27 @@
 </div>
 <div class="col-sm-4">
 </div>
+
+                <!-- modal delete user -->
+                <div id="cancelar_registo_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="myModalLabel">Cancelar Operación</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h4>¿Estás seguro que deseas cancelar el registro?</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <form>
+                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">No</button>
+                                <a type="button" class="btn btn-primary waves-effect waves-light" href="{{=URL('index')}}">Si, cancelar.</a>
+                                </form>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
 
 <input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
@@ -214,6 +246,16 @@
         x.value = labelegido;
         ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
     }
+
+    function mostrarContrasena(idContrasena) {
+    var idContrasena = idContrasena
+    var x = document.getElementById(idContrasena);
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
 
 </script>
 {{end}}
