@@ -81,6 +81,7 @@
                 <div class="form-group" id="auth_user_password__row">
                     <div class="col-xs-12">
                         <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
+                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password')">Mostrar contraseña
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -89,6 +90,7 @@
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
                         <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder="Confirmar Contraseña" value="" onfocusout="v_c()" required>
+                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password_two')">Mostrar contraseña 
                         <div id="password_error_group" style="display:none;">
                             <label class="control-label" id="password_error"></label>
                         </div>
@@ -244,6 +246,16 @@
         x.value = labelegido;
         ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
     }
+
+    function mostrarContrasena(idContrasena) {
+    var idContrasena = idContrasena
+    var x = document.getElementById(idContrasena);
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
 
 </script>
 {{end}}
