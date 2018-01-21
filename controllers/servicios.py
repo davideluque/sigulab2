@@ -373,7 +373,15 @@ def solicitudes():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
-    return dict(datos_solicitud=datos_solicitud,
+
+    #----- GENERACION DE LISTADOS -----#
+    listado_de_solicitudes_generadas = ListaSolicitudes(db, auth, "Solicitante")
+
+    listado_de_solicitudes_recibidas = ListaSolicitudes(db, auth, "Ejecutante")
+
+
+    return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,  
+        solicitudes_recibidas=listado_de_solicitudes_recibidas.filas, datos_solicitud=datos_solicitud,
         categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
