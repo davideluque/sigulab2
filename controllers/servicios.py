@@ -564,8 +564,25 @@ def ajax_ficha_servicio_catalogo():
     else:
         funcion.append("")
 
+    producto = ""
+    if entrada[0].entregaResultados:
+        producto = producto + "Entrega de Resultados, "
+    if entrada[0].ensayoCalibracion:
+        producto = producto + "Informe de ensayo o calibración, "
+    if entrada[0].certificadoConformidadProducto:
+        producto = producto + "Certificado de conformidad del producto (ensayado o calibrado), "
+    if entrada[0].certificadoCalibracion:
+        producto = producto + "Certificado de calibración, "
+    if entrada[0].otro:
+        producto = producto + "Otro"
+
+    if len(producto) > 0 and producto[-1] == ' ' and producto[-2] == ',':
+        # El producto no termino con "Otro". Debemos eliminar el espacio y la coma
+        producto = producto.rstrip(', ')
+
     valores_de_ficha = query_ficha(db, int(request.vars.servicio))
     valores_de_ficha['funcion'] = funcion
+    valores_de_ficha['producto'] = producto
 
     return dict(ficha=valores_de_ficha)
 
