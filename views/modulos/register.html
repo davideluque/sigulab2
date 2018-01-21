@@ -80,8 +80,10 @@
                 <!-- Contraseña -->
                 <div class="form-group" id="auth_user_password__row">
                     <div class="col-xs-12">
-                        <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
-                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password')">Mostrar contraseña
+                        <div class="input-group">
+                            <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
+                            <div class="input-group-addon" onclick="mostrarContrasena('auth_user_password')"><i class="fa fa-eye"></i></div>
+                        </div>    
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -89,8 +91,10 @@
                 <!-- Confirmar contraseña --> 
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
+                        <div class="input-group">
                         <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder="Confirmar Contraseña" value="" onfocusout="v_c()" required>
-                        <input type="checkbox" onclick="mostrarContrasena('auth_user_password_two')">Mostrar contraseña 
+                        <div class="input-group-addon" onclick="mostrarContrasena('auth_user_password_two')"><i class="fa fa-eye"></i></div>
+                        </div>
                         <div id="password_error_group" style="display:none;">
                             <label class="control-label" id="password_error"></label>
                         </div>
