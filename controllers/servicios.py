@@ -43,15 +43,40 @@ def listado():
         extension = False if not request.post_vars.extensionServicio else True
         gestion = False if not request.post_vars.gestionServicio else True
 
+
+        entregaResultados=  False if not request.post_vars.entregadeResultadosServicio else True
+        ensayoCalibracion=  False if not request.post_vars.informedeEnsayoCalibracionServicio else True
+        certificadoConformidadProducto=  False if not request.post_vars.certificadoConformidadServicio else True
+        certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
+        otro=  False if not request.post_vars.otroServicio else True
+
+        ambito_in_situ = False if not request.post_vars.ambito_in_situ else True
+        ambito_en_campo =  False if not request.post_vars.ambito_en_campo else True
+        ambito_otro =  False if not request.post_vars.ambito_otro else True
+
         servicio_nuevo = Servicio(db, request.post_vars.nombreServicio, request.post_vars.tipoServicio,
                    request.post_vars.categoriaServicio, request.post_vars.objetivoServicio,
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
-                   request.post_vars.resultadosServicio, docencia,
-                   investigacion, gestion, extension, True,
+                   entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
+                   otro,docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
-                   request.post_vars.ubicacionServicio)
+                   request.post_vars.ubicacionServicio, ambito_in_situ=ambito_in_situ, 
+                   ambito_en_campo=ambito_en_campo, ambito_otro=ambito_otro, 
+                   ambito_otro_detalle=request.post_vars.ambito_otro_detalle,
+                   per_tecnico=request.post_vars.per_tecnico, cant_per_tecnico=request.post_vars.cant_per_tecnico, 
+                   per_supervisor=request.post_vars.per_supervisor, cant_per_supervisor=request.post_vars.cant_per_supervisor,
+                   per_tesista=request.post_vars.per_tesista, cant_per_tesista=request.post_vars.cant_per_tesista,
+                   per_pasante=request.post_vars.per_pasante, cant_per_pasante=request.post_vars,
+                   per_preparador=request.post_vars.per_preparador, cant_per_preparador=request.post_vars.cant_per_preparador,
+                   per_obrero=request.post_vars.per_obrero, cant_per_obrero=request.post_vars.cant_per_obrero, 
+                   per_otro=request.post_vars.per_otro, per_otro_detalle=request.post_vars.per_otro_detalle,
+                   equipo_presta_servicio=request.post_vars.equipo_presta_servicio,
+                   esp_fis_servicio=request.post_vars.esp_fis_servicio,
+                   insumos_servicio=request.post_vars.insumos_servicio,
+                   condicion_ambiental=request.post_vars.condicion_ambiental,
+                   condicion_ambiental_detalle= request.post_vars.condicion_ambiental_detalle)
 
         servicio_nuevo.insertar()
 
@@ -112,6 +137,16 @@ def listado():
         extension = False if not request.post_vars.extensionServicio else True
         gestion = False if not request.post_vars.gestionServicio else True      
 
+        entregaResultados=  False if not request.post_vars.entregadeResultadosServicio else True
+        ensayoCalibracion=  False if not request.post_vars.informedeEnsayoCalibracionServicio else True
+        certificadoConformidadProducto=  False if not request.post_vars.certificadoConformidadServicio else True
+        certificadoCalibracion=  False if not request.post_vars.certificadoCalibracionServicio else True
+        otro=  False if not request.post_vars.otroServicio else True
+
+        ambito_in_situ = False if not request.post_vars.ambito_in_situ else True
+        ambito_en_campo =  False if not request.post_vars.ambito_en_campo else True
+        ambito_otro =  False if not request.post_vars.ambito_otro else True
+
         servicio_edicion = Servicio(db)
         servicio_edicion.instanciar(request.vars.idServicioEdit)
 
@@ -120,10 +155,19 @@ def listado():
                    request.post_vars.alcanceServicio, request.post_vars.metodoServicio,
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
-                   request.post_vars.resultadosServicio, docencia,
-                   investigacion, gestion, extension, True,
+                   entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
+                   otro, docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
-                   request.post_vars.ubicacionServicio)
+                   request.post_vars.ubicacionServicio, ambito_in_situ, 
+                   ambito_en_campo, ambito_otro, request.post_vars.ambito_otro_detalle,
+                   request.post_vars.per_tecnico, request.post_vars.cant_per_tecnico, request.post_vars.per_supervisor, 
+                   request.post_vars.cant_per_supervisor, request.post_vars.per_tesista, request.post_vars.cant_per_tesista,
+                   request.post_vars.per_pasante, request.post_vars.cant_per_pasante, request.post_vars.per_preparador, 
+                   request.post_vars.cant_per_preparador, request.post_vars.per_obrero, request.post_vars.cant_per_obrero,
+                   request.post_vars.per_otro, request.post_vars.per_otro_detalle, 
+                   request.post_vars.equipo_presta_servicio, request.post_vars.esp_fis_servicio, 
+                   request.post_vars.insumos_servicio, request.post_vars.condicion_ambiental,
+                   request.post_vars.condicion_ambiental_detalle)
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
@@ -236,8 +280,15 @@ def listado():
 
     #----- FIN SOLICITAR SERVICIO -----#
 
-    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
-                sedes=listar_sedes(db), editar=editar)
+    listado_de_servicios = ListaServicios(db, __obtener_jerarquia()[1], 
+        __obtener_jerarquia()[0])
+
+    return dict(servicios=listado_de_servicios.filas,
+                rol=__obtener_jerarquia()[0],
+                categorias=listar_categorias(db),
+                tipos=listar_tipos(db),
+                sedes=listar_sedes(db), 
+                editar=editar)
 
 #----- GESTIONAR SOLICITUDES -----#
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -340,7 +391,15 @@ def solicitudes():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
-    return dict(datos_solicitud=datos_solicitud,
+
+    #----- GENERACION DE LISTADOS -----#
+    listado_de_solicitudes_generadas = ListaSolicitudes(db, auth, "Solicitante")
+
+    listado_de_solicitudes_recibidas = ListaSolicitudes(db, auth, "Ejecutante")
+
+
+    return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,  
+        solicitudes_recibidas=listado_de_solicitudes_recibidas.filas, datos_solicitud=datos_solicitud,
         categorias=listar_categorias(db), tipos=listar_tipos(db), servicio_solicitud=servicio_solicitud)
 
 # ---- GESTIONAR CERTIFICACIONES ---- #
@@ -366,15 +425,24 @@ def certificaciones():
         solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
+
+    #----- GENERACION DE LISTADOS -----#
+
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Ejecutante")
+
   
-    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
-        sedes=listar_sedes(db))
+    return dict(certificaciones_a_generar=listado_de_certificaciones_a_generar.filas,
+                certificaciones_a_recibir=listado_de_certificaciones_a_recibir.filas,
+                categorias=listar_categorias(db), tipos=listar_tipos(db), sedes=listar_sedes(db))
 
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-    print(auth.user.email)
-    return dict()
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+    
+    return dict(listado_de_solicitudes=listado_de_solicitudes.filas)
 
 def detallesServicios():
 
@@ -389,29 +457,27 @@ def detallesServicios():
         nombre_categoria = "Alimentos"
     elif categoria == 2: 
         nombre_categoria = "Ambiente"
-    elif categoria == 3: 
-        nombre_categoria = "Arquitectura, Urbanismo y Arte"
-    elif categoria == 4:
+    elif categoria == 3:
         nombre_categoria = "Biología"
-    elif categoria == 5: 
+    elif categoria == 4: 
         nombre_categoria = "Energía"
-    elif categoria == 6: 
+    elif categoria == 5: 
         nombre_categoria = "Manufactura, Instrumentación y Control"
-    elif categoria == 7:
+    elif categoria == 6:
         nombre_categoria = "Matemáticas y Estadísticas"
-    elif categoria == 8: 
+    elif categoria == 7: 
         nombre_categoria = "Mecánica y Materiales"
-    elif categoria == 9: 
+    elif categoria == 8: 
         nombre_categoria = "Química"
-    elif categoria == 10:
+    elif categoria == 9:
         nombre_categoria = "Física"
-    elif categoria == 11: 
+    elif categoria == 10: 
         nombre_categoria = "Informática, Computación, Comunicación e Información"
-    elif categoria == 12: 
+    elif categoria == 11: 
         nombre_categoria = "Música"
-    elif categoria == 13:
+    elif categoria == 12:
         nombre_categoria = "Salud"
-    elif categoria == 14:
+    elif categoria == 13:
         nombre_categoria = "Otros"
 
     return dict(nombre_categoria=nombre_categoria, ensayo=servicios_mostrar_catalogo[0], inspeccion=servicios_mostrar_catalogo[1], calibracion=servicios_mostrar_catalogo[2], 
@@ -457,8 +523,42 @@ def ajax_ficha_servicio():
     else:
         funcion.append("")
 
+    producto = ""
+    if entrada[0].entregaResultados:
+        producto = producto + "Entrega de Resultados, "
+    if entrada[0].ensayoCalibracion:
+        producto = producto + "Informe de ensayo o calibración, "
+    if entrada[0].certificadoConformidadProducto:
+        producto = producto + "Certificado de conformidad del producto (ensayado o calibrado), "
+    if entrada[0].certificadoCalibracion:
+        producto = producto + "Certificado de calibración, "
+    if entrada[0].otro:
+        producto = producto + "Otro"
+
+    if len(producto) > 0 and producto[-1] == ' ' and producto[-2] == ',':
+        # El producto no termino con "Otro". Debemos eliminar el espacio y la coma
+        producto = producto.rstrip(', ')
+
     valores_de_ficha = query_ficha(db, int(request.vars.serv))
     valores_de_ficha['funcion'] = funcion
+    valores_de_ficha['producto'] = producto
+
+    valores_de_ficha['ambito_in_situ'] = entrada[0].ambito_in_situ
+    valores_de_ficha['ambito_en_campo'] = entrada[0].ambito_en_campo
+    valores_de_ficha['ambito_otro'] = entrada[0].ambito_otro
+    valores_de_ficha['ambito_otro_detalle'] = entrada[0].ambito_otro_detalle
+
+    valores_de_ficha['per_tecnico'] = entrada[0].per_tecnico
+    valores_de_ficha['per_supervisor'] = entrada[0].per_supervisor
+    valores_de_ficha['per_tesista'] = entrada[0].per_tesista
+    valores_de_ficha['per_pasante'] = entrada[0].per_pasante
+    valores_de_ficha['per_preparador'] = entrada[0].per_preparador
+    valores_de_ficha['per_obrero'] = entrada[0].per_obrero
+    valores_de_ficha['per_otro'] = entrada[0].per_otro
+    valores_de_ficha['per_otro_detalle'] = entrada[0].per_otro_detalle
+
+    valores_de_ficha['condicion_ambiental'] = entrada[0].condicion_ambiental
+    valores_de_ficha['condicion_ambiental_detalle'] = entrada[0].condicion_ambiental_detalle
 
     edicion = False
     privilegios = __obtener_priviliegios()
@@ -481,6 +581,56 @@ def ajax_ficha_servicio():
             edicion = True
 
     return dict(ficha=valores_de_ficha, edicion = edicion)
+
+def ajax_ficha_servicio_catalogo():
+    session.forget(response)
+
+    # Servicio
+    entrada = db(db.servicios.id == int(request.vars.servicio)).select(db.servicios.ALL)
+
+    # Funciones
+    funcion = []
+    if entrada[0].gestion:
+        funcion.append("Gestión  ")
+    else:
+        funcion.append("")
+
+    if entrada[0].docencia:
+        funcion.append("Docencia  ")
+    else:
+        funcion.append("")
+
+    if entrada[0].investigacion:
+        funcion.append("Investigación  ")
+    else:
+        funcion.append("")
+
+    if entrada[0].extension:
+        funcion.append("Extensión  ")
+    else:
+        funcion.append("")
+
+    producto = ""
+    if entrada[0].entregaResultados:
+        producto = producto + "Entrega de Resultados, "
+    if entrada[0].ensayoCalibracion:
+        producto = producto + "Informe de ensayo o calibración, "
+    if entrada[0].certificadoConformidadProducto:
+        producto = producto + "Certificado de conformidad del producto (ensayado o calibrado), "
+    if entrada[0].certificadoCalibracion:
+        producto = producto + "Certificado de calibración, "
+    if entrada[0].otro:
+        producto = producto + "Otro"
+
+    if len(producto) > 0 and producto[-1] == ' ' and producto[-2] == ',':
+        # El producto no termino con "Otro". Debemos eliminar el espacio y la coma
+        producto = producto.rstrip(', ')
+
+    valores_de_ficha = query_ficha(db, int(request.vars.servicio))
+    valores_de_ficha['funcion'] = funcion
+    valores_de_ficha['producto'] = producto
+
+    return dict(ficha=valores_de_ficha)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_solicitud():
@@ -982,3 +1132,26 @@ def __obtener_priviliegios():
         return redirect(URL('modulos', 'login'))
 
     return [rol, dependencia]
+
+def __obtener_jerarquia():
+
+    # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
+    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+
+    info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
+    user_group_id = info_membership.group_id
+
+    dependencia = info_membership.dependencia_asociada
+
+    rol = 0
+    if user_group_id == grupo_dir or user_group_id == grupo_asistdir or \
+     user_group_id == grupo_admin or auth.user.email == "ulab-calidad@usb.ve":
+        rol = 2
+    elif user_group_id == grupo_lab:
+        rol = 1
+
+    return [rol, dependencia]
+

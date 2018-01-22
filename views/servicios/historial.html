@@ -1,7 +1,26 @@
 {{extend "layout.html"}}
 
-{{block head}}
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">  
+{{block head}}  
+
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
 {{end}}
 
 {{block center}}
@@ -16,8 +35,62 @@
 <!-- Fin del Breadcrumb de navegación --> 
 
 <!-- Inicio Listado -->
-<div class="container" id="listadoContainer">
-<!-- ajax_listado_historial -->      
+<div class="container">
+  <!-- Inicio Tabla Historial Servicios -->
+  <div class="row">
+    <h3> Historial de Servicios </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+          <!-- Titulos Listado -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Fecha de Certificación</th>
+              <th class="camposTabla linksNombres">Nombre del Servicio</th>
+              <th class="camposTabla linksNombres">Nombre del Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Unidad de Adscripción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Contenido Listado -->
+            {{for solicitud in listado_de_solicitudes:}}
+            <tr>
+              <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}});" >{{=solicitud.registro_solicitud}}</a></th>
+              <th class="camposTabla">{{=solicitud.fecha_certificacion}}</th>
+              <th class="camposTabla">{{=solicitud.nombre_servicio}}</th>
+              <th class="camposTabla">{{=solicitud.responsable_solicitud}}</th>
+              <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora}}</th>
+              <th class="camposTabla">{{=solicitud.adscripcion_dependencia_ejecutora}}</th>
+            </tr>
+          {{pass}}
+          
+          </tbody>
+          <!-- Fin Contenido del Listado -->
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla">Número de Registro</th>
+              <th class="camposTabla">Fecha de Certificación</th>
+              <th class="camposTabla">Nombre del Servicio</th>
+              <th class="camposTabla">Nombre del Solicitante</th>
+              <th class="camposTabla">Dependencia Ejecutora</th>
+              <th class="camposTabla">Unidad de Adscripción</th>
+            </tr>
+          </tfoot>
+
+      </table>
+    </div>
+  </div>  
+  <!-- Fin Tabla Historial Servicios -->
 </div>
 <!-- Fin Listado --> 
 
@@ -37,11 +110,6 @@
 <!-- Ajax ficha historial--> 
 <input type="hidden" id="solicitud" name="solicitud" value="">
 
-<!-- Ajax ordenar listado de servicios--> 
-<input type="hidden" id="ordenarPor" name="ordenarPor" value="">
-<input type="hidden" id="ordenarAlfabeticamente" name="ordenarAlfabeticamente" value="">
-<input type="hidden" id="cambiarPagina" name="cambiarPagina" value="">
-
 <script language="javascript">
   function abrirFicha(solicitud) {
     var x = document.getElementById("solicitud");
@@ -49,46 +117,83 @@
 
     ajax('ajax_ficha_historial', ['solicitud'], "ficha");
   }
-  
-  /// Valores por defecto al cargar la página del listado de servicios
-  order_by_col = null;
-  order_by_asc = null;
-  order_by_pag = 1;
-  function cambiarPagina(page){
-    order_by_pag = page;
+</script>
 
-    var x = document.getElementById("ordenarPor");
-      x.value = order_by_col;
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
 
-    var y = document.getElementById("ordenarAlfabeticamente");
-      y.value = order_by_asc;
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
 
-    var z = document.getElementById("cambiarPagina")
-      z.value = order_by_pag;
+  var filtros = false;
 
-    ajax('ajax_listado_historial', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
   }
+</script>
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
 
-  function ordenarHistorial(order_by){ 
-    if (order_by_col == order_by){
-      order_by_asc = !order_by_asc;
-    }
-    else{
-      order_by_col = order_by
-      order_by_asc = false
-    }
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
 
-    var x = document.getElementById("ordenarPor");
-      x.value = order_by_col;
-
-    var y = document.getElementById("ordenarAlfabeticamente");
-      y.value = order_by_asc;
-
-    var z = document.getElementById("cambiarPagina")
-      z.value = order_by_pag;
-
-    ajax('ajax_listado_historial', ['ordenarPor', 'ordenarAlfabeticamente', 'cambiarPagina'], "listadoContainer");
-  }
-
-  window.onload = ordenarHistorial("id");
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
 </script>

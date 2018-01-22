@@ -1,13 +1,15 @@
 {{extend 'layout.html'}}
 
 {{block center}}
+<!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   	<div class="breadcrumb">
-	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
-	  <span class="breadcrumb-item active">Usuario</span>
+	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+	  <a class="breadcrumb-item" href="#">Gestión</a>
+	  <span class="breadcrumb-item active">Opciones de {{=auth.user.first_name}}  {{=auth.user.last_name}}</span>
 	</div>
 </nav>
-
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 <div class="container">
 
 <h3 style="padding-bottom: 30px;"><i class="fa fa-user-o" aria-hidden="true"></i> Editar usuario</h3>

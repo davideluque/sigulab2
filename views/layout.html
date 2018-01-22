@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <title>SIGULAB</title>
+  <title>SIGULAB</title>    
+  
+  <!-- http://dev.w3.org/html5/markup/meta.name.html -->
+  <meta name="application-name" content="SIGULAB">
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+  <!-- Always force latest IE rendering engine
+       (even in intranet) & Chrome Frame
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- Avoid search sites from indexing this website -->
   <meta name="robots" content="noindex" />
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{=URL('static', 'favicon.ico')}}">
+
+  <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
   
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+  <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
 
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -65,10 +76,10 @@
                 <ul class=" dropdown-menu">
                 <li><a href="{{=URL('servicios','index')}}">Página Principal</a></li>
                 <li><a href="{{=URL('servicios','listado')}}">Listado de Servicios</a></li>
-                <li><a href="{{=URL('servicios','catalogoServicios')}}">Catálogo de Servicios</a></li>
                 <li><a href="{{=URL('servicios','solicitudes')}}">Solicitudes de Servicios</a></li>
                 <li><a href="{{=URL('servicios','certificaciones')}}">Certificar un servicio</a></li>
                 <li><a href="{{=URL('servicios','historial')}}">Historial de servicios</a></li>
+                <li><a href="{{=URL('servicios','catalogoServicios')}}">Catálogo de Servicios</a></li>
               </ul>
             </li>
 
@@ -94,13 +105,13 @@
         <li class="dropdown">
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-              <i id="iconoInfo" class="fa fa-info-circle" aria-hidden="true"></i>
+              <i id="iconoInfo" class="fa fa-cog" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="{{=URL('gestion','usuarios')}}">Usuarios</a></li>
+              <li><a href="{{=URL('modulos','register')}}">Registrar Usuario</a></li>
+              <li><a href="{{=URL('gestion','usuarios')}}">Usuarios Autorizados</a></li>
               <li><a href="{{=URL('gestion','dependencias')}}">Dependencias</a></li>
               <li><a href="{{=URL('gestion','espacios_fisicos')}}">Espacios Físicos</a></li>
-
             </ul>
           </div>
         </li>
@@ -128,11 +139,14 @@
 
 {{block center}}
 {{end}}
-</body>
-</html>
 
 <script type="text/javascript">
-  u = window.location.pathname.toString().split('/')[2]
-  $('li#'+u).addClass("active");
-  
+  if(window.location.pathname.includes('personal')){
+    $('li#personal').addClass("active");
+  }
+  else if (window.location.pathname.includes('servicios')){
+    $('li#servicios').addClass("active");
+  }
 </script>
+</body>
+</html>

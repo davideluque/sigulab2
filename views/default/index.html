@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>SIGULAB | Acceso a módulos</title>
+	<title>SIGULAB - Seleccionar módulo</title>
 	<meta charset="UTF-8" />
 	<!-- Avoid search sites from indexing this website -->
 	<meta name="robots" content="noindex" />
@@ -16,30 +16,33 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="login-pages">
 
-		<div class="row">
-			<h1 id="titulo">SIGULAB</h1>
+		<div class="container">
+
+			<div class="row">
+				<h1 id="titulo">SIGULAB</h1>
+			</div>
+
+			<div class="row fila">
+				
+				<a class="links" href="{{=URL('..','sigulab') }}">
+					<div id="cuadrado1" class="col-sm-5 cuadrados">
+						 <h1>SMyDP <span class="glyphicon glyphicon-alert"></span></h1>
+					</div>
+				</a>
+
+				<div class="col-sm-2"></div>
+
+				<a class="links" href="{{=URL('..','sigulab2', 'modulos') }}">
+					<div id="cuadrado2" class="col-sm-5  cuadrados">
+						<h1>Otros módulos <span class="glyphicon glyphicon-menu-hamburger"></span></h1>
+					</div>
+				</a>
+
+			</div> 
 		</div>
-
-		<div class="row fila">
-
-			<a class="links" href="{{=URL('..','SIGULAB') }}">
-			
-				<div id="cuadrado1" class="col-sm-5 cuadrados">
-					 <h1>SMyDP <span class="glyphicon glyphicon-alert"></span></h1>
-				</div>
-			</a>
-
-			<div class="col-sm-2"></div>
-
-			<a class="links" href="{{=URL('..','sigulab2', 'modulos') }}">
-				<div id="cuadrado2" class="col-sm-5  cuadrados">
-					<h1>Otros módulos <span class="glyphicon glyphicon-menu-hamburger"></span></h1>
-				</div>
-			</a>
-
-		</div> 
+		
 	</div>
 </body>
 </html>

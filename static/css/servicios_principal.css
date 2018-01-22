@@ -2,6 +2,7 @@
 
 	#titulo {
 		text-align: center;
+		color:white;
 	}
 
 	.links {
@@ -23,10 +24,12 @@
 
 	#cuadrado1 {
 		background-color: #808080;
+		opacity: 0.9;
 	}
 
 	#cuadrado2 {
 		background-color: #303f9f;
+		opacity: 0.9;
 	}
 
 }
@@ -35,6 +38,7 @@
 
 	#titulo {
 		text-align: center;
+		color:white;
 	}
 
 	.links {
@@ -62,3 +66,14 @@
 		background-color: #303f9f;
 	}
 }
+
+.login-pages {
+background: linear-gradient(
+	rgba(20,20,20, 0.5), 
+	rgba(20,20,20, 0.5)), url("../images/background.jpg") center;;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+}
+

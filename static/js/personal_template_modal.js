@@ -13,6 +13,15 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     });
 
+    $('#sel1').change(function (){
+        if (($("#sel1 option:selected").val()=="Jubilado") || $("#sel1 option:selected").val()=="Retirado") {
+            $("#fsalida").show();
+        }
+        else {
+            $("#fsalida").hide();
+        };
+    });
+
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
@@ -26,6 +35,10 @@ $(document).ready(function () {
                     $("#err_nombre").html("Este campo es obligatorio");
                     $("#err_nombre").show();
                 }
+                else if (($(this).attr('name')=="apellido_add") || ($(this).attr('name')=="apellido_edit")) {
+                    $("#err_apellido").html("Este campo es obligatorio");
+                    $("#err_apellido").show();
+                }
                 else if (($(this).attr('name')=="ci_add") || ($(this).attr('name')=="ci_edit")) {
                     $("#err_ci").html("Este campo es obligatorio");
                     $("#err_ci").show();
@@ -38,10 +51,10 @@ $(document).ready(function () {
                     $("#err_telefono").html("Este campo es obligatorio");
                     $("#err_telefono").show();
                 }
-                //else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
-                    //$("#err_fecha_ingreso").html("Este campo es obligatorio");
-                    //$("#err_fecha_ingreso").show();
-                //}
+                else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
+                    $("#err_fecha_ingreso").html("Este campo es obligatorio");
+                    $("#err_fecha_ingreso").show();
+                }
                 $(this).addClass('input-error');
                 next_step = false;
             } else {
@@ -57,9 +70,21 @@ $(document).ready(function () {
                         $("#err_nombre").hide();
                     }
                 }
+                else if (($(this).attr('name')=="apellido_add") || ($(this).attr('name')=="apellido_edit")) {
+                    if (!($(this).val().match(/^(([a-zA-Z ]+[\-\'\.]?)+[a-zA-Z ]+)+$/))) {
+                        $("#err_apellido").html("Introduzca un apellido válido");
+                        $("#err_apellido").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_apellido").hide();
+                    }
+                }
                 else if (($(this).attr('name')=="ci_add") || ($(this).attr('name')=="ci_edit")) {
-                    if (!($(this).val().match(/[0-9]{1,9}/))) { // CI
-                        $("#err_ci").html("Introduzca una cédula de identidad válida (Entre 1 y 999999999)");
+                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()>99999999) { // CI
+                        $("#err_ci").html("Introduzca una cédula de identidad válida (Entre 1 y 99999999)");
                         $("#err_ci").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -71,7 +96,7 @@ $(document).ready(function () {
                 }
                 else if (($(this).attr('name')=="email_add") || ($(this).attr('name')=="email_edit")) {
                     if (!($(this).val().match(/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/))) { // Correo
-                        $("#err_email").html("Introduzca un correo válido (Ej: fulanito@de.tal)");
+                        $("#err_email").html("Introduzca un correo válido (Ej: usuario@domino.com)");
                         $("#err_email").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -82,7 +107,7 @@ $(document).ready(function () {
                     }
                 }
                 else if (($(this).attr('name')=="telefono_add") || ($(this).attr('name')=="telefono_edit")) {
-                    if (!($(this).val().match(/[0-9]{1,4}$/))) { // Extension de 1 a 4 digitos
+                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()>9999) { // Extension de 1 a 4 digitos
                         $("#err_telefono").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
                         $("#err_telefono").show();
                         $(this).addClass('input-error');
@@ -93,23 +118,22 @@ $(document).ready(function () {
                         $("#err_telefono").hide();
                     }
                 }
-                //else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
-                    //if (!($(this).val().match(/^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/]\d{4}$/))) { // Fecha del tipo DD-MM-AAAA o DD/MM/AAAA
-                        //$("#err_fecha_ingreso").html("La fecha debe seguir el formato DD/MM/AAAA");
-                        //$("#err_fecha_ingreso").show();
-                        //$(this).addClass('input-error');
-                        //next_step = false;
-                    //}
-                    //else {
-                        //$(this).removeClass('input-error');
-                        //$("#err_fecha_ingreso").hide();
-                    //}
-                //}
                 else {
                     $(this).removeClass('input-error');
-                    $("#err_msg").hide();
+                    $("#err_fecha_ingreso").hide();
                 }
             }
+            if (($("#sel1 option:selected").val()=="Jubilado") || $("#sel1 option:selected").val()=="Retirado") {
+                if (($(this).val() == "") && ($(this).attr('name')=="fecha_salida_add")) {
+                    $("#err_fecha_salida").html("Este campo es obligatorio");
+                    $("#err_fecha_salida").show();
+                    $(this).addClass('input-error');
+                    next_step = false;
+                };
+            } else {
+                $("#err_fecha_salida").hide();
+                $(this).removeClass('input-error');
+            };
         });
 
         if (next_step) {
@@ -134,8 +158,8 @@ $(document).ready(function () {
         parent_fieldset.find('input[type="text"]').each(function () {
             if (($(this).val() == "") && ($(this).attr('required'))) {
                 if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
-                    $("#err_fecha_ingreso").html("Este campo es obligatorio");
-                    $("#err_fecha_ingreso").show();
+                    $("#err_cargo").html("Este campo es obligatorio");
+                    $("#err_cargo").show();
                 }
                 $(this).addClass('input-error');
                 e.preventDefault();
@@ -148,13 +172,12 @@ $(document).ready(function () {
                         e.preventDefault();
                     }
                     else {
-                        $(this).removeClass('input-error');
                         $("#err_cargo").hide();
+                        $(this).removeClass('input-error');
                     }
                 }
                 else {
                     $(this).removeClass('input-error');
-                    //$("#err_msg").hide();
                 }
             }
         });

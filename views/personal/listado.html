@@ -19,10 +19,27 @@
 	</nav>
 	<div class="container">
 	    <div class="row">
-	        <div class="col-sm-12">
+	        <div class="col-sm-2">
 	        <!-- Boton que lleva al modal -->
-	      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
-	    </div>
+		      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
+		    </div>
+		    <div class="col-sm-4">
+	          <select class="form-control" id="fil_categoria" name="categoria_add" onchange="filter('categoria')" style="margin-left:30px" required>
+	            <option value="1" selected hidden>Categoria</option>
+	            {{for categoria in categorias:}}
+	            <option id="categoria_opt" value="{{=categoria}}">{{=categoria}}</option>
+	            {{pass}} 
+	          </select>
+	        </div>
+
+	        <div class="col-sm-4">
+	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" style="margin-left:10px" required>
+	            <option value="1" selected hidden>Dependencia</option>
+	            {{for dependencia in dependencias:}}
+	            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
+	            {{pass}} 
+	          </select>
+          </div>
 	    </div>
 	</div>
 
@@ -33,5 +50,46 @@
 {{include 'personal/ficha_edicion.html'}}
 
 {{include 'personal/form_editar.html'}}
+
+<script type="text/javascript">
+function filter(type){
+	
+	var e = document.getElementById("fil_"+type);
+	var opt = e.options[e.selectedIndex];
+	var trs = document.querySelectorAll('#dummyID tr');
+	for(i = 0; i < trs.length; ++i) {
+	    idtr = trs[i].id.split("_");
+	    if ( type == 'categoria' ){
+	
+	    	trs[i].style.display = 'None';
+	    	if ( idtr[1] == opt.value ){trs[i].style.display = 'table-row';}
+	
+	    }else if ( type == 'dependencia' ){
+
+	    	trs[i].style.display = 'None';
+	    	if ( idtr[0] == opt.innerHTML ){trs[i].style.display = 'table-row';}
+	
+	    }
+	
+	}
+	if (type=='categoria'){
+		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.value);
+	}
+	else {
+		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.innerHTML);
+	}
+}
+</script>
+
+	<div class="container">
+	    <div class="row">
+	        <div class="col-sm-12">
+	        <!-- Boton que lleva al modal -->
+	    	<a id="botonreporte" href="reporte">
+	      		<button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Generar Reporte</button>
+	  		</a>
+	    </div>
+	    </div>
+	</div>
 
 {{end}}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>SIGULAB | Iniciar sesión</title>
+    <title>SIGULAB - Iniciar sesión</title>
     <meta charset="UTF-8">
 
     <!-- Avoid search sites from indexing this website -->
@@ -11,13 +11,18 @@
     <link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{=URL('static','css/core.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/components.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{=URL('static','css/icons.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/pages.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/servicios_login.css')}}" rel="stylesheet" type="text/css"/>
     <script src="{{=URL('static','js/modernizr.min.js')}}"></script>
 
+    <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+
+    <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -25,11 +30,16 @@
 </head>
 
 <body>
+
+<header>
+  <img id="ulab" src="{{=URL('static','images/servicios/logo-ulab.png')}}" style="margin-left: 30px; margin-top: 30px; height: 100px;">
+</header>
+
 <!-- Inicio Wrapper -->
 <div class="wrapper-page">
     <!-- Inicio Card Box -->
-    <div class="m-t-40 card-box boxes" id="boxLogin">
-        
+    <div class="m-t-40 card-box boxes" id="boxLogin">  
+        <!-- <a href="{{=URL('..', 'sigulab2') }}" style="color:white !important"><i class="fa fa-arrow-circle-left style="color:white !important"></i> Regresar a la selección de módulos</a> -->
         <div class="text-center cabecera">
             <h4 id="titulo" class="text-uppercase font-bold m-b-0">SIGULAB</h4>
         </div>
@@ -37,7 +47,7 @@
         <!-- Inicio panel -->
         <div class="panel-body">
             <!-- Inicio form login -->
-            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <form onsubmit="authenticate(); return false;" class="form-horizontal">
 
                 <!-- Correo Electronico -->
                 <div class="form-group" id="auth_user_email__row">
@@ -62,7 +72,8 @@
                             <a href="resetpassword" class="text-muted"><p id="mensaje">¿Has olvidado tu contraseña?</p></a>
                         </div>
                     </div>
-                    </div></div>
+                    </div>
+                </div>
 
                 <!-- Check box Recordar contrasena 
                 <div class="form-group" id="auth_user_remember_me__row">    
@@ -81,28 +92,7 @@
                         <input id="botonLogin" class="btn btn-primary botones" type="submit" value="Iniciar sesion">
                     </div>
                 </div>
-
-                <!-- Boton Registrarse -->
-                <div class="form-group text-center m-t-30" id="submit_record__row">
-                    <div class="col-xs-12">
-                        <a href="{{=URL('register')}}"><input id="botonRegister" class="btn btn-primary botones" value="Registrarse"></a>
-                    </div>
-                </div>
-                {{=form.custom.begin}}
-                {{=form.custom.end}}
-                    <ul class="erroresLogin">
-                        {{if error:}}
-                            <li>{{=error}}</li>
-                        {{pass}}
-                        
-                        {{if form.errors:}}
-                            {{for fieldname in form.errors:}}
-                            <li>{{=form.errors[fieldname]}}</li>
-                            {{pass}}
-                            {{form.errors.clear()}}
-                        {{pass}}
-                    </ul>
-
+                <div id="authdiv" class="authdiv"></div>
             </form>
             <!-- Fin form login -->
         </div>
@@ -111,4 +101,39 @@
     <!-- Fin Card Box -->
 </div>
 <!-- Fin Wrapper -->
+                  
+{{=form.custom.begin}}
+{{=form.custom.end}}
+<input type="hidden" name="email_send" id="email_send" value="">
+<input type="hidden" name="pass_send" id="pass_send" value="">
+<input type="hidden" name="token_send" id="token_send" value="">
+
+<script>
+function authenticate(){
+    var csrf_token = document.getElementsByName("_formkey")[0]; 
+
+    if (!csrf_token){
+        document.getElementById("authdiv").innerHTML = "Esta conexión no es segura. Prueba entrando a la página de nuevo. Si continuas viendo esto contacta al administrador";
+        return;
+    }
+
+    var email = document.getElementById("auth_user_email").value;
+    var password = document.getElementById("auth_user_password").value;
+
+    csrf_token = csrf_token.value
+
+    var email_send = document.getElementById("email_send");
+    var password_send = document.getElementById("pass_send");
+    var token_send = document.getElementById("token_send");
+
+    email_send.value = email;
+    password_send.value = password;
+    token_send.value = csrf_token;
+
+    ajax('authenticate', ['email_send', 'pass_send', 'token_send'], ':eval')
+    $('#auth_user_password').val('');
+}
+
+</script>
 </body>
+</html>

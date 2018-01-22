@@ -77,7 +77,7 @@
         <table id="cabecera" border="1">
         	<tr>
             	<th class="titulos" rowspan="2">LISTADO DE PERSONAL ULAB
-"Dependencia"</th>
+<!--"Dependencia"--></th>
             	<th class="titulos">Fecha</th> 
         	</tr>
             <tr>
@@ -85,7 +85,7 @@
                 	<p id="fecha_actual"></p>
                 	<script>
                 		d = new Date();
-                		document.getElementById("fecha_actual").innerHTML = d.toLocaleFormat('%B %e, %Y');
+                		document.getElementById("fecha_actual").innerHTML = d.toLocaleFormat('%e/%m/%Y');
 
                 	</script>
                 </td>
@@ -101,15 +101,12 @@
         			<th class="titulos">Años Serv.</th>
         		</tr>
         		{{
-        			personas=db(db.t_Personal.f_nombre != None).select()
-        			for persona in personas:
+         			for persona in personas:
         		}}
         		<tr>
-        			<td>{{=persona.f_nombre}} {{=persona.f_apellido}}</td><td>{{=persona.f_email}}</td><td>persona.f_telefono</td><td>{{persona.f_categoria}}</td><td>{{=persona.f_fecha_ingreso}} hasta {{if persona.f_fecha_salida!=None:}}
-        				{{=f.fecha_salida}}
-        			{{else:
-        			    pass}}</td>
+        			<td>{{=persona['nombre']}} {{=persona['apellido']}}</td><td>{{=persona['email']}}</td><td>{{=persona['telefono']}}</td><td>{{=persona['categoria']}}</td><td>{{=persona['fecha_ingreso']}} hasta {{=persona['fecha_salida']}}</td>
         		</tr>
+                {{pass}}
         	</thead>
         	<tbody></tbody>
         </table>
@@ -117,4 +114,4 @@
 Telef.: 58 212 906-3708 / 3709 / 3710 / 3711 Fax: 58 212 906-3712 <a href="www.ulab.usb.ve">www.ulab.usb.ve</a></div>
     	</div>
 </body>
-</html>
+</html>""

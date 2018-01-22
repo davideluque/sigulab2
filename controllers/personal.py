@@ -189,5 +189,29 @@ def listado():
         db(db.t_Personal.f_ci == ced).delete()
         redirect(URL('listado'))
 
-
     return dict(gridedit = edic, editar = editar, grid= tabla, categorias = cat,dependencias = dep, estados = est)
+
+def reporte():
+    tabla=tabla_categoria()
+    personas=[]
+    for persona in tabla:
+        personas.append(persona)
+    return dict(personas=personas)
+
+# def reporte(tipo,filtro):
+#     tabla=tabla_categoria()
+#     personas=[]
+#     if (tipo=="categoria"):
+#         for persona in tabla:
+#             if (persona["categoria"]==filtro):
+#                 personas.append(persona)
+#     elif (tipo=="dependencia"):
+#         named = db(db.dependencias.id == filtro).select(db.dependencias.ALL)
+#         dep= named[0] if len(named) > 0 else None
+#         for persona in tabla:
+#             if (persona["dependencia"]==dep)
+#                 personas.append(persona)
+#     else:
+#         for persona in tabla:
+#             personas.append(persona)
+#     return dict(personas=personas)

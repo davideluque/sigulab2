@@ -22,9 +22,6 @@ db.tipos_servicios._singular = 'Tipo'
 ##############################################################################
 #                     TABLA: CATEGORIAS DE SERVICIOS
 #
-# Tabla de servicios solicitados ya ejecutados y certificados. 
-# Tabla final para una solicitud de servicio (Solicitud estado 3). 
-# Combinacion de las tablas de certificacion y solicitud.
 #
 ##############################################################################
 
@@ -43,7 +40,7 @@ db.categorias_servicios._singular = 'Categoría'
 ##############################################################################
 
 db.define_table(
-    'servicios', # Nombre de la entidad
+    'servicios',
     # Atributos; Datos puntuales, Nombre, Objetivo, etc
     Field('nombre',             'string', notnull=True, label=T('Nombre')),
     Field('objetivo',           'string', notnull=True, label=T('Objetivo')),
@@ -53,8 +50,7 @@ db.define_table(
     Field('incertidumbre',      'string', label=T('Incertidumbre')),
     Field('item_ensayar',       'string', notnull=True, label=T('Item a Ensayar')),
     Field('requisitos',         'text', notnull=True, label=T('Requisitos')),
-    Field('resultados',         'text', notnull=True, label=T('Resultados')),
-
+   
     # Fecha de Agregacion.
     Field('fecha_de_agregacion', 'datetime', requires=IS_DATETIME(), default=request.now),
 
@@ -87,6 +83,55 @@ db.define_table(
     Field('ubicacion',          'reference espacios_fisicos',
           requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), 
           label=T('Ubicación Física')),
+    
+    # Checklist de Producto. Este campo anteriormente se llamaba Resultado
+    # y era un campo de texto largo.
+    Field('entregaResultados', 'boolean', default=False, 
+        label=T('Entrega de Resultados')),
+    Field('ensayoCalibracion', 'boolean', default=False, 
+        label=T('Informe de ensayo o calibración')),
+    Field('certificadoConformidadProducto', 'boolean', default=False, 
+        label=T('Certificado de conformidad del producto (ensayado o calibrado)')),
+    Field('certificadoCalibracion', 'boolean', default=False,
+        label=T('Certificado de calibración')),
+    Field('otro','boolean', default=False, label=T('Otro')),
+
+    # Ámbito de aplicación de un servicio. Checklist.
+    Field('ambito_in_situ', 'boolean', default=False, label=T('Ámbito: In Situ')),
+    Field('ambito_en_campo', 'boolean', default=False, label=T('Ámbito: En Campo')),
+    Field('ambito_otro', 'boolean', default=False, label=T('Ámbito: Otro')),
+    Field('ambito_otro_detalle', 'string', label=T('Ámbito es otro, especifique:')),
+
+    # Personal que presta el Servicio
+    Field('per_tecnico', 'boolean', default=False, label=T('Técnico')),
+    Field('cant_per_tecnico', 'boolean', default=False, label=T('Cantidad Técnico')),
+    Field('per_supervisor', 'boolean', default=False, label=T('Supervisor')),
+    Field('cant_per_supervisor', 'boolean', default=False, label=T('Cantidad Supervisor')),
+    Field('per_tesista', 'boolean', default=False, label=T('Tesista')),
+    Field('cant_per_tesista', 'boolean', default=False, label=T('Cantidad Tesista')),
+    Field('per_pasante', 'boolean', default=False, label=T('Pasante')),
+    Field('cant_per_pasante', 'boolean', default=False, label=T('Cantidad Pasante')),
+    Field('per_preparador', 'boolean', label=T('Preparador')),
+    Field('cant_per_preparador', 'boolean', label=T('Cantidad Preparador')),
+    Field('per_obrero', 'boolean', default=False, label=T('Obrero')),
+    Field('cant_per_obrero', 'boolean', default=False, label=T('Cantidad Obrero')),
+    Field('per_otro', 'boolean', default=False, label=T('Otro')),
+    Field('per_otro_detalle', 'string', label=T('Otro, especifique')),
+
+    # Equipo que presta el Servicio
+    Field('equipo_presta_servicio', 'string', notnull=True, label=T('Equipo Presta Servicio')),
+
+    # Espacio Fisico donde se desarrolla el servicio
+    Field('esp_fis_servicio', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), 
+          label=T('Espacio Físico')),
+
+    # Insumos (requerimientos del servicio)
+    Field('insumos_servicio', 'string', notnull=True, label=T('Insumos del Servicio')),
+
+    # Ambiente para la ejecucion del servicio
+    Field('condicion_ambiental', 'boolean', default=False, label=T('Requiere?')),
+    Field('condicion_ambiental_detalle', 'string', label=T('Si requiere, especifique:'))
+
 )
 
 db.servicios._plural = 'Servicios'
@@ -166,8 +211,7 @@ db.define_table(
 #                     TABLA: HISTORIAL DE SERVICIOS
 #
 # Tabla de servicios solicitados ya ejecutados y certificados. 
-# Tabla final para una solicitud de servicio (Solicitud estado 3). 
-# Combinacion de las tablas de certificacion y solicitud.
+# Tabla final para una solicitud de servicio (Solicitud estado 3).
 #
 ##############################################################################
 

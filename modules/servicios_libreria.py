@@ -3,20 +3,29 @@ import random
 from difflib import SequenceMatcher
 #from fuzzywuzzy import fuzz
 
-#
-# Clase que permite tomar un record de la tabla servicios y realizar cada 
-# accion del CRUD de una manera rapida y ordenada
-#
-#------------------------------------------------------------------------------
-
 class Servicio(object):
+    """ Clase que permite tomar un record de la tabla servicios y realizar cada 
+    accion del CRUD de una manera rapida y ordenada
 
+    Inicialización con None es necesaria para que estos atributos 
+    puedan ser cargados con informacióm al momento de instanciar un objeto 
+    servicio con el método instanciar()
+    """    
     def __init__(self, db, nombre = None, tipo = None, categoria = None,
                  objetivo = None, alcance = None, metodo = None, rango = None,
                  incertidumbre = None, item_ensayar = None, requisitos = None,
-                 resultados = None, docencia = None, investigacion = None,
+                 entregaResultados=None,ensayoCalibracion=None,certificadoConformidadProducto=None,
+                 certificadoCalibracion=None,otro=None,
+                 docencia = None, investigacion = None,
                  gestion = None, extension = None, visibilidad = None,
-                 responsable = None, dependencia = None, ubicacion = None, id=None):
+                 responsable = None, dependencia = None, ubicacion = None, id=None,
+                 ambito_in_situ=None, ambito_en_campo=None, ambito_otro=None, 
+                 ambito_otro_detalle=None, per_tecnico=None, cant_per_tecnico=None, per_supervisor=None, 
+                 cant_per_supervisor=None, per_tesista=None, cant_per_tesista=None,  per_pasante=None,
+                 cant_per_pasante=None, per_preparador=None, cant_per_preparador=None, per_obrero=None, 
+                 cant_per_obrero=None, per_otro=None, per_otro_detalle=None, equipo_presta_servicio=None, 
+                 esp_fis_servicio=None, insumos_servicio=None, condicion_ambiental=None,
+                 condicion_ambiental_detalle=None):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -27,8 +36,14 @@ class Servicio(object):
         self.rango = rango
         self.incertidumbre = incertidumbre
         self.item_ensayar = item_ensayar
-        self.requisitos = requisitos
-        self.resultados = resultados
+        self.requisitos=requisitos
+
+        #Checklist de la lista de producto 
+        self.entregaResultados=entregaResultados
+        self.ensayoCalibracion=ensayoCalibracion
+        self.certificadoConformidadProducto=certificadoConformidadProducto
+        self.certificadoCalibracion=certificadoCalibracion
+        self.otro=otro
 
         self.docencia = docencia
         self.investigacion = investigacion
@@ -39,6 +54,23 @@ class Servicio(object):
         self.responsable = responsable
         self.dependencia = dependencia
         self.ubicacion = ubicacion
+
+        self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro,
+            ambito_otro_detalle)
+        
+        self.inicializar_per_requerido(per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+        per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+        per_obrero, cant_per_obrero, per_otro, per_otro_detalle)
+
+        self.equipo_presta_servicio = equipo_presta_servicio
+        self.esp_fis_servicio = esp_fis_servicio
+        self.insumos_servicio = insumos_servicio
+
+        self.condicion_ambiental = condicion_ambiental
+        self.condicion_ambiental_detalle = condicion_ambiental_detalle
+
+        self.inicializar_condicion_ambiental(condicion_ambiental, 
+            condicion_ambiental_detalle)
 
         # Categorias de Ordenamiento, disponibles tras instanciacion
         self.nombre_tipo = None
@@ -52,6 +84,42 @@ class Servicio(object):
 
         self.obtenerListaPropositos()
 
+    def inicializar_ambito(self, ambito_in_situ, ambito_en_campo, ambito_otro,
+        ambito_otro_detalle):
+        self.ambito_in_situ = ambito_in_situ
+        self.ambito_en_campo = ambito_en_campo
+        self.ambito_otro = ambito_otro
+        self.ambito_otro_detalle = ambito_otro_detalle
+
+        return True
+
+    def inicializar_condicion_ambiental(self, condicion_ambiental,
+        condicion_ambiental_detalle):
+        self.condicion_ambiental = condicion_ambiental
+        self.condicion_ambiental_detalle = condicion_ambiental_detalle
+
+        return True
+
+    def inicializar_per_requerido(self, per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+        per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+        per_obrero, cant_per_obrero, per_otro, per_otro_detalle):
+        self.per_tecnico = per_tecnico
+        self.cant_per_tecnico = cant_per_tecnico
+        self.per_supervisor = per_supervisor
+        self.cant_per_supervisor = cant_per_supervisor
+        self.per_tesista = per_tesista
+        self.cant_per_tesista = cant_per_tesista
+        self.per_pasante = per_pasante
+        self.cant_per_pasante = cant_per_pasante
+        self.per_preparador = per_preparador
+        self.cant_per_preparador = cant_per_preparador
+        self.per_obrero = per_obrero
+        self.cant_per_obrero = cant_per_obrero
+        self.per_otro = per_otro
+        self.per_otro_detalle = per_otro_detalle
+
+        return True
+
     def __str__(self):
 
         return self.nombre
@@ -63,11 +131,27 @@ class Servicio(object):
             tipo = self.tipo, categoria = self.categoria, objetivo = self.objetivo.upper(),
             alcance = self.alcance.upper(), metodo = self.metodo.upper(), rango = self.rango.upper(),
             incertidumbre = self.incertidumbre.upper(), item_ensayar = self.item_ensayar.upper(),
-            requisitos = self.requisitos.upper(), resultados = self.resultados.upper(),
+            requisitos = self.requisitos.upper(), 
+            entregaResultados=self.entregaResultados,ensayoCalibracion=self.ensayoCalibracion,
+            certificadoConformidadProducto=self.certificadoConformidadProducto,
+            certificadoCalibracion=self.certificadoCalibracion,otro=self.otro,
             docencia = self.docencia, investigacion = self.investigacion,
             gestion = self.gestion, extension = self.extension,
             visibilidad = self.visibilidad, responsable = self.responsable,
-            dependencia = self.dependencia, ubicacion = self.ubicacion)
+            dependencia = self.dependencia, ubicacion = self.ubicacion,
+            ambito_in_situ=self.ambito_in_situ, ambito_en_campo=self.ambito_en_campo,
+            ambito_otro=self.ambito_otro, ambito_otro_detalle=self.ambito_otro_detalle, 
+            per_tecnico=self.per_tecnico, cant_per_tecnico=self.cant_per_tecnico, 
+            per_supervisor=self.per_supervisor, cant_per_supervisor=self.cant_per_supervisor,
+            per_tesista=self.per_tesista, cant_per_tesista=self.cant_per_tesista,
+            per_pasante=self.per_pasante, cant_per_pasante=self.per_pasante,
+            per_preparador=self.per_preparador, cant_per_preparador=self.cant_per_preparador,
+            per_obrero=self.per_obrero, cant_per_obrero=self.cant_per_obrero, per_otro=self.per_otro, 
+            per_otro_detalle=self.per_otro_detalle, equipo_presta_servicio=self.equipo_presta_servicio,
+            esp_fis_servicio=self.esp_fis_servicio, insumos_servicio=self.insumos_servicio,
+            condicion_ambiental=self.condicion_ambiental, 
+            condicion_ambiental_detalle=self.condicion_ambiental_detalle
+            )
 
         return insercion
 
@@ -88,7 +172,13 @@ class Servicio(object):
             self.incertidumbre = instanciacion[0].incertidumbre
             self.item_ensayar = instanciacion[0].item_ensayar
             self.requisitos = instanciacion[0].requisitos
-            self.resultados = instanciacion[0].resultados
+
+            self.entregaResultados=instanciacion[0].entregaResultados
+            self.ensayoCalibracion=instanciacion[0].ensayoCalibracion
+            self.certificadoConformidadProducto=instanciacion[0].certificadoConformidadProducto
+            self.certificadoCalibracion=instanciacion[0].certificadoCalibracion
+            self.otro=instanciacion[0].otro
+
             self.docencia = instanciacion[0].docencia
             self.investigacion = instanciacion[0].investigacion
             self.gestion = instanciacion[0].gestion
@@ -97,6 +187,16 @@ class Servicio(object):
             self.responsable = instanciacion[0].responsable
             self.dependencia = instanciacion[0].dependencia
             self.ubicacion = instanciacion[0].ubicacion
+
+            self.instanciacion_ambito(instanciacion[0])
+
+            self.instanciacion_per_requerido(instanciacion[0])
+
+            self.equipo_presta_servicio = instanciacion[0].equipo_presta_servicio
+            self.esp_fis_servicio = instanciacion[0].esp_fis_servicio
+            self.insumos_servicio = instanciacion[0].insumos_servicio
+
+            self.instanciacion_condicion_ambiental(instanciacion[0])
 
             self.conseguir_categorias()
 
@@ -108,11 +208,44 @@ class Servicio(object):
 
             return False
 
+    def instanciacion_ambito(self, instancia):
+        self.ambito_in_situ = instancia.ambito_in_situ
+        self.ambito_en_campo = instancia.ambito_en_campo
+        self.ambito_otro = instancia.ambito_otro
+        self.ambito_otro_detalle = instancia.ambito_otro_detalle
+
+    def instanciacion_condicion_ambiental(self, instancia):
+        self.condicion_ambiental = instancia.condicion_ambiental
+        self.condicion_ambiental_detalle = instancia.condicion_ambiental_detalle
+
+    def instanciacion_per_requerido(self, instancia):
+        self.per_tecnico = instancia.per_tecnico
+        self.cant_per_tecnico = instancia.cant_per_tecnico
+        self.per_supervisor = instancia.per_supervisor
+        self.cant_per_supervisor = instancia.cant_per_supervisor
+        self.per_tesista = instancia.per_tesista
+        self.cant_per_tesista = instancia.cant_per_tesista
+        self.per_pasante = instancia.per_pasante
+        self.cant_per_pasante = instancia.cant_per_pasante
+        self.per_preparador = instancia.per_preparador
+        self.cant_per_preparador = instancia.cant_per_preparador
+        self.per_obrero = instancia.per_obrero
+        self.cant_per_obrero = instancia.cant_per_obrero
+        self.per_otro = instancia.per_otro
+        self.per_otro_detalle = instancia.per_otro_detalle
 
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
-               rango, incertidumbre, item_ensayar, requisitos, resultados,
+               rango, incertidumbre, item_ensayar, requisitos, entregaResultados,
+               ensayoCalibracion,certificadoConformidadProducto,
+               certificadoCalibracion,otro,
                docencia, investigacion, gestion, extension, visibilidad,
-               responsable, dependencia, ubicacion):
+               responsable, dependencia, ubicacion, ambito_in_situ, ambito_en_campo,
+               ambito_otro, ambito_otro_detalle, per_tecnico, cant_per_tecnico, per_supervisor, 
+               cant_per_supervisor, per_tesista, cant_per_tesista,  per_pasante,
+               cant_per_pasante, per_preparador, cant_per_preparador, per_obrero, 
+               cant_per_obrero, per_otro, per_otro_detalle, equipo_presta_servicio, 
+               esp_fis_servicio, insumos_servicio, condicion_ambiental,
+               condicion_ambiental_detalle):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -124,7 +257,27 @@ class Servicio(object):
         self.incertidumbre = incertidumbre
         self.item_ensayar = item_ensayar
         self.requisitos = requisitos
-        self.resultados = resultados
+
+        self.entregaResultados=entregaResultados
+        self.ensayoCalibracion=ensayoCalibracion
+        self.certificadoConformidadProducto=certificadoConformidadProducto
+        self.certificadoCalibracion=certificadoCalibracion
+        self.otro=otro
+
+        self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro, 
+            ambito_otro_detalle)
+
+        self.inicializar_per_requerido(per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+            per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+            per_obrero, cant_per_obrero, per_otro, per_otro_detalle)
+
+        self.equipo_presta_servicio = equipo_presta_servicio
+        self.esp_fis_servicio = esp_fis_servicio
+        self.insumos_servicio = insumos_servicio
+
+        self.inicializar_condicion_ambiental(condicion_ambiental, 
+            condicion_ambiental_detalle)
+
         self.docencia = docencia
         self.investigacion = investigacion
         self.gestion = gestion
@@ -150,7 +303,13 @@ class Servicio(object):
                             incertidumbre = self.incertidumbre.upper(),
                             item_ensayar = self.item_ensayar.upper(),
                             requisitos = self.requisitos.upper(),
-                            resultados = self.resultados.upper(),
+
+                            entregaResultados=self.entregaResultados,
+                            ensayoCalibracion=self.ensayoCalibracion,
+                            certificadoConformidadProducto=self.certificadoConformidadProducto,
+                            certificadoCalibracion=self.certificadoCalibracion,
+                            otro=self.otro,
+
                             docencia = self.docencia,
                             investigacion = self.investigacion,
                             gestion = self.gestion,
@@ -158,19 +317,42 @@ class Servicio(object):
                             visibilidad = self.visibilidad,
                             responsable = self.responsable,
                             dependencia = self.dependencia,
-                            ubicacion = self.ubicacion)
+                            ubicacion = self.ubicacion,
+                            ambito_in_situ=self.ambito_in_situ, 
+                            ambito_en_campo=self.ambito_en_campo,
+                            ambito_otro=self.ambito_otro,
+                            ambito_otro_detalle=self.ambito_otro_detalle,
+                            per_tecnico = self.per_tecnico,  
+                            cant_per_tecnico = self.cant_per_tecnico,
+                            per_supervisor = self.per_supervisor,
+                            cant_per_supervisor = self.cant_per_supervisor, 
+                            per_tesista = self.per_tesista, 
+                            cant_per_tesista = self.cant_per_tesista, 
+                            per_pasante = self.per_pasante, 
+                            cant_per_pasante = self.cant_per_pasante, 
+                            per_preparador = self.per_preparador,
+                            cant_per_preparador = self.cant_per_preparador, 
+                            per_obrero = self.per_obrero, 
+                            cant_per_obrero = self.cant_per_obrero, 
+                            per_otro = self.per_otro,  
+                            per_otro_detalle = self.per_otro_detalle, 
+                            equipo_presta_servicio = self.equipo_presta_servicio,
+                            esp_fis_servicio = self.esp_fis_servicio,
+                            insumos_servicio = self.insumos_servicio,
+                            condicion_ambiental = self.condicion_ambiental,
+                            condicion_ambiental_detalle = self.condicion_ambiental_detalle)
 
         return actualizacion
 
     def conseguir_categorias(self):
-        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre
-        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre
+        self.nombre_tipo = self.db(self.tipo == self.db.tipos_servicios.id).select(self.db.tipos_servicios.ALL)[0].nombre.decode('utf-8')
+        self.nombre_categoria = self.db(self.categoria == self.db.categorias_servicios.id).select(self.db.categorias_servicios.ALL)[0].nombre.decode('utf-8')
 
         seccion_fila = self.db(self.dependencia == self.db.dependencias.id).select(self.db.dependencias.ALL)[0]
 
-        self.seccion = seccion_fila.nombre
-        self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
-        self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre
+        self.seccion = seccion_fila.nombre.decode('utf-8')
+        self.laboratorio = self.db(seccion_fila.unidad_de_adscripcion == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre.decode('utf-8')
+        self.sede = self.db(seccion_fila.id_sede == self.db.sedes.id).select(self.db.sedes.ALL)[0].nombre.decode('utf-8')
 
         self.id_jefe_dependencia = seccion_fila.id_jefe_dependencia
 
@@ -200,6 +382,7 @@ class Servicio(object):
             propositoServicio = self.db("Gestión" == self.db.propositos.tipo).select(self.db.propositos.ALL)[0]
             self.propositos_a_mostrar.append(propositoServicio)
 
+
     def checkear_tags(self, tags, string):
         for tag in tags:
             string_compare = getattr(self, tag).decode('utf-8').upper()
@@ -218,9 +401,7 @@ class Servicio(object):
             print(ratio_str, string, string_compare)
 
         print("NO MATCH")
-        return False
-
-
+        return False   
 
 
 #------------------------------------------------------------------------------
@@ -403,6 +584,7 @@ class ListaServicios(object):
 
 
         return servicios_categoria_tipo
+
 
     # Estas pueden ser nombre, nombre_tipo, nombre_columna, laboratorio, seccion, sede
     def filtrar_por_tags(self, filtro, tags=None):
@@ -775,7 +957,7 @@ class Solicitud(object):
         numero_registro = self.registro 
 
         if estado_solicitud == 2:
-            correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Servicio solicitado: %s<p><p>Dependencia del solicitante: %s</p><p>Jefe de la dependencia del solicitante: %s</p><p>Responsable de la solicitud: %s</p><p>Email del respponsable de la solicitud: %s</p><p>Telf. del responsable de la solicitud: %d</p><p>Categoría del servicio: %s</p><p>Tipo del servicio: %s</p><p>Propósito del servicio: %s<p>Descripción del propósito del servicio: %s</p><p>Descripción del servicio: %s</p><p>Dependencia ejecutora del servicio: %s</p><p>Jefe de la dependencia ejecutora del servicio: %s</p><p>Observaciones: %s</p><p>Solicitud elaborada por: %s</p><p>Fecha de elaboración de la solicitud: %s</p><p>Solicitud aprobada por: %s</p><p>Fecha de aprobación de la solicitud: %s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_servicio, nombre_dependencia_solicitante, nombre_jefe_dependencia_solicitante, nombre_solicitante, email_solicitante, extensiones_solicitante, categoria_servicio, tipo_servicio, proposito_servicio, descripcion_proposito_servicio, descripcion_servicio, nombre_dependencia_ejecutora, nombre_jefe_dependencia_ejecutora, observaciones_solicitud, solicitud_elaborada_por, fecha_elaboracion_solicitud, solicitud_aprobada_por, fecha_aprobacion_solicitud)
+            correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>A continuación se encuentran los datos del servicio que solicitó:</p><p>Servicio solicitado: %s</p><p>Dependencia del solicitante: %s</p><p>Jefe de la dependencia del solicitante: %s</p><p>Responsable de la solicitud: %s</p><p>Email del respponsable de la solicitud: %s</p><p>Telf. del responsable de la solicitud: %d</p><p>Categoría del servicio: %s</p><p>Tipo del servicio: %s</p><p>Propósito del servicio: %s<p>Descripción del propósito del servicio: %s</p><p>Descripción del servicio: %s</p><p>Dependencia ejecutora del servicio: %s</p><p>Jefe de la dependencia ejecutora del servicio: %s</p><p>Observaciones: %s</p><p>Solicitud elaborada por: %s</p><p>Fecha de elaboración de la solicitud: %s</p><p>Solicitud aprobada por: %s</p><p>Fecha de aprobación de la solicitud: %s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_servicio, nombre_dependencia_solicitante, nombre_jefe_dependencia_solicitante, nombre_solicitante, email_solicitante, extensiones_solicitante, categoria_servicio, tipo_servicio, proposito_servicio, descripcion_proposito_servicio, descripcion_servicio, nombre_dependencia_ejecutora, nombre_jefe_dependencia_ejecutora, observaciones_solicitud, solicitud_elaborada_por, fecha_elaboracion_solicitud, solicitud_aprobada_por, fecha_aprobacion_solicitud)
 
             asunto = numero_registro + ' [SIGULAB] ' + 'Solicitud de Servicio'
 
@@ -783,7 +965,6 @@ class Solicitud(object):
 
 
     def correoCertificacionFinalizada(self):
-        print('hola')
         estado_solicitud = self.estado_solicitud
         email_jefe_dependencia = self.usuario_jefe_dependencia_ejecutora.email
         nombre_solicitante = self.nombre_responsable_solicitud
@@ -798,7 +979,6 @@ class Solicitud(object):
         numero_registro = self.registro 
 
         if estado_solicitud == 3:
-            print('chao')
             correo = '<html><head><meta charset="UTF-8"></head><body><table><tr><td><p>Quien suscribe, %s (%s), como responsable de la %s, certifico la conformidad con el(los) trabajo(s) realizado(s) por el/la %s, correspondiente a la Solicitud/orden de servicio identificado como %s, de fecha %s.</p><br><p>%s</p><br><p>%s</p><br><p>Para imprimir el PDF diríjase a la página web <a href="159.90.171.24">SIGULAB</a></p></td></tr></table></body></html>' % (nombre_solicitante, email_solicitante, nombre_dependencia_solicitante, nombre_dependencia_ejecutora, registro, fecha_solicitud, nombre_solicitante, nombre_dependencia_solicitante)
 
             asunto = numero_registro + ' [SIGULAB] ' + 'Certificación de Servicio'
@@ -1160,10 +1340,6 @@ class Historial(object):
             self.numero_de_proyecto = instanciacion[0].numero_de_proyecto
             self.adscripcion_dependencia_solicitante = instanciacion[0].adscripcion_dependencia_solicitante
             self.adscripcion_dependencia_ejecutora = instanciacion[0].adscripcion_dependencia_ejecutora   
-
-
-    
-
 
             return True
         else:

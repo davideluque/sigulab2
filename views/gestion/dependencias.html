@@ -1,5 +1,13 @@
 {{extend 'layout.html'}}
-        {{block center}}
+{{block head}}
+  <link rel="stylesheet" href="{{=URL('static', 'css/web2py.css')}}">
+
+    <!-- All JavaScript at the bottom, except for Modernizr which enables
+         HTML5 elements & feature detects -->
+    <script src="{{=URL('static', 'js/modernizr-2.8.3.min.js')}}"></script>
+{{end block}}
+
+{{block center}}
 <body>
 <!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
@@ -11,8 +19,6 @@
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 <!-- Inicio Listado -->
-<div class="container" id="listadoContainer">
 {{=table}}
-</div>
 </body>
 {{end block}}

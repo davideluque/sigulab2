@@ -1,9 +1,11 @@
-html {
-	background-color: white !important;
-}
-
 body {
-	background-color: white !important;
+	background: linear-gradient(
+	rgba(20,20,20, 0.5), 
+	rgba(20,20,20, 0.5)), url("../images/background.jpg") center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
 	padding-bottom:0px !important;
 } 
 
@@ -16,7 +18,8 @@ body {
 }
 
 #boxLogin {
-	margin-top: 150px !important;
+	margin-top: 50px !important;
+	opacity: 0.9;
 }
 
 #boxRegister {
@@ -24,7 +27,7 @@ body {
 }
 
 #boxResetPassword {
-	margin-top: 250px !important;
+	margin-top: 120px !important;
 }
 
 #titulo {
@@ -55,8 +58,7 @@ body {
 	margin-bottom: 0px !important;
 }
 
-.erroresLogin{
+.authdiv{
 	color:white;
-	list-style-type: none;
 	padding-left:0px;
 }

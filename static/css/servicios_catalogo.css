@@ -2,6 +2,10 @@
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
 
+a {
+  cursor: pointer;
+}
+
 body {
   color: #5a5a5a;
 }
@@ -46,7 +50,8 @@ body {
 
 #ulab {
     height: 80px;
-    margin-top: 110px;
+    margin-top: 60px;
+    margin-right: 15px;
 }
 
 .columnasIzq {
