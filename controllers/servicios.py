@@ -407,16 +407,25 @@ def certificaciones():
         solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
+
+    #----- GENERACION DE LISTADOS -----#
+
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Ejecutante")
+
   
-    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
-        sedes=listar_sedes(db))
+    return dict(certificaciones_a_generar=listado_de_certificaciones_a_generar.filas,
+                certificaciones_a_recibir=listado_de_certificaciones_a_recibir.filas,
+                categorias=listar_categorias(db), tipos=listar_tipos(db), sedes=listar_sedes(db))
 
 
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-    print(auth.user.email)
-    return dict()
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+    
+    return dict(listado_de_solicitudes=listado_de_solicitudes.filas)
 
 def detallesServicios():
 
