@@ -20,6 +20,15 @@
 	padding-top: 10px;
 }
 
+.modal-header.fichaHeaderCatalogo {
+	height: 50px;
+	background-color: #6887c9 !important;
+	color: white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding-top: 10px;
+}
+
 #iconoFicha {
 	width: 30px;
 }
