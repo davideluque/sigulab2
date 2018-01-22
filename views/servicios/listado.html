@@ -54,12 +54,12 @@
 <div class="container">
 <div class="row">
   <h3> Listado de Servicios </h3>
-  <!-- Filtrado -->
-    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn botonesFichita">Filtrado</button>
-    <br><br>
-  <!-- Filtrado -->
 
-    <div id="buttons"></div>
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
     <br>
 
     <div class="table-responsive no-padding no-margin">
@@ -72,7 +72,9 @@
                 <th class="camposTabla linksNombres">Dependencia</th>
                 <th class="camposTabla linksNombres">U. de Adscripción</th>
                 <th class="camposTabla linksNombres">Sede</th>
+                {{if rol == 2:}}
                 <th class="camposTabla linksNombres">Visibilidad</th>
+                {{pass}}
             </tr>
         </thead>
 
@@ -102,7 +104,9 @@
                 <th class="camposTabla linksNombres">Dependencia</th>
                 <th class="camposTabla linksNombres">U. de Adscripción</th>
                 <th class="camposTabla linksNombres">Sede</th>
+                {{if rol == 2:}}
                 <th class="camposTabla linksNombres">Visibilidad</th>
+                {{pass}}
             </tr>
         </tfoot>
 
