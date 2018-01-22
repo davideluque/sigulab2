@@ -189,7 +189,6 @@ def listado():
         db(db.t_Personal.f_ci == ced).delete()
         redirect(URL('listado'))
 
-
     return dict(gridedit = edic, editar = editar, grid= tabla, categorias = cat,dependencias = dep, estados = est)
 
 def reporte():
