@@ -63,7 +63,13 @@
 		  		</tr>
 		  		<tr>
 		  			<td>Ámbito de Aplicación:</td>
-		  			<td><p><i {{if ficha['ambito_in_situ']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> In Situ</p><p><i {{if ficha['ambito_en_campo']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> En Campo</p><p><i {{if ficha['ambito_otro']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i> Otro{{if ficha['ambito_otro']:}}: {{=ficha['ambito_otro_detalle'].upper()}}{{pass}}</p></td>
+		  			<td>
+		  				<p><i {{if ficha['ambito_in_situ']:}} class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> In Situ</p>
+
+		  				<p><i {{if ficha['ambito_en_campo']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> En Campo</p>
+
+		  				<p><i {{if ficha['ambito_otro']:}} class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Otro{{if ficha['ambito_otro']:}}: {{=ficha['ambito_otro_detalle'].upper()}}{{pass}}</p>
+		  			</td>
 		  		</tr>		  		
 		  	</tbody>
 	  	</table>
@@ -117,9 +123,38 @@
 	  <div class="tab-pane" id="recursos" role="tabpanel">
 	  	<table class="table contenidoFicha">
 	  		<tbody>
+	  			<tr>
+		  			<td>Personal Requerido:</td>
+		  			<td>
+		  				<p><i {{if ficha['per_tecnico']:}} class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Técnico</p>
+
+		  				<p><i {{if ficha['per_supervisor']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Supervisor</p>
+
+		  				<p><i {{if ficha['per_tesista']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Tesista</p>
+
+		  				<p><i {{if ficha['per_pasante']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Pasante</p>
+
+		  				<p><i {{if ficha['per_preparador']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Preparador</p>
+
+		  				<p><i {{if ficha['per_obrero']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Obrero</p>
+
+		  				<p><i {{if ficha['per_otro']:}}class="fa fa-check-square text-success"{{else:}} class="fa fa-square"{{pass}} aria-hidden="true"></i> Otro{{if ficha['per_otro']:}}:{{=ficha['per_otro_detalle'].upper()}}{{pass}}</p>
+		  			</td>
+		  		</tr>	
+		  		
 		  		<tr>
-		  			<td>En Construcción</td>
-		  			<td>En Construcción</td>	  			
+		  			<td>Equipos Requeridos:</td><td>{{=ficha['entrada'][0].equipo_presta_servicio.upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Insumos:</td><td>{{=ficha['entrada'][0].insumos_servicio.upper()}}</td>
+		  		</tr>
+		  		<tr>
+		  			<td>Condicion Ambiental:</td>
+
+		  			<td>
+		  				<p><i {{if ficha['condicion_ambiental']:}}class="fa fa-check-square text-success"{{else:}}class="fa fa-square"{{pass}} aria-hidden="true"></i>{{if ficha['condicion_ambiental']:}} Si requiere{{else:}} No requiere{{pass}}{{if ficha['condicion_ambiental']:}}: {{=ficha['condicion_ambiental_detalle'].upper()}}{{pass}}</p>
+		  			</td>
+
 		  		</tr>
 		  	</tbody>
 	  	</table>	  	

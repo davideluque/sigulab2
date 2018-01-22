@@ -54,12 +54,12 @@
 <div class="container">
 <div class="row">
   <h3> Listado de Servicios </h3>
-  <!-- Filtrado -->
-    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn botonesFichita">Filtrado</button>
-    <br><br>
-  <!-- Filtrado -->
 
-    <div id="buttons"></div>
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
     <br>
 
     <div class="table-responsive no-padding no-margin">
@@ -72,7 +72,9 @@
                 <th class="camposTabla linksNombres">Dependencia</th>
                 <th class="camposTabla linksNombres">U. de Adscripción</th>
                 <th class="camposTabla linksNombres">Sede</th>
+                {{if rol == 2:}}
                 <th class="camposTabla linksNombres">Visibilidad</th>
+                {{pass}}
             </tr>
         </thead>
 
@@ -102,7 +104,9 @@
                 <th class="camposTabla linksNombres">Dependencia</th>
                 <th class="camposTabla linksNombres">U. de Adscripción</th>
                 <th class="camposTabla linksNombres">Sede</th>
+                {{if rol == 2:}}
                 <th class="camposTabla linksNombres">Visibilidad</th>
+                {{pass}}
             </tr>
         </tfoot>
 
@@ -168,6 +172,7 @@
                               <span class="step">3</span>
                               <span class="step">4</span>             
                               <span class="step">5</span>
+                              <span class="step">6</span> 
                             </div>
                           <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -194,7 +199,7 @@
 		                        {{pass}}
                               </select>
                             </div>
-                            <div class="form-group" >
+                            <div class="form-group" style="padding-bottom: 50px">
                               <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Función*</h6>
                               <div class="checkbox">
                                 <label><input type="checkbox" id="checkbox1" name="docenciaServicio" value="True" >Docencia</label>
@@ -225,6 +230,7 @@
                             <span class="step">3</span>
                             <span class="step">4</span> 
                             <span class="step">5</span>
+                            <span class="step">6</span> 
                           </div>
 
                           <!-- Aqui va la informacion -->
@@ -281,6 +287,7 @@
                           <span class="step activePass">3</span>
                           <span class="step">4</span> 
                           <span class="step">5</span>
+                          <span class="step">6</span> 
                         </div>
                         
                         <!-- Aqui va la informacion -->
@@ -338,6 +345,7 @@
                           <span class="step ready">3</span>
                           <span class="step activePass">4</span> 
                           <span class="step">5</span>
+                          <span class="step">6</span> 
                         </div>
 
                       <!-- Aqui va la informacion -->
@@ -346,10 +354,12 @@
                           <div class="form-group">
                             <input type="text" class="form-control" id="item_ensayar" name="itemServicio" placeholder="Item a ensayar*">
                           </div>
+                          <br>
                           <div class="form-group">
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
                           </div>
-                          <div class="form-group" >
+                          
+                          <div class="form-group"  style="padding-bottom: 50px">
                             <h6 id="producto" style="margin-top: 25px; font-size: 15px;">Producto*</h6>
                             <div class="checkbox">
                               <label><input type="checkbox" id="checkbox5" name="entregadeResultadosServicio" value="True" >Entrega de Resultados</label>
@@ -385,6 +395,7 @@
                           <span class="step ready">3</span>
                           <span class="step ready">4</span> 
                           <span class="step activePass">5</span>
+                          <span class="step">6</span> 
                         </div>
 
                       <!-- Aqui va la informacion -->
@@ -400,8 +411,90 @@
                             <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
                           </div> -->
 
+                          <!-- Personal Requerido -->
                           <div class="form-group" >
-                            <h6 id="SOON" style="margin-top: 25px; font-size: 15px;">En Construcción</h6>
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Personal Requerido*</h6>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tecnico" value="True">Técnico</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_supervisor" value="True">Supervisor</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tesista" value="True">Tesista</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_pasante" value="True">Pasante</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_preparador" value="True">Preparador</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_obrero" value="True">Obrero</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="checkbox_per_otro" name="per_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))">Otro</label>
+                              </div>
+
+                              <input type="text" class="form-control" style="display:none;" id="input_per_otro_detalle" name="per_otro_detalle" placeholder="Otro, especifique:*" value=" ">
+                          </div>
+
+                          <!-- Equipo que presta servicio -->
+                          <div class="form-group">
+                            <label>Equipos Requeridos*</label>
+                            <textarea class="form-control" name="equipo_presta_servicio" placeholder="Nombre / Bien Nacional" required></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>                     
+                    </fieldset>
+                    <!-- Fin Quinto Paso -->
+
+                    <!-- Sexto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span>
+                          <span class="step ready">5</span> 
+                          <span class="step activePass">6</span>
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+
+                        <h4 class="titulosForm">Recursos Continuación</h4>
+
+                          <!-- Insumos -->
+                          <div class="form-group">
+                            <label>Insumos*</label>
+                            <textarea class="form-control" name="insumos_servicio" placeholder="Materiales que se requieren para la ejecución del servicio" required></textarea>
+                          </div>
+
+                          <!-- Condicion Ambiental -->
+                          <div class="form-group" >
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Condicion Ambiental*</h6>
+
+                              <div class="radio">
+                                <label><input type="radio" id="radio_condicion_ambiental" name="condicion_ambiental" value="True" onclick="cambiar_estado_condicion_ambiental('True', $(this).attr('id'))">Si requiere</label>
+                              </div>
+                              
+                              <div class="radio">
+                                <label><input type="radio" id="radio_condicion_ambiental" name="condicion_ambiental" value="False" onclick="cambiar_estado_condicion_ambiental('False', $(this).attr('id'))">No requiere</label>
+                              </div>
+
+                              <input type="text" class="form-control" style="display:none;" id="input_radio_condicion_ambiental" name="condicion_ambiental_detalle" placeholder="Si requiere, especifique:*" value=" ">
                           </div>
 
                         </div>
@@ -409,7 +502,7 @@
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
                     </fieldset>
-                    <!-- Fin Quinto Paso -->
+                    <!-- Fin Sexto Paso -->
 
                 </form>
             </div>
@@ -472,7 +565,8 @@
                           <span class="step">2</span>
                           <span class="step">3</span>
                           <span class="step">4</span>             
-                          <span class="step">5</span>             
+                          <span class="step">5</span>
+                          <span class="step">6</span>              
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -507,7 +601,7 @@
                               <div class="checkbox">
                                 <label><input type="checkbox" id="checkbox3e" name="extensionServicio" value="True" {{if editar[0].extension:}} checked {{pass}}>Extensión</label>
                               </div>
-                              <div class="checkbox">
+                              <div class="checkbox" style="padding-bottom: 50px">
                                 <label><input type="checkbox" id="checkbox4e" name="gestionServicio" value="True" {{if editar[0].gestion:}} checked {{pass}}>Gestión</label>
                               </div>
                             </div>
@@ -527,6 +621,7 @@
                             <span class="step">3</span>
                             <span class="step">4</span> 
                             <span class="step">5</span>
+                            <span class="step">6</span> 
                           </div>
 
                           <!-- Aqui va la informacion -->
@@ -564,7 +659,7 @@
                               </div>
                               
                               <div class="form-group">
-                                <input type="text" {{if not editar[0].ambito_otro:}}style="display:none;" placeholder="Otro, Especifique:*" value=" "{{else:}}value="{{=editar[0].ambito_otro_detalle}}"{{pass}} class="form-control" id="editar_input_ambito_otro_detalle" name="ambito_otro_detalle" >
+                                <input type="text" {{if not editar[0].ambito_otro:}} style="display:none;" placeholder="Otro, Especifique:*" value=" "{{else:}} value="{{=editar[0].ambito_otro_detalle}}"{{pass}} class="form-control" id="editar_input_ambito_otro_detalle" name="ambito_otro_detalle" >
                               </div>
                           </div>
 
@@ -584,14 +679,13 @@
                           <span class="step">2</span>
                           <span class="step activePass">3</span>
                           <span class="step">4</span>
-                          <span class="step">5</span> 
+                          <span class="step">5</span>
+                          <span class="step">6</span>  
                         </div>
                         
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Responsable y Área</h4>
-
-
 
                           <div class="form-group">
 
@@ -644,7 +738,8 @@
                           <span class="step">2</span>
                           <span class="step">3</span>
                           <span class="step activePass">4</span>
-                          <span class="step">5</span> 
+                          <span class="step">5</span>
+                          <span class="step">6</span>  
                         </div>
 
                       <!-- Aqui va la informacion -->
@@ -688,32 +783,122 @@
                       <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
-                          <span class="step">1</span>
-                          <span class="step">2</span>
-                          <span class="step">3</span>
-                          <span class="step">4</span>
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span> 
                           <span class="step activePass">5</span>
+                          <span class="step">6</span> 
                         </div>
 
                       <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body" >
+
                         <h4 class="titulosForm">Recursos</h4>
-                          
+
+<!--                           <div class="form-group">
+                            <input type="text" class="form-control" id="item_ensayar" name="itemServicio" placeholder="Item a ensayar*">
+                          </div>
+
                           <div class="form-group">
-                            <h6 id="SOON" style="margin-top: 25px; font-size: 15px;">En Construción</h6>
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
+                          </div> -->
+
+                          <!-- Personal Requerido -->
+                          <div class="form-group" >
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Personal Requerido*</h6>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tecnico" value="True"{{if editar[0].per_tecnico:}} checked {{pass}}>Técnico</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_supervisor" value="True" {{if editar[0].per_supervisor:}} checked {{pass}}>Supervisor</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tesista" value="True" {{if editar[0].per_tesista:}} checked {{pass}}>Tesista</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_pasante" value="True" {{if editar[0].per_pasante:}} checked {{pass}}>Pasante</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_preparador" value="True" {{if editar[0].per_preparador:}} checked {{pass}}>Preparador</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_obrero" value="True" {{if editar[0].per_obrero:}} checked {{pass}}>Obrero</label>
+                              </div>
+                              
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="editar_checkbox_per_otro" name="per_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))" {{if editar[0].per_otro:}} checked {{pass}}>Otro</label>
+                              </div>
+
+                              <input type="text" class="form-control" {{if not editar[0].per_otro:}} style="display:none;" name="per_otro_detalle" placeholder="Otro, Especifique:*" value=" " {{else:}} value="{{=editar[0].per_otro_detalle}}"{{pass}}  id="editar_input_per_otro_detalle">
+                          </div>
+
+                          <!-- Equipo que presta servicio -->
+                          <div class="form-group">
+                            <label>Equipos Requeridos*</label>
+                            <textarea class="form-control" name="equipo_presta_servicio" value="{{=editar[0].equipo_presta_servicio}}" required>{{=editar[0].equipo_presta_servicio}}</textarea>
+                          </div>
                         </div>
-
                       </div>
-                      
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
-                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button> 
-
+                      <button type="button" class="btn btn-next botonForm">Siguiente</button>                     
                     </fieldset>
                     <!-- Fin Quinto Paso -->
 
+                    <!-- Sexto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span>
+                          <span class="step ready">5</span> 
+                          <span class="step activePass">6</span>
+                        </div>
 
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
 
+                        <h4 class="titulosForm">Recursos Continuación</h4>
+
+                          <!-- Insumos -->
+                          <div class="form-group">
+                            <label>Insumos*</label>
+                            <textarea class="form-control" name="insumos_servicio" value="{{=editar[0].insumos_servicio}}" required>{{=editar[0].insumos_servicio}}</textarea>
+                          </div>
+
+                          <!-- Condicion Ambiental -->
+                          <div class="form-group" >
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Condicion Ambiental*</h6>
+
+                              <div class="radio">
+                                <label><input type="radio" id="editar_radio_condicion_ambiental" name="condicion_ambiental" value="True" onclick="cambiar_estado_condicion_ambiental('True', $(this).attr('id'))" {{if editar[0].condicion_ambiental:}} checked {{pass}}>Si requiere</label>
+                              </div>
+                              
+                              <div class="radio">
+                                <label><input type="radio" id="editar_radio_condicion_ambiental" name="condicion_ambiental" value="False" onclick="cambiar_estado_condicion_ambiental('False', $(this).attr('id'))" {{if not editar[0].condicion_ambiental:}} checked {{pass}}>No requiere</label>
+                              </div>
+
+                              <input type="text" class="form-control" id="editar_input_radio_condicion_ambiental" name="condicion_ambiental_detalle" {{if not editar[0].condicion_ambiental:}} style="display:none;" placeholder="Si requiere, especifique:" value=" " {{else:}} value="{{=editar[0].condicion_ambiental_detalle}}"{{pass}}>
+                          </div>
+
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <input type="hidden" name="idServicioEdit" value="{{=editar[0].id}}"></input>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" >Guardar Cambios</button>                    
+                    </fieldset>
+                    <!-- Fin Sexto Paso -->
+                    
                 </form>
             </div>
           </div>               
@@ -733,6 +918,9 @@
 <input type="hidden" id="dependencia" name="dependencia" value="">
 <!-- Ajax getResp--> 
 <input type="hidden" id="ubicacion" name="ubicacion" value="">
+<!-- Ajax getEspFis -->
+
+
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -908,6 +1096,47 @@
         $("#editar_input_ambito_otro_detalle").hide();
         $("#editar_input_ambito_otro_detalle").val(' ');
         $("#editar_input_ambito_otro_detalle").attr("placeholder", "Otro, Especifique:*");
+      }   
+    }
+    else if (id == 'checkbox_per_otro'){
+      if (is_otro_checked){
+        $("#input_per_otro_detalle").show();
+      }
+      else{
+        $("#input_per_otro_detalle").hide();
+        $("#input_per_otro_detalle").val(' ');
+      }      
+    }
+    else if (id == 'editar_checkbox_per_otro'){
+      if (is_otro_checked){
+        $("#editar_input_per_otro_detalle").show();
+      }
+      else{
+        $("#editar_input_per_otro_detalle").hide();
+        $("#editar_input_per_otro_detalle").val(' ');
+        $("#editar_input_per_otro_detalle").attr("placeholder", "Otro, Especifique:*");
+      }   
+    }
+  }
+
+  function cambiar_estado_condicion_ambiental(is_otro_checked, id){
+    if (id == 'radio_condicion_ambiental'){
+      if (is_otro_checked == "True"){
+        $("#input_radio_condicion_ambiental").show();
+      }
+      else{
+        $("#input_radio_condicion_ambiental").hide();
+        $("#input_radio_condicion_ambiental").val(' ');
+      }
+    }
+    else if (id == 'editar_radio_condicion_ambiental'){
+      if (is_otro_checked == "True"){
+        $("#editar_input_radio_condicion_ambiental").show();
+      }
+      else{
+        $("#editar_input_radio_condicion_ambiental").hide();
+        $("#editar_input_radio_condicion_ambiental").val(' ');
+        $("#editar_input_radio_condicion_ambiental").attr("placeholder", "Si requiere, Especifique:*");
       }   
     }
   }

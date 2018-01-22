@@ -2,6 +2,10 @@
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
 
+a {
+  cursor: pointer;
+}
+
 body {
   color: #5a5a5a;
 }

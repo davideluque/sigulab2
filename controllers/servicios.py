@@ -60,12 +60,23 @@ def listado():
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
                    entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
-                   otro,
-                   docencia,investigacion, gestion, extension, True,
+                   otro,docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio, ambito_in_situ=ambito_in_situ, 
                    ambito_en_campo=ambito_en_campo, ambito_otro=ambito_otro, 
-                   ambito_otro_detalle=request.post_vars.ambito_otro_detalle)
+                   ambito_otro_detalle=request.post_vars.ambito_otro_detalle,
+                   per_tecnico=request.post_vars.per_tecnico, cant_per_tecnico=request.post_vars.cant_per_tecnico, 
+                   per_supervisor=request.post_vars.per_supervisor, cant_per_supervisor=request.post_vars.cant_per_supervisor,
+                   per_tesista=request.post_vars.per_tesista, cant_per_tesista=request.post_vars.cant_per_tesista,
+                   per_pasante=request.post_vars.per_pasante, cant_per_pasante=request.post_vars,
+                   per_preparador=request.post_vars.per_preparador, cant_per_preparador=request.post_vars.cant_per_preparador,
+                   per_obrero=request.post_vars.per_obrero, cant_per_obrero=request.post_vars.cant_per_obrero, 
+                   per_otro=request.post_vars.per_otro, per_otro_detalle=request.post_vars.per_otro_detalle,
+                   equipo_presta_servicio=request.post_vars.equipo_presta_servicio,
+                   esp_fis_servicio=request.post_vars.esp_fis_servicio,
+                   insumos_servicio=request.post_vars.insumos_servicio,
+                   condicion_ambiental=request.post_vars.condicion_ambiental,
+                   condicion_ambiental_detalle= request.post_vars.condicion_ambiental_detalle)
 
         servicio_nuevo.insertar()
 
@@ -145,11 +156,18 @@ def listado():
                    request.post_vars.rangoServicio, request.post_vars.incertidumbreServicio,
                    request.post_vars.itemServicio, request.post_vars.requisitosServicio,
                    entregaResultados,ensayoCalibracion,certificadoConformidadProducto,certificadoCalibracion,
-                   otro,
-                   docencia,investigacion, gestion, extension, True,
+                   otro, docencia,investigacion, gestion, extension, True,
                    request.post_vars.responsableServicio, request.post_vars.dependenciaServicio, 
                    request.post_vars.ubicacionServicio, ambito_in_situ, 
-                   ambito_en_campo, ambito_otro, request.post_vars.ambito_otro_detalle)
+                   ambito_en_campo, ambito_otro, request.post_vars.ambito_otro_detalle,
+                   request.post_vars.per_tecnico, request.post_vars.cant_per_tecnico, request.post_vars.per_supervisor, 
+                   request.post_vars.cant_per_supervisor, request.post_vars.per_tesista, request.post_vars.cant_per_tesista,
+                   request.post_vars.per_pasante, request.post_vars.cant_per_pasante, request.post_vars.per_preparador, 
+                   request.post_vars.cant_per_preparador, request.post_vars.per_obrero, request.post_vars.cant_per_obrero,
+                   request.post_vars.per_otro, request.post_vars.per_otro_detalle, 
+                   request.post_vars.equipo_presta_servicio, request.post_vars.esp_fis_servicio, 
+                   request.post_vars.insumos_servicio, request.post_vars.condicion_ambiental,
+                   request.post_vars.condicion_ambiental_detalle)
 
         servicio_edicion.actualizar(request.vars.idServicioEdit)
 
@@ -407,16 +425,25 @@ def certificaciones():
         solicitud_a_actualizar.guardar_en_historial()
 
     #-------------------FIN------------------------
+
+    #----- GENERACION DE LISTADOS -----#
+
+    listado_de_certificaciones_a_generar = ListaSolicitudes(db, auth, "Certificante")
+
+    listado_de_certificaciones_a_recibir = ListaSolicitudes(db, auth, "Ejecutante")
+
   
-    return dict(categorias=listar_categorias(db), tipos=listar_tipos(db),
-        sedes=listar_sedes(db))
+    return dict(certificaciones_a_generar=listado_de_certificaciones_a_generar.filas,
+                certificaciones_a_recibir=listado_de_certificaciones_a_recibir.filas,
+                categorias=listar_categorias(db), tipos=listar_tipos(db), sedes=listar_sedes(db))
 
 
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
-    print(auth.user.email)
-    return dict()
+    listado_de_solicitudes = ListaHistorial(db, auth, "Certificante")
+    
+    return dict(listado_de_solicitudes=listado_de_solicitudes.filas)
 
 def detallesServicios():
 
@@ -521,6 +548,18 @@ def ajax_ficha_servicio():
     valores_de_ficha['ambito_en_campo'] = entrada[0].ambito_en_campo
     valores_de_ficha['ambito_otro'] = entrada[0].ambito_otro
     valores_de_ficha['ambito_otro_detalle'] = entrada[0].ambito_otro_detalle
+
+    valores_de_ficha['per_tecnico'] = entrada[0].per_tecnico
+    valores_de_ficha['per_supervisor'] = entrada[0].per_supervisor
+    valores_de_ficha['per_tesista'] = entrada[0].per_tesista
+    valores_de_ficha['per_pasante'] = entrada[0].per_pasante
+    valores_de_ficha['per_preparador'] = entrada[0].per_preparador
+    valores_de_ficha['per_obrero'] = entrada[0].per_obrero
+    valores_de_ficha['per_otro'] = entrada[0].per_otro
+    valores_de_ficha['per_otro_detalle'] = entrada[0].per_otro_detalle
+
+    valores_de_ficha['condicion_ambiental'] = entrada[0].condicion_ambiental
+    valores_de_ficha['condicion_ambiental_detalle'] = entrada[0].condicion_ambiental_detalle
 
     edicion = False
     privilegios = __obtener_priviliegios()
