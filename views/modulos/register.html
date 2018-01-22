@@ -107,7 +107,7 @@
                         <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
                             <option value="" selected hidden disabled>Rol</option>
                             {{for rol in roles:}}
-                            <option value='{{=rol.id}}'>{{=rol.role}}</option>
+                            <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
                             {{pass}}
                         </select>
                     </div>
