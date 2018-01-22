@@ -43,69 +43,12 @@
 </div>
 <!-- Fin del boton que lleva al modal de Solicitud de un Servicio -->
 
-<!-- Inicio Listado Solicitudes para solicitante -->
-<div class="container">
-  <div class="row">
-    <h3> Solicitudes Generadas </h3>  
-
-    <div id="buttons1">
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->   
-    </div>
-
-    <div class="table-responsive no-padding no-margin" >
-      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-       <form>
-          <!-- Titulos Tabla Solicitudes -->
-          <thead>
-            <tr id="titulosListado">
-              <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Servicio</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-              <th class="camposTabla linksNombres">Estado</th>
-            </tr>
-          </thead>
-
-          <!-- Contenido Tabla Solicitudes -->
-          <tbody>
-            {{for solicitud in solicitudes_generadas:}}
-              <tr>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Solicitante');" >{{=solicitud.registro}}</a></th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_servicio.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
-              </tr>
-            {{pass}}
-          </tbody>
-          <tfoot id="collapseFiltros">
-            <tr>
-              <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Servicio</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-              <th class="camposTabla linksNombres">Estado</th>
-            </tr>
-          </tfoot>
-
-       </form>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- Fin Listado Solicitudes para Solicitante-->
-
 <!-- Inicio Listado Solicitudes para ejecutante-->
 <div class="container">
   <div class="row">
-    <h3> Solicitudes Recibidas </h3>
+    <h3 onclick="change_status_list('#solic-recibidas')" title="Ocultar/Mostrar"> Solicitudes Recibidas <i class="fa fa-caret-up" id="solic-recibidas-caret"></i> </h3>
 
+    <div id="solic-recibidas">
     <div id="buttons2">
       <!-- Filtrado -->
        <button type="button" id="filtrar" onclick="mostrarFiltro2()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
@@ -157,7 +100,68 @@
     </div>
   </div>
 </div>
+</div>
 <!-- Fin Listado Solicitudes para ejecutante-->
+
+<!-- Inicio Listado Solicitudes para solicitante -->
+<div class="container">
+  <div class="row">
+    <h3 onclick="change_status_list('#solic-generadas')"> Solicitudes Generadas <i class="fa fa-caret-up" id="solic-generadas-caret" title="Ocultar/Mostrar"></i> </h3>
+
+    <div id="solic-generadas">
+    <div id="buttons1">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->   
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for solicitud in solicitudes_generadas:}}
+              <tr>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Solicitante');" >{{=solicitud.registro}}</a></th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_servicio.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </tfoot>
+
+       </form>
+      </table>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- Fin Listado Solicitudes para Solicitante-->
 
 <!-- Inicio Modal Solicitar Servicio -->
 <div class="modal fade" id="modalServiceRequest" role="dialog">
@@ -682,6 +686,39 @@
     }
   }
 
+  st_solic_generadas = 1;
+  st_solic_recibidas = 1;
+  function change_status_list(list){
+    if (list == '#solic-generadas'){
+      if (st_solic_generadas == 1){
+          $('#solic-generadas').hide();
+          st_solic_generadas = 0;
+          $('#solic-generadas-caret').removeClass('fa-caret-up');
+          $('#solic-generadas-caret').addClass('fa-caret-down');
+        }
+      else {
+        $('#solic-generadas').show();
+        st_solic_generadas = 1;
+        $('#solic-generadas-caret').removeClass('fa-caret-down');
+        $('#solic-generadas-caret').addClass('fa-caret-up');
+      }
+    }
+    else if (list == '#solic-recibidas'){
+      if (st_solic_recibidas == 1){
+        $('#solic-recibidas').hide();
+        st_solic_recibidas = 0;
+          $('#solic-recibidas-caret').removeClass('fa-caret-up');
+          $('#solic-recibidas-caret').addClass('fa-caret-down');
+
+      }
+      else{
+        $('#solic-recibidas').show();
+        st_solic_recibidas = 1;
+        $('#solic-recibidas-caret').removeClass('fa-caret-down');
+        $('#solic-recibidas-caret').addClass('fa-caret-up');
+      }
+    }
+  }
 </script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->
