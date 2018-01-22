@@ -100,7 +100,38 @@ db.define_table(
     Field('ambito_in_situ', 'boolean', default=False, label=T('Ámbito: In Situ')),
     Field('ambito_en_campo', 'boolean', default=False, label=T('Ámbito: En Campo')),
     Field('ambito_otro', 'boolean', default=False, label=T('Ámbito: Otro')),
-    Field('ambito_otro_detalle', 'string', label=T('Ámbito es otro, especifique:'))
+    Field('ambito_otro_detalle', 'string', label=T('Ámbito es otro, especifique:')),
+
+    # Personal que presta el Servicio
+    Field('per_tecnico', 'boolean', default=False, label=T('Técnico')),
+    Field('cant_per_tecnico', 'boolean', default=False, label=T('Cantidad Técnico')),
+    Field('per_supervisor', 'boolean', default=False, label=T('Supervisor')),
+    Field('cant_per_supervisor', 'boolean', default=False, label=T('Cantidad Supervisor')),
+    Field('per_tesista', 'boolean', default=False, label=T('Tesista')),
+    Field('cant_per_tesista', 'boolean', default=False, label=T('Cantidad Tesista')),
+    Field('per_pasante', 'boolean', default=False, label=T('Pasante')),
+    Field('cant_per_pasante', 'boolean', default=False, label=T('Cantidad Pasante')),
+    Field('per_preparador', 'boolean', label=T('Preparador')),
+    Field('cant_per_preparador', 'boolean', label=T('Cantidad Preparador')),
+    Field('per_obrero', 'boolean', default=False, label=T('Obrero')),
+    Field('cant_per_obrero', 'boolean', default=False, label=T('Cantidad Obrero')),
+    Field('per_otro', 'boolean', default=False, label=T('Otro')),
+    Field('per_otro_detalle', 'string', label=T('Otro, especifique')),
+
+    # Equipo que presta el Servicio
+    Field('equipo_presta_servicio', 'string', notnull=True, label=T('Equipo Presta Servicio')),
+
+    # Espacio Fisico donde se desarrolla el servicio
+    Field('esp_fis_servicio', 'reference espacios_fisicos', requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), 
+          label=T('Espacio Físico')),
+
+    # Insumos (requerimientos del servicio)
+    Field('insumos_servicio', 'string', notnull=True, label=T('Insumos del Servicio')),
+
+    # Ambiente para la ejecucion del servicio
+    Field('condicion_ambiental', 'boolean', default=False, label=T('Requiere?')),
+    Field('condicion_ambiental_detalle', 'string', label=T('Si requiere, especifique:'))
+
 )
 
 db.servicios._plural = 'Servicios'

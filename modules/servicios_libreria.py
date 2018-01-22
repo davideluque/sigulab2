@@ -20,7 +20,12 @@ class Servicio(object):
                  gestion = None, extension = None, visibilidad = None,
                  responsable = None, dependencia = None, ubicacion = None, id=None,
                  ambito_in_situ=None, ambito_en_campo=None, ambito_otro=None, 
-                 ambito_otro_detalle=None):
+                 ambito_otro_detalle=None, per_tecnico=None, cant_per_tecnico=None, per_supervisor=None, 
+                 cant_per_supervisor=None, per_tesista=None, cant_per_tesista=None,  per_pasante=None,
+                 cant_per_pasante=None, per_preparador=None, cant_per_preparador=None, per_obrero=None, 
+                 cant_per_obrero=None, per_otro=None, per_otro_detalle=None, equipo_presta_servicio=None, 
+                 esp_fis_servicio=None, insumos_servicio=None, condicion_ambiental=None,
+                 condicion_ambiental_detalle=None):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -52,6 +57,20 @@ class Servicio(object):
 
         self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro,
             ambito_otro_detalle)
+        
+        self.inicializar_per_requerido(per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+        per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+        per_obrero, cant_per_obrero, per_otro, per_otro_detalle)
+
+        self.equipo_presta_servicio = equipo_presta_servicio
+        self.esp_fis_servicio = esp_fis_servicio
+        self.insumos_servicio = insumos_servicio
+
+        self.condicion_ambiental = condicion_ambiental
+        self.condicion_ambiental_detalle = condicion_ambiental_detalle
+
+        self.inicializar_condicion_ambiental(condicion_ambiental, 
+            condicion_ambiental_detalle)
 
         # Categorias de Ordenamiento, disponibles tras instanciacion
         self.nombre_tipo = None
@@ -71,6 +90,33 @@ class Servicio(object):
         self.ambito_en_campo = ambito_en_campo
         self.ambito_otro = ambito_otro
         self.ambito_otro_detalle = ambito_otro_detalle
+
+        return True
+
+    def inicializar_condicion_ambiental(self, condicion_ambiental,
+        condicion_ambiental_detalle):
+        self.condicion_ambiental = condicion_ambiental
+        self.condicion_ambiental_detalle = condicion_ambiental_detalle
+
+        return True
+
+    def inicializar_per_requerido(self, per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+        per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+        per_obrero, cant_per_obrero, per_otro, per_otro_detalle):
+        self.per_tecnico = per_tecnico
+        self.cant_per_tecnico = cant_per_tecnico
+        self.per_supervisor = per_supervisor
+        self.cant_per_supervisor = cant_per_supervisor
+        self.per_tesista = per_tesista
+        self.cant_per_tesista = cant_per_tesista
+        self.per_pasante = per_pasante
+        self.cant_per_pasante = cant_per_pasante
+        self.per_preparador = per_preparador
+        self.cant_per_preparador = cant_per_preparador
+        self.per_obrero = per_obrero
+        self.cant_per_obrero = cant_per_obrero
+        self.per_otro = per_otro
+        self.per_otro_detalle = per_otro_detalle
 
         return True
 
@@ -94,8 +140,18 @@ class Servicio(object):
             visibilidad = self.visibilidad, responsable = self.responsable,
             dependencia = self.dependencia, ubicacion = self.ubicacion,
             ambito_in_situ=self.ambito_in_situ, ambito_en_campo=self.ambito_en_campo,
-            ambito_otro=self.ambito_otro, 
-            ambito_otro_detalle=self.ambito_otro_detalle)
+            ambito_otro=self.ambito_otro, ambito_otro_detalle=self.ambito_otro_detalle, 
+            per_tecnico=self.per_tecnico, cant_per_tecnico=self.cant_per_tecnico, 
+            per_supervisor=self.per_supervisor, cant_per_supervisor=self.cant_per_supervisor,
+            per_tesista=self.per_tesista, cant_per_tesista=self.cant_per_tesista,
+            per_pasante=self.per_pasante, cant_per_pasante=self.per_pasante,
+            per_preparador=self.per_preparador, cant_per_preparador=self.cant_per_preparador,
+            per_obrero=self.per_obrero, cant_per_obrero=self.cant_per_obrero, per_otro=self.per_otro, 
+            per_otro_detalle=self.per_otro_detalle, equipo_presta_servicio=self.equipo_presta_servicio,
+            esp_fis_servicio=self.esp_fis_servicio, insumos_servicio=self.insumos_servicio,
+            condicion_ambiental=self.condicion_ambiental, 
+            condicion_ambiental_detalle=self.condicion_ambiental_detalle
+            )
 
         return insercion
 
@@ -134,6 +190,14 @@ class Servicio(object):
 
             self.instanciacion_ambito(instanciacion[0])
 
+            self.instanciacion_per_requerido(instanciacion[0])
+
+            self.equipo_presta_servicio = instanciacion[0].equipo_presta_servicio
+            self.esp_fis_servicio = instanciacion[0].esp_fis_servicio
+            self.insumos_servicio = instanciacion[0].insumos_servicio
+
+            self.instanciacion_condicion_ambiental(instanciacion[0])
+
             self.conseguir_categorias()
 
             self.obtenerListaPropositos()
@@ -150,13 +214,38 @@ class Servicio(object):
         self.ambito_otro = instancia.ambito_otro
         self.ambito_otro_detalle = instancia.ambito_otro_detalle
 
+    def instanciacion_condicion_ambiental(self, instancia):
+        self.condicion_ambiental = instancia.condicion_ambiental
+        self.condicion_ambiental_detalle = instancia.condicion_ambiental_detalle
+
+    def instanciacion_per_requerido(self, instancia):
+        self.per_tecnico = instancia.per_tecnico
+        self.cant_per_tecnico = instancia.cant_per_tecnico
+        self.per_supervisor = instancia.per_supervisor
+        self.cant_per_supervisor = instancia.cant_per_supervisor
+        self.per_tesista = instancia.per_tesista
+        self.cant_per_tesista = instancia.cant_per_tesista
+        self.per_pasante = instancia.per_pasante
+        self.cant_per_pasante = instancia.cant_per_pasante
+        self.per_preparador = instancia.per_preparador
+        self.cant_per_preparador = instancia.cant_per_preparador
+        self.per_obrero = instancia.per_obrero
+        self.cant_per_obrero = instancia.cant_per_obrero
+        self.per_otro = instancia.per_otro
+        self.per_otro_detalle = instancia.per_otro_detalle
+
     def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,
                rango, incertidumbre, item_ensayar, requisitos, entregaResultados,
                ensayoCalibracion,certificadoConformidadProducto,
                certificadoCalibracion,otro,
                docencia, investigacion, gestion, extension, visibilidad,
                responsable, dependencia, ubicacion, ambito_in_situ, ambito_en_campo,
-               ambito_otro, ambito_otro_detalle):
+               ambito_otro, ambito_otro_detalle, per_tecnico, cant_per_tecnico, per_supervisor, 
+               cant_per_supervisor, per_tesista, cant_per_tesista,  per_pasante,
+               cant_per_pasante, per_preparador, cant_per_preparador, per_obrero, 
+               cant_per_obrero, per_otro, per_otro_detalle, equipo_presta_servicio, 
+               esp_fis_servicio, insumos_servicio, condicion_ambiental,
+               condicion_ambiental_detalle):
 
         self.nombre = nombre
         self.tipo = tipo
@@ -177,6 +266,17 @@ class Servicio(object):
 
         self.inicializar_ambito(ambito_in_situ, ambito_en_campo, ambito_otro, 
             ambito_otro_detalle)
+
+        self.inicializar_per_requerido(per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,
+            per_tesista, cant_per_tesista, per_pasante, cant_per_pasante, per_preparador, cant_per_preparador, 
+            per_obrero, cant_per_obrero, per_otro, per_otro_detalle)
+
+        self.equipo_presta_servicio = equipo_presta_servicio
+        self.esp_fis_servicio = esp_fis_servicio
+        self.insumos_servicio = insumos_servicio
+
+        self.inicializar_condicion_ambiental(condicion_ambiental, 
+            condicion_ambiental_detalle)
 
         self.docencia = docencia
         self.investigacion = investigacion
@@ -221,7 +321,26 @@ class Servicio(object):
                             ambito_in_situ=self.ambito_in_situ, 
                             ambito_en_campo=self.ambito_en_campo,
                             ambito_otro=self.ambito_otro,
-                            ambito_otro_detalle=self.ambito_otro_detalle)
+                            ambito_otro_detalle=self.ambito_otro_detalle,
+                            per_tecnico = self.per_tecnico,  
+                            cant_per_tecnico = self.cant_per_tecnico,
+                            per_supervisor = self.per_supervisor,
+                            cant_per_supervisor = self.cant_per_supervisor, 
+                            per_tesista = self.per_tesista, 
+                            cant_per_tesista = self.cant_per_tesista, 
+                            per_pasante = self.per_pasante, 
+                            cant_per_pasante = self.cant_per_pasante, 
+                            per_preparador = self.per_preparador,
+                            cant_per_preparador = self.cant_per_preparador, 
+                            per_obrero = self.per_obrero, 
+                            cant_per_obrero = self.cant_per_obrero, 
+                            per_otro = self.per_otro,  
+                            per_otro_detalle = self.per_otro_detalle, 
+                            equipo_presta_servicio = self.equipo_presta_servicio,
+                            esp_fis_servicio = self.esp_fis_servicio,
+                            insumos_servicio = self.insumos_servicio,
+                            condicion_ambiental = self.condicion_ambiental,
+                            condicion_ambiental_detalle = self.condicion_ambiental_detalle)
 
         return actualizacion
 
