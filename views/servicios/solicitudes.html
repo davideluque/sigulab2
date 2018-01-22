@@ -1,6 +1,11 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
   <!-- Estilo del listado de Solicitudes de Servicios -->
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
@@ -9,6 +14,11 @@
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
 {{end}}
 
 {{block center}}
@@ -34,21 +44,119 @@
 <!-- Fin del boton que lleva al modal de Solicitud de un Servicio -->
 
 <!-- Inicio Listado Solicitudes para solicitante -->
-<div id="listado_solic_generadas_container" class="container">
+<div class="container">
+  <div class="row">
+    <h3> Solicitudes Generadas </h3>  
+
+    <div id="buttons1">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->   
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for solicitud in solicitudes_generadas:}}
+              <tr>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Solicitante');" >{{=solicitud.registro}}</a></th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_servicio.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </tfoot>
+
+       </form>
+      </table>
+    </div>
+  </div>
 </div>
-<!-- Ajax ordenar listado de solicitudes para solicitante--> 
-<input type="hidden" id="ordenar_solicitudes_generadas_por" name="ordenar_solicitudes_generadas_por" value="">
-<input type="hidden" id="ordenar_solicitudes_generadas_alfabeticamente" name="ordenar_solicitudes_generadas_alfabeticamente" value="">
-<input type="hidden" id="cambiar_pagina_solicitudes_generadas" name="cambiar_pagina_solicitudes_generadas" value="">
+
 <!-- Fin Listado Solicitudes para Solicitante-->
 
 <!-- Inicio Listado Solicitudes para ejecutante-->
-<!-- Ajax ordenar listado de solicitudes para ejecutante--> 
-<div id="listado_solic_recibidas_container" class="container">
+<div class="container">
+  <div class="row">
+    <h3> Solicitudes Recibidas </h3>
+
+    <div id="buttons2">
+      <!-- Filtrado -->
+       <button type="button" id="filtrar" onclick="mostrarFiltro2()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for solicitud in solicitudes_recibidas:}}
+              <tr>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Ejecutante');" >{{=solicitud.registro.decode('utf-8').upper()}}</a></th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_servicio.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Servicio</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </tfoot>
+
+       </form>
+      </table>
+    </div>
+  </div>
 </div>
-<input type="hidden" id="ordenar_solicitudes_recibidas_por" name="ordenar_solicitudes_recibidas_por" value="">
-<input type="hidden" id="ordenar_solicitudes_recibidas_alfabeticamente" name="ordenar_solicitudes_recibidas_alfabeticamente" value="">
-<input type="hidden" id="cambiar_pagina_solicitudes_recibidas" name="cambiar_pagina_solicitudes_recibidas" value="">
 <!-- Fin Listado Solicitudes para ejecutante-->
 
 <!-- Inicio Modal Solicitar Servicio -->
@@ -574,99 +682,160 @@
     }
   }
 
-  // Valores por defecto para el listado de solicitudes recibidas al cargar
-  // el listado de solicitudes. Además estos valores permiten guardar los
-  // parametros de ordenamiento para utilizarlos al cambiar de pagina
-  order_by_col_solicitudes_recibidas = null;
-  order_by_asc_solicitudes_recibidas = null;
-  order_by_pag_solicitudes_recibidas = 1;
-  function cambiar_pagina_solicitudes_recibidas(page){
-    order_by_pag_solicitudes_recibidas = page
-
-    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
-      x.value = order_by_col_solicitudes_recibidas;
-
-    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
-      y.value = order_by_asc_solicitudes_recibidas
-
-    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
-      z.value = order_by_pag_solicitudes_recibidas
-
-    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas");
-  }
-
-  function ordenar_solicitudes_recibidas(order_by){
-    
-    if (order_by_col_solicitudes_recibidas == order_by){
-      order_by_asc_solicitudes_recibidas = !order_by_asc_solicitudes_recibidas
-    }
-    else{
-      order_by_col_solicitudes_recibidas = order_by
-      order_by_asc_solicitudes_recibidas = false
-    }
-
-    var x = document.getElementById("ordenar_solicitudes_recibidas_por");
-      x.value = order_by_col_solicitudes_recibidas;
-
-    var y = document.getElementById("ordenar_solicitudes_recibidas_alfabeticamente");
-      y.value = order_by_asc_solicitudes_recibidas
-
-    var z = document.getElementById("cambiar_pagina_solicitudes_recibidas")
-      z.value = order_by_pag_solicitudes_recibidas
-
-    ajax('ajax_listado_solicitudes_recibidas', ['ordenar_solicitudes_recibidas_por', 'ordenar_solicitudes_recibidas_alfabeticamente', 'cambiar_pagina_solicitudes_recibidas'], "listado_solic_recibidas_container");
-  }
-
-  // Valores por defecto para el listado de solicitudes generadas al cargar
-  // el listado de solicitudes. Además estos valores permiten guardar los
-  // parametros de ordenamiento para utilizarlos al cambiar de pagina
-  order_by_col_solicitudes_generadas = null;
-  order_by_asc_solicitudes_generadas = null;
-  order_by_pag_solicitudes_generadas = 1;
-  function cambiar_pagina_solicitudes_generadas(page){
-    order_by_pag_solicitudes_generadas = page
-
-    var x = document.getElementById("ordenar_solicitudes_generadas_por");
-      x.value = order_by_col_solicitudes_generadas;
-
-    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
-      y.value = order_by_asc_solicitudes_generadas
-
-    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
-      z.value = order_by_pag_solicitudes_generadas
-
-    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
-  }
-
-  function ordenar_solicitudes_generadas(order_by){
-    
-    if (order_by_col_solicitudes_generadas == order_by){
-      order_by_asc_solicitudes_generadas = !order_by_asc_solicitudes_generadas
-    }
-    else{
-      order_by_col_solicitudes_generadas = order_by
-      order_by_asc_solicitudes_generadas = false
-    }
-
-    var x = document.getElementById("ordenar_solicitudes_generadas_por");
-      x.value = order_by_col_solicitudes_generadas;
-
-    var y = document.getElementById("ordenar_solicitudes_generadas_alfabeticamente");
-      y.value = order_by_asc_solicitudes_generadas
-
-    var z = document.getElementById("cambiar_pagina_solicitudes_generadas")
-      z.value = order_by_pag_solicitudes_generadas
-
-    ajax('ajax_listado_solicitudes_generadas', ['ordenar_solicitudes_generadas_por', 'ordenar_solicitudes_generadas_alfabeticamente', 'cambiar_pagina_solicitudes_generadas'], "listado_solic_generadas_container");
-  }
-
-  window.onload = function(){
-    ordenar_solicitudes_generadas("id");
-    ordenar_solicitudes_recibidas("id");
-  }
 </script>
 
 <!-- Validador de inputs del modal de Solicitud de un Servicio -->
 <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+<!-- Script Datatable Solicitudes Generadas-->
+<script>
+
+  var filtros1 = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable1 tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable1').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
+      $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro1() {
+      if (filtros1){
+        $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+        filtros1 = false
+      }
+      else{
+        $("#datatable1 thead tr").not("#titulosListado").css("display","table-row");
+        filtros1 = true
+      }
+
+  }
+
+  var table = $('#datatable1').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons1');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+</script>
+
+<!-- Fin Script Datatable Solicitudes Generadas-->
+
+<!-- Script Datatable Solicitudes Recibidas-->
+<script>
+
+  var filtros2 = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable2 tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable2').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+      $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro2() {
+      if (filtros2){
+        $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+        filtros2 = false
+      }
+      else{
+        $("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
+        filtros2 = true
+      }
+
+  }
+
+  var table = $('#datatable2').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons2');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+</script>
+
+<!-- Fin Script Datatable Solicitudes Recibidas-->
+
 
 {{end}}
