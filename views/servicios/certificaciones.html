@@ -35,64 +35,12 @@
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
-<!-- Inicio Listado Certificaciones que debo certificar (a generar)-->
-<div class="container">
-  <div class="row">
-    <h3> Servicios Recibidos </h3>
-
-    <div id="buttons1">
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->   
-    </div>
-
-    <div class="table-responsive no-padding no-margin" >
-      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-        <!-- Titulos Solicitudes en Espera por mi Certificación -->
-        <thead>
-          <tr id="titulosListado">
-            <th class="camposTabla linksNombres">Número de Registro</th>
-            <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-            <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-            <th class="camposTabla linksNombres">Servicio</th>
-            <th class="camposTabla linksNombres">Fecha de Elaboración</th>
-            <th class="camposTabla linksNombres">Estado</th>
-          </tr>
-        </thead>
-
-        <!-- Contenido Solicitudes en Espera por mi Certificación -->
-        <tbody>
-          {{for certificacion in certificaciones_a_generar:}}
-            <tr>
-              <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=certificacion.id}}, 'Certificante');">{{=certificacion.registro}}</a></th>
-              <th class="camposTabla">{{=certificacion.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
-              <th class="camposTabla">{{=certificacion.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
-              <th class="camposTabla">{{=certificacion.nombre_servicio.decode('utf-8').upper()}}</th>
-              <th class="camposTabla">{{=certificacion.fecha_elaboracion}}</th>
-              <th class="camposTabla">{{=certificacion.estado_solicitud_str.decode('utf-8').upper()}}</th>
-            </tr>
-          {{pass}}
-        </tbody>
-        <tfoot id="collapseFiltros">
-          <tr>
-            <th class="camposTabla linksNombres">Número de Registro</th>
-            <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-            <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-            <th class="camposTabla linksNombres">Servicio</th>
-            <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-            <th class="camposTabla linksNombres">Estado</th>
-          </tr>
-        </tfoot>       
-      </table>
-    </div>
-  </div>
-</div>
-
 <!-- Inicio Listado Certificaciones que me deben certificar (a recibir)-->
 <div class="container">
   <div class="row">
-    <h3> Servicios Ofrecidos </h3>
+    <h3 onclick="change_status_list('#servic-ofrecidos')" title="Ocultar/Mostrar"> Servicios Ofrecidos <i class="fa fa-caret-up" id="servic-ofrecidos-caret"></i></h3>
 
+    <div id="servic-ofrecidos">
     <div id="buttons2">
       <!-- Filtrado -->
        <button type="button" id="filtrar" onclick="mostrarFiltro2()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
@@ -144,6 +92,62 @@
     </div>
   </div>
 </div>
+</div>
+
+<!-- Inicio Listado Certificaciones que debo certificar (a generar)-->
+<div class="container">
+  <div class="row">
+    <h3 onclick="change_status_list('#servic-recibidos')" title="Ocultar/Mostrar"> Servicios Recibidos <i class="fa fa-caret-up" id="servic-recibidos-caret"></i> </h3>
+
+    <div id="servic-recibidos">
+    <div id="buttons1">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->   
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <!-- Titulos Solicitudes en Espera por mi Certificación -->
+        <thead>
+          <tr id="titulosListado">
+            <th class="camposTabla linksNombres">Número de Registro</th>
+            <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+            <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+            <th class="camposTabla linksNombres">Servicio</th>
+            <th class="camposTabla linksNombres">Fecha de Elaboración</th>
+            <th class="camposTabla linksNombres">Estado</th>
+          </tr>
+        </thead>
+
+        <!-- Contenido Solicitudes en Espera por mi Certificación -->
+        <tbody>
+          {{for certificacion in certificaciones_a_generar:}}
+            <tr>
+              <th class="camposTabla"><a data-toggle="modal" data-target="#modalServiceCertification" onclick="abrirForm({{=certificacion.id}}, 'Certificante');">{{=certificacion.registro}}</a></th>
+              <th class="camposTabla">{{=certificacion.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=certificacion.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=certificacion.nombre_servicio.decode('utf-8').upper()}}</th>
+              <th class="camposTabla">{{=certificacion.fecha_elaboracion}}</th>
+              <th class="camposTabla">{{=certificacion.estado_solicitud_str.decode('utf-8').upper()}}</th>
+            </tr>
+          {{pass}}
+        </tbody>
+        <tfoot id="collapseFiltros">
+          <tr>
+            <th class="camposTabla linksNombres">Número de Registro</th>
+            <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+            <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+            <th class="camposTabla linksNombres">Servicio</th>
+            <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+            <th class="camposTabla linksNombres">Estado</th>
+          </tr>
+        </tfoot>       
+      </table>
+    </div>
+  </div>
+</div>
+</div>
 
 
 <!-- Field Escondido para el modal-->
@@ -168,6 +172,41 @@
 
 		ajax('ajax_certificar_servicio', ['solicitud', 'tipoSolicitud'], "formcert");
 	}
+
+  st_servic_ofrecidos = 1;
+  st_servic_recibidos = 1;
+  function change_status_list(list){
+    if (list == '#servic-ofrecidos'){
+      if (st_servic_ofrecidos == 1){
+          $('#servic-ofrecidos').hide();
+          st_servic_ofrecidos = 0;
+          $('#servic-ofrecidos-caret').removeClass('fa-caret-up');
+          $('#servic-ofrecidos-caret').addClass('fa-caret-down');
+        }
+      else {
+        $('#servic-ofrecidos').show();
+        st_servic_ofrecidos = 1;
+        $('#servic-ofrecidos-caret').removeClass('fa-caret-down');
+        $('#servic-ofrecidos-caret').addClass('fa-caret-up');
+      }
+    }
+    else if (list == '#servic-recibidos'){
+      if (st_servic_recibidos == 1){
+        $('#servic-recibidos').hide();
+        st_servic_recibidos = 0;
+          $('#servic-recibidos-caret').removeClass('fa-caret-up');
+          $('#servic-recibidos-caret').addClass('fa-caret-down');
+
+      }
+      else{
+        $('#servic-recibidos').show();
+        st_servic_recibidos = 1;
+        $('#servic-recibidos-caret').removeClass('fa-caret-down');
+        $('#servic-recibidos-caret').addClass('fa-caret-up');
+      }
+    }
+  }
+
 </script>
 
 
