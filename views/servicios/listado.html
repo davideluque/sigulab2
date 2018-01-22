@@ -837,7 +837,7 @@
                                 <label><input type="checkbox" id="editar_checkbox_per_otro" name="per_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))" {{if editar[0].per_otro:}} checked {{pass}}>Otro</label>
                               </div>
 
-                              <input type="text" class="form-control" {{if not editar[0].per_otro:}} style="display:none;" name="per_otro_detalle" placeholder="Otro, Especifique:*" value=" " {{else:}} value="{{=editar[0].per_otro_detalle}}"{{pass}}  id="editar_input_per_otro_detalle">
+                              <input type="text" class="form-control" name="per_otro_detalle" {{if not editar[0].per_otro:}} style="display:none;" placeholder="Otro, Especifique:*" value=" " {{else:}} value="{{=editar[0].per_otro_detalle}}"{{pass}}  id="editar_input_per_otro_detalle">
                           </div>
 
                           <!-- Equipo que presta servicio -->
