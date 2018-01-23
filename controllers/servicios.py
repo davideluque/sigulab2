@@ -370,7 +370,7 @@ def solicitudes():
 
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
-    if auth.has_membership(group_id="Cliente Interno"):
+    if auth.has_membership(group_id="CLIENTE INTERNO"):
         registro = "FUSB"
     else:
         registro = dependencia_usuario.codigo_registro
@@ -672,7 +672,7 @@ def ajax_obtener_adscripcion():
     dependencias_a_mostrar = []
 
     for l in adscripcion_query:
-        if re.match( r'Laboratorio\s[A-G]', l.nombre) or (l.id == 1):
+        if re.match( r'LABORATORIO\s[A-G]', l.nombre) or (l.id == 1):
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
@@ -683,7 +683,7 @@ def ajax_obtener_dependencia():
     dependencias_a_mostrar = []
 
     for l in dependencia_query:
-        if (re.match( r'Laboratorio\s[A-G]', l.nombre)) == None:
+        if (re.match( r'LABORATORIO\s[A-G]', l.nombre)) == None:
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
@@ -714,7 +714,7 @@ def ajax_obtener_adscripcion_editar():
     dependencias_a_mostrar = []
 
     for l in adscripcion_query:
-        if re.match( r'Laboratorio\s[A-G]', l.nombre) or (l.id == 1):
+        if re.match( r'LABORATORIO\s[A-G]', l.nombre) or (l.id == 1):
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
@@ -725,7 +725,7 @@ def ajax_obtener_dependencia_editar():
     dependencias_a_mostrar = []
 
     for l in dependencia_query:
-        if (re.match( r'Laboratorio\s[A-G]', l.nombre)) == None:
+        if (re.match( r'LABORATORIO\s[A-G]', l.nombre)) == None:
             dependencias_a_mostrar.append(l)
     return dict(dependencias=dependencias_a_mostrar)
 
@@ -847,10 +847,10 @@ def ajax_listado_servicios():
 
     # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
 
-    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
-    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
-    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
-    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+    grupo_lab = db(db.auth_group.role == "JEFE DE LABORATORIO").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "ASISTENTE DEL DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WEBMASTER").select(db.auth_group.id)[0].id
 
     info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
     user_group_id = info_membership.group_id
@@ -1112,12 +1112,12 @@ def __queries_enviar_correo():
 
 def __obtener_priviliegios():
     # Obtener Privilegios del usuario (rol y dependencia)
-    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
-    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
-    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
-    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
-    grupo_secc = db(db.auth_group.role == "Jefe de Sección").select(db.auth_group.id)[0].id
-    grupo_coord = db(db.auth_group.role == "Coordinador").select(db.auth_group.id)[0].id
+    grupo_lab = db(db.auth_group.role == "JEFE DE LABORATORIO").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "ASISTENTE DEL DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WEBMASTER").select(db.auth_group.id)[0].id
+    grupo_secc = db(db.auth_group.role == "JEFE DE SECCIÓN").select(db.auth_group.id)[0].id
+    grupo_coord = db(db.auth_group.role == "COORDINADOR").select(db.auth_group.id)[0].id
 
     info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
     user_group_id = info_membership.group_id
@@ -1137,10 +1137,10 @@ def __obtener_priviliegios():
 def __obtener_jerarquia():
 
     # Conseguir dependencia y si su rol es suficiente para ver servicios ocultos
-    grupo_lab = db(db.auth_group.role == "Jefe de Laboratorio").select(db.auth_group.id)[0].id
-    grupo_dir = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
-    grupo_asistdir = db(db.auth_group.role == "Asistente del Director").select(db.auth_group.id)[0].id
-    grupo_admin = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
+    grupo_lab = db(db.auth_group.role == "JEFE DE LABORATORIO").select(db.auth_group.id)[0].id
+    grupo_dir = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_asistdir = db(db.auth_group.role == "ASISTENTE DEL DIRECTOR").select(db.auth_group.id)[0].id
+    grupo_admin = db(db.auth_group.role == "WEBMASTER").select(db.auth_group.id)[0].id
 
     info_membership = db(db.auth_membership.user_id == auth.user_id).select()[0]
     user_group_id = info_membership.group_id

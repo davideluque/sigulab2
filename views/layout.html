@@ -98,9 +98,9 @@
         </ul>
 
       <ul class="nav navbar-nav navbar-right">
-      {{if auth.has_membership('Administrador Personal') \
-        or auth.has_membership('WebMaster')\
-        or auth.has_membership('Director')\
+      {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
+        or auth.has_membership('WEBMASTER')\
+        or auth.has_membership('DIRECTOR')\
         or (auth.user.email == "ulab-calidad@usb.ve"): }}
         <li class="dropdown">
           <div class="dropdown">
