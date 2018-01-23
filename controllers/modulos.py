@@ -84,9 +84,9 @@ def check_role():
   autorizados a realizar registros en este sistema. False de lo contrario.
   """
 
-  grupo_webmaster = db(db.auth_group.role == "WebMaster").select(db.auth_group.id)[0].id
-  grupo_director = db(db.auth_group.role == "Director").select(db.auth_group.id)[0].id
-  grupo_asistente_director = db(db.auth_group.role == "Asistente del Director").select(
+  grupo_webmaster = db(db.auth_group.role == "WEBMASTER").select(db.auth_group.id)[0].id
+  grupo_director = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id)[0].id
+  grupo_asistente_director = db(db.auth_group.role == "ASISTENTE DEL DIRECTOR").select(
     db.auth_group.id)[0].id
 
   auth_user_group_id = db(db.auth_membership.user_id == auth.user_id).select()[0].group_id
@@ -165,8 +165,8 @@ def validar_email():
 def register():
   """ El registro de usuarios está habilitado únicamente para los 
   administradores del sitio que son aquellos que pertecen a uno de los
-  siguientes grupos: Grupo Webmaster, grupo Director, grupo Asistente del 
-  Director o Coordinadora de la Calidad.
+  siguientes grupos: Grupo Webmaster, grupo DIRECTOR, grupo Asistente del 
+  DIRECTOR o Coordinadora de la Calidad.
   """
 
   ### Realizar registro de usuario ###
@@ -184,7 +184,7 @@ def register():
 
     if auth_register is False:
       """La verificación de usuario ya registrado se hace mediante ajax
-      en el método validar email. Este método deshabilita el registro
+      en el método validar email. Ese método deshabilita el registro
       mediante jquery. Se podría hacer una segunda verificación de seguridad 
       acá.
       """
@@ -229,7 +229,7 @@ def register():
     # actualización de datos personales.
     return redirect('register')
 
-  roles=list(db(db.auth_group.role != 'WebMaster').select(db.auth_group.ALL))
+  roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
 
   return dict(roles=roles)
 
@@ -237,20 +237,20 @@ def register():
 def ajax_unidad_rol():
   rolid = request.post_vars.dependenciahidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
-  direccion=db(db.dependencias.nombre == "Dirección").select(db.dependencias.ALL)
+  direccion=db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL)
   labs_y_coordinaciones=list(db(db.dependencias.unidad_de_adscripcion == direccion[0].id).select(db.dependencias.ALL))
   labs = []
   coordinaciones = []
   for i in labs_y_coordinaciones:
-    if "Laboratorio" in i.nombre:
+    if "LABORATORIO" in i.nombre:
       labs.append(i)
     else:
       coordinaciones.append(i)
-  if roltype == "Director" or roltype == "Asistente del Director" or roltype == "Gestor de SMyDP":
+  if roltype == "DIRECTOR" or roltype == "ASISTENTE DEL DIRECTOR" or roltype == "GESTOR DE SMyDP":
     lista = direccion
-  elif roltype == "Coordinador" or roltype == "Personal de Coordinación":
+  elif roltype == "COORDINADOR" or roltype == "PERSONAL DE COORDINACIÓN":
     lista = coordinaciones
-  elif roltype == "WebMaster" or roltype == "Cliente Interno":
+  elif roltype == "WEBMASTER" or roltype == "CLIENTE INTERNO":
     lista = False
   else:
     lista = labs
@@ -273,7 +273,7 @@ def ajax_registro_seccion():
   rolid = request.post_vars.dependenciahidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
-  if roltype == "Técnico" or roltype == "Jefe de Sección":
+  if roltype == "TÉCNICO" or roltype == "JEFE DE SECCIÓN":
     labid = request.post_vars.seccionhidden
     secciones=list(db(db.dependencias.unidad_de_adscripcion == int(labid)).select(db.dependencias.ALL))
 

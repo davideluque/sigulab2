@@ -12,8 +12,8 @@
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def usuarios():
-    if(auth.has_membership('Administrador Personal') or auth.has_membership('WebMaster')\
-       or auth.has_membership('Director') or (auth.user.email == "ulab-calidad@usb.ve")):
+    if(auth.has_membership('ADMINISTRADOR PERSONAL') or auth.has_membership('WEBMASTER')\
+       or auth.has_membership('DIRECTOR') or (auth.user.email == "ulab-calidad@usb.ve")):
         table = SQLFORM.smartgrid(db.auth_user,onupdate=auth.archive,links_in_grid=False,csv=False,user_signature=True,paginate=10)
     else:
         table = SQLFORM.smartgrid(db.auth_user,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
@@ -21,8 +21,8 @@ def usuarios():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def dependencias():
-    if(auth.has_membership('Administrador Personal') or auth.has_membership('WebMaster')\
-       or auth.has_membership('Director') or (auth.user.email == "ulab-calidad@usb.ve")):
+    if(auth.has_membership('ADMINISTRADOR PERSONAL') or auth.has_membership('WEBMASTER')\
+       or auth.has_membership('DIRECTOR') or (auth.user.email == "ulab-calidad@usb.ve")):
         table = SQLFORM.smartgrid(db.dependencias,onupdate=auth.archive,links_in_grid=False,csv=False,user_signature=True,paginate=10)
     else:
         table = SQLFORM.smartgrid(db.dependencias,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
@@ -30,8 +30,8 @@ def dependencias():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def espacios_fisicos():
-    if(auth.has_membership('Administrador Personal') or auth.has_membership('WebMaster')\
-       or auth.has_membership('Director') or (auth.user.email == "ulab-calidad@usb.ve")):
+    if(auth.has_membership('ADMINISTRADOR PERSONAL') or auth.has_membership('WEBMASTER')\
+       or auth.has_membership('DIRECTOR') or (auth.user.email == "ulab-calidad@usb.ve")):
         table = SQLFORM.smartgrid(db.espacios_fisicos,onupdate=auth.archive,links_in_grid=False,csv=False,user_signature=True,paginate=10)
     else:
         table = SQLFORM.smartgrid(db.espacios_fisicos,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)

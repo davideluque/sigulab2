@@ -807,7 +807,7 @@ class Solicitud(object):
             self.adscripcion_dependencia_solicitante = self.db(self.id_adscripcion_dependencia_solicitante == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
 
         else:
-            self.adscripcion_dependencia_solicitante = "Vicerrectorado Académico"
+            self.adscripcion_dependencia_solicitante = "VICERRECTORADO ACADÉMICO"
 
         # Dependencia solicitante
         self.nombre_dependencia_solicitante = dependencia.nombre
@@ -827,7 +827,7 @@ class Solicitud(object):
             self.adscripcion_dependencia_ejecutora = self.db(self.id_adscripcion_dependencia_ejecutora == self.db.dependencias.id).select(self.db.dependencias.ALL)[0].nombre
 
         else:
-            self.adscripcion_dependencia_ejecutora = "Vicerrectorado Académico"       
+            self.adscripcion_dependencia_ejecutora = "VICERRECTORADO ACADÉMICO"       
 
         # Dependencia Ejecutora del Servicio
         self.nombre_dependencia_ejecutora = dependencia_ejecutora_servicio.nombre
