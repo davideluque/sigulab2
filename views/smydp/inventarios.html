@@ -17,24 +17,26 @@
 		{{ while k < filas:}}
 			<div id="fila2" class="row">
 				<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-1 columnas"></div> <!-- Para hacer las cajas menos anchas -->
+				<div class="col-sm-3 columnas">
 					<div class="caja">
 						<p class="dependencia">{{=labs[3*k]}}</p>
 					</div>
 				</div>
 				{{ if 3*k+1 < n: }}
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-3 columnas">
 					<div class="caja">
 						<p class="dependencia">{{=labs[3*k+1]}}</p>
 					</div>
 				</div>
 				{{pass}}
 				{{ if 3*k+2 < n: }}
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-3 columnas">
 					<div class="caja">
 						<p class="dependencia">{{=labs[3*k+2]}}</p>
 					</div>
 				</div>
+				<div class="col-sm-2 columnas"></div> <!-- Para hacer las cajas menos anchas -->
 				{{ pass }}
 			</div>
 			{{k=k+1}}
