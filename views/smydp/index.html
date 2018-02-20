@@ -1,0 +1,40 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modulos.css')}}"> 
+{{end}}
+
+{{block center}}
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
+		<div id="fila2" class="row">
+			<div class="col-sm-2">
+			</div>
+
+			<div class="col-sm-8">
+				<!-- Link a sym (Sustancias y materiales) -->
+				<div class="col-sm-6 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'sustancias')}}">
+					  <img class="iconos" src="{{=URL('static', 'images/sustancias.png')}}">
+					  <h3 class="opciones">Sustancias y materiales</h3>
+					</a>
+				</div>
+				<!-- Link a dp (Desechos peligrosos) -->
+				<div class="col-sm-6 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'desechos')}}">
+					  <img class="iconos" src="{{=URL('static', 'images/desechos.png')}}">
+					  <h3 class="opciones">Desechos peligrosos</h3>
+					</a>
+				</div>
+			  <div class="col-sm-2">
+			  </div>
+
+			</div>
+	  </div>	
+  </div>
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("inicio").className += " active";
+</script>
+{{end}}

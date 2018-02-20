@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_sustancias.css')}}"> 
+{{end}}
+
+{{block center}}
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
+
+		<div id="fila2" class="row">
+			<div class="col-sm-2">
+			</div>
+
+			<div class="col-sm-8">
+				<!-- Link al listado de sustancias -->
+				<div class="col-sm-6 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'listado')}}">
+					  <img class="iconos" src="{{=URL('static', 'images/clipboard2.png')}}">
+					  <h3 class="opciones">Listado de sustancias</h3>
+					</a>
+				</div>
+				<!-- Link al los inventarios -->
+				<div class="col-sm-6 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'inventarios')}}">
+					  <img class="iconos" src="{{=URL('static', 'images/inventario.png')}}">
+					  <h3 class="opciones">Inventarios</h3>
+					</a>
+				</div>
+			  <div class="col-sm-2">
+			  </div>
+
+			</div>
+	  </div>	
+  </div>
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("inicio").className += " active";
+</script>
+{{end}}

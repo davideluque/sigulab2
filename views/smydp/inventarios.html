@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+{{end}}
+
+{{block center}}
+
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
+		<!-- PASAR LO QUE SE PUEDA AL CONTROLADOR -->
+		{{ labs = ['Laboratorio A', 'Laboratorio B', 'Laboratorio C', 'Laboratorio D', 'Laboratorio E', 'Laboratorio F', 'Laboratorio G'] }}
+		{{ n = len(labs) }}
+		{{ filas = n//3 if n%3 == 0 else n//3+1 }}
+		{{ k = 0 }}
+		{{ while k < filas:}}
+			<div id="fila2" class="row">
+				<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+				<div class="col-sm-4 columnas">
+					<div class="caja">
+						<p class="dependencia">{{=labs[3*k]}}</p>
+					</div>
+				</div>
+				{{ if 3*k+1 < n: }}
+				<div class="col-sm-4 columnas">
+					<div class="caja">
+						<p class="dependencia">{{=labs[3*k+1]}}</p>
+					</div>
+				</div>
+				{{pass}}
+				{{ if 3*k+2 < n: }}
+				<div class="col-sm-4 columnas">
+					<div class="caja">
+						<p class="dependencia">{{=labs[3*k+2]}}</p>
+					</div>
+				</div>
+				{{ pass }}
+			</div>
+			{{k=k+1}}
+		{{pass}}
+	</div>
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("inicio").className += " active";
+</script>
+{{end}}
