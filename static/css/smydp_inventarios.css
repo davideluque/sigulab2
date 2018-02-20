@@ -8,14 +8,14 @@
 	margin: 0 5px 0 5px;
 	border: solid;
 	border-width: 2px;
-	border-color: #00b3d0;
-	background-color: #FFFFFF;
+	border-color: #FEE501;
+	background-color: #606060;
 }
 
 .dependencia{
 	margin: 0;
 	text-transform: uppercase;
-	color: #545454;
+	color: #FFFFFF;
 	font-weight: bold;
 }
 
