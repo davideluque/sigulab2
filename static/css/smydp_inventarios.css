@@ -10,12 +10,17 @@
 	border-width: 2px;
 	border-color: #FEE501;
 	background-color: #606060;
+	color: #FFFFFF;
+}
+
+.caja:hover {
+	background-color: #F0F0F0;
+	color: #606060;
 }
 
 .dependencia{
 	margin: 0;
 	text-transform: uppercase;
-	color: #FFFFFF;
 	font-weight: bold;
 }
 
