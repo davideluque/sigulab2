@@ -26,3 +26,5 @@ db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'
 
 
+
+
