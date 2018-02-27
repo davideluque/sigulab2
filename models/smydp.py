@@ -11,7 +11,7 @@ db.define_table(
     Field('f_pureza', 	'integer',	requires=IS_INT_IN_RANGE(0, 101), label=T('Pureza')),
     Field('f_estado', 'list:string',requires=IS_IN_SET(['Sólido','Líquido','Gaseoso']), 
     widget=SQLFORM.widgets.checkboxes.widget, label=T('Estado')),
-    Field('f_control', 'list:integer',requires=IS_IN_SET(['Ninguno','RL4','RL7', 'RL4 y RL7']), 
+    Field('f_control', 'list:string',requires=IS_IN_SET(['Ninguno','RL4','RL7', 'RL4 y RL7']), 
     widget=SQLFORM.widgets.checkboxes.widget, label=T('Control')),
     Field('f_peligrosidad', 'list:string',requires=IS_IN_SET(['Inflamable','Tóxico','Tóxico para el ambiente','Corrosivo','Comburente','Nocivo','Explosivo','Irritante'],multiple = True),
     widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad')),
@@ -24,7 +24,3 @@ db.define_table(
 db.t_Sustancia.f_hds.readable=(auth.has_membership('Gestor de SMyDP') or auth.has_membership('WEBMASTER')) #-*-* Chequear permisos aqui
 db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'
-
-
-
-

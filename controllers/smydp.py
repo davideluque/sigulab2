@@ -26,20 +26,12 @@ def desechos():
 
 
 #-------------------------------------- Catalogo ---------------------------------------
-"""
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def catalogo():
 
-    if not 'view' in request.args:
-        db.t_sustancias.f_peligrosidad.represent = lambda v,r: v[0] if v else "Ninguna"
-
-    if 'edit' in request.args or 'new' in request.args:
-        mark_not_empty(db.t_sustancias)
-
-    if(auth.has_membership('Gestor de SMyDP') or \
-    auth.has_membership('WebMaster')):
-        table = SQLFORM.smartgrid(db.t_sustancias,onupdate=auth.archive,links_in_grid=False,csv=False,user_signature=True,paginate=10)
+    if(auth.has_membership('Gestor de SMyDP') or  auth.has_membership('WEBMASTER')):
+        table = SQLFORM.smartgrid(db.t_Sustancia,onupdate=auth.archive,links_in_grid=False,csv=False,user_signature=True,paginate=10)
     else:
-        table = SQLFORM.smartgrid(db.t_sustancias,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
+        table = SQLFORM.smartgrid(db.t_Sustancia,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
     return locals()
-"""
