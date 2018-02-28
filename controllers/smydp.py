@@ -35,3 +35,4 @@ def catalogo():
     else:
         table = SQLFORM.smartgrid(db.t_Sustancia,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
     return locals()
+
