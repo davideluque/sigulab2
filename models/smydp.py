@@ -16,9 +16,8 @@ db.define_table(
     Field('f_peligrosidad', 'list:string',requires=IS_IN_SET(['Inflamable','Tóxico','Tóxico para el ambiente','Corrosivo','Comburente','Nocivo','Explosivo','Irritante'],multiple = True),
     widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad')),
     # Hoja de seguridad (archivo pdf)
-    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad')),
-    format='%(f_nombre)s',
-    auth.signature) # Agregar los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
+    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad'), format='%(f_nombre)s'),
+    auth.signature) # Agrega los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
 
 #db.t_sustancias.id.readable=False #Si se muestra en la forma, descomentar
 #db.t_sustancias.id.writable=False
