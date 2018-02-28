@@ -6,6 +6,17 @@
 
 {{block center}}
 
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'servicios')}}">Servicios</a>
+  <span class="breadcrumb-item active">Historial de Servicios</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+
 	<div class="container"> 
 		<div class="row">
 			<p>{{=table}}</p>

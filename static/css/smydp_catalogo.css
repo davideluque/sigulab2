@@ -1,88 +1,54 @@
-select{ 
-	border-top: 0px !important;
-	border-left: 0px !important;
-	border-right: 0px !important;
-	box-shadow: none !important;
-	border-radius: 0px !important;
-	border-bottom-width: 2px !important;
-	background-color: transparent !important;
-
+.row{
+	font-family: "Roboto", Sans-Serif ;
 }
 
-th input[type=text]{ 
-	border-top: 0px !important;
-	border-left: 0px !important;
-	border-right: 0px !important;
-	box-shadow: none !important;
-	border-bottom-width: 2px !important;
-	border-radius: 0px;
-	background-color: transparent;
-	height: 35px !important;
-	width: 100%;
+.web2py_htmltable {
+	padding-top: 20px;
 }
+
+table {
+	border-style: solid;
+	border-color: #CECECE;
+	border-width: 1px;
+}
+
+thead{
+	border-style: solid;
+	border-color: #CECECE;
+	border-width: 1px;
+	font-size: 16px;
+}
+
 
 th {
-	width: 150px;
-}
-
-#datatable_length select {
-	height: 30px;
-}
-
-#collapseFiltros {
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-#columnBotonAgregar {
-	text-align: right;
-}
-
-.botonesListado {
-	background-color: #0300d7; 
-	border-color: #0300d7;
-	color: white;
-}
-
-.botonesListado:hover {
-	color: white;
-}
-
-#containerAgregar{
-	margin-top: -30px;
-}
-
-#listadoContainer {
-	padding-top: 25px;
-}
-
-.tablaListado {
- border: 1.5px !important; 
- border-style: solid !important; 
- border-color: #ddd !important;
-}
-
-#titulosListado {
-	background-color: #505050;
-}
-
-.camposTabla {
 	text-align: center;
+	padding: 10px 20px 10px 10px;
 }
 
-.linksNombres {
-	color: white;
+td{
+	padding: 10px 20px 10px 10px;
 }
 
-.linksNombres:hover {
-	color: rgba(6, 164, 252, 1);
-	text-decoration: none;
+
+.web2py_paginator ul{
+	padding: 10px 0px 10px 0px;
 }
 
-.filtros {
-	width: 200px;
+.web2py_paginator li{
+	font-weight: bold;
+	padding: 5px 10px 5px 0px; /* Arreglar esto */
+	display: inline;
+	font-size: 16px;
 }
 
-#filtroInput {
-	margin-left: 100px;
+.web2py_console {
+	display: inline;	
+}
+
+.web2py_counter {
+	padding: 10px 0px;
+}
+
+.current {
+	text-decoration: underline;
 }
