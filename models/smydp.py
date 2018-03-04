@@ -19,8 +19,8 @@ db.define_table(
     Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad'), format='%(f_nombre)s'),
     auth.signature) # Agrega los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
 
-#db.t_sustancias.id.readable=False #Si se muestra en la forma, descomentar
-#db.t_sustancias.id.writable=False
+db.t_Sustancia.id.readable=False #Si se muestra en la forma, descomentar
+db.t_Sustancia.id.writable=False
 db.t_Sustancia.f_hds.readable=(auth.has_membership('Gestor de SMyDP') or auth.has_membership('WEBMASTER')) #-*-* Chequear permisos aqui
 db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'

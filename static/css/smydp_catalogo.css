@@ -1,3 +1,5 @@
+/** Estilos del index (form principal)**/
+
 .row{
 	font-family: "Roboto", Sans-Serif ;
 }
@@ -53,3 +55,14 @@ td{
 	text-decoration: underline;
 }
 
+/** Estilos del Create form **/
+
+.form-horizontal{
+	
+}
+
+
+/** Estilos del Update form **/
+
+
+/** Estilos del View form **/

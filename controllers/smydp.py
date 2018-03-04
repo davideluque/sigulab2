@@ -29,26 +29,17 @@ def desechos():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def catalogo():
-    columnas = [db.t_Sustancia.f_nombre, 
-                db.t_Sustancia.f_cas, 
-                db.t_Sustancia.f_pureza, 
-                db.t_Sustancia.f_estado, 
-                db.t_Sustancia.f_control, 
-                db.t_Sustancia.f_peligrosidad, 
-                db.t_Sustancia.f_hds ]
+
     if(auth.has_membership('Gestor de SMyDP') or  auth.has_membership('WEBMASTER')):
-        table = SQLFORM.smartgrid(  
-                                    db.t_Sustancia,   
-                                    fields=columnas,
+        table = SQLFORM.smartgrid(  db.t_Sustancia, 
                                     onupdate=auth.archive,
                                     links_in_grid=False,
                                     csv=False,
                                     user_signature=True,
                                     paginate=10)
+
     else:
-        table = SQLFORM.smartgrid(
-                                    db.t_Sustancia, 
-                                    fields=columnas,
+        table = SQLFORM.smartgrid(  db.t_Sustancia, 
                                     editable=False,
                                     deletable=False,
                                     csv=False,
