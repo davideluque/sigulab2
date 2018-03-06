@@ -168,7 +168,8 @@ db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
 
 
-# Tabla que mapea tecnicos con sus respectivos Espacios Fisicos. Ejemplo: TecnicoX "es_tecnico" del espacio fisico Espacio_fisicoY
+# Tabla "es_tecnico" que mapea tecnicos con sus respectivos Espacios Fisicos. Ejemplo: TecnicoX "es_tecnico" del espacio 
+# fisico Espacio_fisicoY
 db.define_table(
   'es_tecnico',
   #Atributos;
@@ -177,3 +178,7 @@ db.define_table(
   Field('espacio_fisico', 'reference espacios_fisicos',
           requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), label=T('Espacio Físico'))
   )
+
+# Tabla "es_encargado" que mapea al personal con las dependencias que tiene a cargo. Esta tabla sera necesaria si, por ejemplo
+# una mismo persona puede ser jefa de seccion de varias secciones. Actualmente la tabla "t_Personal" es suficiente si se asume
+# que esto no puede pasar.
