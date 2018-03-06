@@ -17,10 +17,6 @@ import re
 def sigulab2():
   return dict()
 
-# Controlador auxiliar que redirije al controlador real del index 'default/index'
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def index():
-  return redirect(URL('default','index'))
 
 def authenticate():
   """
@@ -42,7 +38,7 @@ def authenticate():
   if not user:
     return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
-    url = URL('index')
+    url = URL('default','index')
     return '$(location).attr("href", "' + str(url) + '")'
 
 def login():
