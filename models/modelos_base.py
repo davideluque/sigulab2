@@ -166,3 +166,14 @@ db.define_table(
     )
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
+
+
+# Tabla que mapea tecnicos con sus respectivos Espacios Fisicos. Ejemplo: TecnicoX "es_tecnico" del espacio fisico Espacio_fisicoY
+db.define_table(
+  'es_tecnico',
+  #Atributos;
+  Field('tecnico', 'reference t_Personal',
+          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None), label=T('Técnico')),
+  Field('espacio_fisico', 'reference espacios_fisicos',
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), label=T('Espacio Físico'))
+  )

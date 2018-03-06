@@ -548,6 +548,7 @@
 'TSV (Excel compatible)': 'TSV (compatible con Excel)',
 'TSV (Excel compatible, hidden cols)': 'TSV (compatible con Excel, columnas ocultas)',
 'Twitter': 'Twitter',
+'Técnico': 'Técnico',
 'Ubicación Física': 'Ubicación Física',
 'Unable to check for upgrades': 'No es posible verificar la existencia de actualizaciones',
 'unable to create application "%s"': 'no es posible crear la aplicación "%s"',
