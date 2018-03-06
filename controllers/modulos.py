@@ -14,15 +14,13 @@ import re
 #-------------------------------------
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def index():
-  """
-  @description Pagina principal de elección de módulos SMyDP o Otros Módulos
-  """
-  return dict()
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 def sigulab2():
   return dict()
+
+# Controlador auxiliar que redirije al controlador real del index 'default/index'
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def index():
+  return redirect(URL('default','index'))
 
 def authenticate():
   """
@@ -56,8 +54,9 @@ def login():
   en caso de que el usuario ya fue autenticado.
   """
   if auth.user:
-    return redirect(URL('index'))
+    return redirect(URL('default', 'index'))
 
+  auth.settings.login_next = URL('default','index')
   form=auth.login()
   
   if request.vars['error'] == 'invalid_data':

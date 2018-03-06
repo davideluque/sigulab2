@@ -1,16 +1,17 @@
 # -------------------------------------------------------------------------
 # Controladores Basicos
-# - index sera la accion basica de la aplicacion.
+# - index sera la accion basica de la aplicacion donde se muestran los modulos de SMyDP, Personal y servicios
 #
 # - download y call son ejemplos de aplicaciones basicas de web2py.
 # -------------------------------------------------------------------------
 
-def register():
-    return redirect(URL('modulos','register'))
-
-# Pagina principal (Boton de SMDP y otros modulos)
+# Pagina principal 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return dict()
+
+def register():
+    return redirect(URL('modulos','register'))
 
 def recoverpassword():
     return dict(form=auth.reset_password())
