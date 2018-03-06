@@ -208,6 +208,7 @@
 'Edit This App': 'Edite esta App',
 'Editing file': 'Editando archivo',
 'Editing file "%s"': 'Editando archivo "%s"',
+'El CAS debe contener tres números separados entre sí por guiones. Por ejemplo, 7732-18-5': 'El CAS debe contener tres números separados entre sí por guiones. Por ejemplo, 7732-18-5',
 'Email and SMS': 'Correo electrónico y SMS',
 'Email del Responsable de la Solicitud': 'Email del Responsable de la Solicitud',
 'Email sent': 'Correo electrónico enviado',
