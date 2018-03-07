@@ -281,7 +281,8 @@ def ajax_registro_espacio():
   #pdb.set_trace()
   espacios = [{"id":"1","codigo":"MYS-214"}, {"id":"2","codigo":"MYS-211"}, {"id":"3","codigo":"MYS-210"}]
   print espacios
-  return dict(lista=espacios)
+  lista = espacios
+  return locals()
 
 
 # Recuperacion de Contraseña (pedido) 
