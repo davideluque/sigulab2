@@ -104,7 +104,9 @@
                 <!-- Tipos de Rol -->
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
+                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick=" getUnidad();
+                                                                                                                                getSeccion();
+                                                                                                                                getEspacio();">
                             <option value="" selected hidden disabled>Rol</option>
                             {{for rol in roles:}}
                             <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
@@ -116,6 +118,8 @@
                 <div id="unidaddiv" class="form-group"></div>
 
                 <div id="secciondiv" class="form-group"></div>
+                <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
+                <div id="espaciodiv" class="form-group"></div> 
 
                 <div class="form-group text-center" id="submit_record__row">
 
@@ -164,8 +168,13 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
+
+<!-- dependenciahidden contiene el id del rol -->
 <input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
+<!-- seccionhidden contiene el id de la dependencia -->
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
+<!-- espaciohidden contiene el id de la seccion -->
+<input type="hidden" id="espaciohidden" name="espaciohidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
@@ -249,6 +258,23 @@
         var x = document.getElementById("seccionhidden");
         x.value = labelegido;
         ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
+    }
+
+
+    function getEspacio(){
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+        var opcioneslab = document.getElementById("laboratorio");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var opcionessec = document.getElementById("seccion");
+        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
+        var x = document.getElementById("dependenciahidden");
+        x.value = rolelegida;
+        var x = document.getElementById("seccionhidden");
+        x.value = labelegido;
+        var x = document.getElementById("espaciohidden");
+        x.value = seccionelegida;
+        ajax('ajax_registro_espacio', ['dependenciahidden', 'seccionhidden', 'espaciohidden'], 'espaciodiv');
     }
 
     function mostrarContrasena(idContrasena) {

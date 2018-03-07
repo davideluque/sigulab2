@@ -188,7 +188,8 @@ def register():
     """Después de haber hecho la verificación de correo electrónico no tomado
     y que la verificación de contraseñas coincide. Es decir, cuando el
     registro fue satisfactorio, se hace una conexión entre el usuario recién
-    registrado y las tablas membership y personal.
+    registrado y las tablas membership y personal. Ademas, se crea una entrada
+    en la tabla "es_tecnico" si el usuario tiene el rol de tecnico.
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
 
@@ -273,6 +274,15 @@ def ajax_registro_seccion():
     secciones=list(db(db.dependencias.unidad_de_adscripcion == int(labid)).select(db.dependencias.ALL))
 
   return dict(lista=secciones)
+
+# Ajax Helper para mostrar espacios fisicos a Tecnicos
+def ajax_registro_espacio():
+  #import pdb
+  #pdb.set_trace()
+  espacios = [{"id":"1","codigo":"MYS-214"}, {"id":"2","codigo":"MYS-211"}, {"id":"3","codigo":"MYS-210"}]
+  print espacios
+  return dict(lista=espacios)
+
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
