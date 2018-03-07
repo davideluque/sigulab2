@@ -168,7 +168,7 @@
 
 
 <!-- dependenciahidden contiene el id del rol -->
-<input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
+<input type="hidden" id="rolhidden" name="rolhidden" value="">
 <!-- seccionhidden contiene el id de la dependencia -->
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
 <!-- espaciohidden contiene el id de la seccion -->
@@ -240,10 +240,10 @@
     function getUnidad(){
         var opcionesrol = document.getElementById("rol");
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-        var x = document.getElementById("dependenciahidden");
+        var x = document.getElementById("rolhidden");
         x.value = rolelegida;
 
-        ajax('ajax_unidad_rol', ['dependenciahidden'], 'unidaddiv');
+        ajax('ajax_unidad_rol', ['rolhidden'], 'unidaddiv');
     }
 
     function getSeccion(){
@@ -251,11 +251,11 @@
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var x = document.getElementById("dependenciahidden");
+        var x = document.getElementById("rolhidden");
         x.value = rolelegida;
         var x = document.getElementById("seccionhidden");
         x.value = labelegido;
-        ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
+        ajax('ajax_registro_seccion', ['rolhidden', 'seccionhidden'], 'secciondiv');
     }
 
 
@@ -266,14 +266,14 @@
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
         var opcionessec = document.getElementById("seccion");
         var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
-        var x = document.getElementById("dependenciahidden");
+        var x = document.getElementById("rolhidden");
         x.value = rolelegida;
         var x = document.getElementById("seccionhidden");
         x.value = labelegido;
         var x = document.getElementById("espaciohidden");
         x.value = seccionelegida;
 
-        ajax('ajax_registro_espacio', ['dependenciahidden', 'seccionhidden', 'espaciohidden'], 'espaciodiv');
+        ajax('ajax_registro_espacio', ['rolhidden', 'seccionhidden', 'espaciohidden'], 'espaciodiv');
     }
 
     function mostrarContrasena(idContrasena) {

@@ -231,7 +231,7 @@ def register():
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
-  rolid = request.post_vars.dependenciahidden
+  rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   direccion=db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL)
   labs_y_coordinaciones=list(db(db.dependencias.unidad_de_adscripcion == direccion[0].id).select(db.dependencias.ALL))
@@ -266,7 +266,7 @@ def ajax_membership():
 
 # Ajax Helper para mostrar dependencias a Tecnicos y Jefes de seccion
 def ajax_registro_seccion(): 
-  rolid = request.post_vars.dependenciahidden
+  rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
   if roltype == "TÉCNICO" or roltype == "JEFE DE SECCIÓN":
