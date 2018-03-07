@@ -104,7 +104,9 @@
                 <!-- Tipos de Rol -->
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();">
+                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
+                                                                                                                                getSeccion();
+                                                                                                                                getEspacio();">
                             <option value="" selected hidden disabled>Rol</option>
                             {{for rol in roles:}}
                             <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
@@ -269,7 +271,7 @@
         var opcionessec = document.getElementById("seccion");
         var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
         // Se le asigna a los elementos escondidos los valores seleccionados por el usuario
-        // en los archivos aja_*
+        // en los archivos ajax_*
         var x = document.getElementById("rolhidden");
         x.value = rolelegida;
         var x = document.getElementById("dephidden");

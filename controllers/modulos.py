@@ -279,9 +279,23 @@ def ajax_registro_seccion():
 
 # Ajax Helper para mostrar espacios fisicos a Tecnicos
 def ajax_registro_espacio():
+  
   # Obteniendo la dependencia a la cual pertenece el tecnico
-  depid = request.post_vars.seccionhidden
-  espacios=list(db(db.espacios_fisicos.dependencia == int(depid)).select())
+  print 'ajax_registro_espacio: ',request.post_vars
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+  labid = request.post_vars.dephidden
+  secid = request.post_vars.seccionhidden
+  
+  # Si usuario selecciona otro laboratorio, el id de este cambia, por lo que este laboratorio
+  # deja de ser la dependencia de la seccion y no es necesario mostrar los espacios fisicos
+  # que ya se habian desplegado
+  esta_adscrito = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion) == int(labid)
+  espacios = False
+  
+  if roltype == "TÉCNICO" and esta_adscrito:
+    espacios = list(db(db.espacios_fisicos.dependencia == int(secid)).select())
+  
   return dict(lista=espacios)
 
 # Recuperacion de Contraseña (pedido) 
