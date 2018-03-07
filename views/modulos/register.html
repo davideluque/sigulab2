@@ -172,7 +172,7 @@
 <!-- dephidden contiene el id de la dependencia en la base de datos -->
 <input type="hidden" id="dephidden" name="dephidden" value="">
 <!-- sechidden contiene el id de la dependencia en la base de datos -->
-<input type="hidden" id="espaciohidden" name="espaciohidden" value="">
+<input type="hidden" id="seccionhidden" name="seccionhidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
@@ -238,6 +238,9 @@
     }
 
     function getUnidad(){
+        /* Esto le asigna a los inputs escondidos (rolhidden, en este caso) 
+        el valor que selecciono el usuario de los dropdowns de entre las opciones
+        disponibles. */
         var opcionesrol = document.getElementById("rol");
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var x = document.getElementById("rolhidden");
@@ -258,7 +261,6 @@
         ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
     }
 
-
     function getEspacio(){
         var opcionesrol = document.getElementById("rol");
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
@@ -266,14 +268,16 @@
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
         var opcionessec = document.getElementById("seccion");
         var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
+        // Se le asigna a los elementos escondidos los valores seleccionados por el usuario
+        // en los archivos aja_*
         var x = document.getElementById("rolhidden");
         x.value = rolelegida;
         var x = document.getElementById("dephidden");
         x.value = labelegido;
-        var x = document.getElementById("espaciohidden");
+        var x = document.getElementById("seccionhidden");
         x.value = seccionelegida;
 
-        ajax('ajax_registro_espacio', ['rolhidden', 'dephidden', 'espaciohidden'], 'espaciodiv');
+        ajax('ajax_registro_espacio', ['rolhidden', 'dephidden', 'seccionhidden'], 'espaciodiv');
     }
 
     function mostrarContrasena(idContrasena) {

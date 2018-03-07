@@ -279,11 +279,10 @@ def ajax_registro_seccion():
 
 # Ajax Helper para mostrar espacios fisicos a Tecnicos
 def ajax_registro_espacio():
-  print 'ajax_registro_espacio: ',request.post_vars
-  espacios = [{"id":"1","codigo":"MYS-214"}, {"id":"2","codigo":"MYS-211"}, {"id":"3","codigo":"MYS-210"}]
-  lista = espacios
-  return locals()
-
+  # Obteniendo la dependencia a la cual pertenece el tecnico
+  depid = request.post_vars.seccionhidden
+  espacios=list(db(db.espacios_fisicos.dependencia == int(depid)).select())
+  return dict(lista=espacios)
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
