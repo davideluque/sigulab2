@@ -277,10 +277,8 @@ def ajax_registro_seccion():
 
 # Ajax Helper para mostrar espacios fisicos a Tecnicos
 def ajax_registro_espacio():
-  #import pdb
-  #pdb.set_trace()
+  
   espacios = [{"id":"1","codigo":"MYS-214"}, {"id":"2","codigo":"MYS-211"}, {"id":"3","codigo":"MYS-210"}]
-  print espacios
   lista = espacios
   return locals()
 

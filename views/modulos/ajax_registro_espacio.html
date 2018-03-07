@@ -1,13 +1,8 @@
-{{if lista:}}
 <div class="col-xs-12">
-<select class="form-control" type="select" required="" id="espacio" name="espacio" placeholder="Espacio físico">
-    <option value="" selected hidden disabled>Sección</option>
-    {{for espacio in lista:}}
-    	<option value='{{=espacio["id"]}}'>{{=espacio["codigo"]}}</option>
-    	<!--
-    	<option value='{{=espacio.id}}'>{{=espacio.codigo}}</option>
-    	-->
-    {{pass}}
-</select>
+	<select class="form-control" type="select" required="" id="espacio" name="espacio" placeholder="Espacio físico">
+	    <option value="" selected hidden disabled>Sección</option>
+	    {{for espacio in lista:}}
+	    <option value="{{=espacio['id']}}">{{=espacio['codigo']}}</option>
+	    {{pass}}
+	</select>
 </div>
-{{pass}}

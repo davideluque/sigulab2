@@ -272,7 +272,8 @@
         x.value = labelegido;
         var x = document.getElementById("espaciohidden");
         x.value = seccionelegida;
-        ajax('ajax_registro_espacio', [], 'espaciodiv');
+
+        ajax('ajax_registro_espacio', ['dependenciahidden', 'seccionhidden', 'espaciohidden'], 'espaciodiv');
     }
 
     function mostrarContrasena(idContrasena) {
