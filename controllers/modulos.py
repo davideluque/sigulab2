@@ -231,6 +231,7 @@ def register():
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
+  print 'ajax_unidad_rol: ',request.post_vars
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   direccion=db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL)
@@ -266,18 +267,19 @@ def ajax_membership():
 
 # Ajax Helper para mostrar dependencias a Tecnicos y Jefes de seccion
 def ajax_registro_seccion(): 
+  print 'ajax_registro_seccion: ',request.post_vars
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
   if roltype == "TÉCNICO" or roltype == "JEFE DE SECCIÓN":
-    labid = request.post_vars.seccionhidden
+    labid = request.post_vars.dephidden
     secciones=list(db(db.dependencias.unidad_de_adscripcion == int(labid)).select(db.dependencias.ALL))
 
   return dict(lista=secciones)
 
 # Ajax Helper para mostrar espacios fisicos a Tecnicos
 def ajax_registro_espacio():
-  
+  print 'ajax_registro_espacio: ',request.post_vars
   espacios = [{"id":"1","codigo":"MYS-214"}, {"id":"2","codigo":"MYS-211"}, {"id":"3","codigo":"MYS-210"}]
   lista = espacios
   return locals()

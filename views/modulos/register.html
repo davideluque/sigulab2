@@ -167,11 +167,11 @@
                 </div><!-- /.modal -->
 
 
-<!-- dependenciahidden contiene el id del rol -->
+<!-- rolhidden contiene el id del rol de la base de datos -->
 <input type="hidden" id="rolhidden" name="rolhidden" value="">
-<!-- seccionhidden contiene el id de la dependencia -->
-<input type="hidden" id="seccionhidden" name="seccionhidden" value="">
-<!-- espaciohidden contiene el id de la seccion -->
+<!-- dephidden contiene el id de la dependencia en la base de datos -->
+<input type="hidden" id="dephidden" name="dephidden" value="">
+<!-- sechidden contiene el id de la dependencia en la base de datos -->
 <input type="hidden" id="espaciohidden" name="espaciohidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -253,9 +253,9 @@
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
         var x = document.getElementById("rolhidden");
         x.value = rolelegida;
-        var x = document.getElementById("seccionhidden");
+        var x = document.getElementById("dephidden");
         x.value = labelegido;
-        ajax('ajax_registro_seccion', ['rolhidden', 'seccionhidden'], 'secciondiv');
+        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
     }
 
 
@@ -268,12 +268,12 @@
         var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
         var x = document.getElementById("rolhidden");
         x.value = rolelegida;
-        var x = document.getElementById("seccionhidden");
+        var x = document.getElementById("dephidden");
         x.value = labelegido;
         var x = document.getElementById("espaciohidden");
         x.value = seccionelegida;
 
-        ajax('ajax_registro_espacio', ['rolhidden', 'seccionhidden', 'espaciohidden'], 'espaciodiv');
+        ajax('ajax_registro_espacio', ['rolhidden', 'dephidden', 'espaciohidden'], 'espaciodiv');
     }
 
     function mostrarContrasena(idContrasena) {
