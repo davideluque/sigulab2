@@ -163,24 +163,12 @@ db.define_table(
     #Referencia (Revisar si el label es asistio o organizo)
     Field('dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')),
+    Field('tecnico', 'reference t_Personal',
+          requires=IS_IN_DB(db, db.t_Personal.id, '%(id)s', zero=None), label=T('Técnico')),  
     )
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
-
-
-# Tabla "es_tecnico" que mapea tecnicos con sus respectivos Espacios Fisicos. Ejemplo: TecnicoX "es_tecnico" del espacio 
-# fisico Espacio_fisicoY
-db.define_table(
-  'es_tecnico',
-  #Atributos;
-  Field('tecnico', 'reference t_Personal',
-          requires=IS_IN_DB(db, db.t_Personal.id, '%(id)s', zero=None), label=T('Técnico')),
-  Field('espacio_fisico', 'reference espacios_fisicos', unique=True,
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(id)s', zero=None), label=T('Espacio Físico'))
-  )
-
-db.es_tecnico.espacio_fisico.requires = IS_NOT_IN_DB(db, 'es_tecnico.espacio_fisico')
 
 # Tabla "es_encargado" que mapea al personal con las dependencias que tiene a cargo. Esta tabla sera necesaria si, por ejemplo
 # una mismo persona puede ser jefa de seccion de varias secciones. Actualmente la tabla "t_Personal" es suficiente si se asume

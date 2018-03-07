@@ -225,8 +225,9 @@ def register():
 
     if roltype == "TÉCNICO":
       # ID del espacio fisico
-      espacioid = request.post_vars.espacio
-      db.es_tecnico.insert(tecnico=int(nuevo_personal_id), espacio_fisico=espacioid)
+      espacio_id = request.post_vars.espacio
+      espacio_row = db(db.espacios_fisicos.id == int(espacio_id)).select().first()
+      espacio_row.update_record(tecnico=nuevo_personal_id)
 
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
