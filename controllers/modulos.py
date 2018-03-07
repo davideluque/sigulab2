@@ -163,7 +163,6 @@ def register():
   siguientes grupos: Grupo Webmaster, grupo DIRECTOR, grupo Asistente del 
   DIRECTOR o Coordinadora de la Calidad.
   """
-
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
     auth_register = auth.register_bare(username=request.post_vars.first_name, 
@@ -207,7 +206,7 @@ def register():
 
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
-    db.t_Personal.insert(f_nombre = request.post_vars.first_name,
+    nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
                            f_ci = request.post_vars.cedula,
                            f_email = request.post_vars.email,
@@ -219,7 +218,16 @@ def register():
                            f_fecha_ingreso = "1/01/1989",
                            f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)
-    
+  
+    # Mapea el usuario al espacio fisico que tiene a cargo
+    rolid = request.post_vars.rol
+    roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+
+    if roltype == "TÉCNICO":
+      # ID del espacio fisico
+      espacioid = request.post_vars.espacio
+      db.es_tecnico.insert(tecnico=int(nuevo_personal_id), espacio_fisico=espacioid)
+
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
     # actualización de datos personales.
@@ -231,7 +239,6 @@ def register():
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
-  print 'ajax_unidad_rol: ',request.post_vars
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   direccion=db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL)
@@ -267,7 +274,6 @@ def ajax_membership():
 
 # Ajax Helper para mostrar dependencias a Tecnicos y Jefes de seccion
 def ajax_registro_seccion(): 
-  print 'ajax_registro_seccion: ',request.post_vars
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
@@ -279,9 +285,8 @@ def ajax_registro_seccion():
 
 # Ajax Helper para mostrar espacios fisicos a Tecnicos
 def ajax_registro_espacio():
-  
+
   # Obteniendo la dependencia a la cual pertenece el tecnico
-  print 'ajax_registro_espacio: ',request.post_vars
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   labid = request.post_vars.dephidden
@@ -289,8 +294,9 @@ def ajax_registro_espacio():
   
   # Si usuario selecciona otro laboratorio, el id de este cambia, por lo que este laboratorio
   # deja de ser la dependencia de la seccion y no es necesario mostrar los espacios fisicos
-  # que ya se habian desplegado
-  esta_adscrito = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion) == int(labid)
+  # que ya se habian desplegado. Quiza sea mejor reiniciar los elementos usando JS
+  unidadid = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion) 
+  esta_adscrito = unidadid == int(labid)
   espacios = False
   
   if roltype == "TÉCNICO" and esta_adscrito:
