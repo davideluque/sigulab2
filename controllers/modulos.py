@@ -234,6 +234,12 @@ def register():
     # actualización de datos personales.
     return redirect('register')
 
+  # Si aun no se ha llenado la forma, se establece la variable tags con los nombres de
+  # los espacios fisicos que ha seleccionado el usuario has ahora
+  if session.tags is None:
+    session.tags = {}
+
+
   roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
 
   return dict(roles=roles)
@@ -306,8 +312,21 @@ def ajax_registro_espacio():
   return dict(lista=espacios)
 
 def ajax_mostrar_espacios():
-  return locals()
-  #return dict(lista=tags)
+
+  # Guardando los espacios seleccionados por el usuario para guardar en la case de datos
+  # aquellos espacios de los que el tecnico es responsable
+  depid = request.post_vars.dephidden
+  secid = request.post_vars.seccionhidden
+  espid = request.post_vars.esphidden
+
+  espacio_nombre = db(db.espacios_fisicos.id == int(espid)).select()[0].codigo
+
+  # Cuando se presiona para abrir la lista de espacios fisicos y se vuelve a pisar el boton
+  # el evento "onclick" termina llamando esta funcion. Para no agregar ids vacios a session.tags
+  if espid != '':
+    session.tags[depid + secid + espid] = espacio_nombre
+
+  return dict(tags=session.tags)
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():

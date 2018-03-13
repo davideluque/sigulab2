@@ -1,1 +1,10 @@
-<div>hola</div>
+{{if tags:}}
+<div class="col-xs-12">
+    {{for trace, espacio in tags.iteritems():}}
+    	<button type="button" class="btn">
+    		<p class="tag">{{=espacio}}</p>
+    		<img class="iconos" src="{{=URL('static', 'images/x.png')}}">
+    	</button>
+    {{pass}}	
+</div>
+{{pass}}

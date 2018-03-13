@@ -7,6 +7,7 @@
     <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/servicios_registro.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/tags.css')}}" rel="stylesheet" type="text/css"/>
 {{end}}
 
 {{block center}}
@@ -288,8 +289,20 @@
     }
 
     function setEspacios(){
-        
-        ajax('ajax_mostrar_espacios', [], 'tagsdiv');   
+        var opcioneslab = document.getElementById("laboratorio");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var opcionessec = document.getElementById("seccion");
+        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
+        var opcionesespacios = document.getElementById("espacio");
+        var espacioelegido = opcionesespacios.options[opcionesespacios.selectedIndex].value;
+        var x = document.getElementById("dephidden");
+        x.value = labelegido;
+        var x = document.getElementById("seccionhidden");
+        x.value = seccionelegida;
+        var x = document.getElementById("esphidden");
+        x.value = espacioelegido;
+
+        ajax('ajax_mostrar_espacios', ['dephidden', 'seccionhidden', 'esphidden'], 'tagsdiv');   
     }
 
     function mostrarContrasena(idContrasena) {
