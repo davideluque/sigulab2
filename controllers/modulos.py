@@ -305,6 +305,10 @@ def ajax_registro_espacio():
   
   return dict(lista=espacios)
 
+def ajax_mostrar_espacios():
+  return locals()
+  #return dict(lista=tags)
+
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():
   site_url = URL('default', 'recoverpassword', host=True)
