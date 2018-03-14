@@ -1,48 +1,14 @@
-.espacios{
-	margin: 0px
+.boton{
+	padding-bottom: 5px;
+	display: inline-block;
 }
 
 .tag {
-	display: inline-block;
 	margin-bottom: 0px !important;
+	display: inline-block;
 }
 
 img {
 	width: 10px;
 	height: auto;
-}
-
-
-.columnas {
-	text-align: center;
-}
-
-.caja{
-	padding: 50px 0 50px 0;
-	margin: 0 5px 0 5px;
-	border: solid;
-	border-width: 2px;
-	border-color: #FEE501;
-	background-color: #606060;
-	color: #FFFFFF;
-}
-
-.caja:hover {
-	background-color: #F0F0F0;
-	color: #606060;
-}
-
-.dependencia{
-	margin: 0;
-	text-transform: uppercase;
-	font-weight: bold;
-}
-
-.opciones {
-	text-align: center;
-	color: #606060;
-}
-
-#fila2 {
-	padding: 30px 0 30px 0;
 }

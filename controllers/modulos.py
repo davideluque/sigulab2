@@ -234,9 +234,10 @@ def register():
     # actualización de datos personales.
     return redirect('register')
 
-  # Si aun no se ha llenado la forma, se establece la variable tags con los nombres de
-  # los espacios fisicos que ha seleccionado el usuario has ahora
-  if session.tags is None:
+  # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de 
+  # registro, se inicializa (o reestablece) la variable tags con los espacios
+  # fisicos seleccionados por el usuario. 
+  if session.tags is None or not request.vars:
     session.tags = {}
 
 
@@ -269,6 +270,7 @@ def ajax_unidad_rol():
 
 # Ajax helper para crear una membership para el usuario recien registrado
 def ajax_membership():
+
   session.depid = None
   session.rolid = int(request.post_vars.rol)
   session.ci = int(request.post_vars.cedula)
@@ -280,7 +282,8 @@ def ajax_membership():
   return dict()
 
 # Ajax Helper para mostrar dependencias a Tecnicos y Jefes de seccion
-def ajax_registro_seccion(): 
+def ajax_registro_seccion():
+
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
@@ -313,8 +316,11 @@ def ajax_registro_espacio():
 
 def ajax_mostrar_espacios():
 
-  # Guardando los espacios seleccionados por el usuario para guardar en la case de datos
-  # aquellos espacios de los que el tecnico es responsable
+  """ 
+  Guardando los espacios seleccionados por el usuario para guardar en la case de datos
+  aquellos espacios de los que el tecnico es responsable
+  """
+
   depid = request.post_vars.dephidden
   secid = request.post_vars.seccionhidden
   espid = request.post_vars.esphidden
@@ -324,8 +330,21 @@ def ajax_mostrar_espacios():
   # Cuando se presiona para abrir la lista de espacios fisicos y se vuelve a pisar el boton
   # el evento "onclick" termina llamando esta funcion. Para no agregar ids vacios a session.tags
   if espid != '':
-    session.tags[depid + secid + espid] = espacio_nombre
+    session.tags[depid + "-" + secid + "-" + espid] = espacio_nombre
 
+  return dict(tags=session.tags)
+
+def ajax_eliminar_espacio():
+
+  """
+  Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
+  espacio que se desea eliminar
+  """
+  print request.post_vars.borrarhidden
+  espid = request.post_vars.borrarhidden
+  print session.tags
+  session.tags.pop(espid)
+  print session.tags
   return dict(tags=session.tags)
 
 # Recuperacion de Contraseña (pedido) 

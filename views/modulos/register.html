@@ -181,6 +181,8 @@
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
 <!-- esphidden contiene el id del espacio seleccionado por el usuario -->
 <input type="hidden" id="esphidden" name="esphidden" value="">
+<!--  contiene el rastro o secuencia de dependencias hasta el espacio fisico -->
+<input type="hidden" id="borrarhidden" name="borrarhidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
@@ -285,10 +287,16 @@
         var x = document.getElementById("seccionhidden");
         x.value = seccionelegida;
 
-        ajax('ajax_registro_espacio', ['rolhidden', 'dephidden', 'seccionhidden'], 'espaciodiv');
+        ajax('ajax_registro_espacio', ['rolhidden', 
+                                       'dephidden', 
+                                       'seccionhidden'], 'espaciodiv');
     }
 
     function setEspacios(){
+        /* 
+        Esta funcion es llamada para actualizar la lista de tags (lista de espacios 
+        fisicos) de los cuales esta a cargo el tecnico que se registra en el sistema. 
+        */
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
         var opcionessec = document.getElementById("seccion");
@@ -303,6 +311,14 @@
         x.value = espacioelegido;
 
         ajax('ajax_mostrar_espacios', ['dephidden', 'seccionhidden', 'esphidden'], 'tagsdiv');   
+    }
+
+    function deleteEspacio(espacio_id){
+
+        var x = document.getElementById("borrarhidden");
+        x.value = espacio_id;
+
+        ajax('ajax_eliminar_espacio', ["borrarhidden"], 'tagsdiv');
     }
 
     function mostrarContrasena(idContrasena) {
