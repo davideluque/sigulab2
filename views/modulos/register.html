@@ -297,12 +297,18 @@
         Esta funcion es llamada para actualizar la lista de tags (lista de espacios 
         fisicos) de los cuales esta a cargo el tecnico que se registra en el sistema. 
         */
+
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
         var opcionessec = document.getElementById("seccion");
         var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
         var opcionesespacios = document.getElementById("espacio");
         var espacioelegido = opcionesespacios.options[opcionesespacios.selectedIndex].value;
+
+        var x = document.getElementById("rolhidden");
+        x.value = rolelegida;
         var x = document.getElementById("dephidden");
         x.value = labelegido;
         var x = document.getElementById("seccionhidden");
@@ -310,7 +316,10 @@
         var x = document.getElementById("esphidden");
         x.value = espacioelegido;
 
-        ajax('ajax_mostrar_espacios', ['dephidden', 'seccionhidden', 'esphidden'], 'tagsdiv');   
+        ajax('ajax_mostrar_espacios', ['rolhidden', 
+                                       'dephidden', 
+                                       'seccionhidden', 
+                                       'esphidden'], 'tagsdiv');   
     }
 
     function deleteEspacio(espacio_id){

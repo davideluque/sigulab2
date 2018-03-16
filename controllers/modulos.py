@@ -320,7 +320,8 @@ def ajax_mostrar_espacios():
   Guardando los espacios seleccionados por el usuario para guardar en la case de datos
   aquellos espacios de los que el tecnico es responsable
   """
-
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   depid = request.post_vars.dephidden
   secid = request.post_vars.seccionhidden
   espid = request.post_vars.esphidden
@@ -332,6 +333,10 @@ def ajax_mostrar_espacios():
   if espid != '':
     session.tags[depid + "-" + secid + "-" + espid] = espacio_nombre
 
+  # Los tags se mostraran solo si el usuario es un tecnico
+  if roltype != "TÉCNICO":
+    session.tags = {}
+
   return dict(tags=session.tags)
 
 def ajax_eliminar_espacio():
@@ -340,11 +345,8 @@ def ajax_eliminar_espacio():
   Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
   espacio que se desea eliminar
   """
-  print request.post_vars.borrarhidden
   espid = request.post_vars.borrarhidden
-  print session.tags
   session.tags.pop(espid)
-  print session.tags
   return dict(tags=session.tags)
 
 # Recuperacion de Contraseña (pedido) 
