@@ -218,17 +218,17 @@ def register():
                            f_fecha_ingreso = "1/01/1989",
                            f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)
-  
+
     # Mapea el usuario al espacio fisico que tiene a cargo
     rolid = request.post_vars.rol
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
 
     if roltype == "TÉCNICO":
-      # ID del espacio fisico
-      espacio_id = request.post_vars.espacio
-      espacio_row = db(db.espacios_fisicos.id == int(espacio_id)).select().first()
-      espacio_row.update_record(tecnico=nuevo_personal_id)
-
+      for trace, espacio in session.tags.iteritems():
+        espacio_id = trace.split('-')[2]
+        db.es_encargado.insert(espacio_fisico = espacio_id, 
+                               tecnico = nuevo_personal_id)
+      
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
     # actualización de datos personales.
