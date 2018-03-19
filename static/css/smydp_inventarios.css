@@ -1,28 +1,24 @@
 
 .columnas {
 	text-align: center;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-bottom: 20px;
 }
 
-.caja{
+.dependencia{
 	padding: 50px 0 50px 0;
 	margin: 0 5px 0 5px;
 	background-color: #03A5FE;
+	color: #F0F0F0;
 	box-shadow: 10px 10px 10px #B1B1B1;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
-.caja:hover {
+.dependencia:hover {
 	background-color: #E1E1E1;
 	color: #606060;
 	transition-timing-function: linear;
 	transition-duration: 0.25s;
-}
-
-.dependencia{
-	margin: 0;
-	font-weight: bold;
-    text-transform: uppercase;
 }
 
 .opciones {
@@ -30,15 +26,13 @@
 	color: #606060;
 }
 
-a {
-	color: #F0F0F0;
-	display: block !important;
+a[class="dependencia"]{
+	text-decoration: none;
+	display: block;
     height: 100% !important;
     width: 100% !important;
-	text-decoration: inherit !important;
 }
 
-a:hover
-{
-    color: #606060;
+a:hover{
+	text-decoration: none;
 }
