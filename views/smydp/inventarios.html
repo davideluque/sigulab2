@@ -31,29 +31,21 @@
 				<div class="col-xs-6 col-sm-10">
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<a class="dependencia">{{=dependencias[4*k].nombre}}</a>
-						</div>
+						<a class="dependencia">{{=dependencias[4*k].nombre}}</a>
 					</div>
 					{{ if 4*k+1 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<a class="dependencia">{{=dependencias[4*k+1].nombre}}</a>
-						</div>
+						<a class="dependencia">{{=dependencias[4*k+1].nombre}}</a>
 					</div>
 					{{pass}}
 					{{ if 4*k+2 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<a class="dependencia">{{=dependencias[4*k+2].nombre}}</a>
-						</div>
+						<a class="dependencia">{{=dependencias[4*k+2].nombre}}</a>
 					</div>
 					{{ pass }}
 					{{ if 4*k+3 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<a class="dependencia">{{=dependencias[4*k+3].nombre}}</a>
-						</div>
+						<a class="dependencia">{{=dependencias[4*k+3].nombre}}</a>
 					</div>
 					{{ pass }}
 				</div>

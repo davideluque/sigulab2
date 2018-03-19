@@ -4,28 +4,35 @@
 	padding-bottom: 20px;
 }
 
-.caja{
+.dependencia{
 	padding: 50px 0 50px 0;
 	margin: 0 5px 0 5px;
 	background-color: #03A5FE;
 	color: #F0F0F0;
 	box-shadow: 10px 10px 10px #B1B1B1;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
-.caja:hover {
+.dependencia:hover {
 	background-color: #E1E1E1;
 	color: #606060;
 	transition-timing-function: linear;
 	transition-duration: 0.25s;
 }
 
-.dependencia{
-	margin: 0;
-	text-transform: uppercase;
-	font-weight: bold;
-}
-
 .opciones {
 	text-align: center;
 	color: #606060;
+}
+
+a[class="dependencia"]{
+	text-decoration: none;
+	display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+a:hover{
+	text-decoration: none;
 }
