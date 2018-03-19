@@ -19,17 +19,12 @@ def sustancias():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
-    # Obteniendo la fila del usuario conectado en t_Personal
-    user_id = auth.user.id
-    user = db.t_Personal(db.t_Personal.id == user_id)
-
-    # Dependencia a la que pertenece el usuario o que tiene a cargo
-    dep_id = user.f_dependencia
-    dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+    import pdb
+    pdb.set_trace()
 
     if auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
-        if request.post_vars.dependencia:
+        if request.post_vars.dep_id:
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -44,11 +39,22 @@ def inventarios():
     # con una lista de adyacencias
     else:
         # Si el usuario ha seleccionado una dependencia
-        if request.post_vars.dependencia:
+        if request.post_vars.dep_id:
             # Se muestran las dependencias que componen a esta dependencia padre
             # y se lista el inventario agregado de estas
-            pass
+            dep_id = request.post_vars.dep_id
+            dep_nombre = request.post_vars.dep_nombre
+            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
+                                                                      db.dependencias.ALL))
         else:
+            # Obteniendo la entrada en t_Personal del usuario conectado
+            user_id = auth.user.id
+            user = db.t_Personal(db.t_Personal.id == user_id)
+
+            # Dependencia a la que pertenece el usuario o que tiene a cargo
+            dep_id = user.f_dependencia
+            dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(

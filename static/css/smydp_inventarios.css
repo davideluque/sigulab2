@@ -1,17 +1,17 @@
-
 .columnas {
 	text-align: center;
 	padding-bottom: 20px;
 }
 
 .dependencia{
-	padding: 50px 0 50px 0;
+	padding: 50px 2px;
 	margin: 0 5px 0 5px;
 	background-color: #03A5FE;
 	color: #F0F0F0;
 	box-shadow: 10px 10px 10px #B1B1B1;
 	text-transform: uppercase;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 .dependencia:hover {
@@ -24,15 +24,4 @@
 .opciones {
 	text-align: center;
 	color: #606060;
-}
-
-a[class="dependencia"]{
-	text-decoration: none;
-	display: block;
-    height: 100% !important;
-    width: 100% !important;
-}
-
-a:hover{
-	text-decoration: none;
 }

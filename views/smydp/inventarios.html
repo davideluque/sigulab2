@@ -30,22 +30,22 @@
 				<div class="col-xs-3 col-sm-1"></div>
 				<div class="col-xs-6 col-sm-10">
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-					<div class="col-sm-3 columnas">
-						<a class="dependencia">{{=dependencias[4*k].nombre}}</a>
+					<div id="{{=dependencias[4*k].id}}" class="col-sm-3 columnas" onclick="postDependencia(this.id);">
+						<div class="dependencia">{{=dependencias[4*k].nombre}}</div>
 					</div>
 					{{ if 4*k+1 < n: }}
-					<div class="col-sm-3 columnas">
-						<a class="dependencia">{{=dependencias[4*k+1].nombre}}</a>
+					<div id="{{=dependencias[4*k+1].id}}" class="col-sm-3 columnas" onclick="postDependencia(this.id);">
+						<div  class="dependencia">{{=dependencias[4*k+1].nombre}}</div>
 					</div>
 					{{pass}}
 					{{ if 4*k+2 < n: }}
-					<div class="col-sm-3 columnas">
-						<a class="dependencia">{{=dependencias[4*k+2].nombre}}</a>
+					<div id="{{=dependencias[4*k+2].id}}" class="col-sm-3 columnas" onclick="postDependencia(this.id);">
+						<div  class="dependencia">{{=dependencias[4*k+2].nombre}}</div>
 					</div>
 					{{ pass }}
 					{{ if 4*k+3 < n: }}
-					<div class="col-sm-3 columnas">
-						<a class="dependencia">{{=dependencias[4*k+3].nombre}}</a>
+					<div id="{{=dependencias[4*k+3].id}}" class="col-sm-3 columnas" onclick="postDependencia(this.id);">
+						<div  class="dependencia">{{=dependencias[4*k+3].nombre}}</div>
 					</div>
 					{{ pass }}
 				</div>
@@ -54,8 +54,25 @@
 			{{k=k+1}}
 		{{pass}}
 	</div>
+
+<form id="depForm" action="{{=URL('inventarios')}}" method="post">
+	<!-- Almacena el ID de la dependencia seleccionada para pasarlo por POST -->
+	<input type="hidden" id="dephidden" name="dependencia" value="">
+</form>
+
 <script>
   // Set blue bar below INICIO text.
   document.getElementById("smydp").className += " active";
+
+  // Llama al controlador inventarios nuevamente, pero en este caso
+  // envia por POST el id del espacio fisico seleccionado
+  function postDependencia(depid){
+  	var x = document.getElementById("dephidden");
+    x.value = depid;
+
+    document.getElementById("depForm").submit();
+  	
+  }
+
 </script>
 {{end}}
