@@ -1,6 +1,7 @@
 
 .columnas {
 	text-align: center;
+	padding-bottom: 20px;
 }
 
 .caja{
@@ -27,8 +28,4 @@
 .opciones {
 	text-align: center;
 	color: #606060;
-}
-
-#fila2 {
-	padding: 30px 0 30px 0;
 }
