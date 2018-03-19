@@ -224,6 +224,8 @@ def register():
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
 
     if roltype == "TÉCNICO":
+      # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
+      # 'es_encargado'
       for trace, espacio in session.tags.iteritems():
         espacio_id = trace.split('-')[2]
         db.es_encargado.insert(espacio_fisico = espacio_id, 

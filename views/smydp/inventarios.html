@@ -22,8 +22,7 @@
 		<div id="fila1" class="row">
 		</div>
 		<!-- PASAR LO QUE SE PUEDA AL CONTROLADOR -->
-		{{ labs = ['Laboratorio A', 'Laboratorio B', 'Laboratorio C', 'Laboratorio D', 'Laboratorio E', 'Laboratorio F', 'Laboratorio G'] }}
-		{{ n = len(labs) }}
+		{{ n = len(dependencias) }}
 		{{ filas = n//4 if n%4 == 0 else n//4+1 }}
 		{{ k = 0 }}
 		{{ while k < filas:}}
@@ -33,27 +32,27 @@
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
 					<div class="col-sm-3 columnas">
 						<div class="caja">
-							<p class="dependencia">{{=labs[4*k]}}</p>
+							<p class="dependencia">{{=dependencias[4*k].nombre}}</p>
 						</div>
 					</div>
 					{{ if 4*k+1 < n: }}
 					<div class="col-sm-3 columnas">
 						<div class="caja">
-							<p class="dependencia">{{=labs[4*k+1]}}</p>
+							<p class="dependencia">{{=dependencias[4*k+1].nombre}}</p>
 						</div>
 					</div>
 					{{pass}}
 					{{ if 4*k+2 < n: }}
 					<div class="col-sm-3 columnas">
 						<div class="caja">
-							<p class="dependencia">{{=labs[4*k+2]}}</p>
+							<p class="dependencia">{{=dependencias[4*k+2].nombre}}</p>
 						</div>
 					</div>
 					{{ pass }}
 					{{ if 4*k+3 < n: }}
 					<div class="col-sm-3 columnas">
 						<div class="caja">
-							<p class="dependencia">{{=labs[4*k+3]}}</p>
+							<p class="dependencia">{{=dependencias[4*k+3].nombre}}</p>
 						</div>
 					</div>
 					{{ pass }}
