@@ -31,28 +31,28 @@
 				<div class="col-sm-10">
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<p class="dependencia">{{=dependencias[4*k].nombre}}</p>
+						<div id="{{=dependencias[4*k].id}}" class="caja" onclick="postDependencia(this.id);">
+							<a class="dependencia fill-div">{{=dependencias[4*k].nombre}}</a>
 						</div>
 					</div>
 					{{ if 4*k+1 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<p class="dependencia">{{=dependencias[4*k+1].nombre}}</p>
+						<div id="{{=dependencias[4*k+1].id}}" class="caja" onclick="postDependencia(this.id);">
+							<a class="dependencia fill-div">{{=dependencias[4*k+1].nombre}}</a>
 						</div>
 					</div>
 					{{pass}}
 					{{ if 4*k+2 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<p class="dependencia">{{=dependencias[4*k+2].nombre}}</p>
+						<div id="{{=dependencias[4*k+2].id}}" class="caja" onclick="postDependencia(this.id);">
+							<a class="dependencia fill-div">{{=dependencias[4*k+2].nombre}}</a>
 						</div>
 					</div>
 					{{ pass }}
 					{{ if 4*k+3 < n: }}
 					<div class="col-sm-3 columnas">
-						<div class="caja">
-							<p class="dependencia">{{=dependencias[4*k+3].nombre}}</p>
+						<div id="{{=dependencias[4*k+3].id}}" class="caja" onclick="postDependencia(this.id);">
+							<a class="dependencia fill-div">{{=dependencias[4*k+3].nombre}}</a>
 						</div>
 					</div>
 					{{ pass }}

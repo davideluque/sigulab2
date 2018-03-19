@@ -1,13 +1,14 @@
 
 .columnas {
 	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .caja{
 	padding: 50px 0 50px 0;
 	margin: 0 5px 0 5px;
 	background-color: #03A5FE;
-	color: #F0F0F0;
 	box-shadow: 10px 10px 10px #B1B1B1;
 }
 
@@ -20,8 +21,8 @@
 
 .dependencia{
 	margin: 0;
-	text-transform: uppercase;
 	font-weight: bold;
+    text-transform: uppercase;
 }
 
 .opciones {
@@ -29,6 +30,15 @@
 	color: #606060;
 }
 
-#fila2 {
-	padding: 30px 0 30px 0;
+a {
+	color: #F0F0F0;
+	display: block !important;
+    height: 100% !important;
+    width: 100% !important;
+	text-decoration: inherit !important;
+}
+
+a:hover
+{
+    color: #606060;
 }
