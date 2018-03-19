@@ -19,12 +19,12 @@ def sustancias():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
-    import pdb
-    pdb.set_trace()
+    #import pdb
+    #pdb.set_trace()
 
     if auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
-        if request.post_vars.dep_id:
+        if request.post_vars.dependencia:
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -39,11 +39,10 @@ def inventarios():
     # con una lista de adyacencias
     else:
         # Si el usuario ha seleccionado una dependencia
-        if request.post_vars.dep_id:
+        if request.post_vars.dependencia:
             # Se muestran las dependencias que componen a esta dependencia padre
             # y se lista el inventario agregado de estas
-            dep_id = request.post_vars.dep_id
-            dep_nombre = request.post_vars.dep_nombre
+            dep_id = request.post_vars.dependencia
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
                                                                       db.dependencias.ALL))
         else:
