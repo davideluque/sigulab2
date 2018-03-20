@@ -52,18 +52,22 @@ def find_dep_id(dependencias, nombre):
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
-def acceso_permitido(dep_id, es_espacio):
-    
+def acceso_permitido(user_id, dep_id, es_espacio):
+    """
+    Args:
+        * user_id (): id del usuario en la tabla t_Personal (diferente de auth.user.id)
+        * dep_id (): id de la dependencia a la cual pertenece el recurso que se 
+            desea acceder
+        * es_espacio (str): 'True' si el usuario viene de seleccionar un espacio 
+            fisico
+    """
+
     permitido = False
 
     # dep_actual es un apuntador que permitira recorrer la jerarquia de dependencias
     # desde dep_id hasta usuario_dep. Si dep_actual no encuentra usuario_dep 
     # entonces se esta tratando de acceder a una dependencia sin permisos suficientes
     dep_actual = dep_id
-
-    # Obteniendo la entrada en t_Personal del usuario conectado
-    user_id = auth.user.id
-    user = db.t_Personal(db.t_Personal.id == user_id)
 
     # Si el usuario es tecnico se busca en la tabla de es_encargado si el usuario 
     # es encargado del espacio con id dep_id
@@ -113,11 +117,18 @@ def acceso_permitido(dep_id, es_espacio):
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
     
+    import pdb
+    pdb.set_trace()
+
     # Inicializando listas de espacios fisicos y dependencias
     espacios = []
     dependencias = []
     dep_nombre = ""
     es_espacio = False
+
+    # Obteniendo la entrada en t_Personal del usuario conectado
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
 
     if auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
@@ -135,17 +146,19 @@ def inventarios():
         # Si el tecnico no ha seleccionado un espacio sino que acaba de entrar
         # a la opcion de inventarios
         else:
-            # Se muestran los espacios fisicos que tiene el tecnico a cargo
-            pass
+            # Buscando espacios fisicos que tengan a user_id como encargado en 
+            # la tabla 'es_encargado'
+            espacios = list(db(
+                    (db.es_encargado.tecnico == user_id) & 
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
+                                                              db.espacios_fisicos.ALL))
+            es_espacio = True
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
     # con una lista de adyacencias
     else:
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
-
-            bool2 = is_valid_id(request.vars.dependencia, db.dependencias)
-            bool1 = is_bool(request.vars.es_espacio)
 
             # Evaluando la correctitud de los parametros del GET 
             if not (is_valid_id(request.vars.dependencia, db.dependencias) and
@@ -154,7 +167,7 @@ def inventarios():
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not acceso_permitido(int(request.vars.dependencia), request.vars.es_espacio):
+            if not acceso_permitido(user_id, int(request.vars.dependencia), request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
             if request.vars.es_espacio == "True":
@@ -179,11 +192,6 @@ def inventarios():
                     es_espacio = True
 
         else:
-
-            # Obteniendo la entrada en t_Personal del usuario conectado
-            user_id = auth.user.id
-            user = db.t_Personal(db.t_Personal.id == user_id)
-
             # Dependencia a la que pertenece el usuario o que tiene a cargo
             dep_id = user.f_dependencia
             dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
@@ -193,10 +201,10 @@ def inventarios():
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
                                                                       db.dependencias.ALL))
 
-        return dict(dep_nombre=dep_nombre, 
-                    dependencias=dependencias, 
-                    espacios=espacios, 
-                    es_espacio=es_espacio)
+    return dict(dep_nombre=dep_nombre, 
+                dependencias=dependencias, 
+                espacios=espacios, 
+                es_espacio=es_espacio)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
