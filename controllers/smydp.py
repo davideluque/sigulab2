@@ -19,8 +19,8 @@ def sustancias():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
-    #import pdb
-    #pdb.set_trace()
+    # Inicializando espacios como None. Si espacios no es None, entonces contiene
+    espacios = None
 
     if auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
@@ -43,9 +43,18 @@ def inventarios():
             # Se muestran las dependencias que componen a esta dependencia padre
             # y se lista el inventario agregado de estas
             dep_id = request.post_vars.dependencia
+            dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
                                                                       db.dependencias.ALL))
+            # Si la lista de dependencias es vacia, entonces la dependencia no 
+            # tiene otras dependencias por debajo (podria tener espacios fisicos
+            # o estar vacia)
+            if len(dependencias) == 0:
+                # Buscando espacios fisicos que apunten a la dependencia escogida
+                espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(db.espacios_fisicos.ALL))
+
         else:
+
             # Obteniendo la entrada en t_Personal del usuario conectado
             user_id = auth.user.id
             user = db.t_Personal(db.t_Personal.id == user_id)
@@ -59,7 +68,7 @@ def inventarios():
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
                                                                       db.dependencias.ALL))
 
-    return dict(dep_nombre=dep_nombre, dependencias=dependencias)
+        return dict(dep_nombre=dep_nombre, dependencias=dependencias, espacios=espacios)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))

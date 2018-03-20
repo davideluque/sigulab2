@@ -3,7 +3,7 @@
 	<select class="form-control" type="select" required="" id="espacio" name="espacio" placeholder="Espacio físico" onclick="setEspacios();">
 	    <option value="" selected hidden disabled>Espacio físico</option>
 	    {{for espacio in lista:}}
-	    	<option value="{{=espacio.id}}">{{=espacio.codigo}}</option>
+	    	<option value="{{=espacio.id}}">{{=espacio.nombre}}</option>
 	    {{pass}}
 	</select>
 </div>

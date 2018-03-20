@@ -328,7 +328,7 @@ def ajax_mostrar_espacios():
   secid = request.post_vars.seccionhidden
   espid = request.post_vars.esphidden
 
-  espacio_nombre = db(db.espacios_fisicos.id == int(espid)).select()[0].codigo
+  espacio_nombre = db(db.espacios_fisicos.id == int(espid)).select()[0].nombre
 
   # Cuando se presiona para abrir la lista de espacios fisicos y se vuelve a pisar el boton
   # el evento "onclick" termina llamando esta funcion. Para no agregar ids vacios a session.tags
