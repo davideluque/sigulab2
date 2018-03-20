@@ -51,7 +51,8 @@ def inventarios():
             # o estar vacia)
             if len(dependencias) == 0:
                 # Buscando espacios fisicos que apunten a la dependencia escogida
-                espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(db.espacios_fisicos.ALL))
+                espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(
+                                                            db.espacios_fisicos.ALL))
 
         else:
 
