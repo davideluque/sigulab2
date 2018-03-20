@@ -18,13 +18,16 @@ def sustancias():
 # a cargo
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
-
-    # Inicializando espacios como None. Si espacios no es None, entonces contiene
-    espacios = None
+    
+    # Inicializando listas de espacios fisicos y dependencias
+    espacios = []
+    dependencias = []
+    dep_nombre = ""
+    es_espacio = False
 
     if auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
-        if request.post_vars.dependencia:
+        if request.vars.dependencia:
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -38,21 +41,28 @@ def inventarios():
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
     # con una lista de adyacencias
     else:
-        # Si el usuario ha seleccionado una dependencia
-        if request.post_vars.dependencia:
-            # Se muestran las dependencias que componen a esta dependencia padre
-            # y se lista el inventario agregado de estas
-            dep_id = request.post_vars.dependencia
-            dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
-            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
-                                                                      db.dependencias.ALL))
-            # Si la lista de dependencias es vacia, entonces la dependencia no 
-            # tiene otras dependencias por debajo (podria tener espacios fisicos
-            # o estar vacia)
-            if len(dependencias) == 0:
-                # Buscando espacios fisicos que apunten a la dependencia escogida
-                espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(
-                                                            db.espacios_fisicos.ALL))
+        # Si el usuario ha seleccionado una dependencia o un espacio fisico
+        if request.vars.dependencia:
+            if request.vars.es_espacio == "True":
+                # Se muestra el inventario del espacio
+                espacio_id = request.vars.dependencia
+                dep_nombre = db.espacios_fisicos(db.espacios_fisicos.id == espacio_id).nombre
+
+            else:
+                # Se muestran las dependencias que componen a esta dependencia padre
+                # y se lista el inventario agregado
+                dep_id = request.vars.dependencia
+                dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+                dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
+                                                                          db.dependencias.ALL))
+                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # tiene otras dependencias por debajo (podria tener espacios fisicos
+                # o estar vacia)
+                if len(dependencias) == 0:
+                    # Buscando espacios fisicos que apunten a la dependencia escogida
+                    espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(
+                                                                db.espacios_fisicos.ALL))
+                    es_espacio = True
 
         else:
 
@@ -69,7 +79,10 @@ def inventarios():
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
                                                                       db.dependencias.ALL))
 
-        return dict(dep_nombre=dep_nombre, dependencias=dependencias, espacios=espacios)
+        return dict(dep_nombre=dep_nombre, 
+                    dependencias=dependencias, 
+                    espacios=espacios, 
+                    es_espacio=es_espacio)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
