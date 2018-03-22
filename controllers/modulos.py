@@ -192,6 +192,9 @@ def register():
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
 
+    import pdb
+    pdb.set_trace()
+
     if request.post_vars.seccion:
       # El registrado pertenece directamente a una sección de un laboratorio.
       depid = request.post_vars.seccion
@@ -214,7 +217,7 @@ def register():
                            f_telefono = 0,
                            f_pagina_web = "N/A",
                            f_categoria = "N/A",
-                           f_cargo = "N/A",
+                           f_cargo = "N/A", # *?* No deberia ser request.vars.rol?
                            f_fecha_ingreso = "1/01/1989",
                            f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)

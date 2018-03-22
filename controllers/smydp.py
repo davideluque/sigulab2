@@ -71,8 +71,9 @@ def acceso_permitido(user, dep_id, es_espacio):
 
     # Si el usuario es tecnico se busca en la tabla de es_encargado si el usuario 
     # es encargado del espacio con id dep_id
-    if user.f_cargo == 'TÉCNICO':
-        pass
+    if auth.has_membership("TÉCNICO"):
+        if db(db.es_encargado.espacio_fisico == dep_id).select()[0].tecnico == user.id:
+            permitido = True
 
     else:
         # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -123,9 +124,6 @@ def inventarios():
     dep_nombre = ""
     es_espacio = False
 
-    import pdb
-    pdb.set_trace()
-
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
@@ -137,6 +135,13 @@ def inventarios():
             # Evaluando la correctitud de los parametros del GET 
             if not (is_valid_id(request.vars.dependencia, db.dependencias) and
                     is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios'))
+
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
             # Se muestra solo el inventario de ese espacio y no se muestran mas
