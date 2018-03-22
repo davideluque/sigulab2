@@ -52,16 +52,16 @@ def find_dep_id(dependencias, nombre):
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
-def acceso_permitido(user_id, dep_id, es_espacio):
+def acceso_permitido(user, dep_id, es_espacio):
     """
     Args:
-        * user_id (): id del usuario en la tabla t_Personal (diferente de auth.user.id)
-        * dep_id (): id de la dependencia a la cual pertenece el recurso que se 
+        * user_id (str): id del usuario en la tabla t_Personal (diferente de auth.user.id)
+        * dep_id (str): id de la dependencia a la cual pertenece el recurso que se 
             desea acceder
         * es_espacio (str): 'True' si el usuario viene de seleccionar un espacio 
             fisico
     """
-
+    # Valor a retornar que determina si el usuario tiene o no acceso al recurso
     permitido = False
 
     # dep_actual es un apuntador que permitira recorrer la jerarquia de dependencias
@@ -117,21 +117,21 @@ def acceso_permitido(user_id, dep_id, es_espacio):
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
     
-    import pdb
-    pdb.set_trace()
-
     # Inicializando listas de espacios fisicos y dependencias
     espacios = []
     dependencias = []
     dep_nombre = ""
     es_espacio = False
 
+    import pdb
+    pdb.set_trace()
+
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
 
-    if auth.has_membership("TÉCNICO"):
-        # Si el tecnico ha seleccionado un espacio fisico
+    if auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE SECCIÓN"):
+        # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
@@ -143,15 +143,22 @@ def inventarios():
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
             pass
-        # Si el tecnico no ha seleccionado un espacio sino que acaba de entrar
-        # a la opcion de inventarios
+        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
+        # entrar a la opcion de inventarios
         else:
-            # Buscando espacios fisicos que tengan a user_id como encargado en 
-            # la tabla 'es_encargado'
-            espacios = list(db(
-                    (db.es_encargado.tecnico == user_id) & 
-                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
-                                                              db.espacios_fisicos.ALL))
+            # Si es un tecnico
+            if auth.has_membership("TÉCNICO"):
+                # Buscando espacios fisicos que tengan a user_id como encargado en 
+                # la tabla 'es_encargado'
+                espacios = list(db(
+                        (db.es_encargado.tecnico == user_id) & 
+                        (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
+                                                                  db.espacios_fisicos.ALL))
+            # Si es un jefe de seccion
+            else:
+                espacios = list(db(
+                            db.espacios_fisicos.dependencia == user.f_dependencia
+                                  ).select(db.espacios_fisicos.ALL))
             es_espacio = True
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -167,7 +174,9 @@ def inventarios():
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not acceso_permitido(user_id, int(request.vars.dependencia), request.vars.es_espacio):
+            if not acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
             if request.vars.es_espacio == "True":

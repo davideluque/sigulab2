@@ -223,6 +223,9 @@ def register():
     rolid = request.post_vars.rol
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
 
+    import pdb
+    pdb.set_trace()
+
     if roltype == "TÉCNICO":
       # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
       # 'es_encargado'
