@@ -117,12 +117,15 @@ def acceso_permitido(user, dep_id, es_espacio):
 # a cargo
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
-    
+
     # Inicializando listas de espacios fisicos y dependencias
     espacios = []
     dependencias = []
     dep_nombre = ""
+    dep_padre_id = ""
+    dep_padre_nombre = ""
     es_espacio = False
+    direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -147,7 +150,14 @@ def inventarios():
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
-            pass
+            
+            # Guardando el ID y nombre de la dependencia a la que pertenece el 
+            # espacio fisico visitado
+            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                                ).select().first().dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                ).select().first().nombre
+
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
         else:
@@ -189,6 +199,14 @@ def inventarios():
                 espacio_id = request.vars.dependencia
                 dep_nombre = db.espacios_fisicos(db.espacios_fisicos.id == espacio_id).nombre
 
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                                    ).select().first().dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+
+
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
@@ -205,6 +223,16 @@ def inventarios():
                                                                 db.espacios_fisicos.ALL))
                     es_espacio = True
 
+                #import pdb
+                #pdb.set_trace()
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.dependencias.id == request.vars.dependencia
+                                     ).select().first().unidad_de_adscripcion
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                     ).select().first().nombre
+
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
             dep_id = user.f_dependencia
@@ -212,13 +240,15 @@ def inventarios():
 
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
-            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
-                                                                      db.dependencias.ALL))
+            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(db.dependencias.ALL))
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
                 espacios=espacios, 
-                es_espacio=es_espacio)
+                es_espacio=es_espacio,
+                dep_padre_id=dep_padre_id,
+                dep_padre_nombre=dep_padre_nombre,
+                direccion_id=direccion_id)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
