@@ -129,6 +129,9 @@ def inventarios():
     es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
 
+    import pdb
+    pdb.set_trace()
+
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
@@ -168,6 +171,7 @@ def inventarios():
         else:
             # Si es un tecnico
             if auth.has_membership("TÉCNICO"):
+                
                 # Buscando espacios fisicos que tengan a user_id como encargado en 
                 # la tabla 'es_encargado'
                 espacios = list(db(
@@ -180,6 +184,7 @@ def inventarios():
                             db.espacios_fisicos.dependencia == user.f_dependencia
                                   ).select(db.espacios_fisicos.ALL))
             es_espacio = True
+
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
     # con una lista de adyacencias
