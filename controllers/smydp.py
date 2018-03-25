@@ -126,10 +126,8 @@ def inventarios():
     dep_padre_id = ""
     dep_padre_nombre = ""
     es_espacio = False
+    es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
-
-    import pdb
-    pdb.set_trace()
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -255,7 +253,8 @@ def inventarios():
                 es_espacio=es_espacio,
                 dep_padre_id=dep_padre_id,
                 dep_padre_nombre=dep_padre_nombre,
-                direccion_id=direccion_id)
+                direccion_id=direccion_id,
+                es_tecnico=es_tecnico)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
