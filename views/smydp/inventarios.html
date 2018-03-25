@@ -19,10 +19,12 @@
 <!-- Fin del Breadcrumb de navegación --> 
 
 	<div class="container titulo">
-		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
-		siguiente nivel superior de jerarquia -->
-		{{if dep_padre_id and not es_tecnico:}}
+		<!-- Si no se esta en el tope de la jerarquia (el id del padre no es None) -->
+		{{if dep_padre_id:}}
 			<div class="col-xs-1"></div>
+			<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
+			siguiente nivel superior de jerarquia -->
+			{{if not es_tecnico:}}
 			<div class="col-xs-2 boton-retorno">
 				<p class="padre"> {{=dep_padre_nombre}} </p>
 					<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
@@ -30,34 +32,30 @@
 					request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 					en el controlador-->
 					{{if dep_padre_id == direccion_id:}}
-			    		<a class="boton" href="{{=URL('inventarios')}}">
-				    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			    		</a>
+		    		<a class="boton" href="{{=URL('inventarios')}}">
+			    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		    		</a>
 		    		{{else:}}
-		    			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-				    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			    		</a>
+	    			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+			    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		    		</a>
 		    		{{pass}}
 			</div>
-
-			<div class="col-xs-8">
-				<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
-			</div>
-		<!-- Si el usuario es tecnico, no debe poder consultar el inventario de la seccion a la que
-		pertenece el espacio fisico que se estaba consultando, sino mostrar de nuevo los espacios que tiene 
-		a cargo el tecnico -->
-		{{elif dep_padre_id and es_tecnico:}}
-			<div class="col-xs-1"></div>
+			<!-- Si el usuario es tecnico, no debe poder consultar el inventario de la seccion a la que
+			pertenece el espacio fisico que se estaba consultando, sino mostrar de nuevo los espacios que tiene 
+			a cargo el tecnico -->
+			{{else:}}
 			<div class="col-xs-2 boton-retorno">
 				<p class="padre"> ESPACIOS FÍSICOS </p>
 	    		<a class="boton" href="{{=URL('inventarios')}}">
 		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		</a>
 			</div>
+			{{pass}}			
 			<div class="col-xs-8">
 				<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
 			</div>
-		<!-- En cualquier otro caso, solo se muestra el nombre de la dependencia o espacio consultado -->
+		<!-- Si ya se esta en el tope de la jerarquia -->
 		{{else:}}
 			<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 			el nombre de la dependecia a la que pertenece el usuario -->
