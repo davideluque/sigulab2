@@ -72,8 +72,9 @@ def acceso_permitido(user, dep_id, es_espacio):
     # Si el usuario es tecnico se busca en la tabla de es_encargado si el usuario 
     # es encargado del espacio con id dep_id
     if auth.has_membership("TÉCNICO"):
-        if db(db.es_encargado.espacio_fisico == dep_id).select()[0].tecnico == user.id:
-            permitido = True
+        encargado = db(db.es_encargado.espacio_fisico == dep_id).select().first()
+        if encargado:
+            permitido = encargado.tecnico == user.id
 
     else:
         # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -127,6 +128,9 @@ def inventarios():
     es_espacio = False
     direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
 
+    import pdb
+    pdb.set_trace()
+
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
@@ -147,16 +151,19 @@ def inventarios():
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
-            # Se muestra solo el inventario de ese espacio y no se muestran mas
-            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
-            # de dependencias
-            
+            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
+                           ).select().first().nombre
+
             # Guardando el ID y nombre de la dependencia a la que pertenece el 
             # espacio fisico visitado
             dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
                                 ).select().first().dependencia
             dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                 ).select().first().nombre
+
+            # Se muestra solo el inventario de ese espacio y no se muestran mas
+            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
+            # de dependencias
 
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
