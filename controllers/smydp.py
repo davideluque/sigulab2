@@ -135,13 +135,15 @@ def inventarios():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
+    user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE SECCIÓN"):
+    if auth.has_membership("TÉCNICO"):
         # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
         if request.vars.dependencia:
 
+            # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
             # Evaluando la correctitud de los parametros del GET 
-            if not (is_valid_id(request.vars.dependencia, db.dependencias) and
+            if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
@@ -155,12 +157,14 @@ def inventarios():
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
 
+            """ **!** Ver si esto es necesario en el caso de los tecnicos
             # Guardando el ID y nombre de la dependencia a la que pertenece el 
             # espacio fisico visitado
             dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
                                 ).select().first().dependencia
             dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                 ).select().first().nombre
+            """
 
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
@@ -169,20 +173,60 @@ def inventarios():
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
         else:
-            # Si es un tecnico
-            if auth.has_membership("TÉCNICO"):
-                
-                # Buscando espacios fisicos que tengan a user_id como encargado en 
-                # la tabla 'es_encargado'
-                espacios = list(db(
-                        (db.es_encargado.tecnico == user_id) & 
-                        (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
-                                                                  db.espacios_fisicos.ALL))
-            # Si es un jefe de seccion
+            # Buscando espacios fisicos que tengan a user_id como encargado en 
+            # la tabla 'es_encargado'
+            espacios = list(db(
+                    (db.es_encargado.tecnico == user_id) & 
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
+                                                              db.espacios_fisicos.ALL))
+            es_espacio = True
+
+    elif auth.has_membership("JEFE DE SECCIÓN"):
+                # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
+        if request.vars.dependencia:
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+            if request.vars.es_espacio == 'True':
+                # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
+                # Evaluando la correctitud de los parametros del GET 
+                if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+
+                dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia).select().first().nombre
+
+                # Guardando el ID y nombre de la dependencia a la que pertenece el 
+                # espacio fisico visitado
+                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia).select().first().dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id).select().first().nombre
             else:
+                # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
+                # Evaluando la correctitud de los parametros del GET 
+                if not (is_valid_id(request.vars.dependencia, db.dependencias) and
+                        is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+
+                dep_nombre = db(db.dependencias.id == request.vars.dependencia).select().first().nombre
                 espacios = list(db(
-                            db.espacios_fisicos.dependencia == user.f_dependencia
-                                  ).select(db.espacios_fisicos.ALL))
+                              db.espacios_fisicos.dependencia == user_dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            # Se muestra solo el inventario de ese espacio y no se muestran mas
+            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
+            # de dependencias
+
+        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
+        # entrar a la opcion de inventarios
+        else:
+            # *!* TERMINAR
+            espacios = list(db(
+                              db.espacios_fisicos.dependencia == user_dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            dep_nombre = db(db.dependencias.id == user_dep_id).select().first().nombre
+
             es_espacio = True
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
