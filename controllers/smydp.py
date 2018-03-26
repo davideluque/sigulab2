@@ -129,9 +129,6 @@ def inventarios():
     es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
 
-    import pdb
-    pdb.set_trace()
-
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
