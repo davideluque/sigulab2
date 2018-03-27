@@ -153,16 +153,6 @@ def inventarios():
 
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
-
-            """ **!** Ver si esto es necesario en el caso de los tecnicos
-            # Guardando el ID y nombre de la dependencia a la que pertenece el 
-            # espacio fisico visitado
-            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                                ).select().first().dependencia
-            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                ).select().first().nombre
-            """
-
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -180,45 +170,52 @@ def inventarios():
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
                 # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
-        if request.vars.dependencia:
+        if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
-            if request.vars.es_espacio == 'True':
-                # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
-                # Evaluando la correctitud de los parametros del GET 
-                if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                        is_bool(request.vars.es_espacio)):
-                    redirect(URL('inventarios'))
 
-                dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia).select().first().nombre
+            # Evaluando la correctitud de los parametros del GET 
+            if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios'))
 
-                # Guardando el ID y nombre de la dependencia a la que pertenece el 
-                # espacio fisico visitado
-                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia).select().first().dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id).select().first().nombre
-            else:
-                # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
-                # Evaluando la correctitud de los parametros del GET 
-                if not (is_valid_id(request.vars.dependencia, db.dependencias) and
-                        is_bool(request.vars.es_espacio)):
-                    redirect(URL('inventarios'))
+            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
+                           ).select().first().nombre
 
-                dep_nombre = db(db.dependencias.id == request.vars.dependencia).select().first().nombre
-                espacios = list(db(
-                              db.espacios_fisicos.dependencia == user_dep_id
-                              ).select(db.espacios_fisicos.ALL))
+            # Guardando el ID y nombre de la dependencia a la que pertenece el 
+            # espacio fisico visitado
+            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                             ).select().first().dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                 ).select().first().nombre
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
 
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
+        elif request.vars.es_espacio == 'False':
+            if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+            espacios = list(db(
+                              db.espacios_fisicos.dependencia == user_dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            dep_nombre = db(db.dependencias.id == user_dep_id).select().first().nombre
+
+            es_espacio = True                        
+
         else:
-            # *!* TERMINAR
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
@@ -274,9 +271,6 @@ def inventarios():
                                                                 db.espacios_fisicos.ALL))
                     es_espacio = True
 
-                #import pdb
-                #pdb.set_trace()
-
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
                 dep_padre_id = db(db.dependencias.id == request.vars.dependencia
@@ -291,7 +285,8 @@ def inventarios():
 
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
-            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(db.dependencias.ALL))
+            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
+                                  ).select(db.dependencias.ALL))
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 

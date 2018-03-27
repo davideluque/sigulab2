@@ -30,7 +30,7 @@
 		<!-- Si el usuario es tecnico y se encuentra en la vista de algun espacio fisico -->
 		{{else:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre"> ESPACIOS FÍSICOS </p>
+			<p class="padre dep-titulo"> ESPACIOS FÍSICOS </p>
 			<a class="boton" href="{{=URL('inventarios')}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
@@ -46,7 +46,7 @@
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre"> {{=dep_padre_nombre}} </p>
+			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
 				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
