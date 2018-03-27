@@ -1,0 +1,10 @@
+{{if tags:}}
+	<div class="col-xs-12">
+	    {{for trace, espacio in tags.iteritems():}}
+	    	<button id="{{=trace}}" type="button" class="btn btn-lg btn-block" onclick="deleteEspacio(this.id);">
+	    		<p class="tag">{{=espacio}}</p>
+	    		<img class="iconos" src="{{=URL('static', 'images/x.png')}}">
+	    	</button>
+	    {{pass}}
+	</div>
+{{pass}}

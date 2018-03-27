@@ -105,10 +105,10 @@
                 <!-- Tipos de Rol -->
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="getUnidad();
-                                                                                                                              getSeccion();
-                                                                                                                              getEspacio();
-                                                                                                                              showEspacios();">
+                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
+                                                                                                                                getSeccion();
+                                                                                                                                getEspacio();
+                                                                                                                                setEspacios();">
                             <option value="" selected hidden disabled>Rol</option>
                             {{for rol in roles:}}
                                 <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
@@ -315,17 +315,10 @@
         var x = document.getElementById("esphidden");
         x.value = espacioelegido;
 
-        ajax('ajax_agregar_espacio', ['rolhidden', 
+        ajax('ajax_mostrar_espacios', ['rolhidden', 
                                        'dephidden', 
                                        'seccionhidden', 
                                        'esphidden'], 'tagsdiv');   
-    }
-
-    function showEspacios(){
-        /* 
-        Esta funcion es llamada para mostrar los espacios que actualmente se han seleccionado
-        */
-        ajax('ajax_mostrar_espacios', [], 'tagsdiv');   
     }
 
     function deleteEspacio(espacio_id){
