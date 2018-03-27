@@ -322,7 +322,7 @@ def ajax_registro_espacio():
 
 # Guardando los espacios seleccionados por el usuario para guardar en la case de datos
 # aquellos espacios de los que el tecnico es responsable
-def ajax_mostrar_espacios():
+def ajax_seleccionar_espacio():
 
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
@@ -351,8 +351,11 @@ def ajax_eliminar_espacio():
   session.tags.pop(espid)
   return dict(tags=session.tags)
 
-def ajax_prueba():
+def ajax_mostrar_espacios():
 
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+  
   # Los tags se mostraran solo si el usuario es un tecnico
   if roltype != "TÉCNICO":
     session.tags = {}
