@@ -164,8 +164,8 @@ def inventarios():
             # la tabla 'es_encargado'
             espacios = list(db(
                     (db.es_encargado.tecnico == user_id) & 
-                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)).select(
-                                                              db.espacios_fisicos.ALL))
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)
+                              ).select(db.espacios_fisicos.ALL))
             es_espacio = True
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
@@ -211,7 +211,8 @@ def inventarios():
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
-            dep_nombre = db(db.dependencias.id == user_dep_id).select().first().nombre
+            dep_nombre = db(db.dependencias.id == user_dep_id
+                           ).select().first().nombre
 
             es_espacio = True                        
 
@@ -219,7 +220,8 @@ def inventarios():
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
-            dep_nombre = db(db.dependencias.id == user_dep_id).select().first().nombre
+            dep_nombre = db(db.dependencias.id == user_dep_id
+                           ).select().first().nombre
 
             es_espacio = True
 
@@ -260,15 +262,15 @@ def inventarios():
                 # y se lista el inventario agregado
                 dep_id = request.vars.dependencia
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
-                dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id).select(
-                                                                          db.dependencias.ALL))
+                dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
+                                      ).select(db.dependencias.ALL))
                 # Si la lista de dependencias es vacia, entonces la dependencia no 
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
                 if len(dependencias) == 0:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
-                    espacios = list(db(db.espacios_fisicos.dependencia == dep_id).select(
-                                                                db.espacios_fisicos.ALL))
+                    espacios = list(db(db.espacios_fisicos.dependencia == dep_id
+                                      ).select(db.espacios_fisicos.ALL))
                     es_espacio = True
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
