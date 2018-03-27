@@ -191,10 +191,7 @@ def register():
     en la tabla "es_tecnico" si el usuario tiene el rol de tecnico.
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
-
-    import pdb
-    pdb.set_trace()
-
+    
     if request.post_vars.seccion:
       # El registrado pertenece directamente a una sección de un laboratorio.
       depid = request.post_vars.seccion
@@ -322,12 +319,15 @@ def ajax_registro_espacio():
   
   return dict(lista=espacios)
 
-def ajax_mostrar_espacios():
+# Guardando los espacios seleccionados por el usuario para guardar en la case de datos
+# aquellos espacios de los que el tecnico es responsable
+def ajax_agregar_espacio():
 
-  """ 
-  Guardando los espacios seleccionados por el usuario para guardar en la case de datos
-  aquellos espacios de los que el tecnico es responsable
-  """
+  print "\nMOSTRAR"
+  print "request.vars", request.vars
+  print "session.tags", session.tags
+  print "\n"
+
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   depid = request.post_vars.dephidden
@@ -347,15 +347,30 @@ def ajax_mostrar_espacios():
 
   return dict(tags=session.tags)
 
+# Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
+# espacio que se desea eliminar
 def ajax_eliminar_espacio():
 
-  """
-  Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
-  espacio que se desea eliminar
-  """
+  print "\ELIMINAR"
+  print "request.vars", request.vars
+  print "session.tags", session.tags
+  print "\n"
+
   espid = request.post_vars.borrarhidden
   session.tags.pop(espid)
   return dict(tags=session.tags)
+
+# Muestra los espacios seleccionados sin realizar ninguna operacion. Se usa cuando hay
+# que actualizar la lista de espacios seleccionados, por ejemplo, si al registrar el 
+# usuario se cambia el rol
+def ajax_eliminar_espacio():
+
+  # Los tags se mostraran solo si el usuario es un tecnico
+  if roltype != "TÉCNICO":
+    session.tags = {}
+
+  return dict(tags=session.tags)
+
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():

@@ -1,8 +1,7 @@
 {{if lista:}}
 <div class="col-xs-12">
 <!-- onclick parece funcionar mejor, ya que contempla el caso en que hay solo una opcion. onchange no activa la funcion getEspacio si hay un solo elemento -->
-<select class="form-control" type="select" required="" id="seccion" name="seccion" placeholder="Sección" onclick="getEspacio();
-                                                                                                                  setEspacios();">
+<select class="form-control" type="select" required="" id="seccion" name="seccion" placeholder="Sección" onclick="getEspacio();">
     <option value="" selected hidden disabled>Sección</option>
     {{for seccion in lista:}}
     	<option value='{{=seccion.id}}'>{{=seccion.nombre}}</option>

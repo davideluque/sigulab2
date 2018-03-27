@@ -4,6 +4,15 @@
 # - Samuel Arleo <saar1312@gmail.com>
 #-----------------------------------------------------------------------------
 
+# Verifica si el usuario que intenta acceder al controlador tiene alguno de los
+# roles necesarios
+def check_role():
+
+    roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
+                        'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'TÉCNICO', 
+                        'GESTOR DE SMyDP']
+    return True in map(lambda x: auth.has_membership(x), roles_permitidos)
+    
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
@@ -116,6 +125,8 @@ def acceso_permitido(user, dep_id, es_espacio):
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
+
+@auth.requires(lambda: check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
