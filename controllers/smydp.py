@@ -136,9 +136,22 @@ def inventarios():
     dep_nombre = ""
     dep_padre_id = ""
     dep_padre_nombre = ""
+    
+    # Esta variable es enviada a la vista para que cuando el usuario seleccione 
+    # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
+    # que la dependencia seleccionada sea un espacio, sino que la siguiente
+    # dependencia visitada sera un espacio fisico
     es_espacio = False
+
+    # Permite saber si actualmente se esta visitando un espacio fisico (True)
+    # o una dependencia (False)
+    espacio_visitado = False
+    
     es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = db(db.dependencias.nombre == 'DIRECCIÓN').select().first().id
+
+    # Lista de sustancias en el inventario del espacio fisico visitado
+    sustancias = []
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -149,7 +162,6 @@ def inventarios():
         # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
         if request.vars.dependencia:
 
-            # **!** VERIFICAR si es db.espacios_fisicos o db.dependencias
             # Evaluando la correctitud de los parametros del GET 
             if not (is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     is_bool(request.vars.es_espacio)):
@@ -164,6 +176,8 @@ def inventarios():
 
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
+
+            espacio_visitado = True
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -203,6 +217,8 @@ def inventarios():
                              ).select().first().dependencia
             dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                  ).select().first().nombre
+
+            espacio_visitado = True
             # Se muestra solo el inventario de ese espacio y no se muestran mas
             # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
             # de dependencias
@@ -267,6 +283,8 @@ def inventarios():
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
 
+                espacio_visitado = True
+
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -305,6 +323,7 @@ def inventarios():
                 dependencias=dependencias, 
                 espacios=espacios, 
                 es_espacio=es_espacio,
+                espacio_visitado=espacio_visitado,
                 dep_padre_id=dep_padre_id,
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
