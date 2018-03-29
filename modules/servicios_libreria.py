@@ -1539,9 +1539,16 @@ def query_ficha(db, idv):
     sedeid = sederow[0].id
 
     # Ubicacion Fisica
-    ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
-    ubicacion = ubicrow[0].codigo
-    ubicacionid = ubicrow[0].id
+    """
+    *!* ERROR? si no fue seleccionado un espacio fisico, explota
+    """
+    ubicrow = ''
+    ubicacion = ''
+    ubicacionid = ''
+    if entrada[0].ubicacion:
+        ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
+        ubicacion = ubicrow[0].codigo
+        ubicacionid = ubicrow[0].id
 
     # Responsable
     resprow = db(entrada[0].responsable == db.t_Personal.id).select(db.t_Personal.ALL)

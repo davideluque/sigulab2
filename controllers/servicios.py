@@ -497,6 +497,11 @@ def catalogoServicios():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
+    # Ver en que momento se esta agregando el espacio fisico cuando se llena la forma del nuevo servicio
+    # En servicios_libreria.py da error en query.ficha() linea
+    # ubicrow = db(entrada[0].ubicacion == db.espacios_fisicos.id).select(db.espacios_fisicos.ALL)
+    import pdb
+    pdb.set_trace()
     session.forget(response)
 
     # Servicio
