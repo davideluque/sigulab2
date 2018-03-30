@@ -5,14 +5,14 @@
 # 
 # - Convenciones:
 # * Funciones "privadas" utilizadas por los controladores y decoradores tienen el
-# prefijo "-"
+# prefijo "__"
 # * Controladores no poseen prefijos
 #
 #-----------------------------------------------------------------------------
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
-def _check_role():
+def __check_role():
 
     roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'TÉCNICO', 
@@ -31,7 +31,7 @@ def sustancias():
 
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
 # o es de un tipo incorrecto
-def _is_valid_id(id_, tabla):
+def __is_valid_id(id_, tabla):
     try:
         int(id_)
     except:
@@ -44,7 +44,7 @@ def _is_valid_id(id_, tabla):
 
 # Determina si una variable "booleana" pasada como parametro con GET es realmente
 # 'True' o 'False' (request.vars almacena todo como strings)
-def _is_bool(bool_var):
+def __is_bool(bool_var):
     if not bool_var in ['True', 'False']:
         return False
     else:
@@ -52,7 +52,7 @@ def _is_bool(bool_var):
 
 # Dado el nombre de una dependencia, retorna el id de esta si la encuentra o
 # None si no lo hace
-def _find_dep_id(dependencias, nombre):
+def __find_dep_id(dependencias, nombre):
 
     dep_id = None
     encontrado = False
@@ -67,7 +67,7 @@ def _find_dep_id(dependencias, nombre):
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
-def _acceso_permitido(user, dep_id, es_espacio):
+def __acceso_permitido(user, dep_id, es_espacio):
     """
     Args:
         * user_id (str): id del usuario en la tabla t_Personal (diferente de auth.user.id)
@@ -106,7 +106,7 @@ def _acceso_permitido(user, dep_id, es_espacio):
         lista_adyacencias = {row.id: row.unidad_de_adscripcion for row in dependencias}
 
         # Buscando el id de la direccion para saber si ya se llego a la raiz
-        direccion_id = _find_dep_id(dependencias, 'DIRECCIÓN')
+        direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
 
         # Si dep_id es un espacio fisico, se sube un nivel en la jerarquia (hasta
         # las secciones) ya que los espacios fisicos no aparecen en la lista de 
@@ -132,7 +132,7 @@ def _acceso_permitido(user, dep_id, es_espacio):
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
 
-@auth.requires(lambda: _check_role())
+@auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
@@ -158,7 +158,7 @@ def inventarios():
     espacio_visitado = False
     
     es_tecnico = auth.has_membership("TÉCNICO")
-    direccion_id = _find_dep_id(dependencias, 'DIRECCIÓN')
+    direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
 
     # Lista de sustancias en el inventario del espacio fisico visitado
     sustancias = []
@@ -173,13 +173,13 @@ def inventarios():
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
-            if not (_is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    _is_bool(request.vars.es_espacio)):
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not _acceso_permitido(user, 
+            if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
@@ -208,14 +208,14 @@ def inventarios():
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not _acceso_permitido(user, 
+            if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
             # Evaluando la correctitud de los parametros del GET 
-            if not (_is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    _is_bool(request.vars.es_espacio)):
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
@@ -236,12 +236,12 @@ def inventarios():
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
         elif request.vars.es_espacio == 'False':
-            if not (_is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    _is_bool(request.vars.es_espacio)):
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
                     redirect(URL('inventarios'))
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not _acceso_permitido(user, 
+            if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
@@ -270,13 +270,13 @@ def inventarios():
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
-            if not (_is_valid_id(request.vars.dependencia, db.dependencias) and
-                    _is_bool(request.vars.es_espacio)):
+            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
+                    __is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not _acceso_permitido(user, 
+            if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
