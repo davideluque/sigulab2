@@ -1,1 +1,83 @@
-<div> SOY UN ESPACIO</div>
+<!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
+
+<!-- Inicio Boton Agregar Sustancia -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+	        <div class="col-sm-6"></div>
+	        <div class="col-sm-6">
+	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addservice">Agregar Sustancia</button>
+	        </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Boton Agregar Sustancia -->
+
+{{sustancias = [
+	{'f_nombre': 'Bicarbonato', 'f_cas': '01-05-04', 'f_pureza': '70', 'f_estado': 'Solido', 'f_existencia': '5', 'f_unidad': 'Gramos', 'f_excedente': '5'},
+	{'f_nombre': 'Acetona', 'f_cas': '05-0545-5014', 'f_pureza': '20', 'f_estado': 'Liquido', 'f_existencia': '6', 'f_unidad': 'ml', 'f_excedente': '5'}
+	]}}
+
+<!-- Inicio Listado de sustancias -->
+<div class="container">
+<div class="row">
+  <h3> Listado de Servicios </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Pureza</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Existencia</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          {{for sustancia in sustancias:}}
+            <tr>
+                <td class="camposTabla">{{=sustancia['f_nombre']}}</td>
+                <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
+                <td class="camposTabla">{{=sustancia['f_cas']}}</td>
+                <td class="camposTabla">{{=sustancia['f_pureza']}}</td>
+                <td class="camposTabla">{{=sustancia['f_estado']}}</td>
+                <td class="camposTabla">{{=sustancia['f_existencia']}}</td>
+                <td class="camposTabla">{{=sustancia['f_unidad']}}</td>
+                <td class="camposTabla">{{int(sustancia['f_existencia']) - int(sustancia['f_excedente'])}}</td>
+                <td class="camposTabla">{{=sustancia['f_excedente']}}</td>
+            </tr>
+          {{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Pureza</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Existencia</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de sustancias --> 

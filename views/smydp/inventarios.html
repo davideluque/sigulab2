@@ -2,6 +2,22 @@
   
 {{block head}}
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+
+ 	<!-- DataTables -->
+ 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
+ 	<!-- Web2py JS - Especialmente para AJAX -->
+ 	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+ 	<style>
+   	.row{
+     	margin-right:0px!important;
+   	}
+ 	</style>
 {{end}}
 
 {{block center}}
@@ -18,6 +34,7 @@
 
 <!-- Fin del Breadcrumb de navegación --> 
 
+<!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
 	
 	{{if es_tecnico:}}
@@ -113,18 +130,85 @@
 		{{pass}}
 	</div>
 
+<!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
 
-<!-- Se lista el inventario del espacio fisico visitado-->
-{{if espacio_visitado:}}
-	{{include 'smydp/inventario_espacio.html'}}
-<!-- Se lista el inventario agregado de la dependencia visitada-->
-{{else:}}
-	{{include 'smydp/inventario_dependencia.html'}}
-{{pass}}
+<!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
+
+	<!-- Se lista el inventario del espacio fisico visitado-->
+	{{if espacio_visitado:}}
+		{{include 'smydp/inventario_espacio.html'}}
+	<!-- Se lista el inventario agregado de la dependencia visitada-->
+	{{else:}}
+		{{include 'smydp/inventario_dependencia.html'}}
+	{{pass}}
+
+<!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
 <script>
   // Set blue bar below INICIO text.
   document.getElementById("smydp").className += " active";
   }
 </script>
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+
 {{end}}
