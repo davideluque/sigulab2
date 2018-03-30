@@ -57,7 +57,7 @@
                 <td class="camposTabla">{{=sustancia['f_estado']}}</td>
                 <td class="camposTabla">{{=sustancia['f_existencia']}}</td>
                 <td class="camposTabla">{{=sustancia['f_unidad']}}</td>
-                <td class="camposTabla">{{int(sustancia['f_existencia']) - int(sustancia['f_excedente'])}}</td>
+                <td class="camposTabla">{{=int(sustancia['f_existencia']) - int(sustancia['f_excedente'])}}</td>
                 <td class="camposTabla">{{=sustancia['f_excedente']}}</td>
             </tr>
           {{pass}}           
@@ -81,3 +81,6 @@
   </div>
 </div>  
 <!-- Fin Listado de sustancias --> 
+
+<!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
+<input type="hidden" id="serv" name="serv" value="">
