@@ -20,7 +20,8 @@ db.define_table(
 
     Field('f_control', 'list:string',requires=IS_IN_SET(['N/A','RL4','RL7', 'RL4 y RL7']), widget=SQLFORM.widgets.options.widget, label=T('Control')),
 
-    Field('f_unidad', 'list:string',requires=IS_IN_SET(['Litros','Kilos','Gramos', 'Mg']), widget=SQLFORM.widgets.options.widget, label=T('Unidad')),
+    # *!* La unidad no va aqui, porque alguien podria querer solicitar la sustancia en ml porque es muy poca y estaria obligada a usar una unidad 
+    #Field('f_unidad', 'list:string',requires=IS_IN_SET(['kg','g','l', 'ml']), widget=SQLFORM.widgets.options.widget, label=T('Unidad')),
 
     Field('f_peligrosidad', 'list:string',
           requires=IS_IN_SET(['Inflamable','Tóxico','Tóxico para el ambiente','Corrosivo','Comburente','Nocivo','Explosivo','Irritante'],
