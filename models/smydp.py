@@ -1,6 +1,16 @@
 #------------------------------------ Modulo de Sustancias, materiales y desechos peligrosos -------------------------------------------
 
 
+#t_Unidades_de_medida: Tabla de unidades de medida de las sustancias (ml, l, g, kg, etc.)
+db.define_table(
+    #Nombre de la entidad
+    't_Unidad_de_medida',
+
+    #Atributos;
+    Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), label=T('Nombre')),
+    Field('f_abreviatura', 'string', requires=IS_NOT_EMPTY(), label=T('Abreviatura'))
+    )
+
 #t_Sustancia: Tabla de sustancias de la cual se obtiene informacion del listado (catalogo de sustancias)
 db.define_table(
     #Nombre de la entidad
@@ -50,7 +60,8 @@ db.define_table(
     # Cantidades (el excedente es calculado dinamicamente como existencia - uso interno)
     Field('f_existencia', 'double', requires=IS_NOT_EMPTY(), label=T('Existencia')),
     Field('f_uso_interno', 'double', requires=IS_NOT_EMPTY(), label=T('Uso interno')),
-
+    Field('f_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
     # Referencias a otras tablas
     Field('espacio', 'reference espacios_fisicos',
           requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), label=T('Espacio Físico'), notnull=True),

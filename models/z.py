@@ -496,6 +496,14 @@ if db(db.auth_membership).isempty():
 	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
+# Unidades de medida
+if db(db.t_Unidad_de_medida).isempty():
+	db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
+	db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')
+	db.t_Unidad_de_medida.insert(f_nombre='Gramos', f_abreviatura='g')
+	db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
+    
+
 # Catalogo de sustancias
 """
 if db(db.t_Sustancia).isempty():

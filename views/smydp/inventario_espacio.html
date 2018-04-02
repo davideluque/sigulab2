@@ -18,7 +18,7 @@
 <!-- Inicio Listado de sustancias -->
 <div class="container">
 <div class="row">
-  <h3> Listado de Servicios </h3>
+  <h3> Inventario </h3>
 
     <div id="buttons">
       <!-- Filtrado -->
@@ -132,6 +132,21 @@
                         </div>
                         <div class="form-group">
                           <input type="text" class="form-control" name="excedente" placeholder="Cantidad total*" required>
+                        </div>
+                        <div class="form-group" style="padding-bottom: 50px">
+                          <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Unidad de medida*</h6>
+                          <div class="checkbox">
+                            <label><input type="checkbox" id="checkbox1" name="unidadLitros" value="True" >Litros</label>
+                          </div>
+                          <div class="checkbox">
+                            <label><input type="checkbox" id="checkbox2" name="unidadMililitros" value="True" >Mililitros</label>
+                          </div>
+                          <div class="checkbox">
+                            <label><input type="checkbox" id="checkbox3" name="unidadKilogramos" value="True" >Kilogramos</label>
+                          </div>
+                          <div class="checkbox">
+                            <label><input type="checkbox" id="checkbox4" name="unidadGramos" value="True" >Gramos</label>
+                          </div>
                         </div>
                         <div class="form-group">
                           <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>

@@ -563,6 +563,7 @@
 'unable to uninstall "%s"': 'no es posible instalar "%s"',
 'uncheck all': 'desmarcar todos',
 'Unidad de Adscripción': 'Unidad de Adscripción',
+'Unidad de medida': 'Unidad de medida',
 'uninstall': 'desinstalar',
 'unknown': 'desconocido',
 'update': 'actualizar',
