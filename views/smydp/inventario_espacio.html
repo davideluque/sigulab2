@@ -168,24 +168,60 @@
 
 <script type="text/javascript">
   function validar_campos(){
-    // Buscando los valores ingresados por el usuario en cada campo
-    var total = document.forms['formularioCarga']['total'].value;
-    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
 
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
     var error_uso_interno = document.getElementById("error-uso-interno");
 
-    if (total == total) {
-      error_total.innerText = "Por favor indique la cantidad total de material que se registrará en el inventario."
-      return false
+    // Limpiando los mensajes anteriores de validadores
+    if (error_total.innerText != ''){
+      error_total.innerText = '';
+    }
+    if (error_uso_interno.innerText != ''){
+      error_uso_interno.innerText = '';
+    }
+     
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico.";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+
+    if (!is_number(total)) {
+      error_total.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(total)) {
+      error_total.innerText = mensaje_error_negativo;
+      return false;
     }
 
-    if (uso_interno == uso_interno) {
-      error_uso_interno.innerText = "Por favor indique la cantidad total de material que se registrará en el inventario."
-      return false
+    if (is_zero(total)) {
+      error_total.innerText = mensaje_error_nulo;
+      return false;
     }
   }
+
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n)
+  }
+
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0)
+  }
+
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0)
+  }
+
 
 
 </script>
