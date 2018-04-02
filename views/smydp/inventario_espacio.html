@@ -8,7 +8,7 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addservice">Agregar Sustancia</button>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
 	        </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         </thead>
 
         <tbody>
-          {{for sustancia in sustancias:}}
+          {{for sustancia in inventario:}}
             {{sust = sustancia['t_Sustancia']}}
             {{inv = sustancia['t_Inventario']}}
             <tr>
@@ -84,3 +84,69 @@
 
 <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
 <input type="hidden" id="serv" name="serv" value="">
+
+
+<!-- Modal añadir una sustancia nueva al inventario -->
+  <div class="modal fade" id="addsustancia" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-10" id="col11Header">
+              <h4 class="modal-title" id="nuevaSustancia">Nueva Sustancia
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                  <!-- Primer Paso -->
+                  <fieldset class="formField">
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Datos de ingreso</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                          <select class="form-control" type="select" id="sustancia" name="sustancia" required>
+                            <option value="" selected hidden >Sustancia*</option>
+                            {{for sustancia in sustancias:}}
+                            <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} ({{=sustancia.f_cas}})</option>
+                            {{pass}}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="excedente" placeholder="Cantidad total*" required>
+                        </div>
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
+                        </div>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Primer Paso -->
+                </form>
+            </div>
+          </div>               
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Fin Modal Agregar Servicio -->
+
+

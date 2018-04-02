@@ -1,3 +1,5 @@
+/* Estilos de inventarios.html */ 
+
 select{ 
 	border-top: 0px !important;
 	border-left: 0px !important;
@@ -86,3 +88,5 @@ th {
 #filtroInput {
 	margin-left: 100px;
 }
+
+/* Estilos de inventario_espacio.html */ 

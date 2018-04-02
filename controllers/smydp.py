@@ -74,12 +74,12 @@ def __find_dep_id(dependencias, nombre):
 # todos los espacios fisicos que pertenecen a esta, agrega los inventarios y retorna
 # la lista
 def __get_inventario(espacio_id=None, dep_id=None):
-    sustancias = []
+    inventario = []
     if espacio_id:
-        sustancias = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & 
+        inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & 
                              (db.t_Inventario.espacio == espacio_id)).select())
 
-    return sustancias
+    return inventario
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
@@ -162,8 +162,11 @@ def inventarios():
 
     # Lista de sustancias en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
-    sustancias = []
+    inventario = []
     
+    # Lista de sustancias en el catalogo
+    sustancias = []
+
     # Esta variable es enviada a la vista para que cuando el usuario seleccione 
     # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
     # que la dependencia seleccionada sea un espacio, sino que la siguiente
@@ -310,7 +313,9 @@ def inventarios():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                sustancias = __get_inventario(espacio_id)
+                inventario = __get_inventario(espacio_id)
+
+                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
 
 
             else:
@@ -358,6 +363,7 @@ def inventarios():
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
+                inventario=inventario,
                 sustancias=sustancias)
 
 
