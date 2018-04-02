@@ -139,16 +139,16 @@
                             <div class="field-error"> <p id="error-total"> </p> </div>
                           </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                            <div class="field-error"> <p id="error-uso-interno"> </p> </div>
+                            <input type="text" class="form-control" name="excedente" placeholder="Excedente*" required>
+                            <div class="field-error"> <p id="error-excedente"> </p> </div>
                           </div>
                           <div class="form-group" style="padding-bottom: 50px">
-                            <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Unidad de medida*</h6>
+                            <select class="form-control" type="select" id="unidad" name="unidad" required>
+                              <option value="" selected hidden >Unidad de medida*</option>
                               {{for u in unidades_de_medida:}}
-                              <div class="checkbox">
-                                <label><input type="checkbox" id="{{=u.id}}" name="{{=u.id}}" value="True" >{{=u.f_nombre}}</label>
-                              </div>
+                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
                               {{pass}}
+                            </select>
                           </div>
                           <div class="field-error"> <p id="error-unidad"> </p> </div>
                       </div>
@@ -167,30 +167,32 @@
 <!-- Fin Modal Agregar Servicio -->
 
 <script type="text/javascript">
+  // Valida los campos de la forma en el modal "addsustancia"
   function validar_campos(){
 
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
-    var error_uso_interno = document.getElementById("error-uso-interno");
+    var error_excedente = document.getElementById("error-excedente");
 
     // Limpiando los mensajes anteriores de validadores
     if (error_total.innerText != ''){
       error_total.innerText = '';
     }
-    if (error_uso_interno.innerText != ''){
-      error_uso_interno.innerText = '';
+    if (error_excedente.innerText != ''){
+      error_excedente.innerText = '';
     }
      
     // Buscando los valores ingresados por el usuario en cada campo
     var total = document.forms['formularioCarga']['total'].value;
-    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+    var excedente = document.forms['formularioCarga']['excedente'].value;
 
     // Mensajes de error
-    var mensaje_error_tipo = "Por favor ingrese un valor numérico.";
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
     var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
     var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
-    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+    var mensaje_error_excedente = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
 
+    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
     if (!is_number(total)) {
       error_total.innerText = mensaje_error_tipo;
       return false;
@@ -205,6 +207,23 @@
       error_total.innerText = mensaje_error_nulo;
       return false;
     }
+
+    /* Validando el campo excedente */
+    if (!is_number(excedente)) {
+      error_excedente.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(excedente)) {
+      error_excedente.innerText = mensaje_error_negativo;
+      return false;
+    }
+    // La cantidad de sustancia como excedente no puede ser mayor al total
+    if (excedente > total) {
+      error_excedente.innerText = mensaje_error_excedente;
+      return false;
+    }
+
   }
 
   // True si "n" es un numero
@@ -221,7 +240,5 @@
   function is_zero(n){
     return (n == 0)
   }
-
-
 
 </script>

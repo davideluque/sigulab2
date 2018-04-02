@@ -82,12 +82,22 @@ def __get_inventario(espacio_id=None, dep_id=None):
     return inventario
 
 
-# Registra una nueva sustancia en el espacio fisico indicado. Valida que
-# la sustancia no exista ya en ese espacio, que las cantidades sean no negativas
-# y que la cantidad para uso interno (uso_interno) sea menor que la existencia
-def __agregar_sustancia(espacio_id, sustancia_id, existencia, uso_interno):
+# Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo la
+# sustancia. 
+def __agregar_sustancia(espacio_id, sustancia_id, total, excedente, unidad_id):
 
-    print "espacio_id {0} sustancia_id {1} existencia {2} uso_interno {3}".format(espacio_id, sustancia_id, existencia, uso_interno)
+    # Si ya existe la sustancia en el inventario
+    if db((db.t_Inventario.espacio == espacio_id) & 
+          (db.t_Inventario.sustancia == sustancia_id)).select():
+        print "Ya existe la sustancia {0} en el espacio {1}".format(sustancia_id, espacio_id)
+        return False
+
+    db.t_Inventario.insert(f_existencia=total, 
+                           f_uso_interno=float(total)-float(excedente),
+                           f_medida=unidad_id,
+                           espacio=espacio_id,
+                           sustancia=sustancia_id)
 
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
@@ -311,9 +321,11 @@ def inventarios():
                 redirect(URL('inventarios'))
 
             if request.vars.es_espacio == "True":
+        
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
-                dep_nombre = db.espacios_fisicos(db.espacios_fisicos.id == espacio_id).nombre
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.nombre
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -333,8 +345,9 @@ def inventarios():
                 if request.vars.sustancia:
                     __agregar_sustancia(espacio_id,
                                         request.vars.sustancia, 
-                                        request.vars.existencia,
-                                        request.vars.uso_interno)
+                                        request.vars.total,
+                                        request.vars.excedente,
+                                        request.vars.unidad)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
