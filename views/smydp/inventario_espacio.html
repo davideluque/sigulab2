@@ -118,39 +118,36 @@
 
                   <!-- Primer Paso -->
                   <fieldset class="formField">
-                    <!-- Aqui va la informacion -->
-                    <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Datos de ingreso</h4>                
-                      <label>Campos marcados con * son obligatorios.</label>
-                        <div class="form-group">
-                          <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                            <option value="" selected hidden >Sustancia*</option>
-                            {{for sustancia in sustancias:}}
-                            <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
-                            {{pass}}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <input type="text" class="form-control" name="excedente" placeholder="Cantidad total*" required>
-                        </div>
-                        <div class="form-group" style="padding-bottom: 50px">
-                          <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Unidad de medida*</h6>
-                          <div class="checkbox">
-                            <label><input type="checkbox" id="checkbox1" name="unidadLitros" value="True" >Litros</label>
+                    <div class="form-bottom">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
+                              <option value="" selected hidden >Sustancia*</option>
+                              {{for sustancia in sustancias:}}
+                              <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
+                              {{pass}}
+                            </select>
                           </div>
-                          <div class="checkbox">
-                            <label><input type="checkbox" id="checkbox2" name="unidadMililitros" value="True" >Mililitros</label>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="excedente" placeholder="Cantidad total*" required>
                           </div>
-                          <div class="checkbox">
-                            <label><input type="checkbox" id="checkbox3" name="unidadKilogramos" value="True" >Kilogramos</label>
+                          <div class="form-group" style="padding-bottom: 50px">
+                            <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Unidad de medida*</h6>
+                              {{for u in unidades_de_medida:}}
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="{{=u.id}}" name="{{=u.id}}" value="True" >{{=u.f_nombre}}</label>
+                              </div>
+                              {{pass}}
                           </div>
-                          <div class="checkbox">
-                            <label><input type="checkbox" id="checkbox4" name="unidadGramos" value="True" >Gramos</label>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
                           </div>
-                        </div>
-                        <div class="form-group">
-                          <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                        </div>
+                      </div>
                     </div>
                     <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
                   </fieldset>

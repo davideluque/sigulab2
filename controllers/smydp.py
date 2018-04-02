@@ -176,6 +176,9 @@ def inventarios():
     # Lista de sustancias en el catalogo
     sustancias = []
 
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
     # Esta variable es enviada a la vista para que cuando el usuario seleccione 
     # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
     # que la dependencia seleccionada sea un espacio, sino que la siguiente
@@ -379,7 +382,8 @@ def inventarios():
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
                 inventario=inventario,
-                sustancias=sustancias)
+                sustancias=sustancias,
+                unidades_de_medida=unidades_de_medida)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
