@@ -158,11 +158,12 @@ db.define_table(
     'espacios_fisicos',
     #Atributos;
     Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
+
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
-    #Referencia (Revisar si el label es asistio o organizo)
+    
     Field('dependencia', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia'))
-    , migrate=False)
+        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), 
+        migrate=False)
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
@@ -173,6 +174,7 @@ db.define_table(
     #Atributos;
     Field('espacio_fisico', 'reference espacios_fisicos', 
             requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None)), 
+
     Field('tecnico', 'reference t_Personal', 
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))
     )

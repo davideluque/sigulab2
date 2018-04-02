@@ -9,9 +9,9 @@ db.define_table(
     #Atributos;
     Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), label=T('Nombre')),
 
-    Field('f_cas', 'string',    requires=[  IS_NOT_EMPTY(), 
+    Field('f_cas', 'string',    requires=[  IS_NOT_EMPTY(),
                                          IS_MATCH('^[0-9]+\-[0-9]+\-[0-9]+$',
-                                error_message='El CAS debe contener tres números separados entre sí por guiones. Por ejemplo, 7732-18-5')], 
+                                error_message='El CAS debe contener tres números separados entre sí por guiones. Por ejemplo, 7732-18-5')],
                                 unique=True, label=T('CAS')),
 
     Field('f_pureza', 	'integer',	requires=IS_INT_IN_RANGE(0, 101), label=T('Pureza')),
@@ -40,3 +40,26 @@ db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'
 
 
+#t_Inventario: Tabla de la entidad debil Inventario que contiene la existencia de cada sustancia en cada espacio fisico
+db.define_table(
+    #Nombre de la entidad
+    't_Inventario',
+
+    #Atributos;
+
+    # Cantidades (el excedente es calculado dinamicamente como existencia - uso interno)
+    Field('f_existencia', 'double', requires=IS_NOT_EMPTY(), label=T('Existencia')),
+    Field('f_uso_interno', 'double', requires=IS_NOT_EMPTY(), label=T('Uso interno')),
+
+    # Referencias a otras tablas
+    Field('espacio', 'reference espacios_fisicos',
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), label=T('Espacio Físico'), notnull=True),
+    Field('sustancia', 'reference t_Sustancia',
+          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), label=T('Sustancia'), notnull=True),
+    
+    # Agrega los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
+    auth.signature
+    )
+
+db.t_Inventario._singular='Inventario'
+db.t_Inventario._plural='Inventario'

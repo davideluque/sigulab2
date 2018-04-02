@@ -64,6 +64,19 @@ def __find_dep_id(dependencias, nombre):
         k = k+1
     return dep_id
 
+
+# Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
+# de ese espacio. Si ningun id es indicado, pero si el de una dependencia, busca
+# todos los espacios fisicos que pertenecen a esta, agrega los inventarios y retorna
+# la lista
+def __get_inventario(espacio_id=None, dep_id=None):
+    
+    sustancias = []
+    if espacio_id:
+        sustancias = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & (db.t_Inventario.espacio == espacio_id)).select())
+
+    return sustancias
+
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
@@ -159,9 +172,6 @@ def inventarios():
     
     es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
-
-    # Lista de sustancias en el inventario del espacio fisico visitado
-    sustancias = []
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -296,7 +306,7 @@ def inventarios():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                sustancias = 
+                sustancias = __get_inventario(espacio_id)
 
 
             else:
@@ -318,9 +328,12 @@ def inventarios():
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
                 dep_padre_id = db(db.dependencias.id == request.vars.dependencia
-                                     ).select().first().unidad_de_adscripcion
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                     ).select().first().nombre
+                                 ).select().first().unidad_de_adscripcion
+                # Si dep_padre_id es None, se ha llegado al tope de la jerarquia
+                # y no hay un padre de este nodo
+                if dep_padre_id:
+                    dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                         ).select().first().nombre
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo

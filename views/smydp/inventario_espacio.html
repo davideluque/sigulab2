@@ -15,11 +15,6 @@
 </div>
 <!-- Fin Boton Agregar Sustancia -->
 
-{{sustancias = [
-	{'f_nombre': 'Bicarbonato', 'f_cas': '01-05-04', 'f_pureza': '70', 'f_estado': 'Solido', 'f_existencia': '5', 'f_unidad': 'Gramos', 'f_excedente': '5'},
-	{'f_nombre': 'Acetona', 'f_cas': '05-0545-5014', 'f_pureza': '20', 'f_estado': 'Liquido', 'f_existencia': '6', 'f_unidad': 'ml', 'f_excedente': '5'}
-	]}}
-
 <!-- Inicio Listado de sustancias -->
 <div class="container">
 <div class="row">
@@ -41,7 +36,9 @@
                 <th class="camposTabla linksNombres">Pureza</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Existencia</th>
+                <!--
                 <th class="camposTabla linksNombres">Unidad</th>
+                -->
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>
             </tr>
@@ -49,16 +46,17 @@
 
         <tbody>
           {{for sustancia in sustancias:}}
+            {{sust = sustancia['t_Sustancia']}}
+            {{inv = sustancia['t_Inventario']}}
             <tr>
-                <td class="camposTabla">{{=sustancia['f_nombre']}}</td>
+                <td class="camposTabla">{{=sust.f_nombre}}</td>
                 <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
-                <td class="camposTabla">{{=sustancia['f_cas']}}</td>
-                <td class="camposTabla">{{=sustancia['f_pureza']}}</td>
-                <td class="camposTabla">{{=sustancia['f_estado']}}</td>
-                <td class="camposTabla">{{=sustancia['f_existencia']}}</td>
-                <td class="camposTabla">{{=sustancia['f_unidad']}}</td>
-                <td class="camposTabla">{{=int(sustancia['f_existencia']) - int(sustancia['f_excedente'])}}</td>
-                <td class="camposTabla">{{=sustancia['f_excedente']}}</td>
+                <td class="camposTabla">{{=sust.f_cas}}</td>
+                <td class="camposTabla">{{=sust.f_pureza}}</td>
+                <td class="camposTabla">{{=sust.f_estado}}</td>
+                <td class="camposTabla">{{=inv.f_existencia}}</td>
+                <td class="camposTabla">{{=inv.f_uso_interno}}</td>
+                <td class="camposTabla">{{=int(inv.f_existencia) - int(inv.f_uso_interno)}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -70,7 +68,9 @@
                 <th class="camposTabla linksNombres">Pureza</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Existencia</th>
+                <!--
                 <th class="camposTabla linksNombres">Unidad</th>
+                -->
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>
             </tr>
