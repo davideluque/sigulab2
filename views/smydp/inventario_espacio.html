@@ -53,7 +53,7 @@
                 <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust.f_cas}}</td>
                 <td class="camposTabla">{{=sust.f_pureza}}</td>
-                <td class="camposTabla">{{=sust.f_estado}}</td>
+                <td class="camposTabla">{{=sust.f_estado[0] if len(sust.f_estado) > 0 else None}}</td>
                 <td class="camposTabla">{{=inv.f_existencia}}</td>
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>
                 <td class="camposTabla">{{=int(inv.f_existencia) - int(inv.f_uso_interno)}}</td>

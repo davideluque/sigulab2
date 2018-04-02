@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #-----------------------------------------------------------------------------
 # Controladores provisionales utilizados solo para probar las vistas del modulo de SMyDP
 #
@@ -9,6 +11,8 @@
 # * Controladores no poseen prefijos
 #
 #-----------------------------------------------------------------------------
+
+
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -70,10 +74,10 @@ def __find_dep_id(dependencias, nombre):
 # todos los espacios fisicos que pertenecen a esta, agrega los inventarios y retorna
 # la lista
 def __get_inventario(espacio_id=None, dep_id=None):
-    
     sustancias = []
     if espacio_id:
-        sustancias = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & (db.t_Inventario.espacio == espacio_id)).select())
+        sustancias = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & 
+                             (db.t_Inventario.espacio == espacio_id)).select())
 
     return sustancias
 
