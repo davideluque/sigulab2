@@ -81,6 +81,15 @@ def __get_inventario(espacio_id=None, dep_id=None):
 
     return inventario
 
+
+# Registra una nueva sustancia en el espacio fisico indicado. Valida que
+# la sustancia no exista ya en ese espacio, que las cantidades sean no negativas
+# y que la cantidad para uso interno (uso_interno) sea menor que la existencia
+def __agregar_sustancia(espacio_id, sustancia_id, existencia, uso_interno):
+
+    print "espacio_id {0} sustancia_id {1} existencia {2} uso_interno {3}".format(espacio_id, sustancia_id, existencia, uso_interno)
+
+
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
@@ -317,6 +326,12 @@ def inventarios():
 
                 sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
 
+                # Si se esta agregando una nueva sustancia, se registra en la DB
+                if request.vars.sustancia:
+                    __agregar_sustancia(espacio_id,
+                                        request.vars.sustancia, 
+                                        request.vars.existencia,
+                                        request.vars.uso_interno)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre

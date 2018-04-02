@@ -126,7 +126,7 @@
                           <select class="form-control" type="select" id="sustancia" name="sustancia" required>
                             <option value="" selected hidden >Sustancia*</option>
                             {{for sustancia in sustancias:}}
-                            <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} ({{=sustancia.f_cas}})</option>
+                            <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
                             {{pass}}
                           </select>
                         </div>
@@ -137,6 +137,7 @@
                           <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
                         </div>
                     </div>
+                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
                   </fieldset>
                   <!-- Fin Primer Paso -->
                 </form>
