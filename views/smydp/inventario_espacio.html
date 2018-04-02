@@ -114,7 +114,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
                   <!-- Primer Paso -->
                   <fieldset class="formField">
@@ -132,9 +132,15 @@
                               <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
                               {{pass}}
                             </select>
+                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
                           </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="excedente" placeholder="Cantidad total*" required>
+                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
+                            <div class="field-error"> <p id="error-uso-interno"> </p> </div>
                           </div>
                           <div class="form-group" style="padding-bottom: 50px">
                             <h6 id="funcion" style="margin-top: 25px; font-size: 15px;">Unidad de medida*</h6>
@@ -144,9 +150,7 @@
                               </div>
                               {{pass}}
                           </div>
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                          </div>
+                          <div class="field-error"> <p id="error-unidad"> </p> </div>
                       </div>
                     </div>
                     <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
@@ -162,4 +166,26 @@
 
 <!-- Fin Modal Agregar Servicio -->
 
+<script type="text/javascript">
+  function validar_campos(){
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
 
+    // Buscando divs para ingresar mensajes de error
+    var error_total = document.getElementById("error-total");
+    var error_uso_interno = document.getElementById("error-uso-interno");
+
+    if (total == total) {
+      error_total.innerText = "Por favor indique la cantidad total de material que se registrará en el inventario."
+      return false
+    }
+
+    if (uso_interno == uso_interno) {
+      error_uso_interno.innerText = "Por favor indique la cantidad total de material que se registrará en el inventario."
+      return false
+    }
+  }
+
+
+</script>
