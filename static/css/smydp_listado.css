@@ -90,3 +90,7 @@ th {
 }
 
 /* Estilos de inventario_espacio.html */ 
+
+.field-error{
+	color:#B70101;
+}
