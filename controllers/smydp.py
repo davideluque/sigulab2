@@ -94,13 +94,17 @@ def __get_inventario_espacio(espacio_id=None, dep_id=None):
 # Si una dependencia no tiene otras adscritas, entonces no aparece en "jerarquia"
 def __get_leaves(dep_id, jerarquia):
 
+    # *!* Ver si buscar quienes no aparecen como claves en jerarquia es lo mismo 
+    # que buscar los que no tienen hijos
+
     if not dep_id in jerarquia:
         return [dep_id]
     else:
         l = []
         for d in jerarquia[dep_id]:
-            l = l + __get_secciones(d, jerarquia) 
+            l = l + __get_leaves(d, jerarquia) 
         return l
+
 
 # Dada una lista de ids de dependencias que no poseen otras adscritas a ellas,
 # retorna los ids de espacios fisicos en la base de datos que tienen a estas 
@@ -561,6 +565,9 @@ def inventarios():
                 if dep_padre_id:
                     dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                          ).select().first().nombre
+                # Se muestra como inventario el egregado de los inventarios que
+                # pertenecen a la dependencia del usuario
+                inventario = __get_inventario_dep(dep_id)
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -571,6 +578,10 @@ def inventarios():
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
                                   ).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la dependencia del usuario
+            inventario = __get_inventario_dep(dep_id)
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
