@@ -241,7 +241,7 @@ def __get_inventario_dep(dep_id):
 # Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo la
 # sustancia. 
-def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
+def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
 
     # Si ya existe la sustancia en el inventario
     if db((db.t_Inventario.espacio == espacio.id) & 
@@ -249,12 +249,12 @@ def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
         sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
 
         response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
-                          en el espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
+                          al espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
         db.t_Inventario.insert(f_existencia=float(total), 
-                               f_uso_interno=float(total)-float(excedente),
+                               f_uso_interno=float(uso_interno),
                                f_medida=unidad_id,
                                espacio=espacio.id,
                                sustancia=sustancia_id)
@@ -400,7 +400,7 @@ def inventarios():
                 __agregar_sustancia(espacio,
                                     request.vars.sustancia, 
                                     request.vars.total,
-                                    request.vars.excedente,
+                                    request.vars.uso_interno,
                                     request.vars.unidad)
 
 
@@ -454,7 +454,7 @@ def inventarios():
                 __agregar_sustancia(espacio,
                                     request.vars.sustancia, 
                                     request.vars.total,
-                                    request.vars.excedente,
+                                    request.vars.uso_interno,
                                     request.vars.unidad)
 
 
@@ -537,7 +537,7 @@ def inventarios():
                     __agregar_sustancia(espacio,
                                         request.vars.sustancia, 
                                         request.vars.total,
-                                        request.vars.excedente,
+                                        request.vars.uso_interno,
                                         request.vars.unidad)
 
             else:
