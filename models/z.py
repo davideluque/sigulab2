@@ -496,8 +496,8 @@ if db(db.auth_membership).isempty():
 	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
-# Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar el controlador 
-# __agregar_inventarios de smydp)
+# Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar la funcion 
+# __sumar_cantidad del controlador __agregar_inventarios de smydp)
 if db(db.t_Unidad_de_medida).isempty():
 	db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
 	db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')

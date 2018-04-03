@@ -142,16 +142,81 @@ def __get_espacios(dep_id):
 
     hojas = __get_leaves(dep_id, jerarquia)
 
-    secciones = __filtrar_espacios(hojas)
+    espacios = __filtrar_espacios(hojas)
 
     return espacios
+
+
+# Permite sumar dos cantidades de sustancia de acuerdo a la unidad en la que
+# se esta mostrando la cantidad de sustancia en el inventario
+def __sumar_cantidad(nueva_cantidad, cantidad_actual, nueva_unidad, unidad):
+
+    if nueva_unidad == unidad:
+        return float(nueva_cantidad) + float(cantidad_actual)
+    # Si no son iguales y ademas la nueva sustancia esta en Litros o Kilos
+    elif nueva_unidad in ["Kilogramos", "Litros"]:
+        return float(nueva_cantidad)*1000 + float(cantidad_actual)
+    # Si no son iguales y ademas la nueva sustancia esta en Mililitros o gramos
+    elif nueva_unidad in ["Mililitros", "Gramos"]:
+        return float(nueva_cantidad)/1000 + float(cantidad_actual)
+
 
 # Agrega los inventarios de los espacios en la lista "espacios"
 def __agregar_inventarios(espacios):
 
-    
+    inventario_total = {}
+    for esp_id in espacios:
+        # Recorriendo las entradas en el inventario que pertenecen al espacio "esp"
+        for row in db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
+                      (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
+                      (db.t_Inventario.espacio == esp_id)).select():
 
-    return []
+            sust = row['t_Sustancia']
+            inv = row['t_Inventario']
+            unid = row['t_Unidad_de_medida']
+
+            sustancia_id = sust.id
+
+            # Se agrega la sustancia al inventario final si esta no estaba ya
+            if not sustancia_id in inventario_total:
+                
+                inventario_total[sustancia_id] = {
+                                        'f_nombre': sust.f_nombre,
+                                        'f_cas': sust.f_cas,
+                                        'f_pureza': sust.f_pureza,
+                                        'f_estado': sust.f_estado,
+                                        'f_existencia':inv.f_existencia,
+                                        'f_uso_interno': inv.f_uso_interno,
+                                        'f_unidad': unid.f_nombre
+                                                 }
+            # Si ya estaba, se suma la cantidad en existencia y de uso interno
+            # de la sustancia con id sustancia_id
+            else:
+                # Inventario actual de la sustancia sustancia_id
+                s = inventario_total[sustancia_id]
+
+                # Cantidades existentes por ahora en el inventario general
+                existencia = s['f_existencia']
+                uso_interno = s['f_uso_interno']
+
+                # Unidad en que se mostrara el inventario general de la sustancia
+                unidad = s['f_unidad']
+
+                # Nuevas cantidades que hay que sumar al inventario general
+                nueva_exist = inv.f_existencia
+                nuevo_uso_interno = inv.f_uso_interno
+                nueva_unidad = unid.f_nombre
+                
+                s['f_existencia'] = __sumar_cantidad(nueva_exist,
+                                                    existencia,
+                                                    nueva_unidad,
+                                                    unidad)
+                s['f_uso_interno'] = __sumar_cantidad(nuevo_uso_interno,
+                                                     uso_interno,
+                                                     nueva_unidad,
+                                                     unidad)
+                    
+    return inventario_total
 
 
 # Dado el id de una dependencia, retorna una lista con el agregado de las sutancias
