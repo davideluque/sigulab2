@@ -1,1 +1,79 @@
-<div> SOY UNA DEPENDENCIA </div>
+<!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
+
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+<div class="row">
+  <h3> Inventario </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Pureza</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Existencia</th>
+                <!--
+                <th class="camposTabla linksNombres">Unidad</th>
+                -->
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {{inventario = [{
+        					't_Sustancia':  { 'f_nombre': 'Acetotona', 'f_cas': '1-6-8', 'f_pureza': '59', 'f_estado': '[Liquido]'}, 
+        					't_Inventario': {'f_existencia': '5', 'f_uso_interno': '5'} 
+        				 },
+        				 {
+        					't_Sustancia':  {'f_nombre': 'Bicarbonato', 'f_cas': '5-8-9', 'f_pureza': '9', 'f_estado': '[Solido]'}, 
+        					't_Inventario': {'f_existencia': '3.5', 'f_uso_interno': '2.5'} 
+        				 }
+        				]
+        }}
+          {{for sustancia in inventario:}}
+            {{sust = sustancia['t_Sustancia']}}
+            {{inv = sustancia['t_Inventario']}}
+            <tr>
+                <td class="camposTabla">{{=sust['f_nombre']}}</td>
+                <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
+                <td class="camposTabla">{{=sust['f_cas'] if sust['f_estado'] else ''}}</td>
+                <td class="camposTabla">{{=sust['f_pureza'] if sust['f_estado'] else ''}}</td>
+                <td class="camposTabla">{{=sust['f_estado'][0] if sust['f_estado'] else ''}}</td>
+                <td class="camposTabla">{{=inv['f_existencia']}}</td>
+                <td class="camposTabla">{{=inv['f_uso_interno']}}</td>
+                <td class="camposTabla">{{=float(inv['f_existencia']) - float(inv['f_uso_interno'])}}</td>
+            </tr>
+          {{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Pureza</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Existencia</th>
+                <!--
+                <th class="camposTabla linksNombres">Unidad</th>
+                -->
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de sustancias --> 
+
