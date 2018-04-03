@@ -85,20 +85,24 @@ def __get_inventario(espacio_id=None, dep_id=None):
 # Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo la
 # sustancia. 
-def __agregar_sustancia(espacio_id, sustancia_id, total, excedente, unidad_id):
+def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
 
     # Si ya existe la sustancia en el inventario
-    if db((db.t_Inventario.espacio == espacio_id) & 
+    if db((db.t_Inventario.espacio == espacio.id) & 
           (db.t_Inventario.sustancia == sustancia_id)).select():
-        print "Ya existe la sustancia {0} en el espacio {1}".format(sustancia_id, espacio_id)
+        sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
+
+        #response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
+        #                  en el espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
         return False
 
     db.t_Inventario.insert(f_existencia=total, 
                            f_uso_interno=float(total)-float(excedente),
                            f_medida=unidad_id,
-                           espacio=espacio_id,
+                           espacio=espacio.id,
                            sustancia=sustancia_id)
 
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
@@ -343,7 +347,7 @@ def inventarios():
 
                 # Si se esta agregando una nueva sustancia, se registra en la DB
                 if request.vars.sustancia:
-                    __agregar_sustancia(espacio_id,
+                    __agregar_sustancia(espacio,
                                         request.vars.sustancia, 
                                         request.vars.total,
                                         request.vars.excedente,
