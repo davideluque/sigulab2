@@ -97,7 +97,7 @@ def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
-        db.t_Inventario.insert(f_existencia=total, 
+        db.t_Inventario.insert(f_existencia=float(total), 
                                f_uso_interno=float(total)-float(excedente),
                                f_medida=unidad_id,
                                espacio=espacio.id,
@@ -228,13 +228,25 @@ def inventarios():
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
 
             espacio_visitado = True
-            # Se muestra solo el inventario de ese espacio y no se muestran mas
-            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
-            # de dependencias
+
+            inventario = __get_inventario(espacio_id)
+
+            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.excedente,
+                                    request.vars.unidad)
+
 
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
@@ -262,6 +274,9 @@ def inventarios():
                     __is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
+
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
 
@@ -273,9 +288,19 @@ def inventarios():
                                  ).select().first().nombre
 
             espacio_visitado = True
-            # Se muestra solo el inventario de ese espacio y no se muestran mas
-            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
-            # de dependencias
+                            # Se muestra la lista de sustancias que tiene en inventario
+            inventario = __get_inventario(espacio_id)
+
+            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.excedente,
+                                    request.vars.unidad)
+
 
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
