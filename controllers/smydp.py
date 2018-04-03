@@ -621,7 +621,6 @@ def catalogo():
                                     csv=False,
                                     links_in_grid=False,
                                     create=False,
-                                    paginate=10,
-                                    showid=False)
+                                    paginate=10)
     return locals()
 

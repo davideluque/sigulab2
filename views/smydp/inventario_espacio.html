@@ -33,7 +33,6 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Pureza</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>
@@ -51,7 +50,6 @@
                 <td class="camposTabla">{{=sust.f_nombre}}</td>
                 <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust.f_cas if sust.f_estado else ''}}</td>
-                <td class="camposTabla">{{=sust.f_pureza if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>
                 <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
@@ -65,7 +63,6 @@
             <tr>
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Pureza</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>
