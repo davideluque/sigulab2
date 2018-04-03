@@ -28,32 +28,17 @@
         </thead>
 
         <tbody>
-        {{inventario = [{
-        					't_Sustancia':  { 'f_nombre': 'Acetotona', 'f_cas': '1-6-8', 'f_pureza': '59', 'f_estado': ['Liquido']}, 
-        					't_Inventario': {'f_existencia': '5', 'f_uso_interno': '5'} ,
-        					't_Unidad_de_medida':{'f_nombre':'Litros'}
-        				 },
-        				 {
-        					't_Sustancia':  {'f_nombre': 'Bicarbonato', 'f_cas': '5-8-9', 'f_pureza': '9', 'f_estado': ['Solido']}, 
-        					't_Inventario': {'f_existencia': '3.5', 'f_uso_interno': '2.5'},
-        					't_Unidad_de_medida':{'f_nombre':'Litros'}
-        				 }
-        				]
-        }}
-          {{for sustancia in inventario:}}
-            {{sust = sustancia['t_Sustancia']}}
-            {{inv = sustancia['t_Inventario']}}
-            {{unid = sustancia['t_Unidad_de_medida']}}
+          {{for sust_id, sust in inventario.iteritems():}}
             <tr>
                 <td class="camposTabla">{{=sust['f_nombre']}}</td>
                 <!-- *!* Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust['f_cas'] if sust['f_estado'] else ''}}</td>
                 <td class="camposTabla">{{=sust['f_pureza'] if sust['f_estado'] else ''}}</td>
                 <td class="camposTabla">{{=sust['f_estado'][0] if sust['f_estado'] else ''}}</td>
-                <td class="camposTabla">{{=inv['f_existencia']}}</td>
-                <td class="camposTabla">{{=inv['f_uso_interno']}}</td>
-                <td class="camposTabla">{{=float(inv['f_existencia']) - float(inv['f_uso_interno'])}}</td>
-                <td class="camposTabla">{{=unid['f_nombre']}}</td>
+                <td class="camposTabla">{{=sust['f_existencia']}}</td>
+                <td class="camposTabla">{{=sust['f_uso_interno']}}</td>
+                <td class="camposTabla">{{=float(sust['f_existencia']) - float(sust['f_uso_interno'])}}</td>
+                <td class="camposTabla">{{=sust['f_unidad']}}</td>
             </tr>
           {{pass}}           
         </tbody>

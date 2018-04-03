@@ -119,8 +119,6 @@ def __filtrar_espacios(hojas):
 # todos los espacios fisicos
 def __get_espacios(dep_id):
     espacios = []
-    import pdb
-    pdb.set_trace()
 
     secciones = []
     dependencias = db(db.dependencias.id > 0).select()
@@ -148,7 +146,10 @@ def __get_espacios(dep_id):
 
 
 # Permite sumar dos cantidades de sustancia de acuerdo a la unidad en la que
-# se esta mostrando la cantidad de sustancia en el inventario
+# se esta mostrando la cantidad de sustancia en el inventario. *!* Se asume que
+# no se agregaran sustancias a los inventarios en unidades diferentes a las normales
+# Si es un liquido, se puede pasar de litros a mililitros, pero no se espera
+# que se ingrese en algun inventario en gramos
 def __sumar_cantidad(nueva_cantidad, cantidad_actual, nueva_unidad, unidad):
 
     if nueva_unidad == unidad:
