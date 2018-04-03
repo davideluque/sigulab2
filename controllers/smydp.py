@@ -92,15 +92,16 @@ def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
           (db.t_Inventario.sustancia == sustancia_id)).select():
         sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
 
-        #response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
-        #                  en el espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
+        response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
+                          en el espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
         return False
-
-    db.t_Inventario.insert(f_existencia=total, 
-                           f_uso_interno=float(total)-float(excedente),
-                           f_medida=unidad_id,
-                           espacio=espacio.id,
-                           sustancia=sustancia_id)
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    else:
+        db.t_Inventario.insert(f_existencia=total, 
+                               f_uso_interno=float(total)-float(excedente),
+                               f_medida=unidad_id,
+                               espacio=espacio.id,
+                               sustancia=sustancia_id)
 
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
