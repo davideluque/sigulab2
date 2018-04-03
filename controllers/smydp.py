@@ -76,7 +76,8 @@ def __find_dep_id(dependencias, nombre):
 def __get_inventario(espacio_id=None, dep_id=None):
     inventario = []
     if espacio_id:
-        inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & 
+        inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
+                             (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
                              (db.t_Inventario.espacio == espacio_id)).select())
 
     return inventario
@@ -213,7 +214,7 @@ def inventarios():
     user_dep_id = user.f_dependencia
 
     if auth.has_membership("TÉCNICO"):
-        # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
+        # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
