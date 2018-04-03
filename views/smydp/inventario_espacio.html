@@ -56,7 +56,7 @@
                 <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=inv.f_existencia}}</td>
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>
-                <td class="camposTabla">{{=int(inv.f_existencia) - int(inv.f_uso_interno)}}</td>
+                <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
             </tr>
           {{pass}}           
         </tbody>
