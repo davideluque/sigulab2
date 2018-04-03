@@ -3,6 +3,7 @@
 {{block head}}
 	<meta charset="UTF-8">
 
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
  	<!-- DataTables -->
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
@@ -34,6 +35,9 @@
 </nav>
 
 <!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
