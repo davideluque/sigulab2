@@ -56,7 +56,7 @@
         <ul class="nav navbar-nav">
             
             <li class="dropdown active-item" id="inicio">
-              <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2', 'modulos')}}">INICIO</a>
+              <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2')}}">INICIO</a>
             </li>
 
             <li class="dropdown active-item" id="personal">
@@ -83,15 +83,12 @@
               </ul>
             </li>
 
-            <li class="dropdown">
+            <li class="dropdown active-item" id="smydp">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SMyDP<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="{{=URL('SIGULAB', 'front_page','sustancias')}}">Página Principal</a></li>
-                  <li><a href="{{=URL('SIGULAB', 'sustancias','sustanciapeligrosa_manage')}}">Listado de Sustancias</a></li>
-                  <li><a href="{{=URL('SIGULAB', 'sustancias','select_inventario')}}">Inventario</a></li>
-                  <li><a href="{{=URL('SIGULAB', 'sustancias','view_compras')}}">Facturación</a></li>
-                  <li><a href="{{=URL('SIGULAB', c='reportes',f='select_fecha')}}">Reportes Rl4</a></li>
-                  <li><a href="{{=URL('SIGULAB', c='reportes',f='select_fecha7')}}">Reportes Rl7</a></li>
+                <li><a href="{{=URL('smydp', 'index')}}">Página Principal</a></li>
+                  <li><a href="{{=URL('smydp', 'catalogo')}}">Listado de Sustancias</a></li>
+                  <li><a href="{{=URL('smydp', 'inventarios')}}">Inventario</a></li>
                  </ul>
             </li> 
 

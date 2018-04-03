@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> 
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">Sustancias</a>
+  <span class="breadcrumb-item active">Catalogo</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+{{if table.create_form:}}
+	{{=table.create_form}}
+{{elif table.update_form:}}
+	{{=table.update_form}}
+{{elif table.view_form:}}
+	{{=table.view_form}}
+{{else:}}
+	<div class="container"> 
+		{{=table}}
+	</div>
+{{pass}}
+
+<script>
+	// Eliminando el breadcrumb que trae la forma SQL por defecto
+	document.getElementsByClassName("web2py_breadcrumbs")[0].style.display='none';
+	// Set blue bar below INICIO text.
+	document.getElementById("smydp").className += " active";
+</script>
+
+{{end}}

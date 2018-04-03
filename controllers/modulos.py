@@ -14,15 +14,9 @@ import re
 #-------------------------------------
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def index():
-  """
-  @description Pagina principal de elección de módulos SMyDP o Otros Módulos
-  """
-  return dict()
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 def sigulab2():
   return dict()
+
 
 def authenticate():
   """
@@ -44,7 +38,7 @@ def authenticate():
   if not user:
     return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
-    url = URL('index')
+    url = URL('default','index')
     return '$(location).attr("href", "' + str(url) + '")'
 
 def login():
@@ -56,8 +50,9 @@ def login():
   en caso de que el usuario ya fue autenticado.
   """
   if auth.user:
-    return redirect(URL('index'))
+    return redirect(URL('default', 'index'))
 
+  auth.settings.login_next = URL('default','index')
   form=auth.login()
   
   if request.vars['error'] == 'invalid_data':
@@ -168,7 +163,6 @@ def register():
   siguientes grupos: Grupo Webmaster, grupo DIRECTOR, grupo Asistente del 
   DIRECTOR o Coordinadora de la Calidad.
   """
-
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
     auth_register = auth.register_bare(username=request.post_vars.first_name, 
@@ -193,7 +187,8 @@ def register():
     """Después de haber hecho la verificación de correo electrónico no tomado
     y que la verificación de contraseñas coincide. Es decir, cuando el
     registro fue satisfactorio, se hace una conexión entre el usuario recién
-    registrado y las tablas membership y personal.
+    registrado y las tablas membership y personal. Ademas, se crea una entrada
+    en la tabla "es_tecnico" si el usuario tiene el rol de tecnico.
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
 
@@ -211,7 +206,7 @@ def register():
 
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
-    db.t_Personal.insert(f_nombre = request.post_vars.first_name,
+    nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
                            f_ci = request.post_vars.cedula,
                            f_email = request.post_vars.email,
@@ -219,15 +214,34 @@ def register():
                            f_telefono = 0,
                            f_pagina_web = "N/A",
                            f_categoria = "N/A",
-                           f_cargo = "N/A",
+                           f_cargo = "N/A", # *?* No deberia ser request.vars.rol?
                            f_fecha_ingreso = "1/01/1989",
                            f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)
+
+    # Mapea el usuario al espacio fisico que tiene a cargo
+    rolid = request.post_vars.rol
+    roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
     
+    if roltype == "TÉCNICO":
+      # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
+      # 'es_encargado'
+      for trace, espacio in session.tags.iteritems():
+        espacio_id = trace.split('-')[2]
+        db.es_encargado.insert(espacio_fisico = espacio_id, 
+                               tecnico = nuevo_personal_id)
+      
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
     # actualización de datos personales.
     return redirect('register')
+
+  # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de 
+  # registro, se inicializa (o reestablece) la variable tags con los espacios
+  # fisicos seleccionados por el usuario. 
+  if session.tags is None or not request.vars:
+    session.tags = {}
+
 
   roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
 
@@ -235,7 +249,7 @@ def register():
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
-  rolid = request.post_vars.dependenciahidden
+  rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   direccion=db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL)
   labs_y_coordinaciones=list(db(db.dependencias.unidad_de_adscripcion == direccion[0].id).select(db.dependencias.ALL))
@@ -258,6 +272,7 @@ def ajax_unidad_rol():
 
 # Ajax helper para crear una membership para el usuario recien registrado
 def ajax_membership():
+
   session.depid = None
   session.rolid = int(request.post_vars.rol)
   session.ci = int(request.post_vars.cedula)
@@ -269,15 +284,81 @@ def ajax_membership():
   return dict()
 
 # Ajax Helper para mostrar dependencias a Tecnicos y Jefes de seccion
-def ajax_registro_seccion(): 
-  rolid = request.post_vars.dependenciahidden
+def ajax_registro_seccion():
+
+  rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   secciones=False
   if roltype == "TÉCNICO" or roltype == "JEFE DE SECCIÓN":
-    labid = request.post_vars.seccionhidden
+    labid = request.post_vars.dephidden
     secciones=list(db(db.dependencias.unidad_de_adscripcion == int(labid)).select(db.dependencias.ALL))
 
   return dict(lista=secciones)
+
+# Ajax Helper para mostrar espacios fisicos a Tecnicos
+def ajax_registro_espacio():
+
+  # Obteniendo la dependencia a la cual pertenece el tecnico
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+  labid = request.post_vars.dephidden
+  secid = request.post_vars.seccionhidden
+  
+  # Si usuario selecciona otro laboratorio, el id de este cambia, por lo que este laboratorio
+  # deja de ser la dependencia de la seccion y no es necesario mostrar los espacios fisicos
+  # que ya se habian desplegado. Quiza sea mejor reiniciar los elementos usando JS
+  unidadid = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion) 
+  esta_adscrito = unidadid == int(labid)
+  espacios = False
+  
+  if roltype == "TÉCNICO" and esta_adscrito:
+    espacios = list(db(db.espacios_fisicos.dependencia == int(secid)).select())
+  
+  return dict(lista=espacios)
+
+
+# Guardando los espacios seleccionados por el usuario para guardar en la case de datos
+# aquellos espacios de los que el tecnico es responsable
+def ajax_seleccionar_espacio():
+
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+  depid = request.post_vars.dephidden
+  secid = request.post_vars.seccionhidden
+  espid = request.post_vars.esphidden
+
+  espacio_nombre = db(db.espacios_fisicos.id == int(espid)).select()[0].nombre
+
+  # Cuando se presiona para abrir la lista de espacios fisicos y se vuelve a pisar el boton
+  # el evento "onclick" termina llamando esta funcion. Para no agregar ids vacios a session.tags
+  if espid != '':
+    session.tags[depid + "-" + secid + "-" + espid] = espacio_nombre
+
+  # Los tags se mostraran solo si el usuario es un tecnico
+  if roltype != "TÉCNICO":
+    session.tags = {}
+
+  return dict(tags=session.tags)
+
+# Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
+# espacio que se desea eliminar
+def ajax_eliminar_espacio():
+
+  espid = request.post_vars.borrarhidden
+  session.tags.pop(espid)
+  return dict(tags=session.tags)
+
+def ajax_mostrar_espacios():
+
+  rolid = request.post_vars.rolhidden
+  roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+  
+  # Los tags se mostraran solo si el usuario es un tecnico
+  if roltype != "TÉCNICO":
+    session.tags = {}
+
+  return dict(tags=session.tags)
+
 
 # Recuperacion de Contraseña (pedido) 
 def resetpassword():

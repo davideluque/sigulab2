@@ -17,7 +17,6 @@
 
 # Tabla de Sedes, necesaria para las Dependencias
 
-
 db.define_table(
     'sedes',
     Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre de la Sede'))
@@ -158,11 +157,24 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 db.define_table(
     'espacios_fisicos',
     #Atributos;
-    Field('codigo', 'string', unique=True, notnull=True, label=T('Código del espacio físico')),
+    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
+
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
-    #Referencia (Revisar si el label es asistio o organizo)
+    
     Field('dependencia', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')),
-    )
+        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), 
+        migrate=False)
+
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
+
+# Tabla "es_encargado" mapea espacios fisicos a sus tecnicos encargados.
+db.define_table(
+    'es_encargado',
+    #Atributos;
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None)), 
+
+    Field('tecnico', 'reference t_Personal', 
+            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))
+    )
