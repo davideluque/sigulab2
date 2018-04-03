@@ -28,7 +28,7 @@
         </thead>
 
         <tbody>
-          {{for sust_id, sust in inventario.iteritems():}}
+          {{for sust in inventario:}}
             <tr>
                 <td class="camposTabla">{{=sust['f_nombre']}}</td>
                 <!-- *!* Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
