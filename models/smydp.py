@@ -38,7 +38,7 @@ db.define_table(
           multiple = True), widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad')),
     
     # Hoja de seguridad (archivo pdf)
-    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad'), format='%(f_nombre)s'),
+    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad')),
     # Agrega los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
     auth.signature
     )
