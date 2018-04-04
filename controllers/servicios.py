@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+
 #
 # Controladores de las funcionalidades del modulo de Servicios
 #
@@ -496,6 +496,7 @@ def catalogoServicios():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_servicio():
+  
     session.forget(response)
 
     # Servicio
