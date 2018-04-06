@@ -502,7 +502,6 @@ if db(db.t_Unidad_de_medida).isempty():
 	db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')
 	db.t_Unidad_de_medida.insert(f_nombre='Gramos', f_abreviatura='g')
 	db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
-    
 
 # Catalogo de sustancias
 """
