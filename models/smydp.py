@@ -38,7 +38,7 @@ db.define_table(
           multiple = True), widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad')),
     
     # Hoja de seguridad (archivo pdf)
-    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad'), format='%(f_nombre)s'),
+    Field('f_hds','upload',requires=IS_NULL_OR(IS_UPLOAD_FILENAME(extension='pdf')),label=T('Hoja de seguridad')),
     # Agrega los campos adicionales created_by, created_on, modified_by, modified_on para los logs de la tabla
     auth.signature
     )
@@ -61,6 +61,7 @@ db.define_table(
     Field('f_existencia', 'double', requires=IS_NOT_EMPTY(), label=T('Existencia')),
     Field('f_uso_interno', 'double', requires=IS_NOT_EMPTY(), label=T('Uso interno')),
     Field('f_medida', 'reference t_Unidad_de_medida',
+
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
     # Referencias a otras tablas
     Field('espacio', 'reference espacios_fisicos',

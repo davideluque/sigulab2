@@ -56,18 +56,10 @@ def __is_bool(bool_var):
 
 # Dado el nombre de una dependencia, retorna el id de esta si la encuentra o
 # None si no lo hace
-def __find_dep_id(dependencias, nombre):
+def __find_dep_id(nombre):
 
-    dep_id = None
-    encontrado = False
-    k = 0
-    while not encontrado and k < len(dependencias):
-        if dependencias[k].nombre == nombre:
-            encontrado = True
-            dep_id = dependencias[k].id
-        k = k+1
+    dep_id = db(db.dependencias.nombre == nombre).select()[0].id    
     return dep_id
-
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -228,7 +220,7 @@ def __agregar_inventarios(espacios):
 # que existen en los espacios fisicos que pertenecen a esta. 
 def __get_inventario_dep(dep_id):
 
-    inventario = []
+    inventario = {}
 
     # Obteniendo lista de espacios bajo la dependencia con id dep_id
     espacios = __get_espacios(dep_id)
@@ -303,7 +295,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
         lista_adyacencias = {dep.id: dep.unidad_de_adscripcion for dep in dependencias}
 
         # Buscando el id de la direccion para saber si ya se llego a la raiz
-        direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
+        direccion_id = __find_dep_id('DIRECCIÓN')
 
         # Si dep_id es un espacio fisico, se sube un nivel en la jerarquia (hasta
         # las secciones) ya que los espacios fisicos no aparecen en la lista de 
@@ -333,6 +325,9 @@ def __acceso_permitido(user, dep_id, es_espacio):
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
 
+    import pdb
+    pdb.set_trace()
+
     # Inicializando listas de espacios fisicos y dependencias
     espacios = []
     dependencias = []
@@ -361,7 +356,7 @@ def inventarios():
     espacio_visitado = False
     
     es_tecnico = auth.has_membership("TÉCNICO")
-    direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
+    direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -391,6 +386,7 @@ def inventarios():
 
             espacio_visitado = True
 
+            # Busca el inventario del espacio
             inventario = __get_inventario_espacio(espacio_id)
 
             sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
@@ -414,6 +410,9 @@ def inventarios():
                     (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)
                               ).select(db.espacios_fisicos.ALL))
             es_espacio = True
+            # Se muestra como inventario el egregado de los inventarios de los
+            # espacios que pertenecen a la dependencia user_dep_id
+            inventario = __get_inventario_dep(user_dep_id)
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
