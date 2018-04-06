@@ -70,37 +70,194 @@ def __find_dep_id(dependencias, nombre):
 
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
-# de ese espacio. Si ningun id es indicado, pero si el de una dependencia, busca
-# todos los espacios fisicos que pertenecen a esta, agrega los inventarios y retorna
-# la lista
-def __get_inventario(espacio_id=None, dep_id=None):
+# de ese espacio.
+def __get_inventario_espacio(espacio_id=None, dep_id=None):
     inventario = []
-    if espacio_id:
-        inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) & 
-                             (db.t_Inventario.espacio == espacio_id)).select())
+    inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
+                         (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
+                         (db.t_Inventario.espacio == espacio_id)).select())
 
     return inventario
 
+# Retorna las hojas o dependencias que no tienen hijos (posiblemente secciones) y
+# que estan por debajo de la dependencia dada.
+# "jerarquia" tiene la forma: 
+#       {'dependencia1': [dep_hija1,
+#                        .
+#                        .
+#                         dep_hijan]
+#        'dependencia2': [dep_hija1,
+#                         .
+#                         .
+#                         dep_hijam]
+#     }
+# Si una dependencia no tiene otras adscritas, entonces no aparece en "jerarquia"
+def __get_leaves(dep_id, jerarquia):
+
+    # *!* Ver si buscar quienes no aparecen como claves en jerarquia es lo mismo 
+    # que buscar los que no tienen hijos
+
+    if not dep_id in jerarquia:
+        return [dep_id]
+    else:
+        l = []
+        for d in jerarquia[dep_id]:
+            l = l + __get_leaves(d, jerarquia) 
+        return l
+
+
+# Dada una lista de ids de dependencias que no poseen otras adscritas a ellas,
+# retorna los ids de espacios fisicos en la base de datos que tienen a estas 
+# dependencias como secciones
+def __filtrar_espacios(hojas):
+
+    espacios = []
+    for dep_id in hojas:
+        nuevos_espacios = [esp.id for esp in db(db.espacios_fisicos.dependencia == dep_id).select()]
+        if nuevos_espacios:
+            espacios = espacios + nuevos_espacios
+    return espacios
+
+# Dado el id de una dependencia, retorna una lista con los ids de todos los
+# espacios fisicos que pertenecen a esta. Si el id es de la ULAB, retorna
+# todos los espacios fisicos
+def __get_espacios(dep_id):
+    espacios = []
+
+    secciones = []
+    dependencias = db(db.dependencias.id > 0).select()
+    
+    # Creando lista de adyacencias
+    lista_adyacencias = {dep.id: dep.unidad_de_adscripcion for dep in dependencias}
+
+    # Representando la jerarquia con la forma {'dependencia': [dep_hija1, dep_hija2]}
+    jerarquia = {}
+
+    for hijo, padre in lista_adyacencias.iteritems():
+        # Si el padre es None, es porque se trata de la unidad de laboratorios
+        # que no tiene padre (nivel mas alto de la jerarquia)
+        if padre is not None:
+            if padre in jerarquia:
+                jerarquia[padre].append(hijo)
+            else:
+                jerarquia[padre] = [hijo]
+
+    hojas = __get_leaves(dep_id, jerarquia)
+
+    espacios = __filtrar_espacios(hojas)
+
+    return espacios
+
+
+# Permite sumar dos cantidades de sustancia de acuerdo a la unidad en la que
+# se esta mostrando la cantidad de sustancia en el inventario. *!* Se asume que
+# no se agregaran sustancias a los inventarios en unidades diferentes a las normales
+# Si es un liquido, se puede pasar de litros a mililitros, pero no se espera
+# que se ingrese en algun inventario en gramos
+def __sumar_cantidad(nueva_cantidad, cantidad_actual, nueva_unidad, unidad):
+
+    if nueva_unidad == unidad:
+        return float(nueva_cantidad) + float(cantidad_actual)
+    # Si no son iguales y ademas la nueva sustancia esta en Litros o Kilos
+    elif nueva_unidad in ["Kilogramos", "Litros"]:
+        return float(nueva_cantidad)*1000 + float(cantidad_actual)
+    # Si no son iguales y ademas la nueva sustancia esta en Mililitros o gramos
+    elif nueva_unidad in ["Mililitros", "Gramos"]:
+        return float(nueva_cantidad)/1000 + float(cantidad_actual)
+
+
+# Agrega los inventarios de los espacios en la lista "espacios"
+def __agregar_inventarios(espacios):
+
+    inventario_total = {}
+    for esp_id in espacios:
+        # Recorriendo las entradas en el inventario que pertenecen al espacio "esp"
+        for row in db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
+                      (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
+                      (db.t_Inventario.espacio == esp_id)).select():
+
+            sust = row['t_Sustancia']
+            inv = row['t_Inventario']
+            unid = row['t_Unidad_de_medida']
+
+            sustancia_id = sust.id
+
+            # Se agrega la sustancia al inventario final si esta no estaba ya
+            if not sustancia_id in inventario_total:
+                
+                inventario_total[sustancia_id] = {
+                                        'f_nombre': sust.f_nombre,
+                                        'f_cas': sust.f_cas,
+                                        'f_pureza': sust.f_pureza,
+                                        'f_estado': sust.f_estado,
+                                        'f_existencia':inv.f_existencia,
+                                        'f_uso_interno': inv.f_uso_interno,
+                                        'f_unidad': unid.f_nombre
+                                                 }
+            # Si ya estaba, se suma la cantidad en existencia y de uso interno
+            # de la sustancia con id sustancia_id
+            else:
+                # Inventario actual de la sustancia sustancia_id
+                s = inventario_total[sustancia_id]
+
+                # Cantidades existentes por ahora en el inventario general
+                existencia = s['f_existencia']
+                uso_interno = s['f_uso_interno']
+
+                # Unidad en que se mostrara el inventario general de la sustancia
+                unidad = s['f_unidad']
+
+                # Nuevas cantidades que hay que sumar al inventario general
+                nueva_exist = inv.f_existencia
+                nuevo_uso_interno = inv.f_uso_interno
+                nueva_unidad = unid.f_nombre
+                
+                s['f_existencia'] = __sumar_cantidad(nueva_exist,
+                                                    existencia,
+                                                    nueva_unidad,
+                                                    unidad)
+                s['f_uso_interno'] = __sumar_cantidad(nuevo_uso_interno,
+                                                     uso_interno,
+                                                     nueva_unidad,
+                                                     unidad)
+                    
+    return inventario_total
+
+
+# Dado el id de una dependencia, retorna una lista con el agregado de las sutancias
+# que existen en los espacios fisicos que pertenecen a esta. 
+def __get_inventario_dep(dep_id):
+
+    inventario = []
+
+    # Obteniendo lista de espacios bajo la dependencia con id dep_id
+    espacios = __get_espacios(dep_id)
+
+    # Agrega los inventarios de los espacios en la lista "espacios"
+    inventario = __agregar_inventarios(espacios)
+
+    return inventario
 
 # Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo la
 # sustancia. 
-def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):
+def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
 
     # Si ya existe la sustancia en el inventario
     if db((db.t_Inventario.espacio == espacio.id) & 
           (db.t_Inventario.sustancia == sustancia_id)).select():
         sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
 
-        #response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
-        #                  en el espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
+        response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
+                          al espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
         return False
-
-    db.t_Inventario.insert(f_existencia=total, 
-                           f_uso_interno=float(total)-float(excedente),
-                           f_medida=unidad_id,
-                           espacio=espacio.id,
-                           sustancia=sustancia_id)
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    else:
+        db.t_Inventario.insert(f_existencia=float(total), 
+                               f_uso_interno=float(uso_interno),
+                               f_medida=unidad_id,
+                               espacio=espacio.id,
+                               sustancia=sustancia_id)
 
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -143,7 +300,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
                                 db.dependencias.unidad_de_adscripcion)
 
         # Creando lista de adyacencias
-        lista_adyacencias = {row.id: row.unidad_de_adscripcion for row in dependencias}
+        lista_adyacencias = {dep.id: dep.unidad_de_adscripcion for dep in dependencias}
 
         # Buscando el id de la direccion para saber si ya se llego a la raiz
         direccion_id = __find_dep_id(dependencias, 'DIRECCIÓN')
@@ -212,7 +369,7 @@ def inventarios():
     user_dep_id = user.f_dependencia
 
     if auth.has_membership("TÉCNICO"):
-        # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
+        # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
@@ -227,13 +384,25 @@ def inventarios():
                                     request.vars.es_espacio):
                 redirect(URL('inventarios'))
 
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
 
             espacio_visitado = True
-            # Se muestra solo el inventario de ese espacio y no se muestran mas
-            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
-            # de dependencias
+
+            inventario = __get_inventario_espacio(espacio_id)
+
+            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.uso_interno,
+                                    request.vars.unidad)
+
 
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
@@ -247,7 +416,7 @@ def inventarios():
             es_espacio = True
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
-                # Si el tecnico o jefe de seccion ha seleccionado un espacio fisico
+        # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
@@ -261,6 +430,9 @@ def inventarios():
                     __is_bool(request.vars.es_espacio)):
                 redirect(URL('inventarios'))
 
+
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
                            ).select().first().nombre
 
@@ -272,12 +444,22 @@ def inventarios():
                                  ).select().first().nombre
 
             espacio_visitado = True
-            # Se muestra solo el inventario de ese espacio y no se muestran mas
-            # dependencias pues ya se alcanzo el nivel mas bajo de la jerarquia 
-            # de dependencias
+                            # Se muestra la lista de sustancias que tiene en inventario
+            inventario = __get_inventario_espacio(espacio_id)
 
-        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
-        # entrar a la opcion de inventarios
+            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.uso_interno,
+                                    request.vars.unidad)
+
+
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # regresar a la vista inicial de inventarios
         elif request.vars.es_espacio == 'False':
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
@@ -295,7 +477,8 @@ def inventarios():
                            ).select().first().nombre
 
             es_espacio = True                        
-
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # entrar a la vista inicial de inventarios
         else:
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
@@ -304,6 +487,10 @@ def inventarios():
                            ).select().first().nombre
 
             es_espacio = True
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la seccion del jefe
+            inventario = __get_inventario_dep(user_dep_id)
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -341,7 +528,7 @@ def inventarios():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                inventario = __get_inventario(espacio_id)
+                inventario = __get_inventario_espacio(espacio_id)
 
                 sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
 
@@ -350,7 +537,7 @@ def inventarios():
                     __agregar_sustancia(espacio,
                                         request.vars.sustancia, 
                                         request.vars.total,
-                                        request.vars.excedente,
+                                        request.vars.uso_interno,
                                         request.vars.unidad)
 
             else:
@@ -378,6 +565,9 @@ def inventarios():
                 if dep_padre_id:
                     dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                          ).select().first().nombre
+                # Se muestra como inventario el egregado de los inventarios que
+                # pertenecen a la dependencia del usuario
+                inventario = __get_inventario_dep(dep_id)
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -388,6 +578,10 @@ def inventarios():
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
                                   ).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la dependencia del usuario
+            inventario = __get_inventario_dep(dep_id)
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -427,7 +621,6 @@ def catalogo():
                                     csv=False,
                                     links_in_grid=False,
                                     create=False,
-                                    paginate=10,
-                                    showid=False)
+                                    paginate=10)
     return locals()
 

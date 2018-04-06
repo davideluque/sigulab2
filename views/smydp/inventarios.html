@@ -3,13 +3,20 @@
 {{block head}}
 	<meta charset="UTF-8">
 
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+	<!-- Para los mensajes con flash -->
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
  	<!-- DataTables -->
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	
+ 	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
  	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
@@ -28,12 +35,15 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">Sustancias</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
   <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
   </div>
 </nav>
 
 <!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
