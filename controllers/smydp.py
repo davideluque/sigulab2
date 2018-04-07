@@ -86,9 +86,6 @@ def __get_inventario_espacio(espacio_id=None, dep_id=None):
 # Si una dependencia no tiene otras adscritas, entonces no aparece en "jerarquia"
 def __get_leaves(dep_id, jerarquia):
 
-    # *!* Ver si buscar quienes no aparecen como claves en jerarquia es lo mismo 
-    # que buscar los que no tienen hijos
-
     if not dep_id in jerarquia:
         return [dep_id]
     else:
@@ -134,7 +131,7 @@ def __get_espacios(dep_id):
             else:
                 jerarquia[padre] = [hijo]
 
-    hojas = __get_leaves(dep_id, jerarquia)
+    hojas = __get_leaves(int(dep_id), jerarquia)
 
     espacios = __filtrar_espacios(hojas)
 
@@ -324,9 +321,6 @@ def __acceso_permitido(user, dep_id, es_espacio):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
-
-    import pdb
-    pdb.set_trace()
 
     # Inicializando listas de espacios fisicos y dependencias
     espacios = []
