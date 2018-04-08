@@ -505,7 +505,6 @@ if db(db.t_Unidad_de_medida).isempty():
 	db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
 
 # Catalogo de sustancias
-"""
 if db(db.t_Sustancia).isempty():
     db.t_Sustancia.insert(f_nombre='Acetato de Etilo', f_cas='141-78-6', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
@@ -555,8 +554,9 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
     db.t_Sustancia.insert(f_nombre='Eter Etílico', f_cas='60-29-7', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Explosivo','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Fósforo blanco', f_cas='7723-14-0', f_pureza='99', 
-    	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable','Nocivo'])
+    # *!* Coincide con el cas de fosforos rojos y amorfos
+    #db.t_Sustancia.insert(f_nombre='Fósforo blanco', f_cas='7723-14-0', f_pureza='99', 
+    #	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable','Nocivo'])
     db.t_Sustancia.insert(f_nombre='Fulminato de Mercurio', f_cas='628-86-4', f_pureza='', 
     	f_estado='', f_control='RL7', f_peligrosidad=['N/A'])
     db.t_Sustancia.insert(f_nombre='Heptano', f_cas='142-82-5', f_pureza='99', 
@@ -572,8 +572,8 @@ if db(db.t_Sustancia).isempty():
     db.t_Sustancia.insert(f_nombre='Metanol', f_cas='67-56-1', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Amonio (salitre de chile)', f_cas='6484-52-2', f_pureza='99', 
-    	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='7697-37-2', f_pureza='99', 
+    	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])#*!* Verificar el CAS del nitrato de bismuto
+    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='10361-46-3', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Calcio', f_cas='13477-34-4', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
@@ -619,4 +619,3 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico'])
     db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
     	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
-"""
