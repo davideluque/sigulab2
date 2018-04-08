@@ -61,6 +61,7 @@ db.define_table(
     Field('f_existencia', 'double', requires=IS_NOT_EMPTY(), label=T('Existencia')),
     Field('f_uso_interno', 'double', requires=IS_NOT_EMPTY(), label=T('Uso interno')),
     Field('f_medida', 'reference t_Unidad_de_medida',
+
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
     # Referencias a otras tablas
     Field('espacio', 'reference espacios_fisicos',
