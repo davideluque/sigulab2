@@ -49,17 +49,13 @@
 	<div class="container titulo">
 	
 	{{if es_tecnico:}}
-		<!-- Si el usuario es tecnico y se encuentra en la vista principal de los inventarios
-		(donde ve los espacios fisicos que tiene a cargo) -->
-		{{if espacios:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> ESPACIOS FÍSICOS </h3>
-		</div>
-		<!-- Si el usuario es tecnico y se encuentra en la vista de algun espacio fisico -->
-		{{else:}}
+		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
+		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
+		debe poder regresar al nivel superior de la jerarquia -->
+		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> ESPACIOS FÍSICOS </p>
-			<a class="boton" href="{{=URL('inventarios')}}">
+			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -67,6 +63,11 @@
 			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
 		</div>
 		<div class="col-xs-2"> </div>
+		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
+		{{else:}}
+		<div class="col-xs-12">
+			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+		</div>
 		{{pass}}
 
 	{{else:}}
@@ -102,7 +103,6 @@
 		{{pass}}
 	{{pass}}
 	</div>
-
 
 	<div class="container">
 		<div id="fila1" class="row">

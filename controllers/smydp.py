@@ -352,6 +352,9 @@ def inventarios():
     # o una dependencia (False)
     espacio_visitado = False
     
+    # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
+    retroceder = True
+
     es_tecnico = auth.has_membership("TÉCNICO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
@@ -378,8 +381,13 @@ def inventarios():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
-                               ).select().first().nombre
+                dep_nombre = espacio.nombre
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = espacio.dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
 
                 espacio_visitado = True
 
@@ -396,20 +404,19 @@ def inventarios():
                                         request.vars.uso_interno,
                                         request.vars.unidad)
             else:
-                import pdb
-                pdb.set_trace()
-                print ""
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
                 espacios = [row.espacios_fisicos for row in db(
-                        (db.es_encargado.espacio_fisico == db.espacios_fisicos.id) & 
-                        (db.espacios_fisicos.dependencia == int(request.vars.dependencia)) & 
-                        (db.es_encargado.tecnico == user_id)).select()]
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id) & 
+                    (db.espacios_fisicos.dependencia == int(request.vars.dependencia)) & 
+                    (db.es_encargado.tecnico == user_id)).select()]
 
                 espacios_ids = [e.id for e in espacios]
 
-                dep_nombre = db(db.dependencias.id == int(request.vars.dependencia)
-                               ).select()[0].nombre
+                dep_id = int(request.vars.dependencia)
+                dep_nombre = db(db.dependencias.id == dep_id).select()[0].nombre
+
+                dep_padre_nombre = "Secciones"
 
                 # Se suman los inventarios de los espacios que tiene a cargo el usuario en la
                 # seccion actual
@@ -417,34 +424,26 @@ def inventarios():
 
                 es_espacio = True
 
-
         # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
         # entrar a la opcion de inventarios
         else:
             # Se buscan las secciones a las que pertenecen los espacios que
             # tiene a cargo el usuario
-            espacios_a_cargo = db((db.es_encargado.tecnico == user_id) & (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)).select()
+            espacios_a_cargo = db(
+                (db.es_encargado.tecnico == user_id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
 
             secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
 
-            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0], secciones_ids)
+            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0], 
+                               secciones_ids)
 
             dep_nombre = "Secciones"
 
             espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
 
             inventario = __sumar_inventarios(espacios_ids)
-
-            # Buscando espacios fisicos que tengan a user_id como encargado en 
-            # la tabla 'es_encargado'
-            #espacios = list(db(
-            #        (db.es_encargado.tecnico == user_id) & 
-            #        (db.es_encargado.espacio_fisico == db.espacios_fisicos.id)
-            #                  ).select(db.espacios_fisicos.ALL))
-            #es_espacio = True
-            # Se muestra como inventario el egregado de los inventarios de los
-            # espacios que pertenecen a la dependencia user_dep_id
-            #inventario = __get_inventario_dep(user_dep_id)
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
@@ -625,7 +624,8 @@ def inventarios():
                 es_tecnico=es_tecnico,
                 inventario=inventario,
                 sustancias=sustancias,
-                unidades_de_medida=unidades_de_medida)
+                unidades_de_medida=unidades_de_medida,
+                retroceder=retroceder)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
