@@ -1,0 +1,33 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<meta charset="UTF-8">
+
+	<!-- Para los mensajes con flash -->
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
+ 	<!-- DataTables -->
+ 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	
+ 	<!-- Estilos de modales y listados -->
+ 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora.css')}}"> 
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
+ 	<!-- Web2py JS - Especialmente para AJAX -->
+ 	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+ 	<style>
+   	.row{
+     	margin-right:0px!important;
+   	}
+ 	</style>
+{{end}}
+
+{{block center}}
+
+<p> HOLA </p>
+
+{{end}}
