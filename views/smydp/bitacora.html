@@ -1,0 +1,87 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<meta charset="UTF-8">
+
+	<!-- Para los mensajes con flash -->
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
+ 	<!-- DataTables -->
+ 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	
+ 	<!-- Estilos de modales y listados -->
+ 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
+ 	<!-- Web2py JS - Especialmente para AJAX -->
+ 	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+ 	<style>
+   	.row{
+     	margin-right:0px!important;
+   	}
+ 	</style>
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+	  <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
+	  <span class="breadcrumb-item active">Bitácora</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Inicio Listado de sustancias -->
+<div class="container">
+<div class="row">
+  <h3 id="titulo"> Bitácora </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+                <th class="camposTabla linksNombres">Total</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">Estado</th>
+                <th class="camposTabla linksNombres">Uso interno</th>
+                <th class="camposTabla linksNombres">Excedente</th>
+                <th class="camposTabla linksNombres">Total</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de sustancias -->
+{{end}}

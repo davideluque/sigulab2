@@ -315,6 +315,12 @@ def __acceso_permitido(user, dep_id, es_espacio):
 
     return permitido
 
+# Muestra los movimientos de la bitacora comenzando por el mas reciente
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def bitacora():
+    return locals()
+
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
 
