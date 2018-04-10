@@ -1,10 +1,10 @@
 #----------- Modulo de Sustancias, materiales y desechos peligrosos ------------
 
-##############################################################################
+################################################################################
 #
 #                     TABLAS DEL CATALOGO DE SUSTANCIAS
 #
-###############################################################################
+################################################################################
 
 #t_Unidades_de_medida: Tabla de unidades de medida de las sustancias (ml, l, g, kg, etc.)
 db.define_table(
@@ -62,11 +62,11 @@ db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'
 
 
-##############################################################################
+################################################################################
 #
 #                     TABLAS DEL MODULO DE COMPRAS
 #
-###############################################################################
+################################################################################
 
 # Esto deberia estar en un modulo separado, pero eso hace que se ejecute luego  
 # del models/db.py o del models/smydp.py y genera un error
@@ -102,6 +102,135 @@ db.define_table(
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
           label=T('Unidad de medida'), notnull=True),
 
+    auth.signature
+    )
+
+################################################################################
+#
+#                     TABLAS DE SOLICITUDES DE SUSTANCIAS
+#
+################################################################################
+
+# *!* revisar todos los campos y sus contraints
+# *!* poner los mismos nombres en el pdf UL04-18-049 Inf complementaria sobre Solicitudes  Sust
+
+#t_Solicitud: Tabla con los datos de solicitudes de sustancias entre espacios fisicos
+db.define_table(
+    #Nombre de la entidad
+    't_Solicitud_smydp',
+
+    #Atributos;
+
+    # Cantidad de sustancia solicitada
+    Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
+
+    # Cantidad de sustancia que ya ha sido prometida por otros espacios al aceptar
+    # la solicitud
+    Field('f_cantidad_conseguida', 'double', label=T('Cantidad conseguida')),
+
+    Field('f_estatus', 'list:string', widget=SQLFORM.widgets.options.widget, 
+          requires=IS_IN_SET(['Caducada','En espera','Completada', 'Por entregar', 
+                            'Por recibir', 'Prestamo por devolver']), 
+          label=T('Estatus de la solicitud'), notnull=True),
+    
+    Field('f_uso', 'list:string',requires=IS_IN_SET(['Docencia','Investigación','Extensión']), 
+          widget=SQLFORM.widgets.options.widget, label=T('Uso de la sustancia')),
+    
+    Field('f_justificacion', 'string', label=T('Justificación')),
+
+    # Modalidad o condicion de la entrega de la sustancia
+    Field('f_preferencia', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
+          widget=SQLFORM.widgets.options.widget, label=T('Preferencia')),
+    
+    Field('f_fecha_caducidad', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
+          error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
+          label=T('Fecha de caducidad')),
+    
+    # Referencias a otras tablas
+
+    # Unidad de medida de la cantidad solicitada
+    Field('f_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
+          label=T('Unidad de medida'), notnull=True),
+
+    # Espacio fisico solicitante
+    Field('f_espacio', 'reference espacios_fisicos',
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+          label=T('Espacio solicitante'), notnull=True),
+    
+    # Sustancia solicitada
+    Field('f_sustancia', 'reference t_Sustancia',
+          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
+          label=T('Sustancia'), notnull=True),
+    
+    auth.signature
+    )
+
+#t_Respuesta: Respuestas a la solicitud de sustancias
+db.define_table(
+    #Nombre de la entidad
+    't_Respuesta',
+
+    #Atributos;
+
+    # Cantidad a suministrar. Vacio si la respuesta es una negacion
+    Field('f_cantidad', 'double', label=T('Cantidad')),
+
+    # Unidad de medida de la cantidad indicada (None si f_cantidad lo es y viceversa *!*)
+    Field('f_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
+          label=T('Unidad de medida')),
+    
+    # Indica si la solicitud fue aceptada o rechazada
+    Field('f_tipo_respuesta', 'list:string', requires=IS_IN_SET(['Negación','Aceptación']), 
+        label=T('Respuesta a la solicitud')),
+    
+    # Almacena información como la causa de la negación de la solicitud
+    Field('f_justificacion', 'string', label=T('Justificación')),
+
+    # En que terminos se esta aceptando dar la sustancia
+    Field('f_calidad', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
+          widget=SQLFORM.widgets.options.widget, label=T('Calidad')),
+    
+    # Fecha en que se recibe la sustancia solicitada
+    Field('f_fecha_recepcion', 'datetime', requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y'))),
+          label=T('Fecha de recepción')),
+
+    # Fecha en que se hace constar la devolucion de la sustancia
+    Field('f_fecha_devolucion', 'datetime', requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y'))),
+          label=T('Fecha de devolución')),
+
+    # Indica la fecha tope en que debe devolverse el material prestado (solo si 
+    # f_calidad es "prestamo" *!*)
+    Field('f_fecha_tope_devolucion', 'datetime', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), 
+          error_message='Debe tener el siguiente formato: dd/mm/yyyy')),
+          label=T('Fecha tope para la devolución')),
+
+    # Referencias a otras tablas
+    
+    # Espacio que responde a la solicitud
+    Field('f_espacio', 'reference espacios_fisicos',
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+          label=T('Espacio solicitante'), notnull=True),
+
+    # Responsable que entrega la sustancia
+    Field('f_responsable_entrega', 'reference t_Personal', 
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))),
+
+    # Responsable que hace constar la recepcion de la sustancia solicitada
+    Field('f_responsable_recepcion', 'reference t_Personal', 
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))),
+
+    # Responsable que hace constar la devolucion
+    Field('f_responsable_devolucion', 'reference t_Personal', 
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))),
+
+    # ID de la solicitud a la que se esta dando respuesta
+    Field('f_solicitud', 'reference t_Solicitud_smydp',
+          requires=IS_IN_DB(db, db.t_Solicitud_smydp.id, zero=None), 
+          label=T('Solicitud'), notnull=True),
+    
+    # Almacena el id del responsable que acepta o niega la solicitud y fecha en que lo hace
     auth.signature
     )
 
@@ -165,9 +294,11 @@ db.define_table(
           requires=IS_EMPTY_OR(IS_IN_SET(['Compra','Almacén','Solicitud'])), 
           widget=SQLFORM.widgets.options.widget),
 
-    # Tipo de egreso de la sustancia (Null si f_concepto no es Egreso) *!*
+    # Tipo de egreso de la sustancia. Otorgado si fue cedido o prestadeo a otra
+    # seccion como respuesta a usa solicitud 
+    # (Null si f_concepto no es Egreso) *!*
     Field('f_tipo_egreso', 'list:string', label=T('Tipo de egreso'),
-          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión'])), 
+          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Otorgado'])), 
           widget=SQLFORM.widgets.options.widget),
             
     # Referencias a otras tablas
@@ -211,136 +342,15 @@ db.define_table(
           requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Compra.id, '%(f_intistitucion)s', zero=None)), 
           label=T('Compra')),
 
+    # Referencia hacia la tabla de respuestas a solicitudes (*!* Null si no es un 
+    # ingreso por compra)
+    # Requiere "f_concepto" = "ingreso" y "f_tipo_ingreso = "Solicitud" 
+    # *!* Null de lo contrario
+    Field('f_respuesta_solicitud', 'reference t_Respuesta',
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Respuesta.id, '%(f_tipo_respuesta)s', zero=None)), 
+          label=T('Respuesta de solicitud')),
+
     # Agrega los campos adicionales created_by, created_on, modified_by, modified_on 
     # para los logs de la tabla
     auth.signature
     )
-
-################################################################################
-#
-#                     TABLAS DE SOLICITUDES DE SUSTANCIAS
-#
-################################################################################
-
-# *!* revisar todos los campos y sus contraints
-# *!* poner los mismos nombres en el pdf UL04-18-049 Inf complementaria sobre Solicitudes  Sust
-
-#t_Solicitud: Tabla con los datos de solicitudes de sustancias entre espacios fisicos
-db.define_table(
-    #Nombre de la entidad
-    't_Solicitud_smydp',
-
-    #Atributos;
-
-    # Cantidad de sustancia solicitada
-    Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
-
-    # Cantidad de sustancia que ya ha sido prometida por otros espacios al aceptar
-    # la solicitud
-    Field('f_cantidad_conseguida', 'double', label=T('Cantidad conseguida')),
-
-    Field('f_medida', 'reference t_Unidad_de_medida',
-          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
-          label=T('Unidad de medida'), notnull=True),
-    
-    Field('f_estatus', 'list:string', widget=SQLFORM.widgets.options.widget, 
-          requires=IS_IN_SET(['Caducada','En espera','Completada', 'Por entregar', 
-                            'Por recibir', 'Prestamo por devolver']), 
-          label=T('Estatus de la solicitud'), notnull=True),
-    
-    Field('f_uso', 'list:string',requires=IS_IN_SET(['Docencia','Investigación','Extensión']), 
-          widget=SQLFORM.widgets.options.widget, label=T('Uso de la sustancia')),
-    
-    Field('f_justificacion', 'string', label=T('Justificación')),
-
-    Field('f_preferencia', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
-          widget=SQLFORM.widgets.options.widget, label=T('Preferencia')),
-    
-    Field('f_fecha_caducidad', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
-          error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
-          label=T('Fecha de caducidad')),
-    
-    # Referencias a otras tablas
-    Field('f_espacio', 'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
-          label=T('Espacio solicitante'), notnull=True),
-    
-    Field('f_sustancia', 'reference t_Sustancia',
-          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
-          label=T('Sustancia'), notnull=True),
-    
-    auth.signature
-    )
-
-
-#t_Respuesta: Respuestas a la solicitud de sustancias
-db.define_table(
-    #Nombre de la entidad
-    't_Respuesta',
-
-    #Atributos;
-
-    # Cantidad a suministrar. Vacio si la respuesta es una negacion
-    Field('f_cantidad', 'double', label=T('Cantidad')),
-
-    # Unidad de medida de la cantidad indicada (None si f_cantidad lo es y viceversa *!*)
-    Field('f_medida', 'reference t_Unidad_de_medida',
-          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
-          label=T('Unidad de medida')),
-    
-    # Indica si la solicitud fue aceptada o rechazada
-    Field('f_tipo_respuesta', 'list:string', requires=IS_IN_SET(['Negación','Aceptación']), 
-        label=T('Respuesta a la solicitud')),
-    
-    # Almacena información como la causa de la negación de la solicitud
-    Field('f_justificacion', 'string', label=T('Justificación')),
-
-    Field('f_uso', 'list:string',requires=IS_IN_SET(['Docencia','Investigación','Extensión']), 
-          widget=SQLFORM.widgets.options.widget, label=T('Uso de la sustancia')),
-    
-    # En que terminos se esta aceptando dar la sustancia
-    Field('f_calidad', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
-          widget=SQLFORM.widgets.options.widget, label=T('Calidad')),
-    
-    # Fecha en que se recibe la sustancia solicitada
-    Field('f_fecha_recepcion', 'datetime', requires = IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de devolución')),
-
-    # Fecha en que se hace constar la devolucion de la sustancia
-    Field('f_fecha_devolucion', 'datetime', requires = IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de devolución')),
-
-    # Indica la fecha tope en que debe devolverse el material prestado (solo si 
-    # f_calidad es "prestamo" *!*)
-    Field('f_fecha_tope_devolucion', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
-          error_message='Debe tener el siguiente formato: dd/mm/yyyy'),
-          label=T('Fecha tope para la devolución')),
-
-    # Referencias a otras tablas
-    
-    # Espacio que responde a la solicitud
-    Field('f_espacio', 'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
-          label=T('Espacio solicitante'), notnull=True),
-
-    # Responsable que entrega la sustancia
-    Field('f_responsable_entrega', 'reference t_Personal', 
-          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None)),
-
-    # Responsable que hace constar la recepcion de la sustancia solicitada
-    Field('f_responsable_recepcion', 'reference t_Personal', 
-          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None)),
-
-    # Responsable que hace constar la devolucion
-    Field('f_responsable_devolucion', 'reference t_Personal', 
-          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None)),
-
-    # ID de la solicitud a la que se esta dando respuesta
-    Field('f_solicitud', 'reference t_Solicitud_smydp',
-          requires=IS_IN_DB(db, db.t_Solicitud_smydp.id, zero=None), 
-          label=T('Solicitud'), notnull=True),
-    
-    # Almacena el id del responsable que acepta o niega la solicitud y fecha en que lo hace
-    auth.signature
-    )
-

@@ -58,16 +58,24 @@
                 <th class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Responsable</th>
                 <th class="camposTabla linksNombres">Concepto</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Descripción</th>
             </tr>
         </thead>
 
         <tbody>
           {{for registro in bitacora:}}
+            {{auth_user = registro['auth_user']}}
+            {{reg = registro['t_Bitacora']}}
+            {{usuario = registro['t_Personal']}}
+            {{medida = registro['t_Unidad_de_medida']}}
             <tr>
-                <td class="camposTabla">{{=registro.created_on}}</td>
-                <td class="camposTabla">{{=registro.created_by}}</td>
-                <td class="camposTabla">{{=registro.f_concepto}}</td>
+                <td class="camposTabla">{{=reg.created_on}}</td>
+                <td class="camposTabla">{{=usuario.f_nombre}} {{=usuario.f_apellido}}</td>
+                <td class="camposTabla">{{=reg.f_concepto[0]}}</td>
+                <th class="camposTabla">{{=reg.f_cantidad}}</th>
+                <th class="camposTabla">{{=medida.f_nombre}}</th>
                 <td class="camposTabla">__mostrar_descripcion(registro)</td>
             </tr>
           {{pass}}
@@ -78,6 +86,8 @@
                 <th class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Responsable</th>
                 <th class="camposTabla linksNombres">Concepto</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Descripción</th>
             </tr>
         </tfoot>

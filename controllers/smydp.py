@@ -358,8 +358,11 @@ def bitacora():
 
     espacio_nombre = inventario['espacios_fisicos'].nombre
 
-    # db((db.t_Bitacora.f_inventario == inventario_id) &(db.t_Bitacora.created_by == db.t_Personal.id)).select()
-    bitacora = db(db.t_Bitacora.f_inventario == inventario_id).select()
+    bitacora = db((db.t_Bitacora.f_inventario == inventario_id) &
+                  (db.t_Bitacora.created_by == db.auth_user.id) &
+                  (db.auth_user.id == db.t_Personal.f_usuario) &
+                  (db.t_Bitacora.f_medida == db.t_Unidad_de_medida.id)).select()
+    
     # Si tiene permisos, retornar la lista de registros del inventario x
 
     return dict(bitacora=bitacora,
