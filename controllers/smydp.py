@@ -322,15 +322,19 @@ def __mostrar_descripcion(registro):
     descripcion = ""
     return descripcion
 
+def bitacora2():
+    return locals()
+
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
-
-    import pdb
-    pdb.set_trace()
+    
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+
+    if request.vars.inv is None:
+        redirect(URL('inventarios'))
 
     inventario_id = int(request.vars.inv)
 
@@ -368,11 +372,11 @@ def bitacora():
     return dict(bitacora=bitacora,
                 inventario=inventario,
                 sust_nombre=sust_nombre,
-                espacio_nombre=espacio_nombre)
+                espacio_nombre=espacio_nombre,
+                espacio_id=espacio_id)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
-
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios():
