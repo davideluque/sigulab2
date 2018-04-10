@@ -131,20 +131,21 @@ db.define_table(
 
     Field('f_uso_interno', 'double', requires=IS_NOT_EMPTY(), label=T('Uso interno')),
     
+    # Referencias a otras tablas
+
     Field('f_medida', 'reference t_Unidad_de_medida',
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
           label=T('Unidad de medida'), notnull=True),
-    
-    # Referencias a otras tablas
     
     # Instancia del servicio en el que se empleara la sustancia egresada
     Field('f_servicio', 'reference servicios',
           requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s', zero=None), 
           label=T('Servicio')),
     
-    Field('sustancia', 'reference t_Sustancia',
-          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
-          label=T('Sustancia'), notnull=True),
+    # Referencia hacia el inventario al cual pertenece el registro de la bitacora
+    Field('f_inventario', 'reference t_Inventario',
+          requires=IS_IN_DB(db, db.t_Inventario.id, zero=None), 
+          label=T('Inventario'), notnull=True),
     
     # Agrega los campos adicionales created_by, created_on, modified_by, modified_on 
     # para los logs de la tabla

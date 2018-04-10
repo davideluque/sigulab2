@@ -319,7 +319,45 @@ def __acceso_permitido(user, dep_id, es_espacio):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
-    return locals()
+
+    import pdb
+    pdb.set_trace()
+    # Obteniendo la entrada en t_Personal del usuario conectado
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+
+    inventario_id = int(request.vars.inv)
+
+    # Si el id de inventario no es valido, retornar al inventario del
+    # espacio fisico que se estaba consultando
+    if not __is_valid_id(inventario_id, db.t_Inventario):
+        response.flash = "La bitácora consultada no es correcta."
+        redirect(URL('inventarios'))
+
+    # Inventario al que pertenecen los registros que se desean consultar
+    inventario = db((db.t_Inventario.id == inventario_id) & 
+                    (db.t_Inventario.espacio == db.espacios_fisicos.id) & 
+                    (db.t_Inventario.sustancia == db.t_Sustancia.id)
+                   ).select()[0]
+
+    # Espacio al que pertenece la bitacora consultada
+    espacio_id = inventario['t_Inventario'].espacio
+
+    # Se valida que el usuario tenga acceso a la bitacora indicada
+    # para consultar la bitacora. 
+    if not __acceso_permitido(user, espacio_id, "True"):
+        redirect(URL('inventarios'))
+
+    sust_nombre = inventario['t_Sustancia'].f_nombre
+
+    espacio_nombre = inventario['espacios_fisicos'].nombre
+
+    bitacora = db(db.t_Bitacora.f_inventario == inventario_id).select()
+    # Si tiene permisos, retornar la lista de registros del inventario x
+
+    return dict(bitacora=bitacora,
+                inventario=inventario,
+                sust_nombre=sust_nombre,
+                espacio_nombre=espacio_nombre)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
