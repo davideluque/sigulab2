@@ -315,6 +315,13 @@ def __acceso_permitido(user, dep_id, es_espacio):
 
     return permitido
 
+# Retorna un string con la descripcion de un registro de la bitacora de acuerdo 
+# a si es un ingreso (sompra, suministro almacen u otorgado por otra seccion) 
+# o un egreso (docencia, invenstigacion o extension)
+def __mostrar_descripcion(registro):
+    descripcion = ""
+    return descripcion
+
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -351,6 +358,7 @@ def bitacora():
 
     espacio_nombre = inventario['espacios_fisicos'].nombre
 
+    # db((db.t_Bitacora.f_inventario == inventario_id) &(db.t_Bitacora.created_by == db.t_Personal.id)).select()
     bitacora = db(db.t_Bitacora.f_inventario == inventario_id).select()
     # Si tiene permisos, retornar la lista de registros del inventario x
 

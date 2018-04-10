@@ -63,6 +63,14 @@
         </thead>
 
         <tbody>
+          {{for registro in bitacora:}}
+            <tr>
+                <td class="camposTabla">{{=registro.created_on}}</td>
+                <td class="camposTabla">{{=registro.created_by}}</td>
+                <td class="camposTabla">{{=registro.f_concepto}}</td>
+                <td class="camposTabla">__mostrar_descripcion(registro)</td>
+            </tr>
+          {{pass}}
         </tbody>
 
         <tfoot id="collapseFiltros">

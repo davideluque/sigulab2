@@ -168,11 +168,12 @@ db.define_table(
 
     #Atributos;
 
+    # Cantidad de sustancia solicitada
     Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
 
     # Cantidad de sustancia que ya ha sido prometida por otros espacios al aceptar
     # la solicitud
-    Field('f_cantidad_confirmada', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
+    Field('f_cantidad_conseguida', 'double', label=T('Cantidad conseguida')),
 
     Field('f_medida', 'reference t_Unidad_de_medida',
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
@@ -181,7 +182,7 @@ db.define_table(
     Field('f_estatus', 'list:string', widget=SQLFORM.widgets.options.widget, 
           requires=IS_IN_SET(['Caducada','En espera','Completada', 'Por entregar', 
                             'Por recibir', 'Prestamo por devolver']), 
-          label=T('Estatus de la solicitud')),
+          label=T('Estatus de la solicitud'), notnull=True),
     
     Field('f_uso', 'list:string',requires=IS_IN_SET(['Docencia','Investigación','Extensión']), 
           widget=SQLFORM.widgets.options.widget, label=T('Uso de la sustancia')),
@@ -191,7 +192,7 @@ db.define_table(
     Field('f_preferencia', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
           widget=SQLFORM.widgets.options.widget, label=T('Preferencia')),
     
-    Field('f_fecha_caducidad', 'string', requires=IS_DATE(format=T('%d/%m/%Y'), 
+    Field('f_fecha_caducidad', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
           error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
           label=T('Fecha de caducidad')),
     
@@ -204,8 +205,6 @@ db.define_table(
           requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
           label=T('Sustancia'), notnull=True),
     
-    Field('f_solicitante', 'reference t_Personal', 
-            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None)),
     auth.signature
     )
 
@@ -249,7 +248,7 @@ db.define_table(
 
     # Indica la fecha tope en que debe devolverse el material prestado (solo si 
     # f_calidad es "prestamo" *!*)
-    Field('f_fecha_tope_devolucion', 'string', requires=IS_DATE(format=T('%d/%m/%Y'), 
+    Field('f_fecha_tope_devolucion', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
           error_message='Debe tener el siguiente formato: dd/mm/yyyy'),
           label=T('Fecha tope para la devolución')),
 
