@@ -15,7 +15,7 @@ db.define_table(
     
     Field('f_nif',          'string', requires=IS_NOT_EMPTY(), label=T('NIF')),
     
-    Field('f_fecha_compra', 'string', requires=IS_DATE(format=T('%d/%m/%Y'), 
+    Field('f_fecha_compra', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
     	  error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
           label=T('Fecha de compra')),
     
