@@ -3,3 +3,8 @@
 .esconder{
 	display: none;
 }
+
+/* Mensajes de error en rojo */
+.field-error{
+	color:#B70101;
+}

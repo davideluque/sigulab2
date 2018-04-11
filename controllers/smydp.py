@@ -332,8 +332,7 @@ def __get_descripcion(registro):
             nro_factura = compra.f_nro_factura
             fecha_compra = compra.f_fecha_compra
 
-            fecha = str(fecha_compra.day)+"-"+str(fecha_compra.month)+\
-                                          "-"+str(fecha_compra.year)
+            fecha = fecha_compra
 
             descripcion = "Compra a \"{0}\" según Factura No. \"{1}\" con fecha"\
                          " \"{2}\"".format(proveedor, nro_factura, fecha)
@@ -489,6 +488,51 @@ def bitacora():
     for reg in bitacora:
         descripcion = __get_descripcion(reg['t_Bitacora'])
         reg['t_Bitacora']['descripcion'] = descripcion
+
+    #----------------------- Inicio agregar registro ------------------------
+    # Si se han enviado datos para agregar un nuevo registro
+    concepto = request.vars.concepto
+    if concepto:
+        cantidad = float(request.vars.cantidad)
+        if concepto == 'Ingreso':
+            tipo_ing = request.vars.tipo_ingreso
+
+            if tipo_ing == 'Almacén':
+                pass
+            # Tipo ingreso es compra
+            else:
+
+                # Datos de la nueva compra
+                nro_factura = request.vars.nro_factura
+                institucion = request.vars.institucion
+                rif = request.vars.rif
+                fecha_compra = request.vars.fecha_compra
+                unidad_id = request.vars.unidad
+
+                inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
+
+                sust_id = inv.sustancia
+
+                # Se agrega la nueva compra a la tabla t_Compra
+                compra_id = db.t_Compra.insert(f_cantidad=cantidad,f_nro_factura=nro_factura,f_institucion=institucion,f_rif=rif,f_fecha_compra=fecha_compra,f_sustancia=inv.sustancia,f_medida=unidad_id)
+
+                # Datos del nuevo registro en la bitacora
+                total_viejo = inv.f_existencia
+                total_nuevo = total_viejo + cantidad
+
+                inv.update_record(f_existencia=total_nuevo)
+
+                db.t_Bitacora.insert(f_cantidad=cantidad,f_cantidad_total=total_nuevo,f_concepto=concepto,f_tipo_ingreso=tipo_ing,f_medida=int(unidad_id),f_compra=compra_id,f_inventario=inv.id,f_sustancia=inv.sustancia)
+
+        else:
+            tipo_eg = request.vars.tipo_egreso            
+            if tipo_eg == 'Docencia':
+                pass
+            elif tipo_eg == 'Investigación':
+                pass
+            elif tipo_eg == 'Extensión':
+                pass
+
 
     return dict(bitacora=bitacora,
                 inventario=inventario,
