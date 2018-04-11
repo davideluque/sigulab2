@@ -424,19 +424,27 @@ def bitacora():
     import pdb
     pdb.set_trace()
 
-    # Datos del modal de agregar un registro
+    # INICIO Datos del modal de agregar un registro
     # Conceptos
     conceptos = db.t_Bitacora.f_concepto.requires.theset
 
     # Tipos de consumos
-    tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
-    
+    #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
+    tipos_egreso = ['Docencia','Investigación','Extensión']
+
     # Tipos de ingresos
-    tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
-    
+    #tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
+    tipos_ingreso = ['Compra','Almacén']
+
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
-    # Fin Datos del modal de agregar un registro
+
+    # Lista de almacences
+    almacenes = db(db.espacios_fisicos.id > 0).select()
+
+    # Lista de servicios
+    servicios = db(db.servicios.id > 0).select()
+    # FIN Datos del modal de agregar un registro
 
     # Obteniendo la entrada en t_Personal del usuario conectado
 
@@ -490,7 +498,9 @@ def bitacora():
                 conceptos=conceptos,
                 tipos_egreso=tipos_egreso,
                 tipos_ingreso=tipos_ingreso,
-                unidades_de_medida=unidades_de_medida)
+                unidades_de_medida=unidades_de_medida,
+                almacenes=almacenes,
+                servicios=servicios)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo

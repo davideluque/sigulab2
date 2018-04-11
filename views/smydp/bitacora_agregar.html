@@ -60,8 +60,9 @@
                               </select>
                             </div>
 
+                            <!-- Concepto: ingreso o egreso -->
                             <div class="form-group">
-                              <select class="form-control" type="select" id="calidad" name="calidad">
+                              <select class="form-control" type="select" id="concepto" name="concepto" onclick="activarTipos(this.value)">
                                 <option value="" selected hidden >Concepto*</option>
                                 {{for c in conceptos:}}
                                 <option value="{{=c}}">{{=c}}</option>
@@ -69,8 +70,9 @@
                               </select>
                             </div>
 
-                            <div class="form-group">
-                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                            <!-- Tipo de ingreso -->
+                            <div id="tipo_ingreso_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso" onclick="activarCamposIngreso(this.value)">
                                 <option value="" selected hidden >Tipo de ingreso*</option>
                                 {{for t in tipos_ingreso:}}
                                 <option value="{{=t}}">{{=t}}</option>
@@ -78,8 +80,9 @@
                               </select>
                             </div>
 
-                            <div class="form-group">
-                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                            <!-- Tipo de egreso -->
+                            <div id="tipo_egreso_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="tipo_egreso" name="tipo_egreso" onclick="activarCamposEgreso(this.value)">
                                 <option value="" selected hidden >Tipo de consumo*</option>
                                 {{for t in tipos_egreso:}}
                                 <option value="{{=t}}">{{=t}}</option>
@@ -87,25 +90,46 @@
                               </select>
                             </div>
 
-                            <!-- Inicio datos de la compra -->
-                            <div class="form-group">
+                            <!-- Si es un ingreso por compra: Datos de compra -->
+                            <div id="nro_factura_div" class="form-group esconder">
                               <input type="text" class="form-control" name="nro_factura" placeholder="Nro. de factura*" required>
                               <font color="red"><div id="err_nro_factura" hidden></div></font>
                             </div>
 
-                            <div class="form-group">
+                            <div id="institucion_div" class="form-group esconder">
                               <input type="text" class="form-control" name="institucion" placeholder="Institución*" required>
                               <font color="red"><div id="err_institucion" hidden></div></font>
                             </div>
 
-                            <div class="form-group">
+                            <div id="nif_div" class="form-group esconder">
                               <input type="text" class="form-control" name="nif" placeholder="NIF*" required>
                               <font color="red"><div id="err_nif" hidden></div></font>
                             </div>
-
-                            <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker" required></p>
-                            <font color="red"><div id="err_fecha_compra" hidden></div></font>
+                            <div id="fecha_compra_div" class="esconder">
+                              <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker" required></p>
+                              <font color="red"><div id="err_fecha_compra" hidden></div></font>
+                            </div>
                             <!-- Inicio datos de la compra -->
+
+                            <!-- Si es un ingreso por almacen, se listan los espacios fisicos para seleccionar el almacen -->                            
+                            <div id="almacen_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="almacen" name="almacen">
+                                <option value="" selected hidden >Almacén*</option>
+                                {{for a in almacenes:}}
+                                <option value="{{=a.id}}">{{=a.nombre}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
+
+                            <!-- Si es un egreso, se listan los servicios -->                            
+                            <div id="servicio_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="servicio" name="servicio">
+                                <option value="" selected hidden >Servicio*</option>
+                                {{for s in servicios:}}
+                                <option value="{{=s.id}}">{{=s.nombre}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
 
                         </div>
                       </div>
@@ -122,3 +146,69 @@
 
     </div>
   </div>
+
+  <script type="text/javascript">
+    
+    // Obteniendo elementos a ser mostrados o escondidos
+    var tipo_ingreso_div = document.getElementById("tipo_ingreso_div");
+    var tipo_egreso_div = document.getElementById("tipo_egreso_div");
+    var nro_factura_div = document.getElementById("nro_factura_div");
+    var institucion_div = document.getElementById("institucion_div");
+    var nif_div = document.getElementById("nif_div");
+    var fecha_compra_div = document.getElementById("fecha_compra_div");
+    var almacen_div = document.getElementById("almacen_div");
+    var servicio_div = document.getElementById("servicio_div");
+    // Muestra los elementos a llenar de acuerdo al concepto y tipo 
+    // de ingreso o consumo
+    function activarTipos(concepto){
+
+      if (concepto == 'Ingreso'){
+        tipo_ingreso_div.style.display = "block";
+        tipo_egreso_div.style.display = "none";
+
+        // Todos los campos de egresos que estuvieran activados son
+        // desactivados
+        servicio_div.style.display = "none"
+      }
+      else{
+        tipo_egreso_div.style.display = "block";
+        tipo_ingreso_div.style.display = "none";
+        
+        // Todos los campos de ingresos que estuvieran activados son
+        // desactivados
+        almacen_div.style.display = "none";
+        nro_factura_div.style.display = "none";
+        institucion_div.style.display = "none";
+        nif_div.style.display = "none";
+        fecha_compra_div.style.display = "none";
+      }
+
+    }
+    // Muestra o esconde elementos una vez se ha seleccionado ingreso como concepto
+    function activarCamposIngreso(valor){
+
+      if (valor == "Compra"){
+        nro_factura_div.style.display = "block";
+        institucion_div.style.display = "block";
+        nif_div.style.display = "block";
+        fecha_compra_div.style.display = "block";
+        almacen_div.style.display = "none";
+      }
+      // Si fue por envio desde el almacen
+      else{
+        almacen_div.style.display = "block";
+        nro_factura_div.style.display = "none";
+        institucion_div.style.display = "none";
+        nif_div.style.display = "none";
+        fecha_compra_div.style.display = "none";
+      }
+    }
+
+    function activarCamposEgreso(valor){
+      // En cualquier caso, se activa el div servicio_div y se
+      // desactivan los demas
+      servicio_div.style.display = "block";
+
+    }
+
+  </script>
