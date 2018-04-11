@@ -161,6 +161,7 @@
   }
 </script>
 
+
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
@@ -221,10 +222,8 @@
 
   }
 </script>
-
-
+ 
 <script language="javascript">
-/*
   var table = $('#datatable').DataTable({
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
@@ -241,17 +240,5 @@
    }
   });
 
-  var w2p_ajax_confirm_message =
-        "{{=T('')}}";
-  
-  // AJAX mostrar ficha de sustancia
-  function abrirFicha(sustancia) {
-    var x = document.getElementById("sust");
-    x.value = sustancia;
-    ajax('ajax_ficha_sustancia', ['sust'], "ficha");
-  }
-*/
-
-</script> 
-
+</script>
 {{end}}

@@ -1,0 +1,124 @@
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora_modal.css')}}">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+      var d1=$( "#datepicker" ).datepicker({maxDate:'0'});
+      $( "#datepicker2" ).datepicker({maxDate:'0'});
+    } );
+  </script>
+
+  <div class="modal fade" id="addregister" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Nuevo Registro</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body"></div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Datos del registro</h4>
+                          <label>Campos marcados con * son obligatorios.</label>
+                          
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="cantidad" placeholder="Cantidad a modificar*" required>
+                              <font color="red"><div id="err_cantidad" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="unidad" name="unidad" required>
+                                <option value="" selected hidden >Unidad de medida*</option>
+                                {{for u in unidades_de_medida:}}
+                                <option value="{{=u.id}}">{{=u.f_nombre}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
+
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="calidad" name="calidad">
+                                <option value="" selected hidden >Concepto*</option>
+                                {{for c in conceptos:}}
+                                <option value="{{=c}}">{{=c}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
+
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                                <option value="" selected hidden >Tipo de ingreso*</option>
+                                {{for t in tipos_ingreso:}}
+                                <option value="{{=t}}">{{=t}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
+
+                            <div class="form-group">
+                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                                <option value="" selected hidden >Tipo de consumo*</option>
+                                {{for t in tipos_egreso:}}
+                                <option value="{{=t}}">{{=t}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
+
+                            <!-- Inicio datos de la compra -->
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nro_factura" placeholder="Nro. de factura*" required>
+                              <font color="red"><div id="err_nro_factura" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="institucion" placeholder="Institución*" required>
+                              <font color="red"><div id="err_institucion" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="nif" placeholder="NIF*" required>
+                              <font color="red"><div id="err_nif" hidden></div></font>
+                            </div>
+
+                            <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker" required></p>
+                            <font color="red"><div id="err_fecha_compra" hidden></div></font>
+                            <!-- Inicio datos de la compra -->
+
+                        </div>
+                      </div>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                </form>
+            </div>
+          </div>               
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
