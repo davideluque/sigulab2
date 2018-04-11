@@ -48,9 +48,8 @@
             {{unid = sustancia['t_Unidad_de_medida']}}
             <tr>
                 <td class="camposTabla">
-                  <a href="{{URL('..', 'sigulab2', 'smydp/bitacora')}}">{{=sust.f_nombre}}</a>
+                  <a href="{{=URL('..','sigulab2','smydp/bitacora')}}">{{=sust.f_nombre}}</a>
                 </td>
-                <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust.f_cas if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>

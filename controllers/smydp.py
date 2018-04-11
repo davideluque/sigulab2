@@ -320,7 +320,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def inventarios():
+def bitacora():
     return locals()
 
 @auth.requires(lambda: __check_role())
