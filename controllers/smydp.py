@@ -332,8 +332,11 @@ def __get_descripcion(registro):
             nro_factura = compra.f_nro_factura
             fecha_compra = compra.f_fecha_compra
 
+            fecha = str(fecha_compra.day)+"-"+str(fecha_compra.month)+\
+                                          "-"+str(fecha_compra.year)
+
             descripcion = "Compra a \"{0}\" según Factura No. \"{1}\" con fecha"\
-                         " \"{2}\"".format(proveedor, nro_factura, fecha_compra)
+                         " \"{2}\"".format(proveedor, nro_factura, fecha)
 
         # Si es un ingreso por almacen
         # Suministro por el almacén del Laboratorio "X" 
@@ -417,6 +420,9 @@ def __get_descripcion(registro):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
+
+    import pdb
+    pdb.set_trace()
 
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]

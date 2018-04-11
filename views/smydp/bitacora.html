@@ -70,8 +70,9 @@
             {{reg = registro['t_Bitacora']}}
             {{usuario = registro['t_Personal']}}
             {{medida = registro['t_Unidad_de_medida']}}
+            {{fecha = reg.created_on}}
             <tr>
-                <td class="camposTabla">{{=reg.created_on}}</td>
+                <td class="camposTabla">{{=fecha.year}}-{{=fecha.month}}-{{=fecha.day}}</td>
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
