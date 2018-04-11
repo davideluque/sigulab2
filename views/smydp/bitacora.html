@@ -24,15 +24,19 @@
 {{end}}
 
 {{block center}}
+
 <!-- Breadcrumb de navegación -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'servicios')}}">Servicios</a>
-  <span class="breadcrumb-item active">Listado</span>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
+    <span class="breadcrumb-item active">Bitácora</span>
   </div>
 </nav>
-<!-- Fin del Breadcrumb de navegación -->
+<!-- Fin del Breadcrumb de navegación --> 
 
 <!-- Inicio Listado -->
 <div id="inventario-dependencia" class="container">
@@ -53,11 +57,10 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Responsable</th>
-                <th class="camposTabla linksNombres">Concepto</th>
-                <th class="camposTabla linksNombres">Cantidad</th>
-                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Ingreso</th>
+                <th class="camposTabla linksNombres">Consumo</th>
+                <th class="camposTabla linksNombres">Total</th>
             </tr>
         </thead>
 
@@ -69,15 +72,10 @@
             {{medida = registro['t_Unidad_de_medida']}}
             <tr>
                 <td class="camposTabla">{{=reg.created_on}}</td>
-                <td class="camposTabla">{{=usuario.f_nombre}} {{=usuario.f_apellido}}</td>
-                <td class="camposTabla">{{=reg.f_concepto[0]}}</td>
-                {{if reg.f_concepto[0] == 'Ingreso':}}
-                  <th class="camposTabla">{{=reg.f_cantidad}}</th>
-                {{else:}}
-                  <th class="camposTabla">-{{=reg.f_cantidad}}</th>
-                {{pass}}
-                <th class="camposTabla">{{=medida.f_nombre}}</th>
-                <td class="camposTabla">__mostrar_descripcion(registro)</td>
+                <td class="camposTabla">{{=reg['descripcion']}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad_total}}</td>
             </tr>
           {{pass}}
         </tbody>
@@ -85,11 +83,10 @@
         <tfoot id="collapseFiltros">
             <tr>
                 <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Responsable</th>
-                <th class="camposTabla linksNombres">Concepto</th>
-                <th class="camposTabla linksNombres">Cantidad</th>
-                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Ingreso</th>
+                <th class="camposTabla linksNombres">Consumo</th>
+                <th class="camposTabla linksNombres">Total</th>
             </tr>
         </tfoot>
 

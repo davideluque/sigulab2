@@ -506,7 +506,7 @@ if db(db.t_Unidad_de_medida).isempty():
     
 
 # Catalogo de sustancias
-"""
+
 if db(db.t_Sustancia).isempty():
     db.t_Sustancia.insert(f_nombre='Acetato de Etilo', f_cas='141-78-6', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
@@ -574,7 +574,8 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Amonio (salitre de chile)', f_cas='6484-52-2', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='7697-37-2', f_pureza='99', 
+    # *!* Tenia el mismo CAS que el acido nitrico
+    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='10361-46-3', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Calcio', f_cas='13477-34-4', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
@@ -618,6 +619,6 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Irritante','Comburente'])
     db.t_Sustancia.insert(f_nombre='4-metilpentan-2-ona (Metilisobutilcetona)', f_cas='108-10-1', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
-    	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
-"""
+    # Tiene el mismo CAS que fosforos blancos
+    #db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
+    #	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])

@@ -83,7 +83,7 @@ db.define_table(
     Field('f_nro_factura', 'string', requires=IS_NOT_EMPTY(), label=T('Nro. Factura'), 
           notnull=True),
 
-    Field('f_intistitucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, 
+    Field('f_institucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, 
           label=T('Intistitución')),
     
     Field('f_nif',          'string', requires=IS_NOT_EMPTY(), label=T('NIF')),
@@ -282,9 +282,12 @@ db.define_table(
     #Atributos;
 
     # Cantidad ingresada o egresada
-    Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
+    Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad modificada')),
 
-    # Concepto del ingreso, egreso o cambio en el inventario
+    # Cantidad total luego del ingreso o egreso
+    Field('f_cantidad_total', 'double', requires=IS_NOT_EMPTY(), label=T('Total')),
+
+    # Concepto del ingreso, egreso o cambio en el inventario *!* COnsumo x egreso
     Field('f_concepto', 'list:string', label=T('Calidad'),
           requires=IS_IN_SET(['Ingreso','Egreso']), 
           widget=SQLFORM.widgets.options.widget),
@@ -300,7 +303,10 @@ db.define_table(
     Field('f_tipo_egreso', 'list:string', label=T('Tipo de egreso'),
           requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Otorgado'])), 
           widget=SQLFORM.widgets.options.widget),
-            
+    
+    # Descripcion del registro para ser mostrada en la tabla de la bitacora
+    Field('f_descripcion', 'string', label=T('Descripción')),
+
     # Referencias a otras tablas
 
     # Referencias obligatorias
@@ -314,6 +320,11 @@ db.define_table(
     Field('f_inventario', 'reference t_Inventario',
           requires=IS_IN_DB(db, db.t_Inventario.id, zero=None), 
           label=T('Inventario'), notnull=True),
+
+    # Sustancia ingresada o consumida. Sirve para el reporte mensual RL4 y 7
+    Field('f_sustancia', 'reference t_Sustancia',
+          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
+          label=T('Sustancia'), notnull=True),
 
     # Referencias opcionales (dependiendo del tipo de entrada o salida)
 
@@ -329,17 +340,10 @@ db.define_table(
           requires=IS_EMPTY_OR(IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None)), 
           label=T('Almacén')),
 
-    # Referencia hacia la tabla espacios fisicos con el espacio fisico que 
-    # pide o provee el material solicitado
-    # Requiere "f_concepto" = "ingreso" y "f_tipo_ingreso" = "Solicitud" *!* Null de lo contrario
-    Field('f_espacio', 'reference espacios_fisicos',
-          requires=IS_EMPTY_OR(IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None)), 
-          label=T('Espacio físico')),
-
     # Referencia hacia la tabla de compras (*!* Null si no es un ingreso por compra)
     # Requiere "f_concepto" = "egreso" *!* Null de lo contrario
     Field('f_compra', 'reference t_Compra',
-          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Compra.id, '%(f_intistitucion)s', zero=None)), 
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Compra.id, '%(f_institucion)s', zero=None)), 
           label=T('Compra')),
 
     # Referencia hacia la tabla de respuestas a solicitudes (*!* Null si no es un 

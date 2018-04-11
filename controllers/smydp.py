@@ -318,18 +318,106 @@ def __acceso_permitido(user, dep_id, es_espacio):
 # Retorna un string con la descripcion de un registro de la bitacora de acuerdo 
 # a si es un ingreso (sompra, suministro almacen u otorgado por otra seccion) 
 # o un egreso (docencia, invenstigacion o extension)
-def __mostrar_descripcion(registro):
+def __get_descripcion(registro):
     descripcion = ""
-    return descripcion
 
-def bitacora2():
-    return locals()
+    if registro.f_concepto[0] == "Ingreso":
+        # Si es un ingreso por compra, se muestra el 
+        # Compra a "Proveedor" según Factura No. "No. Factura" de fecha "Fecha de compra"
+        if registro.f_tipo_ingreso[0] == "Compra":
+            compra = db(db.t_Compra.id == registro.f_compra).select()[0]
+            
+            # Datos de la compra
+            proveedor = compra.f_institucion
+            nro_factura = compra.f_nro_factura
+            fecha_compra = compra.f_fecha_compra
+
+            descripcion = "Compra a \"{0}\" según Factura No. \"{1}\" con fecha"\
+                         " \"{2}\"".format(proveedor, nro_factura, fecha_compra)
+
+        # Si es un ingreso por almacen
+        # Suministro por el almacén del Laboratorio "X" 
+        elif registro.f_tipo_ingreso[0] == "Almacén":
+            almacen = db(db.espacios_fisicos.id == registro.f_almacen).select()[0]
+            dep_id = almacen.dependencia
+            dep = db(db.dependencias.id == dep_id).select()[0]
+
+            # Asumiendo que siempre habra un laboratorio sobre la seccion a la que
+            descripcion = "Suministrado por el almacén de la dependencia "\
+                          "\"{0}\"".format(dep.nombre)
+
+        elif registro.f_tipo_ingreso[0] == "Solicitud":
+            # Respuesta a la solicitud en la que se otorgo la sustancia
+            respuesta = db(db.t_Respuesta.id == registro.f_respuesta_solicitud
+                          ).select()[0]
+
+            # Espacio desde el que se acepto proveer la sustancia
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            # Seccion a la que pertenece ese espacio
+            seccion = db(db.dependencias.id == espacio.dependencia).select()[0]
+
+            # Laboratorio al que pertenece esa seccion
+            lab = db(db.dependencias.id == seccion.unidad_de_adscripcion).select()[0]
+
+            descripcion = "Otorgado por la Sección \"{0}\" del \"{1}\" "\
+                          "en calidad de \"{2}\"".format(seccion.nombre,
+                          lab.nombre, respuesta.f_calidad[0])
+
+    else:
+        # Si es un consumo por Docencia
+        if registro.f_tipo_egreso[0] == "Docencia":
+            servicio = db(db.servicios.id == registro.f_servicio).select()[0] 
+
+            nombre = servicio.nombre
+
+            descripcion = "Ejecución de la práctica \"{0}\"".format(nombre)
+        elif registro.f_tipo_egreso[0] == "Investigación":
+            servicio = db(db.servicios.id == registro.f_servicio).select()[0] 
+
+            nombre = servicio.nombre
+
+            descripcion = "Ejecución del proyecto de investigación \"{0}\"".format(nombre)
+            
+        elif registro.f_tipo_egreso[0] == "Extensión":
+            servicio = db(db.servicios.id == registro.f_servicio).select()[0] 
+
+            nombre = servicio.nombre
+
+            descripcion = "Ejecución del servicio \"{0}\"".format(nombre)
+            
+        # Cuando es un egreso en respuesta a una solicitud
+        else:
+            
+            # Respuesta a la solicitud en la que se solicito la sustancia
+            respuesta = db(db.t_Respuesta.id == registro.f_respuesta_solicitud
+                          ).select()[0]
+
+            # Solicitud que hizo que por aceptarla se sacara material
+            solicitud = db(db.t_Solicitud_smydp.id == respuesta.f_solicitud
+                          ).select()[0]
+
+            # Espacio desde el que se solicito la sustancia
+            espacio = db(db.espacios_fisicos.id == solicitud.f_espacio).select()[0]
+
+            # Seccion a la que pertenece ese espacio
+            seccion = db(db.dependencias.id == espacio.dependencia).select()[0]
+
+            # Laboratorio al que pertenece esa seccion
+            lab = db(db.dependencias.id == seccion.unidad_de_adscripcion).select()[0]
+
+            descripcion = "Otorgado a la Sección \"{0}\" del \"{1}\" "\
+                          "en calidad de \"{2}\"".format(seccion.nombre,
+                          lab.nombre, respuesta.f_calidad[0])
+        
+
+    return descripcion
 
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
-    
+
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
 
@@ -367,7 +455,11 @@ def bitacora():
                   (db.auth_user.id == db.t_Personal.f_usuario) &
                   (db.t_Bitacora.f_medida == db.t_Unidad_de_medida.id)).select()
     
-    # Si tiene permisos, retornar la lista de registros del inventario x
+    # *!* Hacer esto cuando se cree el registro y ponerlo en reg['f_descripcion']
+    # Obteniendo la descripcion de cada fila y guardandola como un atributo
+    for reg in bitacora:
+        descripcion = __get_descripcion(reg['t_Bitacora'])
+        reg['t_Bitacora']['descripcion'] = descripcion
 
     return dict(bitacora=bitacora,
                 inventario=inventario,
