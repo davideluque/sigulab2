@@ -454,9 +454,13 @@ def __agregar_registro(concepto):
             # Datos del nuevo registro en la bitacora
             total_viejo = inv.f_existencia
             total_nuevo = total_viejo + cantidad
+            uso_interno_viejo = inv.f_uso_interno
+            uso_interno_nuevo = uso_interno_viejo + cantidad
 
             # Actualizando cantidad total con la nueva 
-            inv.update_record(f_existencia=total_nuevo)
+            inv.update_record(
+                f_existencia=total_nuevo,
+                f_uso_interno=uso_interno_nuevo)
 
             db.t_Bitacora.insert(
                 f_cantidad=cantidad,
@@ -554,7 +558,6 @@ def bitacora():
         descripcion = __get_descripcion(reg['t_Bitacora'])
         reg['t_Bitacora']['descripcion'] = descripcion
 
-    #----------------------- Inicio agregar registro ------------------------
     # Si se han enviado datos para agregar un nuevo registro
     concepto = request.vars.concepto
     if concepto:
