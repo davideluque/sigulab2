@@ -45,6 +45,21 @@
     <h3 id="titulo" class="titulos"> Bitácora</h3>
     <h3 id="subtitulo" class="titulos"> {{=sust_nombre}} ({{=espacio_nombre}})</h3>
   </div>
+  <!-- Inicio Boton Agregar Sustancia -->
+  <div class="container" id="containerAgregar">
+      <div class="row">
+          <div class="col-sm-6"></div>
+          <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addregister">Agregar Registro</button>
+            </div>
+          </div>
+      </div>
+  </div>
+  <!-- Fin Boton Agregar Sustancia -->
+
     <div id="buttons">
       <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
@@ -97,6 +112,8 @@
 </div>  
 <!-- Fin Listado --> 
 
+<!-- Modal para agregar un registro a la bitacora --> 
+{{include 'smydp/bitacora_agregar.html'}}
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
