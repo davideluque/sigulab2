@@ -23,16 +23,6 @@ def __check_role():
                         'GESTOR DE SMyDP']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
 
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def index():
-    return locals()
-
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def sustancias():
-    return locals()
-
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
 # o es de un tipo incorrecto
 def __is_valid_id(id_, tabla):
@@ -979,3 +969,7 @@ def catalogo():
                                     paginate=10)
     return locals()
 
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def solicitudes():
+    return locals()

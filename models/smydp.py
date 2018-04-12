@@ -299,7 +299,7 @@ db.define_table(
     # seccion como respuesta a usa solicitud 
     # (Null si f_concepto no es Egreso) *!*
     Field('f_tipo_egreso', 'list:string', label=T('Tipo de egreso'),
-          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Otorgado'])), 
+          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Gestión'])), 
           widget=SQLFORM.widgets.options.widget),
     
     # Descripcion del registro para ser mostrada en la tabla de la bitacora
