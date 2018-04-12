@@ -101,9 +101,9 @@
                               <font color="red"><div id="err_institucion" hidden></div></font>
                             </div>
 
-                            <div id="nif_div" class="form-group esconder">
-                              <input type="text" class="form-control" name="nif" placeholder="NIF*">
-                              <font color="red"><div id="err_nif" hidden></div></font>
+                            <div id="rif_div" class="form-group esconder">
+                              <input type="text" class="form-control" name="rif" placeholder="RIF">
+                              <font color="red"><div id="err_rif" hidden></div></font>
                             </div>
                             <div id="fecha_compra_div" class="esconder">
                               <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker"></p>
@@ -158,7 +158,7 @@ del concepto y tipo de ingreso o egreso -->
   var tipo_egreso_div = document.getElementById("tipo_egreso_div");
   var nro_factura_div = document.getElementById("nro_factura_div");
   var institucion_div = document.getElementById("institucion_div");
-  var nif_div = document.getElementById("nif_div");
+  var rif_div = document.getElementById("rif_div");
   var fecha_compra_div = document.getElementById("fecha_compra_div");
   var almacen_div = document.getElementById("almacen_div");
   var servicio_div = document.getElementById("servicio_div");
@@ -183,7 +183,7 @@ del concepto y tipo de ingreso o egreso -->
       almacen_div.style.display = "none";
       nro_factura_div.style.display = "none";
       institucion_div.style.display = "none";
-      nif_div.style.display = "none";
+      rif_div.style.display = "none";
       fecha_compra_div.style.display = "none";
     }
 
@@ -194,7 +194,7 @@ del concepto y tipo de ingreso o egreso -->
     if (valor == "Compra"){
       nro_factura_div.style.display = "block";
       institucion_div.style.display = "block";
-      nif_div.style.display = "block";
+      rif_div.style.display = "block";
       fecha_compra_div.style.display = "block";
       almacen_div.style.display = "none";
     }
@@ -203,7 +203,7 @@ del concepto y tipo de ingreso o egreso -->
       almacen_div.style.display = "block";
       nro_factura_div.style.display = "none";
       institucion_div.style.display = "none";
-      nif_div.style.display = "none";
+      rif_div.style.display = "none";
       fecha_compra_div.style.display = "none";
     }
   }

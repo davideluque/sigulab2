@@ -12,7 +12,7 @@
 #
 #-----------------------------------------------------------------------------
 
-
+import datetime
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -138,11 +138,22 @@ def __get_espacios(dep_id):
     return espacios
 
 
+# Transforma una cantidad en la unidad de medida indicada en nueva_unidad
+def __transformar_cantidad(cantidad, unidad, nueva_unidad):
+    cantidad = float(cantidad)
+    if nueva_unidad == unidad:
+        return cantidad
+    elif unidad in ["Kilogramos", "Litros"]:
+        return cantidad * 1000
+    elif unidad in ["Mililitros", "Gramos"]:
+        return cantidad / 1000
+
 # Permite sumar dos cantidades de sustancia de acuerdo a la unidad en la que
 # se esta mostrando la cantidad de sustancia en el inventario. *!* Se asume que
 # no se agregaran sustancias a los inventarios en unidades diferentes a las normales
 # Si es un liquido, se puede pasar de litros a mililitros, pero no se espera
-# que se ingrese en algun inventario en gramos
+# que se ingrese en algun inventario en gramos. Siempre se pasa a la unidad de 
+# medida que ya estaba
 def __sumar_cantidad(nueva_cantidad, cantidad_actual, nueva_unidad, unidad):
 
     if nueva_unidad == unidad:
@@ -424,34 +435,31 @@ def __agregar_registro(concepto):
         tipo_ing = request.vars.tipo_ingreso
 
         if tipo_ing == 'Almacén':
-            pass
-        # Tipo ingreso es compra
-        else:
+            import pdb
+            pdb.set_trace()
 
-            # Datos de la nueva compra
-            nro_factura = request.vars.nro_factura
-            institucion = request.vars.institucion
-            rif = request.vars.rif
-            fecha_compra = request.vars.fecha_compra
+            almacen = int(request.vars.almacen)
+
+            # ID de la unidad en la que el usuario registro la cantidad ingresada
             unidad_id = request.vars.unidad
 
             # Inventario al cual pertenece la bitacora consultada
             inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
 
-            # Sustancia anadida
-            sust_id = inv.sustancia
+            # Unidad indicada por el usuario
+            unidad = db(db.t_Unidad_de_medida.id == unidad_id
+                           ).select()[0].f_nombre
 
-            # Se registra la nueva compra en la tabla t_Compra
-            compra_id = db.t_Compra.insert(
-                f_cantidad=cantidad,
-                f_nro_factura=nro_factura,
-                f_institucion=institucion,
-                f_rif=rif,
-                f_fecha_compra=fecha_compra,
-                f_sustancia=inv.sustancia,
-                f_medida=unidad_id)
+            # Unidad de medida en la que se encuentra el inventario de la sustancia
+            unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
+                                  ).select()[0].f_nombre
 
-            # Datos del nuevo registro en la bitacora
+            # Transformando las cantidades de acuerdo a la unidad utilizada en
+            # el inventario de la sustancia
+            cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
+
+            # Sumando cantidades total y uso_interno, dejando como unidad la
+            # utilizada en el inventario
             total_viejo = inv.f_existencia
             total_nuevo = total_viejo + cantidad
             uso_interno_viejo = inv.f_uso_interno
@@ -467,7 +475,79 @@ def __agregar_registro(concepto):
                 f_cantidad_total=total_nuevo,
                 f_concepto=concepto,
                 f_tipo_ingreso=tipo_ing,
-                f_medida=int(unidad_id),
+                f_medida=inv.f_medida,
+                f_inventario=inv.id,
+                f_sustancia=inv.sustancia,
+                f_almacen=almacen)
+
+        # Tipo ingreso es compra
+        else:
+
+            # Datos de la nueva compra
+            nro_factura = request.vars.nro_factura
+            institucion = request.vars.institucion
+            rif = request.vars.rif
+
+            # Fecha de la compra en formato "%m/%d/%Y"
+            fecha_compra = request.vars.fecha_compra
+            
+            # ID de la unidad en la que el usuario registro la cantidad ingresada
+            unidad_id = request.vars.unidad
+
+            # Inventario al cual pertenece la bitacora consultada
+            inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
+
+            # Sustancia anadida
+            sust_id = inv.sustancia
+
+            # Se registra la nueva compra en la tabla t_Compra
+            compra_id = db.t_Compra.insert(
+                f_cantidad=cantidad,
+                f_nro_factura=nro_factura,
+                f_institucion=institucion,
+                f_rif=rif,
+                f_fecha=fecha_compra,
+                f_sustancia=inv.sustancia,
+                f_medida=unidad_id)
+
+            # Buscando unidades de medida usadas en el inventario de
+            # la nueva sustancia y la que especifico el usuario al 
+            # hacer el registro en la bitacora
+
+            # Unidad indicada por el usuario
+            unidad = db(db.t_Unidad_de_medida.id == unidad_id
+                           ).select()[0].f_nombre
+
+            # Unidad de medida en la que se encuentra el inventario de la sustancia
+            unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
+                           ).select()[0].f_nombre
+
+            # Sumando cantidades total y uso_interno, dejando como unidad la
+            # utilizada en el inventario
+            total_viejo = inv.f_existencia
+            total_nuevo = __sumar_cantidad(total_viejo, cantidad, 
+                                           unidad, unidad_inventario)
+            uso_interno_viejo = inv.f_uso_interno
+            uso_interno_nuevo = __sumar_cantidad(uso_interno_viejo, cantidad,
+                                                 unidad, unidad_inventario)
+
+            # Actualizando cantidad total con la nueva 
+            inv.update_record(
+                f_existencia=total_nuevo,
+                f_uso_interno=uso_interno_nuevo)
+
+            # Transformando cantidades las unidades dadas por el usuario
+            # al registrar el ingreso a las unidades utilizadas en el inventario
+
+            cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
+            total_nuevo = __transformar_cantidad(total_nuevo, unidad, unidad_inventario)
+
+            db.t_Bitacora.insert(
+                f_cantidad=cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto=concepto,
+                f_tipo_ingreso=tipo_ing,
+                f_medida=inv.f_medida,
                 f_compra=compra_id,
                 f_inventario=inv.id,
                 f_sustancia=inv.sustancia)
@@ -489,12 +569,9 @@ def __agregar_registro(concepto):
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
 
-    import pdb
-    pdb.set_trace()
-
     # INICIO Datos del modal de agregar un registro
     # Conceptos
-    conceptos = db.t_Bitacora.f_concepto.requires.theset
+    conceptos = ['Ingreso','Egreso']
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
@@ -538,6 +615,10 @@ def bitacora():
     # Espacio al que pertenece la bitacora consultada
     espacio_id = inventario['t_Inventario'].espacio
 
+    # Unidad de medida en que es expresada la sustancia en el inventario
+    unidad_medida = db(db.t_Unidad_de_medida.id == inventario.t_Inventario.f_medida
+                      ).select()[0]
+
     # Se valida que el usuario tenga acceso a la bitacora indicada
     # para consultar la bitacora. 
     if not __acceso_permitido(user, espacio_id, "True"):
@@ -565,6 +646,7 @@ def bitacora():
 
 
     return dict(bitacora=bitacora,
+                unidad_medida=unidad_medida,
                 inventario=inventario,
                 sust_nombre=sust_nombre,
                 espacio_nombre=espacio_nombre,

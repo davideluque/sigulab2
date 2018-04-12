@@ -86,11 +86,9 @@ db.define_table(
     Field('f_institucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, 
           label=T('Intistitución')),
     
-    Field('f_rif', 'datetime', requires=IS_NOT_EMPTY(), label=T('RIF')),
+    Field('f_rif', 'datetime', label=T('RIF')),
     
-    Field('f_fecha_compra', 'string', requires=IS_DATE(format=T('%d/%m/%Y'), 
-          error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
-          label=T('Fecha de compra')),
+    Field('f_fecha', 'string', notnull=True, label=T('Fecha de compra')),
     
     # Referencias a otras tablas
     Field('f_sustancia', 'reference t_Sustancia',

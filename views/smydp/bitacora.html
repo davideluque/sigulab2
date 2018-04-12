@@ -73,9 +73,9 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Descripción</th>
-                <th class="camposTabla linksNombres">Ingreso</th>
-                <th class="camposTabla linksNombres">Consumo</th>
-                <th class="camposTabla linksNombres">Total</th>
+                <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
+                <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
+                <th class="camposTabla linksNombres">Total ({{=unidad_medida.f_abreviatura}})</th>
             </tr>
         </thead>
 
@@ -84,10 +84,9 @@
             {{auth_user = registro['auth_user']}}
             {{reg = registro['t_Bitacora']}}
             {{usuario = registro['t_Personal']}}
-            {{medida = registro['t_Unidad_de_medida']}}
             {{fecha = reg.created_on}}
             <tr>
-                <td class="camposTabla">{{=fecha.year}}-{{=fecha.month}}-{{=fecha.day}} | {{=fecha.hour}}:{{=fecha.minute}}:{{=fecha.second}}</td>
+                <td class="camposTabla">{{=fecha.month}}/{{=fecha.day}}/{{=fecha.year}} | {{=fecha.hour}}:{{=fecha.minute}}:{{=fecha.second}}</td>
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
