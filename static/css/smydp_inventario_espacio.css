@@ -1,1 +1,8 @@
 /* Permite agregar estilos especificos del listado de sustancias en el inventario de un espacio fisico */
+
+
+/* Estilos de inventario_espacio.html */ 
+
+.field-error{
+	color:#B70101;
+}

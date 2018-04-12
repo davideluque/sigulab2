@@ -34,7 +34,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
                     <!-- Primer Paso -->
                     <fieldset class="formField">
@@ -48,7 +48,7 @@
                           
                             <div class="form-group">
                               <input type="text" class="form-control" name="cantidad" placeholder="Cantidad a modificar*" required>
-                              <font color="red"><div id="err_cantidad" hidden></div></font>
+                              <div class="field-error"> <p id="error-cantidad"> </p> </div>
                             </div>
 
                             <div class="form-group">
@@ -60,8 +60,9 @@
                               </select>
                             </div>
 
+                            <!-- Concepto: ingreso o egreso -->
                             <div class="form-group">
-                              <select class="form-control" type="select" id="calidad" name="calidad">
+                              <select class="form-control" type="select" id="concepto" name="concepto" onclick="activarTipos(this.value)">
                                 <option value="" selected hidden >Concepto*</option>
                                 {{for c in conceptos:}}
                                 <option value="{{=c}}">{{=c}}</option>
@@ -69,8 +70,9 @@
                               </select>
                             </div>
 
-                            <div class="form-group">
-                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                            <!-- Tipo de ingreso -->
+                            <div id="tipo_ingreso_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso" onclick="activarCamposIngreso(this.value)">
                                 <option value="" selected hidden >Tipo de ingreso*</option>
                                 {{for t in tipos_ingreso:}}
                                 <option value="{{=t}}">{{=t}}</option>
@@ -78,8 +80,9 @@
                               </select>
                             </div>
 
-                            <div class="form-group">
-                              <select class="form-control" type="select" id="tipo_ingreso" name="tipo_ingreso">
+                            <!-- Tipo de egreso -->
+                            <div id="tipo_egreso_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="tipo_egreso" name="tipo_egreso" onclick="activarCamposEgreso(this.value)">
                                 <option value="" selected hidden >Tipo de consumo*</option>
                                 {{for t in tipos_egreso:}}
                                 <option value="{{=t}}">{{=t}}</option>
@@ -87,28 +90,50 @@
                               </select>
                             </div>
 
-                            <!-- Inicio datos de la compra -->
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="nro_factura" placeholder="Nro. de factura*" required>
+                            <!-- Si es un ingreso por compra: Datos de compra -->
+                            <div id="nro_factura_div" class="form-group esconder">
+                              <input type="text" class="form-control" name="nro_factura" placeholder="Nro. de factura*">
                               <font color="red"><div id="err_nro_factura" hidden></div></font>
                             </div>
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="institucion" placeholder="Institución*" required>
+                            <div id="institucion_div" class="form-group esconder">
+                              <input type="text" class="form-control" name="institucion" placeholder="Institución*">
                               <font color="red"><div id="err_institucion" hidden></div></font>
                             </div>
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="nif" placeholder="NIF*" required>
-                              <font color="red"><div id="err_nif" hidden></div></font>
+                            <div id="rif_div" class="form-group esconder">
+                              <input type="text" class="form-control" name="rif" placeholder="RIF">
+                              <font color="red"><div id="err_rif" hidden></div></font>
+                            </div>
+                            <div id="fecha_compra_div" class="esconder">
+                              <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker"></p>
+                              <font color="red"><div id="err_fecha_compra" hidden></div></font>
+                            </div>
+                            <!-- Fin datos de la compra -->
+
+                            <!-- Si es un ingreso por almacen, se listan los espacios fisicos para seleccionar el almacen -->                            
+                            <div id="almacen_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="almacen" name="almacen">
+                                <option value="" selected hidden >Almacén*</option>
+                                {{for a in almacenes:}}
+                                <option value="{{=a.id}}">{{=a.nombre}}</option>
+                                {{pass}}
+                              </select>
                             </div>
 
-                            <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker" required></p>
-                            <font color="red"><div id="err_fecha_compra" hidden></div></font>
-                            <!-- Inicio datos de la compra -->
+                            <!-- Si es un egreso, se listan los servicios -->                            
+                            <div id="servicio_div" class="form-group esconder">
+                              <select class="form-control" type="select" id="servicio" name="servicio">
+                                <option value="" selected hidden >Servicio*</option>
+                                {{for s in servicios:}}
+                                <option value="{{=s.id}}">{{=s.nombre}}</option>
+                                {{pass}}
+                              </select>
+                            </div>
 
                         </div>
                       </div>
+                      <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>        
                     </fieldset>
                     <!-- Fin Primer Paso -->
                     
@@ -122,3 +147,120 @@
 
     </div>
   </div>
+
+
+<!-- *!* Falta verificar que se esten llenando todos los campos dependiendo 
+del concepto y tipo de ingreso o egreso -->
+<script type="text/javascript">
+  
+  // Obteniendo elementos a ser mostrados o escondidos
+  var tipo_ingreso_div = document.getElementById("tipo_ingreso_div");
+  var tipo_egreso_div = document.getElementById("tipo_egreso_div");
+  var nro_factura_div = document.getElementById("nro_factura_div");
+  var institucion_div = document.getElementById("institucion_div");
+  var rif_div = document.getElementById("rif_div");
+  var fecha_compra_div = document.getElementById("fecha_compra_div");
+  var almacen_div = document.getElementById("almacen_div");
+  var servicio_div = document.getElementById("servicio_div");
+  // Muestra los elementos a llenar de acuerdo al concepto y tipo 
+  // de ingreso o consumo
+  function activarTipos(concepto){
+
+    if (concepto == 'Ingreso'){
+      tipo_ingreso_div.style.display = "block";
+      tipo_egreso_div.style.display = "none";
+
+      // Todos los campos de egresos que estuvieran activados son
+      // desactivados
+      servicio_div.style.display = "none"
+    }
+    else{
+      tipo_egreso_div.style.display = "block";
+      tipo_ingreso_div.style.display = "none";
+      
+      // Todos los campos de ingresos que estuvieran activados son
+      // desactivados
+      almacen_div.style.display = "none";
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+    }
+
+  }
+  // Muestra o esconde elementos una vez se ha seleccionado ingreso como concepto
+  function activarCamposIngreso(valor){
+
+    if (valor == "Compra"){
+      nro_factura_div.style.display = "block";
+      institucion_div.style.display = "block";
+      rif_div.style.display = "block";
+      fecha_compra_div.style.display = "block";
+      almacen_div.style.display = "none";
+    }
+    // Si fue por envio desde el almacen
+    else{
+      almacen_div.style.display = "block";
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+    }
+  }
+
+  function activarCamposEgreso(valor){
+    // En cualquier caso, se activa el div servicio_div y se
+    // desactivan los demas
+    servicio_div.style.display = "block";
+
+  }
+
+  function validar_campos(){
+    var err_cantidad = document.getElementById("error-cantidad");
+
+    // Limpiando los mensajes anteriores de validadores
+    if (err_cantidad.innerText != ''){
+      err_cantidad.innerText = '';
+    }
+    // Buscando los valores ingresados por el usuario en cada campo
+    var cantidad = document.forms['formularioCarga']['cantidad'].value;
+
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+  
+    // Validando el campo cantidad
+    if (!is_number(cantidad)) {
+      err_cantidad.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(cantidad)) {
+      err_cantidad.innerText = mensaje_error_negativo;
+      return false;
+    }
+
+    if (is_zero(cantidad)) {
+      err_cantidad.innerText = mensaje_error_nulo;
+      return false;
+    }
+  
+  }
+
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n);
+  }
+
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0);
+  }
+
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0);
+  }
+
+</script>
