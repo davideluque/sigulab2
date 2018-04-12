@@ -72,6 +72,7 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Fecha</th>
+                <th class="camposTabla linksNombres">Hora</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
                 <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
@@ -84,9 +85,10 @@
             {{auth_user = registro['auth_user']}}
             {{reg = registro['t_Bitacora']}}
             {{usuario = registro['t_Personal']}}
-            {{fecha = reg.created_on}}
+            {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
             <tr>
-                <td class="camposTabla">{{=fecha.month}}/{{=fecha.day}}/{{=fecha.year}} | {{=fecha.hour}}:{{=fecha.minute}}:{{=fecha.second}}</td>
+                <td class="camposTabla">{{=fecha[0]}}</td>
+                <td class="camposTabla">{{=fecha[1]}}</td>
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
@@ -98,6 +100,7 @@
         <tfoot id="collapseFiltros">
             <tr>
                 <th class="camposTabla linksNombres">Fecha</th>
+                <th class="camposTabla linksNombres">Hora</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Ingreso</th>
                 <th class="camposTabla linksNombres">Consumo</th>

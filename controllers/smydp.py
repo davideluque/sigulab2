@@ -431,44 +431,45 @@ def __agregar_registro(concepto):
 
     cantidad = float(request.vars.cantidad)
 
+    # Operaciones comunes a todos los casos: actualizacion del inventario
+
+    # ID de la unidad en la que el usuario registro la cantidad ingresada
+    unidad_id = request.vars.unidad
+
+    # Inventario al cual pertenece la bitacora consultada
+    inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
+
+    # Unidad indicada por el usuario
+    unidad = db(db.t_Unidad_de_medida.id == unidad_id
+                   ).select()[0].f_nombre
+
+    # Unidad de medida en la que se encuentra el inventario de la sustancia
+    unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
+                          ).select()[0].f_nombre
+
+    # Transformando las cantidades de acuerdo a la unidad utilizada en
+    # el inventario de la sustancia
+    cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
+
+    # Cantidades total y de uso interno antes del ingreso o consumo
+    total_viejo = inv.f_existencia
+    uso_interno_viejo = inv.f_uso_interno
+
     if concepto == 'Ingreso':
         tipo_ing = request.vars.tipo_ingreso
 
+        # Nueva cantidad total y nueva cantidad para uso interno
+        total_nuevo = total_viejo + cantidad
+        uso_interno_nuevo = uso_interno_viejo + cantidad
+
+        # Actualizando cantidad total con la nueva 
+        inv.update_record(
+            f_existencia=total_nuevo,
+            f_uso_interno=uso_interno_nuevo)
+
         if tipo_ing == 'Almacén':
-            import pdb
-            pdb.set_trace()
 
             almacen = int(request.vars.almacen)
-
-            # ID de la unidad en la que el usuario registro la cantidad ingresada
-            unidad_id = request.vars.unidad
-
-            # Inventario al cual pertenece la bitacora consultada
-            inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
-
-            # Unidad indicada por el usuario
-            unidad = db(db.t_Unidad_de_medida.id == unidad_id
-                           ).select()[0].f_nombre
-
-            # Unidad de medida en la que se encuentra el inventario de la sustancia
-            unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
-                                  ).select()[0].f_nombre
-
-            # Transformando las cantidades de acuerdo a la unidad utilizada en
-            # el inventario de la sustancia
-            cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
-
-            # Sumando cantidades total y uso_interno, dejando como unidad la
-            # utilizada en el inventario
-            total_viejo = inv.f_existencia
-            total_nuevo = total_viejo + cantidad
-            uso_interno_viejo = inv.f_uso_interno
-            uso_interno_nuevo = uso_interno_viejo + cantidad
-
-            # Actualizando cantidad total con la nueva 
-            inv.update_record(
-                f_existencia=total_nuevo,
-                f_uso_interno=uso_interno_nuevo)
 
             db.t_Bitacora.insert(
                 f_cantidad=cantidad,
@@ -491,15 +492,6 @@ def __agregar_registro(concepto):
             # Fecha de la compra en formato "%m/%d/%Y"
             fecha_compra = request.vars.fecha_compra
             
-            # ID de la unidad en la que el usuario registro la cantidad ingresada
-            unidad_id = request.vars.unidad
-
-            # Inventario al cual pertenece la bitacora consultada
-            inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
-
-            # Sustancia anadida
-            sust_id = inv.sustancia
-
             # Se registra la nueva compra en la tabla t_Compra
             compra_id = db.t_Compra.insert(
                 f_cantidad=cantidad,
@@ -509,38 +501,6 @@ def __agregar_registro(concepto):
                 f_fecha=fecha_compra,
                 f_sustancia=inv.sustancia,
                 f_medida=unidad_id)
-
-            # Buscando unidades de medida usadas en el inventario de
-            # la nueva sustancia y la que especifico el usuario al 
-            # hacer el registro en la bitacora
-
-            # Unidad indicada por el usuario
-            unidad = db(db.t_Unidad_de_medida.id == unidad_id
-                           ).select()[0].f_nombre
-
-            # Unidad de medida en la que se encuentra el inventario de la sustancia
-            unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
-                           ).select()[0].f_nombre
-
-            # Sumando cantidades total y uso_interno, dejando como unidad la
-            # utilizada en el inventario
-            total_viejo = inv.f_existencia
-            total_nuevo = __sumar_cantidad(total_viejo, cantidad, 
-                                           unidad, unidad_inventario)
-            uso_interno_viejo = inv.f_uso_interno
-            uso_interno_nuevo = __sumar_cantidad(uso_interno_viejo, cantidad,
-                                                 unidad, unidad_inventario)
-
-            # Actualizando cantidad total con la nueva 
-            inv.update_record(
-                f_existencia=total_nuevo,
-                f_uso_interno=uso_interno_nuevo)
-
-            # Transformando cantidades las unidades dadas por el usuario
-            # al registrar el ingreso a las unidades utilizadas en el inventario
-
-            cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
-            total_nuevo = __transformar_cantidad(total_nuevo, unidad, unidad_inventario)
 
             db.t_Bitacora.insert(
                 f_cantidad=cantidad,
@@ -553,13 +513,37 @@ def __agregar_registro(concepto):
                 f_sustancia=inv.sustancia)
 
     else:
+        import pdb
+        pdb.set_trace()
         tipo_eg = request.vars.tipo_egreso            
-        if tipo_eg == 'Docencia':
-            pass
-        elif tipo_eg == 'Investigación':
-            pass
-        elif tipo_eg == 'Extensión':
-            pass
+        
+        # Nueva cantidad total luego del consumo
+        total_nuevo = total_viejo - cantidad
+        if total_nuevo < 0:
+            response.flash = "La cantidad total luego del consumo no puede ser "\
+                             "negativa"
+            redirect(URL(args=request.args, vars=request.get_vars, host=True))
+        
+        # Nueva cantidad de uso interno nueva puede ser maximo lo que era antes
+        # (si hay material suficiente) o el nuevo total
+        uso_interno_nuevo = min(uso_interno_viejo, total_nuevo)
+
+        # Actualizando cantidad total con la nueva 
+        inv.update_record(
+            f_existencia=total_nuevo,
+            f_uso_interno=uso_interno_nuevo)
+
+        servicio_id = request.vars.servicio
+
+        db.t_Bitacora.insert(
+            f_cantidad=cantidad,
+            f_cantidad_total=total_nuevo,
+            f_concepto=concepto,
+            f_tipo_egreso=tipo_eg,
+            f_medida=inv.f_medida,
+            f_servicio=servicio_id,
+            f_inventario=inv.id,
+            f_sustancia=inv.sustancia)
 
     # Se redirije para evitar mensaje de revisita con metodo POST
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
