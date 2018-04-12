@@ -553,7 +553,7 @@ def bitacora():
 
     # INICIO Datos del modal de agregar un registro
     # Conceptos
-    conceptos = ['Ingreso','Egreso']
+    conceptos = ['Ingreso','Consumo']
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
