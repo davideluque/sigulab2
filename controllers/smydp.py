@@ -421,9 +421,6 @@ def __get_descripcion(registro):
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
 
-    import pdb
-    pdb.set_trace()
-
     # Datos del modal de agregar un registro
     # Conceptos
     conceptos = db.t_Bitacora.f_concepto.requires.theset
@@ -491,13 +488,6 @@ def bitacora():
                 tipos_egreso=tipos_egreso,
                 tipos_ingreso=tipos_ingreso,
                 unidades_de_medida=unidades_de_medida)
-
-# Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
-# a cargo
-@auth.requires(lambda: __check_role())
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def bitacora():
-    return locals()
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
