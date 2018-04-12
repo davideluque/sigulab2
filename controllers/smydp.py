@@ -341,7 +341,7 @@ def __get_descripcion(registro):
             # Datos de la compra
             proveedor = compra.f_institucion
             nro_factura = compra.f_nro_factura
-            fecha_compra = compra.f_fecha_compra
+            fecha_compra = compra.f_fecha
 
             fecha = fecha_compra
 
@@ -513,8 +513,6 @@ def __agregar_registro(concepto):
                 f_sustancia=inv.sustancia)
 
     else:
-        import pdb
-        pdb.set_trace()
         tipo_eg = request.vars.tipo_egreso            
         
         # Nueva cantidad total luego del consumo
