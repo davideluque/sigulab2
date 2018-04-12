@@ -513,8 +513,6 @@ def __agregar_registro(concepto):
                 f_sustancia=inv.sustancia)
 
     else:
-        import pdb
-        pdb.set_trace()
         tipo_eg = request.vars.tipo_egreso            
         
         # Nueva cantidad total luego del consumo

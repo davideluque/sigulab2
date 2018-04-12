@@ -86,7 +86,7 @@ db.define_table(
     Field('f_institucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, 
           label=T('Intistitución')),
     
-    Field('f_rif', 'datetime', label=T('RIF')),
+    Field('f_rif', 'string', label=T('RIF')),
     
     Field('f_fecha', 'string', notnull=True, label=T('Fecha de compra')),
     
