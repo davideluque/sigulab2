@@ -7,6 +7,7 @@
     <link href="{{=URL('static','css/menu.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/responsive.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{=URL('static','css/servicios_registro.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{=URL('static','css/tags.css')}}" rel="stylesheet" type="text/css"/>
 {{end}}
 
 {{block center}}
@@ -14,7 +15,7 @@
 <!-- Bloque de navegación secundaria (breadcrumb) -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'modulos')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('default', 'index')}}">Inicio</a>
   <a class="breadcrumb-item" href="#">Gestión</a>
   <span class="breadcrumb-item active">Registrar Usuario</span>
   </div>
@@ -104,10 +105,13 @@
                 <!-- Tipos de Rol -->
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onchange="getUnidad(); getSeccion();">
+                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
+                                                                                                                                getSeccion();
+                                                                                                                                getEspacio();
+                                                                                                                                showEspacio();">
                             <option value="" selected hidden disabled>Rol</option>
                             {{for rol in roles:}}
-                            <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
+                                <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
                             {{pass}}
                         </select>
                     </div>
@@ -116,6 +120,10 @@
                 <div id="unidaddiv" class="form-group"></div>
 
                 <div id="secciondiv" class="form-group"></div>
+                <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
+                <div id="espaciodiv" class="form-group"></div> 
+                <!-- Para mostrar la lista de espacios fisicos seleccionados por el espacio fisico -->
+                <div id="tagsdiv" class="form-group"></div> 
 
                 <div class="form-group text-center" id="submit_record__row">
 
@@ -164,8 +172,17 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-<input type="hidden" id="dependenciahidden" name="dependenciahidden" value="">
+
+<!-- rolhidden contiene el id del rol seleccionado por el usuario -->
+<input type="hidden" id="rolhidden" name="rolhidden" value="">
+<!-- dephidden contiene el id de la dependencia seleccionada por el usuario -->
+<input type="hidden" id="dephidden" name="dephidden" value="">
+<!-- sechidden contiene el id de la seccion seleccionada por el usuario -->
 <input type="hidden" id="seccionhidden" name="seccionhidden" value="">
+<!-- esphidden contiene el id del espacio seleccionado por el usuario -->
+<input type="hidden" id="esphidden" name="esphidden" value="">
+<!--  contiene el rastro o secuencia de dependencias hasta el espacio fisico -->
+<input type="hidden" id="borrarhidden" name="borrarhidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
@@ -231,12 +248,15 @@
     }
 
     function getUnidad(){
+        /* Esto le asigna a los inputs escondidos (rolhidden, en este caso) 
+        el valor que selecciono el usuario de los dropdowns de entre las opciones
+        disponibles. */
         var opcionesrol = document.getElementById("rol");
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-        var x = document.getElementById("dependenciahidden");
+        var x = document.getElementById("rolhidden");
         x.value = rolelegida;
 
-        ajax('ajax_unidad_rol', ['dependenciahidden'], 'unidaddiv');
+        ajax('ajax_unidad_rol', ['rolhidden'], 'unidaddiv');
     }
 
     function getSeccion(){
@@ -244,11 +264,76 @@
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var opcioneslab = document.getElementById("laboratorio");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var x = document.getElementById("dependenciahidden");
+        var x = document.getElementById("rolhidden");
         x.value = rolelegida;
-        var x = document.getElementById("seccionhidden");
+        var x = document.getElementById("dephidden");
         x.value = labelegido;
-        ajax('ajax_registro_seccion', ['dependenciahidden', 'seccionhidden'], 'secciondiv');
+        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
+    }
+
+    function getEspacio(){
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+        var opcioneslab = document.getElementById("laboratorio");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var opcionessec = document.getElementById("seccion");
+        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
+        // Se le asigna a los elementos escondidos los valores seleccionados por el usuario
+        // en los archivos ajax_*
+        var x = document.getElementById("rolhidden");
+        x.value = rolelegida;
+        var x = document.getElementById("dephidden");
+        x.value = labelegido;
+        var x = document.getElementById("seccionhidden");
+        x.value = seccionelegida;
+
+        ajax('ajax_registro_espacio', ['rolhidden', 
+                                       'dephidden', 
+                                       'seccionhidden'], 'espaciodiv');
+    }
+
+    function setEspacios(){
+        /* 
+        Esta funcion es llamada para actualizar la lista de tags (lista de espacios 
+        fisicos) de los cuales esta a cargo el tecnico que se registra en el sistema. 
+        */
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+        var opcioneslab = document.getElementById("laboratorio");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var opcionessec = document.getElementById("seccion");
+        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
+        var opcionesespacios = document.getElementById("espacio");
+        var espacioelegido = opcionesespacios.options[opcionesespacios.selectedIndex].value;
+
+        var x = document.getElementById("rolhidden");
+        x.value = rolelegida;
+        var x = document.getElementById("dephidden");
+        x.value = labelegido;
+        var x = document.getElementById("seccionhidden");
+        x.value = seccionelegida;
+        var x = document.getElementById("esphidden");
+        x.value = espacioelegido;
+
+        ajax('ajax_seleccionar_espacio', ['rolhidden', 
+                                          'dephidden', 
+                                          'seccionhidden', 
+                                          'esphidden'], 'tagsdiv');   
+    }
+
+    function deleteEspacio(espacio_id){
+
+        var x = document.getElementById("borrarhidden");
+        x.value = espacio_id;
+
+        ajax('ajax_eliminar_espacio', ["borrarhidden"], 'tagsdiv');
+    }
+
+    function showEspacio(){
+        var opcionesrol = document.getElementById("rol");
+        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
+
+        ajax('ajax_mostrar_espacios', ['rolhidden'], 'tagsdiv');
     }
 
     function mostrarContrasena(idContrasena) {

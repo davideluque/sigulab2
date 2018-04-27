@@ -1,0 +1,68 @@
+/** Estilos del index (form principal)**/
+
+.row{
+	font-family: "Roboto", Sans-Serif ;
+}
+
+.web2py_htmltable {
+	padding-top: 20px;
+}
+
+table {
+	border-style: solid;
+	border-color: #CECECE;
+	border-width: 1px;
+}
+
+thead{
+	border-style: solid;
+	border-color: #CECECE;
+	border-width: 1px;
+	font-size: 14px;
+}
+
+
+th {
+	text-align: center;
+	padding: 10px 20px 10px 10px;
+}
+
+td{
+	padding: 10px 20px 10px 10px;
+}
+
+
+.web2py_paginator ul{
+	padding: 10px 0px 10px 0px;
+}
+
+.web2py_paginator li{
+	font-weight: bold;
+	padding: 5px 10px 5px 0px; /* Arreglar esto */
+	display: inline;
+	font-size: 16px;
+}
+
+.web2py_console {
+	display: inline;	
+}
+
+.web2py_counter {
+	padding: 10px 0px;
+}
+
+.current {
+	text-decoration: underline;
+}
+
+/** Estilos del Create form **/
+
+.form-horizontal{
+	
+}
+
+
+/** Estilos del Update form **/
+
+
+/** Estilos del View form **/

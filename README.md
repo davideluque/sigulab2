@@ -1,7 +1,7 @@
-# SIGULAB 2 v1.0 beta.1
+# SIGULAB 2 v2.0 beta.0
 
 # Acerca de
-Este repositorio mantiene las últimas actualizaciones de los módulos Servicios y Personal.
+Este repositorio mantiene las últimas actualizaciones de los módulos Servicios, Personal y Sustancias Materiales y Desechos Peligrosos.
 
 # Requisitos
 ```
@@ -21,3 +21,6 @@ Equipo Octopus Technologies desarrollador del Módulo de Servicios
 - Amanda Camacho <12-10644@usb.ve>
 
 Equipo Synergy desarrollador del Módulo de Personal
+
+Desarrollador del Módulo de Sustancias, Materiales y Desechos Peligrosos
+- Samuel Arleo
