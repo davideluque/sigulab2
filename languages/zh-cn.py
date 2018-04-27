@@ -108,6 +108,7 @@
 'Editing file': '编辑文件',
 'Editing file "%s"': '编辑文件"%s"',
 'Email and SMS': 'Email and SMS',
+'Enter a number between %(min)g and %(max)g': 'Enter a number between %(min)g and %(max)g',
 'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'enter an integer between %(min)g and %(max)g': 'enter an integer between %(min)g and %(max)g',
 'Error logs for "%(app)s"': '"%(app)s"的错误记录',
