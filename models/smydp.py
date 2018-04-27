@@ -292,14 +292,14 @@ db.define_table(
     
     # Tipo de ingreso de la sustancia (Null si f_concepto no es Ingreso) *!*
     Field('f_tipo_ingreso', 'list:string', label=T('Tipo de ingreso'),
-          requires=IS_EMPTY_OR(IS_IN_SET(['Compra','Almacén','Solicitud'])), 
+          requires=IS_EMPTY_OR(IS_IN_SET(['Compra','Almacén','Solicitud','Ingreso inicial'])), 
           widget=SQLFORM.widgets.options.widget),
 
     # Tipo de egreso de la sustancia. Otorgado si fue cedido o prestadeo a otra
     # seccion como respuesta a usa solicitud 
     # (Null si f_concepto no es Egreso) *!*
     Field('f_tipo_egreso', 'list:string', label=T('Tipo de egreso'),
-          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Otorgado'])), 
+          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Gestión'])), 
           widget=SQLFORM.widgets.options.widget),
     
     # Descripcion del registro para ser mostrada en la tabla de la bitacora

@@ -23,16 +23,6 @@ def __check_role():
                         'GESTOR DE SMyDP']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
 
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def index():
-    return locals()
-
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def sustancias():
-    return locals()
-
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
 # o es de un tipo incorrecto
 def __is_valid_id(id_, tabla):
@@ -253,11 +243,25 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
-        db.t_Inventario.insert(f_existencia=float(total), 
-                               f_uso_interno=float(uso_interno),
-                               f_medida=unidad_id,
-                               espacio=espacio.id,
-                               sustancia=sustancia_id)
+        cantidad = float(total)
+        inv_id = db.t_Inventario.insert(f_existencia=cantidad, 
+                                f_uso_interno=float(uso_interno),
+                                f_medida=unidad_id,
+                                espacio=espacio.id,
+                                sustancia=sustancia_id)
+
+        concepto = 'Ingreso'
+        tipo_ing = 'Ingreso inicial'
+
+        # Agregando la primera entrada de la sustancia en la bitacora
+        db.t_Bitacora.insert(
+                                f_cantidad=cantidad,
+                                f_cantidad_total=cantidad,
+                                f_concepto=concepto,
+                                f_tipo_ingreso=tipo_ing,
+                                f_medida=unidad_id,
+                                f_inventario=inv_id,
+                                f_sustancia=sustancia_id)
 
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -341,7 +345,7 @@ def __get_descripcion(registro):
             # Datos de la compra
             proveedor = compra.f_institucion
             nro_factura = compra.f_nro_factura
-            fecha_compra = compra.f_fecha_compra
+            fecha_compra = compra.f_fecha
 
             fecha = fecha_compra
 
@@ -376,6 +380,8 @@ def __get_descripcion(registro):
             descripcion = "Otorgado por la Sección \"{0}\" del \"{1}\" "\
                           "en calidad de \"{2}\"".format(seccion.nombre,
                           lab.nombre, respuesta.f_calidad[0])
+        elif registro.f_tipo_ingreso[0] == "Ingreso inicial":
+            descripcion = "Ingreso inicial de la sustancia al inventario"
 
     else:
         # Si es un consumo por Docencia
@@ -553,7 +559,7 @@ def bitacora():
 
     # INICIO Datos del modal de agregar un registro
     # Conceptos
-    conceptos = ['Ingreso','Egreso']
+    conceptos = ['Ingreso','Consumo']
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
@@ -961,7 +967,7 @@ def desechos():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def catalogo():
 
-    if(auth.has_membership('Gestor de SMyDP') or  auth.has_membership('WEBMASTER')):
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         table = SQLFORM.smartgrid(  db.t_Sustancia, 
                                     onupdate=auth.archive,
                                     links_in_grid=False,
@@ -979,4 +985,18 @@ def catalogo():
                                     paginate=10)
     return locals()
 
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def solicitudes():
+    return locals()
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def index():
+    return locals()
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def sustancias():
+    return locals()
 
