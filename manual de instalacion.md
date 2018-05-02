@@ -1,6 +1,6 @@
 # Manual de Instalación de SIGULAB
 
-1. Descargar el contenido del [repositorio](https://github.com/jfuenmayor96/sigulab2) y colocar todo el contenido en una carpeta llamada `sigulab2`. También se puede clonar el contenido del repositorio mediante el uso de `git` y se obtendrá el mismo resultado. 
+1. Descargar el contenido del [repositorio](https://github.com/davideluque/sigulab2) y colocar todo el contenido en una carpeta llamada `sigulab2`. También se puede clonar el contenido del repositorio mediante el uso de `git` y se obtendrá el mismo resultado. 
 
 
 2. Descargar la última versión estable de `web2py` de la [página oficial](http://web2py.com/init/default/download). Descargar especificamente la opción llamada `Source Code` de la categoría `For Normal Users`. 
@@ -31,9 +31,6 @@
 
 `sudo -u postgres createdb -O sigulab -E UTF8 sigulab2`
 
-
-!!. Cambiar el migrate a True de espacios_fisicos en ~/applications/sigulab2/models/modelos_base.py en la linea 166
-
 9. Una vez hecho todo esto, ir al directorio raíz y ejecutar web2py de la siguiente manera: 
 
 `python web2py.py`
@@ -46,3 +43,13 @@
 `http://localhost:8000/sigulab2`
 
 Si todo ha salido bien, verá la pantalla de login de SIGULAB.
+
+___
+
+# Errores encontrados al momento de instalar el sistema
+
+1. Si al entrar a `http://localhost:8000/sigulab2` el sistema arroja el siguiente error diciendo que la tabla `espacios_fisicos` no existe:
+
+`<class 'psycopg2.ProgrammingError'> relation "espacios_fisicos" does not exist`
+
+Se debe cambiar `migrate=False` a `migrate=True` en la línea 166 de `~/applications/sigulab2/models/modelos_base.py`, en dónde se define la tabla `espacios_fisicos`.
