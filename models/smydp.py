@@ -56,7 +56,7 @@ db.define_table(
 
 db.t_Sustancia.id.readable=False
 db.t_Sustancia.id.writable=False
-db.t_Sustancia.f_hds.readable=(auth.has_membership('Gestor de SMyDP') or \
+db.t_Sustancia.f_hds.readable=(auth.has_membership('GESTOR DE SMyDP') or \
                                auth.has_membership('WEBMASTER')) #*!* Chequear permisos aqui
 db.t_Sustancia._singular='Catálogo de Sustancias'
 db.t_Sustancia._plural='Catálogo de Sustancias'
