@@ -151,6 +151,7 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 # Tablas Generales
 #
 #######################################################################################################################
+
 import pdb
 pdb.set_trace()
 
@@ -158,12 +159,12 @@ pdb.set_trace()
 db.define_table(
     'espacios_fisicos',
     #Atributos;
-    Field('codigo', 'string', unique=True, notnull=True, label=T('Nombre')),
+    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
     
     Field('dependencia', 'reference dependencias',
-        requires=IS_IN_DB(db, db.dependencias.id, '%(codigo)s', zero=None), label=T('Dependencia')))
+        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
 
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
