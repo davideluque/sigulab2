@@ -45,11 +45,3 @@
 Si todo ha salido bien, verá la pantalla de login de SIGULAB.
 
 ___
-
-# Errores encontrados al momento de instalar el sistema
-
-1. Si al entrar a `http://localhost:8000/sigulab2` el sistema arroja el siguiente error diciendo que la tabla `espacios_fisicos` no existe:
-
-`<class 'psycopg2.ProgrammingError'> relation "espacios_fisicos" does not exist`
-
-Se debe cambiar `migrate=False` a `migrate=True` en la línea 166 de `~/applications/sigulab2/models/modelos_base.py`, en dónde se define la tabla `espacios_fisicos`.
