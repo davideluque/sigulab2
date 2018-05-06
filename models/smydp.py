@@ -109,7 +109,7 @@ db.define_table(
     Field('responsable', 'reference t_Personal', 
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None), notnull=True, label=T('Responsable')),
 
-    Field('grupo', 'reference t_Personal', 
+    Field('grupo', 'reference grupo_desechos', 
             requires=IS_IN_DB(db, db.grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
 
     
