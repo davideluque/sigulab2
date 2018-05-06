@@ -88,7 +88,7 @@ def __get_inventario(espacio_id=None, dep_id=None):
 def __get_inventario_desechos(espacio_id=None, dep_id=None):
     inventario = []
     if espacio_id:
-        inventario = list(db(db.desechos.espacio_fisico == espacio_id).select())
+        inventario = list(db(db.desechos.espacio_fisico == espacio_id).select(db.desechos.ALL))
     
     return inventario
 
