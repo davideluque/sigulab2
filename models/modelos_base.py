@@ -178,19 +178,3 @@ db.define_table(
     Field('tecnico', 'reference t_Personal', 
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))
     )
-
-# Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
-# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
-db.define_table(
-    'grupo_desechos',
-    #Atributos;
-    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo')),
-
-    Field('estado', 'string', requires=IS_IN_SET(['Sólido', 'Líquido', 'Gaseoso']), notnull=True, label=T('Estado')),
-    
-    Field('peligrosidad', 'string', notnull=True, label=T('Peligrosidad'))
-)
-
-
-db.grupo_desechos._plural = 'Grupo de Desecho'
-db.grupo_desechos._singular = 'Grupos de Desechos'

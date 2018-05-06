@@ -74,3 +74,43 @@ db.define_table(
 
 db.t_Inventario._singular='Inventario'
 db.t_Inventario._plural='Inventario'
+
+
+# Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
+# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
+db.define_table(
+    'grupo_desechos',
+    #Atributos;
+    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo')),
+
+    Field('estado', 'string', requires=IS_IN_SET(['Sólido', 'Líquido', 'Gaseoso']), notnull=True, label=T('Estado')),
+    
+    Field('peligrosidad', 'string', notnull=True, label=T('Peligrosidad'))
+)
+
+
+db.grupo_desechos._plural = 'Grupo de Desecho'
+db.grupo_desechos._singular = 'Grupos de Desechos'
+
+# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, grupo.
+db.define_table(
+    'desechos',
+    #Atributos;
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
+
+    Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
+
+    Field('seccion', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Unidad de Adscripción'), notnull=True),
+    
+    Field('unidad_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
+
+    Field('responsable', 'reference t_Personal', 
+            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None), notnull=True, label=T('Responsable')),
+
+    Field('grupo', 'reference t_Personal', 
+            requires=IS_IN_DB(db, db.grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
+
+    
+)
