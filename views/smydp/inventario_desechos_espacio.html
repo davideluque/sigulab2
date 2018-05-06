@@ -41,23 +41,23 @@
 
         <tbody>
           {{for desecho in inventario:}}
-            {{print(desecho['espacio_fisico'])}}
-            {{inv = []}}
             <tr>
-                <td class="camposTabla">{{=desecho['grupo']}}</td>
-                <td class="camposTabla">{{=desecho['espacio_fisico']}}</td>
+                <td class="camposTabla">{{=desecho['grupo']['grupo']}}</td>
+                <td class="camposTabla">{{=desecho['espacio_fisico']['nombre']}}</td>
                 <td class="camposTabla">{{=desecho['cantidad']}}</td>
-                <td class="camposTabla">{{=desecho['seccion']}}</td>
-                <td class="camposTabla">{{=desecho['responsable']}}</td>
+                <td class="camposTabla">{{=desecho['seccion']['nombre']}}</td>
+                <td class="camposTabla">{{=desecho['responsable']['f_nombre']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
             <tr>
-                <th class="camposTabla linksNombres">Grupo de Desechos Peligrosos</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Peligrosidad</th>
+                <th class="camposTabla linksNombres">Grupo de Desecho</th>
+                <th class="camposTabla linksNombres">Espacio físico</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Sección</th>
+                <th class="camposTabla linksNombres">Responsable</th>
             </tr>
         </tfoot>
 
@@ -87,7 +87,7 @@
               </div>
             </div>
             <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nueva Grupo de Desecho
+              <h4 class="modal-title" id="nuevaSustancia">Nuevo Grupo de Desecho
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </h4>
             </div>
