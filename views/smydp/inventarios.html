@@ -3,13 +3,20 @@
 {{block head}}
 	<meta charset="UTF-8">
 
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+	<!-- Para los mensajes con flash -->
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
  	<!-- DataTables -->
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	
+ 	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
  	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
@@ -28,28 +35,27 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">Sustancias</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
   <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
   </div>
 </nav>
 
-<!-- Fin del Breadcrumb de navegación --> 
+<!-- Fin del Breadcrumb de navegación -->
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
 	
 	{{if es_tecnico:}}
-		<!-- Si el usuario es tecnico y se encuentra en la vista principal de los inventarios
-		(donde ve los espacios fisicos que tiene a cargo) -->
-		{{if espacios:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> ESPACIOS FÍSICOS </h3>
-		</div>
-		<!-- Si el usuario es tecnico y se encuentra en la vista de algun espacio fisico -->
-		{{else:}}
+		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
+		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
+		debe poder regresar al nivel superior de la jerarquia -->
+		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> ESPACIOS FÍSICOS </p>
-			<a class="boton" href="{{=URL('inventarios')}}">
+			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -57,6 +63,11 @@
 			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
 		</div>
 		<div class="col-xs-2"> </div>
+		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
+		{{else:}}
+		<div class="col-xs-12">
+			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+		</div>
 		{{pass}}
 
 	{{else:}}
@@ -92,7 +103,6 @@
 		{{pass}}
 	{{pass}}
 	</div>
-
 
 	<div class="container">
 		<div id="fila1" class="row">
@@ -135,7 +145,7 @@
 
 <!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
 
-	<!-- Se lista el inventario del espacio fisico visitado-->
+	<!-- Se lista el inventario del espacio fisico visitado -->
 	{{if espacio_visitado:}}
 		{{include 'smydp/inventario_espacio.html'}}
 	<!-- Se lista el inventario agregado de la dependencia visitada-->
@@ -150,6 +160,7 @@
   document.getElementById("smydp").className += " active";
   }
 </script>
+
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -211,10 +222,8 @@
 
   }
 </script>
-
-
+ 
 <script language="javascript">
-/*
   var table = $('#datatable').DataTable({
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
@@ -231,17 +240,5 @@
    }
   });
 
-  var w2p_ajax_confirm_message =
-        "{{=T('')}}";
-  
-  // AJAX mostrar ficha de sustancia
-  function abrirFicha(sustancia) {
-    var x = document.getElementById("sust");
-    x.value = sustancia;
-    ajax('ajax_ficha_sustancia', ['sust'], "ficha");
-  }
-*/
-
-</script> 
-
+</script>
 {{end}}
