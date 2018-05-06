@@ -81,6 +81,17 @@ def __get_inventario(espacio_id=None, dep_id=None):
 
     return inventario
 
+# Dado el id de un espacio fisico, retorna los desechos peligrosos que componen el inventario
+# de ese espacio. Si ningun id es indicado, pero si el de una dependencia, busca
+# todos los espacios fisicos que pertenecen a esta, agrega los inventarios y retorna
+# la lista
+def __get_inventario_desechos(espacio_id=None, dep_id=None):
+    inventario = []
+    if espacio_id:
+        inventario = list(db(db.desechos.espacio_fisico == espacio_id).select())
+    
+    return inventario
+
 
 # Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo la
@@ -571,7 +582,7 @@ def inventarios_desechos():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                inventario = __get_inventario(espacio_id)
+                inventario = __get_inventario_desechos(espacio_id)
 
                 desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
 
