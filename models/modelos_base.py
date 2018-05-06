@@ -152,8 +152,8 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 #
 #######################################################################################################################
 
-import pdb
-pdb.set_trace()
+# import pdb
+# pdb.set_trace()
 
 # Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
 db.define_table(
