@@ -413,12 +413,12 @@ def inventarios_desechos():
     dep_padre_id = ""
     dep_padre_nombre = ""
 
-    # Lista de sustancias en el inventario de un espacio fisico o que componen 
+    # Lista de desechos en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
     inventario = []
     
     # Lista de sustancias en el catalogo
-    sustancias = []
+    desechos = []
 
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
@@ -573,7 +573,7 @@ def inventarios_desechos():
                 # Se muestra la lista de sustancias que tiene en inventario
                 inventario = __get_inventario(espacio_id)
 
-                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+                desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
 
                 # Si se esta agregando una nueva sustancia, se registra en la DB
                 if request.vars.sustancia:
@@ -629,7 +629,7 @@ def inventarios_desechos():
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
                 inventario=inventario,
-                sustancias=sustancias,
+                desechos=desechos,
                 unidades_de_medida=unidades_de_medida)
 
 
