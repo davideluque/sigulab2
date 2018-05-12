@@ -273,44 +273,6 @@ db.t_Inventario._singular='Inventario'
 db.t_Inventario._plural='Inventario'
 
 
-# Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
-# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
-db.define_table(
-    'grupo_desechos',
-    #Atributos;
-    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo')),
-
-    Field('estado', 'string', requires=IS_IN_SET(['Sólido', 'Líquido', 'Gaseoso']), notnull=True, label=T('Estado')),
-    
-    Field('peligrosidad', 'string', notnull=True, label=T('Peligrosidad'))
-)
-
-
-db.grupo_desechos._plural = 'Grupo de Desecho'
-db.grupo_desechos._singular = 'Grupos de Desechos'
-
-# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, grupo.
-db.define_table(
-    'desechos',
-    #Atributos;
-    Field('espacio_fisico', 'reference espacios_fisicos', 
-            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
-
-    Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
-
-    Field('seccion', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Unidad de Adscripción'), notnull=True),
-    
-    Field('unidad_medida', 'reference t_Unidad_de_medida',
-          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
-
-    Field('responsable', 'reference t_Personal', 
-            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None), notnull=True, label=T('Responsable')),
-
-    Field('grupo', 'reference grupo_desechos', 
-            requires=IS_IN_DB(db, db.grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
-
-    
-)
 # *!* Ver not nulls y constraints de t_Bitacora
 
 #t_Bitacora: Tabla de la bitacora de los movimientos en los inventarios de todos 
@@ -398,3 +360,81 @@ db.define_table(
     # para los logs de la tabla
     auth.signature
     )
+
+
+    ## Desechos peligrosos
+
+    # Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
+# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
+db.define_table(
+    't_grupo_desechos',
+    #Atributos;
+    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo'),
+           requires=IS_IN_SET(['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes'])
+    ),
+
+    Field('estado', 'string', requires=IS_IN_SET(['Cristales', 'Lodo', 'Sólido en polvo','Sólido', 'Líquido', 'Gaseoso', 'Desconocido']), notnull=True, label=T('Estado')),
+    
+    Field('peligrosidad', 'list:string',
+          requires=IS_IN_SET(['Explosivo', 'Líquido inflamable', 'Solido inflamable', 'Susceptible de combustión espontánea', 
+          'Susceptible de inflamación espontánea', 'Oxidantes', 'Peróxidos orgánicos', 'Tóxico - veneno', 'Infeccioso', 'Corrosivo', 
+          'Libera gases tóxicos', 'Toxico con efectos retardados o crónicos', 'Ecotóxica']),  
+          label=T('Peligrosidad')),
+)
+
+
+db.t_grupo_desechos._plural = 'Grupo de Desecho'
+db.t_grupo_desechos._singular = 'Grupos de Desechos'
+
+    # Tabla de envases en donde serán almacenados los desechos peligrosos
+db.define_table(
+    't_envases',
+    #Atributos;
+    Field('identificacion', 'string', notnull=True, unique=True, requires=IS_NOT_EMPTY(), label=T('Identificación')),
+
+    Field('capacidad', 'double', requires=IS_NOT_EMPTY(), label=T('Capacidad'), notnull=True),
+
+    Field('unidad_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
+
+    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular']), notnull=True, label=T('Forma')),
+
+    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero']), notnull=True, label=T('Material')),
+    
+    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase']), notnull=True, label=T('Tipo de boca')),
+)
+
+db.t_envases._plural = 'Envases'
+db.t_envases._singular = 'Envase'
+
+# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, grupo.
+db.define_table(
+    't_inventario_desechos',
+    #Atributos;
+    Field('grupo', 'reference t_grupo_desechos', 
+            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
+
+    Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
+
+    Field('unidad_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
+
+    Field('composicion', 'string', requires=IS_NOT_EMPTY(), label=T('Composición'), placeholder='Mezcla de X + Y'),
+
+    Field('concentracion', 'string', requires=IS_NOT_EMPTY(), label=T('Concentración')),
+
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
+
+    Field('seccion', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Unidad de Adscripción'), notnull=True),
+
+    Field('responsable', 'reference t_Personal', 
+            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s', zero=None), notnull=True, label=T('Responsable')),
+
+   Field('envase', 'reference t_envases', 
+            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), label=T('Envase'))
+)
+
+
+db.t_inventario_desechos._plural = 'Inventarios de Desechos Peligrosos'
+db.t_inventario_desechos._singular = 'Inventarios de Desecho Peligrosos'
