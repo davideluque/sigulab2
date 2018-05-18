@@ -68,7 +68,9 @@ def __get_inventario_espacio(espacio_id=None):
 def __get_inventario_desechos(espacio_id=None, dep_id=None):
     inventario = []
     if espacio_id:
-        inventario = list(db(db.desechos.espacio_fisico == espacio_id).select(db.desechos.ALL))
+        inventario = list(db((db.t_inventario_desechos.grupo == db.t_grupo_desechos.id) &
+                         (db.t_inventario_desechos.unidad_medida == db.t_Unidad_de_medida.id) & 
+                         (db.t_inventario_desechos.espacio_fisico == espacio_id)).select())
     
     return inventario
 
@@ -972,6 +974,7 @@ def inventarios():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios_desechos():
 
+
     # Inicializando listas de espacios fisicos y dependencias
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
@@ -1208,9 +1211,9 @@ def inventarios_desechos():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __get_inventario_desechos(espacio_id)
 
-                desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
+                desechos = list(db(db.t_inventario_desechos.id > 0).select(db.t_inventario_desechos.ALL))
 
                 # Si se esta agregando una nueva sustancia, se registra en la DB
                 if request.vars.sustancia:
