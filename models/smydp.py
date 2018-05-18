@@ -395,7 +395,8 @@ db.define_table(
     Field('capacidad', 'double', requires=IS_NOT_EMPTY(), label=T('Capacidad'), notnull=True),
 
     Field('unidad_medida', 'reference t_Unidad_de_medida',
-          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True,
+          represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
 
     Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular']), notnull=True, label=T('Forma')),
 
