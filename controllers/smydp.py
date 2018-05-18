@@ -970,6 +970,28 @@ def inventarios():
                 unidades_de_medida=unidades_de_medida,
                 retroceder=retroceder)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def envases():
+
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
+        table = SQLFORM.smartgrid(  db.t_envases, 
+                                    onupdate=auth.archive,
+                                    links_in_grid=False,
+                                    csv=False,
+                                    user_signature=True,
+                                    paginate=10,
+                                    )
+
+    else:
+        table = SQLFORM.smartgrid(  db.t_envases, 
+                                    editable=False,
+                                    deletable=False,
+                                    csv=False,
+                                    links_in_grid=False,
+                                    create=False,
+                                    paginate=10)
+    return locals()
+
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios_desechos():
