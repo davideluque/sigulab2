@@ -8,7 +8,7 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Bien</button>
 	        </div>
         </div>
     </div>
@@ -80,89 +80,224 @@
 <!-- Fin Listado de sustancias --> 
 
 <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
-<input type="hidden" id="serv" name="serv" value="">
 
 <!-- Modal añadir una sustancia nueva al inventario -->
-  <div class="modal fade" id="addsustancia" role="dialog">
-    <div class="modal-dialog">
+<div class="modal fade" id="addsustancia" role="dialog">
+  <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header addHeader">
-          <div class="row addRow" id="rowHeader">
-            <div class="col-sm-1" id="col1Header">
-              <div class="container" id="plus">
-                <h1 id="agregar">+</h1>
-              </div>
-            </div>
-            <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nueva Sustancia
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </h4>
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
             </div>
           </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien">Bien Mueble <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
         </div>
-        <!-- Fin Modal Header -->
-        
-        <!-- Modal Body -->
-        <div class="modal-body addBody">
-          <div class="row addRow">
-            <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                  <!-- Primer Paso -->
-                  <fieldset class="formField">
-                    <div class="form-bottom">
-                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> </div>
+                <!-- Primer Paso -->
+                <fieldset class="formField">
+                  <div class="form-bottom">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                      <span class="step">4</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Datos de ingreso</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="nombre" placeholder="Nombre*" required>
+                          <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="no_bien" placeholder="Número de Bien Nacional*" required>
+                            <div class="field-error"> <p id="error-no_bien"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="nombre" placeholder="Ubicacion Predeterminada*" value="Ubicacion Predeterminada" required readonly>
+                            <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="marca" placeholder="Marca" >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="modelo" value="" placeholder="Modelo">
+                              <div class="field-error"> <p id="error-modelo"> </p> </div>
+                          </div>
+
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="serial" placeholder="Serial">
+                          <div class="field-error"> <p id="error-serial"> </p> </div>
+                        </div>
+                        
+                        <div class="field-error"> <p id="error-unidad"> </p> </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+                <!-- Comienzo Segundo Paso-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                          <span class="step">4</span>
+                      </div>
+  
                       <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Datos de ingreso</h4>                
-                        <label>Campos marcados con * son obligatorios.</label>
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm">Información sobre el Uso</h4>
+                        
+                      <div class="form-group">
+                          <select class="form-control" type="select" id="estado_uso" name="Estado de Uso" required>
+                            <option value="valor0" selected hidden >En uso*</option>
+                            <option value="valor1">En Desuso</option>
+                            <option value="valor2">Falta manteniento</option>
+                          </select>
+                          <div class="field-error"> <p id="error-estado-uso"> </p> </div>
+                        </div>
 
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                              <option value="" selected hidden >Sustancia*</option>
-                              {{for sustancia in sustancias:}}
-                              <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control" name="est-conservacion" placeholder="Estado de conservación" >
+                          <div class="field-error"> <p id="error-est-conservacion"> </p> </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="descripcion" placeholder="Descripción" >
+                            <div class="field-error"> <p id="error-est-conservacion"> </p> </div>
                           </div>
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
-                          
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                            <div class="field-error"> <p id="error-uso-interno"> </p> </div>
-                          </div>
-                          
-                          <div class="form-group" style="padding-bottom: 50px">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
-                              {{pass}}
-                            </select>
-                          </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
                       </div>
                     </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
-                  </fieldset>
-                  <!-- Fin Primer Paso -->
-                </form>
-            </div>
-          </div>               
-        </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Comienzo Tercer Paso-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Segundo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                          <span class="step">4</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm">Categorización</h4>
+                        
+                      <div class="form-group">
+                          <select class="form-control" type="select" id="estado_uso" name="Material" placeholder="Material predominante" required>
+                            <!-- Insertar un for-->
+                            <option value="" disabled selected>Selecione un material</option>
+                            <option value="plastico">Plastico</option>
+                            <option value="vidrio">Vidrio</option>
+                            <option value="madera">Madera</option>
+                          </select>
+                          <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+
+                      <div class="form-group">
+                          <select class="form-control" type="select" id="color" name="color" placeholder="Color*" required>
+                              <!-- Insertar aqui un for-->
+                              <option value="" disabled selected>Selecciona un color</option>
+                              <option value="Azul">Azul</option>
+                              <option value="Verde">Verde</option>
+                              <option value="Rojo">Rojo</option>
+                            </select>
+                          <div class="field-error"> <p id="error-color"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="fecha-calibracion" placeholder="Fecha de la Última calibración (dd/mm/aaaa)" >
+                            <div class="field-error"> <p id="error-calibracion"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="duracion" placeholder="Duracion (Meses)" >
+                              <div class="field-error"> <p id="error-duracion"> </p> </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="fecha-vencimiento" placeholder="Fecha vencimiento" >
+                                <div class="field-error"> <p id="error-fecha-vencimiento"> </p> </div>
+                              </div>
+
+                              <div class="form-group">
+                                  <input type="text" class="form-control" name="vida-util" placeholder="Vida útil" >
+                                  <div class="field-error"> <p id="error-vida-util"> </p> </div>
+                                </div>
+
+                            
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                </fieldset>
+                <!-- Fin Tercer Paso -->
+
+                <!--
+                  ## AQUI VAN LOS CASOS FALTANTES
+                //-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Segundo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                          <span class="step activePass">4</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm"></h4>
+                        
+                        
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>
+                </fieldset>
+
+
+              </form>
+          </div>
+        </div>               
       </div>
     </div>
   </div>
+</div>
 
 <!-- Fin Modal Agregar Servicio -->
 
