@@ -27,3 +27,12 @@ Desarrollador del Módulo de Sustancias, Materiales y Desechos Peligrosos
 
 Desarollador del Módulo de Desechos Peligrosos
 - Julio Fuenmayor
+
+Desarrolladores del Módulo de Gestión de Personal
+- Yuni Quintero
+- Gabriel Gutierrez
+- Daniel Rodríguez
+- Gustavo Castellanos
+- Francisco Marquez
+- Daniel Francis
+- German Robayo
