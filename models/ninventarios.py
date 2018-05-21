@@ -4,8 +4,7 @@
 # Auth is for authenticaiton and access control
 # -------------------------------------------------------------------------
 
-#Tabla para bien mueble
-
+###Bien mueble###
 db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
@@ -15,7 +14,7 @@ db.define_table(
     Field('bm_modelo','string',notnull=True,label=T('Modelo')),
     Field('bm_serial','string',notnull=True,label=T('Serial')),
     Field('bm_descripcion','text',notnull=True,label=T('Descripción')),
-    Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela'])),
+    Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio'])),
     Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
     Field('bm_unidad','string',label=T('Unidad de Medida'),requires=IS_IN_SET(['cm','m'])),
     Field('bm_ancho','double',label=T('Ancho'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
@@ -24,14 +23,17 @@ db.define_table(
     Field('bm_diametro','double',label=T('Diametro'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
     Field('bm_movilidad','string',notnull=True,label=T('Movilidad'),requires=IS_IN_SET(['Fijo','Portátil'])),
     Field('bm_uso','string',notnull=True,label=T('Uso'),requires=IS_IN_SET(['Docencia','Investigación','Extensión','Apoyo administrativo'])),
-    Field('bm_categoria', 'string', notnull= True, label = T('Nombre de la categoria'), requires = IS_IN_SET(['maquinaria_construccion',
+    Field('bm_categoria', 'string', notnull= True, label = T('Nombre de la categoría'), requires = IS_IN_SET(['maquinaria_construccion',
                     'equipo_transporte', 'equipo_comunicaciones', 'equipo_medico', 'equipo_cientifico_reigioso', 'equipo_oficina'])),
-    #Field('bm_sudebip','',notnull=,label=T()),
-    #Field('','',notnull=,label=T())
+    Field('bm_codigo_localizacion','string',notnull=True,label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
+    Field('bm_localizacion','string',notnull=True,label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto']))
 
     )
 
-####FALTA CODIGO DE LOCALIZACION Y LOCALIZACION DE PESTANA SUDEBIP
+#####No se implementa una tabla para datos de adquisicion
+
+##ESPACIO FISICO
+
 
 ### Tablas de categorias ###
 
@@ -107,6 +109,7 @@ db.equipo_oficina.eo_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_nu
 #Hay que preguntar cuales son obligatorios
 db.define_table(
     'mantenimiento',
+    Field('m_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
     #Claves
     Field('m_dependencia','string',unique=True,notnull=True,label=T('Dependencia'),requires=IS_LENGTH(4)),
     Field('m_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,99)),
@@ -122,6 +125,7 @@ db.define_table(
     Field('m_observaciones','text',label=T('Observaciones')),
     Field('m_estatus','string',label=T('Estatus'),requires=IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible']))
     )
+db.mantenimiento.m_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
 
 ###Solicitudes de prestamo###
 db.define_table(
@@ -144,6 +148,9 @@ db.define_table(
     ##      requires=IS_EMPTY_OR(IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None)), 
     ##      label=T('Almacén'))
     )
+
+###Solicitud de modificacion###
+
 
 # Estructura seguira para las clasificaciones: La tablade bien_mueble posee un campo llamado "categoria" y uno para el numero
 # de bien nacional. La tabla de cada categoria cuenta con un campo que referencia al numero de bien nacional del bien mueble
