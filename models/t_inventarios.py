@@ -8,8 +8,8 @@
 db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
-    Field('bm_num','integer',notnull=True,unique=True,requires = IS_INT_IN_RANGE(1, 999999), label = T('Número Bien Nacional')),
-    Field('bm_placa','integer',label=T('Número de Placa del Bien'),requires = IS_INT_IN_RANGE(1, 99999)),
+    Field('bm_num','integer',notnull=True,unique=True,requires = IS_INT_IN_RANGE(1, 1000000), label = T('Número Bien Nacional')),
+    Field('bm_placa','integer',label=T('Número de Placa del Bien'),requires = IS_INT_IN_RANGE(1, 100000)),
     Field('bm_marca','string',notnull=True,label=T('Marca')),
     Field('bm_modelo','string',notnull=True,label=T('Modelo')),
     Field('bm_serial','string',notnull=True,label=T('Serial')),
@@ -26,14 +26,19 @@ db.define_table(
     Field('bm_categoria', 'string', notnull= True, label = T('Nombre de la categoría'), requires = IS_IN_SET(['maquinaria_construccion',
                     'equipo_transporte', 'equipo_comunicaciones', 'equipo_medico', 'equipo_cientifico_reigioso', 'equipo_oficina'])),
     Field('bm_codigo_localizacion','string',notnull=True,label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
-    Field('bm_localizacion','string',notnull=True,label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto']))
-
+    Field('bm_localizacion','string',notnull=True,label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto'])),
+    #Foraneas
+    Field('bm_espacio_fisico', 'reference espacios_fisicos', unique=True, notnull=True, label=T('Nombre del espacio fisico')),
+    Field('bm_unidad_de_adscripcion', 'reference dependencias',unique=True, notnull=True, label = T('Unidad de Adscripción')),
+    Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
+    Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
+db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.nombre,'%(nombre)s')
+db.bien_mueble.bm_uso_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.uso,'%(uso)s')
+db.bien_mueble.bm_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.unidad_de_adscripcion,'%(unidad_de_adscripcion)s')
+db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.nombre,'%(nombre)s')
 
-#####No se implementa una tabla para datos de adquisicion
-
-##ESPACIO FISICO
-
+#####No se implementa una tabla para datos de adquisicion#####
 
 ### Tablas de categorias ###
 
@@ -111,17 +116,17 @@ db.define_table(
     'mantenimiento',
     Field('m_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
     #Claves
-    Field('m_dependencia','string',unique=True,notnull=True,label=T('Dependencia'),requires=IS_LENGTH(4)),
-    Field('m_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,99)),
-    Field('m_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,999)),
+    Field('m_dependencia','reference dependencias',notnull=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'),label=T('Dependencia')),
+    Field('m_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,100)),
+    Field('m_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,1000)),
     #
     Field('m_fecha','date',notnull=True,label=T('Fecha'), requires = IS_DATE(format=('%d-%m-%Y'))), ###Hay que ver el formato, se quiere dd/mm/aaaa
     Field('m_O_S','string',label=T('O/S'),requires=IS_LENGTH(8)),
     Field('m_proveedor','string',label=T('Proveedor')),
     Field('m_tipo_servicio','string',label=T('Tipo de servicio'), requires=IS_IN_SET(['Mantenimiento preventivo','Mantenimiento correctivo','Calibración','Verificación','Otro'])),
     Field('m_descripcion','text',label=T('Descripción')),
-    Field('m_fecha_inicio','date',label=T('Fecha de inicio')),
-    Field('m_fecha_fin','date',label=T('Fecha de culminación')),
+    Field('m_fecha_inicio','date',label=T('Fecha de inicio'),requires=IS_DATE(format=('%d-%m-%Y'))),
+    Field('m_fecha_fin','date',label=T('Fecha de culminación'), requires=IS_DATE(format=('%d-%m-%Y'))),
     Field('m_observaciones','text',label=T('Observaciones')),
     Field('m_estatus','string',label=T('Estatus'),requires=IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible']))
     )
@@ -129,29 +134,84 @@ db.mantenimiento.m_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)
 
 ###Solicitudes de prestamo###
 db.define_table(
-    'prestamo',
+    'solicitud_prestamo_bien_mueble',
     #Claves
-    Field('p_dependencia','string',unique=True,notnull=True,label=T('Dependencia'),requires=IS_LENGTH(4)),
-    Field('p_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,99)),
-    Field('p_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,999)),
-    #
-    Field('p_fecha','date',notnull=True,label=T('Fecha'), requires = IS_DATE(format=('%d-%m-%Y'))), ###Hay que ver el formato, se quiere dd/mm/aaaa
-    Field('p_responsable','text',notnull=True,label=T('Responsable')),
-    Field('p_prestado','text',notnull=True,label=T('Prestado a')),
-    ##Los pongo aqui para que no lo olvidemos pero esto deberia ser referencia a espacio fisico, con el bien mueble
-    ##Field('p_dependencia','reference dependencias', requires=IS_IN_DB(db,db.dependencias.id,'%(nombre)s'), notnull=True,label=T('Dependencia')),
-    ##Field('p_ubicacion','reference espacio_fisicos', requires=IS_IN_DB(db,db.espacio_fisico.id,'%(ubicacion)s'), notnull=True,label=T('Ubicación')),
+    Field('p_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,100)),
+    Field('p_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,1000)),
+    Field('p_fecha','date',notnull=True,label=T('Fecha'), requires = IS_DATE(format=('%d-%m-%Y'))),
+    Field('p_responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), label=T('Responsable')),
+    Field('p_prestado','string',notnull=True,label=T('Prestado a')),
+    Field('p_dependencia','reference dependencias', unique=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'), notnull=True,label=T('Dependencia')),
+    Field('p_ubicacion','reference espacios_fisicos', requires=IS_IN_DB(db,db.espacios_fisicos.nombre,'%(nombre)s'), notnull=True,label=T('Ubicación')),
     ##A los campos de depedencia y ubicacon se le deben añadir lo siguiente en lineas separadas
-    Field('p_devolucion','date',notnull=True,label=T('Fecha de devolución')),
+    Field('p_devolucion','date',notnull=True,label=T('Fecha de devolución'),requires=IS_DATE(format=('%d-%m-%Y'))),
     Field('p_observaciones','text',label=T('Observaciones')),
-    ##Field('p_almacen', 'reference espacios_fisicos',
-    ##      requires=IS_EMPTY_OR(IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None)), 
-    ##      label=T('Almacén'))
+    
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
 
+### Servicios ###
+db.define_table(
+    'servicio_bien_mueble',
+    Field('s_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
+    Field('s_fecha','reference historial_solicitudes',notnull=True,label=T('Fecha'),requires=IS_IN_DB(db,db.historial_solicitudes.registro_solicitud,'%(registro_solicitud)s')),
+    Field('s_dependencia','reference dependencias',notnull=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'),label=T('Dependencia')),
+    Field('s_cliente_final','reference solicitudes',requires=IS_IN_DB(db,db.solicitudes.proposito_cliente_final,'%(proposito_cliente_final)s'), notnull=True,label=T('Cliente final')),
+    #Fecha de inicio y fecha de culminacion deben preguntarse pues en historial de solicitudes aparecen 3 fechas
+    #En servicios no se tiene nada sobre horas, hay que preguntar esto
+    )
+db.servicio_bien_mueble.s_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+
+### Solicitud de eliminacion ###
+db.define_table(
+    'solicitud_eliminar_bien_mueble',
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    Field('eliminar_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
+    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
+    )
+db.solicitud_eliminar_bien_mueble.eliminar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s')
+
 ###Solicitud de modificacion###
+db.define_table(
+    'solicitud_modificar_bien_mueble',
+    Field('modificar_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
+    Field('bm_nombre','string',label=T('Nombre del Bien Mueble')),
+    Field('bm_num','integer',requires = IS_INT_IN_RANGE(1, 1000000), label = T('Número Bien Nacional')),
+    Field('bm_placa','integer',label=T('Número de Placa del Bien'),requires = IS_INT_IN_RANGE(1, 100000)),
+    Field('bm_marca','string',label=T('Marca')),
+    Field('bm_modelo','string',label=T('Modelo')),
+    Field('bm_serial','string',label=T('Serial')),
+    Field('bm_descripcion','text',label=T('Descripción')),
+    Field('bm_material','string',label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio'])),
+    Field('bm_color','string',label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
+    Field('bm_unidad','string',label=T('Unidad de Medida'),requires=IS_IN_SET(['cm','m'])),
+    Field('bm_ancho','double',label=T('Ancho'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
+    Field('bm_largo','double',label=T('Largo'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
+    Field('bm_alto','double',label=T('Alto'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
+    Field('bm_diametro','double',label=T('Diametro'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
+    Field('bm_movilidad','string',label=T('Movilidad'),requires=IS_IN_SET(['Fijo','Portátil'])),
+    Field('bm_uso','string',label=T('Uso'),requires=IS_IN_SET(['Docencia','Investigación','Extensión','Apoyo administrativo'])),
+    Field('bm_categoria', 'string', label = T('Nombre de la categoría'), requires = IS_IN_SET(['maquinaria_construccion',
+                    'equipo_transporte', 'equipo_comunicaciones', 'equipo_medico', 'equipo_cientifico_reigioso', 'equipo_oficina'])),
+    Field('bm_codigo_localizacion','string',label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
+    Field('bm_localizacion','string',label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto'])),
+    #Foraneas
+    Field('bm_espacio_fisico', 'reference espacios_fisicos', label=T('Nombre del espacio fisico')),
+    Field('bm_unidad_de_adscripcion', 'reference dependencias', label = T('Unidad de Adscripción')),
+    Field('bm_depedencia', 'reference dependencias', label = T('Nombre de la dependencia')),
+    Field('bm_uso_espacio_fisico', 'reference espacios_fisicos', label = T('Uso del espacio fisico')),
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
+    )
+db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
 
-
-# Estructura seguira para las clasificaciones: La tablade bien_mueble posee un campo llamado "categoria" y uno para el numero
+# Estructura seguira para las clasificaciones: La tabla de bien_mueble posee un campo llamado "categoria" y uno para el numero
 # de bien nacional. La tabla de cada categoria cuenta con un campo que referencia al numero de bien nacional del bien mueble
-# y posee otr para el nombre de la categoria. Si queremos matchear ambas tablas con un join podemos hacerlo utlizando esos dos campos
+# y posee otro para el nombre de la categoria. Si queremos matchear ambas tablas con un join podemos hacerlo utlizando esos dos campos
