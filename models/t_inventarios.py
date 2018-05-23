@@ -28,10 +28,10 @@ db.define_table(
     Field('bm_codigo_localizacion','string',notnull=True,label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
     Field('bm_localizacion','string',notnull=True,label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto'])),
     #Foraneas
-    Field('bm_espacio_fisico', 'reference espacios_fisicos', unique=True, notnull=True, label=T('Nombre del espacio fisico')),
-    Field('bm_unidad_de_adscripcion', 'reference dependencias',unique=True, notnull=True, label = T('Unidad de Adscripción')),
+    Field('bm_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
+    Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
-    Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
+    #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.nombre,'%(nombre)s')
 db.bien_mueble.bm_uso_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.uso,'%(uso)s')
