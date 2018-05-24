@@ -132,6 +132,11 @@ def edit_form():
 def index():
     return dict()
 
+def lista():
+    form = SQLFORM.smartgrid(db.t_Personal, links_in_grid=False)
+    
+    return locals()
+
 #Funcion que envia los datos a la vista
 def listado():
 
