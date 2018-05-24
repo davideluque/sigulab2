@@ -17,12 +17,11 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                <th class="camposTabla linksNombres">Estatus</th>
             </tr>
         </thead>
 
@@ -36,20 +35,18 @@
                 <td class="camposTabla">{{=sust['f_uso_interno']}}</td>
                 <td class="camposTabla">{{=float(sust['f_existencia']) - float(sust['f_uso_interno'])}}</td>
                 <td class="camposTabla">{{=sust['f_existencia']}}</td>
-                <td class="camposTabla">{{=sust['f_unidad']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
             <tr>
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+              <th class="camposTabla linksNombres">Nombre</th>
+              <th class="camposTabla linksNombres">N° BM</th>
+              <th class="camposTabla linksNombres">Placa</th>
+              <th class="camposTabla linksNombres">Tipo</th>
+              <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+              <th class="camposTabla linksNombres">Estatus</th>
             </tr>
         </tfoot>
 
