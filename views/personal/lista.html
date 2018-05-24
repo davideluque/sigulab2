@@ -1,0 +1,16 @@
+{{response.files.append(URL('static','css/cupertino/jquery-ui-1.8.14.custom.css'))}}
+{{response.files.append(URL('static','js/jquery-ui-1.8.14.custom.min.js'))}}
+{{extend 'layout.html'}}
+{{block center}}
+{{if form.create_form:}}
+	{{=form.create_form}}
+{{elif form.update_form:}}
+	{{=form.update_form}}
+{{elif form.view_form:}}
+	{{=form.view_form}}
+{{else:}}
+	<div class="container"> 
+		{{=form}}
+	</div>
+{{pass}}
+{{end}}
