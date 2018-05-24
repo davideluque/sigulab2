@@ -858,3 +858,9 @@ def bienes_muebles():
                 sustancias=sustancias,
                 unidades_de_medida=unidades_de_medida,
                 retroceder=retroceder) 
+
+
+# Muestra un crud para añadir bienes muebles
+def entrega0():
+    grid_bm = SQLFORM.grid(db.bien_mueble)
+    return locals()
