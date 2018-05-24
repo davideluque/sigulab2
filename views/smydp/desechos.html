@@ -2,6 +2,7 @@
   
 {{block head}}
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_desechos.css')}}"> 
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
 {{end}}
 
 {{block center}}
@@ -29,9 +30,9 @@
 			<div class="col-sm-8">
 				<!-- Link a los grupos de desechos -->
 				<div class="col-sm-4 columnas">
-					<a href="{{=URL('sigulab2', 'smydp', 'grupos_desechos')}}">
+					<a href="{{=URL('sigulab2', 'smydp', 'categorias_desechos')}}">
 					  <img class="iconos" src="{{=URL('static', 'images/checklist.png')}}">
-					  <h3 class="opciones">Grupos de Desechos</h3>
+					  <h3 class="opciones">Categorías de Desechos</h3>
 					</a>
 				</div>
 				<!-- Link al inventario de desechos -->
