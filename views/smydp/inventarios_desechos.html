@@ -13,7 +13,7 @@
  	
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
@@ -60,13 +60,20 @@
 			</a>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			{{print dep_nombre}}
+			{{if dep_nombre == "Alta Tensión":}}
+				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{pass}}
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 		</div>
 		{{pass}}
 
@@ -91,14 +98,21 @@
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			{{if dep_nombre == "Alta Tensión":}}
+				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{pass}}
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> Inventario de DP - ULAB </h3>
+			<img class="iconos" src="{{=URL('static', 'images/ulab.png')}}">
+
 		</div>
 		{{pass}}
 	{{pass}}
