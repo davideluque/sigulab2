@@ -8,8 +8,8 @@
 db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
-    Field('bm_num','integer',notnull=True,unique=True,requires = IS_INT_IN_RANGE(1, 1000000), label = T('Número Bien Nacional')),
-    Field('bm_placa','integer',label=T('Número de Placa del Bien'),requires = IS_INT_IN_RANGE(1, 100000)),
+    Field('bm_num','integer',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
+    Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_MATCH('^s/n$|^[0-9]{4,6}$')),
     Field('bm_marca','string',notnull=True,label=T('Marca')),
     Field('bm_modelo','string',notnull=True,label=T('Modelo')),
     Field('bm_serial','string',notnull=True,label=T('Serial')),
@@ -23,20 +23,21 @@ db.define_table(
     Field('bm_diametro','double',label=T('Diametro'),requires=IS_FLOAT_IN_RANGE(0.1,999.99)),
     Field('bm_movilidad','string',notnull=True,label=T('Movilidad'),requires=IS_IN_SET(['Fijo','Portátil'])),
     Field('bm_uso','string',notnull=True,label=T('Uso'),requires=IS_IN_SET(['Docencia','Investigación','Extensión','Apoyo administrativo'])),
-    Field('bm_categoria', 'string', notnull= True, label = T('Nombre de la categoría'), requires = IS_IN_SET(['maquinaria_construccion',
-                    'equipo_transporte', 'equipo_comunicaciones', 'equipo_medico', 'equipo_cientifico_reigioso', 'equipo_oficina'])),
+    Field('bm_categoria', 'string', notnull= True, label = T('Nombre de la categoría'), requires = IS_IN_SET(['Maquinaria Construccion',
+                    'Equipo Transporte', 'Equipo Comunicaciones', 'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina'])),
     Field('bm_codigo_localizacion','string',notnull=True,label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
     Field('bm_localizacion','string',notnull=True,label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto'])),
     #Foraneas
     Field('bm_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
     Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
+    Field('bm_crea_ficha', 'references auth_user', notnull = True, label = T('Usuario que crea la ficha'))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
-db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.nombre,'%(nombre)s')
-db.bien_mueble.bm_uso_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.uso,'%(uso)s')
-db.bien_mueble.bm_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.unidad_de_adscripcion,'%(unidad_de_adscripcion)s')
-db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.nombre,'%(nombre)s')
+db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.bien_mueble.bm_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
+db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
 #####No se implementa una tabla para datos de adquisicion#####
 
@@ -52,7 +53,7 @@ db.define_table(
             'Maquinaria y equipos de artes gráficas y reproducción','Maquinaria y equipos industriales y de taller','Maquinaria y equipos de energía',
             'Maquinaria y equipos de riego y acueductos','Equipos de almacen','Otras maquinarias y demás equipos de construcción, campo, industria y taller']))
     )
-db.maquinaria_construccion.mc_NroBM.requires = IS_IN_DB(db, db.bien_mueble.bm_num,'%(bm_num)s') 
+db.maquinaria_construccion.mc_NroBM.requires = IS_IN_DB(db, db.bien_mueble.id,'%(bm_num)s') 
 
 
 #Equipos de transporte, traccion y elevacion
@@ -64,7 +65,7 @@ db.define_table(
         requires=IS_IN_SET(['Vehículos automotores y terrestes','Equipos ferroviarios y de cables aéreos','Equipos marítimos de transporte','Equipos aéreos de transporte',
             'Vehículos de tracción no motorizados','Equipos auxiliares de transporte','Otros equipos de transporte, tracción y elevación']))
     )
-db.equipo_transporte.et_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s')
+db.equipo_transporte.et_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s')
 
 #Equipos de comunicaciones y de senalamiento
 db.define_table(
@@ -75,7 +76,7 @@ db.define_table(
         requires=IS_IN_SET(['Equipos de telecomunicaciones','Equipos de señalamiento','Equipos de control de tráfico aéreo','Equipos de corrreo',
             'Otros equipos de comunicaciones y de señalamiento']))
     )
-db.equipo_comunicaciones.ec_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.equipo_comunicaciones.ec_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 #Equipos medicos-quirurgicos, dentales y veterinarios
 db.define_table(
@@ -85,7 +86,7 @@ db.define_table(
     Field('em_subcategoria','string',notnull=True,label=T('Subcategoría'),
         requires=IS_IN_SET(['Equipos médicos-quirúrgicos, dentales y veterinarios','Otros equipos médicos-quirúrgicos, dentales y veterinarios']))
     )
-db.equipo_medico.em_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.equipo_medico.em_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 #Equipos cientificos, religiosos, de ensenanza y recreacion
 db.define_table(
@@ -96,7 +97,7 @@ db.define_table(
         requires=IS_IN_SET(['Equipos científicos y de laboratorio','Equipos de enseñanza, deporte y recreación','Obras de arte','Libros y revistas','Equipos religiosos',
             'Instrumentos musicales','Otros equipos científicos, religiosos, de enseñanza y recreación']))    
     )
-db.equipo_cientifico_religioso.ecr_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.equipo_cientifico_religioso.ecr_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 
 #Maquinas, muebles y demas equiposde oficina y de alojamiento
@@ -108,7 +109,7 @@ db.define_table(
         requires=IS_IN_SET(['Mobiliario y equipos de oficina','Equipos de procesamiento de datos','Mobiliario y equipos de alojamiento',
             'Otras máquinas, muebles y demás equipos de oficina y de alojamiento']))
     )
-db.equipo_oficina.eo_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.equipo_oficina.eo_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 ### Mantenimiento ###
 #Hay que preguntar cuales son obligatorios
@@ -130,7 +131,7 @@ db.define_table(
     Field('m_observaciones','text',label=T('Observaciones')),
     Field('m_estatus','string',label=T('Estatus'),requires=IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible']))
     )
-db.mantenimiento.m_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.mantenimiento.m_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(first_name)s %(last_name)s | %(email)s') 
 
 ###Solicitudes de prestamo###
 db.define_table(
@@ -140,7 +141,7 @@ db.define_table(
     Field('p_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,1000)),
     Field('p_fecha','date',notnull=True,label=T('Fecha'), requires = IS_DATE(format=('%d-%m-%Y'))),
     Field('p_responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), label=T('Responsable')),
-    Field('p_prestado','string',notnull=True,label=T('Prestado a')),
+    Field('p_prestado','string',notnull=True,label=T('Prestado a'), requires = IS_IN_DB(db, db.t_Personal.f_nombre, '%(f_nombre)s')),
     Field('p_dependencia','reference dependencias', unique=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'), notnull=True,label=T('Dependencia')),
     Field('p_ubicacion','reference espacios_fisicos', requires=IS_IN_DB(db,db.espacios_fisicos.nombre,'%(nombre)s'), notnull=True,label=T('Ubicación')),
     ##A los campos de depedencia y ubicacon se le deben añadir lo siguiente en lineas separadas
@@ -152,6 +153,7 @@ db.define_table(
     # Estado = 1  :Aceptado
     Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
+db.solicitud_prestamo_bien_mueble.p_prestado.requires = IS_IN_DB(db,db.t_Personal.id,'%(f_usuario)s') 
 
 ### Servicios ###
 db.define_table(
@@ -163,7 +165,7 @@ db.define_table(
     #Fecha de inicio y fecha de culminacion deben preguntarse pues en historial de solicitudes aparecen 3 fechas
     #En servicios no se tiene nada sobre horas, hay que preguntar esto
     )
-db.servicio_bien_mueble.s_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.servicio_bien_mueble.s_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 ### Solicitud de eliminacion ###
 db.define_table(
@@ -174,7 +176,7 @@ db.define_table(
     Field('eliminar_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
     Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
-db.solicitud_eliminar_bien_mueble.eliminar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s')
+db.solicitud_eliminar_bien_mueble.eliminar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s')
 
 ###Solicitud de modificacion###
 db.define_table(
@@ -210,7 +212,7 @@ db.define_table(
     # Estado = 1  :Aceptado
     Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
-db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.bm_num,'%(bm_num)s') 
+db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
 # Estructura seguira para las clasificaciones: La tabla de bien_mueble posee un campo llamado "categoria" y uno para el numero
 # de bien nacional. La tabla de cada categoria cuenta con un campo que referencia al numero de bien nacional del bien mueble
