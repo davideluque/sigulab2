@@ -398,11 +398,14 @@ db.define_table(
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True,
           represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
 
-    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular']), notnull=True, label=T('Forma')),
+    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular', 'Otra']), notnull=True, label=T('Forma')),
 
-    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero']), notnull=True, label=T('Material')),
+    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero', 'Otro']), notnull=True, label=T('Material')),
     
-    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase']), notnull=True, label=T('Tipo de boca')),
+    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']), notnull=True, label=T('Tipo de boca')),
+
+    Field('descripcion', 'string', notnull=False, label=T('Descripción')),
+
 )
 
 db.t_envases._plural = 'Envases'
