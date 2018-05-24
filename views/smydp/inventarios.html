@@ -98,7 +98,11 @@
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
+			{{if dep_nombre == 'DIRECCIÓN':}}
+			<h3 class="dep-titulo"> ULAB </h3>
+			{{else:}}
 			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			{{pass}}
 		</div>
 		{{pass}}
 	{{pass}}
