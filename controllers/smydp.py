@@ -68,7 +68,7 @@ def __get_inventario_espacio(espacio_id=None):
 def __get_inventario_desechos(espacio_id=None, dep_id=None):
     inventario = []
     if espacio_id:
-        inventario = list(db((db.t_inventario_desechos.grupo == db.t_grupo_desechos.id) &
+        inventario = list(db((db.t_inventario_desechos.grupo == db.t_categoria_desechos.id) &
                          (db.t_inventario_desechos.unidad_medida == db.t_Unidad_de_medida.id) & 
                          (db.t_inventario_desechos.espacio_fisico == espacio_id)).select())
     
@@ -996,7 +996,7 @@ def envases():
 def categorias_desechos():
 
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
-        table = SQLFORM.smartgrid(  db.t_grupo_desechos, 
+        table = SQLFORM.smartgrid(  db.t_categoria_desechos, 
                                     onupdate=auth.archive,
                                     links_in_grid=False,
                                     csv=False,
@@ -1005,7 +1005,7 @@ def categorias_desechos():
                                     )
 
     else:
-        table = SQLFORM.smartgrid(  db.t_grupo_desechos, 
+        table = SQLFORM.smartgrid(  db.t_categoria_desechos, 
                                     editable=False,
                                     deletable=False,
                                     csv=False,

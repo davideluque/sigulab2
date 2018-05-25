@@ -625,8 +625,8 @@ if db(db.t_Sustancia).isempty():
 
 # Categorias de desechos
 
-if db(db.t_grupo_desechos).isempty():
+if db(db.t_categoria_desechos).isempty():
 	categorias_iniciales = ['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes']
 
 	for categoria in categorias_iniciales:
-		db.t_grupo_desechos.insert(grupo=categoria)
+		db.t_categoria_desechos.insert(categoria=categoria)

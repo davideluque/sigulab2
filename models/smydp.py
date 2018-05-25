@@ -364,19 +364,19 @@ db.define_table(
 
     ## Desechos peligrosos
 
-    # Tabla de Categorías de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
-# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
+    # Tabla de Categorías de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto categoria (tipo), los cuáles
+# se definen en esta tabla. Contiene los campos: categoria de desecho, estado, peligrosidad.
 db.define_table(
-    't_grupo_desechos',
+    't_categoria_desechos',
     #Atributos;
-    Field('grupo', 'string', unique=True, notnull=True, label=T('Categoría'),
+    Field('categoria', 'string', unique=True, notnull=True, label=T('Categoría'),
            requires=IS_IN_SET(['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes'])
     )
 )
 
 
-db.t_grupo_desechos._plural = 'Categoría de Desecho'
-db.t_grupo_desechos._singular = 'Categorías de Desechos'
+db.t_categoria_desechos._plural = 'Categoría de Desecho'
+db.t_categoria_desechos._singular = 'Categorías de Desechos'
 
     # Tabla de envases en donde serán almacenados los desechos peligrosos
 db.define_table(
@@ -401,8 +401,8 @@ db.define_table(
     Field('espacio_fisico', 'reference espacios_fisicos', 
             requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
 
-    Field('categoria', 'reference t_grupo_desechos', 
-            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
 
 
 )
@@ -410,12 +410,12 @@ db.define_table(
 db.t_envases._plural = 'Envases'
 db.t_envases._singular = 'Envase'
 
-# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, grupo.
+# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, categoria.
 db.define_table(
     't_inventario_desechos',
     #Atributos;
-    Field('grupo', 'reference t_grupo_desechos', 
-            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
 
     Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
 

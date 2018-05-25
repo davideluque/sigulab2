@@ -42,7 +42,7 @@
         <tbody>
           {{for desecho in inventario:}}
             <tr>
-                <td class="camposTabla">{{=desecho['grupo']['grupo']}}</td>
+                <td class="camposTabla">{{=desecho['categoria']['categoria']}}</td>
                 <td class="camposTabla">{{=desecho['espacio_fisico']['nombre']}}</td>
                 <td class="camposTabla">{{=desecho['cantidad']}}</td>
                 <td class="camposTabla">{{=desecho['seccion']['nombre']}}</td>
@@ -114,7 +114,7 @@
                             <select class="form-control" type="select" id="sustancia" name="sustancia" required>
                               <option value="" selected hidden >Sustancia*</option>
                               {{for desecho in desechos:}}
-                              <option value="{{=desecho.id}}">{{=desecho.grupo}})</option>
+                              <option value="{{=desecho.id}}">{{=desecho.categoria}})</option>
                               {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-sustancia"> </p> </div>
