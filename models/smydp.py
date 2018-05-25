@@ -406,6 +406,13 @@ db.define_table(
 
     Field('descripcion', 'string', notnull=False, label=T('Descripción')),
 
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=False, label=T('Espacio físico')), 
+
+    Field('categoria', 'reference t_grupo_desechos', 
+            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=False, label=T('Categoría de Desecho')),
+
+
 )
 
 db.t_envases._plural = 'Envases'
