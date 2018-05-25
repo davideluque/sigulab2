@@ -7,10 +7,33 @@
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">Desechos peligrosos</a>
-        <span class="breadcrumb-item active">Listado de Contenedores</span>
+        <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">Listado de Contenedores</a>
     </div>
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Listado de Contenedores</h1>
+        </div>
+    </div>
+    
+    {{if ('new' in request.args) or ('edit' in request.args):}} 
+    
+    {{else:}}
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/new/t_envases')}}">
+                    <button class="btn btn-primary">Agregar contenedor</button>
+                </a>
+            </div>
+        </div>
+        {{pass}} 
+    {{pass}}
+</div>
+
+
 
 {{if table.create_form:}} 
     {{=table.create_form}} 
@@ -23,6 +46,8 @@
         {{=table}}
     </div>
 {{pass}}
+
+
 
 <script>
     // Eliminando el breadcrumb que trae la forma SQL por defecto
