@@ -364,27 +364,19 @@ db.define_table(
 
     ## Desechos peligrosos
 
-    # Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
+    # Tabla de Categorías de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
 # se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
 db.define_table(
     't_grupo_desechos',
     #Atributos;
-    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo'),
+    Field('grupo', 'string', unique=True, notnull=True, label=T('Categoría'),
            requires=IS_IN_SET(['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes'])
-    ),
-
-    Field('estado', 'string', requires=IS_IN_SET(['Cristales', 'Lodo', 'Sólido en polvo','Sólido', 'Líquido', 'Gaseoso', 'Desconocido']), notnull=True, label=T('Estado')),
-    
-    Field('peligrosidad', 'list:string',
-          requires=IS_IN_SET(['Explosivo', 'Líquido inflamable', 'Solido inflamable', 'Susceptible de combustión espontánea', 
-          'Susceptible de inflamación espontánea', 'Oxidantes', 'Peróxidos orgánicos', 'Tóxico - veneno', 'Infeccioso', 'Corrosivo', 
-          'Libera gases tóxicos', 'Toxico con efectos retardados o crónicos', 'Ecotóxica']),  
-          label=T('Peligrosidad')),
+    )
 )
 
 
-db.t_grupo_desechos._plural = 'Grupo de Desecho'
-db.t_grupo_desechos._singular = 'Grupos de Desechos'
+db.t_grupo_desechos._plural = 'Categoría de Desecho'
+db.t_grupo_desechos._singular = 'Categorías de Desechos'
 
     # Tabla de envases en donde serán almacenados los desechos peligrosos
 db.define_table(
@@ -407,10 +399,10 @@ db.define_table(
     Field('descripcion', 'string', notnull=False, label=T('Descripción')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
-            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=False, label=T('Espacio físico')), 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
 
     Field('categoria', 'reference t_grupo_desechos', 
-            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=False, label=T('Categoría de Desecho')),
+            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
 
 
 )
@@ -423,7 +415,7 @@ db.define_table(
     't_inventario_desechos',
     #Atributos;
     Field('grupo', 'reference t_grupo_desechos', 
-            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
+            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
 
     Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
 
