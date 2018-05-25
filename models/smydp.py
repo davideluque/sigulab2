@@ -443,7 +443,8 @@ db.define_table(
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s', zero=None), notnull=True, label=T('Responsable')),
 
    Field('envase', 'reference t_envases', 
-            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), label=T('Envase'))
+            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), notnull=True, label=T('Envase')),
+
 )
 
 
