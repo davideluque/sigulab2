@@ -445,6 +445,12 @@ db.define_table(
    Field('envase', 'reference t_envases', 
             requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), notnull=True, label=T('Envase')),
 
+    Field('tratamiento', 'string', requires=IS_IN_SET(['Reutilizable', 'Recuperable', 'Tratable', 'Disposición final']), notnull=True, label=T('Tratamiento')),
+
+     Field('peligrosidad', 'list:string', 
+          requires=IS_IN_SET(['Sustancia Explosiva (EX)','Sustancia Inflamable (IN)','Sustancia Comburente (CB)', 'Gaso Bajo Presión (GZ)', 
+                            'Corrosiva (CR)', 'Toxicidad Aguda (TO)', 'Peligro para la Salud (DA)', 'Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)', 'Dañino para el Medio Ambiente Acuático (EN)'],
+          multiple = True), widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad'), notnull=True)
 )
 
 
