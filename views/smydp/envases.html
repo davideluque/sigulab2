@@ -19,7 +19,7 @@
         </div>
     </div>
     
-    {{if ('new' in request.args) or ('edit' in request.args):}} 
+    {{if ('edit' in request.args) or ('view' in request.args):}}
     
     {{else:}}
         <div class="row">
@@ -45,6 +45,21 @@
     <div class="container">
         {{=table}}
     </div>
+{{pass}}
+
+{{if ('view' in request.args):}}
+<div class="row">
+    <div class="col-lg-6 text-center">
+        <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/edit/t_envases/' + request.args[3])}}">
+            <button class="btn btn-warning">Editar</button>
+        </a>
+    </div>
+    <div class="col-lg-6 text-center">
+        <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/delete/t_envases/' + request.args[3])}}">
+            <button class="btn btn-danger">Eliminar</button>
+        </a>
+    </div>
+</div>
 {{pass}}
 
 
