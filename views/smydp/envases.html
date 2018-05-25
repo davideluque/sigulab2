@@ -58,7 +58,7 @@
 {{pass}}
 
 {{if ('view' in request.args):}}
-<div class="row">
+<div class="row"></div>
     <div class="col-lg-6 text-center">
         <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/edit/t_envases/' + request.args[3])}}">
             <button class="btn btn-warning">Editar</button>
@@ -72,11 +72,15 @@
 </div>
 {{pass}}
 
-
-
 <script>
     // Eliminando el breadcrumb que trae la forma SQL por defecto
     document.getElementsByClassName("web2py_breadcrumbs")[0].style.display = 'none';
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
-</script> {{end}}
+</script> 
+
+<script>
+    var inputs = document.querySelectorAll('input[type=submit]');
+    inputs[0].value = "Crear";
+</script>
+{{end}}
