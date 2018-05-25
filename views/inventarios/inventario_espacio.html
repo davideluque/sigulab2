@@ -137,31 +137,31 @@
 
                         <div class="form-group">
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" required>
-                            <div class="field-error"> <p id="error-no_bien"> </p> </div>
+                            <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="no_placa" name="no_placa" placeholder="N° de placa*">
-                            <div class="field-error"> <p id="error-no_placa"> </p> </div>
+                            <input type="text" class="form-control" id="no_placa" name="no_placa" placeholder="N° de placa">
+                            <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" >
+                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo">
+                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo" required>
                             <div class="field-error"> <p id="error-modelo"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial">
+                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
                         
                           <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" >
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" required>
                             <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
                         
@@ -189,7 +189,7 @@
 
                           
                           <div class="form-group">
-                              <select class="form-control" type="select" id="material" name="Material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" value="" id="material" name="Material" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 {{ listaMat = ["Acero", "Acrílico" , "Madera", "Metal", "Plástico", "Tela", "Vidrio"
                                
@@ -205,7 +205,7 @@
   
   
                           <div class="form-group">
-                              <select class="form-control" type="select" id="color" name="Color" placeholder="Color" required>
+                              <select class="form-control" value="" type="select" id="color" name="Color" placeholder="Color" required>
                                 <!-- Insertar un for-->
                                 {{ lista = [ "Amarillo", "Azul", "Beige", "Blanco", "Dorado","Gris", "Madera", "Marrón", "Color", "Mostaza", "Naranja", "Negro", "Plateado","Rojo","Rosado",
                                     "Verde",
@@ -222,7 +222,7 @@
                           <label>Dimensiones</label>
 
                           <div class="form-group">
-                            <select class="form-control" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
+                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
                               <!-- Insertar un for-->
                               <option value="" disabled selected>Selecione una unidad</option>
                               <option value="cm">cm</option>
