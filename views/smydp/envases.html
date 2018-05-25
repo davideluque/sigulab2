@@ -13,15 +13,25 @@
 <!-- Fin del Breadcrumb de navegación -->
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Listado de Contenedores</h1>
-        </div>
-    </div>
     
     {{if ('edit' in request.args) or ('view' in request.args):}}
-    
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>Detalle de contenedor</h1>
+            </div>
+        </div>
+    {{elif ('new' in request.args):}}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>Nuevo contenedor</h1>
+            </div>
+        </div>
     {{else:}}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>Listado de Contenedores</h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12 text-right">
                 <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/new/t_envases')}}">
