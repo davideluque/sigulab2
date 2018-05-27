@@ -33,8 +33,7 @@ db.define_table(
     Field('bm_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
     Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
-    Field('bm_crea_ficha', 'references auth_user', notnull = True, label = T('Usuario que crea la ficha')),
-    fake_migrate=True
+    Field('bm_crea_ficha', 'references auth_user', notnull = True, label = T('Usuario que crea la ficha'))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -229,8 +228,7 @@ db.define_table(
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
     # Estado = 1  :Aceptado
-    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2)),
-    fake_migrate=True
+    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
 db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
