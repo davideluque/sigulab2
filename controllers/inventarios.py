@@ -136,11 +136,11 @@ def __get_inventario_dep(dep_id):
 # el bm. 
 def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
                 descripcion, material, color, unidad_med, ancho, largo,
-                alto, diametro, movilidad, uso, nombre_cat, cod_loc, espacio,
+                alto, diametro, movilidad, uso, nombre_cat, cod_loc, localizacion, espacio,
                 unidad_ad, dependencia, user):
 
     # Si ya existe el BM en el inventario
-    if db(((db.bien_mueble.bm_num == no_bien)).select()):
+    if (db(db.bien_mueble.bm_num == no_bien).select()):
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
@@ -166,11 +166,12 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             bm_movilidad = movilidad, 
             bm_uso = uso, 
             bm_categoria = nombre_cat, 
-            bm_codigo_localizacion = cod_loc, 
+            bm_codigo_localizacion = cod_loc,
+            bm_localizacion = localizacion, 
             bm_espacio_fisico = espacio,
             bm_unidad_de_adscripcion = unidad_ad, 
-            bm_dependencia = dependencia, 
-            bm_crea_ficha = user
+            bm_depedencia = dependencia, 
+            bm_crea_ficha = user    
         )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -582,8 +583,8 @@ def bienes_muebles():
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                         request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
-                        espacio.dependencia, auth.user)
+                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
+                        dep_padre_id, user_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -679,8 +680,8 @@ def bienes_muebles():
                     request.vars.descripcion, request.vars.material, request.vars.color,
                     request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                     request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                    request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
-                    espacio.dependencia, auth.user)
+                    request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
+                    dep_padre_id, user_id)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -774,9 +775,9 @@ def bienes_muebles():
                         request.vars.marca, request.vars.modelo, request.vars.serial,
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
-                        espacio.dependencia, auth.user)
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, 
+                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
+                        dep_padre_id, user_id)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -831,7 +832,15 @@ def bienes_muebles():
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
                 inventario=inventario,
-                retroceder=retroceder) 
+                retroceder=retroceder,
+                material_pred = material_pred,
+                color_list = color,
+                unidad_med = unidad_med,
+                movilidad_list = movilidad,
+                uso_list = uso,
+                nombre_cat = nombre_cat,
+                cod_localizacion = cod_localizacion,
+                localizacion = localizacion) 
 
 
 # Muestra un crud para añadir bienes muebles

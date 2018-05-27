@@ -42,7 +42,6 @@
                 <th class="camposTabla linksNombres">N° BM</th>
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -55,7 +54,6 @@
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
                 <td class="camposTabla">{{=bm['bm_categoria']}}</td>
-                <td class="camposTabla">{{=bm['bm_espacio_fisico']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -65,7 +63,6 @@
           <th class="camposTabla linksNombres">N° BM</th>
           <th class="camposTabla linksNombres">Placa</th>
           <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Ubicacion Fisica</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -119,7 +116,6 @@
                       <span class="step activePass">1</span>
                       <span class="step">2</span>
                       <span class="step">3</span>
-                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -177,7 +173,6 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
-                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -189,12 +184,9 @@
                           <div class="form-group">
                               <select class="form-control" type="select" value="" id="material" name="material" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
-                                {{ listaMat = ["Acero", "Acrílico" , "Madera", "Metal", "Plástico", "Tela", "Vidrio"
-                               
-                                  ]  }}
-                                <option value="" disabled selected>Selecione un material</option>
-                                {{ for color in listaMat:}}
-                                <option value="{{=color}}">{{=color}}</option>
+                                <option value="" disabled selected>Selecione un material*</option>
+                                {{ for material in material_pred: }}
+                                <option value="{{=material}}">{{=material}}</option>
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
@@ -204,13 +196,8 @@
   
                           <div class="form-group">
                               <select class="form-control" value="" type="select" id="color" name="color" placeholder="Color" required>
-                                <!-- Insertar un for-->
-                                {{ lista = [ "Amarillo", "Azul", "Beige", "Blanco", "Dorado","Gris", "Madera", "Marrón", "Color", "Mostaza", "Naranja", "Negro", "Plateado","Rojo","Rosado",
-                                    "Verde",
-                                    "Vinotinto"
-                                  ]  }}
-                                <option value="" disabled selected>Selecione un color</option>
-                                {{ for color in lista:}}
+                                <option value="" disabled selected>Selecione un color*</option>
+                                {{ for color in color_list:}}
                                 <option value="{{=color}}">{{=color}}</option>
                                 {{pass}}
                               </select>
@@ -221,10 +208,10 @@
 
                           <div class="form-group">
                             <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
-                              <!-- Insertar un for-->
                               <option value="" disabled selected>Selecione una unidad</option>
-                              <option value="cm">cm</option>
-                              <option value="m">cm</option>
+                              {{ for med in unidad_med:}}
+                              <option value="{{=med}}">{{=med}}</option>
+                              {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
@@ -267,7 +254,6 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
-                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -276,12 +262,11 @@
   
 
                         <div class="form-group">
+                            <label>Seleccione un tipo de movilidad</label>
                             <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
-                              <!-- Insertar un for-->
-                              {{ lista2 = ["Fijo", "Portatil" ]  }}
-                              <option value="" disabled selected>Selecione un material</option>
-                              {{ for color in lista2:}}
-                              <option value="{{=color}}">{{=color}}</option>
+                              <option value="" disabled selected>Seleccione un tipo de movilidad</option>
+                              {{ for movilidad in movilidad_list:}}
+                              <option value="{{=movilidad}}">{{=movilidad}}</option>
                               {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-movilidad"> </p> </div>
@@ -289,13 +274,10 @@
 
                         <label>Tipo de Uso</label>
                         <div class="form-group">
-                            <input type="checkbox" name="tipo-uso" value="1">Docencia
-                            <br>
-                            <input type="checkbox" name="tipo-uso" value="2">Investigacion
-                            <br>
-                            <input type="checkbox" name="tipo-uso" value="3">Extension
-                            <br>
-                            <input type="checkbox" name="tipo-uso" value="4">Apoyo Administrativo
+                          {{ for uso in uso_list: }}
+                          <input type="checkbox" name="tipo_uso" value="{{=uso}}">{{=uso}}
+                          <br>
+                          {{pass}}
                         </div>
 
                         </div>
@@ -313,7 +295,6 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step activePass">3</span>
-                          <span class="step">4</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -323,41 +304,32 @@
                         
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Código de localización</label>
-                          <select class="form-control" type="select" value="" id="cod-localizacion" onchange="placeholder_localizacion(this.value);"  name="Código de localización" required>
-                            <option value="" onchange="placeholder_localizacion(this.value);"  selected hidden >Seleccione un código</option>
-                            <option value="150301" onchange="placeholder_localizacion(this.value);">150301</option>
-                            <option value="240107" onchange="placeholder_localizacion(this.value);">240107</option>
+                          <select class="form-control" type="select" value="" id="cod-localizacion" onchange="placeholder_localizacion(this.value);"  name="cod_loc" required>
+                            <option value="" onchange="placeholder_localizacion(this.value);"  selected hidden >Seleccione un código de localizacion</option>
+                            {{for cod in cod_localizacion:}}
+                            <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
+                            {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Ubicacion</label>
-                            <input type="text" class="form-control" id="localizacion" name="localización" placeholder="" readonly >
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Ubicación</label>
+                            <input type="text" class="form-control" id="localizacion" name="localizacion" placeholder="" readonly >
                             <div class="field-error"> <p id="error-localizacion"> </p> </div>
                           </div>
-                      
-                        {{listaCategorias = ["Maquinaria y demás equipos de construcción, campo, industria y taller",
-                          "Equipos de transporte, tracción y elevación",
-                          "Equipos de comunicaciones y de señalamiento",
-                          "Equipos médicos - quirúrgicos, dentales y veterinarios",
-                          "Equipos científicos, religiosos, de enseñanza y recreación",
-                          "Máquinas, muebles y demás equipos de oficina y de alojamiento"
-                          ]
-                        }}
+                  
+
                       <div class="form-group">
-                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
-                          <select class="form-control" type="select" value="" id="cod-localizacion"  name="cod_loc" required>
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categorias</label>
+                          <select class="form-control" type="select" value="" id="categoria"  name="nombre_cat" required>
                             <option value="" selected hidden >Seleccione una categorias</option>
-                            {{i=1}}
-                            {{ for categoria in listaCategorias:}}
-                              <option value="{{=i}}" >{{=categoria}}</option>
-                              {{ i = i +1}}
+                            {{ for categoria in nombre_cat:}}
+                            <option value="{{=categoria}}" >{{=categoria}}</option>
                             {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-categorias"> </p> </div>
                         </div>
-
 
                         <div class="form-group">
                             <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategoria</label>
@@ -367,60 +339,8 @@
                       </div>
                     </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm">Siguiente</button>
-                </fieldset>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                </fieldset>
                 <!-- Fin Segundo Paso -->
-
-                <!-- Comienzo Tercer Paso-->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="5" data-title="Cuarto Paso">
-                      <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
-                        <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step">3</span>
-                          <span class="step activePass">4</span>
-                      </div>
-  
-                      <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
-                      <h4 class="titulosForm">Ubicación</h4>
-                        
-
-
-                        <div class="form-group">
-                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Espacio Físico</label>
-                            <input type="text" class="form-control" id="espacio-fis" name="espacio-fis" placeholder="Falta la BD" value="" >
-                            <div class="field-error"> <p id="error-espacio-fis"> </p> </div>
-                          </div>
-
-                          <div class="form-group">
-                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Unidad de Adscripción</label>
-                            <input type="text" class="form-control" id="unidad-ads" name="unidad-ads" placeholder="Falta la BD" value="" >
-                            <div class="field-error"> <p id="error-unidad-ads"> </p> </div>
-                          </div>
-  
-                           <div class="form-group">
-                              <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Dependencia</label>
-                              <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Falta la BD" value="" >
-                              <div class="field-error"> <p id="error-dependencia"> </p> </div>
-                            </div>
-    
-  
-                            <div class="form-group">
-                                <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Uso del espacio físico</label>
-                                <input type="text" class="form-control" id="uso-espacio" name="uso-espacio" placeholder="Falta la BD" value="" >
-                                <div class="field-error"> <p id="error-uso-espacio"> </p> </div>
-                            </div>
-                            
-                      </div>
-                    </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>
-                </fieldset>
-                <!-- Fin Tercer Paso -->
-
-
               </form>
           </div>
         </div>               
@@ -429,7 +349,7 @@
   </div>
 </div>
 
-<!-- Fin Modal Agregar Servicio -->
+<!-- Fin Modal Agregar BM -->
 
 <!-- *!* Falta verificar que se esten llenando todos los campos dependiendo 
 del concepto y tipo de ingreso o egreso -->
