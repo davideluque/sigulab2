@@ -96,7 +96,7 @@ db.dependencias.id_jefe_dependencia.type = 'reference auth_user'
 #######################################################################################################################
 def date_widget(f,v):
     wrapper = DIV()
-    inp = SQLFORM.widgets.string.widget(f,v,_class="jqdate")
+    inp = SQLFORM.widgets.date.widget
     jqscr = SCRIPT("jQuery(document).ready(function(){jQuery('#%s').datepicker({dateFormat:'yy-mm-dd'});});" % inp['_id'],_type="text/javascript")
     wrapper.components.extend([inp,jqscr])
     return wrapper
@@ -122,26 +122,26 @@ db.define_table(
           requires=IS_IN_SET(['Docente', 'Administrativo', 'Estudiante']), label=T('Gremio'),error_message='Por favor introduzca un valor'),
 
     Field('f_cargo',          'string',
-          requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo'),error_message='Por favor introduzca un valor'),
+          requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
 
     Field('f_ci',             'integer',
           requires=IS_MATCH('^\d*', error_message='Número de cedula inválido.'),
           notnull=True, label=T('Cédula')),
-    Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono'),notnull=True ,error_message='Por favor introduzca un valor'),
-    Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular'),notnull=True ,error_message='Por favor introduzca un valor'),
-    Field('f_contacto_emergencia',       'integer', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),notnull=True ,error_message='Por favor introduzca un valor'),
+    Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
+    Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
+    Field('f_contacto_emergencia',       'integer', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
 
     Field('f_email',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
-          notnull=True, label=T('Correo Electrónico')),
+           label=T('Correo Electrónico')),
     Field('f_direccion',          'string',
-          requires=IS_NOT_EMPTY(), notnull=True, label=T('Direccion') ,error_message='Por favor introduzca un valor'),
+          requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
     Field('f_ubicacion',          'string',
-          requires=IS_NOT_EMPTY(), notnull=True, label=T('Ubicacion') ,error_message='Por favor introduzca un valor'),
+          requires=IS_NOT_EMPTY(),  label=T('Ubicacion') ,error_message='Por favor introduzca un valor'),
     Field('f_pagina_web',     'string', requires=IS_URL() ,  label=T('Página web'), error_message='Ingrese un formato válido de url'),
 
-    Field('f_estatus',        'string', notnull=True,requires=IS_IN_SET(['Activo', 'Jubilado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
-    Field('f_categoria', notnull=True, requires=IS_IN_SET(['Fijo', 'Contratado', 'Pasantía', 'Ayudantía']), label=T('Categoria') ,error_message='Por favor introduzca un valor'),
+    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
+    Field('f_categoria',requires=IS_IN_SET(['Fijo', 'Contratado', 'Pasantía', 'Ayudantía']), label=T('Categoria') ,error_message='Por favor introduzca un valor'),
     ##Campos condicionales si la categoria es contratado, pasantia o ayudantia.
     Field('f_fecha_ingreso', 'date', label=T('Fecha de Ingreso')),
     Field('f_fecha_salida', 'date', label=T('Fecha de Salida')),
@@ -158,11 +158,14 @@ db.define_table(
            requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
     Field('f_dependencia', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia'))
+          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
+    Field('f_validado', 'boolean', default=False)
     )
 
 db.t_Personal._plural = 'Personal'
 db.t_Personal._singular = 'Personal'
+
+db.t_Personal.f_fecha_salida.widget=SQLFORM.widgets.time.widget
 
 db.auth_membership.f_personal_membership.type = 'reference t_Personal'
 db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None)
