@@ -1,0 +1,574 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'Framework'
+p4
+sS'code'
+p5
+S''
+sS'snapshot'
+p6
+(dp7
+S'exception'
+p8
+(dp9
+S'__getslice__'
+p10
+S"<method-wrapper '__getslice__' of exceptions.BaseException object>"
+p11
+sS'__str__'
+p12
+S"<method-wrapper '__str__' of exceptions.BaseException object>"
+p13
+sS'__reduce__'
+p14
+S'<built-in method __reduce__ of exceptions.BaseException object>'
+p15
+sS'__dict__'
+p16
+S'{}'
+p17
+sS'message'
+p18
+S"'Config file not found'"
+p19
+sS'__sizeof__'
+p20
+S'<built-in method __sizeof__ of exceptions.BaseException object>'
+p21
+sS'__init__'
+p22
+S"<method-wrapper '__init__' of exceptions.BaseException object>"
+p23
+sS'__setattr__'
+p24
+S"<method-wrapper '__setattr__' of exceptions.BaseException object>"
+p25
+sS'__reduce_ex__'
+p26
+S'<built-in method __reduce_ex__ of exceptions.BaseException object>'
+p27
+sS'__new__'
+p28
+S'<built-in method __new__ of type object>'
+p29
+sS'__format__'
+p30
+S'<built-in method __format__ of exceptions.BaseException object>'
+p31
+sS'__class__'
+p32
+S"<type 'exceptions.BaseException'>"
+p33
+sS'__doc__'
+p34
+S"'Common base class for all exceptions'"
+p35
+sS'__getitem__'
+p36
+S"<method-wrapper '__getitem__' of exceptions.BaseException object>"
+p37
+sS'__setstate__'
+p38
+S'<built-in method __setstate__ of exceptions.BaseException object>'
+p39
+sS'__getattribute__'
+p40
+S"<method-wrapper '__getattribute__' of exceptions.BaseException object>"
+p41
+sS'args'
+p42
+S"('Config file not found',)"
+p43
+sS'__subclasshook__'
+p44
+S'<built-in method __subclasshook__ of type object>'
+p45
+sS'__unicode__'
+p46
+S'<built-in method __unicode__ of exceptions.BaseException object>'
+p47
+sS'__delattr__'
+p48
+S"<method-wrapper '__delattr__' of exceptions.BaseException object>"
+p49
+sS'__repr__'
+p50
+S"<method-wrapper '__repr__' of exceptions.BaseException object>"
+p51
+sS'__hash__'
+p52
+S"<method-wrapper '__hash__' of exceptions.BaseException object>"
+p53
+ssS'evalue'
+p54
+S'Config file not found'
+p55
+sS'request'
+p56
+cgluon.html
+XML_unpickle
+p57
+(S's\x85W\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>sigulab2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-fe8721bb-6775-4d5f-b991-e0b108259227<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_welcome</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-286a91f3-089b-42b3-8bdd-308de5dd7a14<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.9,en;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>session_id_welcome=127.0.0.1-286a91f3-089b-42b3-8bdd-308de5dd7a14; session_id_admin=127.0.0.1-fe8721bb-6775-4d5f-b991-e0b108259227</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_REFERER</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/admin/default/site</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/65.0.3325.181 Chrome/65.0.3325.181 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/sigulab2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>49975</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>sandra-VIT</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/sandra/Documents/web2py/applications/welcome/&#x27;, &#x27;/home/sandra/Documents/web2py/applications/sigulab2/&#x27;, &#x27;/home/sandra/Documents/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0xb6198fec: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;sandra-VIT&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/sandra/Documents/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate, br</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.9,en;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>session_id_welcome=127.0.0.1-286a91f3-089b-42b3-8bdd-308de5dd7a14; session_id_admin=127.0.0.1-fe8721bb-6775-4d5f-b991-e0b108259227</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_referer</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/admin/default/site</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/65.0.3325.181 Chrome/65.0.3325.181 Safari/537.36</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>sandra-VIT</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/sigulab2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>49975</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/sigulab2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>sandra-VIT</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.16.1-stable+timestamp.2017.11.14.05.54.25</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0xb756c0d0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0xb64f5f2c&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0xb570acec&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0xb756c0d0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0xb64f5f2c&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0xb570acec&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py/applications/sigulab2/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/sandra/Documents/web2py/applications/welcome/&#x27;, &#x27;/home/sandra/Documents/web2py/applications/sigulab2/&#x27;, &#x27;/home/sandra/Documents/web2py/applications/admin/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0xb6198fec: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;sandra-VIT&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/sandra/Documents/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_py2</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>sandra-VIT</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.16.1-stable+timestamp.2017.11.14.05.54.25</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2018, 5, 25, 19, 50, 18, 398128)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/sigulab2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2018, 5, 25, 23, 50, 18, 398146)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0xb39980cc&gt;</div></td></tr></table></div>'
+tRp58
+sS'frames'
+p59
+(lp60
+(dp61
+S'file'
+p62
+S'/home/sandra/Documents/web2py/gluon/main.py'
+p63
+sS'dump'
+p64
+(dp65
+S'global serve_controller'
+p66
+S'<function serve_controller>'
+p67
+sS'session'
+p68
+S'<Storage {}>'
+p69
+sS'request'
+p70
+S"<Storage {'_vars': None, 'function': 'index', 'c...sandra/Documents/web2py/applications/sigulab2/'}>"
+p71
+sS'response'
+p72
+S"<Storage {'body': <cStringIO.StringO object at 0...a> at 0xb601087c>, 'view': 'default/index.html'}>"
+p73
+ssS'lnum'
+p74
+I445
+sS'lines'
+p75
+(dp76
+I448
+S''
+sI449
+S'                if static_file:'
+p77
+sI440
+S'                if global_settings.debugging and app != "admin":'
+p78
+sI441
+S'                    import gluon.debug'
+p79
+sI442
+S'                    # activate the debugger'
+p80
+sI443
+S'                    gluon.debug.dbg.do_debug(mainpyfile=request.folder)'
+p81
+sI444
+S''
+sI445
+S'                serve_controller(request, response, session)'
+p82
+sI446
+S'            except HTTP as hr:'
+p83
+sI447
+S'                http_response = hr'
+p84
+ssS'call'
+p85
+S"(environ={'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8', 'HTTP_ACCEPT_ENCODING': 'gzip, deflate, br', 'HTTP_ACCEPT_LANGUAGE': 'es-ES,es;q=0.9,en;q=0.8', 'HTTP_CONNECTION': 'keep-alive', 'HTTP_COOKIE': 'session_id_welcome=127.0.0.1-286a91f3-089b-42b3-...in=127.0.0.1-fe8721bb-6775-4d5f-b991-e0b108259227', 'HTTP_HOST': '127.0.0.1:8000', 'HTTP_REFERER': 'http://127.0.0.1:8000/admin/default/site', 'HTTP_UPGRADE_INSECURE_REQUESTS': '1', 'HTTP_USER_AGENT': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36.../65.0.3325.181 Chrome/65.0.3325.181 Safari/537.36', 'PATH_INFO': '/sigulab2/default/index', ...}, responder=<function responder2>)"
+p86
+sS'func'
+p87
+S'wsgibase'
+p88
+sa(dp89
+g62
+S'/home/sandra/Documents/web2py/gluon/main.py'
+p90
+sg64
+(dp91
+S'environment'
+p92
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...}"
+p93
+sS'global run_models_in'
+p94
+S'<function run_models_in>'
+p95
+ssg74
+I178
+sg75
+(dp96
+I173
+S'    # also, make sure the flash is passed through'
+p97
+sI174
+S'    # ##################################################'
+p98
+sI175
+S'    # process models, controller and view (if required)'
+p99
+sI176
+S'    # ##################################################'
+p100
+sI177
+S''
+sI178
+S'    run_models_in(environment)'
+p101
+sI179
+S'    response._view_environment = copy.copy(environment)'
+p102
+sI180
+S'    page = run_controller_in(request.controller, request.function, environment)'
+p103
+sI181
+S'    if isinstance(page, dict):'
+p104
+sI182
+S'        response._vars = page'
+p105
+ssg85
+S"(request=<Storage {'_vars': None, 'function': 'index', 'c...sandra/Documents/web2py/applications/sigulab2/'}>, response=<Storage {'body': <cStringIO.StringO object at 0...a> at 0xb601087c>, 'view': 'default/index.html'}>, session=<Storage {}>)"
+p106
+sg87
+S'serve_controller'
+p107
+sa(dp108
+g62
+S'/home/sandra/Documents/web2py/gluon/compileapp.py'
+p109
+sg64
+(dp110
+S'environment'
+p111
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...}"
+p112
+sS'model'
+p113
+S"'/home/sandra/Documents/web2py/applications/sigulab2/models/db.py'"
+p114
+sS'layer'
+p115
+S'undefined'
+p116
+sS'global restricted'
+p117
+S'<function restricted>'
+p118
+sS'ccode'
+p119
+S'<code object <module> at 0xb2f95ad0, file "/home...b2py/applications/sigulab2/models/db.py", line 4>'
+p120
+ssg74
+I593
+sg75
+(dp121
+I588
+S'            elif compiled:'
+p122
+sI589
+S'                f = lambda: read_pyc(model)'
+p123
+sI590
+S'            else:'
+p124
+sI591
+S'                f = lambda: compile2(read_file(model), model)'
+p125
+sI592
+S'            ccode = getcfs(model, model, f)'
+p126
+sI593
+S'            restricted(ccode, environment, layer=model)'
+p127
+sI594
+S''
+sI595
+S''
+sI596
+S'def run_controller_in(controller, function, environment):'
+p128
+sI597
+S'    """'
+p129
+ssg85
+S"(environment={'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...})"
+p130
+sg87
+S'run_models_in'
+p131
+sa(dp132
+g62
+S'/home/sandra/Documents/web2py/gluon/restricted.py'
+p133
+sg64
+(dp134
+S'environment'
+p135
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...}"
+p136
+sS'ccode'
+p137
+S'<code object <module> at 0xb2f95ad0, file "/home...b2py/applications/sigulab2/models/db.py", line 4>'
+p138
+ssg74
+I219
+sg75
+(dp139
+I214
+S'    if environment is None:'
+p140
+sI215
+S'        environment = {}'
+p141
+sI216
+S"    environment['__file__'] = layer"
+p142
+sI217
+S"    environment['__name__'] = '__restricted__'"
+p143
+sI218
+S'    try:'
+p144
+sI219
+S'        exec(ccode, environment)'
+p145
+sI220
+S'    except HTTP:'
+p146
+sI221
+S'        raise'
+p147
+sI222
+S'    except RestrictedError:'
+p148
+sI223
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p149
+ssg85
+S'(ccode=<code object <module> at 0xb2f95ad0, file "/home...b2py/applications/sigulab2/models/db.py", line 4>, environment={\'A\': <class \'gluon.html.A\'>, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppConfig\': <function AppConfig>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'BUTTON\': <class \'gluon.html.BUTTON\'>, \'CAT\': <class \'gluon.html.CAT\'>, ...}, layer=\'/home/sandra/Documents/web2py/applications/sigulab2/models/db.py\', scode=None)'
+p150
+sg87
+S'restricted'
+p151
+sa(dp152
+g62
+S'/home/sandra/Documents/web2py/applications/sigulab2/models/db.py'
+p153
+sg64
+(dp154
+S'AppConfig'
+p155
+S'<function AppConfig>'
+p156
+sS'builtinTrue'
+p157
+S'True'
+p158
+sS'myconf'
+p159
+g116
+sS'builtinreload'
+p160
+S'<built-in function reload>'
+p161
+ssg74
+I29
+sg75
+(dp162
+I32
+S'    # ---------------------------------------------------------------------'
+p163
+sI33
+S'    # if NOT running on Google App Engine use SQLite or other DB'
+p164
+sI24
+S'from gluon.contrib.appconfig import AppConfig'
+p165
+sI25
+S''
+sI26
+S'# -------------------------------------------------------------------------'
+p166
+sI27
+S'# once in production, remove reload=True to gain full speed'
+p167
+sI28
+S'# -------------------------------------------------------------------------'
+p168
+sI29
+S'myconf = AppConfig(reload=True)'
+p169
+sI30
+S''
+sI31
+S'if not request.env.web2py_runtime_gae:'
+p170
+ssg85
+S'()'
+p171
+sg87
+S'<module>'
+p172
+sa(dp173
+g62
+S'/home/sandra/Documents/web2py/gluon/contrib/appconfig.py'
+p174
+sg64
+(dp175
+S'global AppConfigLoader'
+p176
+S"<class 'gluon.contrib.appconfig.AppConfigLoader'>"
+p177
+sS'vars'
+p178
+g17
+sS'builtinsetattr'
+p179
+S'<built-in function setattr>'
+p180
+sS'args'
+p181
+S'()'
+p182
+sS'instance_name'
+p183
+S"'AppConfig_sigulab2'"
+p184
+sS'global AppConfig'
+p185
+S'<function AppConfig>'
+p186
+ssg74
+I44
+sg75
+(dp187
+I39
+S'    locker.acquire()'
+p188
+sI40
+S"    reload_ = vars.pop('reload', False)"
+p189
+sI41
+S'    try:'
+p190
+sI42
+S"        instance_name = 'AppConfig_' + current.request.application"
+p191
+sI43
+S'        if reload_ or not hasattr(AppConfig, instance_name):'
+p192
+sI44
+S'            setattr(AppConfig, instance_name, AppConfigLoader(*args, **vars))'
+p193
+sI45
+S'        return getattr(AppConfig, instance_name).settings'
+p194
+sI46
+S'    finally:'
+p195
+sI47
+S'        locker.release()'
+p196
+sI48
+S''
+ssg85
+S'(*args=(), **vars={})'
+p197
+sg87
+S'AppConfig'
+p198
+sa(dp199
+g62
+S'/home/sandra/Documents/web2py/gluon/contrib/appconfig.py'
+p200
+sg64
+(dp201
+S'builtinBaseException'
+p202
+S"<type 'exceptions.BaseException'>"
+p203
+ssg74
+I116
+sg75
+(dp204
+I111
+S'            if not os.path.isfile(configfile):'
+p205
+sI112
+S"                configfile = os.path.join(priv_folder, 'appconfig.json')"
+p206
+sI113
+S'                if not os.path.isfile(configfile):'
+p207
+sI114
+S'                    configfile = None'
+p208
+sI115
+S'        if not configfile or not os.path.isfile(configfile):'
+p209
+sI116
+S'            raise BaseException("Config file not found")'
+p210
+sI117
+S'        self.file = configfile'
+p211
+sI118
+S'        self.ctype = os.path.splitext(configfile)[1][1:]'
+p212
+sI119
+S'        self.settings = None'
+p213
+sI120
+S'        self.read_config()'
+p214
+ssg85
+S'(self=<gluon.contrib.appconfig.AppConfigLoader object>, configfile=None)'
+p215
+sg87
+g22
+sasS'pyver'
+p216
+S'Python 2.7.6: /usr/bin/python (prefix: /usr)'
+p217
+sS'session'
+p218
+g57
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp219
+sS'etype'
+p220
+S"<type 'exceptions.BaseException'>"
+p221
+sS'date'
+p222
+S'Fri May 25 19:50:18 2018'
+p223
+sS'response'
+p224
+g57
+(S's4\x16\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0xb60bf1c0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_sigulab2</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-4f552f3d-a714-46e1-b87d-e8ad8a2f537e<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div>: </div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>table3cols</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/index/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_sigulab2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/sandra/Documents/web2py/applications/sigulab2/sessions/127.0.0.1-4f552f3d-a714-46e1-b87d-e8ad8a2f537e</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-4f552f3d-a714-46e1-b87d-e8ad8a2f537e</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_sigulab2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>sigulab2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/index.html</div></td></tr></table></div>'
+tRp225
+sS'locals'
+p226
+(dp227
+S'configfile'
+p228
+S'None'
+p229
+sS'priv_folder'
+p230
+S"'/home/sandra/Documents/web2py/applications/sigulab2/private'"
+p231
+sS'self'
+p232
+S'<gluon.contrib.appconfig.AppConfigLoader object>'
+p233
+sssS'traceback'
+p234
+S'Traceback (most recent call last):\n  File "/home/sandra/Documents/web2py/gluon/main.py", line 445, in wsgibase\n    serve_controller(request, response, session)\n  File "/home/sandra/Documents/web2py/gluon/main.py", line 178, in serve_controller\n    run_models_in(environment)\n  File "/home/sandra/Documents/web2py/gluon/compileapp.py", line 593, in run_models_in\n    restricted(ccode, environment, layer=model)\n  File "/home/sandra/Documents/web2py/gluon/restricted.py", line 219, in restricted\n    exec(ccode, environment)\n  File "/home/sandra/Documents/web2py/applications/sigulab2/models/db.py", line 29, in <module>\n    myconf = AppConfig(reload=True)\n  File "/home/sandra/Documents/web2py/gluon/contrib/appconfig.py", line 44, in AppConfig\n    setattr(AppConfig, instance_name, AppConfigLoader(*args, **vars))\n  File "/home/sandra/Documents/web2py/gluon/contrib/appconfig.py", line 116, in __init__\n    raise BaseException("Config file not found")\nBaseException: Config file not found\n'
+p235
+s.
