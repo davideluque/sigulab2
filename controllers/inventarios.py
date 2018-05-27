@@ -47,9 +47,7 @@ def __find_dep_id(nombre):
 # de ese espacio.
 def __get_inventario_espacio(espacio_id=None):
     inventario = []
-    inventario = list(db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
-                         (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
-                         (db.t_Inventario.espacio == espacio_id)).select())
+    inventario = list(db((db.bien_mueble.espacio == espacio_id)).select())
 
     return inventario
 
@@ -119,130 +117,67 @@ def __get_espacios(dep_id):
 
     return espacios
 
-
-# Transforma una cantidad en la unidad de medida indicada en nueva_unidad
-def __transformar_cantidad(cantidad, unidad, nueva_unidad):
-    cantidad = float(cantidad)
-    if nueva_unidad == unidad:
-        return cantidad
-    elif unidad in ["Kilogramos", "Litros"]:
-        return cantidad * 1000
-    elif unidad in ["Mililitros", "Gramos"]:
-        return cantidad / 1000
-
-# Permite sumar dos cantidades de sustancia de acuerdo a la unidad en la que
-# se esta mostrando la cantidad de sustancia en el inventario. *!* Se asume que
-# no se agregaran sustancias a los inventarios en unidades diferentes a las normales
-# Si es un liquido, se puede pasar de litros a mililitros, pero no se espera
-# que se ingrese en algun inventario en gramos. Siempre se pasa a la unidad de 
-# medida que ya estaba
-def __sumar_cantidad(nueva_cantidad, cantidad_actual, nueva_unidad, unidad):
-
-    if nueva_unidad == unidad:
-        return float(nueva_cantidad) + float(cantidad_actual)
-    # Si no son iguales y ademas la nueva sustancia esta en Litros o Kilos
-    elif nueva_unidad in ["Kilogramos", "Litros"]:
-        return float(nueva_cantidad)*1000 + float(cantidad_actual)
-    # Si no son iguales y ademas la nueva sustancia esta en Mililitros o gramos
-    elif nueva_unidad in ["Mililitros", "Gramos"]:
-        return float(nueva_cantidad)/1000 + float(cantidad_actual)
-
-
 # Agrega los inventarios de los espacios en la lista "espacios"
 def __sumar_inventarios(espacios):
 
-    inventario_total = {}
+    inventario_total = []
     for esp_id in espacios:
         # Recorriendo las entradas en el inventario que pertenecen al espacio "esp"
-        for row in db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
-                      (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
-                      (db.t_Inventario.espacio == esp_id)).select():
-
-            sust = row['t_Sustancia']
-            inv = row['t_Inventario']
-            unid = row['t_Unidad_de_medida']
-
-            sustancia_id = sust.id
-
-            # Se agrega la sustancia al inventario final si esta no estaba ya
-            if not sustancia_id in inventario_total:
+        for row in db((db.bien_mueble.espacio == esp_id)).select():
+            inventario_total += row
                 
-                inventario_total[sustancia_id] = {
-                                        'f_nombre': sust.f_nombre,
-                                        'f_cas': sust.f_cas,
-                                        'f_pureza': sust.f_pureza,
-                                        'f_estado': sust.f_estado,
-                                        'f_existencia':inv.f_existencia,
-                                        'f_uso_interno': inv.f_uso_interno,
-                                        'f_unidad': unid.f_nombre
-                                                 }
-            # Si ya estaba, se suma la cantidad en existencia y de uso interno
-            # de la sustancia con id sustancia_id
-            else:
-                # Inventario actual de la sustancia sustancia_id
-                s = inventario_total[sustancia_id]
-
-                # Cantidades existentes por ahora en el inventario general
-                existencia = s['f_existencia']
-                uso_interno = s['f_uso_interno']
-
-                # Unidad en que se mostrara el inventario general de la sustancia
-                unidad = s['f_unidad']
-
-                # Nuevas cantidades que hay que sumar al inventario general
-                nueva_exist = inv.f_existencia
-                nuevo_uso_interno = inv.f_uso_interno
-                nueva_unidad = unid.f_nombre
-                
-                s['f_existencia'] = __sumar_cantidad(nueva_exist,
-                                                    existencia,
-                                                    nueva_unidad,
-                                                    unidad)
-                s['f_uso_interno'] = __sumar_cantidad(nuevo_uso_interno,
-                                                     uso_interno,
-                                                     nueva_unidad,
-                                                     unidad)
-                    
     return inventario_total
 
 
-# Dado el id de una dependencia, retorna una lista con el agregado de las sutancias
+# Dado el id de una dependencia, retorna una lista con el agregado de los bm
 # que existen en los espacios fisicos que pertenecen a esta. 
 def __get_inventario_dep(dep_id):
+    return db(((db.bien_mueble.dependencia == dep_id)).select())
 
-    inventario = {}
+# Registra un nueva bm en el espacio fisico indicado. Si el bm ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo 
+# el bm. 
+def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
+                descripcion, material, color, unidad_med, ancho, largo,
+                alto, diametro, movilidad, uso, nombre_cat, cod_loc, espacio,
+                unidad_ad, dependencia, user):
 
-    # Obteniendo lista de espacios bajo la dependencia con id dep_id
-    espacios = __get_espacios(dep_id)
+    # Si ya existe el BM en el inventario
+    if db(((db.bien_mueble.bm_num == no_bien)).select()):
+        bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
-    # Agrega los inventarios de los espacios en la lista "espacios"
-    inventario = __sumar_inventarios(espacios)
-
-    return inventario
-
-# Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
-# existe en el inventario, genera un mensaje con flash y no anade de nuevo la
-# sustancia. 
-def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
-
-    # Si ya existe la sustancia en el inventario
-    if db((db.t_Inventario.espacio == espacio.id) & 
-          (db.t_Inventario.sustancia == sustancia_id)).select():
-        sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
-
-        response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
-                          al espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
+        response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
+                          al espacio \"{1}\".".format(bm.bm_nombre, bm.bm_espacio_fisico)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
-        cantidad = float(total)
-        inv_id = db.t_Inventario.insert(f_existencia=cantidad, 
-                                f_uso_interno=float(uso_interno),
-                                f_medida=unidad_id,
-                                espacio=espacio.id,
-                                sustancia=sustancia_id)
+        inv_id = db.bien_mueble.insert(
+            bm_nombre = nombre, 
+            bm_num = no_bien, 
+            bm_placa = no_placa, 
+            bm_marca = marca, 
+            bm_modelo = modelo, 
+            bm_serial = serial,
+            bm_descripcion = descripcion, 
+            bm_material = material, 
+            bm_color = color, 
+            bm_unidad = unidad_med, 
+            bm_ancho = ancho, 
+            bm_largo = largo,
+            bm_alto = alto, 
+            bm_diametro = diametro, 
+            bm_movilidad = movilidad, 
+            bm_uso = uso, 
+            bm_categoria = nombre_cat, 
+            bm_codigo_localizacion = cod_loc, 
+            bm_espacio_fisico = espacio,
+            bm_unidad_de_adscripcion = unidad_ad, 
+            bm_dependencia = dependencia, 
+            bm_crea_ficha = user
+        )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
-        concepto = 'Ingreso'
+"""         concepto = 'Ingreso'
         tipo_ing = 'Ingreso inicial'
 
         # Agregando la primera entrada de la sustancia en la bitacora
@@ -253,9 +188,7 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
                                 f_tipo_ingreso=tipo_ing,
                                 f_medida=unidad_id,
                                 f_inventario=inv_id,
-                                f_sustancia=sustancia_id)
-
-    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+                                f_sustancia=sustancia_id) """
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
@@ -563,17 +496,23 @@ def bienes_muebles():
     dep_padre_id = ""
     dep_padre_nombre = ""
 
-    # Lista de sustancias en el inventario de un espacio fisico o que componen 
+    # Lista de BM en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
     inventario = []
     
-    # Lista de sustancias en el catalogo para el modal de agregar sustancia
-    # al alcanzar el nivel de espacios fisicos
-    sustancias = []
-
-    # Lista de unidades de medida
-    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
-
+    # Elementos que deben ser mostrados como una lista en el modal
+    # de agregar BM
+    material_pred = []
+    color = []
+    unidad_med = []
+    movilidad = []
+    uso = []
+    nombre_cat = []
+    cod_localizacion = []
+    localizacion = []
+    nombre_espaciof = []
+    unidad_adscripcion = []
+    
     # Esta variable es enviada a la vista para que cuando el usuario seleccione 
     # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
     # que la dependencia seleccionada sea un espacio, sino que la siguiente
@@ -626,15 +565,28 @@ def bienes_muebles():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
+                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+                unidad_med = ['cm','m']
+                movilidad = ['Fijo','Portátil']
+                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
+                'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
+                cod_localizacion = ['150301','240107']
+                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
-                # Si se esta agregando una nueva sustancia, se registra en la DB
-                if request.vars.sustancia:
-                    __agregar_sustancia(espacio,
-                                        request.vars.sustancia, 
-                                        request.vars.total,
-                                        request.vars.uso_interno,
-                                        request.vars.unidad)
+                # Si se esta agregando un nuevo BM, se registra en la DB
+                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_bm(
+                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                        request.vars.marca, request.vars.modelo, request.vars.serial,
+                        request.vars.descripcion, request.vars.material, request.vars.color,
+                        request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
+                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                        espacio.dependencia, auth.user)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -650,7 +602,7 @@ def bienes_muebles():
 
                 dep_padre_nombre = "Secciones"
 
-                # Se suman los inventarios de los espacios que tiene a cargo el usuario en la
+                # Se muestra el inventarios de los espacios que tiene a cargo el usuario en la
                 # seccion actual
                 inventario = __sumar_inventarios(espacios_ids)
 
@@ -706,18 +658,32 @@ def bienes_muebles():
                                  ).select().first().nombre
 
             espacio_visitado = True
-                            # Se muestra la lista de sustancias que tiene en inventario
+            
+            # Busca el inventario del espacio
             inventario = __get_inventario_espacio(espacio_id)
 
-            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
+            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+            unidad_med = ['cm','m']
+            movilidad = ['Fijo','Portátil']
+            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
+            'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
+            cod_localizacion = ['150301','240107']
+            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
-            # Si se esta agregando una nueva sustancia, se registra en la DB
-            if request.vars.sustancia:
-                __agregar_sustancia(espacio,
-                                    request.vars.sustancia, 
-                                    request.vars.total,
-                                    request.vars.uso_interno,
-                                    request.vars.unidad)
+            # Si se esta agregando un nuevo BM, se registra en la DB
+            if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
+                __agregar_bm(
+                    request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                    request.vars.marca, request.vars.modelo, request.vars.serial,
+                    request.vars.descripcion, request.vars.material, request.vars.color,
+                    request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
+                    request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
+                    request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                    espacio.dependencia, auth.user)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -792,15 +758,28 @@ def bienes_muebles():
                 # Se muestra la lista de sustancias que tiene en inventario
                 inventario = __get_inventario_espacio(espacio_id)
 
-                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
+                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+                unidad_med = ['cm','m']
+                movilidad = ['Fijo','Portátil']
+                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
+                'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
+                cod_localizacion = ['150301','240107']
+                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
-                # Si se esta agregando una nueva sustancia, se registra en la DB
-                if request.vars.sustancia:
-                    __agregar_sustancia(espacio,
-                                        request.vars.sustancia, 
-                                        request.vars.total,
-                                        request.vars.uso_interno,
-                                        request.vars.unidad)
+                # Si se esta agregando un nuevo BM, se registra en la DB
+                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_bm(
+                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                        request.vars.marca, request.vars.modelo, request.vars.serial,
+                        request.vars.descripcion, request.vars.material, request.vars.color,
+                        request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
+                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                        espacio.dependencia, auth.user)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -855,8 +834,6 @@ def bienes_muebles():
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
                 inventario=inventario,
-                sustancias=sustancias,
-                unidades_de_medida=unidades_de_medida,
                 retroceder=retroceder) 
 
 

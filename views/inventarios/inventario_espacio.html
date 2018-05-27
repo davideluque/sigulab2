@@ -193,7 +193,7 @@
 
                           
                           <div class="form-group">
-                              <select class="form-control" type="select" value="" id="material" name="Material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" value="" id="material" name="material" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 {{ listaMat = ["Acero", "Acrílico" , "Madera", "Metal", "Plástico", "Tela", "Vidrio"
                                
@@ -209,7 +209,7 @@
   
   
                           <div class="form-group">
-                              <select class="form-control" value="" type="select" id="color" name="Color" placeholder="Color" required>
+                              <select class="form-control" value="" type="select" id="color" name="color" placeholder="Color" required>
                                 <!-- Insertar un for-->
                                 {{ lista = [ "Amarillo", "Azul", "Beige", "Blanco", "Dorado","Gris", "Madera", "Marrón", "Color", "Mostaza", "Naranja", "Negro", "Plateado","Rojo","Rosado",
                                     "Verde",
@@ -353,7 +353,7 @@
                         }}
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
-                          <select class="form-control" type="select" value="" id="cod-localizacion"  name="Código de localización" required>
+                          <select class="form-control" type="select" value="" id="cod-localizacion"  name="cod_loc" required>
                             <option value="" selected hidden >Seleccione una categorias</option>
                             {{i=1}}
                             {{ for categoria in listaCategorias:}}
