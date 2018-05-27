@@ -1,5 +1,12 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
 
+  <!-- Estilo del listado de Solicitudes de Servicios -->
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+
 <!-- Inicio Boton Agregar Sustancia -->
 <div class="container" id="containerAgregar">
     <div class="row">
@@ -8,7 +15,7 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Bien</button>
 	        </div>
         </div>
     </div>
@@ -32,12 +39,11 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                <th class="camposTabla linksNombres">Estatus</th>
             </tr>
         </thead>
 
@@ -56,20 +62,17 @@
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>
                 <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
                 <td class="camposTabla">{{=inv.f_existencia}}</td>
-                <td class="camposTabla">{{=unid.f_nombre}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
-            <tr>
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+          <th class="camposTabla linksNombres">Nombre</th>
+          <th class="camposTabla linksNombres">N° BM</th>
+          <th class="camposTabla linksNombres">Placa</th>
+          <th class="camposTabla linksNombres">Tipo</th>
+          <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+          <th class="camposTabla linksNombres">Estatus</th>
             </tr>
         </tfoot>
 
@@ -80,89 +83,357 @@
 <!-- Fin Listado de sustancias --> 
 
 <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
-<input type="hidden" id="serv" name="serv" value="">
 
 <!-- Modal añadir una sustancia nueva al inventario -->
-  <div class="modal fade" id="addsustancia" role="dialog">
-    <div class="modal-dialog">
+<div class="modal fade" id="addsustancia" role="dialog">
+  <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header addHeader">
-          <div class="row addRow" id="rowHeader">
-            <div class="col-sm-1" id="col1Header">
-              <div class="container" id="plus">
-                <h1 id="agregar">+</h1>
-              </div>
-            </div>
-            <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nueva Sustancia
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </h4>
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
             </div>
           </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Bien Mueble<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
         </div>
-        <!-- Fin Modal Header -->
-        
-        <!-- Modal Body -->
-        <div class="modal-body addBody">
-          <div class="row addRow">
-            <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                  <!-- Primer Paso -->
-                  <fieldset class="formField">
-                    <div class="form-bottom">
+                <!-- Primer Paso  PArte 1-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                      <span class="step">4</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Bien</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre*" required>
+                            <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" required>
+                            <font color="red"><div id="err_no_bien" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="no_placa" name="no_placa" placeholder="N° de placa">
+                            <font color="red"><div id="err_placa" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" required >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo" required>
+                            <div class="field-error"> <p id="error-modelo"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial" required>
+                            <div class="field-error"> <p id="error-serial"> </p> </div>
+                          </div>
+                        
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" required>
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+                <!-- Primer Paso PArte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> </div>
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
+  
 
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                              <option value="" selected hidden >Sustancia*</option>
-                              {{for sustancia in sustancias:}}
-                              <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
                           
                           <div class="form-group">
-                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                            <div class="field-error"> <p id="error-uso-interno"> </p> </div>
+                              <select class="form-control" type="select" value="" id="material" name="Material" placeholder="Material predominante" required>
+                                <!-- Insertar un for-->
+                                {{ listaMat = ["Acero", "Acrílico" , "Madera", "Metal", "Plástico", "Tela", "Vidrio"
+                               
+                                  ]  }}
+                                <option value="" disabled selected>Selecione un material</option>
+                                {{ for color in listaMat:}}
+                                <option value="{{=color}}">{{=color}}</option>
+                                {{pass}}
+                              </select>
+                              <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
-                          
-                          <div class="form-group" style="padding-bottom: 50px">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
-                              {{pass}}
+
+  
+  
+                          <div class="form-group">
+                              <select class="form-control" value="" type="select" id="color" name="Color" placeholder="Color" required>
+                                <!-- Insertar un for-->
+                                {{ lista = [ "Amarillo", "Azul", "Beige", "Blanco", "Dorado","Gris", "Madera", "Marrón", "Color", "Mostaza", "Naranja", "Negro", "Plateado","Rojo","Rosado",
+                                    "Verde",
+                                    "Vinotinto"
+                                  ]  }}
+                                <option value="" disabled selected>Selecione un color</option>
+                                {{ for color in lista:}}
+                                <option value="{{=color}}">{{=color}}</option>
+                                {{pass}}
+                              </select>
+                              <div class="field-error"> <p id="error-color"> </p> </div>
+                          </div>
+
+                          <label>Dimensiones</label>
+
+                          <div class="form-group">
+                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
+                              <!-- Insertar un for-->
+                              <option value="" disabled selected>Selecione una unidad</option>
+                              <option value="cm">cm</option>
+                              <option value="m">cm</option>
                             </select>
+                            <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="ancho" name="ancho" placeholder="Ancho" >
+                            <div class="field-error"> <p id="error-ancho" placegolder="No es" > </p> </div>
+                          </div>
+
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="largo" name="largo" placeholder="Largo" >
+                            <div class="field-error"> <p id="error-ancho"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="alto" name="alto" placeholder="Altura" >
+                            <div class="field-error"> <p id="error-alto"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="diametro" name="diametro" placeholder="Diámetro" >
+                            <div class="field-error"> <p id="error-diametro"> </p> </div>
+                          </div>
+
+                          
+                        </div>
                       </div>
-                    </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
                   </fieldset>
                   <!-- Fin Primer Paso -->
-                </form>
-            </div>
-          </div>               
-        </div>
+
+
+                <!-- Primer Paso PArte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Segundo Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+  
+
+                        <div class="form-group">
+                            <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
+                              <!-- Insertar un for-->
+                              {{ lista2 = ["Fijo", "Portatil" ]  }}
+                              <option value="" disabled selected>Selecione un material</option>
+                              {{ for color in lista2:}}
+                              <option value="{{=color}}">{{=color}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-movilidad"> </p> </div>
+                        </div>
+
+                        <label>Tipo de Uso</label>
+                        <div class="form-group">
+                            <input type="checkbox" name="tipo-uso" value="1">Docencia
+                            <br>
+                            <input type="checkbox" name="tipo-uso" value="2">Investigacion
+                            <br>
+                            <input type="checkbox" name="tipo-uso" value="3">Extension
+                            <br>
+                            <input type="checkbox" name="tipo-uso" value="4">Apoyo Administrativo
+                        </div>
+
+                        </div>
+                      </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                  </fieldset>
+                  <!-- Fin Primer Paso  parte 3-->
+
+                <!-- Comienzo Segundo Paso-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                          <span class="step">4</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm">SUDEBID</h4>
+                      <label>Importante: llene según requerimientos de SUDEBID</label>
+                        
+                      <div class="form-group">
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Código de localización</label>
+                          <select class="form-control" type="select" value="" id="cod-localizacion" onchange="placeholder_localizacion(this.value);"  name="Código de localización" required>
+                            <option value="" onchange="placeholder_localizacion(this.value);"  selected hidden >Seleccione un código</option>
+                            <option value="150301" onchange="placeholder_localizacion(this.value);">150301</option>
+                            <option value="240107" onchange="placeholder_localizacion(this.value);">240107</option>
+                          </select>
+                          <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Ubicacion</label>
+                            <input type="text" class="form-control" id="localizacion" name="localización" placeholder="" readonly >
+                            <div class="field-error"> <p id="error-localizacion"> </p> </div>
+                          </div>
+                      
+                        {{listaCategorias = ["Maquinaria y demás equipos de construcción, campo, industria y taller",
+                          "Equipos de transporte, tracción y elevación",
+                          "Equipos de comunicaciones y de señalamiento",
+                          "Equipos médicos - quirúrgicos, dentales y veterinarios",
+                          "Equipos científicos, religiosos, de enseñanza y recreación",
+                          "Máquinas, muebles y demás equipos de oficina y de alojamiento"
+                          ]
+                        }}
+                      <div class="form-group">
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
+                          <select class="form-control" type="select" value="" id="cod-localizacion"  name="Código de localización" required>
+                            <option value="" selected hidden >Seleccione una categorias</option>
+                            {{i=1}}
+                            {{ for categoria in listaCategorias:}}
+                              <option value="{{=i}}" >{{=categoria}}</option>
+                              {{ i = i +1}}
+                            {{pass}}
+                          </select>
+                          <div class="field-error"> <p id="error-categorias"> </p> </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategoria</label>
+                            <input type="text" class="form-control" id="subcategoria" name="subcategoria" placeholder="Subcategoria (falta integrar la BD)" value="" >
+                            <div class="field-error"> <p id="error-subcategoria"> </p> </div>
+                          </div>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Comienzo Tercer Paso-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="5" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                          <span class="step activePass">4</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm">Ubicación</h4>
+                        
+
+
+                        <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Espacio Físico</label>
+                            <input type="text" class="form-control" id="espacio-fis" name="espacio-fis" placeholder="Falta la BD" value="" >
+                            <div class="field-error"> <p id="error-espacio-fis"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Unidad de Adscripción</label>
+                            <input type="text" class="form-control" id="unidad-ads" name="unidad-ads" placeholder="Falta la BD" value="" >
+                            <div class="field-error"> <p id="error-unidad-ads"> </p> </div>
+                          </div>
+  
+                           <div class="form-group">
+                              <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Dependencia</label>
+                              <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Falta la BD" value="" >
+                              <div class="field-error"> <p id="error-dependencia"> </p> </div>
+                            </div>
+    
+  
+                            <div class="form-group">
+                                <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Uso del espacio físico</label>
+                                <input type="text" class="form-control" id="uso-espacio" name="uso-espacio" placeholder="Falta la BD" value="" >
+                                <div class="field-error"> <p id="error-uso-espacio"> </p> </div>
+                            </div>
+                            
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>
+                </fieldset>
+                <!-- Fin Tercer Paso -->
+
+
+              </form>
+          </div>
+        </div>               
       </div>
     </div>
   </div>
+</div>
 
 <!-- Fin Modal Agregar Servicio -->
 
@@ -231,7 +502,7 @@ del concepto y tipo de ingreso o egreso -->
 
   // True si "n" es un numero
   function is_number(n){
-    return !isNaN(n)
+    return !isNaN(n);
   }
 
   // True si "n" es negativo
@@ -242,6 +513,20 @@ del concepto y tipo de ingreso o egreso -->
   // True si "n" es cero
   function is_zero(n){
     return (n == 0)
+  }
+
+  function placeholder_localizacion(value){
+    var x = document.getElementById("localizacion");
+    var y = document.getElementById("cod-localizacion");
+
+    if (value  == "150301"){
+      x.placeholder = "Edo Miranda, Municipio Baruta, Parroquia Baruta";
+      x.value = "Edo Miranda, Municipio Baruta, Parroquia Baruta"
+    }else{;
+      x.placeholder = "Edo Vargas, Municipio Vargas, Parroquia Macuto";
+      x.value = "Edo Vargas, Municipio Vargas, Parroquia Macuto";
+
+    }
   }
 
 </script>
