@@ -11,7 +11,7 @@
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
               </div>
               <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre"></h4>
+                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo"></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
           </div>
@@ -20,17 +20,26 @@
         <div class="modal-body">
 
           <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li role="presentation" class="nav-item active">
+              <a href="#datos_basicos" class="nav-link" data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+            </li>
             <li class="nav-item active">
-              <a class="nav-link" data-toggle="tab" role="tab" aria-controls="datos">Datos Básicos</a>
+              <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
             </li>
           </ul>
 
           <div class="tab-content">
-            <div class="tab-pane active" id="datos" role="tabpanel">
+            <div class="tab-panel active" id="datos_basicos" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                   <tr>
-                    <td>Cédula:</td><td id="field_ci"></td>
+                    <td>Nombre:</td><td id="field_nombre"></td>
+                  </tr>
+                  <tr>
+                    <td>Apellido:</td><td id="field_apellido"></td>
                   </tr>
                   <tr>
                     <td>Correo Electrónico:</td><td id="field_email"></td>
@@ -42,27 +51,74 @@
                     <td>Página Web:</td><td id="field_pagina_web"></td>
                   </tr>
                   <tr>
-                    <td>Gremio:</td><td id="field_categoria"></td>
-                  </tr>
-                  <tr>
-                    <td>Cargo:</td><td id="field_cargo"></td>
-                  </tr>
-                  <tr>
                     <td>Dependencia:</td><td id="field_dependencia"></td>
                   </tr>
                   <tr>
-                    <td>Fecha de Ingreso:</td><td id="field_fecha_i"></td>
-                  </tr>
-                  <tr>
-                    <td>Fecha de Salida:</td><td id="field_fecha_s"></td>
-                  </tr>
-                  <tr>
-                    <td>Estatus:</td><td id="field_estatus"></td>
+                      <td>Unidad Superior: </td><td id="field_unidad_jerarquica_superior"></td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
+
+            <div class="tab-panel" id="datos_laborales" role="tabpanel">
+              <table class="table contenidoFicha">
+                <tbody>
+                    <tr>
+                      <td>Cargo:</td><td id="field_cargo"></td>  
+                    </tr>
+                    <tr>
+                      <td>Gremio:</td><td id="field_gremio"></td>  
+                    </tr>
+                    <tr>
+                      <td>Categoria:</td><td id="field_categoria"></td>  
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>  
+                    </tr>
+                    <tr>
+                      <td>Fecha Culminacion:</td><td id="field_fecha_salida"></td>  
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>  
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab"></td>  
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica"></td>  
+                    </tr>
+                    <tr>
+                      <td>Estatus:</td><td id="field_estatus"></td>  
+                    </tr>
+                    <tr>
+                      <td>Condicion:</td><td id="field_condicion"></td>  
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+              
+             <div class="tab-panel active" id="datos_personales" role="tabpanel">
+              <table class="table contenidoFicha">
+                <tbody>
+                    <tr>
+                      <td>Cédula:</td><td id="field_ci"></td>  
+                    </tr>
+                    <tr>
+                      <td>Celular:</td><td id="field_celular"></td>  
+                    </tr>
+                    <tr>
+                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia"></td>  
+                    </tr>
+                    <tr>
+                      <td>Dirección:</td><td id="field_direccion"></td>  
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+              
+              
+              
+           </div>
         </div>
 
         <div class="modal-footer">
@@ -84,33 +140,58 @@
   <script type="text/javascript">
       $('#ficha_edicion').on('show.bs.modal', function(e){
           var ci = $(e.relatedTarget).data('ci');
-          var categoria = $(e.relatedTarget).data('categoria');
+          var gremio = $(e.relatedTarget).data('gremio');
           var email = $(e.relatedTarget).data('email');
-          var fecha_s = $(e.relatedTarget).data('fecha_s');
-          var fecha_i = $(e.relatedTarget).data('fecha_i');
+          var fecha_salida = $(e.relatedTarget).data('fecha_salida');
+          var fecha_ingreso = $(e.relatedTarget).data('fecha_ingreso');
           var nombre = $(e.relatedTarget).data('nombre');
           var apellido = $(e.relatedTarget).data('apellido');
           var cargo = $(e.relatedTarget).data('cargo');
-          var dep_name = $(e.relatedTarget).data('dep-name');
+          var dependencia = $(e.relatedTarget).data('dep-name');
           var estatus = $(e.relatedTarget).data('estatus');
           var telefono = $(e.relatedTarget).data('telefono');
           var pagina_web = $(e.relatedTarget).data('pagina_web');
+          
+          var unidad_jerarquica_superior = $(e.relatedTarget).data('unidad_jerarquica_superior');
+          var ubicacion = $(e.relatedTarget).data('ubicacion');
+          var celular = $(e.relatedTarget).data('celular');
+          var contacto_emergencia = $(e.relatedTarget).data('contacto_emergencia');
+          var direccion = $(e.relatedTarget).data('direccion');
+          var categoria = $(e.relatedTarget).data('categoria');
+          var fecha_ingreso_ulab = $(e.relatedTarget).data('fecha_ingreso_ulab');
+          var fecha_ingreso_usb = $(e.relatedTarget).data('fecha_ingreso_usb');
+          var fecha_ingreso_admin_publica = $(e.relatedTarget).data('fecha_ingreso_admin_publica');
+          var condicion = $(e.relatedTarget).data('condicion');
+          var nombre_completo= nombre +" "+apellido
 
-          f = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
+          f = [ci, gremio, email, fecha_salida, fecha_ingreso, nombre, cargo, estatus, telefono, pagina_web, unidad_jerarquica_superior,
+                ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion];
 
           $("#field_ci").html(ci);
-          $("#field_categoria").html(categoria);
-          $("#field_dependencia").html(dep_name);
+          $("#field_gremio").html(gremio);
+          $("#field_dependencia").html(dependencia);
           $("#field_email").html(email);
-          $("#field_fecha_s").html(fecha_s);
-          $("#field_fecha_i").html(fecha_i);
+          $("#field_fecha_salida").html(fecha_salida);
+          $("#field_fecha_ingreso").html(fecha_ingreso);
           $("#field_nombre").html(nombre);
           $("#field_apellido").html(apellido);
           $("#field_cargo").html(cargo);
           $("#field_estatus").html(estatus);
           $("#field_telefono").html(telefono);
           $("#field_pagina_web").html(pagina_web);
-
+          
+          $("#field_unidad_jerarquica_superior").html(unidad_jerarquica_superior);
+          $("#field_ubicacion").html(ubicacion);
+          $("#field_celular").html(celular);
+          $("#field_contacto_emergencia").html(contacto_emergencia);
+          $("#field_direccion").html(direccion);
+          $("#field_categoria").html(categoria);
+          $("#field_fecha_ingreso_ulab").html(fecha_ingreso_ulab);
+          $("#field_fecha_ingreso_usb").html(fecha_ingreso_usb);
+          $("#field_fecha_ingreso_admin_publica").html(fecha_ingreso_admin_publica);
+          $("#field_condicion").html(condicion);
+          $("#field_nombre_completo").html(nombre_completo)
+          
           $('#eliminar').on('click',function(f){
             var answer=confirm('¿Seguro que desea eliminar esta persona?');
             if(answer){
@@ -126,10 +207,10 @@
             this.value = $(e.relatedTarget).data('ci');
           });
 
-          fields = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
+          fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
+                ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion];
           console.log(fields);
           //$("#field_ci").html(item);
           //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
       });
   </script>
-
