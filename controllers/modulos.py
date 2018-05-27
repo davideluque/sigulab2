@@ -197,6 +197,7 @@ def register():
       depid = request.post_vars.seccion
     else:
       depid = request.post_vars.laboratorio
+    
 
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
@@ -212,13 +213,15 @@ def register():
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
                            f_telefono = 0,
-                           f_pagina_web = "N/A",
-                           f_categoria = "N/A",
-                           f_cargo = "N/A", # *?* No deberia ser request.vars.rol?
-                           f_fecha_ingreso = "1/01/1989",
-                           f_fecha_salida = "1/02/1989",
                            f_dependencia = depid)
 
+    #Mapea el usuario a su unidad jerarquica superior
+    adscripcion = (db(db.dependencias.id == depid).select(db.dependencias.ALL)).first()
+    if(adscripcion): 
+        db(db.t_Personal.id == nuevo_personal_id).update(f_unidad_jerarquica_superior = adscripcion.unidad_de_adscripcion)
+     
+    else : adscripcionid = request.post_vars.unidad_de_adscripcion
+    
     # Mapea el usuario al espacio fisico que tiene a cargo
     rolid = request.post_vars.rol
     roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
