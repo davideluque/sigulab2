@@ -134,6 +134,7 @@
 'Email': 'Email',
 'Email and SMS': 'Email and SMS',
 'Enter a number between %(min)g and %(max)g': 'Enter a number between %(min)g and %(max)g',
+'Enter a value': 'Enter a value',
 'Enter an integer between %(min)g and %(max)g': 'Enter an integer between %(min)g and %(max)g',
 'Errors': 'Errors',
 'Espacio Fisico': 'Espacio Fisico',

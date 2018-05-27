@@ -46,10 +46,7 @@ def __find_dep_id(nombre):
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
 def __get_inventario_espacio(espacio_id=None):
-    inventario = []
-    inventario = list(db((db.bien_mueble.espacio == espacio_id)).select())
-
-    return inventario
+    return db(db.bien_mueble.bm_espacio_fisico == espacio_id).select()
 
 # Retorna las hojas o dependencias que no tienen hijos (posiblemente secciones) y
 # que estan por debajo de la dependencia dada.
@@ -122,17 +119,17 @@ def __sumar_inventarios(espacios):
 
     inventario_total = []
     for esp_id in espacios:
-        # Recorriendo las entradas en el inventario que pertenecen al espacio "esp"
-        for row in db((db.bien_mueble.espacio == esp_id)).select():
-            inventario_total += row
-                
+        inventario_total += __get_inventario_espacio(esp_id)
+                       
     return inventario_total
 
 
 # Dado el id de una dependencia, retorna una lista con el agregado de los bm
 # que existen en los espacios fisicos que pertenecen a esta. 
 def __get_inventario_dep(dep_id):
-    return db(((db.bien_mueble.dependencia == dep_id)).select())
+    if dep_id == 1:
+        return db(db.bien_mueble).select()
+    return db(db.bien_mueble.bm_depedencia == dep_id).select()
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
@@ -585,7 +582,7 @@ def bienes_muebles():
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                         request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
                         espacio.dependencia, auth.user)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -682,7 +679,7 @@ def bienes_muebles():
                     request.vars.descripcion, request.vars.material, request.vars.color,
                     request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                     request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                    request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                    request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
                     espacio.dependencia, auth.user)
 
 
@@ -778,7 +775,7 @@ def bienes_muebles():
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                         request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1#unidad_ad, 
+                        request.vars.nombre_cat, request.vars.cod_loc, espacio, 1, 
                         espacio.dependencia, auth.user)
 
             else:

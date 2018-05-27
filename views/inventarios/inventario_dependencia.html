@@ -21,20 +21,18 @@
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Ubicacion Fisica</th>
-                <th class="camposTabla linksNombres">Estatus</th>
+                <!-- <th class="camposTabla linksNombres">Estatus</th> -->
             </tr>
         </thead>
-
         <tbody>
-          {{for id_,sust in inventario.iteritems():}}
+          {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla">{{=sust['f_nombre']}}</td>
-                <!-- *!* Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
-                <td class="camposTabla">{{=sust['f_cas'] if sust['f_estado'] else ''}}</td>
-                <td class="camposTabla">{{=sust['f_estado'][0] if sust['f_estado'] else ''}}</td>
-                <td class="camposTabla">{{=sust['f_uso_interno']}}</td>
-                <td class="camposTabla">{{=float(sust['f_existencia']) - float(sust['f_uso_interno'])}}</td>
-                <td class="camposTabla">{{=sust['f_existencia']}}</td>
+                <td class="camposTabla">{{=bm['bm_nombre']}}</td>
+                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                <td class="camposTabla">{{=bm['bm_num']}}</td>
+                <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_categoria']}}</td>
+                <td class="camposTabla">{{=bm['bm_espacio_fisico']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -46,7 +44,7 @@
               <th class="camposTabla linksNombres">Placa</th>
               <th class="camposTabla linksNombres">Tipo</th>
               <th class="camposTabla linksNombres">Ubicacion Fisica</th>
-              <th class="camposTabla linksNombres">Estatus</th>
+              <!-- <th class="camposTabla linksNombres">Estatus</th> -->
             </tr>
         </tfoot>
 
@@ -54,4 +52,4 @@
     </div>
   </div>
 </div>  
-<!-- Fin Listado de sustancias -->
+<!-- Fin Listado de inventario -->

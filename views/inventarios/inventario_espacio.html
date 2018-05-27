@@ -43,25 +43,19 @@
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Ubicacion Fisica</th>
-                <th class="camposTabla linksNombres">Estatus</th>
+                <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
 
         <tbody>
-          {{for sustancia in inventario:}}
-            {{sust = sustancia['t_Sustancia']}}
-            {{inv = sustancia['t_Inventario']}}
-            {{unid = sustancia['t_Unidad_de_medida']}}
+          {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla">
-                  <a href="{{=URL('bitacora',vars=dict(inv=inv.id))}}">{{=sust.f_nombre}}</a>
-                </td>
-                <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
-                <td class="camposTabla">{{=sust.f_cas if sust.f_estado else ''}}</td>
-                <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
-                <td class="camposTabla">{{=inv.f_uso_interno}}</td>
-                <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
-                <td class="camposTabla">{{=inv.f_existencia}}</td>
+                <td class="camposTabla">{{=bm['bm_nombre']}}</td>
+                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                <td class="camposTabla">{{=bm['bm_num']}}</td>
+                <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_categoria']}}</td>
+                <td class="camposTabla">{{=bm['bm_espacio_fisico']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -72,7 +66,7 @@
           <th class="camposTabla linksNombres">Placa</th>
           <th class="camposTabla linksNombres">Tipo</th>
           <th class="camposTabla linksNombres">Ubicacion Fisica</th>
-          <th class="camposTabla linksNombres">Estatus</th>
+          <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
 
