@@ -15,9 +15,11 @@ $(document).ready(function () {
 
     $('#sel1').change(function (){
         if (($("#sel1 option:selected").val()=="Jubilado") || $("#sel1 option:selected").val()=="Retirado") {
+            $("#fentrada").show();
             $("#fsalida").show();
         }
         else {
+            $("#entrada").hide();
             $("#fsalida").hide();
         };
     });
@@ -183,6 +185,7 @@ $(document).ready(function () {
         });
 
     });
+    
 
    
 });
