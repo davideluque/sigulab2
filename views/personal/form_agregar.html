@@ -1,10 +1,14 @@
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
+    $.datepicker.setDefaults({ dateFormat: "yy-mm-dd"})
     $( function() {
-      var d1=$( "#datepicker" ).datepicker({maxDate:'0'});
-      $( "#datepicker2" ).datepicker({maxDate:'0'});
+      var d1=$( "#datepicker" ).datepicker();
+      $( "#datepicker2" ).datepicker();
+      var dateUsb = $( "#datepickerUsb" ).datepicker();
+        $( "#datepickerUlab" ).datepicker();
+        $( "#datepicker5" ).datepicker();
     } );
   </script>
 
@@ -49,32 +53,48 @@
                           <h4 class="titulosForm">Datos Básicos</h4>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre" required>
+                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value={{=usuario.nombre}}>
                               <font color="red"><div id="err_nombre" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" required>
+                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value={{=usuario.apellido}}>
                               <font color="red"><div id="err_apellido" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required>
+                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required value={{=usuario.cedula}}>
                               <font color="red"><div id="err_ci" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required>
+                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value={{=usuario.correo}} >
                               <font color="red"><div id="err_email" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="telefono_add" placeholder="Extension" required>
+                              <input type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
                               <font color="red"><div id="err_telefono" hidden></div></font>
+                            </div>
+                            
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="celular_add" placeholder="Celular" required>
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                            
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                            
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
+                              <font color="red"><div id="err_direccion" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="pagina_web_add" placeholder="Página Web">
+                              <input type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
+                              <font color="red"><div id="err_pagina_web" hidden></div></font>
                             </div>
 
                         </div>
@@ -104,12 +124,40 @@
                                   {{pass}} 
                                 </select>
                               </div>
+                              <div class="form-group">
+                                <select class="form-control" id="sel2" name="categoria_add">
+                                  <option value="1" selected hidden>Categoria</option>
+                                  {{for categoria in categorias:}}
+                                  <option value="{{=categoria}}">{{=categoria}}</option>
+                                  {{pass}} 
+                                </select>
+                              </div>
+                              
+                              <div class="form-group">
+                                <select class="form-control" id="sel3" name="condicion_add">
+                                  <option value="1" selected hidden>Condicion</option>
+                                  {{for condicion in condiciones:}}
+                                  <option value="{{=condicion}}">{{=condicion}}</option>
+                                  {{pass}} 
+                                </select>
+                              </div>
 
-                              <p>Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" required></p>
+                              <p id="fentrada">Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p id="fsalida" hidden>Fecha de Egreso: <input name = "fecha_salida_add" type="text" id="datepicker2"></p>
+                              <p id="fsalida">Fecha de Egreso: <input name = "fecha_salida_add" type="text" id="datepicker2" ></p>
                               <font color="red"><div id="err_fecha_salida" hidden></div></font>
+                              
+                              
+                              
+                              <p id="fsalida">Ingreso a la USB: <input name = "fecha_ingreso_usb_add" type="text" id="datepickerUsb" required></p>
+                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              
+                              <p id="fsalida">Ingreso a la ULAB: <input name = "fecha_ingreso_ulab_add" type="text" id="datepickerUlab" required></p>
+                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              
+                              <p id="fsalida">Ingreso a la administracion publica: <input name = "fecha_ingreso_admin_publica_add" type="text" id="datepicker5" required></p>
+                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
@@ -140,21 +188,24 @@
                         </div>
 
                         <div class="form-group">
-                          <select class="form-control" id="sel1" name="categoria_add" required>
+                          <select class="form-control" id="sel1" name="gremio_add" required>
                             <option value="1" selected hidden>Gremio</option>
-                            {{for categoria in categorias:}}
-                            <option value="{{=categoria}}">{{=categoria}}</option>
+                            {{for gremio in gremios:}}
+                            <option value="{{=gremio}}">{{=gremio}}</option>
                             {{pass}} 
                           </select>
                         </div>
 
                         <div class="form-group">
-                          <select class="form-control" id="sel1" name="dependencia_add" required>
-                            <option value="1" selected hidden>Dependencia</option>
-                            {{for dependencia in dependencias:}}
-                            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
-                            {{pass}} 
-                          </select>
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value={{=usuario.dependencia}}>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value={{=usuario.ubicacion}}>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value={{=usuario.rol}}>
                         </div>
                   
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>

@@ -10,6 +10,7 @@
 {{end}}
 
 {{block center}}
+
 	<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
 	  <div class="breadcrumb">
 	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
@@ -24,17 +25,17 @@
 		      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
 		    </div>
 		    <div class="col-sm-4">
-	          <select class="form-control" id="fil_categoria" name="categoria_add" onchange="filter('categoria')" style="margin-left:30px" required>
-	            <option value="1" selected hidden>Categoria</option>
-	            {{for categoria in categorias:}}
-	            <option id="categoria_opt" value="{{=categoria}}">{{=categoria}}</option>
+	          <select class="form-control" id="fil_gremio" name="gremio_add" onchange="filter('gremio')" style="margin-left:30px" required>
+	            <option value="1" selected hidden>Gremio</option>
+	            {{for gremio in gremios:}}
+	            <option id="gremio_opt" value="{{=gremio}}">{{=gremio}}</option>
 	            {{pass}} 
 	          </select>
 	        </div>
 
 	        <div class="col-sm-4">
 	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" style="margin-left:10px" required>
-	            <option value="1" selected hidden>Dependencia</option>
+	            <option value=usuario.dependencia selected hidden>Dependencia</option>
 	            {{for dependencia in dependencias:}}
 	            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
 	            {{pass}} 
@@ -59,7 +60,7 @@ function filter(type){
 	var trs = document.querySelectorAll('#dummyID tr');
 	for(i = 0; i < trs.length; ++i) {
 	    idtr = trs[i].id.split("_");
-	    if ( type == 'categoria' ){
+	    if ( type == 'gremio' ){
 	
 	    	trs[i].style.display = 'None';
 	    	if ( idtr[1] == opt.value ){trs[i].style.display = 'table-row';}
@@ -72,7 +73,7 @@ function filter(type){
 	    }
 	
 	}
-	if (type=='categoria'){
+	if (type=='gremio'){
 		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.value);
 	}
 	else {
