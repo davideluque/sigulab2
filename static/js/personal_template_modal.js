@@ -13,14 +13,12 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     });
 
-    $('#sel1').change(function (){
-        if (($("#sel1 option:selected").val()=="Jubilado") || $("#sel1 option:selected").val()=="Retirado") {
-            $("#fentrada").show();
-            $("#fsalida").show();
+    $('#sel2').change(function (){
+        if ($("#sel2 option:selected").val()=="Fijo") {
+            $("#fsalida").hide();
         }
         else {
-            $("#entrada").hide();
-            $("#fsalida").hide();
+            $("#fsalida").show();
         };
     });
 
@@ -125,7 +123,7 @@ $(document).ready(function () {
                     $("#err_fecha_ingreso").hide();
                 }
             }
-            if (($("#sel1 option:selected").val()=="Jubilado") || $("#sel1 option:selected").val()=="Retirado") {
+            if (($("#sel2 option:selected").val() != "Fijo") ) {
                 if (($(this).val() == "") && ($(this).attr('name')=="fecha_salida_add")) {
                     $("#err_fecha_salida").html("Este campo es obligatorio");
                     $("#err_fecha_salida").show();
@@ -186,6 +184,8 @@ $(document).ready(function () {
 
     });
     
+    
+
 
    
 });

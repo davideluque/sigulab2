@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
+
+
  <div class="modal fade" id="ficha_edicion" role="dialog">
     <div class="modal-dialog">
 
@@ -75,8 +77,8 @@
                     <tr>
                       <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>  
                     </tr>
-                    <tr>
-                      <td>Fecha Culminacion:</td><td id="field_fecha_salida"></td>  
+                    <tr >
+                      <td>Fecha Salida:</td><td id="field_fecha_salida"></td>  
                     </tr>
                     <tr>
                       <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>  
@@ -201,12 +203,10 @@
             else{
               f.preventDefault();      
             }
+          
           });
 
-          $('#editar').on('click',function(){
-            this.value = $(e.relatedTarget).data('ci');
-          });
-
+          
           fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
                 ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion];
           console.log(fields);
