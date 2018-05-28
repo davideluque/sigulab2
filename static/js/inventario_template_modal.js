@@ -11,7 +11,6 @@ function testcheck(e)
     }
 }
 
-
 $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 
@@ -89,7 +88,7 @@ $(document).ready(function () {
             }else {
                 if (($(this).attr('name')=="no_bien")) {
                     if (!($(this).val().match(/^[0-9]{6}$/))) {
-                        $("#err_no_bien").html("Formato Inválido. son 6 digitos");
+                        $("#err_no_bien").html("Formato Inválido. Son 6 digitos");
                         $("#err_no_bien").show();
                         $(this).addClass('input-error');
                         next_step = false;

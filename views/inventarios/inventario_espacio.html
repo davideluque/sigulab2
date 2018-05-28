@@ -1,13 +1,12 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
 
   <!-- Estilo del listado de Solicitudes de Servicios -->
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
 
-<!-- Inicio Boton Agregar Sustancia -->
+<!-- Inicio Boton Agregar BM -->
 <div class="container" id="containerAgregar">
     <div class="row">
         <div class="col-sm-6"></div>
@@ -15,7 +14,7 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Bien</button>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Bien</button>
 	        </div>
         </div>
     </div>
@@ -41,7 +40,9 @@
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">N° BM</th>
                 <th class="camposTabla linksNombres">Placa</th>
-                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Serial</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -53,16 +54,20 @@
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                <td class="camposTabla">{{=bm['bm_categoria']}}</td>
+                <td class="camposTabla">{{=bm['bm_marca']}}</td>
+                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
+                <td class="camposTabla">{{=bm['bm_serial']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
-          <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">N° BM</th>
-          <th class="camposTabla linksNombres">Placa</th>
-          <th class="camposTabla linksNombres">Tipo</th>
+            <th class="camposTabla linksNombres">Nombre</th>
+            <th class="camposTabla linksNombres">N° BM</th>
+            <th class="camposTabla linksNombres">Placa</th>
+            <th class="camposTabla linksNombres">Marca</th>
+            <th class="camposTabla linksNombres">Modelo</th>
+            <th class="camposTabla linksNombres">Serial</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -75,8 +80,8 @@
 
 <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
 
-<!-- Modal añadir una sustancia nueva al inventario -->
-<div class="modal fade" id="addsustancia" role="dialog">
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -182,9 +187,9 @@
 
                           
                           <div class="form-group">
-                              <select class="form-control" type="select" value="" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
-                                <option value="" disabled selected>Selecione un material*</option>
+                                <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
                                 <option value="{{=material}}">{{=material}}</option>
                                 {{pass}}
@@ -195,8 +200,8 @@
   
   
                           <div class="form-group">
-                              <select class="form-control" value="" type="select" id="color" name="color" placeholder="Color" required>
-                                <option value="" disabled selected>Selecione un color*</option>
+                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" required>
+                                <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
                                 <option value="{{=color}}">{{=color}}</option>
                                 {{pass}}
@@ -208,7 +213,7 @@
 
                           <div class="form-group">
                             <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
-                              <option value="" disabled selected>Selecione una unidad</option>
+                              <option value="">Selecione una unidad</option>
                               {{ for med in unidad_med:}}
                               <option value="{{=med}}">{{=med}}</option>
                               {{pass}}
@@ -217,8 +222,8 @@
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="ancho" name="ancho" placeholder="Ancho" >
-                            <div class="field-error"> <p id="error-ancho" placegolder="No es" > </p> </div>
+                            <input type="text" class="form-control" id="ancho" name="ancho" placeholder="Ancho">
+                            <div class="field-error"> <p id="error-ancho" placeholder="No es" > </p> </div>
                           </div>
 
 
@@ -264,7 +269,7 @@
                         <div class="form-group">
                             <label>Seleccione un tipo de movilidad</label>
                             <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
-                              <option value="" disabled selected>Seleccione un tipo de movilidad</option>
+                              <option value="">Seleccione un tipo de movilidad</option>
                               {{ for movilidad in movilidad_list:}}
                               <option value="{{=movilidad}}">{{=movilidad}}</option>
                               {{pass}}
@@ -273,7 +278,7 @@
                         </div>
 
                         <label>Tipo de Uso</label>
-                        <div class="form-group">
+                        <div class="checkbox-group">
                           {{ for uso in uso_list: }}
                           <input type="checkbox" name="tipo_uso" value="{{=uso}}">{{=uso}}
                           <br>
@@ -305,7 +310,7 @@
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Código de localización</label>
                           <select class="form-control" type="select" value="" id="cod-localizacion" onchange="placeholder_localizacion(this.value);"  name="cod_loc" required>
-                            <option value="" onchange="placeholder_localizacion(this.value);"  selected hidden >Seleccione un código de localizacion</option>
+                            <option value="" onchange="placeholder_localizacion(this.value);">Seleccione un código de localizacion</option>
                             {{for cod in cod_localizacion:}}
                             <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
                             {{pass}}
@@ -323,7 +328,7 @@
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categorias</label>
                           <select class="form-control" type="select" value="" id="categoria"  name="nombre_cat" required>
-                            <option value="" selected hidden >Seleccione una categorias</option>
+                            <option value="">Seleccione una categorias</option>
                             {{ for categoria in nombre_cat:}}
                             <option value="{{=categoria}}" >{{=categoria}}</option>
                             {{pass}}
@@ -333,7 +338,7 @@
 
                         <div class="form-group">
                             <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategoria</label>
-                            <input type="text" class="form-control" id="subcategoria" name="subcategoria" placeholder="Subcategoria (falta integrar la BD)" value="" >
+                            <input type="text" class="form-control" id="subcategoria" name="subcategoria" placeholder="Subcategoria (falta integrar la BD)" value="">
                             <div class="field-error"> <p id="error-subcategoria"> </p> </div>
                           </div>
                       </div>
@@ -355,7 +360,13 @@
 del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
-  // Valida los campos de la forma en el modal "addsustancia"
+
+  // Borrar informacion al cerrar el modal
+  $('.modal').on('hidden.bs.modal', function(){
+      $(this).find('form')[0].reset();
+  });
+
+  // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
 
     // Buscando divs para ingresar mensajes de error
