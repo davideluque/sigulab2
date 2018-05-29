@@ -222,22 +222,34 @@ def listado():
     usuario.correo = infoUsuario.email
     usuario.nombre = infoUsuario.first_name
     usuario.apellido = infoUsuario.last_name
-    usuario.cedula = (db(db.t_Personal.f_email==auth.user.email).select(db.t_Personal.ALL)).first().f_ci
+    
+    usuarioPorMail = (db(db.t_Personal.f_email==auth.user.email).select(db.t_Personal.ALL)).first()
+    if (usuarioPorMail) : 
+        usuario.cedula = usuarioPorMail.f_ci
+        id_unidad_adscripcion = usuarioPorMail.f_unidad_jerarquica_superior
+    else: id_unidad_adscripcion = None
+        
+    if (id_unidad_adscripcion):
+        usuario.unidad_adscripcion = (db(db.dependencias.id == id_unidad_adscripcion).select(db.dependencias.ALL)).first().nombre 
     
 
     GrupoUsuario = (db(db.auth_membership.user_id==auth.user.id).select(db.auth_membership.ALL)).first()
-    #GrupoUsuario = (db(db.auth_membership.user_id==3).select(db.auth_membership.ALL)).first()
-    idGrupoUsuario = GrupoUsuario.group_id
-    usuario.idGrupo=idGrupoUsuario
-    usuario.rol= (db(db.auth_group.id == idGrupoUsuario).select(db.auth_group.ALL)).first().role
+    if(GrupoUsuario):
+        idGrupoUsuario = GrupoUsuario.group_id
+        idDependenciaUsuario= GrupoUsuario.dependencia_asociada
+        usuario.idGrupo=idGrupoUsuario
+        laDependencia = (db(db.dependencias.id == idDependenciaUsuario).select(db.dependencias.ALL)).first()
+        if(laDependencia) :
+            usuario.ubicacion = laDependencia.codigo_registro
+            usuario.dependencia = laDependencia.nombre
+    else:
+        idGrupoUsuario = None
+        idDependenciaUsuario = None
+    if(idGrupoUsuario):
+        usuario.rol= (db(db.auth_group.id == idGrupoUsuario).select(db.auth_group.ALL)).first().role
+
     
-    idDependenciaUsuario= GrupoUsuario.dependencia_asociada
-    usuario.dependencia = (db(db.dependencias.id == idDependenciaUsuario).select(db.dependencias.ALL)).first().nombre
-    id_unidad_adscripcion = (db(db.t_Personal.f_email==auth.user.email).select(db.t_Personal.ALL)).first().f_unidad_jerarquica_superior
-    usuario.unidad_adscripcion = (db(db.dependencias.id == id_unidad_adscripcion).select(db.dependencias.ALL)).first().nombre 
-    usuario.ubicacion = (db(db.dependencias.id == idDependenciaUsuario).select(db.dependencias.ALL)).first().codigo_registro
-    
-    
+
     #Obtenemos los datos para el listado
     tabla = tabla_categoria()
 
