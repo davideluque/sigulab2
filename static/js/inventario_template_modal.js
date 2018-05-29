@@ -68,7 +68,7 @@ $(document).ready(function () {
             }else {
                 if (($(this).attr('name')=="no_bien")) {
                     if (!($(this).val().match(/^[0-9]{6}$/))) {
-                        $("#err_no_bien").html("Formato Inválido. Ingrese 6 dígitos numéricos");
+                        $("#err_no_bien").html("Formato Inválido. Ingrese 6 dígitos");
                         $("#err_no_bien").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -80,7 +80,7 @@ $(document).ready(function () {
                 }
                 else if (($(this).attr('name')=="no_placa")) {
                     if (!($(this).val().match(/^[0-9]{5}$/)) && $(this).val() != "") {
-                        $("#err_placa").html("Formato Inválido. Ingrese 5 dígitos numéricos ");
+                        $("#err_placa").html("Formato Inválido. Ingrese 5 dígitos");
                         $("#err_placa").show();
                         $(this).addClass('input-error');
                         next_step = false;
