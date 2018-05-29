@@ -127,13 +127,22 @@
 				<div class="col-xs-6 col-sm-10">
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
 					<div class="col-sm-3 columnas">
-						<a href="{{=URL('inventarios',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
+						<a href="{{=URL('inventarios',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">
+						{{if espacios:}}
+							{{=dependencias[4*k].codigo}}</a>
+						{{else:}}
+							{{=dependencias[4*k].nombre}}</a>
+						{{pass}}
 					</div>
 					{{ for i in range(1,4): }}
 						{{ if 4*k+i < n: }}
 							<div class="col-sm-3 columnas">
 								<a href="{{=URL('inventarios',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-									{{=dependencias[4*k+i].nombre}}
+									{{if espacios:}}
+										{{=dependencias[4*k+i].codigo}}</a>
+									{{else:}}
+										{{=dependencias[4*k+i].nombre}}</a>
+									{{pass}}
 								</a>
 							</div>
 						{{ pass }}
