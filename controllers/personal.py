@@ -201,15 +201,16 @@ def lista():
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista 
 class Usuario(object):
-    nombre = ""
-    apellido = ""
-    correo = ""
-    rol = ""
-    dependencia = ""
-    unidad_adscripcion = ""
-    ubicacion = ""
-    cedula = ""
-    extension = ""
+    def __init__(self):
+        self.nombre = ""
+        self.apellido = ""
+        self.correo = ""
+        self.rol = ""
+        self.dependencia = ""
+        self.unidad_adscripcion = ""
+        self.ubicacion = ""
+        self.cedula = ""
+        self.extension = ""
 
 
 #Funcion que envia los datos a la vista
@@ -308,7 +309,17 @@ def listado():
         db(db.t_Personal.f_ci == ced).delete()
         redirect(URL('listado'))
 
-    return dict(gridedit = edic, editar = editar, grid= tabla, categorias = categorias,dependencias = dependencias, estados = estados, gremios=gremios, condiciones = condiciones, usuario=usuario)
+    return dict(
+        gridedit=edic,
+        editar=editar,
+        grid=tabla,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        usuario=usuario
+        )
 
 def reporte():
     tabla=tabla_categoria()
@@ -317,20 +328,3 @@ def reporte():
         personas.append(persona)
     return dict(personas=personas)
 
-# def reporte(tipo,filtro):
-#     tabla=tabla_categoria()
-#     personas=[]
-#     if (tipo=="categoria"):
-#         for persona in tabla:
-#             if (persona["categoria"]==filtro):
-#                 personas.append(persona)
-#     elif (tipo=="dependencia"):
-#         named = db(db.dependencias.id == filtro).select(db.dependencias.ALL)
-#         dep= named[0] if len(named) > 0 else None
-#         for persona in tabla:
-#             if (persona["dependencia"]==dep)
-#                 personas.append(persona)
-#     else:
-#         for persona in tabla:
-#             personas.append(persona)
-#     return dict(personas=personas)
