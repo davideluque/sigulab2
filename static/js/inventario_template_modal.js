@@ -63,32 +63,12 @@ $(document).ready(function () {
                     //$("#err_nombre").show();
 
                 }
-                else if (($(this).attr('name')=="apellido_add") || ($(this).attr('name')=="apellido_edit")) {
-                    $("#err_apellido").html("Este campo es obligatorio");
-                    $("#err_apellido").show();
-                }
-                else if (($(this).attr('name')=="ci_add") || ($(this).attr('name')=="ci_edit")) {
-                    $("#err_ci").html("Este campo es obligatorio");
-                    $("#err_ci").show();
-                }
-                else if (($(this).attr('name')=="email_add") || ($(this).attr('name')=="email_edit")) {
-                    $("#err_email").html("Este campo es obligatorio");
-                    $("#err_email").show();
-                }
-                else if (($(this).attr('name')=="telefono_add") || ($(this).attr('name')=="telefono_edit")) {
-                    $("#err_telefono").html("Este campo es obligatorio");
-                    $("#err_telefono").show();
-                }
-                else if (($(this).attr('name')=="fecha_ingreso_add") || ($(this).attr('name')=="fecha_ingreso_edit")) {
-                    $("#err_fecha_ingreso").html("Este campo es obligatorio");
-                    $("#err_fecha_ingreso").show();
-                }
                 $(this).addClass('input-error');
                 next_step = false;
             }else {
                 if (($(this).attr('name')=="no_bien")) {
                     if (!($(this).val().match(/^[0-9]{6}$/))) {
-                        $("#err_no_bien").html("Formato Inválido. Son 6 digitos");
+                        $("#err_no_bien").html("Formato Inválido. Ingrese 6 dígitos numéricos");
                         $("#err_no_bien").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -100,7 +80,7 @@ $(document).ready(function () {
                 }
                 else if (($(this).attr('name')=="no_placa")) {
                     if (!($(this).val().match(/^[0-9]{5}$/)) && $(this).val() != "") {
-                        $("#err_placa").html("Formato Inválido. son 5 digitos");
+                        $("#err_placa").html("Formato Inválido. Ingrese 5 dígitos numéricos ");
                         $("#err_placa").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -108,6 +88,52 @@ $(document).ready(function () {
                     else {
                         $(this).removeClass('input-error');
                         $("#err_placa").hide();
+                    }
+                }
+                else if (($(this).attr('name')=="ancho")) {
+                    if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                        $("#err_ancho").html("Ingrese solo números decimales con punto: 2.5");
+                        $("#err_ancho").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_ancho").hide();
+                    }
+                }
+                else if (($(this).attr('name')=="largo")) {
+                    if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                        $("#err_largo").html("Ingrese números decimales con punto: 2.5");
+                        $("#err_largo").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_largo").hide();
+                    }
+                }else if (($(this).attr('name')=="alto")) {
+                    if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                        $("#err_alto").html("Ingrese solo números decimales con punto: 2.5");
+                        $("#err_alto").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_alto").hide();
+                    }
+                }else if (($(this).attr('name')=="diametro")) {
+                    if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                        $("#err_diametro").html("Ingrese solo números decimales con punto: 2.5");
+                        $("#err_diametro").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_diametro").hide();
                     }
                 }
                 else {
