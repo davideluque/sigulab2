@@ -171,6 +171,9 @@
           if (categoria === 'Fijo') {
             $('#field_fecha_ingreso').parent().addClass('hide')
             $('#field_fecha_salida').parent().addClass('hide')
+          } else {
+            $('#field_fecha_ingreso').parent().removeClass('hide')
+            $('#field_fecha_salida').parent().removeClass('hide')
           }
           $("#field_ci").html(ci);
           $("#field_gremio").html(gremio);
@@ -196,7 +199,8 @@
           $("#field_fecha_ingreso_admin_publica").html(fecha_ingreso_admin_publica);
           $("#field_condicion").html(condicion);
           $("#field_nombre_completo").html(nombre_completo)
-
+          const currentlyLogged = $('[name=CORREO_LOGIN]').val()
+          $('#editar').prop('disabled', currentlyLogged !== email)
           $('#eliminar').on('click',function(f){
             var answer=confirm('¿Seguro que desea eliminar esta persona?');
             if(answer){
