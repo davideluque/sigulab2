@@ -980,6 +980,7 @@ def envases():
                                     csv=False,
                                     user_signature=False,
                                     paginate=10,
+                                    searchable=True,
                                     )
 
     else:
@@ -989,7 +990,8 @@ def envases():
                                     csv=False,
                                     links_in_grid=False,
                                     create=False,
-                                    paginate=10)
+                                    paginate=10,
+                                    searchable=True)
     return locals()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
