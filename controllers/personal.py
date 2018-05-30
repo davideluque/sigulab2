@@ -4,6 +4,9 @@
 #                                   #
 #-----------------------------------#
 
+def index():
+    return dict()
+
 #Enviar info a la tabla del listado
 def tabla_categoria():
 
