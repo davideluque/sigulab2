@@ -92,6 +92,7 @@ if db(db.auth_user).isempty():
 # Sedes
 
 if db(db.sedes).isempty():
+	print("coño de la madre web2py")
 	db.sedes.insert(nombre="Sartenejas")
 	db.sedes.insert(nombre="Litoral")
 
@@ -99,9 +100,11 @@ if db(db.sedes).isempty():
 
 if db(db.dependencias).isempty():
 	
+	sartenejas = db(db.sedes.nombre=="Sartenejas").select(db.sedes.ALL).first().id
+	litoral = db(db.sedes.nombre=="Litoral").select(db.sedes.ALL).first().id
 	# Direccion
 	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=1, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=sartenejas, id_jefe_dependencia=user, 
 		codigo_registro="UL")
 
 	direccionid = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
@@ -110,43 +113,43 @@ if db(db.dependencias).isempty():
 
 	# Laboratorio A
 	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO A', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO A', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLA")
 
 	# Laboratorio B
 	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO B', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO B', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLB")
 
 	# Laboratorio C
 	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='LABORATORIO C', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO C', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLC")
 
 	# Laboratorio D	
 	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO D', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO D', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLD")
 	
 	# Laboratorio E
 	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO E', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO E', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLE")
 
 	# Laboratorio F
 	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO F', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO F', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLF")
 
 	# Laboratorio G
 	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO G', id_sede=2, 
+	db.dependencias.insert(nombre='LABORATORIO G', id_sede=litoral, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLG")
 
@@ -154,31 +157,31 @@ if db(db.dependencias).isempty():
 
 	# Unidad de Administración
 	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=1, 
+	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL03")
 
 	# Coordinación de Adquisiciones
 	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL01")
 
 	# Coordinación de Importaciones
 	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL02")
 
 	# Coordinación de la Calidad
 	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL04")
 
 	# Protección Radiológica
 	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=1, 
+	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL05")
 
@@ -192,16 +195,35 @@ if db(db.t_Personal).isempty():
 	
 	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
     
-'''
 	""" Super Usuario """
 	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
-	db.t_Personal.insert(f_nombre="Super", f_apellido = "", f_gremio="Administrativo", 
-		f_cargo="Super Usuario", f_ci=0, f_email='sigulabusb@gmail.com', f_estatus='Activo',
-        #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="SuperUsuario",
-		f_usuario=user, f_dependencia=dep)
+	rol = db(db.auth_group.role=='WEBMASTER').select()[0].id 
+	print(rol)
 
+	db.t_Personal.insert(
+		f_nombre="Super", 
+		f_apellido = "", 
+		f_gremio="Administrativo", 
+		f_cargo="Super Usuario", 
+		f_ci=0, f_email='sigulabusb@gmail.com', 
+        f_telefono=0, 
+		f_celular=0, 
+		f_estatus='Activo',
+		f_contacto_emergencia=0, 
+		f_direccion="No Disponible", 
+		f_pagina_web="http://superusuario.com",
+    	f_categoria="Fijo", 
+		# f_fecha_ingreso="No disponible", 
+		# f_fecha_salida="No Disponible", 
+		# f_fecha_ingreso_usb="No Disponible", 
+		# f_fecha_ingreso_ulab="No Disponible", 
+		# f_fecha_ingreso_admin_publica="No Disponible", 
+		# f_condicion="En Funciones", 
+		# f_unidad_jerarquica_superior="DIRECCIÓN", 
+		# f_rol='WEBMASTER',
+		# f_usuario=user, f_dependencia=dep
+	)
+'''
 	""" Cliente Interno """
 	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
 	db.t_Personal.insert(f_nombre="Funindes",f_apellido = "", 
