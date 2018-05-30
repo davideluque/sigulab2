@@ -399,10 +399,18 @@ db.define_table(
     Field('descripcion', 'string', notnull=False, label=T('Descripción')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
-            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+            notnull=True, 
+            label=T('Espacio físico'),
+            represent=lambda id, r: db.espacios_fisicos[id].nombre
+            ), 
 
     Field('categoria', 'reference t_categoria_desechos', 
-            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), 
+            notnull=True, label=T('Categoría de Desecho'),
+            represent=lambda id, r: db.t_categoria_desechos[id].categoria
+        
+    ),
 
 
 )
