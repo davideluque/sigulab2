@@ -32,12 +32,13 @@
           </div>
         </div>
         <!-- Fin Modal Header -->
-        
+
         <!-- Modal Body -->
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioCarga" class="registration-form" method="post"
+                  action="{{=URL('personal', 'add_form')}}">
 
                     <!-- Primer Paso -->
                     <fieldset class="formField">
@@ -45,55 +46,55 @@
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
                           <span class="step activePass">1</span>
-                          <span class="step">2</span> 
-                          <span class="step">3</span>           
+                          <span class="step">2</span>
+                          <span class="step">3</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value={{=usuario.nombre}}>
+                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre}}">
                               <font color="red"><div id="err_nombre" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value={{=usuario.apellido}}>
+                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido}}">
                               <font color="red"><div id="err_apellido" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required value={{=usuario.cedula}}>
+                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required value="{{=usuario.f_ci}}">
                               <font color="red"><div id="err_ci" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value={{=usuario.correo}} >
+                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" >
                               <font color="red"><div id="err_email" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
+                              <input value="{{=usuario.f_extension}}" type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
                               <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
-                            
+
                             <div class="form-group">
-                              <input type="text" class="form-control" name="celular_add" placeholder="Celular" required>
+                              <input value="{{=usuario.f_celular}}" type="text" class="form-control" name="celular_add" placeholder="Celular" required>
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
-                            
+
                             <div class="form-group">
-                              <input type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
+                              <input value="{{=usuario.f_contacto_emergencia}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
-                            
+
                             <div class="form-group">
-                              <input type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
+                              <input value="{{=usuario.f_direccion}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
                               <font color="red"><div id="err_direccion" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
+                              <input value="{{=usuario.f_pagina_web}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
                               <font color="red"><div id="err_pagina_web" hidden></div></font>
                             </div>
 
@@ -102,7 +103,7 @@
                       <button type="button" class="btn btn-next botonForm">Siguiente</button>
                     </fieldset>
                     <!-- Fin Primer Paso -->
-                    
+
                     <!-- Segundo Paso -->
                     <fieldset class="formField">
                         <div class="form-bottom" data-step="2" data-title="Segundo Paso">
@@ -118,45 +119,70 @@
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
                                 <select class="form-control" id="sel1" name="estatus_add">
-                                  <option value="1" selected hidden>Estatus</option>
+                                  <option value=""
+                                  {{ if not usuario.f_estatus :}}
+                                  selected
+                                  {{pass}}
+                                  >------</option>
                                   {{for estatus in estados:}}
-                                  <option value="{{=estatus}}">{{=estatus}}</option>
-                                  {{pass}} 
+                                  <option
+                                  {{ if estatus == usuario.f_estatus: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=estatus}}">{{=estatus}}</option>
+
+                                  {{pass}}
                                 </select>
                               </div>
                               <div class="form-group">
                                 <select class="form-control" id="sel2" name="categoria_add">
-                                  <option value="1" selected hidden>Categoria</option>
+                                  <option value=""
+                                  {{ if not usuario.f_categoria :}}
+                                  selected
+                                  {{pass}}
+                                  >------</option>
                                   {{for categoria in categorias:}}
-                                  <option value="{{=categoria}}">{{=categoria}}</option>
-                                  {{pass}} 
+                                  <option
+                                  {{ if categoria == usuario.f_categoria: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=categoria}}">{{=categoria}}</option>
+                                  {{pass}}
                                 </select>
                               </div>
-                              
+
                               <div class="form-group">
                                 <select class="form-control" id="sel3" name="condicion_add">
-                                  <option value="1" selected hidden>Condicion</option>
+                                  <option value=""
+                                  {{ if not usuario.f_condicion :}}
+                                  selected
+                                  {{pass}}
+                                  >------</option>
                                   {{for condicion in condiciones:}}
-                                  <option value="{{=condicion}}">{{=condicion}}</option>
-                                  {{pass}} 
+                                  <option
+                                  {{ if condicion == usuario.f_condicion: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=condicion}}">{{=condicion}}</option>
+                                  {{pass}}
                                 </select>
                               </div>
                               <div id="fsalida" hidden>
-                                  <p >Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
+                                  <p >Fecha de Ingreso: <input value="{{=usuario.f_fecha_ingreso}}" name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
                                   <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                                  <p >Fecha de Egreso: <input name = "fecha_salida_add" type="text" id="datepicker2" ></p>
+                                  <p >Fecha de Egreso: <input value="{{=usuario.f_fecha_salida}}" name = "fecha_salida_add" type="text" id="datepicker2" ></p>
                                   <font color="red"><div id="err_fecha_salida" hidden></div></font>
                               </div>
-                              
-                              
-                              <p >Ingreso a la USB: <input name = "fecha_ingreso_usb_add" type="text" id="datepickerUsb" required></p>
+
+
+                              <p >Ingreso a la USB: <input value="{{=usuario.f_fecha_ingreso_usb}}" name = "fecha_ingreso_usb_add" type="text" id="datepickerUsb" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
-                              
-                              <p >Ingreso a la ULAB: <input name = "fecha_ingreso_ulab_add" type="text" id="datepickerUlab" required></p>
+
+                              <p >Ingreso a la ULAB: <input value="{{=usuario.f_fecha_ingreso_ulab}}" name = "fecha_ingreso_ulab_add" type="text" id="datepickerUlab" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
-                              
-                              <p >Ingreso a la administracion publica: <input name = "fecha_ingreso_admin_publica_add" type="text" id="datepicker5" required></p>
+
+                              <p >Ingreso a la administracion publica: <input value="{{=usuario.f_fecha_ingreso_admin_publica}}" name = "fecha_ingreso_admin_publica_add" type="text" id="datepicker5" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
                             <!--<div class="form-group">
@@ -177,37 +203,45 @@
                           <span class="step">2</span>
                           <span class="step activePass">3</span>
                         </div>
-                        
+
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos Laborales</h4>
 
                         <div class="form-group">
-                          <input type="text" class="form-control" name="cargo_add" placeholder="Cargo">
+                          <input value="{{=usuario.f_cargo}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
                           <font color="red"><div id="err_cargo" hidden></div></font>
                         </div>
 
                         <div class="form-group">
                           <select class="form-control" id="sel1" name="gremio_add" required>
-                            <option value="1" selected hidden>Gremio</option>
+                            <option value=""
+                            {{ if not usuario.f_gremio :}}
+                            selected
+                            {{pass}}
+                            >------</option>
                             {{for gremio in gremios:}}
-                            <option value="{{=gremio}}">{{=gremio}}</option>
-                            {{pass}} 
+                            <option
+                            {{ if gremio == usuario.f_gremio: }}
+                            selected
+                            {{pass}}
+                            value="{{=gremio}}">{{=gremio}}</option>
+                            {{pass}}
                           </select>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value={{=usuario.dependencia}}>
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value={{=usuario.f_dependencia}}>
                         </div>
-                        
+
                         <div class="form-group">
-                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value={{=usuario.ubicacion}}>
+                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value={{=usuario.f_ubicacion}}>
                         </div>
-                        
+
                         <div class="form-group">
-                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value={{=usuario.rol}}>
+                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value={{=usuario.f_rol}}>
                         </div>
-                  
+
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
                       <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>
                       </div>
@@ -216,7 +250,7 @@
 
                 </form>
             </div>
-          </div>               
+          </div>
 
 
         </div>
