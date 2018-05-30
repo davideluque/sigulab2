@@ -1,5 +1,29 @@
-{{extend 'layout.html'}} {{block head}}
-<link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> {{end}} {{block center}}
+{{extend 'layout.html'}} 
+    {{block head}}
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> 
+        <style>
+            div.col-sm-9 {
+                padding: 0px auto;
+                width: 50%;
+            }
+
+            .form-control-static {
+                padding-top: 0px !important;
+                padding-bottom: 0px !important;
+            }
+
+            .control-label {
+                padding: 0px !important;
+            }
+
+            .form-horizontal.web2py_form {
+                width: 80%;
+            }
+        </style>
+
+    {{end}} 
+
+{{block center}}
 
 <!-- Breadcrumb de navegación -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
@@ -13,6 +37,7 @@
 <!-- Fin del Breadcrumb de navegación -->
 
 <div class="container-fluid">
+
     
     {{if ('edit' in request.args) or ('view' in request.args):}}
         <div class="row">
@@ -47,12 +72,24 @@
 
 {{if table.create_form:}} 
     {{=table.create_form}} 
+    <script>
+        let form = document.querySelector("form");
+        console.log(form);
+        var div_node = document.createElement("div");
+        div_node.className += " col-lg-12 text-center";
+        var button_node = document.createElement("button");
+        var textnode = document.createTextNode("Crear");
+        button_node.appendChild(textnode);
+        button_node.className += " btn btn-primary";  
+        div_node.appendChild(button_node);      
+        form.appendChild(div_node);
+    </script>
 {{elif table.update_form:}} 
     {{=table.update_form}} 
 {{elif table.view_form:}}
     {{=table.view_form}} 
 {{else:}}
-    <div class="container">
+    <div class="container-fluid">
         {{=table}}
     </div>
 {{pass}}
@@ -72,6 +109,15 @@
 </div>
 {{pass}}
 
+{{if ('edit' in request.args):}}
+    <script>
+        let check_to_delete_label = document.getElementById("delete_record__label");
+        check_to_delete_label.style.display = "none";
+        let inputs = document.querySelectorAll('input[type=submit]');
+        inputs[0].value = "Guardar cambios";
+    </script>
+{{pass}}
+
 <script>
     // Eliminando el breadcrumb que trae la forma SQL por defecto
     document.getElementsByClassName("web2py_breadcrumbs")[0].style.display = 'none';
@@ -80,7 +126,48 @@
 </script> 
 
 <script>
-    var inputs = document.querySelectorAll('input[type=submit]');
-    inputs[0].value = "Crear";
+    
+    let inputs = document.querySelectorAll('input[type=submit]');
+    inputs[0].style.display = "none";
+    inputs[1].value = 'Limpiar';   
+
+
+
+    // Oculta el boton de 'Add record' que trae la tabla por defecto
+    let web2py_console_elements = document.getElementsByClassName('web2py_console');
+    web2py_console_elements[0].children[0].style.display = 'none';
+
+    // Coloca en español el botón de New Search y Close del panel de búsqueda de la tabla y
+    // oculta los botones de and y or.
+    document.getElementById("w2p_keywords").addEventListener('click', function() {
+        const campos = ['id', 'identificacion', 'capacidad', 'unidad_medida', 'forma', 'material', 'tipo_boca', 'descripcion', 'espacio_fisico', 'categoria'];
+
+        campos.forEach(campo => {
+            let parent = document.getElementById("w2p_field_t_envases-" + campo);
+            let children = parent.getElementsByClassName('btn-default');
+
+            children[0].value = "Buscar";
+            children[1].style.display = "none";
+            children[2].style.display = "none";
+            children[3].value = "Cerrar";
+        });
+    });
+
+    // Se coloca en español el mensaje que dice "XXX rows founds"
+    let row_counter = document.getElementsByClassName("web2py_counter");
+    let row_content = row_counter[0].innerText.split(" ");
+    row_counter[0].innerText = row_content[0] + " entrada(s) encontrada(s)";
+
+
+    // Se colocan en español los botones de la columna de opciones de la tabla
+    let row_buttons = document.getElementsByClassName("row_buttons");
+
+    for (let index = 0; index < row_buttons.length; index++) {
+        
+        let children = row_buttons[index].getElementsByClassName("button btn btn-default");
+        children[0].innerText = "Ver";
+        children[1].style.display = "none";
+        children[2].style.display = "none";
+    }
 </script>
 {{end}}
