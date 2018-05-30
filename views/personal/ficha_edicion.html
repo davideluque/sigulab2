@@ -17,7 +17,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
           </div>
-        </div> 
+        </div>
 
         <div class="modal-body">
 
@@ -66,60 +66,60 @@
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
-                      <td>Cargo:</td><td id="field_cargo"></td>  
+                      <td>Cargo:</td><td id="field_cargo"></td>
                     </tr>
                     <tr>
-                      <td>Gremio:</td><td id="field_gremio"></td>  
+                      <td>Gremio:</td><td id="field_gremio"></td>
                     </tr>
                     <tr>
-                      <td>Categoria:</td><td id="field_categoria"></td>  
+                      <td>Categoria:</td><td id="field_categoria"></td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>  
+                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>
                     </tr>
                     <tr >
-                      <td>Fecha Salida:</td><td id="field_fecha_salida"></td>  
+                      <td>Fecha Salida:</td><td id="field_fecha_salida"></td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>  
+                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab"></td>  
+                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab"></td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica"></td>  
+                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica"></td>
                     </tr>
                     <tr>
-                      <td>Estatus:</td><td id="field_estatus"></td>  
+                      <td>Estatus:</td><td id="field_estatus"></td>
                     </tr>
                     <tr>
-                      <td>Condicion:</td><td id="field_condicion"></td>  
+                      <td>Condicion:</td><td id="field_condicion"></td>
                     </tr>
                 </tbody>
               </table>
             </div>
-              
+
              <div class="tab-pane" id="datos_personales" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
-                      <td>Cédula:</td><td id="field_ci"></td>  
+                      <td>Cédula:</td><td id="field_ci"></td>
                     </tr>
                     <tr>
-                      <td>Celular:</td><td id="field_celular"></td>  
+                      <td>Celular:</td><td id="field_celular"></td>
                     </tr>
                     <tr>
-                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia"></td>  
+                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia"></td>
                     </tr>
                     <tr>
-                      <td>Dirección:</td><td id="field_direccion"></td>  
+                      <td>Dirección:</td><td id="field_direccion"></td>
                     </tr>
                 </tbody>
               </table>
             </div>
-              
-              
-              
+
+
+
            </div>
         </div>
 
@@ -153,7 +153,7 @@
           var estatus = $(e.relatedTarget).data('estatus');
           var telefono = $(e.relatedTarget).data('telefono');
           var pagina_web = $(e.relatedTarget).data('pagina_web');
-          
+
           var unidad_jerarquica_superior = $(e.relatedTarget).data('unidad_jerarquica_superior');
           var ubicacion = $(e.relatedTarget).data('ubicacion');
           var celular = $(e.relatedTarget).data('celular');
@@ -168,7 +168,13 @@
 
           f = [ci, gremio, email, fecha_salida, fecha_ingreso, nombre, cargo, estatus, telefono, pagina_web, unidad_jerarquica_superior,
                 ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion];
-
+          if (categoria === 'Fijo') {
+            $('#field_fecha_ingreso').parent().addClass('hide')
+            $('#field_fecha_salida').parent().addClass('hide')
+          } else {
+            $('#field_fecha_ingreso').parent().removeClass('hide')
+            $('#field_fecha_salida').parent().removeClass('hide')
+          }
           $("#field_ci").html(ci);
           $("#field_gremio").html(gremio);
           $("#field_dependencia").html(dependencia);
@@ -181,7 +187,7 @@
           $("#field_estatus").html(estatus);
           $("#field_telefono").html(telefono);
           $("#field_pagina_web").html(pagina_web);
-          
+
           $("#field_unidad_jerarquica_superior").html(unidad_jerarquica_superior);
           $("#field_ubicacion").html(ubicacion);
           $("#field_celular").html(celular);
@@ -193,7 +199,8 @@
           $("#field_fecha_ingreso_admin_publica").html(fecha_ingreso_admin_publica);
           $("#field_condicion").html(condicion);
           $("#field_nombre_completo").html(nombre_completo)
-          
+          const currentlyLogged = $('[name=CORREO_LOGIN]').val()
+          $('#editar').prop('disabled', currentlyLogged !== email)
           $('#eliminar').on('click',function(f){
             var answer=confirm('¿Seguro que desea eliminar esta persona?');
             if(answer){
@@ -201,12 +208,12 @@
               this.value = $(e.relatedTarget).data('ci');
             }
             else{
-              f.preventDefault();      
+              f.preventDefault();
             }
-          
+
           });
 
-          
+
           fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
                 ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion];
           console.log(fields);

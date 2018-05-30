@@ -129,7 +129,7 @@ db.define_table(
           notnull=True, label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
-    Field('f_contacto_emergencia',       'integer', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
+    Field('f_contacto_emergencia',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
 
     Field('f_email',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),

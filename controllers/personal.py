@@ -6,7 +6,7 @@
 
 #Enviar info a la tabla del listado
 def tabla_categoria():
-    
+
 
     #Buscamos la tabla personal
     tb = db().select(db.t_Personal.ALL)
@@ -22,7 +22,7 @@ def tabla_categoria():
         named = db(db.dependencias.id == elm.f_dependencia).select(db.dependencias.ALL)
 
         dep= named[0].nombre if len(named) > 0 else None
-        
+
         if (dep) : idUSuperior = (db(db.dependencias.nombre==dep).select(db.dependencias.ALL)).first().unidad_de_adscripcion
         else: idUsuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
@@ -54,7 +54,7 @@ def tabla_categoria():
              "rol" : elm.f_rol,
              "ubicacion" : elm.f_ubicacion
              })
-        
+
     return jsns
 
 #Mandar informacion a los dropdowns
@@ -100,11 +100,10 @@ def add_form():
              "rol" : request.post_vars.rol_add
             }
 
-    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
+    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
 
     #Si el diccionario no esta vacio
     if (not(None in dic.values())):
-
         #Insertamos en la base de datos
         db(db.t_Personal.f_email == dic['email'] ).update(f_nombre = dic["nombre"],
                                 f_apellido = dic["apellido"],
@@ -129,186 +128,67 @@ def add_form():
             f_rol= (db(db.auth_group.role == dic['rol']).select(db.auth_group.ALL)).first().id)
         redirect(URL('listado'))
 
-#Funcion que toma las variables de la vista
-def edit_form():
 
-    edic = {"nombre" : request.post_vars.nombre_edit,
-            "apellido" : request.post_vars.apellido_edit,
-            "ci" : request.post_vars.ci_edit,
-            "email" : request.post_vars.email_edit,
-            "telefono" : request.post_vars.telefono_edit,
-            "pagina_web" : request.post_vars.pagina_web_edit,
-            "categoria" : request.post_vars.categoria_edit,
-            "cargo" : request.post_vars.cargo_edit,
-            "fecha_ingreso" : request.post_vars.fecha_ingreso_edit,
-            "fecha_salida" : request.post_vars.fecha_salida_edit,
-            "estatus" : request.post_vars.estatus_edit,
-            "dependencia" : request.post_vars.dependencia_edit,
-            "celular" : request.post_vars.celular_edit,
-             "contacto_emergencia" : request.post_vars.contacto_emergencia_edit,
-             "direccion" : request.post_vars.direccion_edit,
-             "gremio" : request.post_vars.gremio_edit,
-             "fecha_ingreso_usb" : request.post_vars.fecha_ingreso_usb_edit,
-             "fecha_ingreso_ulab" : request.post_vars.fecha_ingreso_ulab_edit,
-             "fecha_ingreso_admin_publica" : request.post_vars.fecha_ingreso_admin_publica_edit,
-             "condicion" : request.post_vars.condicion_edit,
-             "unidad_jerarquica_superior" : request.post_vars.unidad_jerarquica_superior_edit,
-             "rol" : request.post_vars.rol_edit,
-             "ubicacion" : request.post_vars.ubicacion_edit
-            }
-
-    #if str(edic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
-    #Si el diccionario no esta vacio
-    if (not(None in edic.values())):
-
-        #Eliminamos la instancia anterior
-        db(db.t_Personal.f_ci == edic["ci"]).delete()
-        #Insertamos en la base de datos
-        db.t_Personal.insert(f_nombre = edic["nombre"],
-                                f_ci = edic["ci"],
-                                f_apellido = edic["apellido"],
-                                f_email = edic["email"],
-                                f_telefono = edic["telefono"],
-                                f_pagina_web = edic["pagina_web"],
-                                f_categoria = edic["categoria"],
-                                f_cargo = edic["cargo"],
-                                f_fecha_ingreso = edic["fecha_ingreso"],
-                                f_fecha_salida = edic["fecha_salida"],
-                                f_estatus = edic["estatus"],
-                                f_dependencia = edic["dependencia"],
-            f_celular= dic["celular"],
-            f_contacto_emergencia= dic["contacto_emergencia"],
-            f_direccion= dic["direccion"],
-            f_gremio= dic["gremio"],
-            f_fecha_ingreso_usb= dic["fecha_ingreso_usb"],
-            f_fecha_ingreso_ulab= dic["fecha_ingreso_ulab"],
-            f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
-            f_condicion= dic["condicion"],
-            f_unidad_jerarquica_superior= dic["unidad_jerarquica_superior"],
-            f_rol = dic["rol"],
-            f_ubicacion= dic["ubicacion"]
-                                )
-                                
-        redirect(URL('listado'))
-
-def index():
-    return dict()
-
-def lista():
-    form = SQLFORM.smartgrid(db.t_Personal, links_in_grid=False)
-    
-    return locals()
-
-#Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista 
+#Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
 class Usuario(object):
-    nombre = ""
-    apellido = ""
-    correo = ""
-    rol = ""
-    dependencia = ""
-    unidad_adscripcion = ""
-    ubicacion = ""
-    cedula = ""
-    extension = ""
+    """
+    Esta clase usuario no tiene ninguna relacion con la base de datos, solamente
+    es para facilitar la presentacion en el template.
+    """
+    def __init__(self, usuario):
+        # pagina 1
+        self.f_nombre = usuario.f_nombre
+        self.f_apellido = usuario.f_apellido
+        self.f_ci = usuario.f_ci
+        self.f_email = usuario.f_email
+        dependencia = usuario.f_dependencia
+        dependencia = db(db.dependencias.id == dependencia).select().first()
+        self.f_dependencia = dependencia.nombre
+        self.f_extension = dependencia.ext_interna
+        self.f_celular = usuario.f_celular
+        self.f_direccion = usuario.f_direccion
+        self.f_contacto_emergencia = usuario.f_contacto_emergencia
+        self.f_pagina_web = usuario.f_pagina_web
+        self.f_rol = usuario.f_rol
 
+        # pagina 2
+        self.f_estatus = usuario.f_estatus
+        self.f_categoria = usuario.f_categoria
+        self.f_condicion = usuario.f_condicion
+        self.f_fecha_ingreso = usuario.f_fecha_ingreso
+        self.f_fecha_salida = usuario.f_fecha_salida
+        self.f_fecha_ingreso_usb = usuario.f_fecha_ingreso_usb
+        self.f_fecha_ingreso_ulab = usuario.f_fecha_ingreso_ulab
+        self.f_fecha_ingreso_admin_publica = usuario.f_fecha_ingreso_admin_publica
+
+        # pagina 3
+        self.f_cargo = usuario.f_cargo
+        self.f_gremio = usuario.f_gremio
+        self.f_ubicacion = usuario.f_ubicacion
+        rol = db(db.auth_group.id == usuario.f_rol).select().first()
+        self.f_rol = rol.role
+        # dependencia ya dada arriba
 
 #Funcion que envia los datos a la vista
 def listado():
-    usuario = Usuario()
     #Obtenemos el usuario loggeado
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
-    #infoUsuario=(db(db.auth_user.id==3).select(db.auth_user.ALL)).first()
-    
-    usuario.correo = infoUsuario.email
-    usuario.nombre = infoUsuario.first_name
-    usuario.apellido = infoUsuario.last_name
-    
-    usuarioPorMail = (db(db.t_Personal.f_email==auth.user.email).select(db.t_Personal.ALL)).first()
-    if (usuarioPorMail) : 
-        usuario.cedula = usuarioPorMail.f_ci
-        id_unidad_adscripcion = usuarioPorMail.f_unidad_jerarquica_superior
-    else: id_unidad_adscripcion = None
-        
-    if (id_unidad_adscripcion):
-        usuario.unidad_adscripcion = (db(db.dependencias.id == id_unidad_adscripcion).select(db.dependencias.ALL)).first().nombre 
-    
-
-    GrupoUsuario = (db(db.auth_membership.user_id==auth.user.id).select(db.auth_membership.ALL)).first()
-    if(GrupoUsuario):
-        idGrupoUsuario = GrupoUsuario.group_id
-        idDependenciaUsuario= GrupoUsuario.dependencia_asociada
-        usuario.idGrupo=idGrupoUsuario
-        laDependencia = (db(db.dependencias.id == idDependenciaUsuario).select(db.dependencias.ALL)).first()
-        if(laDependencia) :
-            usuario.ubicacion = laDependencia.codigo_registro
-            usuario.dependencia = laDependencia.nombre
-    else:
-        idGrupoUsuario = None
-        idDependenciaUsuario = None
-    if(idGrupoUsuario):
-        usuario.rol= (db(db.auth_group.id == idGrupoUsuario).select(db.auth_group.ALL)).first().role
-
-    
-
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
     #Obtenemos los datos para el listado
     tabla = tabla_categoria()
 
     #Obtenemos los elementos de los dropdowns
-    temp = dropdowns()
-    gremios = temp[0]
-    dependencias = temp[1]
-    estados = temp[2]
-    categorias = temp[3]
-    condiciones = temp[4]
+    gremios, dependencias, estados, categorias, condiciones = dropdowns()
 
-    editar = []
-    cedit = request.vars.cedula_editar
-    if (cedit != None):
-        editar.append(cedit)
-        editdata = db(db.t_Personal.f_ci == cedit).select(db.t_Personal.ALL)
-        edic = {"nombre" : editdata[0].f_nombre,
-            "apellido" : editdata[0].f_apellido,
-            "ci" : editdata[0].f_ci,
-            "email" : editdata[0].f_email,
-            "telefono" : editdata[0].f_telefono,
-            "pagina_web" : editdata[0].f_pagina_web,
-            "categoria" : editdata[0].f_categoria,
-            "cargo" : editdata[0].f_cargo,
-            "fecha_ingreso" : editdata[0].f_fecha_ingreso,
-            "fecha_salida" : editdata[0].f_fecha_salida,
-            "estatus" : editdata[0].f_estatus,
-            "dependencia" : editdata[0].f_dependencia,
-            "gremio" : editdata[0].f_gremio
-            }
-    else:
-        edic = {"nombre" :usuario.nombre,
-            "apellido" :None,
-            "ci" :None,
-            "email" :None,
-            "telefono" :None,
-            "pagina_web" :None,
-            "categoria" :None,
-            "cargo" :None,
-            "fecha_ingreso" :None,
-            "fecha_salida" :None,
-            "estatus" :None,
-            "dependencia" : None,
-            "gremio" : None
-            }
-
-    #Agregamos los datos del formulario a la base de datos
-    add_form()
-
-    #Agregamos los datos del formulario a la base de datos
-    edit_form()
-
-    #Obtenemos la cedula del usuario desde el boton de eliminar
-    ced = request.vars.cedula_eliminar
-    if (ced != None):
-        db(db.t_Personal.f_ci == ced).delete()
-        redirect(URL('listado'))
-
-    return dict(gridedit = edic, editar = editar, grid= tabla, categorias = categorias,dependencias = dependencias, estados = estados, gremios=gremios, condiciones = condiciones, usuario=usuario)
+    return dict(
+        grid=tabla,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        usuario=usuario
+        )
 
 def reporte():
     tabla=tabla_categoria()
@@ -317,20 +197,3 @@ def reporte():
         personas.append(persona)
     return dict(personas=personas)
 
-# def reporte(tipo,filtro):
-#     tabla=tabla_categoria()
-#     personas=[]
-#     if (tipo=="categoria"):
-#         for persona in tabla:
-#             if (persona["categoria"]==filtro):
-#                 personas.append(persona)
-#     elif (tipo=="dependencia"):
-#         named = db(db.dependencias.id == filtro).select(db.dependencias.ALL)
-#         dep= named[0] if len(named) > 0 else None
-#         for persona in tabla:
-#             if (persona["dependencia"]==dep)
-#                 personas.append(persona)
-#     else:
-#         for persona in tabla:
-#             personas.append(persona)
-#     return dict(personas=personas)

@@ -10,7 +10,7 @@
 {{end}}
 
 {{block center}}
-
+	<input type="hidden" name="CORREO_LOGIN" value="{{=usuario.f_email}}">
 	<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
 	  <div class="breadcrumb">
 	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
@@ -35,7 +35,7 @@
 
 	        <div class="col-sm-4">
 	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" style="margin-left:10px" required>
-	            <option value=usuario.dependencia selected hidden>Dependencia</option>
+	            <option value="usuario.dependencia" selected hidden>Dependencia</option>
 	            {{for dependencia in dependencias:}}
 	            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
 	            {{pass}} 
@@ -49,8 +49,6 @@
 {{include 'personal/form_agregar.html'}}
 
 {{include 'personal/ficha_edicion.html'}}
-
-{{include 'personal/form_editar.html'}}
 
 <script type="text/javascript">
 function filter(type){
