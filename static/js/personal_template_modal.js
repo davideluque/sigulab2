@@ -197,6 +197,8 @@ $(document).ready(function () {
         });
     });
 
+
+    
     // submit
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
