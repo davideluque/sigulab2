@@ -70,13 +70,13 @@ def dropdowns():
     #Dropdown de dependencias
     departamento = db(db.dependencias.nombre).select(db.dependencias.ALL)
     #Dropdown de estatus
-    estatus = ['Activo', 'Jubilado', 'Retirado']
+    estatus = ['Activo', 'Jubilado']
     #Dropdown de categoria
     categoria = ['Fijo' , 'Contratado', 'Pasantía' , 'Ayudantía']
     #Dropdown de condiciones
     condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal']
     #Dropdown de roles
-    roles= list(db(db.auth_group.role).select(db.auth_group.ALL))
+    roles= ['Director', 'Asistente del Director', 'Gestor', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de sección', 'Personas de Dependencia', 'Técnico' ]
 
     return (gremio,departamento,estatus,categoria,condiciones,roles)
 

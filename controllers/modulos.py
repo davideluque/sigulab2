@@ -246,7 +246,7 @@ def register():
     session.tags = {}
 
 
-  roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
+  roles=db((db.auth_group.role != 'WEBMASTER') & (db.auth_group.role !='PERSONAL INTERNO') & (db.auth_group.role !='TÉCNICO') & (db.auth_group.role !='CLIENTE INTERNO')).select(db.auth_group.ALL)
   dependencias=list(db().select(db.dependencias.ALL))
   return dict(roles=roles, dependencias=dependencias)
 

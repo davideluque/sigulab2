@@ -245,10 +245,10 @@
                             >Rol</option>
                             {{for rol in roles:}}
                             <option
-                            {{ if rol.id == usuario.f_rol: }}
+                            {{ if rol == usuario.f_rol: }}
                             selected
                             {{pass}}
-                            value="{{=rol.id}}">{{=rol.role.decode('utf-8').upper()}}</option>
+                            value="{{=rol}}">{{=rol}}</option>
                             {{pass}}
                           </select>
                         </div>

@@ -146,7 +146,7 @@ db.define_table(
     Field('f_fecha_ingreso_ulab', 'date',   label=T('Fecha de Ingreso a la ULAB')),
     Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
     Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
-    Field('f_rol', 'reference auth_group', requires=IS_IN_DB(db, db.auth_group, '%(description)s'), label=T('Rol')),
+    Field('f_rol','string', label=T('Rol')),
 
     # #Referencias
      Field('f_usuario', 'reference auth_user',
