@@ -95,14 +95,41 @@ $(document).ready(function () {
                 [name="contacto_emergencia_add"],
                 [name="direccion_add"],
                 [name="pagina_web_add"]`).filter(function () {
-                    $(this).next().hide()
+                    $(this).next().first().hide()
+                    $(this).removeClass('input-error')
                     return $(this).val() === ''
                 }).each(function(idx) {
-                    $(this).next().html('Por favor, llene el campo')
-                    $(this).next().show()
+                    $(this).next().first().html('Por favor, llene el campo')
+                    $(this).next().first().show()
                     $(this).addClass('input-error')
                     next_step = false
                 })
+        } else if (parent_fieldset.attr('id') === 'p2') {
+            // dropdowns
+            $(`[name="estatus_add"],
+                [name="categoria_add"],
+                [name="condicion_add"]`).filter(function () {
+                    $(this).next().first().hide()
+                    $(this).removeClass('input-error')
+                    return $(this).val() === '' || $(this).val() === null
+                }).each(function(idx) {
+                    $(this).next().first().html('Por favor, escoja una opción')
+                    $(this).next().first().show()
+                    $(this).addClass('input-error')
+                    next_step = false
+                })
+
+            // date inputs
+
+            $(`[name="fecha_ingreso_usb_add"],
+            [name="fecha_ingreso_ulab_add"],
+            [name="fecha_ingreso_admin_publica_add"]`).filter(function () {
+                console.log($(this).val())
+                return $(this).val() === '' || $(this).val() === null
+            }).each(function(idx) {
+                $(this).addClass('input-error')
+                next_step = false
+            })
         }
 
         if (next_step) {
