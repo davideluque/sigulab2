@@ -1,26 +1,6 @@
 {{extend 'layout.html'}} 
     {{block head}}
-        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> 
-        <style>
-            div.col-sm-9 {
-                padding: 0px auto;
-                width: 50%;
-            }
-
-            .form-control-static {
-                padding-top: 0px !important;
-                padding-bottom: 0px !important;
-            }
-
-            .control-label {
-                padding: 0px !important;
-            }
-
-            .form-horizontal.web2py_form {
-                width: 80%;
-            }
-        </style>
-
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_contenedores_desechos.css')}}"> 
     {{end}} 
 
 {{block center}}
@@ -36,25 +16,27 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
-<div class="container-fluid">
+<div class="container-fluid titulo">
 
     
     {{if ('edit' in request.args) or ('view' in request.args):}}
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h1>Detalle de contenedor</h1>
+                <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
             </div>
         </div>
     {{elif ('new' in request.args):}}
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h1>Nuevo contenedor</h1>
+                <h3 class="inicio-titulo">NUEVO CONTENEDOR</h3>
+                <img class="iconos" src="{{=URL('static', 'images/nuevocontenedor.png')}}">
             </div>
         </div>
     {{else:}}
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h1>Listado de Contenedores</h1>
+                <h3 class="inicio-titulo">LISTADO DE CONTENEDORES - ULAB</h3>
+                <img class="iconos" src="{{=URL('static', 'images/listadocontenedores.png')}}">
             </div>
         </div>
         <div class="row">
