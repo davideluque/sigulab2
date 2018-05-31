@@ -174,6 +174,7 @@ class Usuario(object):
         # dependencia ya dada arriba
 
 #Funcion que envia los datos a la vista
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
     #Obtenemos el usuario loggeado
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()

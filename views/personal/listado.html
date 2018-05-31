@@ -3,10 +3,14 @@
 {{block head}}
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
-	<script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
+	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
 {{end}}
 
 {{block center}}
@@ -49,46 +53,5 @@
 {{include 'personal/form_agregar.html'}}
 
 {{include 'personal/ficha_edicion.html'}}
-
-<script type="text/javascript">
-function filter(type){
-	
-	var e = document.getElementById("fil_"+type);
-	var opt = e.options[e.selectedIndex];
-	var trs = document.querySelectorAll('#dummyID tr');
-	for(i = 0; i < trs.length; ++i) {
-	    idtr = trs[i].id.split("_");
-	    if ( type == 'gremio' ){
-	
-	    	trs[i].style.display = 'None';
-	    	if ( idtr[1] == opt.value ){trs[i].style.display = 'table-row';}
-	
-	    }else if ( type == 'dependencia' ){
-
-	    	trs[i].style.display = 'None';
-	    	if ( idtr[0] == opt.innerHTML ){trs[i].style.display = 'table-row';}
-	
-	    }
-	
-	}
-	if (type=='gremio'){
-		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.value);
-	}
-	else {
-		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.innerHTML);
-	}
-}
-</script>
-
-	<div class="container">
-	    <div class="row">
-	        <div class="col-sm-12">
-	        <!-- Boton que lleva al modal -->
-	    	<a id="botonreporte" href="reporte">
-	      		<button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Generar Reporte</button>
-	  		</a>
-	    </div>
-	    </div>
-	</div>
 
 {{end}}
