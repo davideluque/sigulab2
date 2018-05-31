@@ -364,27 +364,19 @@ db.define_table(
 
     ## Desechos peligrosos
 
-    # Tabla de Grupos de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto grupo (tipo), los cuáles
-# se definen en esta tabla. Contiene los campos: grupo de desecho, estado, peligrosidad.
+    # Tabla de Categorías de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto categoria (tipo), los cuáles
+# se definen en esta tabla. Contiene los campos: categoria de desecho, estado, peligrosidad.
 db.define_table(
-    't_grupo_desechos',
+    't_categoria_desechos',
     #Atributos;
-    Field('grupo', 'string', unique=True, notnull=True, label=T('Grupo'),
+    Field('categoria', 'string', unique=True, notnull=True, label=T('Categoría'),
            requires=IS_IN_SET(['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes'])
-    ),
-
-    Field('estado', 'string', requires=IS_IN_SET(['Cristales', 'Lodo', 'Sólido en polvo','Sólido', 'Líquido', 'Gaseoso', 'Desconocido']), notnull=True, label=T('Estado')),
-    
-    Field('peligrosidad', 'list:string',
-          requires=IS_IN_SET(['Explosivo', 'Líquido inflamable', 'Solido inflamable', 'Susceptible de combustión espontánea', 
-          'Susceptible de inflamación espontánea', 'Oxidantes', 'Peróxidos orgánicos', 'Tóxico - veneno', 'Infeccioso', 'Corrosivo', 
-          'Libera gases tóxicos', 'Toxico con efectos retardados o crónicos', 'Ecotóxica']),  
-          label=T('Peligrosidad')),
+    )
 )
 
 
-db.t_grupo_desechos._plural = 'Grupo de Desecho'
-db.t_grupo_desechos._singular = 'Grupos de Desechos'
+db.t_categoria_desechos._plural = 'Categoría de Desecho'
+db.t_categoria_desechos._singular = 'Categorías de Desechos'
 
     # Tabla de envases en donde serán almacenados los desechos peligrosos
 db.define_table(
@@ -398,22 +390,40 @@ db.define_table(
           requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True,
           represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
 
-    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular']), notnull=True, label=T('Forma')),
+    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular', 'Otra']), notnull=True, label=T('Forma')),
 
-    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero']), notnull=True, label=T('Material')),
+    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero', 'Otro']), notnull=True, label=T('Material')),
     
-    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase']), notnull=True, label=T('Tipo de boca')),
+    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']), notnull=True, label=T('Tipo de boca')),
+
+    Field('descripcion', 'string', notnull=False, label=T('Descripción')),
+
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+            notnull=True, 
+            label=T('Espacio físico'),
+            represent=lambda id, r: db.espacios_fisicos[id].nombre
+            ), 
+
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), 
+            notnull=True, label=T('Categoría de Desecho'),
+            represent=lambda id, r: db.t_categoria_desechos[id].categoria
+        
+    ),
+
+
 )
 
 db.t_envases._plural = 'Envases'
 db.t_envases._singular = 'Envase'
 
-# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, grupo.
+# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, categoria.
 db.define_table(
     't_inventario_desechos',
     #Atributos;
-    Field('grupo', 'reference t_grupo_desechos', 
-            requires=IS_IN_DB(db, db.t_grupo_desechos.id, '%(grupo)s', zero=None), notnull=True, label=T('Grupo de Desecho')),
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
 
     Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
 
@@ -433,7 +443,14 @@ db.define_table(
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s', zero=None), notnull=True, label=T('Responsable')),
 
    Field('envase', 'reference t_envases', 
-            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), label=T('Envase'))
+            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), notnull=True, label=T('Envase')),
+
+    Field('tratamiento', 'string', requires=IS_IN_SET(['Reutilizable', 'Recuperable', 'Tratable', 'Disposición final']), notnull=True, label=T('Tratamiento')),
+
+     Field('peligrosidad', 'list:string', 
+          requires=IS_IN_SET(['Sustancia Explosiva (EX)','Sustancia Inflamable (IN)','Sustancia Comburente (CB)', 'Gaso Bajo Presión (GZ)', 
+                            'Corrosiva (CR)', 'Toxicidad Aguda (TO)', 'Peligro para la Salud (DA)', 'Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)', 'Dañino para el Medio Ambiente Acuático (EN)'],
+          multiple = True), widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad'), notnull=True)
 )
 
 
