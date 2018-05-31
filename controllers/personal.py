@@ -77,8 +77,10 @@ def dropdowns():
     condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal']
     #Dropdown de roles
     roles= ['Director', 'Asistente del Director', 'Gestor', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de sección', 'Personas de Dependencia', 'Técnico' ]
+    #Dropdown de operadores
+    operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
-    return (gremio,departamento,estatus,categoria,condiciones,roles)
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
 
 #Funcion que toma las variables de la vista
 def add_form():
@@ -94,7 +96,7 @@ def add_form():
             "fecha_ingreso" : request.post_vars.fecha_ingreso_add,
             "fecha_salida" : request.post_vars.fecha_salida_add,
             "estatus" : request.post_vars.estatus_add,
-             "celular" : request.post_vars.celular_add,
+             "celular" : request.post_vars.operador_add+""+request.post_vars.celular_add,
              "contacto_emergencia" : request.post_vars.contacto_emergencia_add,
              "direccion" : request.post_vars.direccion_add,
              "gremio" : request.post_vars.gremio_add,
@@ -152,7 +154,8 @@ class Usuario(object):
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
         self.f_extension = usuario.f_telefono
-        self.f_celular = usuario.f_celular
+        self.f_operador = usuario.f_celular[:6]
+        self.f_celular = usuario.f_celular[6:]
         self.f_direccion = usuario.f_direccion
         self.f_contacto_emergencia = usuario.f_contacto_emergencia
         self.f_pagina_web = usuario.f_pagina_web
@@ -185,7 +188,7 @@ def listado():
     tabla = tabla_categoria()
 
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
     return dict(
         grid=tabla,
@@ -195,6 +198,7 @@ def listado():
         gremios=gremios,
         condiciones=condiciones,
         roles=roles,
+        operadores=operadores,
         usuario=usuario
         
         )

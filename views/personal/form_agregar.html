@@ -65,7 +65,23 @@
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_celular or ''}}" type="text" class="form-control" name="celular_add" placeholder="Celular" required>
+                              <select  name="operador_add">
+                                  <option  value=""
+                                  {{ if not usuario.f_estatus :}}
+                                  selected
+                                  disabled
+                                  {{pass}}
+                                  >Codigo</option>
+                                  {{for operador in operadores:}}
+                                  <option
+                                  {{ if operador == usuario.f_operador: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=operador}}">{{=operador}}</option>
+
+                                  {{pass}}
+                                </select>
+                              <input value="{{=usuario.f_celular or ''}}" type="text" name="celular_add" placeholder="Celular" required>
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
