@@ -27,7 +27,7 @@ def tabla_categoria():
         dep= named[0].nombre if len(named) > 0 else None
 
         if (dep) : idUSuperior = (db(db.dependencias.nombre==dep).select(db.dependencias.ALL)).first().unidad_de_adscripcion
-        else: idUsuperior=None
+        else: idUSuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
 

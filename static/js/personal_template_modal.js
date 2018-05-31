@@ -122,18 +122,48 @@ $(document).ready(function () {
                         $("#err_email").hide();
                     }
                 }
-                else if (($(this).attr('name')=="telefono_add") || ($(this).attr('name')=="telefono_edit")) {
-                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()>9999) { // Extension de 1 a 4 digitos
-                        $("#err_telefono").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
-                        $("#err_telefono").show();
+                else if (($(this).attr('name')=="celular_add") || ($(this).attr('name')=="celular_edit")) {
+                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+                        $("#err_celular").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
+                        $("#err_celular").show();
                         $(this).addClass('input-error');
                         next_step = false;
                     }
                     else {
                         $(this).removeClass('input-error');
-                        $("#err_telefono").hide();
+                        $("#err_celular").hide();
                     }
                 }
+                else if (($(this).attr('name')=="contacto_emergencia_add") || ($(this).attr('name')=="contacto_emergencia_edit")) {
+                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+                        $("#err_emergencia").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
+                        $("#err_emergencia").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_emergencia").hide();
+                    }
+                }
+                else if (($(this).attr('name')=="pagina_web_add") || ($(this).attr('name')=="pagina_web_edit")) {
+                    if (!($(this).val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) { // Extension de 1 a 4 digitos
+                        $("#err_pagina_web").html("Formato incorrecto de pagina web");
+                        $("#err_pagina_web").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_pagina_web").hide();
+                    }
+                }
+                else if (($(this).attr('name')=="direccion_add") || ($(this).attr('name')=="direccion_edit")) {
+                   
+                    $(this).removeClass('input-error');
+                    $("#err_direccion").hide();
+                    
+                }   
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
