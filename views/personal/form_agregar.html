@@ -154,21 +154,21 @@
                                 </select>
                               </div>
                               <div id="fsalida" hidden>
-                                  <p >Fecha de Ingreso: <input value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
+                                  <p >Fecha de Ingreso: <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" ></p>
                                   <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                                  <p >Fecha de Egreso: <input value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="datepicker2" ></p>
+                                  <p >Fecha de Egreso: <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" ></p>
                                   <font color="red"><div id="err_fecha_salida" hidden></div></font>
                               </div>
 
 
-                              <p >Ingreso a la USB: <input value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" id="datepickerUsb" required></p>
+                              <p >Ingreso a la USB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p >Ingreso a la ULAB: <input value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" id="datepickerUlab" required></p>
+                              <p >Ingreso a la ULAB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p >Ingreso a la administracion publica: <input value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" id="datepicker5" required></p>
+                              <p >Ingreso a la administracion publica: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
                             <!--<div class="form-group">

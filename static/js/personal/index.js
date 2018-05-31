@@ -26,10 +26,24 @@ function filter(type){
 	}
 }
 
-$.fn.datepicker.defaults.format = "yy-mm-dd"
+$.fn.datepicker.defaults.format = "yyyy-mm-dd"
+$.fn.datepicker.dates['en'] = {
+    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre"],
+    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec"],
+    today: "Hoy",
+    clear: "Limpiar",
+    titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+    weekStart: 0
+};
 
 
 $(document).ready( function() {
+    $('.datepicker').datepicker({
+        language: 'en'
+    })
     var d1=$( "#datepicker" ).datepicker();
     $( "#datepicker2" ).datepicker();
     var dateUsb = $( "#datepickerUsb" ).datepicker();
