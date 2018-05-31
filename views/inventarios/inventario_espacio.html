@@ -308,10 +308,10 @@
                       <label>Importante: llene según requerimientos de SUDEBID</label>
                         
                       <div class="form-group">
-                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Código de localización</label>
-                          <select class="form-control" type="select" value="" id="cod-localizacion" onchange="placeholder_localizacion(this.value);"  name="cod_loc" required>
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Ubicación</label>
+                          <select class="form-control" type="select" value="" id="localizacion" onchange="placeholder_localizacion(this.value);"  name="localizacion" required>
                             <option value="" onchange="placeholder_localizacion(this.value);">Seleccione un código de localizacion</option>
-                            {{for cod in cod_localizacion:}}
+                            {{for cod in localizacion:}}
                             <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
                             {{pass}}
                           </select>
@@ -319,9 +319,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Ubicación</label>
-                            <input type="text" class="form-control" id="localizacion" name="localizacion" placeholder="" readonly >
-                            <div class="field-error"> <p id="error-localizacion"> </p> </div>
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
+                            <input type="text" class="form-control" id="cod_loc" name="cod_loc" placeholder="" readonly >
+                            <div class="field-error"> <p id="error-cod_loc"> </p> </div>
                           </div>
                   
 
@@ -441,15 +441,16 @@ del concepto y tipo de ingreso o egreso -->
   }
 
   function placeholder_localizacion(value){
-    var x = document.getElementById("localizacion");
-    var y = document.getElementById("cod-localizacion");
+    var x = document.getElementById("cod-loc");
+    var y = document.getElementById("localizacion");
 
-    if (value  == "150301"){
-      x.placeholder = "Edo Miranda, Municipio Baruta, Parroquia Baruta";
-      x.value = "Edo Miranda, Municipio Baruta, Parroquia Baruta"
+
+    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+      x.placeholder = '150301';
+      x.value = '150301';
     }else{;
-      x.placeholder = "Edo Vargas, Municipio Vargas, Parroquia Macuto";
-      x.value = "Edo Vargas, Municipio Vargas, Parroquia Macuto";
+      x.placeholder ='240107';
+      x.value = '240107';
 
     }
   }
