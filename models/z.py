@@ -92,6 +92,7 @@ if db(db.auth_user).isempty():
 # Sedes
 
 if db(db.sedes).isempty():
+	print("coño de la madre web2py")
 	db.sedes.insert(nombre="Sartenejas")
 	db.sedes.insert(nombre="Litoral")
 
@@ -99,9 +100,11 @@ if db(db.sedes).isempty():
 
 if db(db.dependencias).isempty():
 	
+	sartenejas = db(db.sedes.nombre=="Sartenejas").select(db.sedes.ALL).first().id
+	litoral = db(db.sedes.nombre=="Litoral").select(db.sedes.ALL).first().id
 	# Direccion
 	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=1, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=sartenejas, id_jefe_dependencia=user, 
 		codigo_registro="UL")
 
 	direccionid = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
@@ -110,43 +113,43 @@ if db(db.dependencias).isempty():
 
 	# Laboratorio A
 	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO A', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO A', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLA")
 
 	# Laboratorio B
 	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO B', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO B', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLB")
 
 	# Laboratorio C
 	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='LABORATORIO C', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO C', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLC")
 
 	# Laboratorio D	
 	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO D', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO D', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLD")
 	
 	# Laboratorio E
 	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO E', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO E', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLE")
 
 	# Laboratorio F
 	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO F', id_sede=1, 
+	db.dependencias.insert(nombre='LABORATORIO F', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLF")
 
 	# Laboratorio G
 	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO G', id_sede=2, 
+	db.dependencias.insert(nombre='LABORATORIO G', id_sede=litoral, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="ULLG")
 
@@ -154,234 +157,34 @@ if db(db.dependencias).isempty():
 
 	# Unidad de Administración
 	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=1, 
+	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL03")
 
 	# Coordinación de Adquisiciones
 	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL01")
 
 	# Coordinación de Importaciones
 	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL02")
 
 	# Coordinación de la Calidad
 	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=1, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL04")
 
 	# Protección Radiológica
 	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=1, 
+	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=sartenejas, 
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
 		codigo_registro="UL05")
 
-
-if db(db.t_Personal).isempty():
-	"""La inserción de los usuarios registrados en auth_user en la tabla de 
-	Personal es estrictamente necesaria pues los objetos del modulo de Servicios
-	buscan las dependencias de los usuarios a través de una coincidencia del
-	usuario con la tabla de Personal ya que esta tabla es la que guarda el 
-	la dependencia de cada usuario y no auth_user"""
-	
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-    
-'''
-	""" Super Usuario """
-	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
-	db.t_Personal.insert(f_nombre="Super", f_apellido = "", f_gremio="Administrativo", 
-		f_cargo="Super Usuario", f_ci=0, f_email='sigulabusb@gmail.com', f_estatus='Activo',
-        #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="SuperUsuario",
-		f_usuario=user, f_dependencia=dep)
-
-	""" Cliente Interno """
-	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Funindes",f_apellido = "", 
-		f_gremio = "Administrativo", f_cargo = "Cliente Interno",
-		f_ci = 0, f_email='funindes@usb.ve', f_estatus='Activo',
-        #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-        f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Cliente Interno",
-		f_usuario=user, f_dependencia=dep)
-
-	""" Asistente Dirección """
-	user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Asistente Dirección",f_apellido = "", 
-		f_gremio = "Administrativo", f_cargo = "Asistente Dirección",
-		f_ci = 0, f_email='asis-ulab@usb.ve', f_estatus='Activo',
-        #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Asistente Director",
-		f_usuario=user, f_dependencia=dep)
-
-	""" Gestor de Sustancias """
-	user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Gestor de Sustancias", f_apellido = "", 
-											 f_gremio="Administrativo", f_cargo="Gestor de Sustancias",
-											 f_ci=0, f_email='ulab-smdp@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Gestor de Sustancias",
-											 f_usuario=user, f_dependencia=dep)
-
-	""" Director """
-	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Director", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Director",
-		f_ci=0, f_email='ulab@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Director",
-		f_usuario=user, f_dependencia=dep)
-
-	""" Coordinaciones """
-
-	# Coordinación de Adquisiciones
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id
-	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Coordinador de Adquisiciones", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Coordinador",
-		f_ci=0, f_email='ulab-adquisicion@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Coordinador",
-		f_usuario=user, f_dependencia=dep)
-
-	# Coordinación de la Calidad
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id
-	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Coordinador de Calidad", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Coordinador",
-		f_ci=0, f_email='ulab-calidad@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Coordinador",
-		f_usuario=user, f_dependencia=dep)
-
-	# Coordinación de Importaciones
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id
-	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Coordinador de Importaciones", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Coordinador",
-		f_ci=0, f_email='ulab-importaciones@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Coordinador",
-		f_usuario=user, f_dependencia=dep)
-
-	""" Unidades """
-
-	# Unidad de Administración
-	dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id
-	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Unidad de Administración", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Coordinador",f_ci=0, 
-		f_email='ulab-administracion@usb.ve', f_estatus='Activo', f_usuario=user,
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Administrador",
-		f_dependencia=dep)
-
-	# Oficina de Proteccion Radiologica
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Encargado de la Oficina de Proteccion Radiológica", 
-		f_apellido = "", f_gremio="Administrativo", f_cargo="Coordinador",
-		f_ci=0, f_email='ulab-pradiologica@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Administrador",
-		f_usuario=user, f_dependencia=dep)
-
-
-	""" Jefes de Laboratorios --- Tenian de categoria Tecnico, se cambio a gremio administrativo"""
-
-	# Laboratorio A
-	dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
-	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio A", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",f_ci=0, 
-		f_email='usb-laba@usb.ve', f_estatus='Activo',
-                         #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-                         f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio B
-	dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id
-	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio B", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",f_ci=0, 
-		f_email='usb-labb@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-                         f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio C
-	dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id
-	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio C", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
-						 f_ci=0, f_email='usb-labc@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-						 f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio D
-	dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id
-	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio D", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
-						 f_ci=0, f_email='usb-labd@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-						 f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio E
-	dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id
-	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio E", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
-						 f_ci=0, f_email='usb-labe@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-						 f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio F
-	dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id
-	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio F", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
-						 f_ci=0, f_email='usb-labf@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-						 f_usuario=user, f_dependencia=dep)
-
-	# Laboratorio G
-	dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id
-	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	db.t_Personal.insert(f_nombre="Jefe del Laboratorio G", f_apellido = "", 
-		f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
-						 f_ci=0, f_email='usb-labg@usb.ve', f_estatus='Activo',
-                          #
-        f_telefono=0, f_celular=0, f_contacto_emergencia=0, f_direccion="No Disponible", f_pagina_web="No Disponible",
-    f_categoria="Fijo", f_fecha_ingreso="No disponible", f_fecha_salida="No Disponible", f_fecha_ingreso_usb="No Disponible", f_fecha_ingreso_ulab="No Disponible", f_fecha_ingreso_admin_publica="No Disponible", f_condicion="En Funciones", f_unidad_jerarquica_superior="No Disponible", f_rol="Jefe de Laboratorio",
-						 f_usuario=user, f_dependencia=dep)
-
-'''
 # Cargos
 if db(db.auth_group).isempty():
 
@@ -395,6 +198,226 @@ if db(db.auth_group).isempty():
 		db.auth_group.insert(role='PERSONAL DE COORDINACIÓN',description='Personal de Coordinación')
 		db.auth_group.insert(role='GESTOR DE SMyDP',description='Gestor de SMyDP')
 		db.auth_group.insert(role='CLIENTE INTERNO',description='Cliente Interno')
+
+# Fichas de personal
+if db(db.t_Personal).isempty():
+	"""La inserción de los usuarios registrados en auth_user en la tabla de 
+	Personal es estrictamente necesaria pues los objetos del modulo de Servicios
+	buscan las dependencias de los usuarios a través de una coincidencia del
+	usuario con la tabla de Personal ya que esta tabla es la que guarda el 
+	la dependencia de cada usuario y no auth_user"""
+	
+	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    
+	""" Super Usuario """
+	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
+	rol = db(db.auth_group.role=='WEBMASTER').select()[0].id 
+	print(rol)
+
+	db.t_Personal.insert(
+		f_nombre="Super", f_apellido="", f_gremio="Administrativo", f_cargo="Super Usuario",
+		f_ci="0", f_telefono="0", f_celular="0", f_contacto_emergencia=None,
+		f_email="sigulabusb@gmail.com", f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+	""" Cliente Interno """
+	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Funindes", f_apellido="", f_gremio="Administrativo", f_cargo="Cliente Interno",
+		f_ci="1", f_telefono="1", f_celular="1", f_contacto_emergencia=None,
+		f_email='funindes@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	""" Asistente Dirección """
+	user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Asistente Dirección", f_apellido="", f_gremio="Administrativo", f_cargo="Cliente Interno",
+		f_ci="2", f_telefono="2", f_celular="2", f_contacto_emergencia=None,
+		f_email='asis-ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		)
+
+
+	""" Gestor de Sustancias """
+	user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Gestor de Sustancias", f_apellido="", f_gremio="Administrativo", f_cargo="Gestor de Sustancias",
+		f_ci="3", f_telefono="3", f_celular="3", f_contacto_emergencia=None,
+		f_email='ulab-smdp@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		)
+
+	""" Director """
+	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Director", f_apellido="", f_gremio="Administrativo", f_cargo="Director",
+		f_ci="4", f_telefono="4", f_celular="4", f_contacto_emergencia=None,
+		f_email='ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		)
+
+	""" Coordinaciones """
+
+	# Coordinación de Adquisiciones
+	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id
+	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Coordinador de Adquisiciones", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
+		f_ci="5", f_telefono="5", f_celular="5", f_contacto_emergencia=None,
+		f_email='ulab-adquisicion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		)
+
+	# Coordinación de la Calidad
+	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id
+	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Coordinador de Calidad", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
+		f_ci="6", f_telefono="6", f_celular="6", f_contacto_emergencia=None,
+		f_email='ulab-calidad@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+
+	# Coordinación de Importaciones
+	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id
+	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Coordinador de Importaciones", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
+		f_ci="7", f_telefono="7", f_celular="7", f_contacto_emergencia=None,
+		f_email='ulab-importaciones@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		)
+
+	""" Unidades """
+
+	# Unidad de Administración
+	dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id
+	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Unidad de Administración", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
+		f_ci="8", f_telefono="8", f_celular="8", f_contacto_emergencia=None,
+		f_email='ulab-administracion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+	# Oficina de Proteccion Radiologica
+	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Encargado de la Oficina de Proteccion Radiológica", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
+		f_ci="9", f_telefono="9", f_celular="9", f_contacto_emergencia=None,
+		f_email='ulab-pradiologica@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+
+	""" Jefes de Laboratorios --- Tenian de categoria Tecnico, se cambio a gremio administrativo"""
+
+	# Laboratorio A
+	dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
+	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio A", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="10", f_telefono="10", f_celular="10", f_contacto_emergencia=None,
+		f_email='usb-laba@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio B
+	dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id
+	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio B", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="11", f_telefono="11", f_celular="11", f_contacto_emergencia=None,
+		f_email='usb-labb@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio C
+	dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id
+	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio C", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="12", f_telefono="12", f_celular="12", f_contacto_emergencia=None,
+		f_email='usb-labc@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio D
+	dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id
+	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio D", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="13", f_telefono="13", f_celular="13", f_contacto_emergencia=None,
+		f_email='usb-labd@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio E
+	dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id
+	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio E", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="14", f_telefono="14", f_celular="14", f_contacto_emergencia=None,
+		f_email='usb-labe@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio F
+	dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id
+	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio F", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="15", f_telefono="15", f_celular="15", f_contacto_emergencia=None,
+		f_email='usb-labf@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
+	# Laboratorio G
+	dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id
+	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
+	db.t_Personal.insert(
+		f_nombre="Jefe del Laboratorio G", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
+		f_ci="16", f_telefono="16", f_celular="16", f_contacto_emergencia=None,
+		f_email='usb-labg@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
+		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+	)
+
 
 # Propositos de una solicitud
 

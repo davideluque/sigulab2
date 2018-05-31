@@ -55,6 +55,22 @@ $(document).ready(function () {
                     $("#err_fecha_ingreso").html("Este campo es obligatorio");
                     $("#err_fecha_ingreso").show();
                 }
+                else if (($(this).attr('name')=="celular_add") || ($(this).attr('name')=="celular_edit")) {
+                    $("#err_celular").html("Este campo es obligatorio");
+                    $("#err_celular").show();
+                }
+                else if (($(this).attr('name')=="contacto_emergencia_add") || ($(this).attr('name')=="contacto_emergencia_edit")) {
+                    $("#err_emergencia").html("Este campo es obligatorio");
+                    $("#err_emergencia").show();
+                }
+                else if (($(this).attr('name')=="direccion_add") || ($(this).attr('name')=="direccion_edit")) {
+                    $("#err_direccion").html("Este campo es obligatorio");
+                    $("#err_direccion").show();
+                }
+                else if (($(this).attr('name')=="pagina_web_add") || ($(this).attr('name')=="pagina_web_edit")) {
+                    $("#err_pagina_web").html("Este campo es obligatorio");
+                    $("#err_pagina_web").show();
+                }
                 $(this).addClass('input-error');
                 next_step = false;
             } else {

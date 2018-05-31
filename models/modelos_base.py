@@ -124,8 +124,8 @@ db.define_table(
     Field('f_cargo',          'string',
           requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
 
-    Field('f_ci',             'integer',
-          requires=IS_MATCH('^\d*', error_message='Número de cedula inválido.'),
+    Field('f_ci',             'string',
+          requires=IS_MATCH('^\d+', error_message='Número de cedula inválido.'),
           notnull=True, label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
@@ -150,7 +150,6 @@ db.define_table(
     Field('f_fecha_ingreso_ulab', 'date',   label=T('Fecha de Ingreso a la ULAB')),
     Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
     Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
-    Field('f_unidad_jerarquica_superior', 'reference dependencias',  requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'),  label=T('Unidad Jerarquica Superior') ,error_message='Por favor introduzca un valor'),
     Field('f_rol', 'reference auth_group', requires=IS_IN_DB(db, db.auth_group, '%(description)s'), label=T('Rol')),
 
     # #Referencias
