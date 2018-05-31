@@ -39,10 +39,6 @@ db.define_table(
 
     Field('id_sede', 'reference sedes', requires=IS_IN_DB(db, db.sedes.id, '%(nombre)s'), label=T('Sede')),
 
-    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
-
-    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
-
     Field('fax', 'integer', label=T('Fax')),
 
     Field('pagina_web', 'string', label=T('Pagina Web')),
@@ -158,7 +154,8 @@ db.define_table(
 
     Field('f_dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
-    Field('f_validado', 'boolean', default=False)
+    Field('f_validado', 'boolean', default=False),
+    Field('f_es_supervisor', 'boolean', default = True)
     )
 
 db.t_Personal._plural = 'Personal'
@@ -183,6 +180,10 @@ db.define_table(
     Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
+    
+    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
+
+    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
     
     Field('dependencia', 'reference dependencias',
         requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), 

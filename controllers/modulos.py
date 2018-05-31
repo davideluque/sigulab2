@@ -191,20 +191,28 @@ def register():
     en la tabla "es_tecnico" si el usuario tiene el rol de tecnico.
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
-
+    es_supervisor = request.post_vars.tipo_supervisor
     if request.post_vars.seccion:
       # El registrado pertenece directamente a una sección de un laboratorio.
       depid = request.post_vars.seccion
     else:
       depid = request.post_vars.laboratorio
     
+    if request.post_vars.rol and es_supervisor :
+        rolid = request.post_vars.rol
+        roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+    else:
+        rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
+        roltype = "PERSONAL INTERNO"
+        depid= request.post_vars.dependencia
 
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
-                                                    group_id=request.post_vars.rol,
+                                                    group_id=rolid,
                                                     dependencia_asociada=depid,
                                                     f_personal_membership=request.post_vars.cedula)
 
+    
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
     nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
@@ -213,18 +221,11 @@ def register():
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
                            f_telefono = 0,
-                           f_dependencia = depid)
+                           f_dependencia = depid,
+                           f_es_supervisor = es_supervisor)
 
-    #Mapea el usuario a su unidad jerarquica superior
-    adscripcion = (db(db.dependencias.id == depid).select(db.dependencias.ALL)).first()
-    if(adscripcion): 
-        db(db.t_Personal.id == nuevo_personal_id).update(f_unidad_jerarquica_superior = adscripcion.unidad_de_adscripcion)
-     
-    else : adscripcionid = request.post_vars.unidad_de_adscripcion
     
-    # Mapea el usuario al espacio fisico que tiene a cargo
-    rolid = request.post_vars.rol
-    roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+    # Mapea el usuario al espacio fisico que tiene a cargo    
     
     if roltype == "TÉCNICO":
       # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
@@ -247,8 +248,8 @@ def register():
 
 
   roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
-
-  return dict(roles=roles)
+  dependencias=list(db().select(db.dependencias.ALL))
+  return dict(roles=roles, dependencias=dependencias)
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
