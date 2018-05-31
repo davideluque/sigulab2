@@ -220,7 +220,6 @@ def register():
                            f_ci = request.post_vars.cedula,
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
-                           f_telefono = 0,
                            f_dependencia = depid,
                            f_es_supervisor = es_supervisor)
 
