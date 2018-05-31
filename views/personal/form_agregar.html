@@ -105,11 +105,11 @@
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
                                 <select class="form-control" id="sel1" name="estatus_add">
-                                  <option value=""
+                                  <option select hidden disabled  value=""
                                   {{ if not usuario.f_estatus :}}
                                   selected
                                   {{pass}}
-                                  >------</option>
+                                  >Estatus</option>
                                   {{for estatus in estados:}}
                                   <option
                                   {{ if estatus == usuario.f_estatus: }}
@@ -122,11 +122,11 @@
                               </div>
                               <div class="form-group">
                                 <select class="form-control" id="sel2" name="categoria_add">
-                                  <option value=""
+                                  <option select hidden disabled  value=""
                                   {{ if not usuario.f_categoria :}}
                                   selected
                                   {{pass}}
-                                  >------</option>
+                                  >Categoría</option>
                                   {{for categoria in categorias:}}
                                   <option
                                   {{ if categoria == usuario.f_categoria: }}
@@ -139,11 +139,11 @@
 
                               <div class="form-group">
                                 <select class="form-control" id="sel3" name="condicion_add">
-                                  <option value=""
+                                  <option select hidden disabled value=""
                                   {{ if not usuario.f_condicion :}}
                                   selected
                                   {{pass}}
-                                  >------</option>
+                                  >Condición</option>
                                   {{for condicion in condiciones:}}
                                   <option
                                   {{ if condicion == usuario.f_condicion: }}
@@ -201,11 +201,11 @@
 
                         <div class="form-group">
                           <select class="form-control" id="sel1" name="gremio_add" required>
-                            <option value=""
+                            <option selected hidden disabled value=""
                             {{ if not usuario.f_gremio :}}
                             selected
                             {{pass}}
-                            >------</option>
+                            >Gremio</option>
                             {{for gremio in gremios:}}
                             <option
                             {{ if gremio == usuario.f_gremio: }}
@@ -221,24 +221,24 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value="{{=usuario.f_ubicacion or ''}}">
+                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion"  required value="{{=usuario.f_ubicacion or ''}}">
                         </div>
 
                       
                         <div class="form-group">
                             <select class="form-control" id="sel1" name="rol_add" required>
-                              <option
-                              {{ if not usuario.f_rol :}}
-                                selected
-                                {{pass}}
-                                >------</option>
-                                {{for rol in roles:}}
-                                <option
-                                {{ if rol.id == usuario.f_rol: }}
-                                selected
-                                {{pass}}
-                                value="{{=rol.id}}">{{=rol.role.decode('utf-8').upper()}}</option>
-                                {{pass}}
+                          <option selected hidden disabled
+                          {{ if not usuario.f_rol :}}
+                            selected
+                            {{pass}}
+                            >Rol</option>
+                            {{for rol in roles:}}
+                            <option
+                            {{ if rol.id == usuario.f_rol: }}
+                            selected
+                            {{pass}}
+                            value="{{=rol.id}}">{{=rol.role.decode('utf-8').upper()}}</option>
+                            {{pass}}
                           </select>
                         </div>
 
