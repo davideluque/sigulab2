@@ -1,14 +1,3 @@
-  <script>
-    $.datepicker.setDefaults({ dateFormat: "yy-mm-dd"})
-    $( function() {
-      var d1=$( "#datepicker" ).datepicker();
-      $( "#datepicker2" ).datepicker();
-      var dateUsb = $( "#datepickerUsb" ).datepicker();
-        $( "#datepickerUlab" ).datepicker();
-        $( "#datepicker5" ).datepicker();
-    } );
-  </script>
-
   <div class="modal fade" id="addservice" role="dialog">
     <div class="modal-dialog">
 
@@ -165,7 +154,7 @@
                                 </select>
                               </div>
                               <div id="fsalida" hidden>
-                                  <p >Fecha de Ingreso: or '' <input value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
+                                  <p >Fecha de Ingreso: <input value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
                                   <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
                                   <p >Fecha de Egreso: <input value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="datepicker2" ></p>
@@ -228,15 +217,15 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value={{=usuario.f_dependencia or ''}}>
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value={{=usuario.f_ubicacion or ''}}>
+                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value="{{=usuario.f_ubicacion or ''}}">
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value={{=usuario.f_rol or ''}}>
+                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value="{{=usuario.f_rol or ''}}">
                         </div>
 
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
