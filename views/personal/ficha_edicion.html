@@ -128,8 +128,10 @@
 
             <div class="btn-group botonesFicha">
             <button type="button" class="btn btn-primary btn-success" id = "editar" name = "cedula_editar" value="True" data-toggle="modal" data-target="#addservice" data-dismiss="modal">Editar</button>
-
+            
+            {{if usuario.f_email == 'sigulabusb@gmail.com' :}}
             <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name = "cedula_eliminar">Eliminar</button>
+            {{pass}}
 
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>

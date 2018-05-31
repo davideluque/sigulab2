@@ -27,7 +27,7 @@ $(document).ready(function () {
     // Manejo de error de la cedula
     $('[name="ci_add"]').change(function (){
         console.log($(this).val());
-        if (!($(this).val().match(/\d+/)) || $(this).val()>99999999) { // CI
+        if (!($(this).val().match(/^\d+$/gm)) || $(this).val()>99999999) { // CI
             
             $("#err_ci").html("Introduzca una cédula de identidad válida (Entre 1 y 99999999)");
             $("#err_ci").show();
@@ -42,7 +42,7 @@ $(document).ready(function () {
 
     // Manejo de error del numero de celular 
     $('[name="celular_add"]').change(function (){
-        if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+        if (!($(this).val().match(/^\d+$/gm)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
             $("#err_celular").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
             $("#err_celular").show();
             $(this).addClass('input-error');
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
     // Manejo de error del campo de contacto de emergencia 
     $('[name="contacto_emergencia_add"]').change(function (){
-        if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+        if (!($(this).val().match(/^\d+$/gm)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
             $("#err_emergencia").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
             $("#err_emergencia").show();
             $(this).addClass('input-error');
@@ -159,87 +159,18 @@ $(document).ready(function () {
                         $("#err_apellido").hide();
                     }
                 }
-                else if (($(this).attr('name')=="ci_add") || ($(this).attr('name')=="ci_edit")) {
-                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()>99999999) { // CI
-                        $("#err_ci").html("Introduzca una cédula de identidad válida (Entre 1 y 99999999)");
-                        $("#err_ci").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_ci").hide();
-                    }
-                }
-                else if (($(this).attr('name')=="email_add") || ($(this).attr('name')=="email_edit")) {
-                    if (!($(this).val().match(/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/))) { // Correo
-                        $("#err_email").html("Introduzca un correo válido (Ej: usuario@domino.com)");
-                        $("#err_email").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_email").hide();
-                    }
-                }
-                else if (($(this).attr('name')=="celular_add") || ($(this).attr('name')=="celular_edit")) {
-                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
-                        $("#err_celular").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
-                        $("#err_celular").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_celular").hide();
-                    }
-                }
-                else if (($(this).attr('name')=="contacto_emergencia_add") || ($(this).attr('name')=="contacto_emergencia_edit")) {
-                    if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
-                        $("#err_emergencia").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
-                        $("#err_emergencia").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_emergencia").hide();
-                    }
-                }
-                else if (($(this).attr('name')=="pagina_web_add") || ($(this).attr('name')=="pagina_web_edit")) {
-                    if (!($(this).val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) { // Extension de 1 a 4 digitos
-                        $("#err_pagina_web").html("Formato incorrecto de pagina web");
-                        $("#err_pagina_web").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $("#err_pagina_web").hide();
-                    }
-                }
                 else if (($(this).attr('name')=="direccion_add") || ($(this).attr('name')=="direccion_edit")) {
                    
                     $(this).removeClass('input-error');
                     $("#err_direccion").hide();
                     
                 }   
-
-                // ----------------------------------- Segunda pagina del formulario ------------------------------------//
-                else if (($(this).attr('name')=="estatus_add") || ($(this).attr('name')=="estatus_edit")){
-                    console.log('hola');                    
-                    if (($(this).val() == "Estatus")){
-                        $("#err_estatus").html("Seleccione un estatus");
-                        $("#err_estatus").show();
-                        $(this).addClass('input-error');
-                        next_step = false;
-                    }
-                    else {
-                        $(this).removeClass('input-error');
-                        $('#err_estatus').hide();
-                    }
-                }
+                else if (($(this).attr('name')=="extension_add") || ($(this).attr('name')=="extension_edit")) {
+                   
+                    $(this).removeClass('input-error');
+                    $("#err_extension").hide();
+                    
+                }   
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
@@ -280,30 +211,30 @@ $(document).ready(function () {
         var parent_fieldset = $(this).parents('fieldset');
 
         parent_fieldset.find('input[type="text"]').each(function () {
-            if (($(this).val() == "") && ($(this).attr('required'))) {
-                if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
-                    $("#err_cargo").html("Este campo es obligatorio");
-                    $("#err_cargo").show();
-                }
-                $(this).addClass('input-error');
-                e.preventDefault();
-            } else {
-                if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
-                    if (!($(this).val().match(/^(([a-zA-Z ]+[\-\'\.]?)+[a-zA-Z ]+)+$/))) { // Todo lo que sea nombres (Antes del submit)
-                        $("#err_cargo").html("Introduzca un cargo válido");
-                        $("#err_cargo").show();
-                        $(this).addClass('input-error');
-                        e.preventDefault();
-                    }
-                    else {
-                        $("#err_cargo").hide();
-                        $(this).removeClass('input-error');
-                    }
-                }
-                else {
-                    $(this).removeClass('input-error');
-                }
-            }
+            // if (($(this).val() == "") && ($(this).attr('required'))) {
+            //     if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
+            //         $("#err_cargo").html("Este campo es obligatorio");
+            //         $("#err_cargo").show();
+            //     }
+            //     $(this).addClass('input-error');
+            //     e.preventDefault();
+            // } else {
+            //     if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
+            //         if (!($(this).val().match(/^(([a-zA-Z ]+[\-\'\.]?)+[a-zA-Z ]+)+$/))) { // Todo lo que sea nombres (Antes del submit)
+            //             $("#err_cargo").html("Introduzca un cargo válido");
+            //             $("#err_cargo").show();
+            //             $(this).addClass('input-error');
+            //             e.preventDefault();
+            //         }
+            //         else {
+            //             $("#err_cargo").hide();
+            //             $(this).removeClass('input-error');
+            //         }
+            //     }
+            //     else {
+            //         $(this).removeClass('input-error');
+            //     }
+            // }
         });
 
     });

@@ -25,8 +25,10 @@
 	<div class="container">
 	    <div class="row">
 	        <div class="col-sm-2">
-	        <!-- Boton que lleva al modal -->
-		      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
+					<!-- Boton que lleva al modal -->
+					{{ if not usuario.f_es_supervisor :}}
+					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
+					{{pass}}
 		    </div>
 		    <div class="col-sm-4">
 	          <select class="form-control" id="fil_gremio" name="gremio_add" onchange="filter('gremio')" style="margin-left:30px" required>
