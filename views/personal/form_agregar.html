@@ -27,7 +27,7 @@
                   action="{{=URL('personal', 'add_form')}}">
 
                     <!-- Primer Paso -->
-                    <fieldset class="formField">
+                    <fieldset id="p1" class="formField">
                       <div class="form-bottom" data-step="1" data-title="Primer Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
@@ -91,7 +91,7 @@
                     <!-- Fin Primer Paso -->
 
                     <!-- Segundo Paso -->
-                    <fieldset class="formField">
+                    <fieldset class="formField" id="p2">
                         <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                           <!-- Aqui va la barra lateral -->
                           <div class="col-sm-1 col1Body">
@@ -105,7 +105,7 @@
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
                                 <select class="form-control" id="sel1" name="estatus_add">
-                                  <option select hidden disabled  value=""
+                                  <option disabled  value=""
                                   {{ if not usuario.f_estatus :}}
                                   selected
                                   disabled
@@ -120,11 +120,12 @@
 
                                   {{pass}}
                                 </select>
+                                <font color="red"><div id="err_estatus" hidden></div></font>
                               </div>
                               <font color="red"><div id="err_estatus" hidden></div></font>
                               <div class="form-group">
                                 <select class="form-control" id="sel2" name="categoria_add">
-                                  <option select hidden disabled  value=""
+                                  <option disabled  value=""
                                   {{ if not usuario.f_categoria :}}
                                   selected
                                   disabled
@@ -138,11 +139,12 @@
                                   value="{{=categoria}}">{{=categoria}}</option>
                                   {{pass}}
                                 </select>
+                                <font color="red"><div id="err_categoria" hidden></div></font>
                               </div>
 
                               <div class="form-group">
                                 <select class="form-control" id="sel3" name="condicion_add">
-                                  <option select hidden disabled value=""
+                                  <option  disabled value=""
                                   {{ if not usuario.f_condicion :}}
                                   selected
                                   disabled
@@ -156,8 +158,13 @@
                                   value="{{=condicion}}">{{=condicion}}</option>
                                   {{pass}}
                                 </select>
+                                <font color="red"><div id="err_condicion" hidden></div></font>
                               </div>
-                              <div id="fsalida" hidden>
+                              <div id="fsalida"
+                              {{if usuario.f_categoria == 'Fijo' :}}
+                              hidden
+                              {{pass}}
+                              >
                                   <p >Fecha de Ingreso: <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" ></p>
                                   <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
@@ -167,13 +174,13 @@
 
 
                               <p >Ingreso a la USB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
 
                               <p >Ingreso a la ULAB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              <font color="red"><div id="err_fecha_ingreso_ulab" hidden></div></font>
 
                               <p >Ingreso a la administracion publica: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              <font color="red"><div id="err_fecha_ingreso_admin_publica" hidden></div></font>
 
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">

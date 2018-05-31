@@ -136,7 +136,7 @@ db.define_table(
           requires=IS_NOT_EMPTY(),  label=T('Ubicacion') ,error_message='Por favor introduzca un valor'),
     Field('f_pagina_web',     'string', requires=IS_URL() ,  label=T('Página web'), error_message='Ingrese un formato válido de url'),
 
-    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
+    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado', 'Retirado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
     Field('f_categoria',requires=IS_IN_SET(['Fijo', 'Contratado', 'Pasantía', 'Ayudantía']), label=T('Categoria') ,error_message='Por favor introduzca un valor'),
     ##Campos condicionales si la categoria es contratado, pasantia o ayudantia.
     Field('f_fecha_ingreso', 'date', label=T('Fecha de Ingreso')),
