@@ -1,6 +1,19 @@
 {{extend 'layout.html'}} {{block head}}
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> 
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_categorias_desechos.css')}}"> 
+
+<!-- DataTables -->
+<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+<!-- Estilos de modales y listados -->
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>
 {{end}} {{block center}}
 
 <!-- Breadcrumb de navegación -->
@@ -15,7 +28,7 @@
 <!-- Fin del Breadcrumb de navegación -->
 
 <div class="row">
-    <div class="col-lg-12 text-center">
+    <div class="col-lg-12 text-center titulo">
         <h3 class="inicio-titulo"> CATEGORÍAS DE DESECHOS </h3>
         <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
     </div>
@@ -38,4 +51,85 @@
     document.getElementsByClassName("web2py_breadcrumbs")[0].style.display = 'none';
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
-</script> {{end}}
+</script> 
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+    var filtros = false;
+  
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#datatable tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Filtro" />' );
+        } );
+     
+        // DataTable
+        var table = $('#datatable').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+  
+        $('#datatable tfoot tr').appendTo('#datatable thead');
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+    } );
+  
+    function mostrarFiltro() {
+        if (filtros){
+          $("#datatable thead tr").not("#titulosListado").css("display","none");
+          filtros = false
+        }
+        else{
+          $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+          filtros = true
+        }
+  
+    }
+  </script>
+   
+  <script language="javascript">
+    var table = $('#datatable').DataTable({
+      language: {
+        url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+      },
+     initComplete: function(){
+        var api = this.api();
+  
+        new $.fn.dataTable.Buttons(api, {
+           buttons: [
+              'copy', 'pdf', 'excel', 'csv', 'print'
+           ]
+        });
+        api.buttons().container().appendTo('#buttons');  
+     }
+    });
+  
+  </script>
+  {{end}}
