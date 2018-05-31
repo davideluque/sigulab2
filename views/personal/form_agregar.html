@@ -74,7 +74,7 @@
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_extension}}" type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
+                              <input value="{{=usuario.f_extension}}" type="text" class="form-control" name="extension_add" placeholder="Extension" required >
                               <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
 
@@ -118,12 +118,13 @@
                           <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
-                                <select class="form-control" id="sel1" name="estatus_add">
+                                <select class="form-control" id="sel1" name="estatus_add" placeholder="Estatus">
                                   <option value=""
                                   {{ if not usuario.f_estatus :}}
                                   selected
+                                  disabled
                                   {{pass}}
-                                  >------</option>
+                                  >Estatus</option>
                                   {{for estatus in estados:}}
                                   <option
                                   {{ if estatus == usuario.f_estatus: }}
@@ -134,13 +135,15 @@
                                   {{pass}}
                                 </select>
                               </div>
+                              <font color="red"><div id="err_estatus" hidden></div></font>
                               <div class="form-group">
                                 <select class="form-control" id="sel2" name="categoria_add">
                                   <option value=""
                                   {{ if not usuario.f_categoria :}}
                                   selected
+                                  disabled
                                   {{pass}}
-                                  >------</option>
+                                  >Categoría</option>
                                   {{for categoria in categorias:}}
                                   <option
                                   {{ if categoria == usuario.f_categoria: }}
@@ -156,8 +159,9 @@
                                   <option value=""
                                   {{ if not usuario.f_condicion :}}
                                   selected
+                                  disabled
                                   {{pass}}
-                                  >------</option>
+                                  >Condición</option>
                                   {{for condicion in condiciones:}}
                                   <option
                                   {{ if condicion == usuario.f_condicion: }}

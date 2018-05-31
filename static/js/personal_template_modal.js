@@ -22,6 +22,65 @@ $(document).ready(function () {
         };
     });
 
+    //-------------------------------- Primera parte del form agregar -----------------------------------------//
+
+    // Manejo de error de la cedula
+    $('[name="ci_add"]').change(function (){
+        console.log($(this).val());
+        if (!($(this).val().match(/\d+/)) || $(this).val()>99999999) { // CI
+            
+            $("#err_ci").html("Introduzca una cédula de identidad válida (Entre 1 y 99999999)");
+            $("#err_ci").show();
+            $(this).addClass('input-error');
+            next_step = false;
+        }
+        else {
+            $(this).removeClass('input-error');
+            $("#err_ci").hide();
+        }
+    });
+
+    // Manejo de error del numero de celular 
+    $('[name="celular_add"]').change(function (){
+        if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+            $("#err_celular").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
+            $("#err_celular").show();
+            $(this).addClass('input-error');
+            next_step = false;
+        }
+        else {
+            $(this).removeClass('input-error');
+            $("#err_celular").hide();
+        }
+    });
+
+    // Manejo de error del campo de contacto de emergencia 
+    $('[name="contacto_emergencia_add"]').change(function (){
+        if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+            $("#err_emergencia").html("La extensión debe tener entre 1 y 4 dígitos numéricos");
+            $("#err_emergencia").show();
+            $(this).addClass('input-error');
+            next_step = false;
+        }
+        else {
+            $(this).removeClass('input-error');
+            $("#err_emergencia").hide();
+        }
+    })
+
+    // Manejo de error del campo de pagina de web 
+    $('[name="pagina_web_add"]').change(function (){
+        if (!($(this).val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) { // Extension de 1 a 4 digitos
+            $("#err_pagina_web").html("Formato incorrecto de pagina web");
+            $("#err_pagina_web").show();
+            $(this).addClass('input-error');
+            next_step = false;
+        }
+        else {
+            $(this).removeClass('input-error');
+            $("#err_pagina_web").hide();
+        }
+    })
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
@@ -31,6 +90,8 @@ $(document).ready(function () {
         parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
                         
             if (($(this).val() == "") && ($(this).attr('required'))) {
+
+                //---------------------------- Primera pagina-------------------------------------// 
                 if (($(this).attr('name')=="nombre_add") || ($(this).attr('name')=="nombre_edit")) {
                     $("#err_nombre").html("Este campo es obligatorio");
                     $("#err_nombre").show();
@@ -164,6 +225,21 @@ $(document).ready(function () {
                     $("#err_direccion").hide();
                     
                 }   
+
+                // ----------------------------------- Segunda pagina del formulario ------------------------------------//
+                else if (($(this).attr('name')=="estatus_add") || ($(this).attr('name')=="estatus_edit")){
+                    console.log('hola');                    
+                    if (($(this).val() == "Estatus")){
+                        $("#err_estatus").html("Seleccione un estatus");
+                        $("#err_estatus").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $('#err_estatus').hide();
+                    }
+                }
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
