@@ -55,7 +55,8 @@ def tabla_categoria():
              "unidad_jerarquica_superior" : Usuperior,
              "dependencia" : dep ,
              "rol" : elm.f_rol,
-             "ubicacion" : elm.f_ubicacion
+             "ubicacion" : elm.f_ubicacion,
+             "es_supervisor": elm.f_es_supervisor
              })
 
     return jsns
@@ -73,8 +74,10 @@ def dropdowns():
     categoria = ['Fijo' , 'Contratado', 'Pasantía' , 'Ayudantía']
     #Dropdown de condiciones
     condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal']
+    #Dropdown de roles
+    roles= list(db(db.auth_group.role).select(db.auth_group.ALL))
 
-    return (gremio,departamento,estatus,categoria,condiciones)
+    return (gremio,departamento,estatus,categoria,condiciones,roles)
 
 #Funcion que toma las variables de la vista
 def add_form():
@@ -128,7 +131,7 @@ def add_form():
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
             f_ubicacion= dic["ubicacion"],
-            f_rol= (db(db.auth_group.role == dic['rol']).select(db.auth_group.ALL)).first().id)
+            f_rol= dic["rol"])
         redirect(URL('listado'))
 
 
@@ -147,12 +150,11 @@ class Usuario(object):
         dependencia = usuario.f_dependencia
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
-        self.f_extension = dependencia.ext_interna
+        self.f_extension = usuario.f_telefono
         self.f_celular = usuario.f_celular
         self.f_direccion = usuario.f_direccion
         self.f_contacto_emergencia = usuario.f_contacto_emergencia
         self.f_pagina_web = usuario.f_pagina_web
-        self.f_rol = usuario.f_rol
 
         # pagina 2
         self.f_estatus = usuario.f_estatus
@@ -168,11 +170,11 @@ class Usuario(object):
         self.f_cargo = usuario.f_cargo
         self.f_gremio = usuario.f_gremio
         self.f_ubicacion = usuario.f_ubicacion
-        rol = db(db.auth_group.id == usuario.f_rol).select().first()
-        self.f_rol = rol.role
+        self.f_rol = usuario.f_rol
         # dependencia ya dada arriba
 
 #Funcion que envia los datos a la vista
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
     #Obtenemos el usuario loggeado
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
@@ -181,7 +183,7 @@ def listado():
     tabla = tabla_categoria()
 
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles = dropdowns()
 
     return dict(
         grid=tabla,
@@ -190,7 +192,9 @@ def listado():
         estados=estados,
         gremios=gremios,
         condiciones=condiciones,
+        roles=roles,
         usuario=usuario
+        
         )
 
 def reporte():
@@ -199,4 +203,3 @@ def reporte():
     for persona in tabla:
         personas.append(persona)
     return dict(personas=personas)
-

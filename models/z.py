@@ -188,16 +188,17 @@ if db(db.dependencias).isempty():
 # Cargos
 if db(db.auth_group).isempty():
 
-		db.auth_group.insert(role='WEBMASTER',description='Super Usuario')
-		db.auth_group.insert(role='DIRECTOR',description='Director')
-		db.auth_group.insert(role='ASISTENTE DEL DIRECTOR',description='Asistente del Director')
-		db.auth_group.insert(role='COORDINADOR',description='Coordinación')
-		db.auth_group.insert(role='JEFE DE LABORATORIO',description='Jefe de Laboratorio')
-		db.auth_group.insert(role='JEFE DE SECCIÓN',description='Jefe de Sección')
-		db.auth_group.insert(role='TÉCNICO',description='Técnico')
-		db.auth_group.insert(role='PERSONAL DE COORDINACIÓN',description='Personal de Coordinación')
-		db.auth_group.insert(role='GESTOR DE SMyDP',description='Gestor de SMyDP')
-		db.auth_group.insert(role='CLIENTE INTERNO',description='Cliente Interno')
+        db.auth_group.insert(role='WEBMASTER',description='Super Usuario')
+        db.auth_group.insert(role='DIRECTOR',description='Director')
+        db.auth_group.insert(role='ASISTENTE DEL DIRECTOR',description='Asistente del Director')
+        db.auth_group.insert(role='COORDINADOR',description='Coordinación')
+        db.auth_group.insert(role='JEFE DE LABORATORIO',description='Jefe de Laboratorio')
+        db.auth_group.insert(role='JEFE DE SECCIÓN',description='Jefe de Sección')
+        db.auth_group.insert(role='TÉCNICO',description='Técnico')
+        db.auth_group.insert(role='PERSONAL DE COORDINACIÓN',description='Personal de Coordinación')
+        db.auth_group.insert(role='GESTOR DE SMyDP',description='Gestor de SMyDP')
+        db.auth_group.insert(role='CLIENTE INTERNO',description='Cliente Interno')
+        db.auth_group.insert(role='PERSONAL INTERNO',description='Personal Interno')
 
 # Fichas de personal
 if db(db.t_Personal).isempty():
@@ -220,7 +221,7 @@ if db(db.t_Personal).isempty():
 		f_email="sigulabusb@gmail.com", f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 	""" Cliente Interno """
 	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
@@ -230,7 +231,7 @@ if db(db.t_Personal).isempty():
 		f_email='funindes@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	""" Asistente Dirección """
@@ -241,7 +242,7 @@ if db(db.t_Personal).isempty():
 		f_email='asis-ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 		)
 
 
@@ -253,7 +254,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-smdp@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 		)
 
 	""" Director """
@@ -264,7 +265,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 		)
 
 	""" Coordinaciones """
@@ -278,7 +279,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-adquisicion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 		)
 
 	# Coordinación de la Calidad
@@ -290,7 +291,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-calidad@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 
@@ -303,7 +304,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-importaciones@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 		)
 
 	""" Unidades """
@@ -317,7 +318,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-administracion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 	# Oficina de Proteccion Radiologica
 	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
@@ -328,7 +329,7 @@ if db(db.t_Personal).isempty():
 		f_email='ulab-pradiologica@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 
@@ -343,7 +344,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-laba@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio B
@@ -355,7 +356,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labb@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio C
@@ -367,7 +368,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labc@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio D
@@ -379,7 +380,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labd@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio E
@@ -391,7 +392,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labe@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio F
@@ -403,7 +404,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labf@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 	# Laboratorio G
@@ -415,7 +416,7 @@ if db(db.t_Personal).isempty():
 		f_email='usb-labg@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
 		f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
 		f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
-		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True
+		f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
 	)
 
 

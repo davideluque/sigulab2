@@ -1,18 +1,4 @@
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-    $.datepicker.setDefaults({ dateFormat: "yy-mm-dd"})
-    $( function() {
-      var d1=$( "#datepicker" ).datepicker();
-      $( "#datepicker2" ).datepicker();
-      var dateUsb = $( "#datepickerUsb" ).datepicker();
-        $( "#datepickerUlab" ).datepicker();
-        $( "#datepicker5" ).datepicker();
-    } );
-  </script>
-
-  <div class="modal fade" id="addservice" role="dialog">
+<div class="modal fade" id="addservice" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -54,17 +40,17 @@
                           <h4 class="titulosForm">Datos Básicos</h4>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre}}">
+                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
                               <font color="red"><div id="err_nombre" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido}}">
+                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}">
                               <font color="red"><div id="err_apellido" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required value="{{=usuario.f_ci}}">
+                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required value="{{=usuario.f_ci or ''}}">
                               <font color="red"><div id="err_ci" hidden></div></font>
                             </div>
 
@@ -74,27 +60,27 @@
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_extension}}" type="text" class="form-control" name="extension_add" placeholder="Extension" required >
+                              <input value="{{=usuario.f_extension or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
                               <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_celular}}" type="text" class="form-control" name="celular_add" placeholder="Celular" required>
+                              <input value="{{=usuario.f_celular or ''}}" type="text" class="form-control" name="celular_add" placeholder="Celular" required>
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_contacto_emergencia}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
-                              <font color="red"><div id="err_emergencia" hidden></div></font>
+                              <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
+                              <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_direccion}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
+                              <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
                               <font color="red"><div id="err_direccion" hidden></div></font>
                             </div>
 
                             <div class="form-group">
-                              <input value="{{=usuario.f_pagina_web}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
+                              <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
                               <font color="red"><div id="err_pagina_web" hidden></div></font>
                             </div>
 
@@ -172,21 +158,21 @@
                                 </select>
                               </div>
                               <div id="fsalida" hidden>
-                                  <p >Fecha de Ingreso: <input value="{{=usuario.f_fecha_ingreso}}" name = "fecha_ingreso_add" type="text" id="datepicker" ></p>
+                                  <p >Fecha de Ingreso: <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" ></p>
                                   <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                                  <p >Fecha de Egreso: <input value="{{=usuario.f_fecha_salida}}" name = "fecha_salida_add" type="text" id="datepicker2" ></p>
+                                  <p >Fecha de Egreso: <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" ></p>
                                   <font color="red"><div id="err_fecha_salida" hidden></div></font>
                               </div>
 
 
-                              <p >Ingreso a la USB: <input value="{{=usuario.f_fecha_ingreso_usb}}" name = "fecha_ingreso_usb_add" type="text" id="datepickerUsb" required></p>
+                              <p >Ingreso a la USB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p >Ingreso a la ULAB: <input value="{{=usuario.f_fecha_ingreso_ulab}}" name = "fecha_ingreso_ulab_add" type="text" id="datepickerUlab" required></p>
+                              <p >Ingreso a la ULAB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
-                              <p >Ingreso a la administracion publica: <input value="{{=usuario.f_fecha_ingreso_admin_publica}}" name = "fecha_ingreso_admin_publica_add" type="text" id="datepicker5" required></p>
+                              <p >Ingreso a la administracion publica: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required></p>
                               <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
 
                             <!--<div class="form-group">
@@ -213,7 +199,7 @@
                         <h4 class="titulosForm">Datos Laborales</h4>
 
                         <div class="form-group">
-                          <input value="{{=usuario.f_cargo}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
+                          <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
                           <font color="red"><div id="err_cargo" hidden></div></font>
                         </div>
 
@@ -235,15 +221,29 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value={{=usuario.f_dependencia}}>
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value={{=usuario.f_ubicacion}}>
+                            <input type="text" class="form-control" name="ubicacion_add" placeholder="Ubicacion" readonly required value="{{=usuario.f_ubicacion or ''}}">
                         </div>
 
+                      
                         <div class="form-group">
-                            <input type="text" class="form-control" name="rol_add" placeholder="Rol" readonly required value={{=usuario.f_rol}}>
+                            <select class="form-control" id="sel1" name="rol_add" required>
+                              <option
+                              {{ if not usuario.f_rol :}}
+                                selected
+                                {{pass}}
+                                >------</option>
+                                {{for rol in roles:}}
+                                <option
+                                {{ if rol.id == usuario.f_rol: }}
+                                selected
+                                {{pass}}
+                                value="{{=rol.id}}">{{=rol.role.decode('utf-8').upper()}}</option>
+                                {{pass}}
+                          </select>
                         </div>
 
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
