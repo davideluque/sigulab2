@@ -5,6 +5,7 @@
 #-----------------------------------#
 
 def index():
+    redirect(URL('listado'))
     return dict()
 
 #Enviar info a la tabla del listado
