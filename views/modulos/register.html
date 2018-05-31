@@ -101,30 +101,49 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Tipos de Rol -->
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <select class="form-control" type="select" required="" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
-                                                                                                                                getSeccion();
-                                                                                                                                getEspacio();
-                                                                                                                                showEspacio();">
-                            <option value="" selected hidden disabled>Rol</option>
-                            {{for rol in roles:}}
-                                <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
-                            {{pass}}
-                        </select>
-                    </div>
+                <div class="form-group"  style=" margin-bottom:6px">
+                  <input hidden id="tipo_supervisor" name="tipo_supervisor">Indique tipo de usuario:<br>
+                  <input type="radio"  id="#cono" name="tipo_usuario" value="True" onclick="setSupervisor()"> Supervisor<br>
+                  <input type="radio"  name="tipo_usuario" value="False" onclick="setPersonal()"> Personal Interno<br>
                 </div>
 
-                <div id="unidaddiv" class="form-group"></div>
+                
+                <!-- Tipos de Rol -->
+                <div  hidden id="roldiv">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <select class="form-control" type="select" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
+                                                                                                                                    getSeccion();
+                                                                                                                                    getEspacio();
+                                                                                                                                    showEspacio();">
+                                <option value="" selected hidden disabled>Rol</option>
+                                {{for rol in roles:}}
+                                    <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
+                                {{pass}}
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div id="unidaddiv" class="form-group"></div>
 
-                <div id="secciondiv" class="form-group"></div>
-                <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
-                <div id="espaciodiv" class="form-group"></div> 
-                <!-- Para mostrar la lista de espacios fisicos seleccionados por el espacio fisico -->
-                <div id="tagsdiv" class="form-group"></div> 
-
+                    <div id="secciondiv" class="form-group"></div>
+                    <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
+                    <div id="espaciodiv" class="form-group"></div> 
+                    <!-- Para mostrar la lista de espacios fisicos seleccionados por el espacio fisico -->
+                    <div id="tagsdiv" class="form-group"></div> 
+                </div>
+                <div hidden id="dependenciadiv">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia">
+                                <option value="" selected hidden disabled>Dependencia</option>
+                                {{for dependencia in dependencias:}}
+                                    <option value='{{=dependencia.id}}'>{{=dependencia.nombre.decode('utf-8').upper()}}</option>
+                                {{pass}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group text-center" id="submit_record__row">
 
                     <div class="col-sm-3">
@@ -138,6 +157,7 @@
                         <button class="btn btn-primary" type="submit" name="registrar" value="do_register">Registrar</button>
                     </div>
                 </div>
+                
 
             </form>
             <!-- Fin form de registro -->
@@ -187,6 +207,18 @@
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
 
+    function setSupervisor(){
+        $("#roldiv").show();
+        $("#dependenciadiv").hide();
+        document.getElementById("tipo_supervisor").value = true;
+        
+    }
+    function setPersonal(){
+        $("#roldiv").hide();
+        $("#dependenciadiv").show();
+        document.getElementById("tipo_supervisor").value = false;
+    }
+    
     function limpiar_cedula(){
         jQuery('#auth_cedula__row').removeClass('has-error');
         jQuery('#cedula_error_group').removeClass('has-error');
