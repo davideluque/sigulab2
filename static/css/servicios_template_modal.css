@@ -155,7 +155,9 @@ button.btn.botonForm.active:focus {
 
 
 /*style.css**/
-
+.close{
+    margin-top:30px;
+}
 
 strong {
     font-weight: 500;
@@ -270,4 +272,3 @@ form .form-bottom .input-error {
 form.registration-form fieldset {
     display: none;
 }
-

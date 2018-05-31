@@ -154,8 +154,15 @@ class Usuario(object):
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
         self.f_extension = usuario.f_telefono
-        self.f_operador = usuario.f_celular[:6]
-        self.f_celular = usuario.f_celular[6:]
+        
+        if(usuario.f_celular):
+            self.f_operador = usuario.f_celular[:6]
+            self.f_celular = usuario.f_celular[6:]
+        else: 
+            self.f_operador = None
+            self.f_celular = usuario.f_celular
+            
+        
         self.f_direccion = usuario.f_direccion
         self.f_contacto_emergencia = usuario.f_contacto_emergencia
         self.f_pagina_web = usuario.f_pagina_web
