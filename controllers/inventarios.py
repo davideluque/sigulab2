@@ -137,7 +137,6 @@ def __get_inventario_dep(dep_id):
     inventario = __sumar_inventarios(espacios)
 
     return inventario
-
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
@@ -184,7 +183,6 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 
 """         concepto = 'Ingreso'
         tipo_ing = 'Ingreso inicial'
-
         # Agregando la primera entrada de la sustancia en la bitacora
         db.t_Bitacora.insert(
                                 f_cantidad=cantidad,
@@ -500,7 +498,47 @@ def bienes_muebles():
     dep_nombre = ""
     dep_padre_id = ""
     dep_padre_nombre = ""
-    dir_espacios = db().select(db.espacios_fisicos.id, db.espacios_fisicos.nombre)
+    categorias = {
+		"Maquinaria y demás equipos de construcción, campo, industria y taller":
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipos de transporte, tracción y elevación":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipos de comunicaciones y de señalamiento":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipos científicos, religiosos, de enseñanza y recreación":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]}
 
     # Lista de BM en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
@@ -565,8 +603,6 @@ def bienes_muebles():
                 dep_padre_id = espacio.dependencia
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
-                dep_padre_adc = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
 
                 espacio_visitado = True
 
@@ -593,7 +629,7 @@ def bienes_muebles():
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                         request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_adc, 
+                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
                         dep_padre_id, user_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -664,8 +700,6 @@ def bienes_muebles():
                              ).select().first().dependencia
             dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                  ).select().first().nombre
-            dep_padre_adc = db(db.dependencias.id == dep_padre_id
-                    ).select().first().unidad_de_adscripcion
 
             espacio_visitado = True
             
@@ -692,7 +726,7 @@ def bienes_muebles():
                     request.vars.descripcion, request.vars.material, request.vars.color,
                     request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                     request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                    request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_adc, 
+                    request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
                     dep_padre_id, user_id)
 
 
@@ -762,8 +796,6 @@ def bienes_muebles():
                                     ).select().first().dependencia
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
-                dep_padre_adc = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
 
                 espacio_visitado = True
 
@@ -790,7 +822,7 @@ def bienes_muebles():
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
                         request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_adc, 
+                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
                         dep_padre_id, user_id)
 
             else:
@@ -855,7 +887,8 @@ def bienes_muebles():
                 nombre_cat = nombre_cat,
                 cod_localizacion = cod_localizacion,
                 localizacion = localizacion,
-                dir_espacios = dir_espacios) 
+                categorias = categorias
+                ) 
 
 
 # Muestra un crud para añadir bienes muebles
