@@ -16,13 +16,14 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
-<div class="container-fluid titulo">
+<div class="container titulo">
 
     
     {{if ('edit' in request.args) or ('view' in request.args):}}
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+                <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
             </div>
         </div>
     {{elif ('new' in request.args):}}
@@ -71,24 +72,33 @@
 {{elif table.view_form:}}
     {{=table.view_form}} 
 {{else:}}
-    <div class="container-fluid">
+    <div class="container">
         {{=table}}
     </div>
 {{pass}}
 
 {{if ('view' in request.args):}}
-<div class="row"></div>
-    <div class="col-lg-6 text-center">
+<div class="row">
+    <div class="col-lg-12 text-center">
         <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/edit/t_envases/' + request.args[3])}}">
-            <button class="btn btn-warning">Editar</button>
+            <button class="btn btn-warning botones-edicion">Editar</button>
         </a>
-    </div>
-    <div class="col-lg-6 text-center">
         <a href="{{=URL('..', 'sigulab2', 'smydp/envases/t_envases/delete/t_envases/' + request.args[3])}}">
-            <button class="btn btn-danger">Eliminar</button>
+            <button class="btn btn-danger botones-edicion">Eliminar</button>
         </a>
     </div>
 </div>
+<script>
+    let ids = ["#t_envases_id__row","#t_envases_identificacion__row", "#t_envases_capacidad__row", "#t_envases_unidad_medida__row", "#t_envases_forma__row", "#t_envases_material__row", "#t_envases_descripcion__row", "#t_envases_tipo_boca__row", "#t_envases_espacio_fisico__row", "#t_envases_categoria__row"];
+    for (let index = 0; index < ids.length; index++) {
+        const element = document.querySelector(ids[index]);
+        element.children[0].className = "readonly control-label col-sm-2 col-sm-offset-4";
+        element.children[1].className = "readonly control-label col-sm-2";        
+        element.children[0].style.textAlign = "center";
+        element.children[1].style.textAlign = "center";
+        element.style.marginBottom = "0px";
+    }
+</script>
 {{pass}}
 
 {{if ('edit' in request.args):}}
@@ -111,7 +121,9 @@
     
     let inputs = document.querySelectorAll('input[type=submit]');
     inputs[0].style.display = "none";
-    inputs[1].value = 'Limpiar';   
+    inputs[1].value = 'Limpiar';
+    inputs[1].className += " btn btn-primary";
+    inputs[1].style.margin = "15px 0px";   
 
 
 
@@ -139,7 +151,7 @@
     let row_counter = document.getElementsByClassName("web2py_counter");
     let row_content = row_counter[0].innerText.split(" ");
     row_counter[0].innerText = row_content[0] + " entrada(s) encontrada(s)";
-
+    row_counter[0].style.marginBottom = "15px";
 
     // Se colocan en español los botones de la columna de opciones de la tabla
     let row_buttons = document.getElementsByClassName("row_buttons");
@@ -148,6 +160,7 @@
         
         let children = row_buttons[index].getElementsByClassName("button btn btn-default");
         children[0].innerText = "Ver";
+        children[0].className += " btn btn-primary";
         children[1].style.display = "none";
         children[2].style.display = "none";
     }
