@@ -369,9 +369,7 @@ db.define_table(
 db.define_table(
     't_categoria_desechos',
     #Atributos;
-    Field('categoria', 'string', unique=True, notnull=True, label=T('Categoría'),
-           requires=IS_IN_SET(['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes'])
-    )
+    Field('categoria', 'string', unique=True, notnull=True, label=T('Categoría'))
 )
 
 
