@@ -201,11 +201,13 @@ def register():
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
         depid= request.post_vars.dependencia
+        
+        
+    if request.post_vars.laboratorio:
+        depid = request.post_vars.laboratorio
     if request.post_vars.seccion:
       # El registrado pertenece directamente a una sección de un laboratorio.
       depid = request.post_vars.seccion
-    else:
-      depid = request.post_vars.laboratorio
 
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
@@ -246,7 +248,7 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE COORDINACIÓN']
+    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
     roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
     dependencias=list(db().select(db.dependencias.ALL))
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id

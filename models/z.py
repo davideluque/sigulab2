@@ -195,7 +195,7 @@ if db(db.auth_group).isempty():
         db.auth_group.insert(role='JEFE DE LABORATORIO',description='Jefe de Laboratorio')
         db.auth_group.insert(role='JEFE DE SECCIÓN',description='Jefe de Sección')
         db.auth_group.insert(role='TÉCNICO',description='Técnico')
-        db.auth_group.insert(role='PERSONAL DE COORDINACIÓN',description='Personal de Coordinación')
+        db.auth_group.insert(role='PERSONAL DE DEPENDENCIA',description='Personal de dependencia')
         db.auth_group.insert(role='GESTOR DE SMyDP',description='Gestor de SMyDP')
         db.auth_group.insert(role='CLIENTE INTERNO',description='Cliente Interno')
         db.auth_group.insert(role='PERSONAL INTERNO',description='Personal Interno')
