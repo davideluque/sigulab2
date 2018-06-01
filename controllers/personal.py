@@ -31,7 +31,8 @@ def tabla_categoria():
         else: idUSuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
-
+        ext = "No disponible"
+            
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -54,8 +55,8 @@ def tabla_categoria():
              "fecha_ingreso_admin_publica" : elm.f_fecha_ingreso_admin_publica,
              "condicion" : elm.f_condicion,
              "unidad_jerarquica_superior" : Usuperior,
-             "dependencia" : dep ,
              "rol" : elm.f_rol,
+             "extension" : ext,
              "ubicacion" : elm.f_ubicacion,
              "es_supervisor": elm.f_es_supervisor
              })
@@ -106,7 +107,8 @@ def add_form():
              "condicion" : request.post_vars.condicion_add,
              "ubicacion" : request.post_vars.ubicacion_add,
              "dependencia" : request.post_vars.dependencia_add,
-             "rol" : request.post_vars.rol_add
+             "rol" : request.post_vars.rol_add,
+             "extension" : request.post_vars.extension_add
             }
 
     #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
@@ -153,7 +155,7 @@ class Usuario(object):
         dependencia = usuario.f_dependencia
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
-        self.f_extension = usuario.f_telefono
+        self.f_telefono = usuario.f_telefono
         
         if(usuario.f_celular):
             self.f_operador = usuario.f_celular[:6]

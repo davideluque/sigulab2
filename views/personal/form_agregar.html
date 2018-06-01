@@ -65,8 +65,8 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Extensión</label>
-                              <input value="{{=usuario.f_extension or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Extension" required >
+                              <label>Teléfono Residencial</label>
+                              <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required >
                               <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
                             <label>Celular</label>
@@ -99,14 +99,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Dirección</label>
+                                <label>Dirección de Habitación</label>
                               <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
                               <font color="red"><div id="err_direccion" hidden></div></font>
                             </div>
 
                             <div class="form-group">
                                 <label>Página Web</label>
-                              <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" required>
+                              <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" >
                               <font color="red"><div id="err_pagina_web" hidden></div></font>
                             </div>
 
@@ -261,6 +261,10 @@
                         <div class="form-group">
                             <label>Dependencia</label> 
                             <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Extension</label> 
+                            <input type="text" class="form-control" name="extension_add" placeholder="Extension"  required >
                         </div>
 
                         <div class="form-group">

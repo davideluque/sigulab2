@@ -245,8 +245,8 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-
-  roles=db((db.auth_group.role != 'WEBMASTER') & (db.auth_group.role !='PERSONAL INTERNO') & (db.auth_group.role !='TÉCNICO') & (db.auth_group.role !='CLIENTE INTERNO')).select(db.auth_group.ALL)
+  rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE COORDINACIÓN']
+  roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
   dependencias=list(db().select(db.dependencias.ALL))
   return dict(roles=roles, dependencias=dependencias)
 

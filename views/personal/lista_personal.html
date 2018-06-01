@@ -6,7 +6,7 @@
 							<th><button class="btn-link" name="order" value="nombre" 	id="f_nombre">Nombre</button></th>
 							<th><button class="btn-link" name="order" value="email" 	id="f_email">Correo Electrónico</button></th>
 							<th><button class="btn-link" name="order" value="seccion" 	id="f_dependencia">Unidad de Adscripción</button></th>
-							<th><button class="btn-link" name="order" value="telefono" 	id="f_telefono">Extensión</button></th>
+							<th><button class="btn-link" name="order" value="extension" 	id="f_extension">Extensión</button></th>
 					</tr>
 				</thead>
 
@@ -39,11 +39,13 @@
                                     data-fecha_ingreso_ulab="{{=item['fecha_ingreso_ulab']}}"
                                     data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
                                     data-condicion="{{=item['condicion']}}"
+                                    data-rol="{{=item['rol']}}"
+                                    data-extension="{{=item['extension']}}"
                                     value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</button></td>
 
                                 <td>{{= item["email"]}}</td>
                                 <td>{{= item["dependencia"]}}</td>
-                                <td>{{= item["telefono"]}}</td>
+                                <td>{{= item["extension"]}}</td>
                             </tr>
                             {{pass}}
 			          	{{pass}}
