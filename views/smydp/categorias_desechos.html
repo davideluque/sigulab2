@@ -27,15 +27,54 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
-<div class="row">
-    <div class="col-lg-12 text-center titulo">
-        <h3 class="inicio-titulo"> CATEGORÍAS DE DESECHOS </h3>
-        <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
-    </div>
+<div class="container titulo">
+        {{if ('edit' in request.args) or ('view' in request.args):}}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">DETALLE DE LA CATEGORÍA</h3>
+                <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+            </div>
+        </div>
+    {{elif ('new' in request.args):}}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">NUEVA CATEGORÍA DE DESECHO</h3>
+                <img class="iconos" src="{{=URL('static', 'images/nuevocontenedor.png')}}">
+            </div>
+        </div>
+    {{else:}}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
+                <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <a href="{{=URL('..', 'sigulab2', 'smydp/categorias_desechos/t_categoria_desechos/new/t_categoria_desechos')}}">
+                    <button class="btn btn-primary">Agregar categoría</button>
+                </a>
+            </div>
+        </div>
+        {{pass}} 
+    {{pass}}
 </div>
 
 {{if table.create_form:}} 
     {{=table.create_form}} 
+    <script>
+        let boton = document.getElementsByClassName("btn btn-primary");
+        boton[2].style.display = "none";
+        let form = document.querySelector("form");
+        var div_node = document.createElement("div");
+        div_node.className += " col-lg-12 text-center";
+        var button_node = document.createElement("button");
+        var textnode = document.createTextNode("Agregar Categoría");
+        button_node.appendChild(textnode);
+        button_node.className += " btn btn-primary";  
+        div_node.appendChild(button_node);      
+        form.appendChild(div_node);
+    </script>
 {{elif table.update_form:}} 
     {{=table.update_form}} 
 {{elif table.view_form:}}
@@ -132,4 +171,26 @@
     });
   
   </script>
+<script>  
+    // Oculta el boton de 'Add record' que trae la tabla por defecto
+    //let boton1 = document.getElementsByClassName("btn btn-default");
+    //boton1[0].style.display = "none";
+    // Se coloca en español el mensaje que dice "XXX rows founds"
+    let row_counter = document.getElementsByClassName("web2py_counter");
+    let row_content = row_counter[0].innerText.split(" ");
+    row_counter[0].innerText = row_content[0] + " entrada(s) encontrada(s)";
+    row_counter[0].style.marginBottom = "15px";
+    // Se colocan en español los botones de la columna de opciones de la tabla
+    let row_buttons = document.getElementsByClassName("row_buttons");
+
+    for (let index = 0; index < row_buttons.length; index++) {
+        
+        let children = row_buttons[index].getElementsByClassName("button btn btn-default");
+        children[0].innerText = "Ver";
+        children[0].className += " btn btn-primary";
+        children[1].style.display = "none";
+        children[2].style.display = "none";
+    }
+</script>
+
   {{end}}

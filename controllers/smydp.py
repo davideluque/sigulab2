@@ -1004,6 +1004,7 @@ def categorias_desechos():
                                     csv=False,
                                     user_signature=True,
                                     paginate=10,
+                                    create=True
                                     )
 
     else:

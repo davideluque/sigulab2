@@ -28,7 +28,7 @@
 
 			<div class="col-sm-8">
 				<!-- Solo muestra la opción de Categorías de desechos si el usuario es un Gestor -->
-				{{if auth.has_membership('GESTOR DE SMyDP'):}}	
+				{{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}	
 					<!-- Link a los grupos de desechos -->
 					<div class="col-sm-4 columnas">
 						<a href="{{=URL('sigulab2', 'smydp', 'categorias_desechos')}}">
