@@ -103,13 +103,26 @@
                 </div>
                 <div class="form-group"  style=" margin-bottom:6px">
                   <input hidden id="tipo_supervisor" name="tipo_supervisor">Indique tipo de usuario:<br>
-                  <input type="radio"  id="#cono" name="tipo_usuario" value="True" onclick="setSupervisor()"> Dependencia<br>
+                  <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()"> Dependencia<br>
                   <input type="radio"  name="tipo_usuario" value="False" onclick="setPersonal()"> Personal Interno<br>
                 </div>
 
-                
+                <div hidden id="dependenciadiv">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia" onclick="  getSeccionPersonal();">
+                                <option value="" selected hidden disabled>Dependencia</option>
+                                {{for dependencia in dependencias:}}
+                                    {{if dependencia.unidad_de_adscripcion == 1:}}
+                                    <option value='{{=dependencia.id}}'>{{=dependencia.nombre.decode('utf-8').upper()}}</option>
+                                    {{pass}}
+                                {{pass}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <!-- Tipos de Rol -->
-                <div  hidden id="roldiv">
+                <div  hidden id="roldiv1">
                     <div class="form-group">
                         <div class="col-xs-12">
                             <select class="form-control" type="select" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
@@ -123,27 +136,17 @@
                             </select>
                         </div>
                     </div>
-                   
+                 
                     <div id="unidaddiv" class="form-group"></div>
-
+                 </div> 
                     <div id="secciondiv" class="form-group"></div>
+                <div id="roldiv2">
                     <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
                     <div id="espaciodiv" class="form-group"></div> 
                     <!-- Para mostrar la lista de espacios fisicos seleccionados por el espacio fisico -->
                     <div id="tagsdiv" class="form-group"></div> 
-                </div>
-                <div hidden id="dependenciadiv">
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia">
-                                <option value="" selected hidden disabled>Dependencia</option>
-                                {{for dependencia in dependencias:}}
-                                    <option value='{{=dependencia.id}}'>{{=dependencia.nombre.decode('utf-8').upper()}}</option>
-                                {{pass}}
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+               
                 <div class="form-group text-center" id="submit_record__row">
 
                     <div class="col-sm-3">
@@ -194,7 +197,7 @@
 
 
 <!-- rolhidden contiene el id del rol seleccionado por el usuario -->
-<input type="hidden" id="rolhidden" name="rolhidden" value="">
+<input type="hidden" id="rolhidden" name="rolhidden" value={{=idJefeSec}}>
 <!-- dephidden contiene el id de la dependencia seleccionada por el usuario -->
 <input type="hidden" id="dephidden" name="dephidden" value="">
 <!-- sechidden contiene el id de la seccion seleccionada por el usuario -->
@@ -207,15 +210,29 @@
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
 
+    function getSeccionPersonal(){
+
+        var opcioneslab = document.getElementById("dependencia");
+        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+        var x = document.getElementById("dephidden");
+        x.value = labelegido;
+        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
+
+    }
+    
     function setSupervisor(){
-        $("#roldiv").show();
+        $("#secciondiv").hide();
+        $("#roldiv1").show();
+        $("#roldiv2").show();
         $("#dependenciadiv").hide();
         document.getElementById("tipo_supervisor").value = true;
         
     }
     function setPersonal(){
-        $("#roldiv").hide();
+        $("#roldiv1").hide();
+        $("#roldiv2").hide();
         $("#dependenciadiv").show();
+         $("#secciondiv").show();
         document.getElementById("tipo_supervisor").value = false;
     }
     

@@ -192,11 +192,7 @@ def register():
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
     es_supervisor = request.post_vars.tipo_supervisor
-    if request.post_vars.seccion:
-      # El registrado pertenece directamente a una sección de un laboratorio.
-      depid = request.post_vars.seccion
-    else:
-      depid = request.post_vars.laboratorio
+
     
     if request.post_vars.rol and es_supervisor :
         rolid = request.post_vars.rol
@@ -205,6 +201,11 @@ def register():
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
         depid= request.post_vars.dependencia
+    if request.post_vars.seccion:
+      # El registrado pertenece directamente a una sección de un laboratorio.
+      depid = request.post_vars.seccion
+    else:
+      depid = request.post_vars.laboratorio
 
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
@@ -245,10 +246,12 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-  rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE COORDINACIÓN']
-  roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
-  dependencias=list(db().select(db.dependencias.ALL))
-  return dict(roles=roles, dependencias=dependencias)
+    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE COORDINACIÓN']
+    roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
+    dependencias=list(db().select(db.dependencias.ALL))
+    idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
+  
+  return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec )
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
