@@ -31,7 +31,13 @@ def tabla_categoria():
         else: idUSuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
-        ext = "No disponible"
+        ext = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
+        if ext: ext=ext.ext_USB[0]
+        print(ext)
+        
+        ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
+        if(ubicacion): ubicacion = ubicacion.nombre
+          
             
         jsns.append(
             {"nombre" : elm.f_nombre,
@@ -57,7 +63,7 @@ def tabla_categoria():
              "unidad_jerarquica_superior" : Usuperior,
              "rol" : elm.f_rol,
              "extension" : ext,
-             "ubicacion" : elm.f_ubicacion,
+             "ubicacion" : ubicacion,
              "es_supervisor": elm.f_es_supervisor
              })
 
@@ -81,11 +87,12 @@ def dropdowns():
     #Dropdown de operadores
     operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
+
     return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
 
 #Funcion que toma las variables de la vista
 def add_form():
-
+    ubicacion = request.post_vars.ubicacion_add
     dic = {"nombre" : request.post_vars.nombre_add,
             "apellido" : request.post_vars.apellido_add,
             "ci" : request.post_vars.ci_add,
@@ -108,7 +115,7 @@ def add_form():
              "ubicacion" : request.post_vars.ubicacion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
-             "extension" : request.post_vars.extension_add
+             "extension" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_USB).first()
             }
 
     #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
@@ -136,6 +143,7 @@ def add_form():
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
             f_ubicacion= dic["ubicacion"],
+            f_extension= dic["extension"],
             f_rol= dic["rol"])
         redirect(URL('listado'))
 
@@ -196,6 +204,9 @@ def listado():
     #Obtenemos los datos para el listado
     tabla = tabla_categoria()
 
+    #Dropdown ubicaciones
+    idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
+    ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
@@ -208,6 +219,7 @@ def listado():
         condiciones=condiciones,
         roles=roles,
         operadores=operadores,
+        ubicaciones=ubicaciones,
         usuario=usuario
         
         )
