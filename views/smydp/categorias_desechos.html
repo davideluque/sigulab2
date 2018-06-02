@@ -32,14 +32,14 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h3 class="inicio-titulo">DETALLE DE LA CATEGORÍA</h3>
-                <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+                <img class="iconos" src="{{=URL('static', 'images/detallecategoria.png')}}">
             </div>
         </div>
     {{elif ('new' in request.args):}}
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h3 class="inicio-titulo">NUEVA CATEGORÍA DE DESECHO</h3>
-                <img class="iconos" src="{{=URL('static', 'images/nuevocontenedor.png')}}">
+                <img class="iconos" src="{{=URL('static', 'images/nuevacategoria.png')}}">
             </div>
         </div>
     {{else:}}
@@ -84,6 +84,42 @@
         {{=table}}
     </div>
 {{pass}}
+
+{{if ('view' in request.args):}}
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <a href="{{=URL('..', 'sigulab2', 'smydp/categorias_desechos/t_categoria_desechos/edit/t_categoria_desechos/' + request.args[3])}}">
+            <button class="btn btn-warning botones-edicion">Editar</button>
+        </a>
+        <a href="{{=URL('..', 'sigulab2', 'smydp/categorias_desechos/t_categoria_desechos/delete/t_categoria_desechos/' + request.args[3])}}">
+            <button class="btn btn-danger botones-edicion">Eliminar</button>
+        </a>
+    </div>
+</div>
+<script>
+    let ids = ["#t_categoria_desechos_categoria__row","#t_categoria_desechos_id__row"];
+    for (let index = 0; index < ids.length; index++) {
+        const element = document.querySelector(ids[index]);
+        element.children[0].className = "readonly control-label col-sm-2 col-sm-offset-4";
+        element.children[1].className = "readonly control-label col-sm-2";        
+        element.children[0].style.textAlign = "center";
+        element.children[1].style.textAlign = "center";
+        element.style.marginBottom = "0px";
+    }
+</script>
+{{pass}}
+
+{{if ('edit' in request.args):}}
+    <script>
+        let check_to_delete_label = document.getElementById("delete_record__label");
+        check_to_delete_label.style.display = "none";
+        let inputs = document.querySelectorAll('input[type=submit]');
+        inputs[0].value = "Guardar cambios";
+        inputs[0].style.marginTop = "-40px";
+        inputs[0].className += " text-center";
+    </script>
+{{pass}}
+
 
 <script>
     // Eliminando el breadcrumb que trae la forma SQL por defecto
@@ -172,9 +208,34 @@
   
   </script>
 <script>  
+    let inputs = document.querySelectorAll('input[type=submit]');
+    inputs[0].style.display = "none";
+    inputs[1].value = 'Limpiar';
+    inputs[1].className += " btn btn-primary";
+    inputs[1].style.margin = "15px 0px";   
+
     // Oculta el boton de 'Add record' que trae la tabla por defecto
-    //let boton1 = document.getElementsByClassName("btn btn-default");
-    //boton1[0].style.display = "none";
+    let boton1 = document.getElementsByClassName("btn btn-default");
+    boton1[0].style.display = "none";
+
+    // Coloca en español el botón de New Search y Close del panel de búsqueda de la tabla y
+    // oculta los botones de and y or.
+    document.getElementById("w2p_keywords").addEventListener('click', function() {
+        const campos = ['id', 'categoria'];
+
+        campos.forEach(campo => {
+            let parent = document.getElementById("w2p_field_t_categoria_desechos-" + campo);
+            let children = parent.getElementsByClassName('btn-default');
+
+            children[0].value = "Buscar";
+            children[1].style.display = "none";
+            children[2].style.display = "none";
+            children[3].value = "Cerrar";
+            children[0].className += " btn btn-primary botones-busqueda";
+            children[3].className += " btn btn-primary botones-busqueda";
+
+        });
+    });
     // Se coloca en español el mensaje que dice "XXX rows founds"
     let row_counter = document.getElementsByClassName("web2py_counter");
     let row_content = row_counter[0].innerText.split(" ");
