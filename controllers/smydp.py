@@ -1002,7 +1002,7 @@ def categorias_desechos():
                                     onupdate=auth.archive,
                                     links_in_grid=False,
                                     csv=False,
-                                    user_signature=True,
+                                    user_signature=False,
                                     paginate=10,
                                     create=True
                                     )
