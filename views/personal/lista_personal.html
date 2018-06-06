@@ -12,6 +12,8 @@
 			    
 			    <tbody id="dummyID">
 					{{for item in grid:}}
+						{{print item['dependencia']}}
+			          	{{print "HOLA"}}
 			          	{{if not item["nombre"] == "Ninguno":}}
 						<tr id="{{=item['dependencia']['nombre']}}_{{=item['categoria']}}">
 				            <td><button data-toggle="modal" data-target="#ficha_edicion" type="button"

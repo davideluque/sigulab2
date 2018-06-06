@@ -1,5 +1,9 @@
 /** Estilos del index (form principal)**/
 
+#titulo{
+	text-align: center;
+}
+
 .row{
 	font-family: "Roboto", Sans-Serif ;
 }
@@ -56,10 +60,6 @@ td{
 }
 
 /** Estilos del Create form **/
-
-.form-horizontal{
-	
-}
 
 
 /** Estilos del Update form **/
