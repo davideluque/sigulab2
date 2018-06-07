@@ -55,8 +55,9 @@ $(document).ready( function() {
         var ci = $(e.relatedTarget).data('ci');
         var gremio = $(e.relatedTarget).data('gremio');
         var email = $(e.relatedTarget).data('email');
-        var email_alter = $(e.relatedTarget).data('email_alter');
-        console.log(email_alter)
+        var email_alt = $(e.relatedTarget).data('email_alt');
+        console.log("Este es el correo: " )
+        console.log(email_alt)
         var fecha_salida = $(e.relatedTarget).data('fecha_salida');
         var fecha_ingreso = $(e.relatedTarget).data('fecha_ingreso');
         var nombre = $(e.relatedTarget).data('nombre');
@@ -84,7 +85,7 @@ $(document).ready( function() {
 
         f = [ci, gremio, email, fecha_salida, fecha_ingreso, nombre, cargo, estatus, telefono, pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
-               condicion,rol, extension_USB, extension_interna, email_alter];
+               condicion,rol, extension_USB, extension_interna, email_alt];
         if (categoria === 'Fijo') {
           $('#field_fecha_ingreso').parent().addClass('hide')
           $('#field_fecha_salida').parent().addClass('hide')
@@ -96,7 +97,7 @@ $(document).ready( function() {
         $("#field_gremio").html(gremio);
         $("#field_dependencia").html(dependencia);
         $("#field_email").html(email);
-        $("#field_email_alter").html(email_alter);
+        $("#field_email_alt").html(email_alt);
         $("#field_fecha_salida").html(fecha_salida);
         $("#field_fecha_ingreso").html(fecha_ingreso);
         $("#field_nombre").html(nombre);
@@ -137,7 +138,7 @@ $(document).ready( function() {
 
         fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
-               condicion, rol, extension_USB, extension_interna, email_alter];
+               condicion, rol, extension_USB, extension_interna, email_alt];
         console.log(fields);
         //$("#field_ci").html(item);
         //$(e.currentTarget).find('input[name="usbid"]').val(usbid);

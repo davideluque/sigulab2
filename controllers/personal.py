@@ -45,7 +45,7 @@ def tabla_categoria():
             "apellido" : elm.f_apellido,
             "ci" : elm.f_ci,
             "email" : elm.f_email,
-            "email_alter" : elm.f_email_alt,
+            "email_alt" : elm.f_email_alt,
             "telefono" : elm.f_telefono,
             "pagina_web" : elm.f_pagina_web,
             "categoria" : elm.f_categoria,
