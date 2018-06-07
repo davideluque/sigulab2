@@ -220,7 +220,7 @@ def register():
     # para que posteriormente ingrese y actualice sus datos.
     nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
-                           f_ci = request.post_vars.cedula,
+                           f_ci = request.post_vars.tipo_cedula+request.post_vars.cedula,
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
                            f_dependencia = depid,
@@ -252,8 +252,10 @@ def register():
     roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
     dependencias=list(db().select(db.dependencias.ALL))
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
+    
+    prefijos_cedula = ['V-','E-', 'P-']
   
-  return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec )
+  return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec, prefijos_cedula=prefijos_cedula )
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():
