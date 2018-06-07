@@ -130,6 +130,9 @@ db.define_table(
     Field('f_email',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
            label=T('Correo Electrónico')),
+    Field('f_email_alt',          'string',
+          requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
+           label=T('Correo Electrónico')),
     Field('f_direccion',          'string',
           requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
     Field('f_ubicacion',          'string',
@@ -145,7 +148,7 @@ db.define_table(
     Field('f_fecha_ingreso_usb','date',   label=T('Fecha de Ingreso a la USB')),
     Field('f_fecha_ingreso_ulab', 'date',   label=T('Fecha de Ingreso a la ULAB')),
     Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
-    Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
+    Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal','Otro']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
     Field('f_rol','string', label=T('Rol')),
 
     # #Referencias
