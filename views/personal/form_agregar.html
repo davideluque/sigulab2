@@ -75,26 +75,22 @@
                               <font color="red"><div id="err_telefono" hidden></div></font>
                             </div>
                             <label>Celular</label>
-                            <div class="input-group">
-                               
-                              <select   name="operador_add">
-                                  <option  value=""
-                                  {{ if not usuario.f_estatus :}}
-                                  selected
-                                  disabled
-                                  {{pass}}
-                                  >Codigo</option>
-                                  {{for operador in operadores:}}
-                                  <option
-                                  {{ if operador == usuario.f_operador: }}
-                                  selected
-                                  {{pass}}
-                                  value="{{=operador}}">{{=operador}}</option>
+                            <div class="form-group form-inline">
+                                <div class="form-group">
+                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador">
+                                                <option value="" disabled selected>Codigo</option>
+                                            {{for operador in operadores:}}
+                                                <option value='{{=operador}}'>{{=operador}}</option>
+                                            {{pass}}
+                                        </select>
 
-                                  {{pass}}
-                                </select>
-                              <input value="{{=usuario.f_celular or ''}}" type="text" name="celular_add" placeholder="Celular" required>
-                              <font color="red"><div id="err_celular" hidden></div></font>
+                                </div>
+                                <div class="form-group" >
+                                    <div class="col-xs-12">
+                                        <input class="form-control" id="celular_add" name="celular_add" type="text" placeholder="Celular" required value="{{=usuario.f_celular or ''}}">
+                                    </div>
+                                </div>
+                                <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
                             <div class="form-group">
@@ -277,8 +273,6 @@
                             {{pass}}
                             >Ubicación</option>
                             {{for ubicacion in ubicaciones:}}
-                                                                  {{print str(ubicacion.id)+""+usuario.f_ubicacion }}
-
                             <option
                             {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
                             selected
