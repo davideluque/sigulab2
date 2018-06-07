@@ -63,6 +63,11 @@
                               <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" >
                               <font color="red"><div id="err_email" hidden></div></font>
                             </div>
+                            <div class="form-group">
+                              <label>Email Alternativo</label>
+                              <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" required value="{{=usuario.f_email_alt or ''}}" >
+                              <font color="red"><div id="err_email" hidden></div></font>
+                            </div>
 
                             <div class="form-group">
                               <label>Teléfono Residencial</label>

@@ -22,6 +22,7 @@
                                     data-ci="{{=item['ci']}}"
                                     data-categoria="{{=item['categoria']}}"
                                     data-email="{{=item['email']}}"
+                                    data-email_alter="{{item['email_alter']}}"
                                     data-fecha_ingreso="{{=item['fecha_ingreso']}}"
                                     data-fecha_salida="{{=item['fecha_salida']}}"
                                     data-estatus="{{=item['estatus']}}"
@@ -40,12 +41,13 @@
                                     data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
                                     data-condicion="{{=item['condicion']}}"
                                     data-rol="{{=item['rol']}}"
-                                    data-extension="{{=item['extension']}}"
+                                    data-extension_usb="{{= item['extension_USB']}}"
+                                    data-extension_interna="{{=item['extension_interna']}}"
                                     value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</button></td>
 
-                                <td>{{= item["email"]}}</td>
+                                <td>{{= item["email_alter"]}}</td>
                                 <td>{{= item["dependencia"]}}</td>
-                                <td>{{= item["extension"]}}</td>
+                                <td>{{= item["extension_USB"]}}</td>
                             </tr>
                             {{pass}}
 			          	{{pass}}

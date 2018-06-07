@@ -31,9 +31,10 @@ def tabla_categoria():
         else: idUSuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
-        ext = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
-        if ext: ext=ext.ext_USB[0]
-        print(ext)
+        ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
+        ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+        if ext_USB: ext_USB=ext_USB.ext_USB[0]
+        if ext_int: ext_int=ext_int.ext_interna
         
         ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
         if(ubicacion): ubicacion = ubicacion.nombre
@@ -44,6 +45,7 @@ def tabla_categoria():
             "apellido" : elm.f_apellido,
             "ci" : elm.f_ci,
             "email" : elm.f_email,
+            "email_alter" : elm.f_email_alt,
             "telefono" : elm.f_telefono,
             "pagina_web" : elm.f_pagina_web,
             "categoria" : elm.f_categoria,
@@ -62,7 +64,8 @@ def tabla_categoria():
              "condicion" : elm.f_condicion,
              "unidad_jerarquica_superior" : Usuperior,
              "rol" : elm.f_rol,
-             "extension" : ext,
+             "extension_USB" : ext_USB,
+             "extension_interna" : ext_int,
              "ubicacion" : ubicacion,
              "es_supervisor": elm.f_es_supervisor
              })
@@ -77,11 +80,11 @@ def dropdowns():
     #Dropdown de dependencias
     departamento = db(db.dependencias.nombre).select(db.dependencias.ALL)
     #Dropdown de estatus
-    estatus = ['Activo', 'Jubilado']
+    estatus = ['Activo', 'Retirado', 'Jubilado']
     #Dropdown de categoria
     categoria = ['Fijo' , 'Contratado', 'Pasantía' , 'Ayudantía']
     #Dropdown de condiciones
-    condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal']
+    condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal', 'Otro']
     #Dropdown de roles
     roles= ['Director', 'Asistente del Director', 'Gestor', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de sección', 'Personas de Dependencia', 'Técnico' ]
     #Dropdown de operadores
@@ -97,6 +100,7 @@ def add_form():
             "apellido" : request.post_vars.apellido_add,
             "ci" : request.post_vars.ci_add,
             "email" : request.post_vars.email_add,
+            "email_alt" : request.post_vars.email_alt_add,
             "telefono" : request.post_vars.telefono_add,
             "pagina_web" : request.post_vars.pagina_web_add,
             "categoria" : request.post_vars.categoria_add,
@@ -115,7 +119,8 @@ def add_form():
              "ubicacion" : request.post_vars.ubicacion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
-             "extension" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_USB).first()
+             "extension_USB" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_USB).first(),
+             "extension_interna" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_interna).first()
             }
 
     #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
@@ -127,6 +132,7 @@ def add_form():
                                 f_apellido = dic["apellido"],
                                 f_ci = dic["ci"],
                                 f_email = dic["email"],
+                                f_email_alt = dic["email_alt"],
                                 f_telefono = dic["telefono"],
                                 f_pagina_web = dic["pagina_web"],
                                 f_categoria = dic["categoria"],
@@ -143,7 +149,8 @@ def add_form():
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
             f_ubicacion= dic["ubicacion"],
-            f_extension= dic["extension"],
+            f_extension_USB = dic["extension_USB"],
+            f_extension_interna = dic["extension_interna"],
             f_rol= dic["rol"])
         redirect(URL('listado'))
 
@@ -160,6 +167,7 @@ class Usuario(object):
         self.f_apellido = usuario.f_apellido
         self.f_ci = usuario.f_ci
         self.f_email = usuario.f_email
+        self.f_email_alt = usuario.f_email_alt
         dependencia = usuario.f_dependencia
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre

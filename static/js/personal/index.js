@@ -55,6 +55,8 @@ $(document).ready( function() {
         var ci = $(e.relatedTarget).data('ci');
         var gremio = $(e.relatedTarget).data('gremio');
         var email = $(e.relatedTarget).data('email');
+        var email_alter = $(e.relatedTarget).data('email_alter');
+        console.log(email_alter)
         var fecha_salida = $(e.relatedTarget).data('fecha_salida');
         var fecha_ingreso = $(e.relatedTarget).data('fecha_ingreso');
         var nombre = $(e.relatedTarget).data('nombre');
@@ -65,7 +67,8 @@ $(document).ready( function() {
         var telefono = $(e.relatedTarget).data('telefono');
         var pagina_web = $(e.relatedTarget).data('pagina_web');
         var rol = $(e.relatedTarget).data('rol');
-        var extension = $(e.relatedTarget).data('extension');
+        var extension_USB = $(e.relatedTarget).data('extension_usb');
+        var extension_interna = $(e.relatedTarget).data('extension_interna');
 
         var unidad_jerarquica_superior = $(e.relatedTarget).data('unidad_jerarquica_superior');
         var ubicacion = $(e.relatedTarget).data('ubicacion');
@@ -80,7 +83,8 @@ $(document).ready( function() {
         var nombre_completo= nombre +" "+apellido;
 
         f = [ci, gremio, email, fecha_salida, fecha_ingreso, nombre, cargo, estatus, telefono, pagina_web, unidad_jerarquica_superior,
-              ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion,rol,extension];
+              ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
+               condicion,rol, extension_USB, extension_interna, email_alter];
         if (categoria === 'Fijo') {
           $('#field_fecha_ingreso').parent().addClass('hide')
           $('#field_fecha_salida').parent().addClass('hide')
@@ -92,6 +96,7 @@ $(document).ready( function() {
         $("#field_gremio").html(gremio);
         $("#field_dependencia").html(dependencia);
         $("#field_email").html(email);
+        $("#field_email_alter").html(email_alter);
         $("#field_fecha_salida").html(fecha_salida);
         $("#field_fecha_ingreso").html(fecha_ingreso);
         $("#field_nombre").html(nombre);
@@ -101,7 +106,8 @@ $(document).ready( function() {
         $("#field_telefono").html(telefono);
         $("#field_pagina_web").html(pagina_web);
         $("#field_rol").html(rol);
-        $("#field_extension").html(extension);
+        $("#field_extension_interna").html(extension_interna);
+        $("#field_extension_USB").html(extension_USB);
 
         $("#field_unidad_jerarquica_superior").html(unidad_jerarquica_superior);
         $("#field_ubicacion").html(ubicacion);
@@ -130,7 +136,8 @@ $(document).ready( function() {
 
 
         fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
-              ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica, condicion, rol, extension];
+              ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
+               condicion, rol, extension_USB, extension_interna, email_alter];
         console.log(fields);
         //$("#field_ci").html(item);
         //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
