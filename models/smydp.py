@@ -394,7 +394,7 @@ db.define_table(
     
     Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']), notnull=True, label=T('Tipo de boca')),
 
-    Field('descripcion', 'string', notnull=False, label=T('Descripción')),
+    Field('descripcion', 'string', notnull=False, label=T('Descripción'), placeholder='Si marcó otro en alguna opción, especifique características en este campo.'),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
             requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
@@ -454,3 +454,88 @@ db.define_table(
 
 db.t_inventario_desechos._plural = 'Inventarios de Desechos Peligrosos'
 db.t_inventario_desechos._singular = 'Inventarios de Desecho Peligrosos'
+
+#Tabla de la Bitacora de los movimientos en los inventarios de todos los espacios fisicos. Contiene los campos:
+db.define_table(
+    #Nombre de la entidad
+    't_Bitacora_desechos',
+
+    #Atributos;
+
+    # Cantidad ingresada o egresada
+    Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad modificada')),
+
+    # Cantidad total luego del ingreso o egreso
+    Field('f_cantidad_total', 'double', requires=IS_NOT_EMPTY(), label=T('Total')),
+
+    # Concepto del ingreso, egreso o cambio en el inventario *!* COnsumo x egreso
+    Field('f_concepto', 'list:string', label=T('Calidad'),
+          requires=IS_IN_SET(['Ingreso','Egreso']), 
+          widget=SQLFORM.widgets.options.widget),
+    
+    # Tipo de ingreso de la sustancia (Null si f_concepto no es Ingreso) *!*
+    Field('f_tipo_ingreso', 'list:string', label=T('Tipo de ingreso'),
+          requires=IS_EMPTY_OR(IS_IN_SET(['Compra','Almacén','Solicitud','Ingreso inicial'])), 
+          widget=SQLFORM.widgets.options.widget),
+
+    # Tipo de egreso de la sustancia. Otorgado si fue cedido o prestadeo a otra
+    # seccion como respuesta a usa solicitud 
+    # (Null si f_concepto no es Egreso) *!*
+    Field('f_tipo_egreso', 'list:string', label=T('Tipo de egreso'),
+          requires=IS_EMPTY_OR(IS_IN_SET(['Docencia','Investigación','Extensión','Gestión'])), 
+          widget=SQLFORM.widgets.options.widget),
+    
+    # Descripcion del registro para ser mostrada en la tabla de la bitacora
+    Field('f_descripcion', 'string', label=T('Descripción')),
+
+    # Referencias a otras tablas
+
+    # Referencias obligatorias
+
+    # Unidad de medida de la cantidad ingresada o egresada 
+    Field('f_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), 
+          label=T('Unidad de medida'), notnull=True),
+    
+    # Referencia hacia el inventario al cual pertenece el registro de la bitacora
+    Field('f_inventario', 'reference t_Inventario',
+          requires=IS_IN_DB(db, db.t_Inventario.id, zero=None), 
+          label=T('Inventario'), notnull=True),
+
+    # Sustancia ingresada o consumida. Sirve para el reporte mensual RL4 y 7
+    Field('f_sustancia', 'reference t_Sustancia',
+          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
+          label=T('Sustancia'), notnull=True),
+
+    # Referencias opcionales (dependiendo del tipo de entrada o salida)
+
+    # Instancia del servicio en el que se empleara la sustancia egresada
+    # Requiere "f_concepto" = "egreso" *!* Null de lo contrario
+    Field('f_servicio', 'reference servicios',
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.servicios.id, '%(nombre)s', zero=None)), 
+          label=T('Servicio')),
+    
+    # Referencia hacia la tabla espacios fisicos con el id del almacen surtidor
+    # Requiere "f_concepto" = "ingreso" y "f_tipo_ingreso = "Almacen" *!* Null de lo contrario
+    Field('f_almacen', 'reference espacios_fisicos',
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None)), 
+          label=T('Almacén')),
+
+    # Referencia hacia la tabla de compras (*!* Null si no es un ingreso por compra)
+    # Requiere "f_concepto" = "egreso" *!* Null de lo contrario
+    Field('f_compra', 'reference t_Compra',
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Compra.id, '%(f_institucion)s', zero=None)), 
+          label=T('Compra')),
+
+    # Referencia hacia la tabla de respuestas a solicitudes (*!* Null si no es un 
+    # ingreso por compra)
+    # Requiere "f_concepto" = "ingreso" y "f_tipo_ingreso = "Solicitud" 
+    # *!* Null de lo contrario
+    Field('f_respuesta_solicitud', 'reference t_Respuesta',
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Respuesta.id, '%(f_tipo_respuesta)s', zero=None)), 
+          label=T('Respuesta de solicitud')),
+
+    # Agrega los campos adicionales created_by, created_on, modified_by, modified_on 
+    # para los logs de la tabla
+    auth.signature
+    )

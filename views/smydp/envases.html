@@ -66,6 +66,8 @@
         button_node.className += " btn btn-primary";  
         div_node.appendChild(button_node);      
         form.appendChild(div_node);
+
+        let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
     </script>
 {{elif table.update_form:}} 
     {{=table.update_form}} 
@@ -98,6 +100,9 @@
         element.children[1].style.textAlign = "center";
         element.style.marginBottom = "0px";
     }
+
+    let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
+
 </script>
 {{pass}}
 
@@ -107,6 +112,8 @@
         check_to_delete_label.style.display = "none";
         let inputs = document.querySelectorAll('input[type=submit]');
         inputs[0].value = "Guardar cambios";
+
+        let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
     </script>
 {{pass}}
 
