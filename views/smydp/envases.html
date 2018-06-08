@@ -68,6 +68,8 @@
         form.appendChild(div_node);
 
         let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
+
+        let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
     </script>
 {{elif table.update_form:}} 
     {{=table.update_form}} 
@@ -103,6 +105,8 @@
 
     let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
 
+    let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
+
 </script>
 {{pass}}
 
@@ -114,6 +118,8 @@
         inputs[0].value = "Guardar cambios";
 
         let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
+
+        let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
     </script>
 {{pass}}
 
