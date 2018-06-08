@@ -11,7 +11,7 @@
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
         <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">Desechos peligrosos</a>
-        <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">Listado de Contenedores</a>
+        <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">Inventario de Contenedores</a>
     </div>
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
@@ -36,7 +36,7 @@
     {{else:}}
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">LISTADO DE CONTENEDORES - ULAB</h3>
+                <h3 class="inicio-titulo">INVENTARIO DE CONTENEDORES - ULAB</h3>
                 <img class="iconos" src="{{=URL('static', 'images/listadocontenedores.png')}}">
             </div>
         </div>
@@ -69,7 +69,7 @@
 
         let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
 
-        let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
+        let campo_mezcla = document.getElementById("t_envases_composicion").placeholder = "Mezcla de X + Y";
     </script>
 {{elif table.update_form:}} 
     {{=table.update_form}} 
@@ -93,7 +93,7 @@
     </div>
 </div>
 <script>
-    let ids = ["#t_envases_id__row","#t_envases_identificacion__row", "#t_envases_capacidad__row", "#t_envases_unidad_medida__row", "#t_envases_forma__row", "#t_envases_material__row", "#t_envases_descripcion__row", "#t_envases_tipo_boca__row", "#t_envases_espacio_fisico__row", "#t_envases_categoria__row"];
+    let ids = ["#t_envases_id__row","#t_envases_identificacion__row", "#t_envases_capacidad__row", "#t_envases_unidad_medida__row", "#t_envases_forma__row", "#t_envases_material__row", "#t_envases_descripcion__row", "#t_envases_tipo_boca__row", "#t_envases_espacio_fisico__row", "#t_envases_categoria__row", "#t_envases_composicion__row"];
     for (let index = 0; index < ids.length; index++) {
         const element = document.querySelector(ids[index]);
         element.children[0].className = "readonly control-label col-sm-2 col-sm-offset-4";
@@ -105,7 +105,7 @@
 
     let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
 
-    let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
+    let campo_mezcla = document.getElementById("t_envases_composicion").placeholder = "Mezcla de X + Y";
 
 </script>
 {{pass}}
@@ -119,7 +119,7 @@
 
         let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
 
-        let campo_mezcla = document.getElementById("t_envases_mezcla").placeholder = "Mezcla de X + Y";
+        let campo_mezcla = document.getElementById("t_envases_composicion").placeholder = "Mezcla de X + Y";
     </script>
 {{pass}}
 
