@@ -43,6 +43,8 @@ h3{
 
 .iconos {
 	text-align: center;
+	height: 64px;
+	width: 64px;
 }
 
 .boton-retorno{
