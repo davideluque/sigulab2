@@ -396,7 +396,7 @@ db.define_table(
 
     Field('descripcion', 'string', notnull=False, label=T('Descripción'), placeholder='Si marcó otro en alguna opción, especifique características en este campo.'),
 
-    Field('mezcla', 'string', notnull=False, label=T('Mezcla')),
+    Field('composicion', 'string', notnull=False, label=T('Composición')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
             requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
