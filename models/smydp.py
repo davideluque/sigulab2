@@ -385,7 +385,7 @@ db.define_table(
     Field('capacidad', 'double', requires=IS_NOT_EMPTY(), label=T('Capacidad'), notnull=True),
 
     Field('unidad_medida', 'reference t_Unidad_de_medida',
-          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True,
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_abreviatura)s', zero=None), label=T('Unidad de medida'), notnull=True,
           represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
 
     Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular', 'Otra']), notnull=True, label=T('Forma')),
@@ -395,6 +395,8 @@ db.define_table(
     Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']), notnull=True, label=T('Tipo de boca')),
 
     Field('descripcion', 'string', notnull=False, label=T('Descripción'), placeholder='Si marcó otro en alguna opción, especifique características en este campo.'),
+
+    Field('mezcla', 'string', notnull=False, label=T('Mezcla')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
             requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
