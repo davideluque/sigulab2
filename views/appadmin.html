@@ -53,8 +53,7 @@
       </div>
   </div>
 {{elif request.function=='select':}}
-  <h2>{{=XML(str(T("Database %s select"))%A(request.args[0],_href=URL('index'))) }}
-  </h2>
+  <h2>{{=XML(str(T("Database %s select"))%A(request.args[0],_href=URL('index'))) }}</h2>
   {{if tb:}}
   <h3>{{=T('Traceback')}}</h3>
   <pre>

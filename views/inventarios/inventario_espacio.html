@@ -1,6 +1,12 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
 
-<!-- Inicio Boton Agregar Sustancia -->
+  <!-- Estilo del listado de Solicitudes de Servicios -->
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+
+<!-- Inicio Boton Agregar BM -->
 <div class="container" id="containerAgregar">
     <div class="row">
         <div class="col-sm-6"></div>
@@ -8,7 +14,7 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Bien</button>
 	        </div>
         </div>
     </div>
@@ -32,44 +38,37 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Serial</th>
+                <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
 
         <tbody>
-          {{for sustancia in inventario:}}
-            {{sust = sustancia['t_Sustancia']}}
-            {{inv = sustancia['t_Inventario']}}
-            {{unid = sustancia['t_Unidad_de_medida']}}
+          {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla">
-                  <a href="{{=URL('bitacora',vars=dict(inv=inv.id))}}">{{=sust.f_nombre}}</a>
-                </td>
-                <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
-                <td class="camposTabla">{{=sust.f_cas if sust.f_estado else ''}}</td>
-                <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
-                <td class="camposTabla">{{=inv.f_uso_interno}}</td>
-                <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
-                <td class="camposTabla">{{=inv.f_existencia}}</td>
-                <td class="camposTabla">{{=unid.f_nombre}}</td>
+                <td class="camposTabla">{{=bm['bm_nombre']}}</td>
+                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                <td class="camposTabla">{{=bm['bm_num']}}</td>
+                <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_marca']}}</td>
+                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
+                <td class="camposTabla">{{=bm['bm_serial']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
-            <tr>
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">CAS</th>
-                <th class="camposTabla linksNombres">Estado</th>
-                <th class="camposTabla linksNombres">Uso interno</th>
-                <th class="camposTabla linksNombres">Excedente</th>
-                <th class="camposTabla linksNombres">Total</th>
-                <th class="camposTabla linksNombres">Unidad</th>
+          <th class="camposTabla linksNombres">Nombre</th>
+          <th class="camposTabla linksNombres">N° BM</th>
+          <th class="camposTabla linksNombres">Placa</th>
+          <th class="camposTabla linksNombres">Marca</th>
+          <th class="camposTabla linksNombres">Modelo</th>
+          <th class="camposTabla linksNombres">Serial</th>
+          <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
 
@@ -80,97 +79,308 @@
 <!-- Fin Listado de sustancias --> 
 
 <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
-<input type="hidden" id="serv" name="serv" value="">
 
-<!-- Modal añadir una sustancia nueva al inventario -->
-  <div class="modal fade" id="addsustancia" role="dialog">
-    <div class="modal-dialog">
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
+  <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header addHeader">
-          <div class="row addRow" id="rowHeader">
-            <div class="col-sm-1" id="col1Header">
-              <div class="container" id="plus">
-                <h1 id="agregar">+</h1>
-              </div>
-            </div>
-            <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nueva Sustancia
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </h4>
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
             </div>
           </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Bien Mueble<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
         </div>
-        <!-- Fin Modal Header -->
-        
-        <!-- Modal Body -->
-        <div class="modal-body addBody">
-          <div class="row addRow">
-            <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                  <!-- Primer Paso -->
-                  <fieldset class="formField">
-                    <div class="form-bottom">
+                <!-- Primer Paso  PArte 1-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Bien</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group" tag="Formato:">
+                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*"  required>
+                            <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)"   required>
+                            <font color="red"><div id="err_no_bien" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
+                            <font color="red"><div id="err_placa" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
+                            <div class="field-error"> <p id="error-modelo"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
+                            <div class="field-error"> <p id="error-serial"> </p> </div>
+                          </div>
+                        
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción*" required>
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+                <!-- Primer Paso PArte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> </div>
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                      </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
+  
 
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                              <option value="" selected hidden >Sustancia*</option>
-                              {{for sustancia in sustancias:}}
-                              <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
                           
                           <div class="form-group">
-                            <input type="text" class="form-control" name="uso_interno" placeholder="Uso interno*" required>
-                            <div class="field-error"> <p id="error-uso-interno"> </p> </div>
+                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                                <!-- Insertar un for-->
+                                <option type="text" value="">Selecione un material*</option>
+                                {{ for material in material_pred: }}
+                                <option value="{{=material}}">{{=material}}</option>
+                                {{pass}}
+                              </select>
+                              <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
-                          
-                          <div class="form-group" style="padding-bottom: 50px">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
+
+  
+  
+                          <div class="form-group">
+                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" required>
+                                <option value="">Selecione un color*</option>
+                                {{ for color in color_list:}}
+                                <option value="{{=color}}">{{=color}}</option>
+                                {{pass}}
+                              </select>
+                              <div class="field-error"> <p id="error-color"> </p> </div>
+                          </div>
+
+                          <label>Dimensiones</label>
+
+                          <div class="form-group">
+                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
+                              <option value="">Selecione una unidad</option>
+                              {{ for med in unidad_med:}}
+                              <option value="{{=med}}">{{=med}}</option>
                               {{pass}}
                             </select>
+                            <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                            <font color="red"><div id="err_ancho" hidden></div></font>
+                          </div>
+
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                            <font color="red"><div id="err_largo" hidden></div></font>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                            <font color="red"><div id="err_alto" hidden></div></font>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                            <font color="red"><div id="err_diametro" hidden></div></font>
+                          </div>
+
+                          
+                        </div>
                       </div>
-                    </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
                   </fieldset>
                   <!-- Fin Primer Paso -->
-                </form>
-            </div>
-          </div>               
-        </div>
+
+
+                <!-- Primer Paso PArte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Segundo Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+  
+
+                        <div class="form-group">
+                            <label>Seleccione un tipo de movilidad</label>
+                            <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
+                              <option value="">Seleccione un tipo de movilidad</option>
+                              {{ for movilidad in movilidad_list:}}
+                              <option value="{{=movilidad}}">{{=movilidad}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-movilidad"> </p> </div>
+                        </div>
+
+                        <label>Tipo de Uso</label>
+                        <div class="checkbox-group">
+                          {{ for uso in uso_list: }}
+                          <input type="checkbox" name="tipo_uso" value="{{=uso}}">{{=uso}}
+                          <br>
+                          {{pass}}
+                        </div>
+
+                        </div>
+                      </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                  </fieldset>
+                  <!-- Fin Primer Paso  parte 3-->
+
+                <!-- Comienzo Segundo Paso-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <h4 class="titulosForm">SUDEBID</h4>
+                      <label>Importante: llene según requerimientos de SUDEBID</label>
+                        
+                      <div class="form-group">
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Ubicación</label>
+                          <select class="form-control" type="select" value="" id="localizacion" onchange="placeholder_localizacion(this.value);"  name="localizacion" required>
+                            <option value="" onchange="placeholder_localizacion(this.value);">Seleccione un código de localizacion</option>
+                            {{for cod in localizacion:}}
+                            <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
+                            <input type="text" class="form-control" id="cod_loc" name="cod_loc" placeholder="" readonly >
+                            <div class="field-error"> <p id="error-cod_loc"> </p> </div>
+                          </div>
+                  
+
+                      <div class="form-group">
+                          <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categorias</label>
+                          <select class="form-control" type="select" value="" id="categoria" onchange="colocar_subcategoria(this.value);" name="nombre_cat" required>
+                            <option value="" onchange="colocar_subcategoria(this.value);" >Seleccione una categorias</option>
+                            {{ for categoria in nombre_cat:}}
+                            <option value="{{=categoria}}" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="field-error"> <p id="error-categorias"> </p> </div>
+                        </div>
+
+                    
+                        <div class="form-group">
+                            <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategorias</label>
+                            <label class="form-group" id="numRegistro2" style="margin-bottom: 0px" ></label>
+                            <select class="form-control" type="select" value="" id="Subcategorias"  name="Subcategorias" required>
+                              <option value="">Seleccione una subcategorias</option>
+                              <option value="" id="Opcion1" hidden></option>
+                              <option value="" id="Opcion2" hidden ></option>
+                              <option value="" id="Opcion3" hidden ></option>
+                              <option value="" id="Opcion4" hidden ></option>
+                              <option value="" id="Opcion5" hidden ></option>
+                              <option value="" id="Opcion6" hidden ></option>
+                              <option value="" id="Opcion7" hidden ></option>
+                              <option value="" id="Opcion8" hidden ></option>
+                              <option value="" id="Opcion9" hidden ></option>
+                            </select>
+                            <div class="field-error"> <p id="error-categorias"> </p> </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                </fieldset>
+                <!-- Fin Segundo Paso -->
+              </form>
+          </div>
+        </div>               
       </div>
     </div>
   </div>
+</div>
 
-<!-- Fin Modal Agregar Servicio -->
+<!-- Fin Modal Agregar BM -->
 
 <!-- *!* Falta verificar que se esten llenando todos los campos dependiendo 
 del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
-  // Valida los campos de la forma en el modal "addsustancia"
+
+  // Borrar informacion al cerrar el modal
+  $('.modal').on('hidden.bs.modal', function(){
+      $(this).find('form')[0].reset();
+  });
+
+  // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
 
     // Buscando divs para ingresar mensajes de error
@@ -231,7 +441,7 @@ del concepto y tipo de ingreso o egreso -->
 
   // True si "n" es un numero
   function is_number(n){
-    return !isNaN(n)
+    return !isNaN(n);
   }
 
   // True si "n" es negativo
@@ -243,5 +453,91 @@ del concepto y tipo de ingreso o egreso -->
   function is_zero(n){
     return (n == 0)
   }
+
+  function placeholder_localizacion(value){
+    var x = document.getElementById("cod_loc");
+    var y = document.getElementById("localizacion");
+
+
+    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+      x.placeholder = '150301';
+      x.value = '150301';
+    }else{;
+      x.placeholder ='240107';
+      x.value = '240107';
+
+    }
+  }
+
+  function colocar_subcategoria(value){
+    var dict = {
+		'Maquinaria Construccion':
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipo Transporte":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipo Comunicaciones":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipos Medico":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipo Cientifico Religioso":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Equipo Oficina" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+  var n = 1;
+  var x;
+  var y = document.getElementById("numRegistro2");
+
+  if (value != ""){
+    for (var i in dict[value]){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      x.innerText = dict[value][i];
+      x.style.display= "block";
+      $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+      $('#Opcion'.concat(n.toString())).show();
+      x.value = dict[value][i];
+      n = n + 1;  
+    }
+    while (n <= 9){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      //x.innerText = "";
+      //x.style.display = "none";
+      $('#Opcion'.concat(n.toString())).hide();
+      $('#Opcion'.concat(n.toString())).html("");
+      x.value = "";
+      n = n +1;
+      
+    }
+    
+  }
+}
+
 
 </script>
