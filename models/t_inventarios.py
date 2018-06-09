@@ -10,19 +10,24 @@ db.define_table(
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
     Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
-    Field('bm_marca','string',notnull=True,label=T('Marca'),requires=IS_NOT_EMPTY()),
-    Field('bm_modelo','string',notnull=True,label=T('Modelo'),requires=IS_NOT_EMPTY()),
-    Field('bm_serial','string',notnull=True,label=T('Serial'),requires=IS_NOT_EMPTY()),
+    #No son obligatorios para mobiliario
+    Field('bm_marca','string',label=T('Marca')),
+    Field('bm_modelo','string',label=T('Modelo')),
+    Field('bm_serial','string',label=T('Serial')),
+    #
     Field('bm_descripcion','text',notnull=True,label=T('Descripción'),requires=IS_NOT_EMPTY()),
     Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio'])),
     Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
-    #Se debe ver cuales categorias requieren esto
+    #Solo lo poseen los equipos
+    Field('bm_calibrado','boolean',default=False,label=T('Descripción')),
+    Field('bm_fecha_calibracion','date',notnull=True,label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
+    #
     Field('bm_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
     Field('bm_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('bm_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('bm_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('bm_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    #
+
     Field('bm_movilidad','string',notnull=True,label=T('Movilidad'),requires=IS_IN_SET(['Fijo','Portátil'])),
     Field('bm_uso','string',notnull=True,label=T('Uso'),requires=IS_IN_SET(['Docencia','Investigación','Extensión','Apoyo administrativo'])),
     Field('bm_estatus','string',label=T('Estatus'),requires=IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible'])),
@@ -34,7 +39,9 @@ db.define_table(
     Field('bm_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
     Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
-    Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha'))
+    Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
+
+    Field('bm_categoria', 'string', notnull = True, label = T('Categoria del bien mueble'), requires=IS_IN_SET['Equipo','Mobiliario'])
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -111,6 +118,7 @@ db.define_table(
 db.solicitud_eliminar_bien_mueble.eliminar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s')
 
 ###Solicitud de modificacion###
+######ACOMODAR
 
 modificacion=db.Table(
     db,
@@ -155,12 +163,7 @@ db.define_table(
     )
 db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
 
-# Estructura seguira para las clasificaciones: La tabla de bien_mueble posee un campo llamado "categoria" y uno para el numero
-# de bien nacional. La tabla de cada categoria cuenta con un campo que referencia al numero de bien nacional del bien mueble
-# y posee otro para el nombre de la categoria. Si queremos matchear ambas tablas con un join podemos hacerlo utlizando esos dos campos
-
-
-# Tabla general para bienes muebles que no poseen numero de bien nacional
+### Tabla general para bienes muebles que no poseen numero de bien nacional ###
 
 db.define_table(
 	'sin_bn',
@@ -170,7 +173,7 @@ db.define_table(
 	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
 	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
-	Field('sb_descripcion', 'string', label = T('Descripción del elemento')),
+	Field('sb_descripcion', 'string', label = T('Descripción del elemento'))
 	#primarykey = ['sb_nombre', 'sb_espacio']
 	)
 
@@ -183,7 +186,7 @@ db.define_table(
 	Field('co_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
 	Field('co_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
 	Field('co_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
-	Field('co_total', 'integer', notnull = True, label = T('Total de unidades')),
+	Field('co_total', 'integer', notnull = True, label = T('Total de unidades'))
 	#primarykey = ['co_nombre', 'co_espacio']
 	)
 
@@ -205,7 +208,7 @@ db.define_table(
     Field('ml_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('ml_material', 'string', notnull = True, label = T('Material predominante')),
     Field('ml_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
-    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
+    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']))
 	#primarykey = ['ml_nombre', 'ml_espacio']    
 	)
 
