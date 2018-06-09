@@ -164,7 +164,6 @@ db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bie
 
 db.define_table(
 	'sin_bn',
-    Field('sb_id','id'),
 	Field('sb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
 	Field('sb_marca', 'string', label = T('Marca del elemento')),
 	Field('sb_modelo', 'string', label = T('Modelo/código del elemento')),
@@ -172,28 +171,27 @@ db.define_table(
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
 	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
 	Field('sb_descripcion', 'string', label = T('Descripción del elemento')),
-	primarykey = ['sb_nombre', 'sb_espacio']
+	#primarykey = ['sb_nombre', 'sb_espacio']
 	)
 
 db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.sin_bn.sb_nombre.requires=IS_NOT_IN_DB(db(db.sin_bn.sb_espacio==request.vars.sb_espacio),'sin_bn.sb_nombre')
 
 db.define_table(
 	'consumible',
-    Field('co_id','id'),
 	Field('co_presentacion', 'string', notnull = True, label = T('Presentación')),
 	Field('co_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
 	Field('co_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
 	Field('co_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
 	Field('co_total', 'integer', notnull = True, label = T('Total de unidades')),
-	primarykey = ['co_nombre', 'co_espacio']
+	#primarykey = ['co_nombre', 'co_espacio']
 	)
 
-db.consumible.co_espacio = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
-db.consumible.co_nombre = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
+db.consumible.co_espacio.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
+db.consumible.co_nombre.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
 
 db.define_table(
 	'material_laboratorio',
-    Field('ml_id','id'),
 	Field('ml_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
 	Field('ml_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
 	Field('ml_aforado', 'string', notnull = True, label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
@@ -208,11 +206,11 @@ db.define_table(
     Field('ml_material', 'string', notnull = True, label = T('Material predominante')),
     Field('ml_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
     																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
-	primarykey = ['ml_nombre', 'ml_espacio']    
+	#primarykey = ['ml_nombre', 'ml_espacio']    
 	)
 
-db.material_laboratorio.ml_espacio = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
-db.material_laboratorio.ml_nombre = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
+db.material_laboratorio.ml_espacio.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
+db.material_laboratorio.ml_nombre.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
 
 # Nota: Cantidad para consumibles debe tener una longitud de 4 dígitos
 #		Colocar la opción de especificar dede el front para el field "prsentacion" en consumible y en "material" en material_laboratorio
