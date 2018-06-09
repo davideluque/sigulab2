@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S'<class \'psycopg2.IntegrityError\'> null value in column "bm_calibrar" violates not-null constraint\nDETAIL:  Failing row contains (1, BM1, 123456, null, , , , Hola, Pl\xc3\xa1stico, Naranja, null, null, null, null, null, null, null, Port\xc3\xa1til, Extensi\xc3\xb3n, En desuso, Equipo Transporte, 150301, Edo Miranda, Municipio Baruta, Parroquia Baruta, 1, 10, 1, 7, Equipo).\n'
+p3
+sS'layer'
+p4
+S'/home/sandra/Documents/web2py/applications/sigulab2/controllers/appadmin.py'
+p5
+sS'code'
+p6
+S'<code object <module> at 0xb6f5a920, file "/home/sandra/Documents/web2py/applications/sigulab2/controllers/appadmin.py", line 7>'
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "/home/sandra/Documents/web2py/gluon/restricted.py", line 219, in restricted\n    exec(ccode, environment)\n  File "/home/sandra/Documents/web2py/applications/sigulab2/controllers/appadmin.py", line 696, in <module>\n  File "/home/sandra/Documents/web2py/gluon/globals.py", line 419, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/sandra/Documents/web2py/applications/sigulab2/controllers/appadmin.py", line 147, in insert\n    if form.accepts(request.vars, session):\n  File "/home/sandra/Documents/web2py/gluon/sqlhtml.py", line 1965, in accepts\n    self.vars.id = self.table.insert(**fields)\n  File "/home/sandra/Documents/web2py/gluon/packages/dal/pydal/objects.py", line 753, in insert\n    ret = self._db._adapter.insert(self, row.op_values())\n  File "/home/sandra/Documents/web2py/gluon/packages/dal/pydal/adapters/base.py", line 486, in insert\n    raise e\nIntegrityError: null value in column "bm_calibrar" violates not-null constraint\nDETAIL:  Failing row contains (1, BM1, 123456, null, , , , Hola, Pl\xc3\xa1stico, Naranja, null, null, null, null, null, null, null, Port\xc3\xa1til, Extensi\xc3\xb3n, En desuso, Equipo Transporte, 150301, Edo Miranda, Municipio Baruta, Parroquia Baruta, 1, 10, 1, 7, Equipo).\n\n'
+p11
+s.

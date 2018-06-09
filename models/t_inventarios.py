@@ -7,7 +7,7 @@
 ###Bien mueble###
 db.define_table(
     'bien_mueble',
-    Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
+    Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
     Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     #No son obligatorios para mobiliario
@@ -19,8 +19,8 @@ db.define_table(
     Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio'])),
     Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
     #Solo lo poseen los equipos
-    Field('bm_calibrado','boolean',default=False,label=T('Descripción')),
-    Field('bm_fecha_calibracion','date',notnull=True,label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
+    Field('bm_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
+    Field('bm_fecha_calibracion','date',label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
     #
     Field('bm_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
     Field('bm_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
@@ -41,7 +41,7 @@ db.define_table(
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
     Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
 
-    Field('bm_categoria', 'string', notnull = True, label = T('Categoria del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario']))
+    Field('bm_clasificacion', 'string', notnull = True, label = T('Clasificacion del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario']))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -173,22 +173,23 @@ db.define_table(
 	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
 	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
-	Field('sb_descripcion', 'string', label = T('Descripción del elemento')),
-	Field('sb_aforado', 'string', notnull = True, label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
-	Field('sb_calibrar', 'string', notnull = True, label = T('Requiere calibración'), requires = IS_IN_SET('Si', 'No')),
-	Field('sb_capacidad', 'string', label = T('Capacidad'), requieres = IS_MATCH('^[0-9]{5},[0-9]{2}$')),
-	Field('sb_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_IN_SET(['m^3','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb'])),
-	Field('sb_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_IN_SET(['m', 'cm'])),
+	Field('sb_descripcion', 'text', label = T('Descripción del elemento')),
+	Field('sb_aforado', 'string', label = T('Condición de aforado'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No', 'N/A']))),
+	Field('sb_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
+	Field('sb_capacidad', 'string', label = T('Capacidad'), requieres = IS_EMPTY_OR(IS_MATCH('^[0-9]{5},[0-9]{2}$'))),
+	Field('sb_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_EMPTY_OR(IS_IN_SET(['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']))),
+	Field('sb_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_EMPTY_OR(IS_IN_SET(['m', 'cm']))),
     Field('sb_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('sb_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('sb_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('sb_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    Field('sb_material', 'string', notnull = True, label = T('Material predominante')),
-    Field('sb_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
-    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
-   	Field('sb_presentacion', 'string', notnull = True, label = T('Presentación')),
-	Field('sb_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
-	Field('sb_total', 'integer', notnull = True, label = T('Total de unidades'))
+    Field('sb_material', 'string', label = T('Material predominante')),
+    Field('sb_material_sec', 'string', label = T('Material secundario'), requires = IS_EMPTY_OR(IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
+                                                                                                        'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']))),
+   	Field('sb_presentacion', 'string', label = T('Presentación')),
+	Field('sb_unidades', 'string', label = T('Unidades por presentación'), requires = IS_EMPTY_OR(IS_MATCH('^[0-9]{5}$'))),
+	Field('sb_total', 'integer', label = T('Total de unidades')),
+    Field('sb_clasificacion', 'string', notnull = True, label = T('Clasificacion del consumible/material'), requires=IS_IN_SET(['Material de Laboratorio','Consumible']))
 	#primarykey = ['sb_nombre', 'sb_espacio']
 	)
 
