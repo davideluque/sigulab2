@@ -8,7 +8,7 @@
 db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
-    Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
+    Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')), primarykey,
     Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     Field('bm_marca','string',notnull=True,label=T('Marca'),requires=IS_NOT_EMPTY()),
     Field('bm_modelo','string',notnull=True,label=T('Modelo'),requires=IS_NOT_EMPTY()),
@@ -34,7 +34,7 @@ db.define_table(
     Field('bm_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
     Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
-    Field('bm_crea_ficha', 'references auth_user', notnull = True, label = T('Usuario que crea la ficha'))
+    Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha'))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -235,3 +235,58 @@ db.solicitud_modificar_bien_mueble.modificar_NroBM.requires = IS_IN_DB(db,db.bie
 # Estructura seguira para las clasificaciones: La tabla de bien_mueble posee un campo llamado "categoria" y uno para el numero
 # de bien nacional. La tabla de cada categoria cuenta con un campo que referencia al numero de bien nacional del bien mueble
 # y posee otro para el nombre de la categoria. Si queremos matchear ambas tablas con un join podemos hacerlo utlizando esos dos campos
+
+
+# Tabla general para bienes muebles que no poseen numero de bien nacional
+
+db.define_table(
+	'sin_bn',
+	Field('sb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
+	Field('sb_marca', 'string', label = T('Marca del elemento')),
+	Field('sb_modelo', 'string', label = T('Modelo/código del elemento')=,
+	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
+	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
+	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
+	Field('sb_descripcion', 'string', label = T('Descripción del elemento')),
+	primarykey = ['sb_nombre', 'sb_espacio']
+	)
+
+db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+
+db.define_table(
+	'consumible',
+	Field('co_presentacion', 'string', notnull = True, label = T('Presentación')),
+	Field('co_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
+	Field('co_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
+	Field('co_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
+	Field('co_total', 'integer', notnull = True, label = T('Total de unidades')),
+	primarykey = ['co_nombre', 'co_espacio']
+	)
+
+db.consumible.co_espacio = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
+db.consumible.co_nombre = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
+
+db.define_table(
+	'material_laboratorio',
+	Field('ml_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
+	Field('ml_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
+	Field('ml_aforado', 'string', notnull = True, label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
+	Field('ml_calibrar', 'string', notnull = True, label = T('Requiere calibración'), requires = IS_IN_SET('Si', 'No')),
+	Field('ml_capacidad', 'string', label = T('Capacidad'), requieres = IS_MATCH('^[0-9]{5},[0-9]{2}$')),
+	Field('ml_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_IN_SET(['m^3','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb'])),
+	Field('ml_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_IN_SET(['m', 'cm'])),
+    Field('ml_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('ml_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('ml_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('ml_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('ml_material', 'string', notnull = True, label = T('Material predominante')),
+    Field('ml_material_sec', 'string', label = T('Material secundario'), , requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
+    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
+	primarykey = ['ml_nombre', 'ml_espacio']    
+	)
+
+db.material_laboratorio.ml_espacio = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
+db.material_laboratorio.ml_nombre = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
+
+# Nota: Cantidad para consumibles debe tener una longitud de 4 dígitos
+#		Colocar la opción de especificar dede el front para el field "prsentacion" en consumible y en "material" en material_laboratorio
