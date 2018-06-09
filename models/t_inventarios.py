@@ -8,7 +8,7 @@
 db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble')),
-    Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')), primarykey,
+    Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
     Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     Field('bm_marca','string',notnull=True,label=T('Marca'),requires=IS_NOT_EMPTY()),
     Field('bm_modelo','string',notnull=True,label=T('Modelo'),requires=IS_NOT_EMPTY()),
@@ -243,7 +243,7 @@ db.define_table(
 	'sin_bn',
 	Field('sb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
 	Field('sb_marca', 'string', label = T('Marca del elemento')),
-	Field('sb_modelo', 'string', label = T('Modelo/código del elemento')=,
+	Field('sb_modelo', 'string', label = T('Modelo/código del elemento')),
 	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
 	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
@@ -263,8 +263,8 @@ db.define_table(
 	primarykey = ['co_nombre', 'co_espacio']
 	)
 
-db.consumible.co_espacio = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
-db.consumible.co_nombre = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
+db.consumible.co_espacio = IS_IN_DB(db, db.sin_bn.primarykey,'%(sb_espacio)s')
+db.consumible.co_nombre = IS_IN_DB(db, db.sin_bn.primarykey,'%(sb_nombre)s')
 
 db.define_table(
 	'material_laboratorio',
@@ -280,7 +280,7 @@ db.define_table(
     Field('ml_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('ml_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
     Field('ml_material', 'string', notnull = True, label = T('Material predominante')),
-    Field('ml_material_sec', 'string', label = T('Material secundario'), , requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
+    Field('ml_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
     																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
 	primarykey = ['ml_nombre', 'ml_espacio']    
 	)
