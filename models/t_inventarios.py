@@ -41,7 +41,7 @@ db.define_table(
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
     Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
 
-    Field('bm_categoria', 'string', notnull = True, label = T('Categoria del bien mueble'), requires=IS_IN_SET['Equipo','Mobiliario'])
+    Field('bm_categoria', 'string', notnull = True, label = T('Categoria del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario']))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -173,47 +173,29 @@ db.define_table(
 	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
 	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
-	Field('sb_descripcion', 'string', label = T('Descripción del elemento'))
+	Field('sb_descripcion', 'string', label = T('Descripción del elemento')),
+	Field('sb_aforado', 'string', notnull = True, label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
+	Field('sb_calibrar', 'string', notnull = True, label = T('Requiere calibración'), requires = IS_IN_SET('Si', 'No')),
+	Field('sb_capacidad', 'string', label = T('Capacidad'), requieres = IS_MATCH('^[0-9]{5},[0-9]{2}$')),
+	Field('sb_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_IN_SET(['m^3','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb'])),
+	Field('sb_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_IN_SET(['m', 'cm'])),
+    Field('sb_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('sb_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('sb_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('sb_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('sb_material', 'string', notnull = True, label = T('Material predominante')),
+    Field('sb_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
+    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
+   	Field('sb_presentacion', 'string', notnull = True, label = T('Presentación')),
+	Field('sb_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
+	Field('sb_total', 'integer', notnull = True, label = T('Total de unidades'))
 	#primarykey = ['sb_nombre', 'sb_espacio']
 	)
 
 db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
 db.sin_bn.sb_nombre.requires=IS_NOT_IN_DB(db(db.sin_bn.sb_espacio==request.vars.sb_espacio),'sin_bn.sb_nombre')
 
-db.define_table(
-	'consumible',
-	Field('co_presentacion', 'string', notnull = True, label = T('Presentación')),
-	Field('co_unidades', 'string', notnull = True, label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
-	Field('co_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
-	Field('co_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
-	Field('co_total', 'integer', notnull = True, label = T('Total de unidades'))
-	#primarykey = ['co_nombre', 'co_espacio']
-	)
-
-db.consumible.co_espacio.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
-db.consumible.co_nombre.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
-
-db.define_table(
-	'material_laboratorio',
-	Field('ml_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
-	Field('ml_espacio', 'reference sin_bn', notnull = True, label = T('Espacio fisico al que pertenece')),
-	Field('ml_aforado', 'string', notnull = True, label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
-	Field('ml_calibrar', 'string', notnull = True, label = T('Requiere calibración'), requires = IS_IN_SET('Si', 'No')),
-	Field('ml_capacidad', 'string', label = T('Capacidad'), requieres = IS_MATCH('^[0-9]{5},[0-9]{2}$')),
-	Field('ml_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_IN_SET(['m^3','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb'])),
-	Field('ml_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_IN_SET(['m', 'cm'])),
-    Field('ml_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    Field('ml_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    Field('ml_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    Field('ml_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
-    Field('ml_material', 'string', notnull = True, label = T('Material predominante')),
-    Field('ml_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
-    																								'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']))
-	#primarykey = ['ml_nombre', 'ml_espacio']    
-	)
-
-db.material_laboratorio.ml_espacio.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_espacio)s')
-db.material_laboratorio.ml_nombre.requires = IS_IN_DB(db, db.sin_bn.id,'%(sb_nombre)s')
-
 # Nota: Cantidad para consumibles debe tener una longitud de 4 dígitos
-#		Colocar la opción de especificar dede el front para el field "prsentacion" en consumible y en "material" en material_laboratorio
+#		Colocar la opción de especificar dede el front para el field "prsentacion" en sin_bn y en "material" en sin_bn
+# 		Calculo de la cantidad total de unidades que se hace multiplicando el número de unidades por la cantidad 
+#		sb_unidad es obligatorio si se rellena sb_capacidad
