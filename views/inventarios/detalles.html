@@ -1,5 +1,11 @@
 {{extend 'layout.html'}}
 
+  <!-- Estilo del listado de Solicitudes de Servicios -->
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+
 {{block head}}
 <style type="text/css">
 
@@ -109,12 +115,25 @@
 {{end}}
 
 {{block center}}
-
+<li>Nombre: {{=bien['bm_nombre']}} </li>
 <li>N/B: {{=bien['bm_num']}} </li>
 <li>Placa {{=bien['bm_placa']}}</li>
 {{pass}}
-<li>Nombre: {{=bien['bm_nombre']}} </li>
 
+<!-- Inicio Boton Modificar BM -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Modificar Bien</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Boton Agregar Sustancia -->
 
 <div class="wrapper">
 		
