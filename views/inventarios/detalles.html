@@ -1,0 +1,206 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<style type="text/css">
+
+    .wrapper {
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 0;
+    }
+
+    .tab-wrapper {
+    text-align: center;
+    display: block;
+    margin: auto;
+    max-width: 400px;
+    }
+
+    .tabs {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    }
+
+    .tab-link {
+    margin: 0 1%;
+    list-style: none;
+    padding: 10px 20px;
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all ease 0.5s;
+    border-bottom: solid 3px rgba(255, 255, 255, 0);
+    letter-spacing: 1px;
+    }
+
+    .tab-link:hover {
+    color: #999;
+    border-color: #999;
+    }
+
+    .tab-link.active {
+    color: #333;
+    border-color: #333;
+    }
+
+    .tab-link:nth-of-type(1).active {
+    color: #1790D2;
+    border-color: #1790D2
+    }
+
+    .tab-link:nth-of-type(2).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .tab-link:nth-of-type(4).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .tab-link:nth-of-type(5).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .tab-link:nth-of-type(6).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .tab-link:nth-of-type(7).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .tab-link:nth-of-type(3).active {
+    color: #1790D2;
+    border-color: #1790D2;
+    }
+
+    .content-wrapper {
+    padding: 20px 80px;
+    }
+
+    .tab-content {
+    display: none;
+    text-align: left;
+    color:  #464646;
+    font-weight: 200;
+    font-size: 20px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeIn 0.5s ease 1 forwards;
+    }
+
+    .tab-content.active {
+    display: block;
+    }
+
+    @keyframes fadeIn {
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+</style>
+{{end}}
+
+{{block center}}
+
+<li>N/B: {{=bien['bm_num']}} </li>
+<li>Placa {{=bien['bm_placa']}}</li>
+{{pass}}
+<li>Nombre: {{=bien['bm_nombre']}} </li>
+
+
+<div class="wrapper">
+		
+	<div class="tab-wrapper">
+		<ul class="tabs">
+				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
+				<li class="tab-link" data-tab="2">SUDEBID</li>
+                <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                <li class="tab-link" data-tab="4">UBICACIÓN</li>
+                <li class="tab-link" data-tab="5">MANTENIMIENTO</li>
+                <li class="tab-link" data-tab="6">SERVICIOS</li>
+                <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+        
+        
+            </ul>
+	</div>
+
+	<div class="content-wrapper">
+
+		<div id="tab-1" class="tab-content active">
+            <h4>Marca: {{=bien['bm_serial']}} </h4>
+            <h4>Modelo: {{=bien['bm_modelo']}}</h4>
+            <h4>Serial: {{=bien['bm_serial']}} </h4>
+            <h4>Descripción: {{=bien['bm_descripcion']}} </h4>
+            <h4>Marterial predominante: {{=bien['bm_material']}} </h4>
+            <h4>Color:  {{=bien['bm_color']}}</h4>
+            {{if bien['bm_unidad'] != '':}}
+                {{if bien['bm_unidad'] == 'm':}}
+                    <h4>Dimensiones: metros</h4>
+                {{else:}}
+                    <h4>Dimensiones: centímetros</h4>
+                    
+                {{pass}}
+                {{if bien['bm_ancho'] != '':}}
+                    <h4> &emsp;   Ancho: {{=bien['bm_ancho']}} </h4>
+                {{pass}}
+                {{if bien['bm_largo'] != '':}}
+                    <h4>  &emsp;   Largo: {{=bien['bm_largo']}} </h4>
+                {{pass}}
+                {{if bien['bm_alto'] != '':}}
+                    <h4>  &emsp;   Alto: {{=bien['bm_alto']}} </h4>
+                {{pass}}
+                {{if bien['bm_diametro'] != '':}}
+                    <h4>  &emsp;   Diámetro: {{=bien['bm_diametro']}} </h4>
+                {{pass}}
+            {{pass}}
+            <h4>Movilidad:  {{=bien['bm_movilidad']}}</h4>
+            <h4>Uso:  {{=bien['bm_uso']}}
+            </h4>
+                
+        </div>
+
+		<div id="tab-2" class="tab-content">
+                <h4> Localización : {{=bien['bm_localizacion']}} </h4>
+                <h4>Código Localización: {{=bien['bm_codigo_localizacion']}} </h4>
+                <h4>Categoria: {{=bien['bm_categoria']}} </h4>
+        </div>
+
+		<div id="tab-3"class="tab-content">En desarrollo</div>
+        <div id="tab-4"class="tab-content">
+            <h4> Espacio físico : {{=bien['bm_espacio_fisico']}} </h4>
+            <h4> Unidad de Adscripción : {{=bien['bm_unidad_de_adscripcion']}} </h4>
+            <h4> Dependencia : {{=bien['bm_depedencia']}} </h4>
+        </div>
+		<div id="tab-5"class="tab-content">En Desarrollo</div>
+		<div id="tab-6"class="tab-content">En desarrollo</div>
+		<div id="tab-7"class="tab-content">En desarrollo</div>
+
+
+
+	</div>
+	
+</div>
+
+
+
+
+<script type="text/javascript">
+$('.tab-link').click( function() {
+	
+	var tabID = $(this).attr('data-tab');
+	
+	$(this).addClass('active').siblings().removeClass('active');
+	
+	$('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+});
+  
+  </script>
+{{end}}
