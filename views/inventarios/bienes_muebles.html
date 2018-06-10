@@ -104,18 +104,29 @@
 	{{pass}}
 	</div>
 
-
+	<!-- 
+		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
+		sera utilizada en lugar de la variable dependencias 
+	-->
 	<div class="container">
 		<div id="fila1" class="row">
 		</div>
-		<!-- 
-		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
-		sera utilizada en lugar de la variable dependencias 
-		-->
+		{{ title = "Secciones" }}
 		{{ if espacios: }}
+			{{ title = "Espacios Físicos" }}
 			{{dependencias = espacios}}
 		{{pass}}
-		<div class="grid-container">
+		{{ if dep_nombre.find("DIRECCIÓN") == -1: }}
+			{{ if len(dependencias) > 0: }}
+				<button onclick="show_seccion()">
+					{{=title}}
+					<span class="caret"></span>
+				</button>
+				<div class="grid-container" id="secciones" style="display: none">
+			{{ pass }}
+		{{ else: }}
+			<div class="grid-container" id="secciones">
+		{{pass}}
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{ =espacio.nombre }}
@@ -162,9 +173,29 @@
 
 <!-- Datatable init js -->
 <script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
-<script>
+<script type="text/javascript">
 	function redirect(dir){
 		window.location.href = dir;
+	}
+	
+	function show_seccion() {
+		var x = document.getElementById("secciones");
+		if (x.style.display === "none") {
+			x.style.display = "grid";
+			x.style.webkitAnimation = "fadein 2s";
+			x.style.marginTop = "20px";
+		} else {
+			x.style.webkitAnimation = "fadeOut 1s";
+			setTimeout(function () {
+				x.style.display = "none";
+			}, 500);
+		}
+	}
+
+	function hide_seccion(){
+		console.log("alo")
+		var x = document.getElementById("secciones");
+		x.style.display = "none";
 	}
 </script>
 <script>

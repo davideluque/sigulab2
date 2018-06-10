@@ -7,7 +7,7 @@ input[type=date]::-webkit-inner-spin-button {
     display: grid;
     width: 100%;
     margin: 0 auto;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-gap: 20px;
     justify-content: center;
   }
@@ -25,4 +25,14 @@ input[type=date]::-webkit-inner-spin-button {
 	transition-timing-function: linear;
     transition-duration: 0.25s;
     cursor: pointer;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        0% {opacity: 1;}
+        100% {opacity: 0;} 
     }
