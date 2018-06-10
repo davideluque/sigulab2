@@ -496,7 +496,42 @@ def index(): return locals()
 def detalles():
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
-    return dict(bien = bien)
+
+    # Elementos que deben ser mostrados como una lista en el modal
+    # de agregar BM
+    material_pred = []
+    color = []
+    unidad_med = []
+    movilidad = []
+    uso = []
+    nombre_cat = []
+    cod_localizacion = []
+    localizacion = []
+    nombre_espaciof = []
+    unidad_adscripcion = []
+
+    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+    unidad_med = ['cm','m']
+    movilidad = ['Fijo','Portátil']
+    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+    'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+    cod_localizacion = ['150301','240107']
+    localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+    'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+
+    return dict(bien = bien,
+                material_pred = material_pred,
+                color_list = color,
+                unidad_med = unidad_med,
+                movilidad_list = movilidad,
+                uso_list = uso,
+                nombre_cat = nombre_cat,
+                cod_localizacion = cod_localizacion,
+                localizacion = localizacion,
+                )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
