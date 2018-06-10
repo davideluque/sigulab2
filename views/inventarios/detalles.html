@@ -1,262 +1,189 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-
 <style type="text/css">
-    body {
-        color: #566787;
-		background: #f5f5f5;
-		font-family: 'Varela Round', sans-serif;
-		font-size: 13px;
-	}
-	.table-wrapper {
-        background: #fff;
-        padding: 20px 25px;
-        margin: 30px 0;
-		border-radius: 3px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+
+    .wrapper {
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 0;
     }
-	.table-title {        
-		padding-bottom: 15px;
-		background: #435d7d;
-		color: #fff;
-		padding: 16px 30px;
-		margin: -20px -25px 10px;
-		border-radius: 3px 3px 0 0;
+
+    .tab-wrapper {
+    text-align: center;
+    display: block;
+    margin: auto;
+    max-width: 400px;
     }
-    .table-title h2 {
-		margin: 5px 0 0;
-		font-size: 24px;
-	}
-	.table-title .btn-group {
-		float: right;
-	}
-	.table-title .btn {
-		color: #fff;
-		float: right;
-		font-size: 13px;
-		border: none;
-		min-width: 50px;
-		border-radius: 2px;
-		border: none;
-		outline: none !important;
-		margin-left: 10px;
-	}
-	.table-title .btn i {
-		float: left;
-		font-size: 21px;
-		margin-right: 5px;
-	}
-	.table-title .btn span {
-		float: left;
-		margin-top: 2px;
-	}
-    table.table tr th, table.table tr td {
-        border-color: #e9e9e9;
-		padding: 12px 15px;
-		vertical-align: middle;
+
+    .tabs {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
     }
-	table.table tr th:first-child {
-		width: 60px;
-	}
-	table.table tr th:last-child {
-		width: 100px;
-	}
-    table.table-striped tbody tr:nth-of-type(odd) {
-    	background-color: #fcfcfc;
-	}
-	table.table-striped.table-hover tbody tr:hover {
-		background: #f5f5f5;
-	}
-    table.table th i {
-        font-size: 13px;
-        margin: 0 5px;
-        cursor: pointer;
-    }	
-    table.table td:last-child i {
-		opacity: 0.9;
-		font-size: 22px;
-        margin: 0 5px;
+
+    .tab-link {
+    margin: 0 1%;
+    list-style: none;
+    padding: 10px 20px;
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all ease 0.5s;
+    border-bottom: solid 3px rgba(255, 255, 255, 0);
+    letter-spacing: 1px;
     }
-	table.table td a {
-		font-weight: bold;
-		color: #566787;
-		display: inline-block;
-		text-decoration: none;
-		outline: none !important;
-	}
-	table.table td a:hover {
-		color: #2196F3;
-	}
-	table.table td a.edit {
-        color: #FFC107;
+
+    .tab-link:hover {
+    color: #999;
+    border-color: #999;
     }
-    table.table td a.delete {
-        color: #F44336;
+
+    .tab-link.active {
+    color: #333;
+    border-color: #333;
     }
-    table.table td i {
-        font-size: 19px;
+
+    .tab-link:nth-of-type(1).active {
+    color: #1790D2;
+    border-color: #1790D2
     }
-	table.table .avatar {
-		border-radius: 50%;
-		vertical-align: middle;
-		margin-right: 10px;
-	}
-    .pagination {
-        float: right;
-        margin: 0 0 5px;
+
+    .tab-link:nth-of-type(2).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-    .pagination li a {
-        border: none;
-        font-size: 13px;
-        min-width: 30px;
-        min-height: 30px;
-        color: #999;
-        margin: 0 2px;
-        line-height: 30px;
-        border-radius: 2px !important;
-        text-align: center;
-        padding: 0 6px;
+
+    .tab-link:nth-of-type(4).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-    .pagination li a:hover {
-        color: #666;
-    }	
-    .pagination li.active a, .pagination li.active a.page-link {
-        background: #03A9F4;
+
+    .tab-link:nth-of-type(5).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-    .pagination li.active a:hover {        
-        background: #0397d6;
+
+    .tab-link:nth-of-type(6).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-	.pagination li.disabled i {
-        color: #ccc;
+
+    .tab-link:nth-of-type(7).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-    .pagination li i {
-        font-size: 16px;
-        padding-top: 6px
+
+    .tab-link:nth-of-type(3).active {
+    color: #1790D2;
+    border-color: #1790D2;
     }
-    .hint-text {
-        float: left;
-        margin-top: 10px;
-        font-size: 13px;
-    }    
-	/* Custom checkbox */
-	.custom-checkbox {
-		position: relative;
-	}
-	.custom-checkbox input[type="checkbox"] {    
-		opacity: 0;
-		position: absolute;
-		margin: 5px 0 0 3px;
-		z-index: 9;
-	}
-	.custom-checkbox label:before{
-		width: 18px;
-		height: 18px;
-	}
-	.custom-checkbox label:before {
-		content: '';
-		margin-right: 10px;
-		display: inline-block;
-		vertical-align: text-top;
-		background: white;
-		border: 1px solid #bbb;
-		border-radius: 2px;
-		box-sizing: border-box;
-		z-index: 2;
-	}
-	.custom-checkbox input[type="checkbox"]:checked + label:after {
-		content: '';
-		position: absolute;
-		left: 6px;
-		top: 3px;
-		width: 6px;
-		height: 11px;
-		border: solid #000;
-		border-width: 0 3px 3px 0;
-		transform: inherit;
-		z-index: 3;
-		transform: rotateZ(45deg);
-	}
-	.custom-checkbox input[type="checkbox"]:checked + label:before {
-		border-color: #03A9F4;
-		background: #03A9F4;
-	}
-	.custom-checkbox input[type="checkbox"]:checked + label:after {
-		border-color: #fff;
-	}
-	.custom-checkbox input[type="checkbox"]:disabled + label:before {
-		color: #b8b8b8;
-		cursor: auto;
-		box-shadow: none;
-		background: #ddd;
-	}
-	/* Modal styles */
-	.modal .modal-dialog {
-		max-width: 400px;
-	}
-	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
-		padding: 20px 30px;
-	}
-	.modal .modal-content {
-		border-radius: 3px;
-	}
-	.modal .modal-footer {
-		background: #ecf0f1;
-		border-radius: 0 0 3px 3px;
-	}
-    .modal .modal-title {
-        display: inline-block;
+
+    .content-wrapper {
+    padding: 20px 80px;
     }
-	.modal .form-control {
-		border-radius: 2px;
-		box-shadow: none;
-		border-color: #dddddd;
-	}
-	.modal textarea.form-control {
-		resize: vertical;
-	}
-	.modal .btn {
-		border-radius: 2px;
-		min-width: 100px;
-	}	
-	.modal form label {
-		font-weight: normal;
-	}	
+
+    .tab-content {
+    display: none;
+    text-align: left;
+    color:  #464646;
+    font-weight: 200;
+    font-size: 20px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeIn 0.5s ease 1 forwards;
+    }
+
+    .tab-content.active {
+    display: block;
+    }
+
+    @keyframes fadeIn {
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
 </style>
 {{end}}
 
+{{block center}}
 
-<!-- Inicio Boton Agregar Sustancia -->
-<div class="container" id="containerAgregar">
-    <div class="row">
-        <div class="col-sm-6"></div>
-        <div id="columnBotonAgregar" class="col-sm-6">
-	        <div class="col-sm-6"></div>
-	        <div class="col-sm-6">
-	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
-	        </div>
-        </div>
-    </div>
-</div>
+<li>N/B: {{=bien['bm_num']}} </li>
+<li>Placa {{=bien['bm_placa']}}</li>
+{{pass}}
+<li>Nombre: {{=bien['bm_nombre']}} </li>
+
 
 <div class="wrapper">
 		
 	<div class="tab-wrapper">
 		<ul class="tabs">
-				<li class="tab-link active" data-tab="1">HTML</li>
-				<li class="tab-link" data-tab="2">CSS</li>
-				<li class="tab-link" data-tab="3">jQuery</li>
-		</ul>
+				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
+				<li class="tab-link" data-tab="2">SUDEBID</li>
+                <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                <li class="tab-link" data-tab="4">UBICACIÓN</li>
+                <li class="tab-link" data-tab="5">MANTENIMIENTO</li>
+                <li class="tab-link" data-tab="6">SERVICIOS</li>
+                <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+        
+        
+            </ul>
 	</div>
 
 	<div class="content-wrapper">
 
-		<div id="tab-1" class="tab-content active">Hypertext Markup Language (HTML) is the standard markup language for creating web pages and web applications. With Cascading Style Sheets (CSS) and JavaScript, it forms a triad of cornerstone technologies for the World Wide Web. </div>
+		<div id="tab-1" class="tab-content active">
+            <h4>Marca: {{=bien['bm_serial']}} </h4>
+            <h4>Modelo: {{=bien['bm_modelo']}}</h4>
+            <h4>Serial: {{=bien['bm_serial']}} </h4>
+            <h4>Descripción: {{=bien['bm_descripcion']}} </h4>
+            <h4>Marterial predominante: {{=bien['bm_material']}} </h4>
+            <h4>Color:  {{=bien['bm_color']}}</h4>
+            {{if bien['bm_unidad'] != '':}}
+                {{if bien['bm_unidad'] == 'm':}}
+                    <h4>Dimensiones: metros</h4>
+                {{else:}}
+                    <h4>Dimensiones: centímetros</h4>
+                    
+                {{pass}}
+                {{if bien['bm_ancho'] != '':}}
+                    <h4> &emsp;   Ancho: {{=bien['bm_ancho']}} </h4>
+                {{pass}}
+                {{if bien['bm_largo'] != '':}}
+                    <h4>  &emsp;   Largo: {{=bien['bm_largo']}} </h4>
+                {{pass}}
+                {{if bien['bm_alto'] != '':}}
+                    <h4>  &emsp;   Alto: {{=bien['bm_alto']}} </h4>
+                {{pass}}
+                {{if bien['bm_diametro'] != '':}}
+                    <h4>  &emsp;   Diámetro: {{=bien['bm_diametro']}} </h4>
+                {{pass}}
+            {{pass}}
+            <h4>Movilidad:  {{=bien['bm_movilidad']}}</h4>
+            <h4>Uso:  {{=bien['bm_uso']}}
+            </h4>
+                
+        </div>
 
-		<div id="tab-2" class="tab-content">CSS stands for Cascading Style Sheets. CSS describes how HTML elements are to be displayed on screen, paper, or in other media. CSS saves a lot of work. It can control the layout of multiple web pages all at once.</div>
+		<div id="tab-2" class="tab-content">
+                <h4> Localización : {{=bien['bm_localizacion']}} </h4>
+                <h4>Código Localización: {{=bien['bm_codigo_localizacion']}} </h4>
+                <h4>Categoria: {{=bien['bm_categoria']}} </h4>
+        </div>
 
-		<div id="tab-3"class="tab-content">jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers.</div>
+		<div id="tab-3"class="tab-content">En desarrollo</div>
+        <div id="tab-4"class="tab-content">
+            <h4> Espacio físico : {{=bien['bm_espacio_fisico']}} </h4>
+            <h4> Unidad de Adscripción : {{=bien['bm_unidad_de_adscripcion']}} </h4>
+            <h4> Dependencia : {{=bien['bm_depedencia']}} </h4>
+        </div>
+		<div id="tab-5"class="tab-content">En Desarrollo</div>
+		<div id="tab-6"class="tab-content">En desarrollo</div>
+		<div id="tab-7"class="tab-content">En desarrollo</div>
+
+
 
 	</div>
 	
@@ -276,4 +203,4 @@ $('.tab-link').click( function() {
 });
   
   </script>
-  
+{{end}}
