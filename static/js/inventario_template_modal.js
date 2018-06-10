@@ -50,7 +50,7 @@ $(document).ready(function () {
     // next step
 
         
-            // next step
+    // next step
     $('.registration-form .btn-next').on('click', function () {
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
@@ -192,7 +192,7 @@ $(document).ready(function () {
             });
         
            
-           parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"], textarea[name="propositoDescripcion"], input[name="itemServicio"]').each(function () {         
+           parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"], textarea[name="propositoDescripcion"], input[name="itemServicio"], input[type="date"]').each(function () {         
 
             if ($(this).val() == "") {
                 $(this).addClass('input-error');

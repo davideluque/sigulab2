@@ -27,11 +27,11 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla">{{=bm['bm_nombre']}}</td>
+                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                <td class="camposTabla">{{=bm['bm_categoria']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['bm_espacio_fisico']).select().first().nombre}}</td>
             </tr>
           {{pass}}           

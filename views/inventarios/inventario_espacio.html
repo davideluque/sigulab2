@@ -39,6 +39,7 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
@@ -50,9 +51,10 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla">{{=bm['bm_nombre']}}</td>
+                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
                 <td class="camposTabla">{{=bm['bm_marca']}}</td>
                 <td class="camposTabla">{{=bm['bm_modelo']}}</td>
@@ -64,6 +66,7 @@
         <tfoot id="collapseFiltros">
           <th class="camposTabla linksNombres">Nombre</th>
           <th class="camposTabla linksNombres">N° BM</th>
+          <th class="camposTabla linksNombres">Tipo</th>
           <th class="camposTabla linksNombres">Placa</th>
           <th class="camposTabla linksNombres">Marca</th>
           <th class="camposTabla linksNombres">Modelo</th>
@@ -113,14 +116,45 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                <!-- Primer Paso  PArte 1-->
+            <!-- Primer paso-->
+            <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                  <div class="col-sm-1 col1Body"> 
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Características del Bien</h4>                
+                    <label>Campos marcados con * son obligatorios.</label>
+
+                    <div class="form-group">
+                        <label>Seleccione la clasificación del Bien Mueble*</label>
+                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
+                          <option value="">Seleccione una opción</option>
+                          <option value="Equipo">Equipo</option>
+                          <option value="Mobilario">Mobilario</option>
+                        </select>
+                        <div class="field-error"> <p id="error-clasificacion"></p></div>
+                      </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()">Siguiente</button>    
+            </fieldset>
+          
+                
+                <!-- Segundo paso-->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
-                      <span class="step activePass">1</span>
-                      <span class="step">2</span>
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
                       <span class="step">3</span>
+                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -132,7 +166,6 @@
                             <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*"  required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
-
 
                         <div class="form-group">
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)"   required>
@@ -166,18 +199,20 @@
                         
                     </div>
                   </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
                   <button type="button" class="btn btn-next botonForm">Siguiente</button>         
                 </fieldset>
-                <!-- Fin Primer Paso -->
+                <!-- Fin Segundo Paso -->
 
-                <!-- Primer Paso PArte 2-->
+                <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step activePass">2</span>
-                        <span class="step">3</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -212,7 +247,7 @@
                           <label>Dimensiones</label>
 
                           <div class="form-group">
-                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida">
+                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
                               <option value="">Selecione una unidad</option>
                               {{ for med in unidad_med:}}
                               <option value="{{=med}}">{{=med}}</option>
@@ -222,55 +257,54 @@
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                            <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                             <font color="red"><div id="err_ancho" hidden></div></font>
                           </div>
 
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                            <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                             <font color="red"><div id="err_largo" hidden></div></font>
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                            <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                             <font color="red"><div id="err_alto" hidden></div></font>
                           </div>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                            <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                             <font color="red"><div id="err_diametro" hidden></div></font>
                           </div>
-
                           
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
                     <button type="button" class="btn btn-next botonForm">Siguiente</button>       
                   </fieldset>
-                  <!-- Fin Primer Paso -->
+                  <!-- Fin tercer Paso -->
 
 
-                <!-- Primer Paso PArte 2-->
+                <!--Tercer Paso parte 2-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Segundo Paso">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step activePass">2</span>
-                        <span class="step">3</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
   
-
                         <div class="form-group">
-                            <label>Seleccione un tipo de movilidad</label>
+                            <label>Seleccione un tipo de movilidad*</label>
                             <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
                               <option value="">Seleccione un tipo de movilidad</option>
-                              {{ for movilidad in movilidad_list:}}
+                              {{ for movilidad in movilidad_list: }}
                               <option value="{{=movilidad}}">{{=movilidad}}</option>
                               {{pass}}
                             </select>
@@ -285,21 +319,51 @@
                           {{pass}}
                         </div>
 
+                        <div class="form-group" id="calibrar">
+                          <label>Seleccione si el equipo ha sido calibrado*</label>
+                          <select class="form-control" id="select-calibrar" type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                          </select>
+                          <div class="field-error"> <p id="error-calibrar"> </p> </div>
+                        </div>
+  
+                        <div class="form-group" id="fecha_calibracion">
+                          <label>Seleccione la fecha de la última calibración del equipo*</label>
+                          <input type="date" class="form-control" name="fecha_calibracion">
+                          <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
+                        </div>
+  
+                        <div class="form-group">
+                          <label>Seleccione el estado del bien mueble*</label>
+                          <select class="form-control" type="select" id="estatus" name="estatus" placeholder="Estatus del equipo" required>
+                            <option value="">Seleccione una opción</option>
+                            {{ form_estatus = ['Operativo','Inoperativo','En desuso','Inservible'] }}
+                            {{ for estatus in form_estatus: }}
+                            <option value="{{=estatus}}">{{=estatus}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="field-error"> <p id="error-estatus"> </p> </div>
+                        </div>
+
                         </div>
                       </div>
+
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
                     <button type="button" class="btn btn-next botonForm">Siguiente</button>       
                   </fieldset>
-                  <!-- Fin Primer Paso  parte 3-->
+                  <!-- Fin tercer paso-->
 
-                <!-- Comienzo Segundo Paso-->
+                <!-- Comienzo Cuarto Paso Parte 1-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body">
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -340,7 +404,7 @@
                         <div class="form-group">
                             <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategorias</label>
                             <label class="form-group" id="numRegistro2" style="margin-bottom: 0px" ></label>
-                            <select class="form-control" type="select" value="" id="Subcategorias"  name="Subcategorias" required>
+                            <select class="form-control" type="select" value="" id="Subcategorias"  name="subcategoria" required>
                               <option value="">Seleccione una subcategorias</option>
                               <option value="" id="Opcion1" hidden></option>
                               <option value="" id="Opcion2" hidden ></option>
@@ -359,7 +423,7 @@
                     </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
                     <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                </fieldset>
-                <!-- Fin Segundo Paso -->
+                <!-- Fin Cuarto Paso -->
               </form>
           </div>
         </div>               
@@ -375,10 +439,48 @@ del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
 
-  // Borrar informacion al cerrar el modal
-  $('.modal').on('hidden.bs.modal', function(){
-      $(this).find('form')[0].reset();
-  });
+  // Funcion para mostrar campos dependendiendo de la categoria
+  function elegir_campos(){
+    var selecion = document.getElementById("clasificacion");
+    if (selecion.value == "Mobilario"){
+      document.getElementById("marca").type = 'hidden';
+      document.getElementById("modelo").type = 'hidden';
+      document.getElementById("serial").type = 'hidden';
+      document.getElementById("estatus").type = 'hidden';
+      document.getElementById("calibrar").style.display = 'none';
+    }
+    else{;
+      document.getElementById("select-calibrar").setAttribute("required", "");
+    }
+    document.getElementById("fecha_calibracion").style.display = 'none';
+  }
+
+  // Mostrar fecha de calibracion
+  function display_date(value){
+    if ( value == "Si" ){
+      document.getElementById("fecha_calibracion").style.display = 'block';
+      document.getElementById("fecha_calibracion").setAttribute("required", "");
+    }else{
+      document.getElementById("fecha_calibracion").style.display = 'none';
+    }
+  }
+
+  // Mostrar unidades
+  function display_units(value){
+    if ( value == '' ){
+      document.getElementById("unidad").type = 'hidden';
+      document.getElementById("ancho").type = 'hidden';
+      document.getElementById("largo").type = 'hidden';
+      document.getElementById("alto").type = 'hidden';
+      document.getElementById("diametro").type = 'hidden';
+    }else{
+      document.getElementById("unidad").type = 'text';
+      document.getElementById("ancho").type = 'text';
+      document.getElementById("largo").type = 'text';
+      document.getElementById("alto").type = 'text';
+      document.getElementById("diametro").type = 'text';
+    }
+  }
 
   // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
@@ -386,6 +488,7 @@ del concepto y tipo de ingreso o egreso -->
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
     var error_uso_interno = document.getElementById("error-uso-interno");
+    var fecha_calibracion = document.getElementById("fecha_calibracion")
 
     // Limpiando los mensajes anteriores de validadores
     if (error_total.innerText != ''){
@@ -471,7 +574,7 @@ del concepto y tipo de ingreso o egreso -->
 
   function colocar_subcategoria(value){
     var dict = {
-		'Maquinaria Construccion':
+		'Maquinaria Construcción':
 			["Maquinaria y equipos de construcción y mantenimiento",
 			"Maquinarias y equipos para mantenimiento de automotores",
 			"Maquinarias y equipos agrícolas y pecuarios",
@@ -495,10 +598,10 @@ del concepto y tipo de ingreso o egreso -->
 			"Equipos de control de tráfico aéreo",
 			"Equipos de correo",
 			"Otros equipos de comunicaciones y de señalamiento"],
-		"Equipos Medico":
+		"Equipo Médico":
 			["Equipos médicos - quirúrgicos, dentales y veterinarios",
 			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-		"Equipo Cientifico Religioso":
+		"Equipo Científico Religioso":
 			["Equipos científicos y de laboratorio",
 			"Equipos de enseñanza, deporte y recreación",
 			"Obras de arte",

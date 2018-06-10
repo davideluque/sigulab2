@@ -17,7 +17,8 @@
  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
+	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">	   
  	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -105,42 +106,37 @@
 	{{pass}}
 	</div>
 
+	<!-- 
+		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
+		sera utilizada en lugar de la variable dependencias 
+	-->
 	<div class="container">
 		<div id="fila1" class="row">
 		</div>
-		<!-- 
-		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
-		sera utilizada en lugar de la variable dependencias 
-		-->
+		{{ title = "Secciones" }}
 		{{ if espacios: }}
+			{{ title = "Espacios Físicos" }}
 			{{dependencias = espacios}}
 		{{pass}}
-		{{ n = len(dependencias) }}
-		{{ filas = n//4 if n%4 == 0 else n//4+1 }}
-		{{ k = 0 }}
-		{{ while k < filas:}}
-			<div id="fila2" class="row">
-				<div class="col-xs-3 col-sm-1"></div>
-				<div class="col-xs-6 col-sm-10">
-					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-					<div class="col-sm-3 columnas">
-						<a href="{{=URL('bienes_muebles',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
-					</div>
-					{{ for i in range(1,4): }}
-						{{ if 4*k+i < n: }}
-							<div class="col-sm-3 columnas">
-								<a href="{{=URL('bienes_muebles',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-									{{=dependencias[4*k+i].nombre}}
-								</a>
-							</div>
-						{{ pass }}
-					{{ pass }}
-				</div>
-				<div class="col-xs-3 col-sm-1"></div>
-			</div>
-			{{k=k+1}}
+		{{ if dep_nombre.find("DIRECCIÓN") == -1: }}
+			{{ if len(dependencias) > 0: }}
+				<button onclick="show_seccion()">
+					{{=title}}
+					<span class="caret"></span>
+				</button>
+				<div class="grid-container" id="secciones" style="display: none">
+			{{ pass }}
+		{{ else: }}
+			<div class="grid-container" id="secciones">
 		{{pass}}
+			{{ for espacio in dependencias: }}
+			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+				{{ =espacio.nombre }}
+			</div>
+			{{ pass }}
+		</div>
 	</div>
+	
 
 <!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
 
@@ -179,6 +175,31 @@
 
 <!-- Datatable init js -->
 <script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script type="text/javascript">
+	function redirect(dir){
+		window.location.href = dir;
+	}
+	
+	function show_seccion() {
+		var x = document.getElementById("secciones");
+		if (x.style.display === "none") {
+			x.style.display = "grid";
+			x.style.webkitAnimation = "fadein 2s";
+			x.style.marginTop = "20px";
+		} else {
+			x.style.webkitAnimation = "fadeOut 1s";
+			setTimeout(function () {
+				x.style.display = "none";
+			}, 500);
+		}
+	}
+
+	function hide_seccion(){
+		console.log("alo")
+		var x = document.getElementById("secciones");
+		x.style.display = "none";
+	}
+</script>
 <script>
 
   var filtros = false;
@@ -195,7 +216,6 @@
    
       // Apply the search
       table.columns().every( function () {
-		  console.log("soy marico")
           var that = this;
    
           $( 'input', this.footer() ).on( 'keyup change', function () {
