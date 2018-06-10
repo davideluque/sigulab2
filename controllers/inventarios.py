@@ -141,9 +141,10 @@ def __get_inventario_dep(dep_id):
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
 def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
-                descripcion, material, color, unidad_med, ancho, largo,
-                alto, diametro, movilidad, uso, nombre_cat, cod_loc, localizacion, espacio,
-                unidad_ad, dependencia, user):
+                descripcion, material, color, calibrar, fecha_calibracion,
+                unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
+                estatus, nombre_cat, subcategoria, cod_loc, localizacion, espacio, unidad_ad, 
+                dependencia, user, clasificacion):
 
     # Si ya existe el BM en el inventario
     if (db(db.bien_mueble.bm_num == no_bien).select()):
@@ -163,21 +164,26 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             bm_serial = serial,
             bm_descripcion = descripcion, 
             bm_material = material, 
-            bm_color = color, 
+            bm_color = color,
+            bm_calibrar =  calibrar,
+            bm_fecha_calibracion = fecha_calibracion,
             bm_unidad = unidad_med, 
             bm_ancho = ancho, 
             bm_largo = largo,
             bm_alto = alto, 
             bm_diametro = diametro, 
             bm_movilidad = movilidad, 
-            bm_uso = uso, 
-            bm_categoria = nombre_cat, 
+            bm_uso = uso,
+            bm_estatus = estatus, 
+            bm_categoria = nombre_cat,
+            bm_subcategoria = subcategoria, 
             bm_codigo_localizacion = cod_loc,
             bm_localizacion = localizacion, 
             bm_espacio_fisico = espacio,
             bm_unidad_de_adscripcion = unidad_ad, 
             bm_depedencia = dependencia, 
-            bm_crea_ficha = user    
+            bm_crea_ficha = user,
+            bm_clasificacion = clasificacion
         )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -498,47 +504,6 @@ def bienes_muebles():
     dep_nombre = ""
     dep_padre_id = ""
     dep_padre_nombre = ""
-    categorias = {
-		"Maquinaria y demás equipos de construcción, campo, industria y taller":
-			["Maquinaria y equipos de construcción y mantenimiento",
-			"Maquinarias y equipos para mantenimiento de automotores",
-			"Maquinarias y equipos agrícolas y pecuarios",
-			"Maquinarias y equipos de artes gráficas y reproducción",
-			"Maquinarias y equipos industriales y de taller",
-			"Maquinarias y equipos de energía",
-			"Maquinarias y equipos de riego y acueductos",
-			"Equipos de almacen",
-			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-		"Equipos de transporte, tracción y elevación":
-			["Vehículos automotores terrestres",
-			"Equipos ferroviarios y de cables aéreos",
-			"Equipos marítimos de transporte",
-			"Equipos aéreos de transporte",
-			"Vehículos de tracción no motorizados",
-			"Equipos auxiliares de transporte",
-			"Otros equipos de transporte, tracción y elevación"],
-		"Equipos de comunicaciones y de señalamiento":
-			["Equipos de telecomunicaciones",
-			"Equipos de señalamiento",
-			"Equipos de control de tráfico aéreo",
-			"Equipos de correo",
-			"Otros equipos de comunicaciones y de señalamiento"],
-		"Equipos médicos - quirúrgicos, dentales y veterinarios":
-			["Equipos médicos - quirúrgicos, dentales y veterinarios",
-			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-		"Equipos científicos, religiosos, de enseñanza y recreación":
-			["Equipos científicos y de laboratorio",
-			"Equipos de enseñanza, deporte y recreación",
-			"Obras de arte",
-			"Libros y revistas",
-			"Equipos religiosos",
-			"Instrumentos musicales",
-			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
-		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
-			["Mobiliario y equipos de oficina",
-			"Equipos de procesamiento de datos",
-			"Mobiliario y equipos de alojamiento",
-			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]}
 
     # Lista de BM en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
@@ -603,20 +568,23 @@ def bienes_muebles():
                 dep_padre_id = espacio.dependencia
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
+                # Guardando la unidad de adscripcion
+                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().unidad_de_adscripcion
 
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
+                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
                 'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -627,10 +595,11 @@ def bienes_muebles():
                         request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
                         request.vars.marca, request.vars.modelo, request.vars.serial,
                         request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
-                        dep_padre_id, user_id)
+                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
+                        request.vars.ancho, request.vars.largo, request.vars.alto,
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
+                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                        dep_padre_id, user_id, request.vars.clasificacion)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -689,45 +658,47 @@ def bienes_muebles():
                 redirect(URL('bienes_muebles'))
 
 
-            espacio_id = request.vars.dependencia
-            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
-                           ).select().first().nombre
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.nombre
 
-            # Guardando el ID y nombre de la dependencia a la que pertenece el 
-            # espacio fisico visitado
-            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                             ).select().first().dependencia
-            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                 ).select().first().nombre
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = espacio.dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+                # Guardando la unidad de adscripcion
+                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().unidad_de_adscripcion
 
-            espacio_visitado = True
-            
-            # Busca el inventario del espacio
-            inventario = __get_inventario_espacio(espacio_id)
+                espacio_visitado = True
 
-            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
-            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-            unidad_med = ['cm','m']
-            movilidad = ['Fijo','Portátil']
-            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-            nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
-            'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
-            cod_localizacion = ['150301','240107']
-            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+                # Busca el inventario del espacio
+                inventario = __get_inventario_espacio(espacio_id)
 
-            # Si se esta agregando un nuevo BM, se registra en la DB
-            if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                __agregar_bm(
-                    request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                    request.vars.marca, request.vars.modelo, request.vars.serial,
-                    request.vars.descripcion, request.vars.material, request.vars.color,
-                    request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
-                    request.vars.diametro, request.vars.movilidad, request.vars.tipo-uso, 
-                    request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
-                    dep_padre_id, user_id)
+                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+                unidad_med = ['cm','m']
+                movilidad = ['Fijo','Portátil']
+                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                cod_localizacion = ['150301','240107']
+                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+
+                # Si se esta agregando un nuevo BM, se registra en la DB
+                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_bm(
+                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                        request.vars.marca, request.vars.modelo, request.vars.serial,
+                        request.vars.descripcion, request.vars.material, request.vars.color,
+                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
+                        request.vars.ancho, request.vars.largo, request.vars.alto,
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
+                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                        dep_padre_id, user_id, request.vars.clasificacion)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -792,24 +763,26 @@ def bienes_muebles():
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
-                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                                    ).select().first().dependencia
+                dep_padre_id = espacio.dependencia
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
+                # Guardando la unidad de adscripcion
+                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().unidad_de_adscripcion
 
                 espacio_visitado = True
 
-                # Se muestra la lista de sustancias que tiene en inventario
+                # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']
+                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
                 'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construccion', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -820,10 +793,11 @@ def bienes_muebles():
                         request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
                         request.vars.marca, request.vars.modelo, request.vars.serial,
                         request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.unidad, request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, 
-                        request.vars.nombre_cat, request.vars.cod_loc, request.vars.localizacion, espacio, 1, 
-                        dep_padre_id, user_id)
+                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
+                        request.vars.ancho, request.vars.largo, request.vars.alto,
+                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
+                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                        dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -887,7 +861,6 @@ def bienes_muebles():
                 nombre_cat = nombre_cat,
                 cod_localizacion = cod_localizacion,
                 localizacion = localizacion,
-                categorias = categorias
                 ) 
 
 
