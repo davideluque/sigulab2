@@ -494,9 +494,8 @@ def index(): return locals()
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles():
-    print(request.env)
-    bien = db(db.bien_mueble.bm_num == '777777').select()[0]
-    print(bien)
+    bm = request.vars['bm']
+    bien = db(db.bien_mueble.bm_num == bm).select()[0]
     return dict(bien = bien)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
