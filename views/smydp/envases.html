@@ -79,6 +79,21 @@
     <div class="container">
         {{=table}}
     </div>
+    <script>
+        let tabla_envases = document.querySelector("table");
+
+        tabla_envases.border = "1";
+
+        let celdas_tabla_envases = document.querySelectorAll("td");
+        
+        for (let index = 0; index < celdas_tabla_envases.length; index++) {
+            celdas_tabla_envases[index].style.paddingLeft = "5px";            
+        }
+
+        let table_head = document.querySelector("thead>tr");
+        
+        table_head.children[0].style.margin = "10px !important";
+    </script>
 {{pass}}
 
 {{if ('view' in request.args):}}
@@ -106,6 +121,8 @@
     let campo_descripcion = document.getElementById("t_envases_descripcion").placeholder = "Si marcó otro en alguna opción, especifique características en este campo.";
 
     let campo_mezcla = document.getElementById("t_envases_composicion").placeholder = "Mezcla de X + Y";
+
+    
 
 </script>
 {{pass}}
@@ -173,6 +190,7 @@
         
         let children = row_buttons[index].getElementsByClassName("button btn btn-default");
         children[0].innerText = "Ver";
+        children[0].style.margin = "5px";
         children[0].className += " btn btn-primary";
         children[1].style.display = "none";
         children[2].style.display = "none";
