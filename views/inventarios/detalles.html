@@ -146,7 +146,7 @@
 <li>Nombre: {{=bien['bm_nombre']}} </li>
 <li>N/B: {{=bien['bm_num']}} </li>
 <li>Placa {{=bien['bm_placa']}}</li>
-{{pass}}
+
 
 <!-- Inicio Boton Modificar BM -->
 <div class="container" id="containerAgregar">
@@ -625,221 +625,215 @@
 
 
 <script type="text/javascript">
-$('.tab-link').click( function() {
-	
-	var tabID = $(this).attr('data-tab');
-	
-	$(this).addClass('active').siblings().removeClass('active');
-	
-	$('#tab-'+tabID).addClass('active').siblings().removeClass('active');
 
     // Funcion para mostrar campos dependendiendo de la categoria
-  function elegir_campos(){
-    var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Mobiliario"){
-      document.getElementById("marca").type = 'hidden';
-      document.getElementById("modelo").type = 'hidden';
-      document.getElementById("serial").type = 'hidden';
-      document.getElementById("estatus").type = 'hidden';
-      document.getElementById("calibrar").style.display = 'none';
-    }
-    else{
-      document.getElementById("select-calibrar").setAttribute("required", "");
-      document.getElementById("marca").type = 'text';
-      document.getElementById("modelo").type = 'text';
-      document.getElementById("serial").type = 'text';
-      document.getElementById("estatus").type = 'text';
-      document.getElementById("calibrar").style.display = 'block';
-    }
-    document.getElementById("fecha_calibracion").style.display = 'none';
-  }
-
-  // Mostrar fecha de calibracion
-  function display_date(value){
-    if ( value == "Si" ){
-      document.getElementById("fecha_calibracion").style.display = 'block';
-      document.getElementById("fecha_calibracion").setAttribute("required", "");
-    }else{
+    function elegir_campos(){
+      var selecion = document.getElementById("clasificacion");
+      if (selecion.value == "Mobiliario"){
+        document.getElementById("marca").type = 'hidden';
+        document.getElementById("modelo").type = 'hidden';
+        document.getElementById("serial").type = 'hidden';
+        document.getElementById("estatus").type = 'hidden';
+        document.getElementById("calibrar").style.display = 'none';
+      }
+      else{
+        document.getElementById("select-calibrar").setAttribute("required", "");
+        document.getElementById("marca").type = 'text';
+        document.getElementById("modelo").type = 'text';
+        document.getElementById("serial").type = 'text';
+        document.getElementById("estatus").type = 'text';
+        document.getElementById("calibrar").style.display = 'block';
+      }
       document.getElementById("fecha_calibracion").style.display = 'none';
     }
-  }
-
-  // Mostrar unidades
-  function display_units(value){
-    if ( value == '' ){
-      document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho").type = 'hidden';
-      document.getElementById("largo").type = 'hidden';
-      document.getElementById("alto").type = 'hidden';
-      document.getElementById("diametro").type = 'hidden';
-    }else{
-      document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho").type = 'text';
-      document.getElementById("largo").type = 'text';
-      document.getElementById("alto").type = 'text';
-      document.getElementById("diametro").type = 'text';
+  
+    // Mostrar fecha de calibracion
+    function display_date(value){
+      if ( value == "Si" ){
+        document.getElementById("fecha_calibracion").style.display = 'block';
+        document.getElementById("fecha_calibracion").setAttribute("required", "");
+      }else{
+        document.getElementById("fecha_calibracion").style.display = 'none';
+      }
     }
-  }
-
-  // Valida los campos de la forma en el modal "addbm"
-  function validar_campos(){
-
-    // Buscando divs para ingresar mensajes de error
-    var error_total = document.getElementById("error-total");
-    var error_uso_interno = document.getElementById("error-uso-interno");
-    var fecha_calibracion = document.getElementById("fecha_calibracion")
-
-    // Limpiando los mensajes anteriores de validadores
-    if (error_total.innerText != ''){
-      error_total.innerText = '';
+  
+    // Mostrar unidades
+    function display_units(value){
+      if ( value == '' ){
+        document.getElementById("unidad").type = 'hidden';
+        document.getElementById("ancho").type = 'hidden';
+        document.getElementById("largo").type = 'hidden';
+        document.getElementById("alto").type = 'hidden';
+        document.getElementById("diametro").type = 'hidden';
+      }else{
+        document.getElementById("unidad").type = 'text';
+        document.getElementById("ancho").type = 'text';
+        document.getElementById("largo").type = 'text';
+        document.getElementById("alto").type = 'text';
+        document.getElementById("diametro").type = 'text';
+      }
     }
-    if (error_uso_interno.innerText != ''){
-      error_uso_interno.innerText = '';
+  
+    // Valida los campos de la forma en el modal "addbm"
+    function validar_campos(){
+  
+      // Buscando divs para ingresar mensajes de error
+      var error_total = document.getElementById("error-total");
+      var error_uso_interno = document.getElementById("error-uso-interno");
+      var fecha_calibracion = document.getElementById("fecha_calibracion")
+  
+      // Limpiando los mensajes anteriores de validadores
+      if (error_total.innerText != ''){
+        error_total.innerText = '';
+      }
+      if (error_uso_interno.innerText != ''){
+        error_uso_interno.innerText = '';
+      }
+       
+      // Buscando los valores ingresados por el usuario en cada campo
+      var total = document.forms['formularioCarga']['total'].value;
+      var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+  
+      // Mensajes de error
+      var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+      var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+      var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+      var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+  
+      /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+      if (!is_number(total)) {
+        error_total.innerText = mensaje_error_tipo;
+        return false;
+      }
+      
+      if (is_negative(total)) {
+        error_total.innerText = mensaje_error_negativo;
+        return false;
+      }
+  
+      if (is_zero(total)) {
+        error_total.innerText = mensaje_error_nulo;
+        return false;
+      }
+  
+      /* Validando el campo uso_interno */
+      if (!is_number(uso_interno)) {
+        error_uso_interno.innerText = mensaje_error_tipo;
+        return false;
+      }
+      
+      if (is_negative(uso_interno)) {
+        error_uso_interno.innerText = mensaje_error_negativo;
+        return false;
+      }
+      // La cantidad de sustancia para uso interno no puede ser mayor al total
+      if (uso_interno > total) {
+        error_uso_interno.innerText = mensaje_error_uso_interno;
+        return false;
+      }
+  
     }
-     
-    // Buscando los valores ingresados por el usuario en cada campo
-    var total = document.forms['formularioCarga']['total'].value;
-    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
-
-    // Mensajes de error
-    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
-    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
-    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
-    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
-
-    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
-    if (!is_number(total)) {
-      error_total.innerText = mensaje_error_tipo;
-      return false;
+  
+    // True si "n" es un numero
+    function is_number(n){
+      return !isNaN(n);
     }
-    
-    if (is_negative(total)) {
-      error_total.innerText = mensaje_error_negativo;
-      return false;
+  
+    // True si "n" es negativo
+    function is_negative(n){
+      return (n < 0)
     }
-
-    if (is_zero(total)) {
-      error_total.innerText = mensaje_error_nulo;
-      return false;
+  
+    // True si "n" es cero
+    function is_zero(n){
+      return (n == 0)
     }
-
-    /* Validando el campo uso_interno */
-    if (!is_number(uso_interno)) {
-      error_uso_interno.innerText = mensaje_error_tipo;
-      return false;
+  
+    function placeholder_localizacion(value){
+      var x = document.getElementById("cod_loc");
+      var y = document.getElementById("localizacion");
+  
+  
+      if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+        x.placeholder = '150301';
+        x.value = '150301';
+      }else{;
+        x.placeholder ='240107';
+        x.value = '240107';
+  
+      }
     }
-    
-    if (is_negative(uso_interno)) {
-      error_uso_interno.innerText = mensaje_error_negativo;
-      return false;
-    }
-    // La cantidad de sustancia para uso interno no puede ser mayor al total
-    if (uso_interno > total) {
-      error_uso_interno.innerText = mensaje_error_uso_interno;
-      return false;
-    }
-
-  }
-
-  // True si "n" es un numero
-  function is_number(n){
-    return !isNaN(n);
-  }
-
-  // True si "n" es negativo
-  function is_negative(n){
-    return (n < 0)
-  }
-
-  // True si "n" es cero
-  function is_zero(n){
-    return (n == 0)
-  }
-
-  function placeholder_localizacion(value){
-    var x = document.getElementById("cod_loc");
-    var y = document.getElementById("localizacion");
-
-
-    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
-      x.placeholder = '150301';
-      x.value = '150301';
-    }else{;
-      x.placeholder ='240107';
-      x.value = '240107';
-
-    }
-  }
-
-  function colocar_subcategoria(value){
-    var dict = {
-        'Maquinaria Construcción':
-            ["Maquinaria y equipos de construcción y mantenimiento",
-            "Maquinarias y equipos para mantenimiento de automotores",
-            "Maquinarias y equipos agrícolas y pecuarios",
-            "Maquinarias y equipos de artes gráficas y reproducción",
-            "Maquinarias y equipos industriales y de taller",
-            "Maquinarias y equipos de energía",
-            "Maquinarias y equipos de riego y acueductos",
-            "Equipos de almacen",
-            "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-        "Equipo Transporte":
-            ["Vehículos automotores terrestres",
-            "Equipos ferroviarios y de cables aéreos",
-            "Equipos marítimos de transporte",
-            "Equipos aéreos de transporte",
-            "Vehículos de tracción no motorizados",
-            "Equipos auxiliares de transporte",
-            "Otros equipos de transporte, tracción y elevación"],
-        "Equipo Comunicaciones":
-            ["Equipos de telecomunicaciones",
-            "Equipos de señalamiento",
-            "Equipos de control de tráfico aéreo",
-            "Equipos de correo",
-            "Otros equipos de comunicaciones y de señalamiento"],
-        "Equipo Médico":
-            ["Equipos médicos - quirúrgicos, dentales y veterinarios",
-            "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-        "Equipo Científico Religioso":
-            ["Equipos científicos y de laboratorio",
-            "Equipos de enseñanza, deporte y recreación",
-            "Obras de arte",
-            "Libros y revistas",
-            "Equipos religiosos",
-            "Instrumentos musicales",
-            "Otros equipos científicos, religiosos, de enseñanza y recreación"],
-        "Equipo Oficina" : 
-            ["Mobiliario y equipos de oficina",
-            "Equipos de procesamiento de datos",
-            "Mobiliario y equipos de alojamiento",
-            "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
-  var n = 1;
-  var x;
-  var y = document.getElementById("numRegistro2");
-
-  if (value != ""){
-    for (var i in dict[value]){
-      x = document.getElementById("Opcion".concat(n.toString()));
-      x.innerText = dict[value][i];
-      x.style.display= "block";
-      $('#Opcion'.concat(n.toString())).html(dict[value][i]);
-      $('#Opcion'.concat(n.toString())).show();
-      x.value = dict[value][i];
-      n = n + 1;  
-    }
-    while (n <= 9){
-      x = document.getElementById("Opcion".concat(n.toString()));
-      //x.innerText = "";
-      //x.style.display = "none";
-      $('#Opcion'.concat(n.toString())).hide();
-      $('#Opcion'.concat(n.toString())).html("");
-      x.value = "";
-      n = n +1;
+  
+    function colocar_subcategoria(value){
+      var dict = {
+          'Maquinaria Construcción':
+              ["Maquinaria y equipos de construcción y mantenimiento",
+              "Maquinarias y equipos para mantenimiento de automotores",
+              "Maquinarias y equipos agrícolas y pecuarios",
+              "Maquinarias y equipos de artes gráficas y reproducción",
+              "Maquinarias y equipos industriales y de taller",
+              "Maquinarias y equipos de energía",
+              "Maquinarias y equipos de riego y acueductos",
+              "Equipos de almacen",
+              "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+          "Equipo Transporte":
+              ["Vehículos automotores terrestres",
+              "Equipos ferroviarios y de cables aéreos",
+              "Equipos marítimos de transporte",
+              "Equipos aéreos de transporte",
+              "Vehículos de tracción no motorizados",
+              "Equipos auxiliares de transporte",
+              "Otros equipos de transporte, tracción y elevación"],
+          "Equipo Comunicaciones":
+              ["Equipos de telecomunicaciones",
+              "Equipos de señalamiento",
+              "Equipos de control de tráfico aéreo",
+              "Equipos de correo",
+              "Otros equipos de comunicaciones y de señalamiento"],
+          "Equipo Médico":
+              ["Equipos médicos - quirúrgicos, dentales y veterinarios",
+              "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+          "Equipo Científico Religioso":
+              ["Equipos científicos y de laboratorio",
+              "Equipos de enseñanza, deporte y recreación",
+              "Obras de arte",
+              "Libros y revistas",
+              "Equipos religiosos",
+              "Instrumentos musicales",
+              "Otros equipos científicos, religiosos, de enseñanza y recreación"],
+          "Equipo Oficina" : 
+              ["Mobiliario y equipos de oficina",
+              "Equipos de procesamiento de datos",
+              "Mobiliario y equipos de alojamiento",
+              "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+    var n = 1;
+    var x;
+    var y = document.getElementById("numRegistro2");
+  
+    if (value != ""){
+      for (var i in dict[value]){
+        x = document.getElementById("Opcion".concat(n.toString()));
+        x.innerText = dict[value][i];
+        x.style.display= "block";
+        $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+        $('#Opcion'.concat(n.toString())).show();
+        x.value = dict[value][i];
+        n = n + 1;  
+      }
+      while (n <= 9){
+        x = document.getElementById("Opcion".concat(n.toString()));
+        //x.innerText = "";
+        //x.style.display = "none";
+        $('#Opcion'.concat(n.toString())).hide();
+        $('#Opcion'.concat(n.toString())).html("");
+        x.value = "";
+        n = n +1;
+        
+      }
       
     }
-    
   }
-}
+  
   
   </script>
-{{end}}
+  {{end}}
