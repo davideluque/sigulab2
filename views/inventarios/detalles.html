@@ -209,8 +209,8 @@
                 {{pass}}
             {{pass}}
             <h4>Movilidad:  {{=bien['bm_movilidad']}}</h4>
-            <h4>Uso:  {{=bien['bm_uso']}}
-            </h4>
+            <h4>Uso:  {{=bien['bm_uso']}}</h4>
+            <h4>Calibrado:  {{=bien['bm_calibrar']}}</h4>
                 
         </div>
 
@@ -338,7 +338,6 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
-                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -350,7 +349,11 @@
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
-                                <option value="{{=material}}">{{=material}}</option>
+                                    {{if bien['bm_material']==material:}}
+                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
+                                    {{else:}}
+                                        <option value="{{=material}}">{{=material}}</option>
+                                    {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
@@ -361,7 +364,12 @@
                               <select class="form-control" type="select" value={{=bien['bm_color']}} id="color" name="color" placeholder="Color" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
-                                <option value="{{=color}}">{{=color}}</option>
+                                    {{if bien['bm_color']==color:}}
+                                        <option value="{{=color}}" selected="selected">{{=color}}</option>
+                                    {{else:}}
+                                        <option value="{{=color}}">{{=color}}</option>
+                                    {{pass}}
+                                
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
@@ -370,23 +378,16 @@
                           <label>Dimensiones</label>
 
                           <div class="form-group">
-                            {{if bien['bm_unidad']=="":}}
                                 <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
                                 <option value="">Selecione una unidad</option>
                                 {{ for med in unidad_med:}}
-                                <option value="{{=med}}">{{=med}}</option>
+                                    {{if bien['bm_unidad']==med:}}
+                                        <option value="{{=med}}" selected="selected">{{=med}}</option>
+                                    {{else:}}
+                                        <option value="{{=med}}">{{=med}}</option>
+                                    {{pass}}
                                 {{pass}}
                                 </select>
-                            {{else:}}
-                                <select class="form-control" value="" value={{=bien['bm_unidad']}} type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                                <option value="">Selecione una unidad</option>
-                                {{ for med in unidad_med:}}
-                                <option value="{{=med}}">{{=med}}</option>
-                                {{pass}}
-                                </select>
-                            {{pass}}
-
-                            
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
 
@@ -457,7 +458,11 @@
                             <select class="form-control" type="select" id="movilidad" value={{=bien['bm_movilidad']}} name="movilidad" placeholder="Movilidad" required>
                               <option value="">Seleccione un tipo de movilidad</option>
                               {{ for movilidad in movilidad_list: }}
-                              <option value="{{=movilidad}}">{{=movilidad}}</option>
+                                {{if bien['bm_movilidad']==movilidad:}}
+                                    <option value="{{=movilidad}}" selected="selected">{{=movilidad}}</option>
+                                {{else:}}
+                                    <option value="{{=movilidad}}">{{=movilidad}}</option>
+                                {{pass}}
                               {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-movilidad"> </p> </div>
@@ -465,18 +470,32 @@
 
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
-                          {{ for uso in uso_list: }}
-                          <input type="checkbox" name="tipo_uso" value={{=bien['bm_uso']}} >{{=uso}}
+                        {{ for uso in uso_list: }}
+                            {{if uso in bien['bm_uso']:}}
+                                <input type="checkbox" name="tipo_uso" checked>{{=uso}}
+                            {{else:}}
+                                <input type="checkbox" name="tipo_uso">{{=uso}}
+                            {{pass}} 
                           <br>
-                          {{pass}}
+                        {{pass}}
                         </div>
 
                         <div class="form-group" id="calibrar">
                           <label>Seleccione si el equipo ha sido calibrado*</label>
                           <select class="form-control" id="select-calibrar" value={{=bien['bm_calibrar']}} type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
                             <option value="">Seleccione una opción</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
+                                {{if bien['bm_calibrar']=="Si":}}
+                                    <option value="Si" selected="selected">Si</option>
+                                {{else:}}
+                                    <option value="Si">Si</option>
+                                {{pass}}
+                            
+                                {{if bien['bm_calibrar']=="No":}}
+                                    <option value="No" selected="selected">No</option>
+                                {{else:}}
+                                    <option value="No">No</option>
+                                {{pass}}
+                            
                           </select>
                           <div class="field-error"> <p id="error-calibrar"> </p> </div>
                         </div>
@@ -498,7 +517,11 @@
                             <option value="">Seleccione una opción</option>
                             {{ form_estatus = ['Operativo','Inoperativo','En desuso','Inservible'] }}
                             {{ for estatus in form_estatus: }}
-                            <option value="{{=estatus}}">{{=estatus}}</option>
+                                {{if bien['bm_estatus']==estatus:}}
+                                    <option value="{{=estatus}}" selected="selected">{{=estatus}}</option>
+                                {{else:}}
+                                    <option value="{{=estatus}}">{{=estatus}}</option>
+                                {{pass}}
                             {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
@@ -530,9 +553,14 @@
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Ubicación</label>
                           <select class="form-control" type="select" value={{=bien['bm_localizacion']}} value="" id="localizacion" onchange="placeholder_localizacion(this.value);"  name="localizacion" required>
-                            <option value="" onchange="placeholder_localizacion(this.value);">Seleccione un código de localizacion</option>
+                            <option value="" onchange="placeholder_localizacion(this.value);">Seleccione una localizacion</option>
                             {{for cod in localizacion:}}
-                            <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
+                                {{if bien['bm_localizacion']==cod:}}
+                                    <option value="{{=cod}}" selected="selected" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
+                                {{else:}}
+                                    <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
+                                {{pass}}
+                            
                             {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
@@ -550,8 +578,13 @@
                           <select class="form-control" type="select" value={{=bien['bm_categoria']}} id="categoria" onchange="colocar_subcategoria(this.value);" name="nombre_cat" required>
                             <option value="" onchange="colocar_subcategoria(this.value);" >Seleccione una categorias</option>
                             {{ for categoria in nombre_cat:}}
-                            <option value="{{=categoria}}" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                                {{if bien['bm_categoria']==categoria:}}
+                                    <option value="{{=categoria}}" selected="selected" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                                {{else:}}
+                                    <option value="{{=categoria}}" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                                {{pass}}
                             {{pass}}
+
                           </select>
                           <div class="field-error"> <p id="error-categorias"> </p> </div>
                         </div>
@@ -599,7 +632,214 @@ $('.tab-link').click( function() {
 	$(this).addClass('active').siblings().removeClass('active');
 	
 	$('#tab-'+tabID).addClass('active').siblings().removeClass('active');
-});
+
+    // Funcion para mostrar campos dependendiendo de la categoria
+  function elegir_campos(){
+    var selecion = document.getElementById("clasificacion");
+    if (selecion.value == "Mobiliario"){
+      document.getElementById("marca").type = 'hidden';
+      document.getElementById("modelo").type = 'hidden';
+      document.getElementById("serial").type = 'hidden';
+      document.getElementById("estatus").type = 'hidden';
+      document.getElementById("calibrar").style.display = 'none';
+    }
+    else{
+      document.getElementById("select-calibrar").setAttribute("required", "");
+      document.getElementById("marca").type = 'text';
+      document.getElementById("modelo").type = 'text';
+      document.getElementById("serial").type = 'text';
+      document.getElementById("estatus").type = 'text';
+      document.getElementById("calibrar").style.display = 'block';
+    }
+    document.getElementById("fecha_calibracion").style.display = 'none';
+  }
+
+  // Mostrar fecha de calibracion
+  function display_date(value){
+    if ( value == "Si" ){
+      document.getElementById("fecha_calibracion").style.display = 'block';
+      document.getElementById("fecha_calibracion").setAttribute("required", "");
+    }else{
+      document.getElementById("fecha_calibracion").style.display = 'none';
+    }
+  }
+
+  // Mostrar unidades
+  function display_units(value){
+    if ( value == '' ){
+      document.getElementById("unidad").type = 'hidden';
+      document.getElementById("ancho").type = 'hidden';
+      document.getElementById("largo").type = 'hidden';
+      document.getElementById("alto").type = 'hidden';
+      document.getElementById("diametro").type = 'hidden';
+    }else{
+      document.getElementById("unidad").type = 'text';
+      document.getElementById("ancho").type = 'text';
+      document.getElementById("largo").type = 'text';
+      document.getElementById("alto").type = 'text';
+      document.getElementById("diametro").type = 'text';
+    }
+  }
+
+  // Valida los campos de la forma en el modal "addbm"
+  function validar_campos(){
+
+    // Buscando divs para ingresar mensajes de error
+    var error_total = document.getElementById("error-total");
+    var error_uso_interno = document.getElementById("error-uso-interno");
+    var fecha_calibracion = document.getElementById("fecha_calibracion")
+
+    // Limpiando los mensajes anteriores de validadores
+    if (error_total.innerText != ''){
+      error_total.innerText = '';
+    }
+    if (error_uso_interno.innerText != ''){
+      error_uso_interno.innerText = '';
+    }
+     
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+
+    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+    if (!is_number(total)) {
+      error_total.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(total)) {
+      error_total.innerText = mensaje_error_negativo;
+      return false;
+    }
+
+    if (is_zero(total)) {
+      error_total.innerText = mensaje_error_nulo;
+      return false;
+    }
+
+    /* Validando el campo uso_interno */
+    if (!is_number(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_negativo;
+      return false;
+    }
+    // La cantidad de sustancia para uso interno no puede ser mayor al total
+    if (uso_interno > total) {
+      error_uso_interno.innerText = mensaje_error_uso_interno;
+      return false;
+    }
+
+  }
+
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n);
+  }
+
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0)
+  }
+
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0)
+  }
+
+  function placeholder_localizacion(value){
+    var x = document.getElementById("cod_loc");
+    var y = document.getElementById("localizacion");
+
+
+    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+      x.placeholder = '150301';
+      x.value = '150301';
+    }else{;
+      x.placeholder ='240107';
+      x.value = '240107';
+
+    }
+  }
+
+  function colocar_subcategoria(value){
+    var dict = {
+        'Maquinaria Construcción':
+            ["Maquinaria y equipos de construcción y mantenimiento",
+            "Maquinarias y equipos para mantenimiento de automotores",
+            "Maquinarias y equipos agrícolas y pecuarios",
+            "Maquinarias y equipos de artes gráficas y reproducción",
+            "Maquinarias y equipos industriales y de taller",
+            "Maquinarias y equipos de energía",
+            "Maquinarias y equipos de riego y acueductos",
+            "Equipos de almacen",
+            "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+        "Equipo Transporte":
+            ["Vehículos automotores terrestres",
+            "Equipos ferroviarios y de cables aéreos",
+            "Equipos marítimos de transporte",
+            "Equipos aéreos de transporte",
+            "Vehículos de tracción no motorizados",
+            "Equipos auxiliares de transporte",
+            "Otros equipos de transporte, tracción y elevación"],
+        "Equipo Comunicaciones":
+            ["Equipos de telecomunicaciones",
+            "Equipos de señalamiento",
+            "Equipos de control de tráfico aéreo",
+            "Equipos de correo",
+            "Otros equipos de comunicaciones y de señalamiento"],
+        "Equipo Médico":
+            ["Equipos médicos - quirúrgicos, dentales y veterinarios",
+            "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+        "Equipo Científico Religioso":
+            ["Equipos científicos y de laboratorio",
+            "Equipos de enseñanza, deporte y recreación",
+            "Obras de arte",
+            "Libros y revistas",
+            "Equipos religiosos",
+            "Instrumentos musicales",
+            "Otros equipos científicos, religiosos, de enseñanza y recreación"],
+        "Equipo Oficina" : 
+            ["Mobiliario y equipos de oficina",
+            "Equipos de procesamiento de datos",
+            "Mobiliario y equipos de alojamiento",
+            "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+  var n = 1;
+  var x;
+  var y = document.getElementById("numRegistro2");
+
+  if (value != ""){
+    for (var i in dict[value]){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      x.innerText = dict[value][i];
+      x.style.display= "block";
+      $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+      $('#Opcion'.concat(n.toString())).show();
+      x.value = dict[value][i];
+      n = n + 1;  
+    }
+    while (n <= 9){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      //x.innerText = "";
+      //x.style.display = "none";
+      $('#Opcion'.concat(n.toString())).hide();
+      $('#Opcion'.concat(n.toString())).html("");
+      x.value = "";
+      n = n +1;
+      
+    }
+    
+  }
+}
   
   </script>
 {{end}}
