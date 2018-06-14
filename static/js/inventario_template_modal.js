@@ -138,29 +138,17 @@ $(document).ready(function () {
                         $("#err_diametro").hide();
                     }
                 }
-                else if( $(this).attr('name')== 'tipo_uso1' && !testcheck())  {
+                else if( $(this).attr('name')== 'tipo_uso' && !testcheck())  {
                     $("#err_tipo_uso").html("Seleccione al menos una opción");
                     $("#err_tipo_uso").show();
                     $(this).addClass('input-error');
                      next_step = false;
-                } 
-                else if( $(this).attr('name')== 'tipo_uso2' && !testcheck())  {
-                    $("#err_tipo_uso").html("Seleccione al menos una opción");
-                    $("#err_tipo_uso").show();
-                    $(this).addClass('input-error');
-                    next_step = false;
-                } 
-                else if( $(this).attr('name')== 'tipo_uso3' && !testcheck())  {
-                    $("#err_tipo_uso").html("Seleccione al menos una opción");
-                    $("#err_tipo_uso").show();
-                    $(this).addClass('input-error');
-                    next_step = false;
                 }
-                else if( $(this).attr('name')== 'tipo_uso4' && !testcheck())  {
-                    $("#err_tipo_uso").html("Seleccione al menos una opción");
-                    $("#err_tipo_uso").show();
+                else if( $(this).attr('name')== 'fecha_calibracion' && $(this).val()=='') {
+                    $("#err-fecha_calibracion").html("No tiene el formato adecuado");
+                    $("#err-fecha_calibracion").show();
                     $(this).addClass('input-error');
-                    next_step = false;
+                     next_step = false;
                 }
                 else {
                     $(this).removeClass('input-error');
