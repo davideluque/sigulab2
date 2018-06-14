@@ -87,14 +87,14 @@
                                         <label>Campos marcados con * son obligatorios.</label>
 
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="categoria" placeholder="Nombre de la categoría*" required>
+                                            <input type="text" class="form-control" name="categoria" placeholder="Nombre de la categoría*">
                                             <div class="field-error">
-                                                <p id="error-nombre-sustancia"> </p>
+                                                <p id="error-nombre-categoria"> </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" form="formularioNuevaCategoria" id="submit" class="btn btn-submit">Agregar categoría</button>
+                                <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar categoría</button>
                             </fieldset>
                         </form>
                     </div>
@@ -108,6 +108,31 @@
 <script>
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
+
+    // Valida los campos de la forma en el modal "addsustancia"
+    function validar_campos() {
+        
+        // Buscando divs para ingresar mensajes de error
+        var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_nombre_categoria.innerText != '') {
+            error_nombre_categoria.innerText = '';
+            nombre_categoria.style.border = "none";
+        }
+
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+
+        // Mensajes de error
+        var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+
+        if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
+            error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
+            nombre_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
 </script> 
 
 <!-- Datatables-->
