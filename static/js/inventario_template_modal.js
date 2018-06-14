@@ -1,9 +1,9 @@
-function testcheck(e)
+function testcheck()
 {
-    if (jQuery("#checkbox1").prop("checked") || 
-        jQuery("#checkbox2").prop("checked") || 
-        jQuery("#checkbox3").prop("checked") || 
-        jQuery("#checkbox4").prop("checked")){
+    if (jQuery("#tipo_uso1").prop("checked") || 
+        jQuery("#tipo_uso2").prop("checked") || 
+        jQuery("#tipo_uso3").prop("checked") || 
+        jQuery("#tipo_uso4").prop("checked")){
         return true;
     }     
     else{
@@ -63,6 +63,8 @@ $(document).ready(function () {
                     //$("#err_nombre").show();
 
                 }
+
+
                 $(this).addClass('input-error');
                 next_step = false;
             }else {
@@ -136,6 +138,30 @@ $(document).ready(function () {
                         $("#err_diametro").hide();
                     }
                 }
+                else if( $(this).attr('name')== 'tipo_uso1' && !testcheck())  {
+                    $("#err_tipo_uso").html("Seleccione al menos una opción");
+                    $("#err_tipo_uso").show();
+                    $(this).addClass('input-error');
+                     next_step = false;
+                } 
+                else if( $(this).attr('name')== 'tipo_uso2' && !testcheck())  {
+                    $("#err_tipo_uso").html("Seleccione al menos una opción");
+                    $("#err_tipo_uso").show();
+                    $(this).addClass('input-error');
+                    next_step = false;
+                } 
+                else if( $(this).attr('name')== 'tipo_uso3' && !testcheck())  {
+                    $("#err_tipo_uso").html("Seleccione al menos una opción");
+                    $("#err_tipo_uso").show();
+                    $(this).addClass('input-error');
+                    next_step = false;
+                }
+                else if( $(this).attr('name')== 'tipo_uso4' && !testcheck())  {
+                    $("#err_tipo_uso").html("Seleccione al menos una opción");
+                    $("#err_tipo_uso").show();
+                    $(this).addClass('input-error');
+                    next_step = false;
+                }
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
@@ -143,6 +169,18 @@ $(document).ready(function () {
             }
         });
 
+        //if (!testcheck() && next_step){
+        //    $("#err_tipo_uso").html("Seleccione al menos una opción");
+        //    $("#err_ancho").show();
+        //     next_step = false;
+        // }
+        // else{
+        //    $("#err_cargo").hide();
+        // }
+        if (testcheck()){
+            $("#err_tipo_uso").hide();
+        }
+        
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
                 $(this).next().fadeIn();
@@ -204,13 +242,6 @@ $(document).ready(function () {
 
         });
 
-        // if (!testcheck()){
-        //     jQuery("#funcion").addClass('input-error');
-        //     next_step = false;
-        // }
-        // else{
-        //      jQuery("#funcion").removeClass('input-error');
-        // }
 
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
