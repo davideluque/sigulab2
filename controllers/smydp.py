@@ -1001,10 +1001,20 @@ def categorias_desechos():
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
+
+        if request.vars.categoria:
+            __agregar_categoria(request.vars.categoria)
     else:
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
     return locals()
+
+
+def __agregar_categoria(nombre_categoria):
+    db.t_categoria_desechos.insert(categoria=nombre_categoria)
+
+    response.flash = "Categoría agregada exitosamente"
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
 @auth.requires(lambda: __check_role())
