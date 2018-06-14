@@ -27,63 +27,123 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
+<!-- Area con el título de la página-->
 <div class="container titulo">
-        {{if ('edit' in request.args) or ('view' in request.args):}}
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">DETALLE DE LA CATEGORÍA</h3>
-                <img class="iconos" src="{{=URL('static', 'images/detallecategoria.png')}}">
-            </div>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
+            <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
         </div>
-    {{elif ('new' in request.args):}}
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">NUEVA CATEGORÍA DE DESECHO</h3>
-                <img class="iconos" src="{{=URL('static', 'images/nuevacategoria.png')}}">
-            </div>
-        </div>
-    {{else:}}
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
-                <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 text-right">
-                <a href="{{=URL('..', 'sigulab2', 'smydp/categorias_desechos/t_categoria_desechos/new/t_categoria_desechos')}}">
-                    <button class="btn btn-primary">Agregar categoría</button>
-                </a>
-            </div>
-        </div>
-        {{pass}} 
-    {{pass}}
-</div>
-
-{{if table.create_form:}} 
-    {{=table.create_form}} 
-    <script>
-        let boton = document.getElementsByClassName("btn btn-primary");
-        boton[2].style.display = "none";
-        let form = document.querySelector("form");
-        var div_node = document.createElement("div");
-        div_node.className += " col-lg-12 text-center";
-        var button_node = document.createElement("button");
-        var textnode = document.createTextNode("Agregar Categoría");
-        button_node.appendChild(textnode);
-        button_node.className += " btn btn-primary";  
-        div_node.appendChild(button_node);      
-        form.appendChild(div_node);
-    </script>
-{{elif table.update_form:}} 
-    {{=table.update_form}} 
-{{elif table.view_form:}}
-    {{=table.view_form}} 
-{{else:}}
-    <div class="container">
-        {{=table}}
     </div>
-{{pass}}
+    <div class="row">
+        <div id="columnBotonAgregar" >
+            <div class="col-lg-12 text-right">
+                <!-- Boton que lleva al modal -->
+                <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                <button type="button" id="botonAgregar" class="btn btn-primary" data-toggle="modal" data-target="#addCategoria">Agregar Categoría</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin del área con el título de la página-->
+
+<!-- Inicio Listado de categorías de desechos -->
+<div class="container">
+    <div class="row">
+        <h3> Inventario </h3>
+
+        <div id="buttons">
+            <!-- Filtrado -->
+            <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+            <!-- Filtrado -->
+        </div>
+        <br>
+
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado" style="text-align: left">
+                        <th class="camposTabla linksNombres">Categoría</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                 {{for categoria in categorias:}} 
+                    <tr>
+                        <td class="camposTabla" style="text-align: left">{{=categoria.categoria}}</td>
+                    </tr>
+                {{pass}}
+                </tbody>
+
+                <tfoot id="collapseFiltros">
+                    <tr>
+                        <th class="camposTabla linksNombres">Categoría</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Fin Listado de categorías de desecho -->
+
+
+<!-- Modal añadir una categoría de desecho nueva al inventario -->
+<div class="modal fade" id="addCategoria" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+                <div class="row addRow" id="rowHeader">
+                    <div class="col-sm-1" id="col1Header">
+                        <div class="container" id="plus">
+                            <h1 id="agregar">+</h1>
+                        </div>
+                    </div>
+                    <div class="col-sm-10" id="col11Header">
+                        <h4 class="modal-title" id="nuevaSustancia">Nueva Categoría
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal Header -->
+
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <div class="row addRow">
+                    <div class="col-md-12 form-box">
+                        <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                            <fieldset class="formField">
+                                <div class="form-bottom">
+                                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                    <div class="col-sm-1 col1Body"> </div>
+                                    <!-- Aqui va la informacion -->
+                                    <div class="col-sm-11 col11Body">
+                                        <h4 class="titulosForm">Datos de ingreso</h4>
+                                        <label>Campos marcados con * son obligatorios.</label>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="categoria" placeholder="Nombre de la categoría*">
+                                            <div class="field-error">
+                                                <p id="error-nombre-categoria"> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar categoría</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal Body-->
+        </div>
+    </div>
+</div>
 
 {{if ('view' in request.args):}}
 <div class="row">
@@ -122,10 +182,33 @@
 
 
 <script>
-    // Eliminando el breadcrumb que trae la forma SQL por defecto
-    document.getElementsByClassName("web2py_breadcrumbs")[0].style.display = 'none';
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
+
+    // Valida los campos de la forma en el modal "addsustancia"
+    function validar_campos() {
+        
+        // Buscando divs para ingresar mensajes de error
+        var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_nombre_categoria.innerText != '') {
+            error_nombre_categoria.innerText = '';
+            nombre_categoria.style.border = "none";
+        }
+
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+
+        // Mensajes de error
+        var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+
+        if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
+            error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
+            nombre_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
 </script> 
 
 <!-- Datatables-->
@@ -207,51 +290,4 @@
     });
   
   </script>
-<script>  
-    let inputs = document.querySelectorAll('input[type=submit]');
-    inputs[0].style.display = "none";
-    inputs[1].value = 'Limpiar';
-    inputs[1].className += " btn btn-primary";
-    inputs[1].style.margin = "15px 0px";   
-
-    // Oculta el boton de 'Add record' que trae la tabla por defecto
-    let boton1 = document.getElementsByClassName("btn btn-default");
-    boton1[0].style.display = "none";
-
-    // Coloca en español el botón de New Search y Close del panel de búsqueda de la tabla y
-    // oculta los botones de and y or.
-    document.getElementById("w2p_keywords").addEventListener('click', function() {
-        const campos = ['id', 'categoria'];
-
-        campos.forEach(campo => {
-            let parent = document.getElementById("w2p_field_t_categoria_desechos-" + campo);
-            let children = parent.getElementsByClassName('btn-default');
-
-            children[0].value = "Buscar";
-            children[1].style.display = "none";
-            children[2].style.display = "none";
-            children[3].value = "Cerrar";
-            children[0].className += " btn btn-primary botones-busqueda";
-            children[3].className += " btn btn-primary botones-busqueda";
-
-        });
-    });
-    // Se coloca en español el mensaje que dice "XXX rows founds"
-    let row_counter = document.getElementsByClassName("web2py_counter");
-    let row_content = row_counter[0].innerText.split(" ");
-    row_counter[0].innerText = row_content[0] + " entrada(s) encontrada(s)";
-    row_counter[0].style.marginBottom = "15px";
-    // Se colocan en español los botones de la columna de opciones de la tabla
-    let row_buttons = document.getElementsByClassName("row_buttons");
-
-    for (let index = 0; index < row_buttons.length; index++) {
-        
-        let children = row_buttons[index].getElementsByClassName("button btn btn-default");
-        children[0].innerText = "Ver";
-        children[0].className += " btn btn-primary";
-        children[1].style.display = "none";
-        children[2].style.display = "none";
-    }
-</script>
-
-  {{end}}
+{{end}}

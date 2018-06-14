@@ -996,26 +996,26 @@ def envases():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def categorias_desechos():
+    categorias = []
 
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
-        table = SQLFORM.smartgrid(  db.t_categoria_desechos, 
-                                    onupdate=auth.archive,
-                                    links_in_grid=False,
-                                    csv=False,
-                                    user_signature=False,
-                                    paginate=10,
-                                    create=True
-                                    )
+        categorias = list(db(db.t_categoria_desechos
+                                  ).select(db.t_categoria_desechos.ALL))
 
+        if request.vars.categoria:
+            __agregar_categoria(request.vars.categoria)
     else:
-        table = SQLFORM.smartgrid(  db.t_categoria_desechos, 
-                                    editable=False,
-                                    deletable=False,
-                                    csv=False,
-                                    links_in_grid=False,
-                                    create=False,
-                                    paginate=10)
+        categorias = list(db(db.t_categoria_desechos
+                                  ).select(db.t_categoria_desechos.ALL))
     return locals()
+
+
+def __agregar_categoria(nombre_categoria):
+    db.t_categoria_desechos.insert(categoria=nombre_categoria)
+
+    response.flash = "Categoría agregada exitosamente"
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
