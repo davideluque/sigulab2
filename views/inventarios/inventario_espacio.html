@@ -28,7 +28,7 @@
 
     <div id="buttons">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrar resultados</button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -136,7 +136,7 @@
                         <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
                           <option value="">Seleccione una opción</option>
                           <option value="Equipo">Equipo</option>
-                          <option value="Mobilario">Mobilario</option>
+                          <option value="Mobiliario">Mobiliario</option>
                         </select>
                         <div class="field-error"> <p id="error-clasificacion"></p></div>
                       </div>
@@ -445,15 +445,20 @@ del concepto y tipo de ingreso o egreso -->
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Mobilario"){
+    if (selecion.value == "Mobiliario"){
       document.getElementById("marca").type = 'hidden';
       document.getElementById("modelo").type = 'hidden';
       document.getElementById("serial").type = 'hidden';
       document.getElementById("estatus").type = 'hidden';
       document.getElementById("calibrar").style.display = 'none';
     }
-    else{;
+    else{
       document.getElementById("select-calibrar").setAttribute("required", "");
+      document.getElementById("marca").type = 'text';
+      document.getElementById("modelo").type = 'text';
+      document.getElementById("serial").type = 'text';
+      document.getElementById("estatus").type = 'text';
+      document.getElementById("calibrar").style.display = 'block';
     }
     document.getElementById("fecha_calibracion").style.display = 'none';
   }
