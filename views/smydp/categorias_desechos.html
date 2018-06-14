@@ -47,6 +47,46 @@
 </div>
 <!-- Fin del área con el título de la página-->
 
+<!-- Inicio Listado de categorías de desechos -->
+<div class="container">
+    <div class="row">
+        <h3> Inventario </h3>
+
+        <div id="buttons">
+            <!-- Filtrado -->
+            <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+            <!-- Filtrado -->
+        </div>
+        <br>
+
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado" style="text-align: left">
+                        <th class="camposTabla linksNombres">Categoría</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                 {{for categoria in categorias:}} 
+                    <tr>
+                        <td class="camposTabla" style="text-align: left">{{=categoria.categoria}}</td>
+                    </tr>
+                {{pass}}
+                </tbody>
+
+                <tfoot id="collapseFiltros">
+                    <tr>
+                        <th class="camposTabla linksNombres">Categoría</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Fin Listado de categorías de desecho -->
+
 
 <!-- Modal añadir una categoría de desecho nueva al inventario -->
 <div class="modal fade" id="addCategoria" role="dialog">
