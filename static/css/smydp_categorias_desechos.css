@@ -130,7 +130,5 @@ tr.w2p_odd.odd.with_id, tr.w2p_even.even.with_id {
 }
 
 div.opciones-modal-footer {
-	display: flex;
-	flex-flow: row;
-	align-items: center;
+	margin: 15px auto;
 }
