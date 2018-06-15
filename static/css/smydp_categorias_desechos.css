@@ -122,3 +122,15 @@ tr.w2p_odd.odd.with_id > td, tr.w2p_even.even.with_id > td {
 tr.w2p_odd.odd.with_id, tr.w2p_even.even.with_id {
 	border-bottom: solid 1px #CECECE;
 }
+
+.modal-title.titulo-modal-categoria{
+	color: white !important;
+	padding-left: 12px;
+	text-align: left;
+}
+
+div.opciones-modal-footer {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+}

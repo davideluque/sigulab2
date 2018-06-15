@@ -994,6 +994,11 @@ def envases():
                                     searchable=True)
     return locals()
 
+
+########################################
+#         CATEGORIAS DE DESECHOS       #
+# FUNCIONES AUXILIARES Y CONTROLADORES #
+########################################
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def categorias_desechos():
     categorias = []
@@ -1001,20 +1006,45 @@ def categorias_desechos():
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
-
+        # El formulario de edición/creación de categoria se ha recibido
         if request.vars.categoria:
-            __agregar_categoria(request.vars.categoria)
+            marcado_para_borrar = False
+
+            if request.vars.borrar_categoria == 'True':
+                marcado_para_borrar = True
+
+            # Verifica si el elemento fue marcado para ser borrado
+            if marcado_para_borrar:
+                __eliminar_categoria(int(request.vars.id_categoria))
+            else:
+                #De lo contrario debe ser creado o actualizado
+                id_categoria = -1
+
+                if request.vars.id_categoria != '':
+                    id_categoria = int(request.vars.id_categoria)
+                
+                __agregar_categoria(request.vars.categoria, id_categoria)
     else:
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
     return locals()
 
 
-def __agregar_categoria(nombre_categoria):
-    db.t_categoria_desechos.insert(categoria=nombre_categoria)
+def __agregar_categoria(nombre_categoria, id_categoria):
+    # Si el id_categoria es distinto de -1, es porque ya exista la categoría y se va a actualizar
+    if id_categoria != -1:
+        db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria)
+    else:
+        #De lo contrario, la categoría no existe y se tiene que crear
+        db.t_categoria_desechos.insert(categoria = nombre_categoria)
 
     response.flash = "Categoría agregada exitosamente"
-    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+    return redirect(URL(host=True)) 
+
+
+def __eliminar_categoria(categoria_id):
+    db(db.t_categoria_desechos.id == categoria_id).delete()
+    return redirect(URL(host=True)) 
 
 
 @auth.requires(lambda: __check_role())
