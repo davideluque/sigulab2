@@ -1001,7 +1001,6 @@ def envases():
 
     # El formulario de edición/creación de un envase se ha recibido
     if request.vars.capacidad:
-        print request.vars
 
         envase = {}
 
