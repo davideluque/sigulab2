@@ -110,3 +110,18 @@ div.col-sm-9 {
 .botones-edicion {
 	margin: 30px;
 }
+
+select.select-envases {
+	width: 100%;
+}
+
+div.row.opciones-modal-footer{
+	display: flex !important;
+	flex-flow: row !important;
+	align-content: center !important;
+	justify-content: space-between;
+}
+
+div.modal-envases-footer {
+	margin: 15px auto;
+}

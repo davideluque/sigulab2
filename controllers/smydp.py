@@ -970,30 +970,111 @@ def inventarios():
                 unidades_de_medida=unidades_de_medida,
                 retroceder=retroceder)
 
+########################################
+#         ENVASES/CONTENEDORES         #
+# FUNCIONES AUXILIARES Y CONTROLADORES #
+########################################
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def envases():
+    user_id = auth.user_id
 
-    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
-        table = SQLFORM.smartgrid(  db.t_envases, 
-                                    onupdate=auth.archive,
-                                    links_in_grid=False,
-                                    csv=False,
-                                    user_signature=False,
-                                    paginate=10,
-                                    searchable=True,
-                                    )
+    categorias_de_desecho = []
+    contenedores = []
+    espacios_fisicos_adscritos = []
+    unidades_de_medida = []
 
-    else:
-        table = SQLFORM.smartgrid(  db.t_envases, 
-                                    editable=False,
-                                    deletable=False,
-                                    csv=False,
-                                    links_in_grid=False,
-                                    create=False,
-                                    paginate=10,
-                                    searchable=True)
+    formas = ['Cilíndrica', 'Cuadrada', 'Rectangular', 'Otra']
+    materiales = ['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero', 'Otro']
+    tipos_de_boca = ['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']
+
+    categorias_de_desecho = list(db(db.t_categoria_desechos).select(db.t_categoria_desechos.ALL))
+    contenedores = list(db(db.t_envases).select(db.t_envases.ALL))
+
+    # Listas de espacios físicos de los cuáles el usuario logueado es responsable
+    espacios_fisicos_adscritos = list(db(
+        (db.t_Personal.id == user_id) &
+        (db.dependencias.id == db.t_Personal.f_dependencia) &
+        (db.espacios_fisicos.dependencia == db.dependencias.id)
+    ).select(db.espacios_fisicos.id, db.espacios_fisicos.nombre)) 
+
+    unidades_de_medida = list(db(db.t_Unidad_de_medida).select(db.t_Unidad_de_medida.ALL))
+
+    # El formulario de edición/creación de un envase se ha recibido
+    if request.vars.capacidad:
+        print request.vars
+
+        envase = {}
+
+        marcado_para_borrar = False
+
+        if request.vars.borrar_envase == 'True':
+            marcado_para_borrar = True
+
+        # Verifica si el elemento fue marcado para ser borrado
+        if marcado_para_borrar:
+            #__eliminar_categoria(int(request.vars.id_envase))
+            pass
+        else:
+            #De lo contrario debe ser creado o actualizado
+            id_envase = -1
+
+            if request.vars.id_envase != '':
+                id_envase = int(request.vars.id_envase)
+            
+            __agregar_envase(
+                request.vars.identificacion,
+                float(request.vars.capacidad),
+                int(request.vars.unidad_medida),
+                request.vars.forma,
+                request.vars.material,
+                request.vars.tipo_boca,
+                request.vars.descripcion,
+                request.vars.composicion,
+                int(request.vars.espacio_fisico),
+                int(request.vars.categoria),
+                id_envase
+            )
+
     return locals()
 
+
+def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, tipo_boca, descripcion, composicion, espacio_fisico, categoria, id_envase):
+    # Si el id_envase es distinto de -1, es porque ya exista la categoría y se va a actualizar
+    if id_envase != -1:
+        db(db.t_envases.id == id_envase).update(
+            identificacion = identificacion,
+            capacidad = capacidad, 
+            unidad_medida = unidad_medida, 
+            forma = forma, 
+            material = material, 
+            tipo_boca = tipo_boca, 
+            descripcion = descripcion, 
+            composicion = composicion, 
+            espacio_fisico = espacio_fisico, 
+            categoria = categoria
+        )
+    else:
+        #De lo contrario, el envase aún no existe y se tiene que crear
+        db.t_envases.insert(
+            identificacion = identificacion,
+            capacidad = capacidad, 
+            unidad_medida = unidad_medida, 
+            forma = forma, 
+            material = material, 
+            tipo_boca = tipo_boca, 
+            descripcion = descripcion, 
+            composicion = composicion, 
+            espacio_fisico = espacio_fisico, 
+            categoria = categoria
+        )
+
+    response.flash = "Contenedor creado exitosamente"
+    return redirect(URL(host=True)) 
+
+
+def __eliminar_envase(categoria_id):
+    db(db.t_categoria_desechos.id == categoria_id).delete()
+    return redirect(URL(host=True)) 
 
 ########################################
 #         CATEGORIAS DE DESECHOS       #
