@@ -125,3 +125,17 @@ div.row.opciones-modal-footer{
 div.modal-envases-footer {
 	margin: 15px auto;
 }
+
+div.row.fila-detalle-envase {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	width: 50%;
+	padding: 5px 0px;
+}
+
+div.row.contenedor-filas-detalle-envase {
+	display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}

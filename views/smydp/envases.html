@@ -36,6 +36,84 @@
                 <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
             </div>
         </div>
+        <div class="row contenedor-filas-detalle-envase">
+             {{for contenedor in contenedores:}}
+                {{if contenedor.id == int(request.args[1]):}}
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Identificación:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.identificacion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Capacidad:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.capacidad}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Forma:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.forma}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Material:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.material}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Tipo de boca:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.tipo_boca}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Descripción:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.descripcion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Composición:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.composicion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Espacio físico:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.espacio_fisico.nombre}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Categoría de desecho:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.categoria.categoria}}</span>
+                        </div>
+                    </div>
+                {{pass}}
+            {{pass}}
+        </div>
     </div>
 {{elif ('new' in request.args):}}
     <div class="container">
@@ -93,7 +171,7 @@
                             {{for contenedor in contenedores:}}
                             <tr>
                                 <td class="camposTabla" style="text-align: left">
-                                    <a>
+                                    <a href={{=URL('..', 'sigulab2', 'smydp/envases', args=['view', contenedor.id])}}>
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
