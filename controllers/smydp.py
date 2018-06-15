@@ -1011,7 +1011,7 @@ def envases():
 
         # Verifica si el elemento fue marcado para ser borrado
         if marcado_para_borrar:
-            #__eliminar_categoria(int(request.vars.id_envase))
+            __eliminar_envase(int(request.vars.id_envase))
             pass
         else:
             #De lo contrario debe ser creado o actualizado
@@ -1071,8 +1071,8 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
     return redirect(URL(host=True)) 
 
 
-def __eliminar_envase(categoria_id):
-    db(db.t_categoria_desechos.id == categoria_id).delete()
+def __eliminar_envase(id_envase):
+    db(db.t_envases.id == id_envase).delete()
     return redirect(URL(host=True)) 
 
 ########################################

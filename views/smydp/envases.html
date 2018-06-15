@@ -718,6 +718,16 @@
             }
         }
 
+        function dialogoAdvertencia() {
+                if (confirm('Está seguro de que desea eliminar el contenedor?')) {
+                    document.getElementById("borrar_envase").value = "True";
+                    return true;
+
+                } else {
+                    return false;
+                }
+            }
+
 </script> 
 
 
