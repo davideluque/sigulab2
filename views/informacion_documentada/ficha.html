@@ -1,0 +1,536 @@
+{{extend 'layout.html'}}
+<h1>Está es la plantilla informacion_documentada/ficha.html</h1>
+{{=BEAUTIFY(response._vars)}}
+
+
+{{block head}}
+  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="{{=URL('static', 'css/agregarDoc.css')}}">
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Poppins:300,400,700'>
+  <style type="text/css">
+    
+    .wrapper {
+      max-width: 80%;
+      margin: auto;
+      margin-top: 10px;
+    }
+
+    .tab-wrapper2 {
+      text-align: center;
+      display: block;
+      margin: auto;
+      max-width: 1200px;
+    }
+
+    .tabs {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tab-link {
+      margin: 0 1%;
+      list-style: none;
+      padding: 10px 40px;
+      font-size: 25px;
+      color: #aaa;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all ease 0.5s;
+      border-bottom: solid 3px rgba(255, 255, 255, 0);
+      letter-spacing: 1px;
+    }
+
+    .tab-link:hover {
+      color: #999;
+      border-color: #999;
+    }
+
+    .tab-link.active {
+      color: #333;
+      border-color: #333;
+    }
+
+    .tab-link:nth-of-type(1).active {
+      color: #60e8f2;
+      border-color: #60e8f2;
+    }
+
+    .tab-link:nth-of-type(2).active {
+      color: #60e8f2;
+      border-color: #60e8f2;
+    }
+
+    .tab-link:nth-of-type(3).active {
+      color: #60e8f2;
+      border-color: #60e8f2;
+    }
+
+    .content-wrapper {
+      margin-top: 30px;
+      padding: 40px 80px;
+    }
+
+    .tab-content {
+      display: none;
+      text-align: left;
+      color: #888;
+      font-weight: 300;
+      font-size: 15px;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeIn 0.5s ease 1 forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      100% {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+  </style>
+
+{{end}}
+
+
+{{block center}}
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Información Documentada</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Listado de Documentos</a>
+  <span class="breadcrumb-item active">Ficha</span>
+  </div>
+</nav>
+  {{for doc in message:}}
+
+
+
+<div class="wrapper">
+    
+  <div class="tab-wrapper2">
+    <ul class="tabs">
+        <li class="tab-link active" data-tab="1">Información General</li>
+        <li class="tab-link" data-tab="2">Historial de Revisión</li>
+        <li class="tab-link" data-tab="3">Ubicación</li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <div id="tab-1" class="tab-content active">
+
+      <p><span style="color: #52798c; font-size: 1.2em;">Código:  {{=doc.codigo}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Tipo:    {{=doc.tipo_doc}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Documento: {{=doc.nombre_doc}}    </span> </p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Objetivo: {{=doc.objetivo}}       </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}    </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:  {{=doc.periodo_rev}}   </span></p>
+
+      <div style="margin-top: 50px; float: right;">
+        <div class="row container-fluid">
+            <form method="POST">
+                <button type="button" class="btn btn-primary btn-lg" id="botonModal" style="margin-right: 15px;">Editar</button>
+                <button type="button" class="btn btn-info btn-lg" style="margin-right: 15px;">Ocultar</button>
+                <button type="submit" class="btn btn-danger btn-lg" name="eliminar" value="eliminar">Eliminar</button>
+            </form>
+        </div>
+      </div>  
+    
+
+    </div>
+
+
+
+    <div id="tab-2" class="tab-content">
+
+
+
+      <table class="container">
+        <thead>
+          <tr>
+            <th>Responsable</th>
+            <th>Elaborado por</th>
+            <th>Revisión de contenido realizado por</th>
+            <th>Fecha de revisión de contenido</th>
+            <th>Revisión de especificaciones del documento realizado por</th>
+            <th>Fecha de revisión de especificaciones del documento</th>
+            <th>Revisión por el Consejo Asesor</th>
+            <th>Fecha de revisión por el Consejo Asesor</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>{{=doc.responsable}}</td>
+            <td>{{=doc.elaborado_actualizado_por}}</td>
+            <td>{{=doc.rev_contenido_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_contenido}}</td>
+            <td>{{=doc.rev_especficaciones_doc_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_especificaciones_doc}}</td>
+            <td>{{=doc.rev_por_consejo_asesor}}</td>
+            <td>{{=doc.fecha_rev_por_consejo_asesor}}</td>
+            
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
+    </div>
+    <div id="tab-3" class="tab-content">
+    
+
+      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion: {{=doc.registro}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Fecha de registro de Ubicacion:      </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     </span> </p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}     </span></p>
+    
+
+    </div>
+  </div>
+  
+</div>    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="modal" class="modal">
+
+  <form id="form-wrapper" class="form-wrapper" name="form" method="POST">
+
+      <nav id="progress-bar" class="progress-bar">
+          <ul class="progress-bar__container">  
+              <li class="progress-bar__item current"><a href="#" class="link">Información General</a></li>
+              <li class="progress-bar__item"><a href="#" class="link">Información de Elaboración</a></li>
+              <li class="progress-bar__item"><a href="#" class="link">Información de Revisión</a></li>
+              <li class="progress-bar__item"><a href="#" class="link">Aprobado </a></li> 
+              <li class="progress-bar__item"><a href="#" class="link">Ubicación del Documento</a></li>
+
+          </ul>
+      </nav>
+      
+      <div id="fieldset-container" class="tab-wrapper ">
+          <fieldset class="tab-panel">
+              <legend>Editar Documento / Información General</legend>
+
+              <input type="hidden" name="indicador" value="agregar">
+
+              <div class="input-group focus">
+                  <input type="text" class="input" name="nombre_documento" id="nombre_documento" value="{{=doc.nombre_doc}}" required>
+                  <label class="label" for="nombre_documento"><i class="lnr lnr-user"></i> Nombre del Documento</label>
+              </div>
+
+              <div class="input-group"> 
+                  <select name="tipo" id="tipo" class="input" >
+                    <option value=""></option>
+
+            <option value="Referente Estrategico">Referente Estratégico</option>
+            <option value="Reglamento">Reglameto</option>
+            <option value="Manual">Manual de Organización</option>
+            <option value="Manual">Manual de Calidad</option>
+            <option value="Manual">Manual de Proceso de Gestión</option>
+            <option value="Manual">Manual de Proceso Técnico</option>
+            <option value="Manual">Manual de Uso</option>
+            <option value="Otro">Manual de Uso</option>
+
+          </select>
+                  <label class="label" for="tipo">Tipo del Documento</label>
+              </div>
+
+              <div class="input-group"> 
+                  <select name="responsable" id="responsable" class="input">
+                    <option value=""></option>
+
+            <option value="DIRECCIÓN">DIRECCIÓN</option>
+            <option value="LABORATORIO A">LABORATORIO A</option>
+            <option value="LABORATORIO B">LABORATORIO B</option>
+            <option value="LABORATORIO C">LABORATORIO C</option>
+            <option value="LABORATORIO D">LABORATORIO D</option>
+            <option value="LABORATORIO E">LABORATORIO E</option>
+            <option value="LABORATORIO F">LABORATORIO F</option>
+            <option value="LABORATORIO G">LABORATORIO H</option>
+            <option value="UNIDAD DE ADMINISTRACIÓN">UNIDAD DE ADMINISTRACIÓN</option>
+            <option value="COORDINACIÓN DE ADQUISICIONES">COORDINACIÓN DE ADQUISICIONES</option>
+            <option value="COORDINACIÓN DE IMPORTACIONES">COORDINACIÓN DE IMPORTACIONES</option>
+            <option value="COORDINACIÓN DE LA CALIDAD">COORDINACIÓN DE LA CALIDAD</option>
+            <option value="OFICINA DE PROTECCIÓN RADIOLÓGICA">OFICINA DE PROTECCIÓN RADIOLÓGICA</option>
+          
+          </select>
+                  <label class="label" for="responsable">Responsable</label>
+              </div>
+
+        <!--<div class="input-group">
+                  <input type="text" class="input" name="responsable" id="responsable"> 
+                  <label class="label" for="responsable"><i class="lnr lnr-users"></i> Responsable </label>
+              </div>-->
+        
+        <div class="input-group focus">
+                  <input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" value="{{=doc.fecha_prox_rev}}">
+                  <label class="label" for="fecha_prox_rev"><i class="lnr lnr-calendar-full"></i> Fecha de entrega para revisión</label>
+              </div>
+          </fieldset>
+
+          <fieldset class="tab-panel">
+              <legend>Editar Documento / Información Elaboración</legend>
+              
+              <div class="input-group focus" >
+                  <input type="text" class="input" name="codigo" id="codigo" value="{{=doc.codigo}}" disabled="true" required> 
+                  <label class="label" for="codigo"><i class="lnr lnr-code"></i> Código Documento</label>
+              </div>
+              <div class="input-group focus">
+                  <input type="text" class="input" name="objetivos" id="objetivos" value="{{=doc.objetivo}}"> 
+                  <label class="label" for="objetivos"><i class="lnr lnr-flag"></i> Objetivos </label>
+              </div>
+        <div class="input-group">
+
+
+                  <select name="periodo" id="periodo" class="input">
+            <option value=""></option>
+
+            <option value="Quincenal">Quincenal</option>
+            <option value="Mensual">Mensual</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Anual">Anual</option>
+            <option value="Bienal">Bienal</option>
+            <option value="Trienal">Trienal</option>
+
+          </select> 
+
+
+                  <label class="label" for="periodo"><i class="lnr lnr-map-marker"></i>Período de Revisión</label>
+              </div>
+              <!--<div class="input-group">
+
+                  <input type="number" class="input" name="anexos" id="anexos" min="0" max="30"> 
+
+                  <label class="label" for="anexos"><i class="lnr lnr-paperclip"></i> Cantidad de Anexos </label>
+              </div>-->
+              <div class="input-group focus">
+                  <input type="text" class="input" name="elaborado" id="elaborado" value="{{=doc.elaborado_actualizado_por}}"> 
+                  <label class="label" for="elaborado"><i class="lnr lnr-pencil"></i> Elaborado por </label>
+              </div>
+         
+              <div class="input-group"> 
+                  <select name="estatus" id="estatus" class="input">
+                    <option value=""></option>
+
+            <option value="Planificado">En planificación</option>
+            <option value="Elaborado">En elaboración</option>
+            <option value="Revisado">En revisión</option>
+            <option value="Aprobado">Aprobado</option>
+
+          </select>
+                  <label class="label" for="estatus">Estatus</label>
+              </div>
+
+              
+
+
+          </fieldset>
+
+          <fieldset class="tab-panel">
+              <legend>Editar Documento / Información Revisión</legend>
+
+        <div class="input-group focus">
+                  <input type="text" class="input" name="revision_contenido" id="revision_contenido" value="{{=doc.rev_contenido_realizado_por}}">
+                  <label class="label" for="revision_contenido"><i class="lnr lnr-spell-check"></i>Revisión de contenido realizado por:</label>
+              </div> 
+              <div class="input-group focus">
+                  <input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" value="{{=doc.fecha_rev_contenido}}">
+                  <label class="label" for="fecha_revision_contenidos"><i class="lnr lnr-calendar-full"></i> Fecha de registro de revisión de contenidos</label>
+              </div> 
+              
+              <div class="input-group focus">
+                  <input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" value="{{=doc.rev_especficaciones_doc_realizado_por}}">
+                  <label class="label" for="revision_especificaciones"><i class="lnr lnr-spell-check"></i>Revisión de especificaciones del documento realizado por:</label>
+              </div> 
+
+              <div class="input-group focus">
+                  <input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" value="{{=doc.fecha_rev_especificaciones_doc}}">
+                  <label class="label" for="fecha_revision_especificaciones"><i class="lnr lnr-calendar-full"></i> Fecha de revisión de especificaciones del documento</label>
+              </div> 
+              <div class="input-group focus">
+                  <input type="text" class="input" name="revision_consejo" id="revision_consejo" value="{{=doc.rev_por_consejo_asesor}}">
+                  <label class="label" for="revision_consejo"><i class="lnr lnr-spell-check" ></i>Revisión por el Consejo Asesor</label>
+              </div> 
+              <div class="input-group focus">
+                  <input type="date" class="input" name="fecha_revision_consejo" id="fecha_revision_consejo" value="{{=doc.fecha_rev_por_consejo_asesor}}">
+                  <label class="label" for="fecha_revision_consejo"><i class="lnr lnr-calendar-full"></i> Fecha de revisión por el Consejo Asesor</label>
+              </div> 
+
+              <!--<div class="input-group">
+
+
+                  <input type="text" class="input" name="periodocant" id="periodocant">
+
+                  <label class="label" for="periodocant"><i class="lnr lnr-map-redo"></i>Período de Revisión (cantidad)</label>
+              </div>-->
+
+
+
+
+          </fieldset>
+          
+          <fieldset class="tab-panel">
+              <legend>Editar Documento / Aprobado </legend>
+
+
+              <div class="input-group focus">
+                  <input type="text" class="input" name="aprobado" id="aprobado" value="{{=doc.aprobado_por}}">
+                  <label class="label" for="aprobado"><i class="icon-thumbs-up"></i> Aprobado Por:</label>
+              </div>
+              <div class="input-group focus">
+          <input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" >
+          <label class="label" for="fechaAprobacion"><i class="lnr lnr-calendar-full"></i>Fecha de Aprobación</label>
+        </div>  
+              <div class="input-group focus">
+
+                  <input type="text" class="input" name="cod_registro" id="cod_registro" value="cod_aprob">
+                  <label class="label" for="cod_registro"><i class="lnr lnr-code"></i> Código de Registro de Aprobacion</label>
+              </div>
+               <div class="input-group focus">
+                  <input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" disabled="true">
+                  <label class="label" for="cod_controlCambios"><i class="lnr lnr-code"></i> Cod Registro de control de cambios</label>
+              </div>
+
+              <div class="input-group focus">
+                  <input type="date" class="input" disabled="" name="fechaControlCambios" id="fechaControlCambios">
+                  <label class="label" for="fechaControlCambios"><i class="lnr lnr-calendar-full"></i> Fecha de reg de control de cambios</label>
+              </div>
+              
+
+
+
+
+          </fieldset>
+
+          <fieldset class="tab-panel">
+              <legend>Ubicación del Documento</legend>
+
+              <div class="input-group focus">
+                  <input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" ">
+                  <label class="label" for="ubicacion_fisica"><i class="lnr lnr-pushpin"></i>Ubicación física del documento</label>
+              </div>  
+             <!--<div class="input-group">
+                  <input type="text" class="input" name="archivo_el" id="archivo_el" value="{{=doc.ubicacion_electronica}}>
+                  <label class="label" for="archivo_el"><i class="lnr lnr-file-empty"></i>Archivo electrónico</label>
+              </div>-->
+              <div class="input-group focus">
+                  <input type="text" class="input" name="carpeta_el" id="carpeta_el">
+                  <label class="label" for="carpeta_el"><i class="lnr lnr-enter"></i>Carpeta electrónica</label>
+              </div>
+              
+                        
+              
+                  
+                  
+
+
+
+          </fieldset>
+  
+
+         
+      </div>
+      <button type="submit" form="form-wrapper" class="submit-button button" value="Submit" name="button" id="edit_send">Guardar</button>
+      <span class="close">&times;</span>
+      
+      <nav id="tab-nav" class="tab-nav">
+          <button class="tab-nav__button nav-button prev lnr lnr-arrow-up"></button>
+          <button class="tab-nav__button nav-button next lnr lnr-arrow-down"></button>
+      </nav>
+      
+  </form>
+
+</div>
+
+
+
+
+
+
+
+  {{pass}}
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <script type="text/javascript">
+    var ficha = "{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}";
+    $('.tab-link').click( function() {
+    
+    var tabID = $(this).attr('data-tab');
+    
+    $(this).addClass('active').siblings().removeClass('active');
+    
+    $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+  });
+  </script>
+  <script type="text/javascript">
+    // Get the modal
+    var modal = document.getElementById('modal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("botonModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    $('#edit_send').click(function(event){
+        window.reload();
+    });
+  </script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src="{{=URL('static','js/agregarDoc.js')}}"></script>
+{{end}}

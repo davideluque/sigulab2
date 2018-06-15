@@ -1,0 +1,854 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+
+
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
+
+
+
+
+{{end}}
+{{block center}}
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada')}}">Información Documentada</a>
+  <span class="breadcrumb-item active" >Listado de Documentos</span>
+  </div>
+</nav>
+
+<div class="container-fluid" id="container-body">
+	<!--<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Inicio</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Documentos</li>
+			</ol>
+
+	</nav><-->
+
+	<div class="row">
+		<div class="col-md-1">
+		</div>	
+		<div class="col-md-10">
+			<div class="col-lg-12 col-xs-12" style="margin-top: 50px;">
+				<p style="font-size: 35px; text-align: center;">GESTIÓN DE INFORMACIÓN DOCUMENTADA</p>
+				<p
+			</div>
+			<nav class="indicadores" style="background-color: #FAFAFA;">			
+				<div class="row">
+
+				  <div style="margin-right: 3%; margin-left: 3%;">
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Planificado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-calendar-check-o fa-4x" style="color: white;"></i>
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right; ">{{=doc_planificacion}} </h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+				    <!-- ./col -->
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Elaborado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-pencil fa-4x" style="color: white; display: inline-block;"></i> 
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right;"> {{=doc_elaboracion}}</h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+
+				    <div class="col-lg-3 col-xs-6">
+				      <!-- small box -->
+				    
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Revisado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-search fa-4x" style="color: white; display: inline-block;"></i> 
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_revision}} </h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+				      
+				    </div>
+
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#" >
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4  style="color: white; font-size: 25px; margin-bottom: 8px;">Aprobado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-check-circle fa-4x" style="color: white; display: inline-block;"></i> 
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_aprobado}} </h2>
+				            </div>
+
+
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+
+				  </div>   	
+						
+						
+					</ul>
+					
+			</nav>
+		</div>
+		<div class="col-md-1">
+		</div>	
+	<div>
+
+</div>
+
+
+<div style="padding: 50px;">
+	<span style="padding: 50px;"></span>
+</div>
+
+
+
+<div class="container">
+<div class="row">
+
+
+    <div id="buttons">
+      	<a href="#">
+			<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+		</a> 
+		<a href="#">
+			<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
+		</a>
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->   
+
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Documento</th>
+                <th class="camposTabla linksNombres">Código</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+                <th class="camposTabla linksNombres">Período de Revisión</th>
+                <th class="camposTabla linksNombres">Link de Descarga</th>
+                <th class="camposTabla linksNombres">Estatus</th>
+            </tr>
+        </thead>
+
+        <tbody>
+  			{{for doc in documentos:}}
+			<tr>
+				<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+					{{=doc.nombre_doc}}
+				</a>
+				</td>
+				<td class="camposTabla" >{{=doc.codigo}}</td>
+				<td class="camposTabla" >{{=doc.tipo_doc}}</td>
+				<td class="camposTabla" >{{=doc.responsable}}</td>
+				<td class="camposTabla" >{{=doc.periodo_rev}}</td>
+				<td class="camposTabla" >Deshabilitado temporalmente</td>
+				<td class="camposTabla" >{{=doc.estatus}}</td>
+				
+			</tr>
+			{{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+
+            <tr>
+                <th class="camposTabla linksNombres">Documento</th>
+                <th class="camposTabla linksNombres">Código</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+                <th class="camposTabla linksNombres">Período de Revisión</th>
+                <th class="camposTabla linksNombres">Link de Descarga</th>
+                <th class="camposTabla linksNombres">Estatus</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="modal fade" id="adddoc" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+              <h4 class="modal-title" id="nuevoServicio">Agregar Documento</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioEdit" class="registration-form" method="post">
+
+                    <!-- Primer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step activePass">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>             
+                          <span class="step">5</span>
+              
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Información General</h4>
+
+			            <div class="form-group">
+			                <input type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" required>
+			                
+			            </div>
+
+			            <div class="form-group"> 
+			            	<h5>Tipo del Documento</h5>
+			                <select name="tipo" id="tipo" class="input" required>
+			                	<option value=""></option>
+								<option value="Referente Estrategico">Referente Estratégico</option>
+								<option value="Reglamento">Reglameto</option>
+								<option value="Manual">Manual de Organización</option>
+								<option value="Manual">Manual de Calidad</option>
+								<option value="Manual">Manual de Proceso de Gestión</option>
+								<option value="Manual">Manual de Proceso Técnico</option>
+								<option value="Manual">Manual de Uso</option>
+								<option value="Otro">Manual de Uso</option>
+
+							</select>
+			            </div>
+
+			            <div class="form-group"> 
+			            	<h5>Responsable</h5>
+			                <select name="responsable" id="responsable" class="input" required>
+			                	<option value=""></option>
+								<option value="DIRECCIÓN">DIRECCIÓN</option>
+								<option value="LABORATORIO A">LABORATORIO A</option>
+								<option value="LABORATORIO B">LABORATORIO B</option>
+								<option value="LABORATORIO C">LABORATORIO C</option>
+								<option value="LABORATORIO D">LABORATORIO D</option>
+								<option value="LABORATORIO E">LABORATORIO E</option>
+								<option value="LABORATORIO F">LABORATORIO F</option>
+								<option value="LABORATORIO G">LABORATORIO H</option>
+								<option value="UNIDAD DE ADMINISTRACIÓN">UNIDAD DE ADMINISTRACIÓN</option>
+								<option value="COORDINACIÓN DE ADQUISICIONES">COORDINACIÓN DE ADQUISICIONES</option>
+								<option value="COORDINACIÓN DE IMPORTACIONES">COORDINACIÓN DE IMPORTACIONES</option>
+								<option value="COORDINACIÓN DE LA CALIDAD">COORDINACIÓN DE LA CALIDAD</option>
+								<option value="OFICINA DE PROTECCIÓN RADIOLÓGICA">OFICINA DE PROTECCIÓN RADIOLÓGICA</option>
+							</select>
+			            </div>
+
+						<!--<div class="input-group">
+			                <input type="text" class="input" name="responsable" id="responsable"> 
+			                <label class="label" for="responsable"><i class="lnr lnr-users"></i> Responsable </label>
+			            </div>-->
+						
+						<div class="form-group">
+			                <h5>Fecha de entrega para revisión</h5><input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" required>
+			            </div>
+
+
+			           <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+                      <button type="button" class="btn btn-next edit botonForm"><i class="fa fa-arrow-right"></i></button>
+                    </fieldset>
+                    <!-- Fin Primer Paso -->
+                    
+                    <!-- Segundo Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                          <!-- Aqui va la barra lateral -->
+                          <div class="col-sm-1 col1Body">
+                            <span class="step">1</span>
+                            <span class="step activePass">2</span>
+                            <span class="step">3</span>
+                            <span class="step">4</span> 
+                            <span class="step">5</span>
+                          </div>
+
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Información Elaboración</h4>
+
+
+
+
+			            
+			            <div class="form-group">
+			                <input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" required>
+			            </div>
+
+			            <div class="form-group">
+			                <input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos" required> 
+			            </div>
+						<div class="form-group">
+							<h5>Período de Revisión</h5>
+
+			                <select name="periodo" id="periodo" class="input" required>
+								<option value=""></option>
+
+								<option value="Quincenal">Quincenal</option>
+								<option value="Mensual">Mensual</option>
+								<option value="Trimestral">Trimestral</option>
+								<option value="Semestral">Semestral</option>
+								<option value="Anual">Anual</option>
+								<option value="Bienal">Bienal</option>
+								<option value="Trienal">Trienal</option>
+
+							</select> 
+			                
+			            </div>
+			            <!--<div class="input-group">
+
+			                <input type="number" class="input" name="anexos" id="anexos" min="0" max="30"> 
+
+			                <label class="label" for="anexos"><i class="lnr lnr-paperclip"></i> Cantidad de Anexos </label>
+			            </div>-->
+			            <div class="form-group">
+			                <input type="text" class="input" name="elaborado" id="elaborado" placeholder="Elaborado por" required="">  
+			            </div>
+                            
+
+                        <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                        <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+                        <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step activePass">3</span>
+                          <span class="step">4</span>
+                          <span class="step">5</span> 
+                        </div>
+                        
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm"> Información Revisión </h4>
+
+
+
+
+						<div class="form-group">
+			                <input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required>
+			            </div> 
+			            <div class="form-group">
+			                <input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" required> 
+			            </div> 
+			            
+			            <div class="form-group">
+			                <input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required> 
+			            </div> 
+
+			            <div class="form-group">
+			                <input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" required> 
+			            </div> 
+			            <div class="form-group">
+			                <input type="text" class="input" name="revision_consejo" id="revision_consejo" placeholder="Revisión por el Consejo Asesor" required>
+			            </div> 
+			            <div class="form-group">
+			                <input type="date" class="input" name="fecha_revision_consejo" id="fecha_revision_consejo" placeholder="Fecha de revisión por el Consejo Asesor" required>  
+			            </div> 
+
+			            <!--<div class="input-group">
+
+
+			                <input type="text" class="input" name="periodocant" id="periodocant">
+
+			                <label class="label" for="periodocant"><i class="lnr lnr-map-redo"></i>Período de Revisión (cantidad)</label>
+			            </div>-->
+
+
+
+                      <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+                      <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span>
+                          <span class="step">5</span> 
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        <h4 class="titulosForm"> Aprobado </h4>
+
+
+
+			            <div class="form-group">
+			                <input type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:"> 
+			            </div>
+			            <div class="form-group">
+							<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación"> 
+						</div>	
+			            <div class="form-group">
+			                <input type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion"> 
+			            </div>
+			             <div class="form-group">
+			                <input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios"> 
+			            </div>
+
+			            <div class="form-group">
+			                <input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios"> 
+			            </div>
+	            
+                      
+                      <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+                      <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                    <!-- Quinto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span> 
+                          <span class="step activePass">5</span>
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+
+                        <h4 class="titulosForm">Ubicación del Documento</h4>
+
+
+
+
+
+			            <div class="form-group">
+			                <input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento">
+			                
+			            </div>  
+			            <div class="form-group">
+			                <input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico"> 
+			            </div>
+			            <div class="form-group">
+			                <input type="text" class="input" name="carpeta_el" id="carpeta_el" placeholder="Carpeta electrónica"> 
+			            </div>
+
+
+
+
+
+                      <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                      <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioEdit" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+                     
+                    </fieldset>
+                    <!-- Fin Quinto Paso -->
+
+
+                </form>
+            </div>
+          </div>               
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+ 
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+  
+  function abrirFicha(servicio) {
+    var x = document.getElementById("serv");
+      x.value = servicio;
+    ajax('ajax_ficha_servicio', ['serv'], "ficha");
+  }
+
+  function getAdscripcion(){
+    var opcionessede = document.getElementById("sel6");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+    var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
+  }
+
+  function getDependencia(){
+      var opcionesads = document.getElementById("sel4");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
+
+   }
+
+  function getUbicacion(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
+
+   }
+
+  function getResponsable(){
+      var opcionesdep = document.getElementById("sel3");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
+   }
+
+  // AJAX EDICION
+  function getAdscripcionEdit(){
+    var opcionessede = document.getElementById("sel6-edit");
+    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
+    var x = document.getElementById("sede");
+      x.value = sedeelegida;
+    ajax('ajax_obtener_adscripcion_editar', ['sede'], "adscripciondiv-edit");
+  }
+
+  function getDependenciaEdit(){
+      var opcionesads = document.getElementById("sel4-edit");
+      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
+      var x = document.getElementById("adscripcion");
+        x.value = adselegida;
+      ajax('ajax_obtener_dependencia_editar', ['adscripcion'], "dependenciadiv-edit");
+
+   }
+
+  function getUbicacionEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_ubicacion_editar', ['dependencia'], "ubicaciondiv-edit");
+
+   }
+
+  function getResponsableEdit(){
+      var opcionesdep = document.getElementById("sel3-edit");
+      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
+      var x = document.getElementById("dependencia");
+        x.value = dependenciaelegida;
+      ajax('ajax_obtener_responsable_editar', ['dependencia'], "responsablediv-edit");
+   }
+
+  function cambiar_estado_detalle_ambito(is_otro_checked, id){
+    if (id == 'checkbox_ambito_otro'){
+      if (is_otro_checked){
+        $("#input_ambito_otro_detalle").show();
+      }
+      else{
+        $("#input_ambito_otro_detalle").hide();
+        $("#input_ambito_otro_detalle").val(' ');
+      }
+    }
+    else if (id == 'editar_checkbox_ambito_otro'){
+      if (is_otro_checked){
+        $("#editar_input_ambito_otro_detalle").show();
+      }
+      else{
+        $("#editar_input_ambito_otro_detalle").hide();
+        $("#editar_input_ambito_otro_detalle").val(' ');
+        $("#editar_input_ambito_otro_detalle").attr("placeholder", "Otro, Especifique:*");
+      }   
+    }
+    else if (id == 'checkbox_per_otro'){
+      if (is_otro_checked){
+        $("#input_per_otro_detalle").show();
+      }
+      else{
+        $("#input_per_otro_detalle").hide();
+        $("#input_per_otro_detalle").val(' ');
+      }      
+    }
+    else if (id == 'editar_checkbox_per_otro'){
+      if (is_otro_checked){
+        $("#editar_input_per_otro_detalle").show();
+      }
+      else{
+        $("#editar_input_per_otro_detalle").hide();
+        $("#editar_input_per_otro_detalle").val(' ');
+        $("#editar_input_per_otro_detalle").attr("placeholder", "Otro, Especifique:*");
+      }   
+    }
+  }
+
+  function cambiar_estado_condicion_ambiental(is_otro_checked, id){
+    if (id == 'radio_condicion_ambiental'){
+      if (is_otro_checked == "True"){
+        $("#input_radio_condicion_ambiental").show();
+      }
+      else{
+        $("#input_radio_condicion_ambiental").hide();
+        $("#input_radio_condicion_ambiental").val(' ');
+      }
+    }
+    else if (id == 'editar_radio_condicion_ambiental'){
+      if (is_otro_checked == "True"){
+        $("#editar_input_radio_condicion_ambiental").show();
+      }
+      else{
+        $("#editar_input_radio_condicion_ambiental").hide();
+        $("#editar_input_radio_condicion_ambiental").val(' ');
+        $("#editar_input_radio_condicion_ambiental").attr("placeholder", "Si requiere, Especifique:*");
+      }   
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+{{end}}
