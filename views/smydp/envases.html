@@ -61,7 +61,7 @@
                             <label for="">Capacidad:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.capacidad}}</span>
+                            <span>{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -152,7 +152,7 @@
                 <div class="modal-body addBody">
                     <div class="row addRow">
                         <div class="col-md-12 form-box">
-                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return editar_contenedor()">
+                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
                                 <fieldset class="formField">
                                     <div class="form-bottom">
                                         <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -185,7 +185,11 @@
                                                 <br>
                                                 <select class="select-envases" name="unidad_medida" id="unidad_medida" placeholder="Unidad de medida*" value='{{=cont.unidad_medida.id}}'>
                                                     {{for unidad in unidades_de_medida:}}
-                                                    <option value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                        {{if unidad.id == cont.unidad_medida.id:}}
+                                                            <option selected value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                        {{pass}}
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -198,7 +202,11 @@
                                                 <br>
                                                 <select class="select-envases" name="forma" id="forma" value='{{=cont.forma}}'>
                                                     {{for forma in formas:}}
-                                                    <option value="{{=forma}}">{{=forma}}</option>
+                                                        {{if forma == cont.forma:}}
+                                                            <option selected value="{{=forma}}">{{=forma}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=forma}}">{{=forma}}</option>
+                                                        {{pass}}
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -210,7 +218,11 @@
                                                 <br>
                                                 <select class="select-envases" name="material" id="material" value='{{=cont.material}}'>
                                                     {{for material in materiales:}}
-                                                    <option value="{{=material}}">{{=material}}</option>
+                                                        {{if material == cont.material:}}
+                                                            <option selected value="{{=material}}">{{=material}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=material}}">{{=material}}</option>
+                                                        {{pass}}                                                        
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -222,7 +234,11 @@
                                                 <br>
                                                 <select class="select-envases" name="tipo_boca" id="tipo_boca" value='{{=cont.tipo_boca}}'>
                                                     {{for tipo_boca in tipos_de_boca:}}
-                                                    <option value="{{=tipo_boca}}">{{=tipo_boca}}</option>
+                                                        {{if tipo_boca == cont.tipo_boca:}}
+                                                            <option selected value="{{=tipo_boca}}">{{=tipo_boca}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=tipo_boca}}">{{=tipo_boca}}</option>    
+                                                        {{pass}}                                                    
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -246,7 +262,11 @@
                                                 <br>
                                                 <select class="select-envases" name="espacio_fisico" id="espacio_fisico" value='{{=cont.espacio_fisico.id}}'>
                                                     {{for espacio_fisico in espacios_fisicos_adscritos:}}
-                                                    <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>
+                                                        {{if espacio_fisico.id == cont.espacio_fisico.id:}}
+                                                            <option selected value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>                                                        
+                                                        {{pass}}
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -258,7 +278,11 @@
                                                 <br>
                                                 <select class="select-envases" name="categoria" id="categoria" value='{{=cont.categoria.id}}'>
                                                     {{for categoria in categorias_de_desecho:}}
-                                                    <option value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                        {{if categoria.id == cont.categoria.id:}}
+                                                            <option selected value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                        {{pass}}                                                        
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
@@ -537,6 +561,8 @@
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
 
+    var edit_contenedor_modal = document.getElementById("editContenedor");
+
     function validar_campos() {
             
             // Buscando divs para ingresar mensajes de error
@@ -552,9 +578,9 @@
 
             // Limpiando los mensajes anteriores de validadores
             if (error_identificacion.innerText != '') {
-            error_identificacion.innerText = '';
-            document.getElementById("identificacion").style.border = "3px solid #ddd";
-        }
+                error_identificacion.innerText = '';
+                document.getElementById("identificacion").style.border = "3px solid #ddd";
+            }
             if(error_capacidad.innerText != '') {
                 error_capacidad.innerText = '';
                 document.getElementById("capacidad").style.border = "3px solid #ddd";
@@ -563,121 +589,7 @@
                 error_composicion.innerText = '';
                 document.getElementById("composicion").style.border = "3px solid #ddd";
             }
-            // if(error_unidad_medida.innerText != '') {
-            //     error_unidad_medida.innerText = '';
-            //     error_unidad_medida.style.border = 'none';
-            // }
-            // if(error_forma.innerText != '') {
-            //     error_forma.innerText = '';
-            //     error_forma.style.border = 'none';
-            // }
-            // if(error_material.innerText != '') {
-            //     error_material.innerText = '';
-            //     error_material.style.border = 'none';
-            // }
-            // if(error_tipo_boca.innerText != '') {
-            //     error_tipo_boca.innerText = '';
-            //     error_tipo_boca.style.border = 'none';
-            // }
-            // if(error_espacio_fisico.innerText != '') {
-            //     error_espacio_fisico.innerText = '';
-            //     error_espacio_fisico.style.border = 'none';
-            // }
-            // if(error_categoria.innerText != '') {
-            //     error_categoria.innerText = '';
-            //     error_categoria.style.border = 'none';
-            // }
-
-            // Buscando los valores ingresados por el usuario en cada campo
-            var identificacion = document.forms['formularioCarga']['identificacion'];
-            var capacidad = document.forms['formularioCarga']['capacidad'];
-            var unidad_medida = document.forms['formularioCarga']['unidad_medida'];
-            var forma = document.forms['formularioCarga']['forma'];
-            var material = document.forms['formularioCarga']['material'];
-            var tipo_boca = document.forms['formularioCarga']['tipo_boca'];
-            var descripcion = document.forms['formularioCarga']['descripcion'];
-            var composicion = document.forms['formularioCarga']['composicion'];
-            var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
-            var categoria = document.forms['formularioCarga']['categoria'];
-
-            // Mensajes de error
-            var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
-            var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
-            var mensaje_error_unidad_medida = "Por favor, ingrese una unidad de medida válida.";
-            var mensaje_error_forma = "Por favor, ingrese una forma de recipiente válida.";
-            var mensaje_error_material = "Por favor, ingrese un material válido.";
-            var mensaje_error_tipo_boca = "Por favor, ingrese un tipo de boca válido.";
-            var mensaje_error_composicion = "Por favor, ingrese una composición válida.";
-            var mensaje_error_espacio_fisico = "Por favor, ingrese un espacio físico válido.";
-            var mensaje_error_categoria = "Por favor, ingrese una categoría de desecho válida.";
-
-            if (identificacion.value === '' || identificacion.value.length === 0) {
-                error_identificacion.innerText = mensaje_error_identificacion;
-                identificacion.style.border = "1px solid red";
-                return false;
-            }
-            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value)) {
-                error_capacidad.innerText = mensaje_error_capacidad;
-                capacidad.style.border = "1px solid red";
-                return false;
-            }
-            if(composicion.value === '' || composicion.value.length === 0){
-                error_composicion.innerText = mensaje_error_composicion;
-                composicion.style.border = "1px solid red";
-                return false;
-            }
-        }
-
-    function editar_contenedor() {
-            // Buscando divs para ingresar mensajes de error
-            var error_identificacion = document.getElementById("error-identificacion");
-            var error_capacidad = document.getElementById("error-capacidad");
-            var error_unidad_medida = document.getElementById("error-unidad-medida");
-            var error_forma = document.getElementById("error-forma");
-            var error_material = document.getElementById("error-material");
-            var error_tipo_boca = document.getElementById("error-tipo-boca");
-            var error_composicion = document.getElementById("error-composicion");
-            var error_espacio_fisico = document.getElementById("error-espacio-fisico");
-            var error_categoria = document.getElementById("error-categoria");
-
-            // Limpiando los mensajes anteriores de validadores
-            if (error_identificacion.innerText != '') {
-            error_identificacion.innerText = '';
-            document.getElementById("identificacion").style.border = "3px solid #ddd";
-        }
-            if(error_capacidad.innerText != '') {
-                error_capacidad.innerText = '';
-                document.getElementById("capacidad").style.border = "3px solid #ddd";
-            }
-            if(error_composicion.innerText != '') {
-                error_composicion.innerText = '';
-                document.getElementById("composicion").style.border = "3px solid #ddd";
-            }
-            // if(error_unidad_medida.innerText != '') {
-            //     error_unidad_medida.innerText = '';
-            //     error_unidad_medida.style.border = 'none';
-            // }
-            // if(error_forma.innerText != '') {
-            //     error_forma.innerText = '';
-            //     error_forma.style.border = 'none';
-            // }
-            // if(error_material.innerText != '') {
-            //     error_material.innerText = '';
-            //     error_material.style.border = 'none';
-            // }
-            // if(error_tipo_boca.innerText != '') {
-            //     error_tipo_boca.innerText = '';
-            //     error_tipo_boca.style.border = 'none';
-            // }
-            // if(error_espacio_fisico.innerText != '') {
-            //     error_espacio_fisico.innerText = '';
-            //     error_espacio_fisico.style.border = 'none';
-            // }
-            // if(error_categoria.innerText != '') {
-            //     error_categoria.innerText = '';
-            //     error_categoria.style.border = 'none';
-            // }
-
+            
             // Buscando los valores ingresados por el usuario en cada campo
             var identificacion = document.forms['formularioCarga']['identificacion'];
             var capacidad = document.forms['formularioCarga']['capacidad'];
