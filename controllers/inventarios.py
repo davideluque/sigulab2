@@ -528,6 +528,7 @@ def bienes_muebles():
     localizacion = []
     nombre_espaciof = []
     unidad_adscripcion = []
+    unidad_cap = []
     
     # Esta variable es enviada a la vista para que cuando el usuario seleccione 
     # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
@@ -901,6 +902,7 @@ def material_lab():
     localizacion = []
     nombre_espaciof = []
     unidad_adscripcion = []
+    unidad_cap = []
     
     # Esta variable es enviada a la vista para que cuando el usuario seleccione 
     # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
