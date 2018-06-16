@@ -30,7 +30,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada')}}">Información Documentada</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada')}}">Control de Documentos</a>
   <span class="breadcrumb-item active" >Listado de Documentos</span>
   </div>
 </nav>
@@ -43,15 +43,12 @@
 			</ol>
 
 	</nav><-->
-
+	<h2 style="text-align: center;"> CONTROL DE DOCUMENTOS </h2>
 	<div class="row">
 		<div class="col-md-1">
 		</div>	
 		<div class="col-md-10">
-			<div class="col-lg-12 col-xs-12" style="margin-top: 50px;">
-				<p style="font-size: 35px; text-align: center;">GESTIÓN DE INFORMACIÓN DOCUMENTADA</p>
-				<p
-			</div>
+
 			<nav class="indicadores" style="background-color: #FAFAFA;">			
 				<div class="row">
 
@@ -147,81 +144,77 @@
 
 </div>
 
+<div style="margin-top: 100px; padding: 80px;"></div>
 
-<div style="padding: 50px;">
-	<span style="padding: 50px;"></span>
+
+<div class="container" style="padding: 0px;">
+	<div class="row">
+
+
+	    <div id="buttons">
+	      	<a href="#">
+				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+			</a> 
+			<a href="#">
+				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
+			</a>
+	      <!-- Filtrado -->
+	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+	      <!-- Filtrado -->   
+
+	    </div>
+	    <br>
+
+	    <div class="table-responsive no-padding no-margin">
+	      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+	        <thead>
+	            <tr id="titulosListado">
+	                <th class="camposTabla linksNombres">Documento</th>
+	                <th class="camposTabla linksNombres">Código</th>
+	                <th class="camposTabla linksNombres">Tipo</th>
+	                <th class="camposTabla linksNombres">Responsable</th>
+	                <th class="camposTabla linksNombres">Período de Revisión</th>
+	                <th class="camposTabla linksNombres">Link de Descarga</th>
+	                <th class="camposTabla linksNombres">Estatus</th>
+	            </tr>
+	        </thead>
+
+	        <tbody>
+	  			{{for doc in documentos:}}
+				<tr>
+					<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+						{{=doc.nombre_doc}}
+					</a>
+					</td>
+					<td class="camposTabla" >{{=doc.codigo}}</td>
+					<td class="camposTabla" >{{=doc.tipo_doc}}</td>
+					<td class="camposTabla" >{{=doc.responsable}}</td>
+					<td class="camposTabla" >{{=doc.periodo_rev}}</td>
+					<td class="camposTabla" >Deshabilitado temporalmente</td>
+					<td class="camposTabla" >{{=doc.estatus}}</td>
+					
+				</tr>
+				{{pass}}           
+	        </tbody>
+
+	        <tfoot id="collapseFiltros">
+
+	            <tr>
+	                <th class="camposTabla linksNombres">Documento</th>
+	                <th class="camposTabla linksNombres">Código</th>
+	                <th class="camposTabla linksNombres">Tipo</th>
+	                <th class="camposTabla linksNombres">Responsable</th>
+	                <th class="camposTabla linksNombres">Período de Revisión</th>
+	                <th class="camposTabla linksNombres">Link de Descarga</th>
+	                <th class="camposTabla linksNombres">Estatus</th>
+	            </tr>
+	        </tfoot>
+
+	      </table>
+	    </div>
+	  </div>
+	</div> 
 </div>
-
-
-
-<div class="container">
-<div class="row">
-
-
-    <div id="buttons">
-      	<a href="#">
-			<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
-		</a> 
-		<a href="#">
-			<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
-		</a>
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->   
-
-    </div>
-    <br>
-
-    <div class="table-responsive no-padding no-margin">
-      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-        <thead>
-            <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Documento</th>
-                <th class="camposTabla linksNombres">Código</th>
-                <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Responsable</th>
-                <th class="camposTabla linksNombres">Período de Revisión</th>
-                <th class="camposTabla linksNombres">Link de Descarga</th>
-                <th class="camposTabla linksNombres">Estatus</th>
-            </tr>
-        </thead>
-
-        <tbody>
-  			{{for doc in documentos:}}
-			<tr>
-				<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
-					{{=doc.nombre_doc}}
-				</a>
-				</td>
-				<td class="camposTabla" >{{=doc.codigo}}</td>
-				<td class="camposTabla" >{{=doc.tipo_doc}}</td>
-				<td class="camposTabla" >{{=doc.responsable}}</td>
-				<td class="camposTabla" >{{=doc.periodo_rev}}</td>
-				<td class="camposTabla" >Deshabilitado temporalmente</td>
-				<td class="camposTabla" >{{=doc.estatus}}</td>
-				
-			</tr>
-			{{pass}}           
-        </tbody>
-
-        <tfoot id="collapseFiltros">
-
-            <tr>
-                <th class="camposTabla linksNombres">Documento</th>
-                <th class="camposTabla linksNombres">Código</th>
-                <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Responsable</th>
-                <th class="camposTabla linksNombres">Período de Revisión</th>
-                <th class="camposTabla linksNombres">Link de Descarga</th>
-                <th class="camposTabla linksNombres">Estatus</th>
-            </tr>
-        </tfoot>
-
-      </table>
-    </div>
-  </div>
-</div> 
-
 
 
 

@@ -18,18 +18,7 @@ db.define_table(
           requires=IS_NOT_EMPTY()
           ),
 
-    Field('ubicacion_fisica', 'string', label=T('Ubicacion Fisica del registro')
-          ),
-
-    Field('ubicacion_electronica', 'string',
-          label=T('Direccion electronica del registro')
-          ),
-
-    Field('doc_electronico', 'string', label=T('Documento Electronico')
-          ),
-
-    Field('fecha_creacion', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de creacion del registro')
+    Field('fecha_creacion', 'string', label=T('Fecha')
           ),
 
     Field('descripcion', 'string', label=T('Descripcion del registro')
@@ -41,7 +30,13 @@ db.define_table(
     Field('remitente', 'string', label=T('Remitente del registro')
           ),
 
-    primarykey=['codigo']
+    Field('doc_electronico', 'string', label=T('Doc. Electrónico')
+          ),
+
+    Field('archivo_fisico', 'string', label=T('Archivo Fisico')
+          ),
+
+    primarykey=['descripcion']
 )
 
 ##############################################################################

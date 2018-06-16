@@ -168,8 +168,68 @@ def lista_documentos():
 				)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def lista_registros(): return dict(message="hello from informacion_documentada.py")
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+
+def lista_registros():
+
+	# Lista de documentos a mostrar según privilegios del rol del usuario
+	registros = []
+
+	dic = {
+	"codigo": request.post_vars.codigo,
+	"fecha_creacion": request.post_vars.fecha_creacion,
+	"descripcion": request.post_vars.descripcion,
+	"destinatario": request.post_vars.destinatario,
+	"remitente": request.post_vars.remitente,
+	"doc_electronico": request.post_vars.doc_electronico,
+	"archivo_fisico": request.post_vars.archivo_fisico,
+	}
+
+
+	if(dic["descripcion"]!=None):
+		db.registros.insert(
+			codigo=dic["codigo"],
+			fecha_creacion=dic["fecha_creacion"],
+			descripcion=dic["descripcion"],
+			destinatario=dic["destinatario"],
+			remitente=dic["remitente"],
+			doc_electronico=dic["doc_electronico"],
+			archivo_fisico=dic["archivo_fisico"],
+		)
+
+		#Aqui estoy intentando poner el contador por defecto para cada codigo del registro.
+	return dict(
+	            registros=db().select(db.registros.ALL),
+	            codigo_reg=db(db.registros.codigo).count()
+				)
+
+def ficha_reg():
+	uname = request.args[0]
+	row = db(db.documentos.codigo==uname).select()
+
+
+	dic = {
+	"codigo": request.post_vars.codigo,
+	"fecha_creacion": request.post_vars.fecha_creacion,
+	"descripcion": request.post_vars.descripcion,
+	"destinatario": request.post_vars.destinatario,
+	"remitente": request.post_vars.remitente,
+	"doc_electronico": request.post_vars.doc_electronico,
+	"archivo_fisico": request.post_vars.archivo_fisico,
+	}
+
+	registro =  db(db.registros.codigo==uname)
+
+	if(request.post_vars.eliminar=="eliminar"):
+		db(db.registros.codigo==uname).delete()
+		redirect(URL('..', 'sigulab2','informacion_documentada',''))
+
+	### END ###
+	return dict(message=row	)
+
+
+	
 def ficha():
 	uname = request.args[0]
 	row = db(db.documentos.codigo==uname).select()
