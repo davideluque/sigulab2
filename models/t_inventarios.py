@@ -224,12 +224,14 @@ db.sin_bn.sb_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
 db.define_table(
     'modificacion_sin_bn',
-    Field('msb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
+    #El nombre no se puede modificar, referencia al bm que se quiere cambiar
+    Field('msb_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
     Field('msb_marca', 'string', label = T('Marca del elemento')),
     Field('msb_modelo', 'string', label = T('Modelo/código del elemento')),
-    Field('msb_cantidad', 'integer', label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
-    Field('msb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
-    Field('msb_ubicacion', 'string', label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
+    Field('msb_cantidad', 'integer', label = T('Cantidad'), requires = IS_EMPTY_OR(IS_INT_IN_RANGE(0,99999999))),
+    #El espacio no se puede modificar
+    #Field('msb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
+    Field('msb_ubicacion', 'string', label = T('Ubicacion interna'), requires = IS_EMPTY_OR(IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro']))),
     Field('msb_descripcion', 'string', label = T('Descripción del elemento')),
     Field('msb_aforado', 'string', label = T('Condición de aforado'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No', 'N/A']))),
     Field('msb_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
@@ -246,14 +248,15 @@ db.define_table(
     Field('msb_presentacion', 'string', label = T('Presentación')),
     Field('msb_unidades', 'string', label = T('Unidades por presentación'), requires = IS_EMPTY_OR(IS_MATCH('^[0-9]{5}$'))),
     Field('msb_total', 'integer', label = T('Total de unidades')),
+    Field('sb_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
     # Estado = 1  :Aceptado
-    Field('estado','integer', default=0, label=T('Estado de Solicitud de Modificacion'), requires=IS_INT_IN_RANGE(-1,2))
+    Field('estado','integer', default=0, label=T('Estado de Solicitud de Modificacion'), requires=IS_EMPTY_OR(IS_INT_IN_RANGE(-1,2)))
     )
 
-db.modificacion_sin_bn.msb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
-db.modificacion_sin_bn.msb_nombre.requires =IS_NOT_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
+db.modificacion_sin_bn.msb_nombre.requires =IS_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
+db.modificacion_sin_bn.sb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 
 # Nota: Cantidad para consumibles debe tener una longitud de 4 dígitos
 #		Colocar la opción de especificar dede el front para el field "prsentacion" en sin_bn y en "material" en sin_bn
