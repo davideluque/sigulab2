@@ -49,6 +49,58 @@ db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,
 db.bien_mueble.bm_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
 db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
+###Modificacion de bien mueble###
+
+db.define_table(
+    'modificacion_bn',
+    Field('mbn_nombre','string',label=T('Nombre del Bien Mueble')),
+    Field('mbn_num','references bien_mueble',notnull=True,unique=True, label = T('Número Bien Nacional')),
+    Field('mbn_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
+    #No son obligatorios para mobiliario
+    Field('mbn_marca','string',label=T('Marca')),
+    Field('mbn_modelo','string',label=T('Modelo')),
+    Field('mbn_serial','string',label=T('Serial')),
+    #
+    Field('mbn_descripcion','text',label=T('Descripción'),requires=IS_NOT_EMPTY()),
+    Field('mbn_material','string',label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio'])),
+    Field('mbn_color','string',label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
+    #Solo lo poseen los equipos
+    Field('mbn_calibrado','boolean',default=False,label=T('Descripción')),
+    Field('mbn_fecha_calibracion','date',label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
+    #
+    Field('mbn_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
+    Field('mbn_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mbn_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mbn_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mbn_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+
+    Field('mbn_movilidad','string',label=T('Movilidad'),requires=IS_IN_SET(['Fijo','Portátil'])),
+    Field('mbn_uso','string',label=T('Uso'),requires=IS_IN_SET(['Docencia','Investigación','Extensión','Apoyo administrativo'])),
+    Field('mbn_estatus','string',label=T('Estatus'),requires=IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible'])),
+    Field('mbn_categoria', 'string', label = T('Nombre de la categoría'), requires = IS_IN_SET(['Maquinaria Construccion',
+                    'Equipo Transporte', 'Equipo Comunicaciones', 'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina'])),
+    Field('mbn_codigo_localizacion','string',notnull=True,label=T('Código de Localización'), requires=IS_IN_SET(['150301','240107'])),
+    Field('mbn_localizacion','string',label=T('Localización'), requires=IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto'])),
+    #Foraneas
+    Field('mbn_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
+    Field('mbn_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
+    Field('mbn_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
+    Field('mbn_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
+
+    Field('mbn_categoria', 'string', label = T('Categoria del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario'])),
+
+    #Estado de la modificación
+    Field('mbn_estado', 'boolean', notnull = True, label = T('Estado de la modificacion')),
+    fake_migrate = True
+    )
+
+db.modificacion_bn.mbn_num.requires = IS_IN_DB(db, db.bien_mueble.id, '%(bm_num)s')
+db.modificacion_bn.mbn_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.modificacion_bn.mbn_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.modificacion_bn.mbn_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
+db.modificacion_bn.mbn_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+
+
 #####No se implementa una tabla para datos de adquisicion#####
 
 ### Mantenimiento ###
@@ -195,6 +247,38 @@ db.define_table(
 
 db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
 db.sin_bn.sb_nombre.requires=IS_NOT_IN_DB(db(db.sin_bn.sb_espacio==request.vars.sb_espacio),'sin_bn.sb_nombre')
+
+###Modificacion de muebles sin número de bien nacional###
+
+db.define_table(
+    'modificacion_sin_bn',
+    Field('msb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
+    Field('msb_marca', 'string', label = T('Marca del elemento')),
+    Field('msb_modelo', 'string', label = T('Modelo/código del elemento')),
+    Field('msb_cantidad', 'integer', label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
+    Field('msb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
+    Field('msb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
+    Field('msb_descripcion', 'string', label = T('Descripción del elemento')),
+    Field('msb_aforado', 'string', label = T('Condición de aforado'), requires = IS_IN_SET('Si', 'No', 'N/A')),
+    Field('msb_calibrar', 'string', label = T('Requiere calibración'), requires = IS_IN_SET('Si', 'No')),
+    Field('msb_capacidad', 'string', label = T('Capacidad'), requieres = IS_MATCH('^[0-9]{5},[0-9]{2}$')),
+    Field('msb_unidad', 'string', label = T('Unidad de medida de capacidad'), requires = IS_IN_SET(['m^3','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb'])),
+    Field('msb_unidad_dim', 'string', label = T('Unidad de medida de dimensiones'), requires = IS_IN_SET(['m', 'cm'])),
+    Field('msb_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('msb_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('msb_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('msb_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('msb_material', 'string', label = T('Material predominante')),
+    Field('msb_material_sec', 'string', label = T('Material secundario'), requires = IS_IN_SET(['Acero', 'Acrílico', 'Cerámica', 'Cuarzo', 'Madera',
+                                                                                                    'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro'])),
+    Field('msb_presentacion', 'string', label = T('Presentación')),
+    Field('msb_unidades', 'string', label = T('Unidades por presentación'), requires = IS_MATCH('^[0-9]{5}$')),
+    Field('msb_total', 'integer', label = T('Total de unidades')),
+    Field('msb_estado', 'boolean', notnull = True, label = T('Estado de la modificacion'))
+    )
+
+db.modificacion_sin_bn.msb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.modificacion_sin_bn.msb_nombre.requires =IS_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
 
 # Nota: Cantidad para consumibles debe tener una longitud de 4 dígitos
 #		Colocar la opción de especificar dede el front para el field "prsentacion" en sin_bn y en "material" en sin_bn
