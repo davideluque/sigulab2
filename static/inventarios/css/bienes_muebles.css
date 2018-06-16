@@ -3,6 +3,15 @@ input[type=date]::-webkit-inner-spin-button {
     display: none;
 }
 
+.grid-container-ef {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 20px;
+    justify-content: center;
+}
+
 .grid-container {
     display: grid;
     width: 100%;
@@ -13,7 +22,7 @@ input[type=date]::-webkit-inner-spin-button {
   }
   .grid-item {
     color: white;
-    font-size: 15px;
+    font-size: 13px;
     padding: 20px;
     background: #337ab7;
     text-align: center;
