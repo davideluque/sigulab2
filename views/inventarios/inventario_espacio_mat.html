@@ -1,24 +1,23 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
 
   <!-- Estilo del listado de Solicitudes de Servicios -->
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
 
 
 <!-- Inicio Boton Agregar BM -->
+<!--
 <div class="container" id="containerAgregar">
     <div class="row">
         <div class="col-sm-6"></div>
         <div id="columnBotonAgregar" class="col-sm-6">
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
-	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
 	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Material</button>
 	        </div>
         </div>
     </div>
 </div>
+-->
 <!-- Fin Boton Agregar Sustancia -->
 
 <!-- Inicio Listado de sustancias -->
@@ -28,7 +27,8 @@
 
     <div id="buttons">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrar resultados</button>
+        <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+        <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -176,6 +176,7 @@
 
                     </div>
                   </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
                   <button type="button" class="btn btn-next botonForm">Siguiente</button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
@@ -335,7 +336,6 @@
 del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
-
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
@@ -356,7 +356,6 @@ del concepto y tipo de ingreso o egreso -->
     }
     document.getElementById("fecha_calibracion").style.display = 'none';
   }
-
   // Mostrar fecha de calibracion
   function display_date(value){
     if ( value == "Si" ){
@@ -366,7 +365,6 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("fecha_calibracion").style.display = 'none';
     }
   }
-
   // Mostrar unidades
   function display_units(value){
     if ( value == '' ){
@@ -383,15 +381,12 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("diametro").type = 'text';
     }
   }
-
   // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
-
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
     var error_uso_interno = document.getElementById("error-uso-interno");
     var fecha_calibracion = document.getElementById("fecha_calibracion")
-
     // Limpiando los mensajes anteriores de validadores
     if (error_total.innerText != ''){
       error_total.innerText = '';
@@ -403,13 +398,11 @@ del concepto y tipo de ingreso o egreso -->
     // Buscando los valores ingresados por el usuario en cada campo
     var total = document.forms['formularioCarga']['total'].value;
     var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
-
     // Mensajes de error
     var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
     var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
     var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
     var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
-
     /* Validando el campo total (cantidad total de la sustancia en el inventario) */
     if (!is_number(total)) {
       error_total.innerText = mensaje_error_tipo;
@@ -420,12 +413,10 @@ del concepto y tipo de ingreso o egreso -->
       error_total.innerText = mensaje_error_negativo;
       return false;
     }
-
     if (is_zero(total)) {
       error_total.innerText = mensaje_error_nulo;
       return false;
     }
-
     /* Validando el campo uso_interno */
     if (!is_number(uso_interno)) {
       error_uso_interno.innerText = mensaje_error_tipo;
@@ -441,39 +432,30 @@ del concepto y tipo de ingreso o egreso -->
       error_uso_interno.innerText = mensaje_error_uso_interno;
       return false;
     }
-
   }
-
   // True si "n" es un numero
   function is_number(n){
     return !isNaN(n);
   }
-
   // True si "n" es negativo
   function is_negative(n){
     return (n < 0)
   }
-
   // True si "n" es cero
   function is_zero(n){
     return (n == 0)
   }
-
   function placeholder_localizacion(value){
     var x = document.getElementById("cod_loc");
     var y = document.getElementById("localizacion");
-
-
     if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
       x.placeholder = '150301';
       x.value = '150301';
     }else{;
       x.placeholder ='240107';
       x.value = '240107';
-
     }
   }
-
   function colocar_subcategoria(value){
     var dict = {
 		'Maquinaria Construcción':
@@ -519,7 +501,6 @@ del concepto y tipo de ingreso o egreso -->
   var n = 1;
   var x;
   var y = document.getElementById("numRegistro2");
-
   if (value != ""){
     for (var i in dict[value]){
       x = document.getElementById("Opcion".concat(n.toString()));
@@ -543,6 +524,4 @@ del concepto y tipo de ingreso o egreso -->
     
   }
 }
-
-
 </script>

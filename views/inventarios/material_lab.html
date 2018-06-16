@@ -4,12 +4,18 @@
 	<meta charset="UTF-8">
 
 	<!-- Para los mensajes con flash -->
-  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
- 	<!-- DataTables -->
- 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
- 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
- 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+	  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/r-2.2.2/datatables.min.css"/>
+ 
+
+ 
+
+	<style type="text/css">
+		div.dt-buttons {
+		  float: right;
+		}
+		
+	</style>
  	
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
@@ -160,20 +166,12 @@
 
 
 <!-- Datatables-->
-<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/r-2.2.2/datatables.min.js"></script>
 
-<!-- Datatable init js -->
-<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+
 <script type="text/javascript">
 	function redirect(dir){
 		window.location.href = dir;
@@ -243,8 +241,10 @@
 </script>
  
 <script language="javascript">
+
   var table = $('#datatable').DataTable({
-	'sDom' : '<"top"lf>irt<"bottom"p><"clear">',
+	'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	//dom: 'Bfrtip',
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
@@ -253,10 +253,32 @@
 
       new $.fn.dataTable.Buttons(api, {
         buttons: [
-           'copy', 'pdf', 'excel', 'csv', 'print'
+
+            {
+                extend: 'collection',
+                text: '<i class="fa fa-save"></i>',
+                buttons: [
+                    { extend:'copy', text: 'Copiar' } ,
+                    'excel',
+                    'csv',
+                    'pdf'
+                ]
+			},
+			{ extend:'print', text: '<i class="fa fa-print"></i>'}
         ]
-      });
-      api.buttons().container().appendTo('#buttons');  
+	  });
+	  $('#botonModal').addClass('pull-left')
+	  $('#filtrar').addClass('pull-left');
+	  
+	  $('.dataTables_filter').appendTo('#buttons');
+
+	  api.buttons().container().appendTo('#buttons');
+	  $('#buttons').append('<br><br>');
+	  $('.dataTables_info').addClass('pull-right');
+	  
+	  $('.dataTables_filter').addClass('pull-left');
+
+	  
    }
   });
 
