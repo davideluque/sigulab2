@@ -575,13 +575,13 @@
 
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categorias</label>
-                          <select class="form-control" type="select" value={{=bien['bm_categoria']}} id="categoria" onchange="colocar_subcategoria(this.value);" name="nombre_cat" required>
-                            <option value="" onchange="colocar_subcategoria(this.value);" >Seleccione una categorias</option>
+                          <select class="form-control" type="select" value={{=bien['bm_categoria']}} id="categoria" onchange="colocar_subcategoria2(2);" name="nombre_cat" required>
+                            <option value="" onchange="colocar_subcategoria2(2);" >Seleccione una categorias</option>
                             {{ for categoria in nombre_cat:}}
                                 {{if bien['bm_categoria']==categoria:}}
-                                    <option value="{{=categoria}}" selected="selected" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                                    <option value="{{=categoria}}" selected="selected" onchange="colocar_subcategoria2(2);" >{{=categoria}}</option>
                                 {{else:}}
-                                    <option value="{{=categoria}}" onchange="colocar_subcategoria(this.value);" >{{=categoria}}</option>
+                                    <option value="{{=categoria}}" onchange="colocar_subcategoria2(2);" >{{=categoria}}</option>
                                 {{pass}}
                             {{pass}}
 
@@ -763,76 +763,6 @@
   
       }
     }
-  
-    function colocar_subcategoria(value){
-      var dict = {
-          'Maquinaria Construcción':
-              ["Maquinaria y equipos de construcción y mantenimiento",
-              "Maquinarias y equipos para mantenimiento de automotores",
-              "Maquinarias y equipos agrícolas y pecuarios",
-              "Maquinarias y equipos de artes gráficas y reproducción",
-              "Maquinarias y equipos industriales y de taller",
-              "Maquinarias y equipos de energía",
-              "Maquinarias y equipos de riego y acueductos",
-              "Equipos de almacen",
-              "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-          "Equipo Transporte":
-              ["Vehículos automotores terrestres",
-              "Equipos ferroviarios y de cables aéreos",
-              "Equipos marítimos de transporte",
-              "Equipos aéreos de transporte",
-              "Vehículos de tracción no motorizados",
-              "Equipos auxiliares de transporte",
-              "Otros equipos de transporte, tracción y elevación"],
-          "Equipo Comunicaciones":
-              ["Equipos de telecomunicaciones",
-              "Equipos de señalamiento",
-              "Equipos de control de tráfico aéreo",
-              "Equipos de correo",
-              "Otros equipos de comunicaciones y de señalamiento"],
-          "Equipo Médico":
-              ["Equipos médicos - quirúrgicos, dentales y veterinarios",
-              "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-          "Equipo Científico Religioso":
-              ["Equipos científicos y de laboratorio",
-              "Equipos de enseñanza, deporte y recreación",
-              "Obras de arte",
-              "Libros y revistas",
-              "Equipos religiosos",
-              "Instrumentos musicales",
-              "Otros equipos científicos, religiosos, de enseñanza y recreación"],
-          "Equipo Oficina" : 
-              ["Mobiliario y equipos de oficina",
-              "Equipos de procesamiento de datos",
-              "Mobiliario y equipos de alojamiento",
-              "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
-    var n = 1;
-    var x;
-    var y = document.getElementById("numRegistro2");
-  
-    if (value != ""){
-      for (var i in dict[value]){
-        x = document.getElementById("Opcion".concat(n.toString()));
-        x.innerText = dict[value][i];
-        x.style.display= "block";
-        $('#Opcion'.concat(n.toString())).html(dict[value][i]);
-        $('#Opcion'.concat(n.toString())).show();
-        x.value = dict[value][i];
-        n = n + 1;  
-      }
-      while (n <= 9){
-        x = document.getElementById("Opcion".concat(n.toString()));
-        //x.innerText = "";
-        //x.style.display = "none";
-        $('#Opcion'.concat(n.toString())).hide();
-        $('#Opcion'.concat(n.toString())).html("");
-        x.value = "";
-        n = n +1;
-        
-      }
-      
-    }
-  }
 
     function colocar_subcategoria2(indicador){
     value = document.getElementById('categoria').value;
@@ -881,10 +811,13 @@
     var x;
     var y = document.getElementById("numRegistro2");
   
-    if (indicador == '1'){
+    if (indicador == '1' || indicador == '2'){
         var z = document.getElementById('Opcion0');
         z.value = '';
         z.innerHTML = 'Seleccione una opcion';
+        if (indicador == '2'){
+            z.selected = true;
+        }
     }
 
     if (value != ""){
