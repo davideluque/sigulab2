@@ -9,11 +9,28 @@ def index():
     return dict()
 
 #Enviar info a la tabla del listado
-def tabla_categoria():
+def tabla_categoria(tipo):
 
 
-    #Buscamos la tabla personal
-    tb = db().select(db.t_Personal.ALL)
+    #Buscamos la tabla general de personal 
+    if tipo =="listado":
+        tb = db().select(db.t_Personal.ALL)
+    
+    #Buscamos la tabla general de empleados por validar
+    elif tipo == "validacion" :
+        usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+        if(len(usuario)>1): usuario = usuario[1]
+        else: usuario = usuario.first()
+        print("---------------------------------------")
+        print("Nombre: "+usuario.f_nombre+" /// Correo: "+str(usuario.f_email)+" ///Dependencia: "+str(usuario.f_dependencia))
+        es_supervisor = usuario.f_es_supervisor
+        dependencia = None
+        if es_supervisor:
+            dependencia = usuario.f_dependencia
+            tb = db((db.t_Personal.f_dependencia == dependencia)&
+                           (db.t_Personal.f_es_supervisor == False)&
+                           (db.t_Personal.f_por_validar == True)
+                          ).select(db.t_Personal.ALL)
 
     #Creamos una lista para enviar a la vista
     jsns = []
@@ -67,7 +84,8 @@ def tabla_categoria():
              "extension_USB" : ext_USB,
              "extension_interna" : ext_int,
              "ubicacion" : ubicacion,
-             "es_supervisor": elm.f_es_supervisor
+             "es_supervisor": elm.f_es_supervisor,
+             "validado": elm.f_validado
              })
 
     return jsns
@@ -210,7 +228,7 @@ def listado():
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
     usuario = Usuario(infoUsuario.t_Personal.select().first())
     #Obtenemos los datos para el listado
-    tabla = tabla_categoria()
+    tabla = tabla_categoria("listado")
 
     #Dropdown ubicaciones
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
@@ -229,8 +247,43 @@ def listado():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario=usuario
-        
         )
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def listado_estilo():
+    return listado()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def validacion():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL).first()
+    if(usuario.f_es_supervisor == False):
+        redirect(URL('listado'))
+    #diccionario = listado()
+    dic = { 'empleados' : buscarEmpleados()}
+    return dic
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def validacion_estilo():
+    #dic = { 'empleados' : buscarEmpleados()}
+    dic = { 'empleados' : tabla_categoria("validacion")}
+    return dic
+
+def buscarJefe(dependencia_trabajador):
+    unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
+    print("La unidad es: "+str(unidad_adscripcion))
+    if unidad_adscripcion:
+        print("conisimo"+ str(unidad_adscripcion))
+        idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia)[0].id_jefe_dependencia
+        print(id)
+    else: 
+        idGestor = db(db.auth_group.role == "GESTOR DE PERSONAL").select(db.auth_group.id)[0].id
+        print("ID gestor: "+str(idGestor))
+        idJefe = db(db.auth_membership.group_id == idGestor).select(db.auth_membership.user_id)[0].user_id
+
+    correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
+    print("El id del jefe es: "+ str(idJefe)+ "y su correo es: "+correo)
+    return idJefe
+
 
 def reporte():
     tabla=tabla_categoria()

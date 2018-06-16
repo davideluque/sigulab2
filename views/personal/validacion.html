@@ -1,0 +1,84 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
+	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+{{end}}
+
+{{block center}}
+<div class = 'text-center'>
+    <h2>
+        Tabla de Usuarios Por Validar
+    </h2>
+</div>
+<div class="container" style="padding-top:25px">
+		<div class="table-responsive" >
+			<table class="table table-hover" style="border: 1.5px !important; border-style: solid !important; border-color: #ddd !important;">
+				<thead>
+					<tr>
+							<th><button class="btn-link" name="order" value="nombre" 	id="f_nombre">Nombre</button></th>
+							<th><button class="btn-link" name="order" value="email" 	id="f_email">Correo Electrónico</button></th>
+							<th><button class="btn-link" name="order" value="seccion" 	id="f_dependencia">Unidad de Adscripción</button></th>
+							<th><button class="btn-link" name="order" value="extension" 	id="f_extension">Extensión</button></th>
+					</tr>
+				</thead>
+
+			    <tbody id="dummyID">
+					{{for item in empleados:}}
+			          	{{if not item["nombre"] == "Ninguno": }}
+                            {{if  not item['es_supervisor'] :}}
+
+                                <tr id="{{=item['dependencia']}}_{{=item['categoria']}}">
+                                    <td><button data-toggle="modal" data-target="#ficha_edicion" type="button"
+                                        data-nombre="{{=item['nombre']}}"
+                                        data-apellido="{{=item['apellido']}}"
+                                        data-ci="{{=item['ci']}}"
+                                        data-categoria="{{=item['categoria']}}"
+                                        data-email="{{=item['email']}}"
+                                        data-email_alt="{{=item['email_alt']}}"
+                                        data-fecha_ingreso="{{=item['fecha_ingreso']}}"
+                                        data-fecha_salida="{{=item['fecha_salida']}}"
+                                        data-estatus="{{=item['estatus']}}"
+                                        data-telefono="{{=item['telefono']}}"
+                                        data-pagina_web="{{=item['pagina_web']}}"
+                                        data-cargo="{{=item['cargo']}}"
+                                        data-dep-name="{{=item['dependencia']}}"
+                                        data-gremio="{{=item['gremio']}}"
+                                        data-ubicacion="{{=item['ubicacion']}}"
+                                        data-celular="{{=item['celular']}}"
+                                        data-contacto_emergencia="{{=item['contacto_emergencia']}}"
+                                        data-direccion="{{=item['direccion']}}"
+                                        data-fecha_ingreso_usb="{{=item['fecha_ingreso_usb']}}"
+                                        data-fecha_ingreso_ulab="{{=item['fecha_ingreso_ulab']}}"
+                                        data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
+                                        data-condicion="{{=item['condicion']}}"
+                                        data-rol="{{=item['rol']}}"
+                                        value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</button></td>
+
+                                    <td>{{= item["email"]}}</td>
+                                    <td>{{= item["dependencia"]}}</td>
+                                </tr>
+                            {{pass}}
+			          	{{pass}}
+					{{pass}}
+				</tbody>
+				
+				<tfooter>
+					<tr>
+						<th>
+						<div id="number">1</div>
+						</th>
+					</tr>
+				</tfooter>
+			</table>
+		</div>
+	</div>
+{{end}}

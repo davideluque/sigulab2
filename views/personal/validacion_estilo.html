@@ -1,0 +1,168 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
+
+{{end}}
+
+{{block center}}
+
+<div class="container">
+    	<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+	  <div class="breadcrumb">
+	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+	  <a class="breadcrumb-item" href="{{=URL('..')}}">Personal</a>
+	  <span class="breadcrumb-item active">Validación</span>
+	  </div>
+	</nav>
+<div class="row">
+  <h3 class=" text-center"> LISTADO DE USUARIOS POR VALIDAR</h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">Correo</th>
+                <th class="camposTabla linksNombres">Unidad de Adscripcion</th>
+                <th class="camposTabla linksNombres">Cargo</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          {{for empleado in empleados:}}
+            <tr>
+                <td class="camposTabla">{{=empleado['nombre']}} {{=empleado['apellido']}}</td>
+                <td class="camposTabla">{{=empleado['email']}}</td>
+                <td class="camposTabla">{{=empleado['dependencia']}}</td>
+                <td class="camposTabla">{{=empleado['cargo']}}</td>
+            </tr>
+          {{pass}}           
+        </tbody>
+          <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">Correo</th>
+                <th class="camposTabla linksNombres">Unidad de Adscripcion</th>
+                <th class="camposTabla linksNombres">Cargo</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+</div>
+</div>
+
+<!-- Fin Listado --> 
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+ 
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+</script>
+<script>
+    $('#buttons').hide()
+    $('#filtrar').show()
+    
+</script>
+{{end}}

@@ -33,11 +33,6 @@ if db(db.auth_user).isempty():
     db.auth_user.insert(first_name="Gestor de Sustancias", last_name="", email='ulab-smdp@usb.ve',
         password=db.auth_user.password.validate('0000')[0])
 
-    """ Gestor de Personal """	
-    db.auth_user.insert(first_name="Gestor de Personal Dirección", last_name="", 
-        email='asis-ulab@usb.ve', password=db.auth_user.password.validate('0000')[0])
-
-
     """Usuarios representantes de dependencias. Es necesario añadir estos 
     usuarios mediante este servicio automatizado hasta que se tenga la gestión 
     de dependencias. En ese caso solo hará falta añadir la dirección y 
@@ -263,7 +258,7 @@ if db(db.t_Personal).isempty():
         )
 
     """ Gestor de Personal """
-    user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id
+    user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id
     db.t_Personal.insert(
         f_nombre="Gestor de Personal", f_apellido="", f_gremio="Administrativo", f_cargo="Gestor de Personal",
         f_ci="3", f_telefono="3", f_celular="3", f_contacto_emergencia=None,
@@ -477,115 +472,121 @@ if db(db.categorias_servicios).isempty():
 
 # Asignacion de roles
 if db(db.auth_membership).isempty():
-	# Asignacion de roles
-	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	role = db(db.auth_group.role == 'CLIENTE INTERNO').select()[0].id
+    # Asignacion de roles
+    user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    role = db(db.auth_group.role == 'CLIENTE INTERNO').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role)
+    db.auth_membership.insert(user_id=user, group_id=role)
 
-	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	role = db(db.auth_group.role == 'WEBMASTER').select()[0].id
+    user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    role = db(db.auth_group.role == 'WEBMASTER').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role)
+    db.auth_membership.insert(user_id=user, group_id=role)
 
-	user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	role = db(db.auth_group.role == 'GESTOR DE SMyDP').select()[0].id
+    user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    role = db(db.auth_group.role == 'GESTOR DE SMyDP').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	role = db(db.auth_group.role == 'ASISTENTE DEL DIRECTOR').select()[0].id
+    user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    role = db(db.auth_group.role == 'ASISTENTE DEL DIRECTOR').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	# Director
+    dep = None
+    role = db(db.auth_group.role == 'GESTOR DE PERSONAL').select()[0].id
 
-	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-	role = db(db.auth_group.role == 'DIRECTOR').select()[0].id
-
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
-
-	# Coordinadores
-
-	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id
-	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
-
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
-
-	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id
-	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
-
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
-
-	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id
-	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
-
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
-	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id
-	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
+    # Director
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    role = db(db.auth_group.role == 'DIRECTOR').select()[0].id
 
-	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'OFICINA DE PROTECCIÓN RADIOLÓGICA').select()[0].id
-	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    # Coordinadores
 
-	# Laboratorios
+    user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id
+    role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
 
-	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id
+    role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
 
-	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id
+    role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
 
-	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id
+    role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
-    
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'OFICINA DE PROTECCIÓN RADIOLÓGICA').select()[0].id
+    role = db(db.auth_group.role == 'COORDINADOR').select()[0].id
 
-	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    # Laboratorios
 
-	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id
-	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+    user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
 
-	db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
+
+    user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
+    dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id
+    role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id
+
+    db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
 # Unidades de medida

@@ -16,7 +16,7 @@
                             {{if  not item['es_supervisor'] :}}
 
                             <tr id="{{=item['dependencia']}}_{{=item['categoria']}}">
-                                <td><button data-toggle="modal" data-target="#ficha_edicion" type="button"
+                                <td><a data-toggle="modal" data-target="#ficha_edicion" type="button"
                                     data-nombre="{{=item['nombre']}}"
                                     data-apellido="{{=item['apellido']}}"
                                     data-ci="{{=item['ci']}}"
@@ -43,7 +43,7 @@
                                     data-rol="{{=item['rol']}}"
                                     data-extension_usb="{{= item['extension_USB']}}"
                                     data-extension_interna="{{=item['extension_interna']}}"
-                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</button></td>
+                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
 
                                 <td>{{= item["email"]}}</td>
                                 <td>{{= item["dependencia"]}}</td>
