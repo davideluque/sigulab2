@@ -156,6 +156,7 @@
 'Fecha': 'Fecha',
 'Fecha de compra': 'Fecha de compra',
 'Fecha de devolución': 'Fecha de devolución',
+'file ## download': 'file ',
 'First name': 'First name',
 'First Name': 'First Name',
 'For %s #%s': 'For %s #%s',

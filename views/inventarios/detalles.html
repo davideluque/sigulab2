@@ -106,15 +106,17 @@
     }
 }
 </style>
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
 {{end}}
 
 {{block center}}
-
-<li>N/B: {{=bien['bm_num']}} </li>
-<li>Placa {{=bien['bm_placa']}}</li>
+    <h2 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h2>
+    <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
+    {{ if bien['bm_placa'] != '': }}
+        <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
+    {{pass}}
 {{pass}}
-<li>Nombre: {{=bien['bm_nombre']}} </li>
-
 
 <div class="wrapper">
 		
@@ -127,26 +129,27 @@
                 <li class="tab-link" data-tab="5">MANTENIMIENTO</li>
                 <li class="tab-link" data-tab="6">SERVICIOS</li>
                 <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
-        
-        
             </ul>
 	</div>
 
 	<div class="content-wrapper">
-
 		<div id="tab-1" class="tab-content active">
-            <h4>Marca: {{=bien['bm_serial']}} </h4>
-            <h4>Modelo: {{=bien['bm_modelo']}}</h4>
-            <h4>Serial: {{=bien['bm_serial']}} </h4>
-            <h4>Descripción: {{=bien['bm_descripcion']}} </h4>
-            <h4>Marterial predominante: {{=bien['bm_material']}} </h4>
-            <h4>Color:  {{=bien['bm_color']}}</h4>
+            <div class="grid-container">
+                {{ for title in caracteristicas_list: }}
+                    <div class="grid-item">
+                        {{=title}}
+                    </div>
+                    <div class="grid-item">
+                        {{= caracteristicas_dict.get(title)}}
+                    </div>
+                {{ pass }}
+            </div>
+            <!-- Pensar como Mostrar esto en el grid-->
             {{if bien['bm_unidad'] != '':}}
                 {{if bien['bm_unidad'] == 'm':}}
                     <h4>Dimensiones: metros</h4>
                 {{else:}}
                     <h4>Dimensiones: centímetros</h4>
-                    
                 {{pass}}
                 {{if bien['bm_ancho'] != '':}}
                     <h4> &emsp;   Ancho: {{=bien['bm_ancho']}} </h4>
@@ -161,16 +164,13 @@
                     <h4>  &emsp;   Diámetro: {{=bien['bm_diametro']}} </h4>
                 {{pass}}
             {{pass}}
-            <h4>Movilidad:  {{=bien['bm_movilidad']}}</h4>
-            <h4>Uso:  {{=bien['bm_uso']}}
-            </h4>
-                
         </div>
 
+        <!-- Pensar utilizar grid-->
 		<div id="tab-2" class="tab-content">
-                <h4> Localización : {{=bien['bm_localizacion']}} </h4>
+                <h4>Localización: {{=bien['bm_localizacion']}} </h4>
                 <h4>Código Localización: {{=bien['bm_codigo_localizacion']}} </h4>
-                <h4>Categoria: {{=bien['bm_categoria']}} </h4>
+                <h4>Categoria: {{=bien['bm_categoria']}}</h4>
         </div>
 
 		<div id="tab-3"class="tab-content">En desarrollo</div>
