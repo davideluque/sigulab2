@@ -455,6 +455,7 @@
 'Registration is pending approval': 'Registration is pending approval',
 'Registration key': 'Llave de registro',
 'Registration successful': 'Registro con éxito',
+'Registro exitoso.': 'Registro exitoso.',
 'reload': 'recargar',
 'Remember me (for 30 days)': 'Recuérdame (durante 30 días)',
 'remove compiled': 'eliminar compiladas',
