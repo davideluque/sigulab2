@@ -250,6 +250,23 @@ def listado():
         )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def ficha():
+    # Obtenemos la cédula
+    ci = request.args[0]
+
+    # Buscamos en la base de datos
+    personal = db(db.t_Personal.f_ci == ci).select()[0]
+    
+    #Obtenemos el usuario loggeado
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
+
+    return dict(
+        personal=personal,
+        usuario=usuario
+    )
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado_estilo():
     return listado()
 
