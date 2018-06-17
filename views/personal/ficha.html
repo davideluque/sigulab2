@@ -24,7 +24,7 @@
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
               </div>
               <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['f_nombre']}} {{=personal['f_apellido']}}</h4>
+                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
               </div>
           </div>
         </div>
@@ -48,34 +48,34 @@
               <table class="table contenidoFicha">
                 <tbody>
                   <tr>
-                    <td>Nombre:</td><td id="field_nombre">{{=personal['f_nombre']}}</td>
+                    <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
                   </tr>
                   <tr>
-                    <td>Apellido:</td><td id="field_apellido">{{=personal['f_apellido']}}</td>
+                    <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
                   </tr>
                   <tr>
-                    <td>Correo Electrónico:</td><td id="field_email">{{=personal['f_email']}}</td>
+                    <td>Correo Electrónico:</td><td id="field_email">{{=personal['email']}}</td>
                   </tr>
                   <tr>
-                    <td>Extensión USB:</td><td id="field_extension_USB"></td>
+                    <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
                   </tr>
                   <tr>
-                    <td>Extensión Interna:</td><td id="field_extension_interna"></td>
+                    <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
                   </tr>
                   <tr>
-                    <td>Página Web:</td><td id="field_pagina_web"></td>
+                    <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
                   </tr>
                   <tr>
-                    <td>Rol:</td><td id="field_rol"></td>
+                    <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
                   </tr>
                   <tr>
-                    <td>Dependencia:</td><td id="field_dependencia"></td>
+                    <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
                   </tr>
                     <tr>
-                        <td>Ubicación:</td><td id="field_ubicacion"></td>
+                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
                     </tr>
                   <tr>
-                      <td>Unidad Superior: </td><td id="field_unidad_jerarquica_superior"></td>
+                      <td>Unidad Superior: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -85,34 +85,34 @@
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
-                      <td>Cargo:</td><td id="field_cargo"></td>
+                      <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
                     </tr>
                     <tr>
-                      <td>Gremio:</td><td id="field_gremio"></td>
+                      <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
                     </tr>
                     <tr>
-                      <td>Categoria:</td><td id="field_categoria"></td>
+                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>
+                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
                     </tr>
                     <tr >
-                      <td>Fecha Salida:</td><td id="field_fecha_salida"></td>
+                      <td>Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>
+                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab"></td>
+                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
                     </tr>
                     <tr>
-                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica"></td>
+                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
                     </tr>
                     <tr>
-                      <td>Estatus:</td><td id="field_estatus"></td>
+                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
                     </tr>
                     <tr>
-                      <td>Condicion:</td><td id="field_condicion"></td>
+                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
                 </tbody>
               </table>
@@ -122,49 +122,28 @@
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
-                      <td>Cédula:</td><td id="field_ci"></td>
+                      <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
                     </tr>
                     <tr>
-                      <td>Correo Alternativo:</td><td id="field_email_alt"></td>
+                      <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
                     </tr>
                     <tr>
-                      <td>Celular:</td><td id="field_celular"></td>
+                      <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
                     </tr>
                     <tr>
-                        <td>Teléfono:</td><td id="field_telefono"></td>
+                        <td>Teléfono:</td><td id="field_telefono">{{=personal['telefono']}}</td>
                     </tr>
                     <tr>
-                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia"></td>
+                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia">{{=personal['contacto_emergencia']}}</td>
                     </tr>
                     <tr>
-                      <td>Dirección de Habitación:</td><td id="field_direccion"></td>
+                      <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
                     </tr>
                 </tbody>
               </table>
             </div>
-
-
-
            </div>
         </div>
-
-        <div class="modal-footer">
-          <form method="post">
-
-            <div class="btn-group botonesFicha">
-            <!-- si el usuario loggeado es el dueño de la ficha -->
-            {{if usuario.f_email == personal.f_email :}}                
-            <button type="button" class="btn btn-primary btn-success" id = "editar" name = "cedula_editar" value="True" data-toggle="modal" data-target="#addservice" data-dismiss="modal">Editar</button>
-            {{pass}}
-            
-            {{if usuario.f_email == 'sigulabusb@gmail.com' :}}
-            <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name = "cedula_eliminar">Eliminar</button>
-            {{pass}}
-
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </form>
-      </div>
     </div>
   </div>
 </div>
