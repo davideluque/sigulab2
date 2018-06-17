@@ -48,6 +48,12 @@ def __find_dep_id(nombre):
 def __get_inventario_espacio(espacio_id=None):
     return db(db.bien_mueble.bm_espacio_fisico == espacio_id).select()
 
+
+# Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
+# de ese espacio.
+def __get_inventario_materiales_espacio(espacio_id=None):
+    return db(db.sin_bn.sb_espacio_fisico == espacio_id).select()
+
 # Retorna las hojas o dependencias que no tienen hijos (posiblemente secciones) y
 # que estan por debajo de la dependencia dada.
 # "jerarquia" tiene la forma: 
@@ -123,6 +129,13 @@ def __sumar_inventarios(espacios):
                        
     return inventario_total
 
+def __sumar_inventarios_materiales(espacios):
+
+    inventario_total = []
+    for esp_id in espacios:
+        inventario_total += __get_inventario_materiales_espacio(esp_id)
+                       
+    return inventario_total
 
 # Dado el id de una dependencia, retorna una lista con el agregado de los bm
 # que existen en los espacios fisicos que pertenecen a esta. 
@@ -137,6 +150,23 @@ def __get_inventario_dep(dep_id):
     inventario = __sumar_inventarios(espacios)
 
     return inventario
+
+
+# Dado el id de una dependencia, retorna una lista con el agregado de los materiales
+# que existen en los espacios fisicos que pertenecen a esta. 
+def __get_inventario_materiales_dep(dep_id):
+
+    inventario = {}
+
+    # Obteniendo lista de espacios bajo la dependencia con id dep_id
+    espacios = __get_espacios(dep_id)
+
+    # Agrega los inventarios de los espacios en la lista "espacios"
+    inventario = __sumar_inventarios_materiales(espacios)
+
+    return inventario
+
+
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
@@ -184,6 +214,52 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             bm_depedencia = dependencia, 
             bm_crea_ficha = user,
             bm_clasificacion = clasificacion
+        )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+
+
+
+
+# Registra un nueva bm en el espacio fisico indicado. Si el bm ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo 
+# el bm. 
+def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
+                descripcion, aforado, calibrar, capacidad, unidad, unidad_dim, 
+                 ancho, largo, alto, diametro, material, material_sec, presentacion, unidades,
+                 unidades,total, clasificacion, unidad_ad):
+
+    # Si ya existe el BM en el inventario
+    #if (db(db.bien_mueble.bm_num == no_bien).select()):
+    #    bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
+
+    #    response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
+    #                      al espacio \"{1}\".".format(bm.bm_nombre, bm.bm_espacio_fisico)
+    #    return False
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    else:
+        inv_id = db.sin_bn.insert(
+            sb_nombre = nombre,   
+            sb_marca = marca, 
+            sb_modelo = modelo, 
+            sb_descripcion = descripcion, 
+            sb_material = material, 
+            sb_material_sec = material_sec,
+            sb_calibrar =  calibrar,
+            sb_unidad = unidad_med, 
+            sb_ancho = ancho, 
+            sb_largo = largo,
+            sb_alto = alto, 
+            sb_diametro = diametro, 
+            sb_espacio = espacio,
+            sb_clasificacion = clasificacion,
+            sb_presentacion = presentacion,
+            sb_total = total,
+            sb_unidades = sb_unidades,
+            sb_aforado = aforado,
+            sb_ubicacion = ubicacion
+            sb_capacidad = capacidad,
+            sb_unidad_dim = unidad_dim,
         )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -932,14 +1008,14 @@ def material_lab():
                 # Evaluando la correctitud de los parametros del GET 
                 if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                         __is_bool(request.vars.es_espacio)):
-                    redirect(URL('bienes_muebles'))
+                    redirect(URL('material_lab'))
 
                 # Determinando si el usuario tiene privilegios suficientes para
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user, 
                                     int(request.vars.dependencia), 
                                         request.vars.es_espacio):
-                    redirect(URL('bienes_muebles'))
+                    redirect(URL('material_lab'))
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -957,7 +1033,7 @@ def material_lab():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __get_inventario_materiales_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -973,15 +1049,16 @@ def material_lab():
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_material(
+                        request.vars.nombre_mat,
+                        request.vars.marca_mat, request.vars.modelo_mat,espacio,  request.vars.cantidad_mat, request_vars.ubicacion_int 
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.capacidad, request.vars.unidad_cap, 
+                         request.vars.unidad_mat,  
+                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.unidades, request.vars.total, request.vars.clasificacion, request.vars.localizacion, espacio, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -1000,7 +1077,7 @@ def material_lab():
 
                 # Se muestra el inventarios de los espacios que tiene a cargo el usuario en la
                 # seccion actual
-                inventario = __sumar_inventarios(espacios_ids)
+                inventario = __sumar_inventarios_materiales(espacios_ids)
 
                 es_espacio = True
 
@@ -1023,7 +1100,7 @@ def material_lab():
 
             espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
 
-            inventario = __sumar_inventarios(espacios_ids)
+            inventario = __sumar_inventarios_materiales(espacios_ids)
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
@@ -1057,7 +1134,7 @@ def material_lab():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __get_inventario_materiales_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1073,15 +1150,16 @@ def material_lab():
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_material(
+                        request.vars.nombre_mat,
+                        request.vars.marca_mat, request.vars.modelo_mat,espacio,  request.vars.cantidad_mat, request_vars.ubicacion_int 
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.capacidad, request.vars.unidad_cap, 
+                         request.vars.unidad_mat,  
+                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.unidades, request.vars.total, request.vars.clasificacion, request.vars.localizacion, espacio, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
 
@@ -1090,13 +1168,13 @@ def material_lab():
         elif request.vars.es_espacio == 'False':
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                    redirect(URL('bienes_muebles'))
+                    redirect(URL('material_lab'))
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('bienes_muebles'))
+                redirect(URL('material_lab'))
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
@@ -1117,7 +1195,7 @@ def material_lab():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la seccion del jefe
-            inventario = __get_inventario_dep(user_dep_id)
+            inventario = __get_inventario_materiales_dep(user_dep_id)
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -1129,14 +1207,14 @@ def material_lab():
             # Evaluando la correctitud de los parametros del GET 
             if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
                     __is_bool(request.vars.es_espacio)):
-                redirect(URL('bienes_muebles'))
+                redirect(URL('material_lab'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('bienes_muebles'))
+                redirect(URL('material_lab'))
 
             if request.vars.es_espacio == "True":
         
@@ -1157,7 +1235,7 @@ def material_lab():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __get_inventario_materiales_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1173,15 +1251,16 @@ def material_lab():
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_material(
+                        request.vars.nombre_mat,
+                        request.vars.marca_mat, request.vars.modelo_mat,espacio,  request.vars.cantidad_mat, request_vars.ubicacion_int 
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.capacidad, request.vars.unidad_cap, 
+                         request.vars.unidad_mat,  
+                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.unidades, request.vars.total, request.vars.clasificacion, request.vars.localizacion, espacio, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
@@ -1211,7 +1290,7 @@ def material_lab():
                                          ).select().first().nombre
                 # Se muestra como inventario el egregado de los inventarios que
                 # pertenecen a la dependencia del usuario
-                inventario = __get_inventario_dep(dep_id)
+                inventario = __get_inventario_materiales_dep(dep_id)
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -1225,7 +1304,7 @@ def material_lab():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
-            inventario = __get_inventario_dep(dep_id)
+            inventario = __get_inventario_material_dep(dep_id)
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 

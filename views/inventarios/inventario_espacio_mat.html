@@ -134,28 +134,28 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre_mat" name="nombre" title="Nombre del material" placeholder="Nombre del material*"  required>
+                            <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del material" placeholder="Nombre del material*"  required>
                             <div class="field-error"> <p id="err_cantidad_mat"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
                             <font color="red"><div id="err_cantidad_mat" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción*" required>
+                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
                             
 
                         <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
+                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo_mat" name="modelo" value="" placeholder="Modelo/Código*" required>
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código*" required>
                             <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                         </div>
 
@@ -198,7 +198,7 @@
   
                         <label>Calibración</label>
                         <div class="form-group">
-                                <select class="form-control" type="select" id="calibracion" name="calibracion" placeholder="Calibración" required>
+                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
                                   <!-- Insertar un for-->
                                   <option type="text" value="">¿Requiere calibración?*</option>
                                   <option value="Si">Si</option>
@@ -226,7 +226,7 @@
                         
                         <label>Materiales</label>
                         <div class="form-group">
-                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
@@ -276,7 +276,7 @@
                         <label>Dimensiones</label>
 
                         <div class="form-group">
-                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                          <select class="form-control" value="" type="select" id="unidad_mat" name="unidad_mat" placeholder="Unidad de medida" onchange="display_units(this.value)">
                             <option value="">Selecione una unidad</option>
                             {{ for med in unidad_med:}}
                             <option value="{{=med}}">{{=med}}</option>
@@ -286,23 +286,23 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                          <input type="hidden" class="form-control" id="ancho_mat" name="ancho_mat" title="Formato ##.##" placeholder="Ancho">
                           <font color="red"><div id="err_ancho" hidden></div></font>
                         </div>
 
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                          <input type="hidden" class="form-control" id="largo_mat" name="largo_mat" title="Formato ##.##" placeholder="Largo" >
                           <font color="red"><div id="err_largo" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                          <input type="hidden" class="form-control" id="alto_mat" name="alto_mat" title="Formato ##.##" placeholder="Altura" >
                           <font color="red"><div id="err_alto" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                          <input type="hidden" class="form-control" id="diametro_mat" name="diametro_mat" title="Formato ##.##" placeholder="Diámetro" >
                           <font color="red"><div id="err_diametro" hidden></div></font>
                         </div>
 
