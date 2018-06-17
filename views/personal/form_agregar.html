@@ -39,41 +39,66 @@
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="rows-planilla">
+                              <div class="form-group">
+                                <div class="col-sm-6" >
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
+                                    <font color="red"><div id="err_nombre" hidden></div></font>
+                                </div>
+                              </div>
+                            
+
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Apellido</label>
+                                  <input type="text" class="form-control rows-planilla" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}" id="input-apellido">
+                                  <font color="red"><div id="err_apellido" hidden></div></font>
+                                </div>
+                              </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
 
                             <div class="form-group">
-                              <label>Nombre</label>
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
-                              <font color="red"><div id="err_nombre" hidden></div></font>
-                            </div>
-
-                            <div class="form-group">
-                              <label>Apellido</label>
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}">
-                              <font color="red"><div id="err_apellido" hidden></div></font>
-                            </div>
-
-                            <div class="form-group">
-                              <label>Cédula</label>
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required readonly value="{{=usuario.f_ci or ''}}">
-                              <font color="red"><div id="err_ci" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Cédula</label>
+                                <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required readonly value="{{=usuario.f_ci or ''}}">
+                                <font color="red"><div id="err_ci" hidden></div></font>
+                              </div>
                             </div>
     
                             <div class="form-group">
-                              <label>Email</label>
-                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" >
-                              <font color="red"><div id="err_email" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Email</label>
+                                <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" id="input-email">
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>  
                             </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
                             <div class="form-group">
-                              <label>Email Alternativo</label>
-                              <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" >
-                              <font color="red"><div id="err_email" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Email Alternativo</label>
+                                <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" >
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>
                             </div>
 
                             <div class="form-group">
-                              <label>Teléfono Residencial</label>
-                              <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required >
-                              <font color="red"><div id="err_telefono" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Teléfono Residencial</label>
+                                <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required id="input-telefono" >
+                                <font color="red"><div id="err_telefono" hidden></div></font>
+                              </div>
                             </div>
+
+                          </div>
+                          
+                          <div class="col-sm-12">
                             <label>Celular</label>
                             <div class="form-group form-inline">
                                 <div class="form-group">
@@ -92,24 +117,33 @@
                                 </div>
                                 <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
+                          </div>
 
-                            <div class="form-group">
+                            <div class="form-group col-sm-12">
                                 <label>Contacto de Emergencia</label>
                               <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
+                          <div class="rows-planilla">
+
                             <div class="form-group">
+                              <div class="col-sm-6">
                                 <label>Dirección de Habitación</label>
-                              <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
-                              <font color="red"><div id="err_direccion" hidden></div></font>
+                                <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
+                                <font color="red"><div id="err_direccion" hidden></div></font>
+                              </div>
                             </div>
 
                             <div class="form-group">
+                              <div class="col-sm-6">
                                 <label>Página Web</label>
-                              <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" >
-                              <font color="red"><div id="err_pagina_web" hidden></div></font>
+                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" >
+                                <font color="red"><div id="err_pagina_web" hidden></div></font>
+                              </div>
                             </div>
+
+                          </div>
 
                         </div>
                       </div>
