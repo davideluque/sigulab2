@@ -58,7 +58,7 @@ $(document).ready(function () {
         parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
                         
             if (($(this).val() == "") && ($(this).attr('required'))) {
-                if (($(this).attr('name')=="nombre") || ($(this).attr('name')=="nombre_edit")) {
+                if (($(this).attr('name')=="nombre_mat") || ($(this).attr('name')=="nombre_edit")) {
                     //$("#err_nombre").html("Este campo es obligatorio");
                     //$("#err_nombre").show();
 
@@ -68,9 +68,9 @@ $(document).ready(function () {
                 $(this).addClass('input-error');
                 next_step = false;
             }else {
-                if (($(this).attr('name')=="no_bien")) {
-                    if (!($(this).val().match(/^[0-9]{6}$/))) {
-                        $("#err_no_bien").html("Formato Inválido. Ingrese 6 dígitos");
+                if (($(this).attr('name')=="cantidad_mat")) {
+                    if (!($(this).val().match(/^[0-9]+$/))) {
+                        $("#err_no_bien").html("Formato Inválido. Ingrese solo dígitos numéricos");
                         $("#err_no_bien").show();
                         $(this).addClass('input-error');
                         next_step = false;
@@ -80,9 +80,9 @@ $(document).ready(function () {
                         $("#err_no_bien").hide();
                     }
                 }
-                else if (($(this).attr('name')=="no_placa")) {
-                    if (!($(this).val().match(/^[0-9]{5}$/)) && $(this).val() != "") {
-                        $("#err_placa").html("Formato Inválido. Ingrese 5 dígitos");
+                else if (($(this).attr('name')=="capacidad")) {
+                    if (!($(this).val().match(/^[0-9]+$/)) && $(this).val() != "") {
+                        $("#err_placa").html("Formato Inválido. Ingrese solo dígitos numéricos");
                         $("#err_placa").show();
                         $(this).addClass('input-error');
                         next_step = false;
