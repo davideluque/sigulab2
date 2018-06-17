@@ -125,7 +125,6 @@
                       <span class="step activePass">1</span>
                       <span class="step">2</span>
                       <span class="step">3</span>
-                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -187,16 +186,15 @@
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
-                        <span class="step">4</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del material</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
   
-                        <label>Calibración</label>
+                        
                         <div class="form-group">
                                 <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
                                   <!-- Insertar un for-->
@@ -266,14 +264,11 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step activePass">3</span>
-                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
-                        <label>Dimensiones</label>
 
                         <div class="form-group">
                           <select class="form-control" value="" type="select" id="unidad_mat" name="unidad_mat" placeholder="Unidad de medida" onchange="display_units(this.value)">
@@ -308,7 +303,7 @@
 
                         <label>Ubicación interna</label>
                         <div class="form-group">
-                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón u otro." title="#####.##"   required>
+                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
                                 <font color="red"><div id="err_ubicacion_int" hidden></div></font>
                         </div>
 
