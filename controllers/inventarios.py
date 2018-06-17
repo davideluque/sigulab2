@@ -528,7 +528,7 @@ def detalles():
         'Modelo:': bien['bm_modelo'],
         'Serial:': bien['bm_serial'],
         'Descripción:': bien['bm_descripcion'],
-        'Marterial predominante:': bien['bm_material'],
+        'Material predominante:': bien['bm_material'],
         'Color:': bien['bm_color'],
         'Movilidad:': bien['bm_movilidad'],
         'Uso:': bien['bm_uso']
