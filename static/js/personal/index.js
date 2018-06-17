@@ -50,14 +50,20 @@ $(document).ready( function() {
     $( "#datepickerUlab" ).datepicker();
     $( "#datepicker5" ).datepicker();
 
+    // Funcion para reiniciar el modal de mostrar ficha cada vez que 
+    // se selecciona una persona 
+    $( ".empleado" ).on("click", function(e){
+      $(".tab-edicion-principal").attr("class", "tab-edicion-principal nav-item active");
+      $(".tab-edicion").attr("class", "tab-edicion nav-item");
+      $(".pane-edicion-principal").attr("class", "pane-edicion-principal tab-pane active");
+      $(".pane-edicion").attr("class", "pane-edicion tab-pane")
+    })
+
     $('#ficha_edicion').on('show.bs.modal', function(e){
-        console.log('camoio')
         var ci = $(e.relatedTarget).data('ci');
         var gremio = $(e.relatedTarget).data('gremio');
         var email = $(e.relatedTarget).data('email');
         var email_alt = $(e.relatedTarget).data('email_alt');
-        console.log("Este es el correo: " )
-        console.log(email_alt)
         var fecha_salida = $(e.relatedTarget).data('fecha_salida');
         var fecha_ingreso = $(e.relatedTarget).data('fecha_ingreso');
         var nombre = $(e.relatedTarget).data('nombre');
@@ -139,7 +145,6 @@ $(document).ready( function() {
         fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
                condicion, rol, extension_USB, extension_interna, email_alt];
-        console.log(fields);
         //$("#field_ci").html(item);
         //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
     });
