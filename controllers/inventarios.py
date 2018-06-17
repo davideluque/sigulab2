@@ -521,7 +521,18 @@ def detalles():
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-
+    caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
+    'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+    caracteristicas_dict = {
+        'Marca:': bien['bm_marca'],
+        'Modelo:': bien['bm_modelo'],
+        'Serial:': bien['bm_serial'],
+        'Descripción:': bien['bm_descripcion'],
+        'Marterial predominante:': bien['bm_material'],
+        'Color:': bien['bm_color'],
+        'Movilidad:': bien['bm_movilidad'],
+        'Uso:': bien['bm_uso']
+    }
     return dict(bien = bien,
                 material_pred = material_pred,
                 color_list = color,
@@ -531,7 +542,8 @@ def detalles():
                 nombre_cat = nombre_cat,
                 cod_localizacion = cod_localizacion,
                 localizacion = localizacion,
-                )
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
