@@ -4,13 +4,10 @@
 	<meta charset="UTF-8">
 
 	<!-- Para los mensajes con flash -->
-  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
-	<!-- Para los mensajes con flash -->
+	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/r-2.2.2/datatables.min.css"/>
-
-
+ 
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
@@ -27,7 +24,7 @@
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">	   
- 	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>	
+ 	<script src="{{=URL('static', 'js/inventario_material_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -65,7 +62,7 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -91,11 +88,11 @@
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('bienes_muebles')}}">
+	    		<a class="boton" href="{{=URL('material_lab')}}">
 		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		</a>
 	    		{{else:}}
-    			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+    			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
 		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		</a>
 	    		{{pass}}
@@ -138,7 +135,7 @@
 			<div class="grid-container" id="secciones">
 		{{pass}}
 			{{ for espacio in dependencias: }}
-			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+			<div class="grid-item" onclick="redirect('{{=URL('material_lab',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{ =espacio.nombre }}
 			</div>
 			{{ pass }}
@@ -152,16 +149,16 @@
 
 	<!-- Se lista el inventario del espacio fisico visitado -->
 	{{if espacio_visitado:}}
-		{{include 'inventarios/inventario_espacio.html'}}
+		{{include 'inventarios/inventario_espacio_mat.html'}}
 	<!-- Se lista el inventario de una dependencia de apoyo -->
 	{{elif (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_seccion.html'}}
+		{{include 'inventarios/inventario_seccion_mat.html'}}
 	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
 	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
 		{{include 'inventarios/inventario_laboratorio.html'}}
 	<!-- Se lista el inventario de una seccion -->
 	{{else:}}
-		{{include 'inventarios/inventario_seccion.html'}}
+		{{include 'inventarios/inventario_seccion_mat.html'}}
 	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
@@ -242,47 +239,47 @@
   }
 </script>
  
- <script language="javascript">
+<script language="javascript">
 
-		var table = $('#datatable').DataTable({
-		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-		  //dom: 'Bfrtip',
-		  language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-		  },
-		 initComplete: function(){
-			var api = this.api();
+  var table = $('#datatable').DataTable({
+	'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	//dom: 'Bfrtip',
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+        buttons: [
+
+            {
+                extend: 'collection',
+                text: '<i class="fa fa-save"></i>',
+                buttons: [
+                    { extend:'copy', text: 'Copiar' } ,
+                    'excel',
+                    'csv',
+                    'pdf'
+                ]
+			},
+			{ extend:'print', text: '<i class="fa fa-print"></i>'}
+        ]
+	  });
+	  $('#botonModal').addClass('pull-left')
+	  $('#filtrar').addClass('pull-left');
 	  
-			new $.fn.dataTable.Buttons(api, {
-			  buttons: [
+	  $('.dataTables_filter').appendTo('#buttons');
+
+	  api.buttons().container().appendTo('#buttons');
+	  $('#buttons').append('<br><br>');
+	  $('.dataTables_info').addClass('pull-right');
 	  
-				  {
-					  extend: 'collection',
-					  text: '<i class="fa fa-save"></i>',
-					  buttons: [
-						  { extend:'copy', text: 'Copiar' } ,
-						  'excel',
-						  'csv',
-						  'pdf'
-					  ]
-				  },
-				  { extend:'print', text: '<i class="fa fa-print"></i>'}
-			  ]
-			});
-			$('#botonModal').addClass('pull-left')
-			$('#filtrar').addClass('pull-left');
-			
-			$('.dataTables_filter').appendTo('#buttons');
+	  $('.dataTables_filter').addClass('pull-left');
+
 	  
-			api.buttons().container().appendTo('#buttons');
-			$('#buttons').append('<br><br>');
-			$('.dataTables_info').addClass('pull-right');
-			
-			$('.dataTables_filter').addClass('pull-left');
-	  
-			
-		 }
-		});
-	  
-	  </script>
+   }
+  });
+
+</script>
 {{end}}
