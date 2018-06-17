@@ -1,0 +1,94 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+  <link rel="stylesheet" href="{{=URL('static','inventarios/css/inventarios.css')}}">
+{{end}}
+
+{{block center}}
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <span class="breadcrumb-item active">Inventarios</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+<!-- Contenido principal de la página de gestión de inventarios-->
+<div id="main" class="container">
+    <div id="fila1" class="row">
+
+      <h2 id="tituloBienvenida">Gestión de Bienes Muebles</h2>
+
+    </div>
+
+    <div id="fila2" class="row">
+
+      <div class="col-sm-3">
+      </div>
+
+      <div class="col-sm-6">
+
+        <!-- Boton Bienes Muebles -->
+        <div class="col-sm-6 columnas">
+          <a href="{{=URL('bienes_muebles')}}">
+            <img class="iconos" src="{{=URL('static','inventarios/images/3d-buildings.png')}}">
+            <h4 class="opciones">Bienes Muebles</h4>
+          </a>
+        </div>
+
+        <!-- Boton Material de laboratorio -->
+        <div class="col-sm-6 columnas">
+          <a href="{{=URL('material_lab')}}">
+            <img class="iconos" src="{{=URL('static','inventarios/images/research.png')}}">
+            <div>
+              <h4 class="opciones" style="">Material de laboratorio<tag style="font-size: 20px; color: red;"></tag></h4>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="col-sm-3">
+      </div>
+
+    </div>
+
+    <div id="fila3" class="row">  
+
+      <div class="col-sm-3">
+      </div>
+
+      <div class="col-sm-6">
+
+        <!-- Boton Solicitud de préstamos-->
+        <div class="col-sm-6 columnas">
+          <a href="{{=URL('prestamos')}}">
+            <img class="iconos" src="{{=URL('static','inventarios/images/file(1).png')}}">
+            <div>
+              <h4 class="opciones" style="display:;">Solicitud de préstamos<tag style="font-size: 20px; color: red"></tag></h4>
+            </div>
+          </a>
+        </div>
+
+        <!-- Boton Mantenimiento -->
+        <div class="col-sm-6 columnas">
+          <a href="{{=URL('mantenimiento')}}">
+            <img class="iconos" src="{{=URL('static','inventarios/images/maintenance.png')}}">
+            <h4 class="opciones">Mantenimiento</h4>
+          </a>
+        </div>
+        
+      </div>
+
+      <div class="col-sm-3">
+      </div>
+
+    </div>
+    </div>
+    <div class="col-sm-3">
+      </div>
+    </div>
+</div>
+<!-- Fin del contenido principal de la página de gestión de servicios -->
