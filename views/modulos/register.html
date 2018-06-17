@@ -58,25 +58,21 @@
                 </div>
 
                 <!-- Cedula de Identidad -->
-                <div class="form-group form-inline">
-                    <div class="form-group">
-                            <select class="form-control" type="select" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
-                                {{for prefijo_cedula in prefijos_cedula:}}
-                                    <option value='{{=prefijo_cedula}}'>{{=prefijo_cedula}}</option>
-                                {{pass}}
-                            </select>
-                        
+                <div class="form-group">
+                    <div class="col-xs-2" id="cedula-select">
+                        <select class="form-control" type="select" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
+                            {{for prefijo_cedula in prefijos_cedula:}}
+                                <option value='{{=prefijo_cedula}}'>{{=prefijo_cedula}}</option>
+                            {{pass}}
+                        </select>
                     </div>
                 
-                    <div class="form-group" id="auth_cedula__row">
-                        <div class="col-xs-12">
-                            <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
-                            
-                        </div>
+                    <div class="col-xs-9" id="auth_cedula__row">
+                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
                     </div>
                     <div id="cedula_error_group" style="display:none;">
-                                <label class="control-label" id="cedula_error"></label>
-                            </div>
+                        <label class="control-label" id="cedula_error"></label>
+                    </div>
                 </div>
 
 
