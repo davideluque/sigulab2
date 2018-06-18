@@ -182,14 +182,14 @@
 	  			{{for doc in documentos:}}
 				<tr>
 					<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
-						{{=doc.nombre_doc}}
+						{{=doc.nombre_doc.upper()}}
 					</a>
 					</td>
-					<td class="camposTabla" >{{=doc.codigo}}</td>
-					<td class="camposTabla" >{{=doc.tipo_doc}}</td>
-					<td class="camposTabla" >{{=doc.responsable}}</td>
+					<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+					<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+					<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
 					<td class="camposTabla" >Deshabilitado temporalmente</td>
-					<td class="camposTabla" >{{=doc.estatus}}</td>
+					<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 					
 				</tr>
 				{{pass}}           
@@ -289,7 +289,7 @@
 		<div class="modal-body addBody">
 		<div class="row addRow">
 			<div class="col-md-12 form-box">
-				<form id="formularioAdd" class="registration-form" method="post">
+				<form id="formularioCarga" class="registration-form" method="post">
 
 					<!-- Primer Paso -->
 					<fieldset class="formField">
@@ -321,11 +321,11 @@
 										<option value="Referente Estrategico">Referente Estratégico</option>
 										<option value="Reglamento">Reglameto</option>
 										<option value="Manual">Manual de Organización</option>
-										<option value="Manual">Manual de Calidad</option>
-										<option value="Manual">Manual de Proceso de Gestión</option>
-										<option value="Manual">Manual de Proceso Técnico</option>
-										<option value="Manual">Manual de Uso</option>
-										<option value="Otro">Manual de Uso</option>
+										<option value="Manua2">Manual de Calidad</option>
+										<option value="Manua3">Manual de Proceso de Gestión</option>
+										<option value="Manua4">Manual de Proceso Técnico</option>
+										<option value="Manua5">Manual de Uso</option>
+										<option value="Otro">Otro/option>
 									</select>
 								</div>
 
@@ -343,7 +343,7 @@
 
 
 
-								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioAdd" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
 								<button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
 							</div>
 						</div>	
@@ -371,18 +371,18 @@
 
 							<!-- Campo de Código -->
 							<div class="form-group">
-								<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()" required>
+								<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
 							</div>
 
 							<!-- Campo de Objetivos -->
 							<div class="form-group">
-								<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos" required> 
+								<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos"> 
 							</div>
 
 							<!-- Campo de Período de Revisión -->
 							<div class="form-group">
 								<h5>Período de Revisión</h5>
-								<select name="periodo" id="periodo" class="input" required>
+								<select name="periodo" id="periodo" class="input">
 									<option value=""></option>
 									<option value="Semestral">Semestral</option>
 									<option value="Anual">Anual</option>
@@ -395,7 +395,7 @@
 
 							<!-- Campo de Fecha de entrega para revisión del Documento -->
 							<div class="form-group">
-								<h5>Fecha de entrega para revisión</h5><input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" required>
+								<h5>Fecha de entrega para revisión</h5><input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev">
 							</div>
 
 
@@ -427,7 +427,7 @@
 
 							<!-- Campo de Número de Anexos -->
 							<div class="form-group">
-								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" required>  
+								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
 							
 								<div id="containerAnexos"/>
 							</div>
@@ -450,7 +450,7 @@
 						
 
 							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioAdd" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
 							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
 						</div>
 					</fieldset>
@@ -476,22 +476,24 @@
 
 							<!-- Campo de responsable de la revisión de contenidos -->
 							<div class="form-group">
-								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required>
+								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" />
 							</div> 
 
 							<!-- Campo de fecha de la revisión de contenidos -->
 							<div class="form-group">
-									<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" required> 
+								<h5>Fecha de revisión de contenidos</h5>
+								<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" /> 
 							</div> 
 
 							<!-- Campo de responsable de la revisión de especificaciones -->
 							<div class="form-group">
-									<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required> 
+								<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" /> 
 							</div> 
 
 							<!-- Campo de fecha de la revisión de especificaciones -->
 							<div class="form-group">
-									<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" required> 
+								<h5>Fecha de revisión de especificaciones</h5>
+								<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" /> 
 							</div> 
 
 
@@ -506,7 +508,7 @@
 							</div> 
 
 							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioAdd" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
 							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
 						</div>
 					</fieldset>
@@ -534,17 +536,18 @@
 
 								<!-- Campo de responsable de aprobación-->
 								<div class="form-group">
-										<input type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:"> 
+									<input type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
 								</div>
 
 								<!-- Campo de fecha de aprobación -->
 								<div class="form-group">
-									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación"> 
+									<h5>Fecha de aprobación</h5>
+									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" /> 
 								</div>	
 								
 								<!-- Campo de código de registro de aprobación -->
 								<div class="form-group">
-										<input type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion"> 
+									<input type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion" /> 
 								</div>
 
 				
@@ -575,14 +578,14 @@
 
 								<!-- Campo de ubicación física del documento -->
 								<div class="form-group">
-									<input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento">
+									<input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" />
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 											acceder al documento</h6>
 								</div>  
 
 								<!-- Campo de ubicación electrónica del documento -->
 								<div class="form-group">
-									<input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico"> 
+									<input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" /> 
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 											acceder al documento</h6>
 								</div>
@@ -621,36 +624,37 @@
 
 								<!-- Campo del control de cambios -->
 								<div class="form-group">
-										<input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios"> 
+									<input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios" /> 
 								</div>
 
 								<!-- Campo de la fecha del control de cambios -->
 								<div class="form-group">
-										<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios"> 
+									<h5>Fecha de control de cambios</h5>
+									<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" /> 
 								</div>
 
 								<!-- Campo de Elaborado por -->
 								<div class="form-group">
-										<input type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por"> 
+									<input type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
 								</div>
 
 								<!-- Campo de Ubicación del registro en formato físico -->
 								<div class="form-group">
-										<input type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico"> 
-										<h6>Indique la carpeta, archivo, estante u otro se puede
+									<input type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
+									<h6>Indique la carpeta, archivo, estante u otro se puede
 												acceder al documento</h6>
 								</div>
 
 								<!-- Campo deUbicación del registro en formato físicoo -->
 								<div class="form-group">
-										<input type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato físico"> 
-										<h6>Indique la carpeta, archivo, estante u otro se puede
+									<input type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
+									<h6>Indique la carpeta, archivo, estante u otro se puede
 												acceder al documento</h6>
 								</div>
 
 
 								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioAdd" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
 						</div>
 					</fieldset>
 					<!-- Fin Sexto Paso -->
@@ -725,7 +729,7 @@
 			var inputName = document.createElement("input");
 
 			inputCode.type = "text";
-			inputCode.name = "anexoCod" + i;
+			inputCode.name = "anexoCode" + i;
 			inputCode.value = c;
 
 			inputName.type = "text";
