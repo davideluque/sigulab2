@@ -844,7 +844,16 @@
       
     }
   }
-  
-  
   </script>
+  <script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+      </script>
   {{end}}
