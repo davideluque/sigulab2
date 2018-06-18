@@ -326,7 +326,6 @@
                         
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
                   <button type="button" class="btn btn-next botonForm">Siguiente</button>         
                 </fieldset>
                 <!-- Fin Primer Paso -->
@@ -453,7 +452,7 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
+                        
                         <div class="form-group">
                             <label>Seleccione un tipo de movilidad*</label>
                             <select class="form-control" type="select" id="movilidad" value={{=bien['bm_movilidad']}} name="movilidad" placeholder="Movilidad" required>
@@ -472,11 +471,13 @@
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
                         {{ for uso in uso_list: }}
+                            {{i=1}}
                             {{if uso in bien['bm_uso']:}}
-                                <input type="checkbox" name="tipo_uso" checked>{{=uso}}
+                                <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}" value="{{=uso}}" checked>{{=uso}}
                             {{else:}}
-                                <input type="checkbox" name="tipo_uso">{{=uso}}
-                            {{pass}} 
+                                <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}" value="{{=uso}}">{{=uso}}
+                            {{pass}}
+                            {{i = i+1}} 
                           <br>
                         {{pass}}
                         </div>
@@ -612,7 +613,8 @@
                       </div>
                     </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Modificar</button>                </fieldset>
+                    <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm">Modificar</button>
+                </fieldset>
                 <!-- Fin Tercer Paso -->
               </form>
           </div>

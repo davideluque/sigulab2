@@ -494,6 +494,9 @@ def index(): return locals()
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles():
+    if request.vars.modificacion:
+        # Se solicito modificar el bien mueble
+        request.vars.modificacion = None
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
 
