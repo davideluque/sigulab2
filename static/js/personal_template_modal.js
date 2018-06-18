@@ -122,9 +122,13 @@ $(document).ready(function () {
                     $(this).removeClass('input-error')
                     return $(this).val() === '' || $(this).val() === null
                 }).each(function(idx) {
-                    $(this).next().first().html('Por favor, escoja una opción')
-                    $(this).next().first().show()
+                    // $(this).next().first().html('Por favor, escoja una opción')
+                    // $(this).next().first().show()
                     $(this).addClass('input-error')
+                    if ($(this).val() === null){
+                        $(this).attr("data-content", "Seleccione una opción");
+                        $(this).popover('show');
+                    }
                     next_step = false
                 })
 
@@ -132,11 +136,16 @@ $(document).ready(function () {
 
             $(`[name="fecha_ingreso_usb_add"],
             [name="fecha_ingreso_ulab_add"],
-            [name="fecha_ingreso_admin_publica_add"]`).filter(function () {
-                console.log($(this).val())
+            [name="fecha_ingreso_admin_publica_add"],
+            [name="fecha_ingreso_add"],
+            [name="fecha_salida_add"]`).filter(function () {
+                console.log($(this).val());
                 return $(this).val() === '' || $(this).val() === null
             }).each(function(idx) {
                 $(this).addClass('input-error')
+                if ($(this).val() === ''){
+                    $(this).popover('show');
+                }
                 next_step = false
             })
         }
@@ -165,8 +174,17 @@ $(document).ready(function () {
         [name="celular_add"],
         [name="contacto_emergencia_add"],
         [name="direccion_add"],
-        [name="pagina_web_add"]`).on('click', function(e){
+        [name="pagina_web_add"],
+        [name="estatus_add"],
+        [name="categoria_add"],
+        [name="condicion_add"],
+        [name="fecha_ingreso_usb_add"],
+        [name="fecha_ingreso_ulab_add"],
+        [name="fecha_ingreso_admin_publica_add"],
+        [name="fecha_ingreso_add"],
+        [name="fecha_salida_add"]`).on('focus', function(e){
         $(this).popover('hide');
+        $(this).removeClass('input-error');
     })
     
     // submit
