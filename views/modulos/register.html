@@ -31,6 +31,7 @@
 
         <!-- Inicio card box -->
         <div id="boxRegister" class="card-box boxes">
+            <div class="flash "><span class="badge badge-success">{{=response.flash or ''}}</span></div>
             <div class="text-center">
                 <h4 id="titulo" class="text-uppercase font-bold m-b-0">Nuevo Usuario</h4>
             </div>
@@ -111,7 +112,7 @@
                 </div>
                 <div class="form-group"  style=" margin-bottom:6px">
                   <input hidden id="tipo_supervisor" name="tipo_supervisor">Indique tipo de usuario:<br>
-                  <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()"> Dependencia<br>
+                  <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()" required> Dependencia<br>
                   <input type="radio"  name="tipo_usuario" value="False" onclick="setPersonal()"> Personal Interno<br>
                 </div>
 
