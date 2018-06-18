@@ -74,11 +74,11 @@ db.define_table(
 
     Field('responsable', 'string',
           label=T('Dependencia responsable del Documento'),
-          requires=IS_IN_SET(['DIRECCIÓN','LABORATORIO A','LABORATORIO B', \
-                    'LABORATORIO C','LABORATORIO D','LABORATORIO E',\
-                    'LABORATORIO F','LABORATORIO G','UNIDAD DE ADMINISTRACIÓN',\
-                    'COORDINACIÓN DE ADQUISICIONES','COORDINACIÓN DE IMPORTACIONES',\
-                    'COORDINACIÓN DE LA CALIDAD','OFICINA DE PROTECCIÓN RADIOLÓGICA'
+          requires=IS_IN_SET(['DIRECCIÓN','Laboratorio A','Laboratorio B', \
+                    'Laboratorio C','Laboratorio D','Laboratorio E',\
+                    'Laboratorio F','Laboratorio G','Unidad de Administración',\
+                    'Coordinación de Adquisiciones','Coordinación de Importaciones',\
+                    'Coordinación de la Calidad','Oficina de Proteccion Radiológica'
                     ])
           ),
 

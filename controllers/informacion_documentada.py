@@ -64,8 +64,12 @@ def lista_documentos():
 	# elif auth.has_membership("CLIENTE INTERNO"): pass
 	# else: pass
 
-	# 	#
-
+	print(auth.user.first_name)
+	if auth.has_membership("WEBMASTER") or auth.has_membership("DIRECTOR") or auth.user.email=='ulab-calidad@usb.ve':
+		documentos = db().select(db.documentos.ALL)
+	else:
+		print (auth.user.first_name=='Unidad de Administración')
+		documentos = db(db.documentos.responsable==auth.user.first_name).select()
 	dic = {
 	"codigo": request.post_vars.codigo,
 	"objetivo": request.post_vars.objetivos,
@@ -128,7 +132,7 @@ def lista_documentos():
 	if(not('' in aprobado.values())):
 
 		dic["estatus"] = "Aprobado"
-
+	print(dic["codigo"]!=None)
 	if(dic["codigo"]!=None):
 		db.documentos.insert(
 			codigo=dic["codigo"],
