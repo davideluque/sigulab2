@@ -38,12 +38,13 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Capacidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
-                <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Presentacion</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -51,26 +52,28 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
+                <td class="camposTabla">{{=bm['sb_nombre']}}</td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
-                <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                <td class="camposTabla">{{=bm['bm_marca']}}</td>
-                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
-                <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_unidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_clasificacion']}}</td>
+                <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+                <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
-          <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">N° BM</th>
-          <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Placa</th>
-          <th class="camposTabla linksNombres">Marca</th>
-          <th class="camposTabla linksNombres">Modelo</th>
-          <th class="camposTabla linksNombres">Serial</th>
+            <th class="camposTabla linksNombres">Nombre</th>
+            <th class="camposTabla linksNombres">Cantidad</th>
+            <th class="camposTabla linksNombres">Capacidad</th>
+            <th class="camposTabla linksNombres">Unidad</th>
+            <th class="camposTabla linksNombres">Tipo</th>
+            <th class="camposTabla linksNombres">Marca</th>
+            <th class="camposTabla linksNombres">Modelo</th>
+            <th class="camposTabla linksNombres">Presentacion</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -363,17 +366,17 @@ del concepto y tipo de ingreso o egreso -->
   // Mostrar unidades
   function display_units(value){
     if ( value == '' ){
-      document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho").type = 'hidden';
-      document.getElementById("largo").type = 'hidden';
-      document.getElementById("alto").type = 'hidden';
-      document.getElementById("diametro").type = 'hidden';
+      document.getElementById("unidad_mat").type = 'hidden';
+      document.getElementById("ancho_mat").type = 'hidden';
+      document.getElementById("largo_mat").type = 'hidden';
+      document.getElementById("alto_mat").type = 'hidden';
+      document.getElementById("diametro_mat").type = 'hidden';
     }else{
-      document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho").type = 'text';
-      document.getElementById("largo").type = 'text';
-      document.getElementById("alto").type = 'text';
-      document.getElementById("diametro").type = 'text';
+      document.getElementById("unidad_mat").type = 'text';
+      document.getElementById("ancho_mat").type = 'text';
+      document.getElementById("largo_mat").type = 'text';
+      document.getElementById("alto_mat").type = 'text';
+      document.getElementById("diametro_mat").type = 'text';
     }
   }
   // Valida los campos de la forma en el modal "addbm"
