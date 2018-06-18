@@ -125,7 +125,7 @@
                             <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia" onclick="  getSeccionPersonal();">
                                 <option value="" selected hidden disabled>Dependencia</option>
                                 {{for dependencia in dependencias:}}
-                                    {{if dependencia.unidad_de_adscripcion == 1:}}
+                                    {{if dependencia.unidad_de_adscripcion <= 1:}}
                                     <option value='{{=dependencia.id}}'>{{=dependencia.nombre.decode('utf-8').upper()}}</option>
                                     {{pass}}
                                 {{pass}}
@@ -225,10 +225,11 @@
     function getSeccionPersonal(){
         var opcioneslab = document.getElementById("dependencia");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var x = document.getElementById("dephidden");
-        x.value = labelegido;
-        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
-
+        if (labelegido != 1){
+            var x = document.getElementById("dephidden");
+            x.value = labelegido;
+            ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
+        }
     }
     
     function setSupervisor(){
