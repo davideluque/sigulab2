@@ -1,0 +1,524 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
+
+  <!-- Estilo del listado de Solicitudes de Servicios -->
+
+
+
+<!-- Inicio Boton Agregar BM -->
+<!--
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+	        <div class="col-sm-6"></div>
+	        <div class="col-sm-6">
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Material</button>
+	        </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- Fin Boton Agregar Sustancia -->
+
+<!-- Inicio Listado de sustancias -->
+<div class="container">
+<div class="row">
+  <h3> Inventario </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+        <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Serial</th>
+                <!--<th class="camposTabla linksNombres">Estatus</th>-->
+            </tr>
+        </thead>
+
+        <tbody>
+          {{for bm in inventario:}}
+            <tr>
+                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
+                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                <td class="camposTabla">{{=bm['bm_num']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
+                <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_marca']}}</td>
+                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
+                <td class="camposTabla">{{=bm['bm_serial']}}</td>
+            </tr>
+          {{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+          <th class="camposTabla linksNombres">Nombre</th>
+          <th class="camposTabla linksNombres">N° BM</th>
+          <th class="camposTabla linksNombres">Tipo</th>
+          <th class="camposTabla linksNombres">Placa</th>
+          <th class="camposTabla linksNombres">Marca</th>
+          <th class="camposTabla linksNombres">Modelo</th>
+          <th class="camposTabla linksNombres">Serial</th>
+          <!--<th class="camposTabla linksNombres">Estatus</th>-->
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de sustancias --> 
+
+<!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
+
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Material de laboratorio<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+
+                
+                <!-- Primer paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Material</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group" tag="Formato:">
+                            <input type="text" class="form-control" id="nombre_mat" name="nombre" title="Nombre del material" placeholder="Nombre del material*"  required>
+                            <div class="field-error"> <p id="err_cantidad_mat"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
+                            <font color="red"><div id="err_cantidad_mat" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" >
+                            <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
+                        </div>
+                            
+
+                        <div class="form-group">
+                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo" value="" placeholder="Modelo/Código" >
+                            <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
+                        </div>
+
+                        <label>Aforado</label>
+                        <div class="form-group">
+                              <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado" required>
+                                <!-- Insertar un for-->
+                                <option type="text" value="">¿Es aforado?*</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                                <option value="N/A">N/A</option>                                
+                              </select>
+                              <div class="field-error"> <p id="err_aforado"> </p> </div>
+                        </div>      
+                        
+
+
+
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Tercer paso Parte 3-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del material</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+  
+                        
+                        <div class="form-group">
+                          <label>Calibración</label>
+                                <select class="form-control" type="select" id="calibracion" name="calibracion" placeholder="Calibración" required>
+                                  <!-- Insertar un for-->
+                                  <option type="text" value="">¿Requiere calibración?*</option>
+                                  <option value="Si">Si</option>
+                                  <option value="No">No</option>                                
+                                </select>
+                                <div class="field-error"> <p id="err_aforado"> </p> </div>
+                        </div>  
+
+                        <label>Capacidad</label>
+                        <div class="form-group">
+                                <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
+                                <font color="red"><div id="err_capacidad" hidden></div></font>
+                        </div>
+
+
+                        <div class="form-group">
+                                <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
+                                  <option value="">Selecione una unidad</option>
+                                  {{ for med in unidad_cap:}}
+                                  <option value="{{=med}}">{{=med}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-unidad" > </p> </div>
+                              </div>
+                        
+                        <label>Materiales</label>
+                        <div class="form-group">
+                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                                <!-- Insertar un for-->
+                                <option type="text" value="">Selecione un material*</option>
+                                {{ for material in material_pred: }}
+                                <option value="{{=material}}">{{=material}}</option>
+                                {{pass}}
+                              </select>
+                              <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+
+                          <div class="form-group">
+                                <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material secundario">
+                                  <!-- Insertar un for-->
+                                  <option type="text" value="">Selecione un material secundario</option>
+                                  {{ for material in material_pred: }}
+                                  <option value="{{=material}}">{{=material}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-material-sec"> </p> </div>
+                            </div>
+
+
+
+                          
+                        </div>
+                      </div>
+                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                  </fieldset>
+                  <!-- Fin tercer Paso -->
+
+
+                <!--Tercer Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                        <label>Dimensiones</label>
+                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                            <option value="">Selecione una unidad</option>
+                            {{ for med in unidad_med:}}
+                            <option value="{{=med}}">{{=med}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="field-error"> <p id="error-unidad" > </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                          <font color="red"><div id="err_ancho" hidden></div></font>
+                        </div>
+
+
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                          <font color="red"><div id="err_largo" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                          <font color="red"><div id="err_alto" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                          <font color="red"><div id="err_diametro" hidden></div></font>
+                        </div>
+
+                        <label>Ubicación interna</label>
+                        <div class="form-group">
+                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
+                                <font color="red"><div id="err_ubicacion_int" hidden></div></font>
+                        </div>
+
+
+                        </div>
+                      </div>
+
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                </fieldset>    
+                  </fieldset>
+                  <!-- Fin tercer paso-->
+
+                <!-- Fin Cuarto Paso -->
+              </form>
+          </div>
+        </div>               
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fin Modal Agregar BM -->
+
+<!-- *!* Falta verificar que se esten llenando todos los campos dependiendo 
+del concepto y tipo de ingreso o egreso -->
+
+<script type="text/javascript">
+  // Funcion para mostrar campos dependendiendo de la categoria
+  function elegir_campos(){
+    var selecion = document.getElementById("clasificacion");
+    if (selecion.value == "Mobiliario"){
+      document.getElementById("marca").type = 'hidden';
+      document.getElementById("modelo").type = 'hidden';
+      document.getElementById("serial").type = 'hidden';
+      document.getElementById("estatus").type = 'hidden';
+      document.getElementById("calibrar").style.display = 'none';
+    }
+    else{
+      document.getElementById("select-calibrar").setAttribute("required", "");
+      document.getElementById("marca").type = 'text';
+      document.getElementById("modelo").type = 'text';
+      document.getElementById("serial").type = 'text';
+      document.getElementById("estatus").type = 'text';
+      document.getElementById("calibrar").style.display = 'block';
+    }
+    document.getElementById("fecha_calibracion").style.display = 'none';
+  }
+  // Mostrar fecha de calibracion
+  function display_date(value){
+    if ( value == "Si" ){
+      document.getElementById("fecha_calibracion").style.display = 'block';
+      document.getElementById("fecha_calibracion").setAttribute("required", "");
+    }else{
+      document.getElementById("fecha_calibracion").style.display = 'none';
+    }
+  }
+  // Mostrar unidades
+  function display_units(value){
+    if ( value == '' ){
+      document.getElementById("unidad").type = 'hidden';
+      document.getElementById("ancho").type = 'hidden';
+      document.getElementById("largo").type = 'hidden';
+      document.getElementById("alto").type = 'hidden';
+      document.getElementById("diametro").type = 'hidden';
+    }else{
+      document.getElementById("unidad").type = 'text';
+      document.getElementById("ancho").type = 'text';
+      document.getElementById("largo").type = 'text';
+      document.getElementById("alto").type = 'text';
+      document.getElementById("diametro").type = 'text';
+    }
+  }
+  // Valida los campos de la forma en el modal "addbm"
+  function validar_campos(){
+    // Buscando divs para ingresar mensajes de error
+    var error_total = document.getElementById("error-total");
+    var error_uso_interno = document.getElementById("error-uso-interno");
+    var fecha_calibracion = document.getElementById("fecha_calibracion")
+    // Limpiando los mensajes anteriores de validadores
+    if (error_total.innerText != ''){
+      error_total.innerText = '';
+    }
+    if (error_uso_interno.innerText != ''){
+      error_uso_interno.innerText = '';
+    }
+     
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+    if (!is_number(total)) {
+      error_total.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(total)) {
+      error_total.innerText = mensaje_error_negativo;
+      return false;
+    }
+    if (is_zero(total)) {
+      error_total.innerText = mensaje_error_nulo;
+      return false;
+    }
+    /* Validando el campo uso_interno */
+    if (!is_number(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_negativo;
+      return false;
+    }
+    // La cantidad de sustancia para uso interno no puede ser mayor al total
+    if (uso_interno > total) {
+      error_uso_interno.innerText = mensaje_error_uso_interno;
+      return false;
+    }
+  }
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n);
+  }
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0)
+  }
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0)
+  }
+  function placeholder_localizacion(value){
+    var x = document.getElementById("cod_loc");
+    var y = document.getElementById("localizacion");
+    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+      x.placeholder = '150301';
+      x.value = '150301';
+    }else{;
+      x.placeholder ='240107';
+      x.value = '240107';
+    }
+  }
+  function colocar_subcategoria(value){
+    var dict = {
+		'Maquinaria Construcción':
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipo Transporte":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipo Comunicaciones":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipo Médico":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipo Científico Religioso":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Equipo Oficina" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+  var n = 1;
+  var x;
+  var y = document.getElementById("numRegistro2");
+  if (value != ""){
+    for (var i in dict[value]){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      x.innerText = dict[value][i];
+      x.style.display= "block";
+      $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+      $('#Opcion'.concat(n.toString())).show();
+      x.value = dict[value][i];
+      n = n + 1;  
+    }
+    while (n <= 9){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      //x.innerText = "";
+      //x.style.display = "none";
+      $('#Opcion'.concat(n.toString())).hide();
+      $('#Opcion'.concat(n.toString())).html("");
+      x.value = "";
+      n = n +1;
+      
+    }
+    
+  }
+}
+</script>

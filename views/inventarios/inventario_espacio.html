@@ -6,21 +6,6 @@
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
 
-<!-- Inicio Boton Agregar BM -->
-<div class="container" id="containerAgregar">
-    <div class="row">
-        <div class="col-sm-6"></div>
-        <div id="columnBotonAgregar" class="col-sm-6">
-	        <div class="col-sm-6"></div>
-	        <div class="col-sm-6">
-	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Bien</button>
-	        </div>
-        </div>
-    </div>
-</div>
-<!-- Fin Boton Agregar Sustancia -->
-
 <!-- Inicio Listado de sustancias -->
 <div class="container">
 <div class="row">
@@ -28,7 +13,8 @@
 
     <div id="buttons">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+      <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -136,7 +122,7 @@
                         <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
                           <option value="">Seleccione una opción</option>
                           <option value="Equipo">Equipo</option>
-                          <option value="Mobilario">Mobilario</option>
+                          <option value="Mobiliario">Mobiliario</option>
                         </select>
                         <div class="field-error"> <p id="error-clasificacion"></p></div>
                       </div>
@@ -313,10 +299,13 @@
 
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
-                          {{ for uso in uso_list: }}
-                          <input type="checkbox" name="tipo_uso" value="{{=uso}}">{{=uso}}
-                          <br>
-                          {{pass}}
+                            {{i=1}}
+                            {{ for uso in uso_list: }}
+                              <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}"   value="{{=uso}}">{{=uso}}
+                              {{i = i+1}}
+                            <br>
+                            {{pass}}
+                            <font color="red"><div id="err_tipo_uso" hidden></div></font>
                         </div>
 
                         <div class="form-group" id="calibrar">
@@ -442,15 +431,20 @@ del concepto y tipo de ingreso o egreso -->
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Mobilario"){
+    if (selecion.value == "Mobiliario"){
       document.getElementById("marca").type = 'hidden';
       document.getElementById("modelo").type = 'hidden';
       document.getElementById("serial").type = 'hidden';
       document.getElementById("estatus").type = 'hidden';
       document.getElementById("calibrar").style.display = 'none';
     }
-    else{;
+    else{
       document.getElementById("select-calibrar").setAttribute("required", "");
+      document.getElementById("marca").type = 'text';
+      document.getElementById("modelo").type = 'text';
+      document.getElementById("serial").type = 'text';
+      document.getElementById("estatus").type = 'text';
+      document.getElementById("calibrar").style.display = 'block';
     }
     document.getElementById("fecha_calibracion").style.display = 'none';
   }
