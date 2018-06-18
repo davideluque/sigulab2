@@ -216,9 +216,16 @@
 
         <!-- Pensar utilizar grid-->
 		<div id="tab-2" class="tab-content">
-                <h4>Localización: {{=bien['bm_localizacion']}} </h4>
-                <h4>Código Localización: {{=bien['bm_codigo_localizacion']}} </h4>
-                <h4>Categoria: {{=bien['bm_categoria']}}</h4>
+            <div class="grid-container">
+            {{ for title in sudebid_list: }}
+                <div class="grid-item">
+                    {{=title}}
+                </div>
+                <div class="grid-item">
+                    {{= sudebid_dict.get(title)}}
+                </div>
+            {{ pass }}
+            </div>
         </div>
 
 		<div id="tab-3"class="tab-content">En desarrollo</div>

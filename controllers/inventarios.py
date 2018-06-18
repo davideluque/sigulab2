@@ -524,18 +524,43 @@ def detalles():
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-    caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
-    'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
-    caracteristicas_dict = {
-        'Marca:': bien['bm_marca'],
-        'Modelo:': bien['bm_modelo'],
-        'Serial:': bien['bm_serial'],
-        'Descripción:': bien['bm_descripcion'],
-        'Material predominante:': bien['bm_material'],
-        'Color:': bien['bm_color'],
-        'Movilidad:': bien['bm_movilidad'],
-        'Uso:': bien['bm_uso']
+
+    if bien['bm_clasificacion']=="Equipo":
+
+        caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
+        'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+
+
+        caracteristicas_dict = {
+            'Marca:': bien['bm_marca'],
+            'Modelo:': bien['bm_modelo'],
+            'Serial:': bien['bm_serial'],
+            'Descripción:': bien['bm_descripcion'],
+            'Material predominante:': bien['bm_material'],
+            'Color:': bien['bm_color'],
+            'Movilidad:': bien['bm_movilidad'],
+            'Uso:': bien['bm_uso']
+        }
+    elif bien['bm_clasificacion']=="Mobiliario":
+
+        caracteristicas_list = ['Descripción:', 'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+
+        caracteristicas_dict = {
+            'Descripción:': bien['bm_descripcion'],
+            'Material predominante:': bien['bm_material'],
+            'Color:': bien['bm_color'],
+            'Movilidad:': bien['bm_movilidad'],
+            'Uso:': bien['bm_uso']
+        }
+
+    sudebid_list = ['Localización:', 'Código Localización:', 'Categoría:', 'Subcategoría:']
+    sudebid_dict = {
+        'Localización:': bien['bm_localizacion'], 
+        'Código Localización:': bien['bm_codigo_localizacion'],
+        'Categoría:': bien['bm_categoria'],
+        'Subcategoría:': bien['bm_subcategoria']
     }
+
     return dict(bien = bien,
                 material_pred = material_pred,
                 color_list = color,
@@ -546,7 +571,9 @@ def detalles():
                 cod_localizacion = cod_localizacion,
                 localizacion = localizacion,
                 caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict)
+                caracteristicas_dict = caracteristicas_dict,
+                sudebid_list = sudebid_list,
+                sudebid_dict = sudebid_dict)
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
