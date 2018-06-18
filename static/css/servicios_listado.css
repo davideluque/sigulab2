@@ -86,3 +86,32 @@ th {
 #filtroInput {
 	margin-left: 100px;
 }
+
+#input-apellido {
+	margin-bottom: 10px;
+}
+
+#input-email{
+	margin-bottom: 10px;
+}
+
+
+#input-telefono{
+	margin-bottom: 10px;
+}
+
+#input-pagina{
+	margin-bottom: 10px;
+}
+
+.botones-form{
+	float: right;
+}
+
+#sel1, #sel2, #sel3 {
+	margin-bottom: 10px;
+}
+
+#input-egreso, #input-ingreso{
+	padding-right:0px;
+}

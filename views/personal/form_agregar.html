@@ -39,41 +39,66 @@
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="rows-planilla">
+                              <div class="form-group">
+                                <div class="col-sm-6" >
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
+                                    <font color="red"><div id="err_nombre" hidden></div></font>
+                                </div>
+                              </div>
+                            
+
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Apellido</label>
+                                  <input type="text" class="form-control rows-planilla" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}" id="input-apellido">
+                                  <font color="red"><div id="err_apellido" hidden></div></font>
+                                </div>
+                              </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
 
                             <div class="form-group">
-                              <label>Nombre</label>
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
-                              <font color="red"><div id="err_nombre" hidden></div></font>
-                            </div>
-
-                            <div class="form-group">
-                              <label>Apellido</label>
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}">
-                              <font color="red"><div id="err_apellido" hidden></div></font>
-                            </div>
-
-                            <div class="form-group">
-                              <label>Cédula</label>
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required readonly value="{{=usuario.f_ci or ''}}">
-                              <font color="red"><div id="err_ci" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Cédula</label>
+                                <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required readonly value="{{=usuario.f_ci or ''}}">
+                                <font color="red"><div id="err_ci" hidden></div></font>
+                              </div>
                             </div>
     
                             <div class="form-group">
-                              <label>Email</label>
-                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" >
-                              <font color="red"><div id="err_email" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Email</label>
+                                <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" id="input-email">
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>  
                             </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
                             <div class="form-group">
-                              <label>Email Alternativo</label>
-                              <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" >
-                              <font color="red"><div id="err_email" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Email Alternativo</label>
+                                <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" >
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>
                             </div>
 
                             <div class="form-group">
-                              <label>Teléfono Residencial</label>
-                              <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required >
-                              <font color="red"><div id="err_telefono" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Teléfono Residencial</label>
+                                <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required id="input-telefono"
+                                      data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                              </div>
                             </div>
+
+                          </div>
+                          
+                          <div class="col-sm-12">
                             <label>Celular</label>
                             <div class="form-group form-inline">
                                 <div class="form-group">
@@ -87,29 +112,41 @@
                                 </div>
                                 <div class="form-group" >
                                     <div class="col-xs-12">
-                                        <input class="form-control" id="celular_add" name="celular_add" type="text" placeholder="Celular" required value="{{=usuario.f_celular or ''}}">
+                                        <input class="form-control" id="celular_add" name="celular_add" type="text" placeholder="Celular" required value="{{=usuario.f_celular or ''}}"
+                                            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                                     </div>
                                 </div>
                                 <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
+                          </div>
 
-                            <div class="form-group">
+                            <div class="form-group col-sm-12">
                                 <label>Contacto de Emergencia</label>
-                              <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required>
+                              <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
+                          <div class="rows-planilla">
+
                             <div class="form-group">
+                              <div class="col-sm-6">
                                 <label>Dirección de Habitación</label>
-                              <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required>
-                              <font color="red"><div id="err_direccion" hidden></div></font>
+                                <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required
+                                      data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                <font color="red"><div id="err_direccion" hidden></div></font>
+                              </div>
                             </div>
 
                             <div class="form-group">
+                              <div class="col-sm-6">
                                 <label>Página Web</label>
-                              <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" >
-                              <font color="red"><div id="err_pagina_web" hidden></div></font>
+                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                <font color="red"><div id="err_pagina_web" hidden></div></font>
+                              </div>
                             </div>
+
+                          </div>
 
                         </div>
                       </div>
@@ -131,93 +168,101 @@
                           <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
-                                  <label>Estatus</label>
-                                <select class="form-control" id="sel1" name="estatus_add">
-                                  <option disabled  value=""
-                                  {{ if not usuario.f_estatus :}}
-                                  selected
-                                  disabled
-                                  {{pass}}
-                                  >Estatus</option>
-                                  {{for estatus in estados:}}
-                                  <option
-                                  {{ if estatus == usuario.f_estatus: }}
-                                  selected
-                                  {{pass}}
-                                  value="{{=estatus}}">{{=estatus}}</option>
-
-                                  {{pass}}
-                                </select>
-                                <font color="red"><div id="err_estatus" hidden></div></font>
+                                <div class="col-sm-12">
+                                    <label>Estatus</label>
+                                  <select class="form-control" id="sel1" name="estatus_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option disabled  value=""
+                                    {{ if not usuario.f_estatus :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Estatus</option>
+                                    {{for estatus in estados:}}
+                                    <option
+                                    {{ if estatus == usuario.f_estatus: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=estatus}}">{{=estatus}}</option>
+  
+                                    {{pass}}
+                                  </select>
+                                </div>
                               </div>
                               <font color="red"><div id="err_estatus" hidden></div></font>
                               <div class="form-group">
-                                  <label>Categoria</label>
-                                <select class="form-control" id="sel2" name="categoria_add">
-                                  <option disabled  value=""
-                                  {{ if not usuario.f_categoria :}}
-                                  selected
-                                  disabled
-                                  {{pass}}
-                                  >Categoría</option>
-                                  {{for categoria in categorias:}}
-                                  <option
-                                  {{ if categoria == usuario.f_categoria: }}
-                                  selected
-                                  {{pass}}
-                                  value="{{=categoria}}">{{=categoria}}</option>
-                                  {{pass}}
-                                </select>
-                                <font color="red"><div id="err_categoria" hidden></div></font>
+                                <div class="col-sm-12">
+                                    <label>Categoría</label>
+                                  <select class="form-control" id="sel2" name="categoria_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option disabled  value=""
+                                    {{ if not usuario.f_categoria :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Categoría</option>
+                                    {{for categoria in categorias:}}
+                                    <option
+                                    {{ if categoria == usuario.f_categoria: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=categoria}}">{{=categoria}}</option>
+                                    {{pass}}
+                                  </select>
+                                </div>
                               </div>
 
                               <div class="form-group">
-                                  <label>Condición</label>
-                                <select class="form-control" id="sel3" name="condicion_add">
-                                  <option  disabled value=""
-                                  {{ if not usuario.f_condicion :}}
-                                  selected
-                                  disabled
-                                  {{pass}}
-                                  >Condición</option>
-                                  {{for condicion in condiciones:}}
-                                  <option
-                                  {{ if condicion == usuario.f_condicion: }}
-                                  selected
-                                  {{pass}}
-                                  value="{{=condicion}}">{{=condicion}}</option>
-                                  {{pass}}
-                                </select>
-                                <font color="red"><div id="err_condicion" hidden></div></font>
+                                <div class="col-sm-12">
+                                    <label>Condición</label>
+                                  <select class="form-control" id="sel3" name="condicion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option  disabled value=""
+                                    {{ if not usuario.f_condicion :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Condición</option>
+                                    {{for condicion in condiciones:}}
+                                    <option
+                                    {{ if condicion == usuario.f_condicion: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=condicion}}">{{=condicion}}</option>
+                                    {{pass}}
+                                  </select>
+                                </div>
                               </div>
                               <div id="fsalida"
                               {{if usuario.f_categoria == 'Fijo' :}}
                               hidden
                               {{pass}}
-                              >
-                                  <p >Fecha de Ingreso: <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" ></p>
-                                  <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
-
-                                  <p >Fecha de Egreso: <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" ></p>
-                                  <font color="red"><div id="err_fecha_salida" hidden></div></font>
+                              >   
+                                <div class="col-sm-6">
+                                  <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                </div>
+                                <div class="col-sm-6">
+                                  <p ><label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                </div>
                               </div>
 
-
-                              <p >Ingreso a la USB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
-
-                              <p >Ingreso a la ULAB: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso_ulab" hidden></div></font>
-
-                              <p >Ingreso a la administracion publica: <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required></p>
-                              <font color="red"><div id="err_fecha_ingreso_admin_publica" hidden></div></font>
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
+                              </div>
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+                              
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
 
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
                             </div>-->
                           </div>
-                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                        <div class="botones-form">
+                          <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                          <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                        </div>
                     </fieldset>
                     <!-- Fin Segundo Paso -->
 
@@ -236,79 +281,93 @@
                         <h4 class="titulosForm">Datos Laborales</h4>
 
                         <div class="form-group">
-                           <label>Cargo</label> 
-                          <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
-                          <font color="red"><div id="err_cargo" hidden></div></font>
+                          <div class="col-sm-12">
+                            <label>Cargo</label> 
+                            <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
+                            <font color="red"><div id="err_cargo" hidden></div></font>
+                          </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Gremio</label> 
-                          <select class="form-control" id="sel1" name="gremio_add" required>
-                            <option selected hidden disabled value=""
-                            {{ if not usuario.f_gremio :}}
-                            selected
-                            {{pass}}
-                            >Gremio</option>
-                            {{for gremio in gremios:}}
-                            <option
-                            {{ if gremio == usuario.f_gremio: }}
-                            selected
-                            {{pass}}
-                            value="{{=gremio}}">{{=gremio}}</option>
-                            {{pass}}
-                          </select>
+                          <div class="col-sm-12">
+                              <label>Gremio</label> 
+                            <select class="form-control" id="sel1" name="gremio_add" required>
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_gremio :}}
+                              selected
+                              {{pass}}
+                              >Gremio</option>
+                              {{for gremio in gremios:}}
+                              <option
+                              {{ if gremio == usuario.f_gremio: }}
+                              selected
+                              {{pass}}
+                              value="{{=gremio}}">{{=gremio}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
                         </div>
 
                         <div class="form-group">
+                          <div class="col-sm-12">
                             <label>Dependencia</label> 
                             <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
+                          </div>
                         </div>
                             
                         <div class="form-group">
-                            <label>Ubicación</label> 
-                          <select class="form-control" id="sel1" name="ubicacion_add" required>
-                            <option selected hidden disabled value=""
-                            {{ if not usuario.f_ubicacion :}}
-                            selected
-                            {{pass}}
-                            >Ubicación</option>
-                            {{for ubicacion in ubicaciones:}}
-                            <option
-                            {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
-                            selected
-                            {{pass}}
-                            value="{{=ubicacion.id}}">{{=ubicacion.nombre}}</option>
-                            {{pass}}
-                          </select>
+                          <div class="col-sm-12">
+                              <label>Ubicación</label> 
+                            <select class="form-control" id="sel1" name="ubicacion_add" required>
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_ubicacion :}}
+                              selected
+                              {{pass}}
+                              >Ubicación</option>
+                              {{for ubicacion in ubicaciones:}}
+                              <option
+                              {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
+                              selected
+                              {{pass}}
+                              value="{{=ubicacion.id}}">{{=ubicacion.nombre}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
                         </div>
                         <div hidden class="form-group">
+                          <div class="col-sm-12">
                             <label>Extension</label> 
                             <input type="text" class="form-control" name="extension_add" placeholder="Extension" >
+                          </div>
                         </div>
 
                         
 
                       
                         <div class="form-group">
-                            <label>Rol</label> 
-                            <select class="form-control" id="sel1" name="rol_add" required>
-                          <option selected hidden disabled
-                          {{ if not usuario.f_rol :}}
-                            selected
-                            {{pass}}
-                            >Rol</option>
-                            {{for rol in roles:}}
-                            <option
-                            {{ if rol == usuario.f_rol: }}
-                            selected
-                            {{pass}}
-                            value="{{=rol}}">{{=rol}}</option>
-                            {{pass}}
-                          </select>
+                          <div class="col-sm-12">
+                              <label>Rol</label> 
+                              <select class="form-control" id="sel1" name="rol_add" required>
+                            <option selected hidden disabled
+                            {{ if not usuario.f_rol :}}
+                              selected
+                              {{pass}}
+                              >Rol</option>
+                              {{for rol in roles:}}
+                              <option
+                              {{ if rol == usuario.f_rol: }}
+                              selected
+                              {{pass}}
+                              value="{{=rol}}">{{=rol}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
                         </div>
-
-                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>
+                      
+                      <div class="botones-form">
+                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                        <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>
+                      </div>
                       </div>
                     </fieldset>
                     <!-- Fin Tercer Paso -->
