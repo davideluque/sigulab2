@@ -6,7 +6,9 @@
 	<!-- Para los mensajes con flash -->
 	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/r-2.2.2/datatables.min.css"/>
+	<!--DATATABLES-->
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
  
 	<style type="text/css">
 		div.dt-buttons {
@@ -23,7 +25,8 @@
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">	   
+	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
  	<script src="{{=URL('static', 'js/inventario_material_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -43,7 +46,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <span class="breadcrumb-item active">Bienes Muebles</span>
+  <span class="breadcrumb-item active">Materiales de laboratorio</span>
   </div>
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
@@ -54,7 +57,10 @@
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
-	
+	<h3 class="dep-titulo">INVENTARIO DE MATERIALES DE LABORATORIO</h3>
+	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
+		{{ dep_padre_nombre = 'ULAB'}}
+	{{ pass }}
 	{{if es_tecnico:}}
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
@@ -67,13 +73,15 @@
 			</a>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		{{pass}}
 
@@ -82,30 +90,35 @@
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
 				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
 	    		<a class="boton" href="{{=URL('material_lab')}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
 	    		</a>
 	    		{{else:}}
     			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-	    		</a>
+						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
+				</a>
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			{{ if dep_nombre == 'DIRECCIÓN': }}
+				<h3 class="dep-titulo"> ULAB</h3>
+			{{ else: }}
+				<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
+			{{ pass }}
 		</div>
 		{{pass}}
 	{{pass}}
@@ -118,22 +131,25 @@
 	<div class="container">
 		<div id="fila1" class="row">
 		</div>
-		{{ title = "Secciones" }}
 		{{ if espacios: }}
 			{{ title = "Espacios Físicos" }}
 			{{dependencias = espacios}}
-		{{pass}}
-		{{ if dep_nombre.find("DIRECCIÓN") == -1: }}
-			{{ if len(dependencias) > 0: }}
-				<button onclick="show_seccion()">
-					{{=title}}
-					<span class="caret"></span>
-				</button>
-				<div class="grid-container" id="secciones" style="display: none">
-			{{ pass }}
+		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
+			{{ title = "Laboratorios y coordinaciones" }}
+		{{else: }}
+			{{ title = "Secciones" }}
+		{{ pass }}
+		{{ if len(dependencias) > 0: }}
+			<button onclick="show_seccion()">
+				{{=title}}
+				<span class="caret"></span>
+			</button>
+		{{ pass }}
+		{{ if espacios: }}
+			<div class="grid-container-ef" id="secciones" style="display: none">
 		{{ else: }}
-			<div class="grid-container" id="secciones">
-		{{pass}}
+			<div class="grid-container" id="secciones" style="display: none">
+		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('material_lab',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{ =espacio.nombre }}
@@ -162,14 +178,6 @@
 	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
-
-
-<!-- Datatables-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.1/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/r-2.2.2/datatables.min.js"></script>
-
-
 
 <script type="text/javascript">
 	function redirect(dir){
