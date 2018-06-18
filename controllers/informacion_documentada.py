@@ -159,12 +159,15 @@ def lista_documentos():
 		)
 
 
+
 	return dict(
 	            documentos=db().select(db.documentos.ALL),
 				doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
 				doc_revision=db(db.documentos.estatus=="Revisado").count(),
 				doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
-				doc_planificacion=db(db.documentos.estatus=="Planificado").count()
+				doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
+				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+				usuarios = db().select(db.auth_user.first_name)
 				)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
