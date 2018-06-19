@@ -105,7 +105,11 @@
                                         <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador">
                                                 <option value="" disabled selected>Codigo</option>
                                             {{for operador in operadores:}}
-                                                <option value='{{=operador}}'>{{=operador}}</option>
+                                                <option
+                                                {{if usuario.f_operador == operador:}}
+                                                selected
+                                                {{pass}}
+                                                value='{{=operador}}'>{{=operador}}</option>
                                             {{pass}}
                                         </select>
 
