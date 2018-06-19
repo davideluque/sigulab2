@@ -5,7 +5,7 @@
 #-----------------------------------#
 
 def index():
-    redirect(URL('listado'))
+    redirect(URL('listado_estilo'))
     return dict()
 
 #Enviar info a la tabla del listado
@@ -14,7 +14,7 @@ def tabla_categoria(tipo):
 
     #Buscamos la tabla general de personal 
     if tipo =="listado":
-        tb = db(db.t_Personal.f_validado == True).select(db.t_Personal.ALL)
+        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False).select(db.t_Personal.ALL)
     
     #Buscamos la tabla general de empleados por validar
     elif tipo == "validacion" :
@@ -175,7 +175,7 @@ def add_form():
             f_por_validar=True,
             f_validado=False,
             f_rol= dic["rol"])
-        redirect(URL('listado'))
+        redirect(URL('listado_estilo'))
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
