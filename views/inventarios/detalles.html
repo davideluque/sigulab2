@@ -298,7 +298,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value={{=bien['bm_num']}}  required>
+                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value={{=bien['bm_num']}} readonly required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
@@ -311,21 +311,28 @@
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
+                        {{if bien['bm_marca']!="":}}
                         <div class="form-group">
                             <input type="text" class="form-control" value={{=bien['bm_marca']}} id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
+                        {{pass}}
 
+                        {{if bien['bm_modelo']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo" value={{=bien['bm_modelo']}} name="modelo" value="" placeholder="Modelo*" required>
-                            <div class="field-error"> <p id="error-modelo"> </p> </div>
+                                <input type="text" class="form-control" id="modelo" value={{=bien['bm_modelo']}} name="modelo" value="" placeholder="Modelo*" required>
+                                <div class="field-error"> <p id="error-modelo"> </p> </div>
+                            
                         </div>
+                        {{pass}}
 
+                        {{if bien['bm_serial']!="":}}
                         <div class="form-group">
                             <input type="text" class="form-control" id="serial" value={{=bien['bm_serial']}} name="serial" placeholder="Serial*" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
-                        
+                        {{pass}}
+
                           <div class="form-group">
                             <input type="text" class="form-control" id="Descripcion" value={{=bien['bm_descripcion']}} name="descripcion" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
@@ -398,6 +405,7 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
 
+                          <!-- FALTA ARREGLAR ESTO  -->
                           <div class="form-group">
                             {{if bien['bm_ancho']=="":}}
                                 <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
@@ -489,9 +497,10 @@
                         {{pass}}
                         </div>
 
+                        {{if bien['bm_calibrar']!="":}}
                         <div class="form-group" id="calibrar">
                           <label>Seleccione si el equipo ha sido calibrado*</label>
-                          <select class="form-control" id="select-calibrar" value={{=bien['bm_calibrar']}} type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
+                          <select class="form-control" id="select-calibrar" type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
                             <option value="">Seleccione una opción</option>
                                 {{if bien['bm_calibrar']=="Si":}}
                                     <option value="Si" selected="selected">Si</option>
@@ -508,8 +517,10 @@
                           </select>
                           <div class="field-error"> <p id="error-calibrar"> </p> </div>
                         </div>
-  
-                        <div class="form-group" id="fecha_calibracion">
+                        {{pass}}
+
+                        {{if bien['bm_calibrar']=="No" or bien['bm_calibrar']=="":}}
+                        <div class="form-group" id="fecha_calibracion" style="display: none">
                           <label>Seleccione la fecha de la última calibración del equipo*</label>
                             {{if bien['bm_fecha_calibracion']=="":}}
                                 <input type="date" class="form-control" name="fecha_calibracion">
@@ -519,6 +530,18 @@
                           
                           <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
                         </div>
+                        {{elif bien['bm_calibrar']=="Si":}}
+                        <div class="form-group" id="fecha_calibracion" >
+                          <label>Seleccione la fecha de la última calibración del equipo*</label>
+                            {{if bien['bm_fecha_calibracion']=="":}}
+                                <input type="date" class="form-control" name="fecha_calibracion">
+                            {{else:}}
+                                <input type="date" class="form-control" value={{=bien['bm_fecha_calibracion']}} name="fecha_calibracion">
+                            {{pass}}
+                          
+                          <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
+                        </div>
+                        {{pass}}
   
                         <div class="form-group">
                           <label>Seleccione el estado del bien mueble*</label>
@@ -569,7 +592,6 @@
                                 {{else:}}
                                     <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
                                 {{pass}}
-                            
                             {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
@@ -638,7 +660,7 @@
 
     // Funcion para mostrar campos dependendiendo de la categoria
     function elegir_campos(){
-      var selecion = document.getElementById("clasificacion");
+      var selecion = "{{=bien['bm_clasificacion']}} ";
       if (selecion.value == "Mobiliario"){
         document.getElementById("marca").type = 'hidden';
         document.getElementById("modelo").type = 'hidden';

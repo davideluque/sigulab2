@@ -525,6 +525,8 @@ def detalles():
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
+    print(bien)
+
     if bien['bm_clasificacion']=="Equipo":
 
         caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
