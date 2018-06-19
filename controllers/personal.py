@@ -26,11 +26,15 @@ def tabla_categoria(tipo):
         es_supervisor = usuario.f_es_supervisor
         dependencia = None
         if es_supervisor:
-            dependencia = str(usuario.f_dependencia)
-            print("HOLAAAAAAAAAAAAAAAAAAAAAAAAA" + dependencia)
-            print(dependencia)
-            tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
-                          ).select(db.t_Personal.ALL)
+            if(auth.user.email == "sigulabusb@gmail.com" or auth.user.email =="asis-ulab@usb.ve"):
+                tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
+                
+            else:
+                print("Estamos aca")
+                print(auth.user.email)
+                dependencia = str(usuario.f_dependencia)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
+                              ).select(db.t_Personal.ALL)
 
 
     #Creamos una lista para enviar a la vista
