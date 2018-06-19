@@ -127,8 +127,29 @@ $(document).ready( function() {
         $("#field_fecha_ingreso_admin_publica").html(fecha_ingreso_admin_publica);
         $("#field_condicion").html(condicion);
         $("#field_nombre_completo").html(nombre_completo)
+
+        var superusuario = 'sigulabusb@gmail.com';
+        var gestor = 'asis-ulab@usb.ve';
+        var director = 'ulab@usb.ve';
         const currentlyLogged = $('[name=CORREO_LOGIN]').val()
-        $('#editar').prop('disabled', currentlyLogged !== email)
+        
+        if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor){
+             $('#editar').prop('disabled',true);
+        }else{
+            $('#editar').removeAttr('disabled');
+        }
+        
+        if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && 
+            currentlyLogged != director){
+             $('#tab_datos_personales').hide();
+        }else{
+            $('#tab_datos_personales').show();
+            console.log("aca")
+        }
+        
+        
+        //$('#editar').prop('disabled',( currentlyLogged !== email && currentlyLogged && superusuario && currentlyLogged != gestor))
+
         $('#eliminar').on('click',function(f){
           var answer=confirm('¿Seguro que desea eliminar esta persona?');
           if(answer){
@@ -138,6 +159,7 @@ $(document).ready( function() {
           else{
             f.preventDefault();
           }
+            
 
         });
 

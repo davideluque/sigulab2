@@ -39,13 +39,13 @@
               <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+              <a class="nav-link" id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
             </li>
           </ul>
 
           <div class="tab-content">
             <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-              <table class="table contenidoFicha">
+              <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                   <tr>
                     <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
@@ -54,7 +54,7 @@
                     <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
                   </tr>
                   <tr>
-                    <td>Correo Electrónico:</td><td id="field_email">{{=personal['email']}}</td>
+                    <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
                   </tr>
                   <tr>
                     <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
@@ -114,6 +114,9 @@
                     <tr>
                       <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
+                    <tr>
+                      <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
+                    </tr>
                 </tbody>
               </table>
             </div>
@@ -142,12 +145,75 @@
                 </tbody>
               </table>
             </div>
+        {{if personal['por_validar']:}}
+        <div class="modal-footer">
+          <form method="post">
+
+            <div class="btn-group botonesFicha" >
+                <input id="validacion" name="validacion" hidden value="-1">
+                <button type="submit" class="btn btn-primary" id = "validar" name = "validar_ficha" onclick=confirmar_validacion() value="True">Validar</button>
+                <button type="submit" class="btn btn-primary" id = "rechazar" name = "rechazar_ficha" onclick=confirmar_rechazo()>Rechazar</button>
+            </div>
+          </form>
+      </div>
+        
+        {{pass}}
            </div>
         </div>
     </div>
   </div>
 </div>
+<div id='logged_user' hidden>{{=usuario.f_email}}</div>
 
-{{end}}
+
+<script>
+    var superusuario = 'sigulabusb@gmail.com';
+    var gestor = 'asis-ulab@usb.ve';
+    var director = 'ulab@usb.ve';
+    var jefe  = document.getElementById("field_jefe").innerHTML;
+    var email = document.getElementById("field_email").innerHTML;
+    var currentlyLogged = document.getElementById('logged_user').innerHTML;
+
+    console.log(currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe);
+    console.log(email);
+
+    if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor){
+        $('#editar').prop('disabled',true);
+    }else{
+        $('#editar').removeAttr('disabled');
+    }
+
+    if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe){
+         $('#tab_datos_personales').hide();
+    }else{
+        $('#tab_datos_personales').show();
+    }
+</script>
+<script>
+    $("#validacion").val("Hola");
+    
+     function confirmar_validacion(){
+         var answer=confirm('Confirme validacion de la ficha');
+          if(answer){
+            alert('Ficha Validada');
+            $("#validacion").val(true);
+          }
+          else{
+            f.preventDefault();
+          }
+     }
+
+    
+     function confirmar_rechazo(){
+     var answer=confirm('¿Quiere rechazar esta ficha?');
+        if(answer){
+            alert('Ficha Rechazada');
+            $("#validacion").val(false);
+        }
+        else{
+        f.preventDefault();
+        }
+     }
+</script>
 
 {{end}}

@@ -256,6 +256,7 @@ def register():
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
     
     prefijos_cedula = ['V-','E-', 'P-']
+    print(dependencias)
   
   return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec, prefijos_cedula=prefijos_cedula )
 

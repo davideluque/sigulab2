@@ -13,7 +13,8 @@
 			    <tbody id="dummyID">
 					{{for item in grid:}}
 			          	{{if not item["nombre"] == "Ninguno": }}
-                            {{if  not item['es_supervisor'] :}}
+                            {{if not item['es_supervisor'] :}}
+                                
 
                             <tr id="{{=item['dependencia']}}_{{=item['categoria']}}">
                                 <td>
@@ -43,9 +44,11 @@
                                     data-condicion="{{=item['condicion']}}"
                                     data-rol="{{=item['rol']}}"
                                     data-extension_usb="{{= item['extension_USB']}}"
-                                    data-extension_interna="{{=item['extension_interna']}}"
-                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a>
-								</td>
+                                    data-extension_interna="{{=item['extension_interna']}}
+
+                                    "
+                                    data-jefe = "{{=item['jefe']}}"
+                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
 
                                 <td>{{= item["email"]}}</td>
                                 <td>{{= item["dependencia"]}}</td>
