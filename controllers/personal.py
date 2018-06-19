@@ -358,6 +358,8 @@ def validacion():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
+    val = db(db.t_Personal.f_por_validar == True).count()
+    session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
     return dic

@@ -8,6 +8,8 @@
 # Pagina principal 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
+    val = db(db.t_Personal.f_por_validar == True).count()
+    session.validaciones_pendientes = val
     return dict()
 
 def register():

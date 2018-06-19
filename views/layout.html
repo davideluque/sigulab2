@@ -92,6 +92,14 @@
         </ul>
 
       <ul class="nav navbar-nav navbar-right">
+       {{if session.validaciones_pendientes>0:}}
+       <li class="dropdown">
+          <div class="dropdown">
+                <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Hay Fichas Pendiente por Validar"><span id="iconoNotificacion" class="glyphicon glyphicon-bell btn btn-primary dropdown-toggle"></span></a>
+
+          </div>
+        </li>
+       {{pass}}
       {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
         or auth.has_membership('WEBMASTER')\
         or auth.has_membership('DIRECTOR')\
@@ -141,6 +149,13 @@
   else if (window.location.pathname.includes('servicios')){
     $('li#servicios').addClass("active");
   }
+</script>
+<script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+    $("#iconoNotificacion").popover
+
 </script>
 </body>
 </html>
