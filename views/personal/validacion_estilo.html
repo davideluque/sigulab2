@@ -35,9 +35,9 @@
 <div class="row">
   <h3 class=" text-center"> LISTADO DE USUARIOS POR VALIDAR</h3>
 
-    <div id="buttons">
+    <div id="buttons" class="text-right">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">Filtrado</button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -172,6 +172,7 @@
  
 <script language="javascript">
   var table = $('#datatable').DataTable({
+    "dom": "<'row buscar'<'col-md-1'f>>"+"<'row'<'col-md-8'l><'col-md-4'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
@@ -180,19 +181,22 @@
 
       new $.fn.dataTable.Buttons(api, {
          buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
+             {extend:'copy', text:"Copiar"}, 'pdf', 'excel', 'print'
          ]
       });
-      api.buttons().container().appendTo('#buttons');  
+      api.buttons().container().appendTo('#buttons');
+      $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+      $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+      $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+      $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+      $('#buttons').style.textAlign = "right"
    }
+   
   });
+
 
   var w2p_ajax_confirm_message =
         "{{=T('')}}";
 </script>
-<script>
-    $('#buttons').hide()
-    $('#filtrar').show()
-    
-</script>
+
 {{end}}
