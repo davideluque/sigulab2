@@ -525,6 +525,7 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             mbn_localizacion = localizacion, 
             mbn_modifica_ficha = user
         )
+    response.flash = "Se ha enviado una solicitud de modificación de BM"
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
