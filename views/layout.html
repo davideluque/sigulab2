@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
   
   <script src="{{=URL('static','js/jquery.min.js')}}"></script>
   <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
@@ -95,11 +98,12 @@
        {{if session.validaciones_pendientes>0:}}
        <li class="dropdown">
           <div class="dropdown">
-                <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Hay Fichas Pendiente por Validar"><span id="iconoNotificacion" class="glyphicon glyphicon-bell btn btn-primary dropdown-toggle"></span></a>
+                <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Fichas por Validar"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="material-icons">notifications_active</i></span></a>
 
           </div>
         </li>
        {{pass}}
+          
       {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
         or auth.has_membership('WEBMASTER')\
         or auth.has_membership('DIRECTOR')\

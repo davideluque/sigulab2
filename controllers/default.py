@@ -36,6 +36,7 @@ def contar_notificaciones():
         else:
             dependencia = usuario.f_dependencia
             notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    else: notif = 0
     return notif
 
 #--------------------------------------
