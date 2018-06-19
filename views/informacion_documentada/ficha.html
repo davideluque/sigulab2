@@ -554,14 +554,14 @@
 
                 <!-- Campo de ubicación física del documento -->
                 <div class="form-group">
-                  <input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" value="{{=doc.ubicacion_fisica}}" />
+                  <input  disabled="" type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" value="{{=doc.ubicacion_fisica}}" />
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                       acceder al documento</h6>
                 </div>  
 
                 <!-- Campo de ubicación electrónica del documento -->
                 <div class="form-group">
-                  <input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" vlaue="{{=doc.ubicacion_electronica}}"/> 
+                  <input disabled=""  type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" vlaue="{{=doc.ubicacion_electronica}}"/> 
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                       acceder al documento</h6>
                 </div>
@@ -703,6 +703,13 @@ function estatus(){
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
+        
+      }else if($('.form-group').data('atributo')=='Aprobado'){
+
+
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+
         
       }
     }
