@@ -10,7 +10,7 @@ def index():
 
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
-
+    tb=[]
 
     #Buscamos la tabla general de personal 
     if tipo =="listado":

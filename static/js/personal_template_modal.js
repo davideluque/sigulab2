@@ -133,21 +133,43 @@ $(document).ready(function () {
                 })
 
             // date inputs
+            if ($('[name="categoria_add"]').val() !== 'Fijo'){
+                $(`[name="fecha_ingreso_usb_add"],
+                [name="fecha_ingreso_ulab_add"],
+                [name="fecha_ingreso_admin_publica_add"],
+                [name="fecha_ingreso_add"],
+                [name="fecha_salida_add"]`).filter(function () {
+                    return $(this).val() === '' || $(this).val() === null
+                }).each(function(idx) {
+                    $(this).addClass('input-error')
+                    if ($(this).val() === ''){
+                        $(this).popover('show');
+                    }
+                    next_step = false
+                })    
+            }
+            else{
+                $(`[name="fecha_ingreso_usb_add"],
+                [name="fecha_ingreso_ulab_add"],
+                [name="fecha_ingreso_admin_publica_add"]
+                `).filter(function () {
+                    return $(this).val() === '' || $(this).val() === null
+                }).each(function(idx) {
+                    $(this).addClass('input-error')
+                    if ($(this).val() === ''){
+                        $(this).popover('show');
+                    }
+                    next_step = false
+                })
+    
+            }
+            
 
-            $(`[name="fecha_ingreso_usb_add"],
-            [name="fecha_ingreso_ulab_add"],
-            [name="fecha_ingreso_admin_publica_add"],
-            [name="fecha_ingreso_add"],
-            [name="fecha_salida_add"]`).filter(function () {
-                console.log($(this).val());
-                return $(this).val() === '' || $(this).val() === null
-            }).each(function(idx) {
-                $(this).addClass('input-error')
-                if ($(this).val() === ''){
-                    $(this).popover('show');
-                }
-                next_step = false
-            })
+            // Aqui se maneja el caso donde el trabajador tiene la condicion de fijo 
+            console.log($('[name="categoria_add"]').val());
+            if ($('[name="categoria_add"]').val() === 'Fijo'){
+                $(`[name="fecha_ingreso_add"], [name="fecha_egreso_add"]`).removeAttr("required");
+            }
         }
 
         if (next_step) {
