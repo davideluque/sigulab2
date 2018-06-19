@@ -486,6 +486,48 @@ def __agregar_registro(concepto):
     # Se redirije para evitar mensaje de revisita con metodo POST
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
+def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
+                descripcion, material, color, calibrar, fecha_calibracion,
+                unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
+                estatus, nombre_cat, subcategoria, cod_loc, localizacion, user):
+
+    # Si ya existe el BM en el inventario
+    if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
+        bm = db(db.modificacion_bien_mueble.mbn_num == no_bien).select()[0]
+
+        response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.mbn_nombre)
+        return False
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    else:
+        inv_id = db.modificacion_bien_mueble.insert(
+            mbn_nombre = nombre, 
+            mbn_num = no_bien, 
+            mbn_placa = no_placa, 
+            mbn_marca = marca, 
+            mbn_modelo = modelo, 
+            mbn_serial = serial,
+            mbn_descripcion = descripcion, 
+            mbn_material = material, 
+            mbn_color = color,
+            mbn_calibrar =  calibrar,
+            mbn_fecha_calibracion = fecha_calibracion,
+            mbn_unidad = unidad_med, 
+            mbn_ancho = ancho, 
+            mbn_largo = largo,
+            mbn_alto = alto, 
+            mbn_diametro = diametro, 
+            mbn_movilidad = movilidad, 
+            mbn_uso = uso,
+            mbn_estatus = estatus, 
+            mbn_categoria = nombre_cat,
+            mbn_subcategoria = subcategoria, 
+            mbn_codigo_localizacion = cod_loc,
+            mbn_localizacion = localizacion, 
+            mbn_modifica_ficha = user
+        )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+
 # < -------- Final Funciones privadas de SMDYP ------------>
 
 # < ------- Vistas del modulo de inventario -------->
@@ -494,14 +536,27 @@ def index(): return locals()
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles():
-    if request.vars.modificacion:
-        # Se solicito modificar el bien mueble
-        request.vars.modificacion = None
+    # Obteniendo la entrada en t_Personal del usuario conectado
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
 
+
+    if request.vars.modificacion:
+        __agregar_modificar_bm(
+            request.vars.nombre, bien['bm_num'],request.vars.no_placa, 
+            request.vars.marca, request.vars.modelo, request.vars.serial,
+            request.vars.descripcion, request.vars.material, request.vars.color,
+            request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
+            request.vars.ancho, request.vars.largo, request.vars.alto,
+            request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
+            request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion,
+            user_id)
+        request.vars.modificacion = None
+
     # Elementos que deben ser mostrados como una lista en el modal
-    # de agregar BM
+    # de modificar BM
     material_pred = []
     color = []
     unidad_med = []
@@ -524,8 +579,6 @@ def detalles():
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-
-    print(bien)
 
     if bien['bm_clasificacion']=="Equipo":
 
