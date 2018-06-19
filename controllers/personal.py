@@ -26,9 +26,10 @@ def tabla_categoria(tipo):
         es_supervisor = usuario.f_es_supervisor
         dependencia = None
         if es_supervisor:
-            dependencia = usuario.f_dependencia
-            tb = db((db.t_Personal.f_es_supervisor == False)&
-                           (db.t_Personal.f_por_validar == True)
+            dependencia = str(usuario.f_dependencia)
+            print("HOLAAAAAAAAAAAAAAAAAAAAAAAAA" + dependencia)
+            print(dependencia)
+            tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
                           ).select(db.t_Personal.ALL)
 
 
@@ -358,12 +359,28 @@ def validacion():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
-    val = db(db.t_Personal.f_por_validar == True).count()
+    val = contar_notificaciones();
     session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
     return dic
 
+def contar_notificaciones():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    if(len(usuario)>1): usuario = usuario[1]
+    else: usuario = usuario.first()
+    print("---------------------------------------")
+    print("Nombre: "+usuario.f_nombre+" /// Correo: "+str(usuario.f_email)+" ///Dependencia: "+str(usuario.f_dependencia))
+    es_supervisor = usuario.f_es_supervisor
+    dependencia = None
+    if es_supervisor:
+        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+            notif = db(db.t_Personal.f_por_validar == True).count()
+        else:
+            dependencia = usuario.f_dependencia
+            notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    return notif
+    
 def buscarJefe(dependencia_trabajador):
     unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
     print("La unidad es: "+str(unidad_adscripcion))

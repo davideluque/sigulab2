@@ -8,7 +8,7 @@
 # Pagina principal 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
-    val = db(db.t_Personal.f_por_validar == True).count()
+    val = contar_notificaciones();
     session.validaciones_pendientes = val
     return dict()
 
@@ -21,6 +21,22 @@ def recoverpassword():
 # Inicio de Sesion
 def login():
     return redirect(URL('modulos', 'login', vars=dict(error='invalid_data')))
+
+def contar_notificaciones():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    if(len(usuario)>1): usuario = usuario[1]
+    else: usuario = usuario.first()
+    print("---------------------------------------")
+    print("Nombre: "+usuario.f_nombre+" /// Correo: "+str(usuario.f_email)+" ///Dependencia: "+str(usuario.f_dependencia))
+    es_supervisor = usuario.f_es_supervisor
+    dependencia = None
+    if es_supervisor:
+        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+            notif = db(db.t_Personal.f_por_validar == True).count()
+        else:
+            dependencia = usuario.f_dependencia
+            notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    return notif
 
 #--------------------------------------
 # Otras Funcionalidades Basicas

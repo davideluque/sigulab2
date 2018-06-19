@@ -149,7 +149,7 @@
         <div class="modal-footer">
           <form method="post">
 
-            <div class="btn-group botonesFicha" >
+            <div class="btn-group botonesFicha" id="botones_validacion" >
                 <input id="validacion" name="validacion" hidden value="-1">
                 <button type="submit" class="btn btn-primary" id = "validar" name = "validar_ficha" onclick=confirmar_validacion() value="True">Validar</button>
                 <button type="submit" class="btn btn-primary" id = "rechazar" name = "rechazar_ficha" onclick=confirmar_rechazo()>Rechazar</button>
@@ -185,12 +185,16 @@
 
     if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe){
          $('#tab_datos_personales').hide();
+         $("#validar").hide();
+         $("#rechazar").hide();
+        
     }else{
         $('#tab_datos_personales').show();
+        $("#validar").show();
+        $("#rechazar").show();
     }
 </script>
 <script>
-    $("#validacion").val("Hola");
     
      function confirmar_validacion(){
          var answer=confirm('Confirme validacion de la ficha');
