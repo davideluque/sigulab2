@@ -38,12 +38,13 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">N° BM</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Capacidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
                 <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
-                <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Presentacion</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -51,26 +52,28 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
+                <td class="camposTabla">{{=bm['sb_nombre']}}</td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
-                <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                <td class="camposTabla">{{=bm['bm_marca']}}</td>
-                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
-                <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_unidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_clasificacion']}}</td>
+                <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+                <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
-          <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">N° BM</th>
-          <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Placa</th>
-          <th class="camposTabla linksNombres">Marca</th>
-          <th class="camposTabla linksNombres">Modelo</th>
-          <th class="camposTabla linksNombres">Serial</th>
+            <th class="camposTabla linksNombres">Nombre</th>
+            <th class="camposTabla linksNombres">Cantidad</th>
+            <th class="camposTabla linksNombres">Capacidad</th>
+            <th class="camposTabla linksNombres">Unidad</th>
+            <th class="camposTabla linksNombres">Tipo</th>
+            <th class="camposTabla linksNombres">Marca</th>
+            <th class="camposTabla linksNombres">Modelo</th>
+            <th class="camposTabla linksNombres">Presentacion</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -133,28 +136,28 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre_mat" name="nombre" title="Nombre del material" placeholder="Nombre del material*"  required>
+                            <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del material" placeholder="Nombre del material*"  required>
                             <div class="field-error"> <p id="err_cantidad_mat"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
                             <font color="red"><div id="err_cantidad_mat" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" >
+                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
                             
 
                         <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" >
+                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo_mat" name="modelo" value="" placeholder="Modelo/Código" >
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código*" required>
                             <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                         </div>
 
@@ -196,8 +199,7 @@
   
                         
                         <div class="form-group">
-                          <label>Calibración</label>
-                                <select class="form-control" type="select" id="calibracion" name="calibracion" placeholder="Calibración" required>
+                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
                                   <!-- Insertar un for-->
                                   <option type="text" value="">¿Requiere calibración?*</option>
                                   <option value="Si">Si</option>
@@ -225,7 +227,7 @@
                         
                         <label>Materiales</label>
                         <div class="form-group">
-                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
@@ -272,8 +274,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
 
                         <div class="form-group">
-                        <label>Dimensiones</label>
-                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                          <select class="form-control" value="" type="select" id="unidad_mat" name="unidad_mat" placeholder="Unidad de medida" onchange="display_units(this.value)">
                             <option value="">Selecione una unidad</option>
                             {{ for med in unidad_med:}}
                             <option value="{{=med}}">{{=med}}</option>
@@ -283,23 +284,23 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                          <input type="hidden" class="form-control" id="ancho_mat" name="ancho_mat" title="Formato ##.##" placeholder="Ancho">
                           <font color="red"><div id="err_ancho" hidden></div></font>
                         </div>
 
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                          <input type="hidden" class="form-control" id="largo_mat" name="largo_mat" title="Formato ##.##" placeholder="Largo" >
                           <font color="red"><div id="err_largo" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                          <input type="hidden" class="form-control" id="alto_mat" name="alto_mat" title="Formato ##.##" placeholder="Altura" >
                           <font color="red"><div id="err_alto" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                          <input type="hidden" class="form-control" id="diametro_mat" name="diametro_mat" title="Formato ##.##" placeholder="Diámetro" >
                           <font color="red"><div id="err_diametro" hidden></div></font>
                         </div>
 
@@ -365,17 +366,17 @@ del concepto y tipo de ingreso o egreso -->
   // Mostrar unidades
   function display_units(value){
     if ( value == '' ){
-      document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho").type = 'hidden';
-      document.getElementById("largo").type = 'hidden';
-      document.getElementById("alto").type = 'hidden';
-      document.getElementById("diametro").type = 'hidden';
+      document.getElementById("unidad_mat").type = 'hidden';
+      document.getElementById("ancho_mat").type = 'hidden';
+      document.getElementById("largo_mat").type = 'hidden';
+      document.getElementById("alto_mat").type = 'hidden';
+      document.getElementById("diametro_mat").type = 'hidden';
     }else{
-      document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho").type = 'text';
-      document.getElementById("largo").type = 'text';
-      document.getElementById("alto").type = 'text';
-      document.getElementById("diametro").type = 'text';
+      document.getElementById("unidad_mat").type = 'text';
+      document.getElementById("ancho_mat").type = 'text';
+      document.getElementById("largo_mat").type = 'text';
+      document.getElementById("alto_mat").type = 'text';
+      document.getElementById("diametro_mat").type = 'text';
     }
   }
   // Valida los campos de la forma en el modal "addbm"

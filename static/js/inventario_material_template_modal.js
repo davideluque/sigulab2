@@ -92,7 +92,7 @@ $(document).ready(function () {
                         $("#err_placa").hide();
                     }
                 }
-                else if (($(this).attr('name')=="ancho")) {
+                else if (($(this).attr('name')=="ancho_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_ancho").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_ancho").show();
@@ -104,7 +104,7 @@ $(document).ready(function () {
                         $("#err_ancho").hide();
                     }
                 }
-                else if (($(this).attr('name')=="largo")) {
+                else if (($(this).attr('name')=="largo_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_largo").html("Ingrese números decimales con punto: 2.5");
                         $("#err_largo").show();
@@ -115,7 +115,7 @@ $(document).ready(function () {
                         $(this).removeClass('input-error');
                         $("#err_largo").hide();
                     }
-                }else if (($(this).attr('name')=="alto")) {
+                }else if (($(this).attr('name')=="alto_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_alto").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_alto").show();
@@ -126,7 +126,7 @@ $(document).ready(function () {
                         $(this).removeClass('input-error');
                         $("#err_alto").hide();
                     }
-                }else if (($(this).attr('name')=="diametro")) {
+                }else if (($(this).attr('name')=="diametro_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_diametro").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_diametro").show();
