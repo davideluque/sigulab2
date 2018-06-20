@@ -12,6 +12,9 @@
 ###################################################################################
 
 
+import time
+
+
 ## Pagina de Inicio del modulo de Gestion de Informacion Documentada
 def index(): 
 	return dict(message="hello from informacion_documentada.py")
@@ -157,26 +160,27 @@ def lista_documentos():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 
-@auth.requires_login(otherwise=URL('modulos', 'login'))
 
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_registros():
 
-	# Lista de documentos a mostrar según privilegios del rol del usuario
-	registros = []
-
 	dic = {
-	"codigo": request.post_vars.codigo,
-	"fecha_creacion": request.post_vars.fecha_creacion,
-	"descripcion": request.post_vars.descripcion,
-	"destinatario": request.post_vars.destinatario,
-	"remitente": request.post_vars.remitente,
-	"doc_electronico": request.post_vars.doc_electronico,
-	"archivo_fisico": request.post_vars.archivo_fisico,
+		"usuario":auth.user.first_name,
+		"codigo": request.post_vars.codigo,
+		"fecha_creacion": request.post_vars.fecha_creacion,
+		"descripcion": request.post_vars.descripcion,
+		"destinatario": request.post_vars.destinatario,
+		"remitente": request.post_vars.remitente,
+		"doc_electronico": request.post_vars.doc_electronico,
+		"archivo_fisico": request.post_vars.archivo_fisico,
 	}
 
 
 	if(dic["descripcion"]!=None):
 		db.registros.insert(
+			usuario=dic["usuario"],
 			codigo=dic["codigo"],
 			fecha_creacion=dic["fecha_creacion"],
 			descripcion=dic["descripcion"],
@@ -186,11 +190,22 @@ def lista_registros():
 			archivo_fisico=dic["archivo_fisico"],
 		)
 
-		#Aqui estoy intentando poner el contador por defecto para cada codigo del registro.
+	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	t = strings.split(',')
+	year = t[0]
+	print(year[2:])
+
 	return dict(
-	            registros=db().select(db.registros.ALL),
-	            codigo_reg=db(db.registros.codigo).count()
-				)
+	    registros=db().select(db.registros.ALL),
+	    codigo_reg=db(db.registros.codigo).count(),
+		contador=db(db.registros.usuario == auth.user.first_name).count()
+	)
+
+
+
+
+
+
 
 def ficha_reg():
 	uname = request.args[0]
