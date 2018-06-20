@@ -6,10 +6,17 @@
 	<!-- Para los mensajes con flash -->
   	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
- 	<!-- DataTables -->
- 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
- 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
- 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+	<!--DATATABLES-->
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+	<style type="text/css">
+		div.dt-buttons {
+		  float: right;
+		  padding-right: 10ex;
+		}
+		
+	</style>
  	
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
@@ -27,8 +34,10 @@
    	.row{
      	margin-right:0px!important;
    	}
- 	</style>
+	 </style>
 {{end}}
+
+
 
 {{block center}}
 
@@ -171,22 +180,6 @@
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
 
-<!-- Datatables-->
-<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
-<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
-
-
-<!-- Datatable init js -->
-<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
 <script type="text/javascript">
 	// Funcion para que mostrar el grid de espacios fisicos
 	function grid_ef(){
@@ -215,7 +208,6 @@
 	}
 
 	function hide_seccion(){
-		console.log("alo")
 		var x = document.getElementById("secciones");
 		x.style.display = "none";
 	}
@@ -264,22 +256,47 @@
   }
 </script>
  
-<script language="javascript">
-  var table = $('#datatable').DataTable({
-    language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
-   initComplete: function(){
-      var api = this.api();
+ <script language="javascript">
 
-      new $.fn.dataTable.Buttons(api, {
-         buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
-         ]
-      });
-      api.buttons().container().appendTo('#buttons');  
-   }
-  });
-
-</script>
+		var table = $('#datatable').DataTable({
+		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+		  //dom: 'Bfrtip',
+		  language: {
+			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+		  },
+		 initComplete: function(){
+			var api = this.api();
+	  
+			new $.fn.dataTable.Buttons(api, {
+			  buttons: [
+	  
+				  {
+					  extend: 'collection',
+					  text: '<i class="fa fa-save"></i>',
+					  buttons: [
+						  { extend:'copy', text: 'Copiar' } ,
+						  'excel',
+						  'csv',
+						  'pdf'
+					  ]
+				  },
+				  { extend:'print', text: '<i class="fa fa-print"></i>'}
+			  ]
+			});
+			$('#botonModal').addClass('pull-left')
+			$('#filtrar').addClass('pull-left');
+			
+			$('.dataTables_filter').appendTo('#buttons');
+	  
+			api.buttons().container().appendTo('#buttons');
+			$('#buttons').append('<br><br>');
+			$('.dataTables_info').addClass('pull-right');
+			
+			$('.dataTables_filter').addClass('pull-left');
+	  
+			
+		 }
+		});
+	  
+	  </script>
 {{end}}
