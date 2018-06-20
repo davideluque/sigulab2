@@ -149,6 +149,8 @@
     {{ if bien['bm_placa'] != '': }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
+    <!-- Flash message -->
+    <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
 
 <!-- Inicio Boton Modificar BM -->

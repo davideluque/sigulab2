@@ -493,8 +493,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
-        bm = db(db.modificacion_bien_mueble.mbn_num == no_bien).select()[0]
-        response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.mbn_nombre)
+        bm = db(db.bien_mueble.bm_num == no_bien).select()[0] #Se busca de la tabla de bm para tener el nombre original
+        response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.bm_nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
@@ -524,7 +524,6 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             mbn_localizacion = localizacion, 
             mbn_modifica_ficha = user
         )
-    response.flash = "Se ha enviado una solicitud de modificación de BM"
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
