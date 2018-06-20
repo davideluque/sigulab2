@@ -449,47 +449,87 @@
                           </div>
 
                           <!-- FALTA ARREGLAR ESTO  -->
+                           {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
+                              <div class="form-group">
+                                {{if bien['bm_ancho']==None:}}
+                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{else:}}
+                                    <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{pass}}
+                                <font color="red"><div id="err_ancho" hidden></div></font>
+                              </div>
 
-                          <div class="form-group">
-                            {{if bien['bm_ancho']==None:}}
-                                <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                            {{else:}}
-                                <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_largo']==None:}}
+                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{pass}}
+                                <font color="red"><div id="err_largo" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_alto']==None:}}
+                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{pass}}
+                                <font color="red"><div id="err_alto" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_diametro']==None:}}
+                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{pass}}
+                                <font color="red"><div id="err_diametro" hidden></div></font>
+                              </div>
+
+                            {{elif bien['bm_unidad']!="":}}
+                                <div class="form-group">
+                                {{if bien['bm_ancho']==None:}}
+                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{else:}}
+                                    <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{pass}}
+                                <font color="red"><div id="err_ancho" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_largo']==None:}}
+                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{pass}}
+                                <font color="red"><div id="err_largo" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_alto']==None:}}
+                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{pass}}
+                                <font color="red"><div id="err_alto" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_diametro']==None:}}
+                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{pass}}
+                                <font color="red"><div id="err_diametro" hidden></div></font>
+                              </div>
                             {{pass}}
-                            <font color="red"><div id="err_ancho" hidden></div></font>
-                          </div>
-
-
-                          <div class="form-group">
-                            
-                            {{if bien['bm_largo']==None:}}
-                                <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                            {{else:}}
-                                <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
-                            {{pass}}
-                            <font color="red"><div id="err_largo" hidden></div></font>
-                          </div>
-
-                          <div class="form-group">
-                            
-                            {{if bien['bm_alto']==None:}}
-                                <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                            {{else:}}
-                                <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
-                            {{pass}}
-                            <font color="red"><div id="err_alto" hidden></div></font>
-                          </div>
-
-                          <div class="form-group">
-                            
-                            {{if bien['bm_diametro']==None:}}
-                                <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                            {{else:}}
-                                <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                            {{pass}}
-                            <font color="red"><div id="err_diametro" hidden></div></font>
-                          </div>
-                          
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
