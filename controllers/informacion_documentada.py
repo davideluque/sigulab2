@@ -38,7 +38,12 @@ def lista_documentos():
 	# 	)	
 	# 	x += 1
 	
-
+	print(auth.user.first_name)
+	if auth.has_membership("WEBMASTER") or auth.has_membership("DIRECTOR") or auth.user.email=='ulab-calidad@usb.ve':
+		documentos = db().select(db.documentos.ALL)
+	else:
+		print (auth.user.first_name=='Unidad de Administración')
+		documentos = db(db.documentos.responsable==auth.user.first_name).select()
 	dic = {
 
 		##### Planificación
@@ -53,34 +58,30 @@ def lista_documentos():
 		"periodo_rev":request.post_vars.periodo,
 		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
 
-
-
-	
-	
-	"ubicacion_electronica": request.post_vars.ubicacion_electronica,
-	"ubicacion_fisica": request.post_vars.ubicacion_fisica,
-	# "cod_anexo": request.post_vars.cod_anexo,
-	# "nombre_anexo": request.post_vars.nombre_anexo,
-	
-	
-	"estatus":"Planificado",
-	
-	"aprobado_por": request.post_vars.aprobado,
-	"elaborado_actualizado_por": request.post_vars.elaborado,
-	# "vigencia":
-	"fecha_aprob": request.post_vars.fechaAprobacion,
-	
-	"fecha_control_cambio": request.post_vars.fecha_control_cambio,
-	"cod_control_cambio": request.post_vars.cod_control_cambio,
-	"cod_aprob": request.post_vars.cod_registro,
-	"fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
-	"rev_por_consejo_asesor": request.post_vars.revision_consejo,
-	"fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
-	"fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
-	"rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,
-	"rev_contenido_realizado_por": request.post_vars.revision_contenido,
-	
-	}
+		"ubicacion_electronica": request.post_vars.ubicacion_electronica,
+		"ubicacion_fisica": request.post_vars.ubicacion_fisica,
+		# "cod_anexo": request.post_vars.cod_anexo,
+		# "nombre_anexo": request.post_vars.nombre_anexo,
+		
+		
+		"estatus":"Planificado",
+		
+		"aprobado_por": request.post_vars.aprobado,
+		"elaborado_actualizado_por": request.post_vars.elaborado,
+		# "vigencia":
+		"fecha_aprob": request.post_vars.fechaAprobacion,
+		
+		"fecha_control_cambio": request.post_vars.fecha_control_cambio,
+		"cod_control_cambio": request.post_vars.cod_control_cambio,
+		"cod_aprob": request.post_vars.cod_registro,
+		"fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
+		"rev_por_consejo_asesor": request.post_vars.revision_consejo,
+		"fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
+		"fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
+		"rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,
+		"rev_contenido_realizado_por": request.post_vars.revision_contenido,
+		
+		}
 
 	planificado = {
 				"tipo_doc": dic["tipo_doc"]=='',
@@ -116,7 +117,7 @@ def lista_documentos():
 	if(not('' in aprobado.values())):
 
 		dic["estatus"] = "Aprobado"
-
+	print(dic["codigo"]!=None)
 	if(dic["codigo"]!=None):
 		db.documentos.insert(
 			codigo=dic["codigo"],
@@ -158,7 +159,7 @@ def lista_documentos():
 				usuarios = db().select(db.auth_user.first_name)
 				)
 
-@auth.requires_login(otherwise=URL('modulos', 'login'))
+
 
 
 
@@ -208,6 +209,7 @@ def lista_registros():
 
 
 def ficha_reg():
+	print(request.args[0])
 	uname = request.args[0]
 	row = db(db.documentos.codigo==uname).select()
 
@@ -234,6 +236,7 @@ def ficha_reg():
 
 	
 def ficha():
+
 	uname = request.args[0]
 	row = db(db.documentos.codigo==uname).select()
 
@@ -266,9 +269,51 @@ def ficha():
 	# "tipo_doc":request.post_vars.tipo,
 	# }
 
-	# documento =  db(db.documentos.codigo==uname)
-	# if(request.post_vars.button=="Submit"):
+	documento =  db(db.documentos.codigo==uname)
+	if(request.post_vars.elaborado=="edicion"):
+		 jQuery('#objetivos').removeAttr('disabled');
+        jQuery('#periodo').removeAttr('disabled');
+        jQuery('#elaborado').removeAttr('disabled');
 
+		documento.update(estatus="Elaborado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev
+			)
+	elif (request.post_vars.revisado=="revisado"):
+
+		print("revisado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,)
+
+	elif(request.post_vars.aprobado=="aprobado"):
+		print("aprobado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
+       		aprobado_por = request.post_vars.aprobado,
+        	fecha_aprob = request.post_vars.fechaAprobacion,
+        	cod_aprob = request.post_vars.cod_registro,
+        	cod_control_cambio = request.post_vars.cod_controlCambios,
+        	fecha_control_cambio = request.post_vars.fechaControlCambios,
+        	ubicacion_fisica = request.post_vars.ubicacion_fisica,
+        	ubicacion_electronica = request.post_vars.archivo_el
+        )
 	# 	documento.update(
 
 	# 			objetivo=dic["objetivo"],
@@ -301,4 +346,6 @@ def ficha():
 	# 	redirect(URL('..', 'sigulab2','informacion_documentada',''))
 
 	### END ###
-	return dict(message="holi") #row	)
+
+	return dict(documentos=row,
+				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row	)

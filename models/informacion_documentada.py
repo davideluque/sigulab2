@@ -1,197 +1,168 @@
-################################################################################
-##                                                                            ##
-##    Modelos del Módulo de Informacion Documentada                           ##
-##                                                                            ##
-################################################################################
+##############################################################################
+#                                                                            #
+# Tablas del Modulo de Informacion Documentada                               #
+#                                                                            #
+##############################################################################
 
-
-
-
-###############################################################################
-##                                                                           ##
-##    Tabla de los Registros                                                 ##
-##                                                                           ##
-###############################################################################
+##############################################################################
+#                                                                            #
+# Tabla de los Registros                                                     #
+#                                                                            #
+##############################################################################
 
 db.define_table(
 
-      'registros',
+    'registros',
 
-      Field('usuario', 'string', label=T('Usuario creador del registro')),
+    Field('codigo', 'string', label=T('Codigo del registro'),
+          requires=IS_NOT_EMPTY()
+          ),
 
-      Field('codigo', 'string', label=T('Codigo del registro'), requires=IS_NOT_EMPTY()),
+    Field('ubicacion_fisica', 'string', label=T('Ubicacion Fisica del registro')
+          ),
 
-      Field('fecha_creacion', 'string', label=T('Fecha')),
+    Field('ubicacion_electronica', 'string',
+          label=T('Direccion electronica del registro')
+          ),
 
-      Field('descripcion', 'string', label=T('Descripcion del registro')),
+    Field('doc_electronico', 'string', label=T('Documento Electronico')
+          ),
 
-      Field('destinatario', 'string', label=T('Destinatario del registro')),
+    Field('fecha_creacion', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de creacion del registro')
+          ),
 
-      Field('remitente', 'string', label=T('Remitente del registro')),
+    Field('descripcion', 'string', label=T('Descripcion del registro')
+          ),
 
-      Field('doc_electronico', 'string', label=T('Doc. Electrónico')),
+    Field('destinatario', 'string', label=T('Destinatario del registro')
+          ),
 
-      Field('archivo_fisico', 'string', label=T('Archivo Fisico')),
+    Field('remitente', 'string', label=T('Remitente del registro')
+          ),
 
-      primarykey=['descripcion']
+    primarykey=['codigo']
 )
 
-
-
-###############################################################################
-##                                                                           ##
-##    Tabla de Anexos                                                        ##
-##                                                                           ##
-###############################################################################
+##############################################################################
+#                                                                            #
+# Tabla de los Documentos                                                    #
+#                                                                            #
+##############################################################################
 
 db.define_table(
 
-      'anexos',
+    "documentos",
 
-      Field('anexo_code', 'string', label=T('Código del anexo')),
-      Field('anexo_name', 'string', label=T('Nombre del anexo')),
+    Field('codigo', 'string', label=T('Codigo del registro'),
+          requires=IS_NOT_EMPTY()
+          ),
 
-)
+    Field('objetivo', 'string', label=T('Objetivo del documento')
+          ),
 
+    Field('ubicacion_fisica', 'string', label=T('Ubicacion fisica del Documento')
+          ),
 
-###############################################################################
-##                                                                           ##
-##    Tabla de Elaboradores                                                  ##
-##                                                                           ##
-###############################################################################
+    Field('ubicacion_electronica', 'string',
+          label=T('Ubicacion Electronica del Documento')),
 
+    Field('cod_anexo', 'string', label=T('Codigo del anexo')),
 
-db.define_table(
-      
-      'elaboradores',
+    Field('nombre_anexo', 'string', label=T('Nombre del anexo del Documento'),
+          unique=True),
 
-      Field('elaborado', 'string', label=T('Nombre del elaborador del Documento')),
+    Field('responsable', 'string',
+          label=T('Dependencia responsable del Documento'),
+          requires=IS_IN_SET(['DIRECCIÓN','Laboratorio A','Laboratorio B', \
+                    'Laboratorio C','Laboratorio D','Laboratorio E',\
+                    'Laboratorio F','Laboratorio G','Unidad de Administración',\
+                    'Coordinación de Adquisiciones','Coordinación de Importaciones',\
+                    'Coordinación de la Calidad','Oficina de Proteccion Radiológica'
+                    ])
+          ),
 
-)
+    Field('nombre_doc', 'string', label=T('Nombre del Documento'), unique=True,
+          notnull=True),
 
-
-
-
-###############################################################################
-##                                                                           ##
-##    Tabla de los Documentos                                                ##
-##                                                                           ##
-###############################################################################
-
-db.define_table(
-      
-      'documentos',
-
-
-
-      ################ Fase de Planificación
-
-      Field('usuario', 'string', label=T('Usuario creador del documento')),
-    
-      Field('nombre_doc', 'string', label=T('Nombre del Documento'), unique=True, notnull=True),
-
-      Field('tipo_doc', 'string', label=T('Tipo del Documento'), notnull=True, widget=SQLFORM.widgets.options.widget,
-            requires=IS_IN_SET(['Referente Estratégico','Reglamento','Manual de Organización', \
-            'Manual de Calidad', 'Manual de Proceso de Gestión', 'Manual de Proceso Técnico', \
-            'Manual de Uso', 'Otro'])
-      ),
-
-      Field('responsable', 'string', label=T('Dependencia responsable del Documento'),
-            requires=IS_IN_SET(['DIRECCIÓN','LABORATORIO A','LABORATORIO B', \
-            'LABORATORIO C','LABORATORIO D','LABORATORIO E',\
-            'LABORATORIO F','LABORATORIO G','UNIDAD DE ADMINISTRACIÓN',\
-            'COORDINACIÓN DE ADQUISICIONES','COORDINACIÓN DE IMPORTACIONES',\
-            'COORDINACIÓN DE LA CALIDAD','OFICINA DE PROTECCIÓN RADIOLÓGICA'
-            ])
-      ),
-
-
-
-      ################ Fase de Elaboración
-
-      Field('codigo', 'string', label=T('Codigo del registro')),
-
-      Field('objetivo', 'string', label=T('Objetivo del documento')),
-
-      Field('periodo_rev', 'string', label=T('Periodo de revision del Documento'),
-            widget=SQLFORM.widgets.options.widget,
-            requires=IS_IN_SET(['Semestral', 'Anual','Bienal','Trienal','Quinqueanual'])
-      ),
-
-      Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-            label=T('Fecha de proxima revision del Documento')
-      ),
-
-      Field('cod_anexo', 'string', requires=IS_IN_DB(db, db.anexos.id, '%(anexo_code)s'), 
-            label=T('Codigo del anexo')
-      ),
-
-      Field('nombre_anexo', 'reference anexos', requires=IS_IN_DB(db, db.anexos.id, '%(anexo_name)s'), 
-            label=T('Nombre del anexo del Documento'), unique=True
-      ),
-
-      Field('elaborado_actualizado_por', 'reference elaboradores', requires=IS_IN_DB(db, db.elaboradores.id, '%(elaborado)s'),
-            label=T('Nombre de quien elaboro/actualizo el Documento')
-      ),
-
-
-
-      ################# Fase de Revisión
-
-      Field('rev_contenido_realizado_por', 'string', label=T('Nombre de quien reviso el contenido del Documento')),
-
-      Field('fecha_rev_contenido', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de revision del contenido del Documento')
-      ),
-
-      Field('rev_especficaciones_doc_realizado_por', 'string',
-          label=T('Nombre de quien realizo la revision de las especificaciones')
-      ),
-
-      Field('fecha_rev_especificaciones_doc', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de revision de las especificaciones del Documento')
-      ),
-
-      Field('fecha_rev_por_consejo_asesor', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-          label=T('Fecha de revision por el Consejo Asesor')
-      ),
-
-
-
-      ################# Fase de Aprobación
-
-      Field('aprobado_por', 'string', label=T('Nombre de quien aprobo el Documento')),
-
-      Field('fecha_aprob', 'date', requires=IS_DATE(format=('%d-%m-%Y')), 
-            label=T('Fecha de aprobacion del Documento')
-      ),
-
-      Field('cod_aprob', 'string', label=T('Codigo de registro de aprobacion del Documento')),
-
-      Field('ubicacion_fisica', 'string', label=T('Ubicacion fisica del Documento')),
-
-      Field('ubicacion_electronica', 'string', label=T('Ubicacion Electronica del Documento')),
-
-      Field('cod_control_cambio', 'string', label=T('Codigo de registro de control de cambios del Documento')),
-
-      Field('fecha_control_cambio', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
-            label=T('Fecha de registro de control de cambios en el Documento')
-      ),
-
-      Field('ccelaborado', 'text', label=T("Elaborador del control de cambios")),
-
-      Field('registro_fisico', 'text', label=T("Ubicación del registro en formato físico")),
-
-      Field('registro_electronico', 'text', label=T("Ubicación del registro en formato electrónico")),
-
-
-
-      ############### ESTATUS DEL DOCUMENTO
-
-      Field('estatus', 'string', label=T('Estatus del Documento'), widget=SQLFORM.widgets.options.widget,
+    Field('estatus', 'string', label=T('Estatus del Documento'),
+          widget=SQLFORM.widgets.options.widget,
           requires=IS_IN_SET(['Planificado','Elaborado','Revisado','Aprobado'])
-      ),
+          ),
 
+    Field('periodo_rev', 'string', label=T('Periodo de revision del Documento'),
+          widget=SQLFORM.widgets.options.widget,
+          requires=IS_IN_SET(['Mensual','Quincenal','Trimestral','Semestral',\
+                             'Anual','Bienal','Trienal','Quinqueanual'])
+          ),
+
+    Field('aprobado_por', 'string', label=T('Nombre de quien aprobo el Documento')
+          ),
+
+    Field('elaborado_actualizado_por', 'string',
+          label=T('Nombre de quien elaboro/actualizo el Documento')
+          ),
+
+    Field('vigencia', 'boolean', label=T('Vigencia del Documento')),
+
+    Field('fecha_aprob', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de aprobacion del Documento')),
+
+    Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de proxima revision del Documento')),
+
+    Field('fecha_control_cambio', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de registro de control de cambios en el Documento')
+          ),
+
+    Field('cod_control_cambio', 'string',
+          label=T('Codigo de registro de control de cambios del Documento')
+          ),
+
+    Field('cod_aprob', 'string',
+          label=T('Codigo de registro de aprobacion del Documento')),
+
+    Field('fecha_rev_por_consejo_asesor', 'date',
+          requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de revision por el Consejo Asesor')),
+
+    Field('rev_por_consejo_asesor', 'string',
+          label=T('Revision hecha por el Consejo Asesor')),
+
+    Field('fecha_rev_especificaciones_doc', 'date',
+          requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de revision de las especificaciones del Documento')),
+
+    Field('rev_especficaciones_doc_realizado_por', 'string',
+          label=T('Nombre de quien realizo la revision de las especificaciones')
+          ),
+
+    Field('fecha_rev_contenido', 'date',
+          requires=IS_DATE(format=('%d-%m-%Y')),
+          label=T('Fecha de revision del contenido del Documento')
+          ),
+
+    Field('rev_contenido_realizado_por', 'string',
+          label=T('Nombre de quien reviso el contenido del Documento')),
+
+    Field('tipo_doc', 'string', label=T('Tipo del Documento'),
+          widget=SQLFORM.widgets.options.widget,
+          requires=IS_IN_SET(['Referente Estrategico','Reglamento','Manual','Otro'])
+          ),
+
+    Field('procedimientos', 'string',
+          label=T('Procedimientos del Manual')),
+
+    Field('formularios', 'string',
+          label=T('Formularios del Manual')),
+
+    Field('instructivos', 'string',
+          label=T('Instructivos del Manual')),
+
+    Field('registro', 'string', unique=True,
+          label=T('Identificador del registo del manual')),
+
+    Field('tipo_manual', 'string', label=T('Tipo del manual')),
 
     primarykey=['codigo']
 )
