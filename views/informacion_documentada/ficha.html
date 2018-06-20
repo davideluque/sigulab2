@@ -152,7 +152,7 @@
       <p><span style="color: #52798c; font-size: 1.2em;">Tipo:    <!--{{=doc.tipo_doc}}-->  </span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Documento: <!--{{=doc.nombre_doc}}-->    </span> </p>
       <p><span style="color: #52798c; font-size: 1.2em;">Objetivo: <!--{{=doc.objetivo}}-->       </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Estatus:  <!--{{=doc.estatus}}-->    </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}    </span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:  <!--{{=doc.periodo_rev}}-->   </span></p>
 
       <div style="margin-top: 50px; float: right;">
@@ -358,7 +358,7 @@
               <!-- Campo de Período de Revisión -->
               <div class="form-group">
                 <h5>Período de Revisión</h5>
-                <select disabled="" name="periodo" id="periodo" class="input">
+                <select disabled="" name="periodo" id="periodo" class="input" >
                   <option value="{{=doc.periodo_rev}}"></option>
                   <option value="Semestral">Semestral</option>
                   <option value="Anual">Anual</option>
@@ -426,7 +426,7 @@
             
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
               <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
             </div>
           </fieldset>
@@ -452,24 +452,24 @@
 
               <!-- Campo de responsable de la revisión de contenidos -->
               <div class="form-group">
-                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" />
+                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required />
               </div> 
 
               <!-- Campo de fecha de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Fecha de revisión de contenidos</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" /> 
+                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" required/> 
               </div> 
 
               <!-- Campo de responsable de la revisión de especificaciones -->
               <div class="form-group">
-                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" /> 
+                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required /> 
               </div> 
 
               <!-- Campo de fecha de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Fecha de revisión de especificaciones</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" /> 
+                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" required/> 
               </div> 
 
 
@@ -484,7 +484,7 @@
               </div> 
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
               <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
             </div>
           </fieldset>
@@ -630,18 +630,10 @@
 
 
                 <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="aprobado" value="aprobado" ><i class="fa fa-floppy-o"></i></button>  
             </div>
           </fieldset>
           <!-- Fin Sexto Paso -->
-
-
-
-
- 
-
-
-
 
         </form>
       </div>
@@ -650,6 +642,8 @@
   </div>  
 </div>
 </div>
+
+
 
 
 
@@ -681,6 +675,11 @@ function estatus(){
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+        jQuery('#cod_controlCambios').removeAttr('disabled');
+        jQuery('#fechaControlCambios').removeAttr('disabled');
+
 
       }else if($('.form-group').data('atributo')=='Elaborado'){
 
@@ -697,12 +696,17 @@ function estatus(){
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
 
+         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+
       }else if($('.form-group').data('atributo')=='Revisado'){
         jQuery('#aprobado').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
+         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
         
       }else if($('.form-group').data('atributo')=='Aprobado'){
 

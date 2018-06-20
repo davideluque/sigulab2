@@ -254,9 +254,51 @@ def ficha():
 	# "tipo_doc":request.post_vars.tipo,
 	# }
 
-	# documento =  db(db.documentos.codigo==uname)
-	# if(request.post_vars.button=="Submit"):
+	documento =  db(db.documentos.codigo==uname)
+	if(request.post_vars.elaborado=="edicion"):
+		 jQuery('#objetivos').removeAttr('disabled');
+        jQuery('#periodo').removeAttr('disabled');
+        jQuery('#elaborado').removeAttr('disabled');
 
+		documento.update(estatus="Elaborado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev
+			)
+	elif (request.post_vars.revisado=="revisado"):
+
+		print("revisado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,)
+
+	elif(request.post_vars.aprobado=="aprobado"):
+		print("aprobado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
+       		aprobado_por = request.post_vars.aprobado,
+        	fecha_aprob = request.post_vars.fechaAprobacion,
+        	cod_aprob = request.post_vars.cod_registro,
+        	cod_control_cambio = request.post_vars.cod_controlCambios,
+        	fecha_control_cambio = request.post_vars.fechaControlCambios,
+        	ubicacion_fisica = request.post_vars.ubicacion_fisica,
+        	ubicacion_electronica = request.post_vars.archivo_el
+        )
 	# 	documento.update(
 
 	# 			objetivo=dic["objetivo"],
