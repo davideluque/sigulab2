@@ -212,11 +212,11 @@
     </div>
     <div id="tab-3" class="tab-content">
   
-      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion: {{=doc.registro}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion: <!--{{=doc.registro}}  --></span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Fecha de registro de Ubicacion:      </span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     </span> </p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}     </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   <!--{{=doc.ubicacion_electronica}}-->  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: <!--{{=doc.ubicacion_fisica}}   -->  </span></p>
     
 
     </div>
@@ -402,14 +402,14 @@
               <h4 class="titulosForm">Fase de Elaboración</h4>
 
               <!-- Campo de Número de Anexos -->
-              <div class="form-group">
+<!--               <div class="form-group">
                 <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
               
                 <div id="containerAnexos"/>
-              </div>
+              </div> -->
 
               <!-- Campo de Elaboradores del Documento -->
-              <div class="form-group">
+<!--               <div class="form-group">
                 
                 
                 <div id="p_scents">
@@ -422,7 +422,7 @@
                                       
               </div>
 
-          
+           -->
             
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
@@ -474,14 +474,14 @@
 
 
               <!-- Campo de confirmación si fué o no revisado por el consejo -->
-              <div class="form-group">
+<!--               <div class="form-group">
                 <label>Revisión del Consejo</label>
                 <br>
                 <input disabled='' type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
                 <br>
                 <input disabled='' type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
                 <div id="containerRevision"/>
-              </div> 
+              </div>  -->
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
               <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  

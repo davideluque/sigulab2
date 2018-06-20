@@ -325,7 +325,7 @@
 										<option value="Manua3">Manual de Proceso de Gestión</option>
 										<option value="Manua4">Manual de Proceso Técnico</option>
 										<option value="Manua5">Manual de Uso</option>
-										<option value="Otro">Otro/option>
+										<option value="Otro">Otro</option>
 									</select>
 								</div>
 
@@ -438,7 +438,7 @@
 								
 								<div id="p_scents">
 									<p>
-										<input type="text" id="p_scnt" size="20" name="elaborador" value="" placeholder="Ingrese un elaborador" />
+										<input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
 									</p>
 								</div>
 
@@ -758,7 +758,7 @@
 		var i = $('#p_scents p').length + 1;
 		
 		$('.form-group').on('click', '#addScnt', function() {
-			$('<p><input type="text" id="p_scnt" size="20" name="elaborador_' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
+			$('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
 			i++;
 			return false;
 		});

@@ -2,20 +2,20 @@
 {{block head}}
  
 
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- DataTables -->
-	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
-	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
 
-	<!-- Web2py JS - Especialmente para AJAX -->
-	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
 {{end}}
 {{block center}}
@@ -28,35 +28,35 @@
 </nav>
 
 <div class="container-fluid" id="container-body" style="">
-	<!--<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Documentos</li>
-			</ol>
-	</nav><-->
+  <!--<nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Documentos</li>
+      </ol>
+  </nav><-->
 
-		<p style="font-size: 35px; text-align: center;">CONTROL DE REGISTROS</p>
-			
+    <p style="font-size: 35px; text-align: center;">CONTROL DE REGISTROS</p>
+      
 
-	</div>
+  </div>
 
 
-	<div class="row" style="margin-bottom: 100px;">
-		<div class="col-md-1">
-		</div>	
-		<div class="col-md-10">
-			<nav class="indicadores" style="background-color: #FAFAFA;">			
-				<div class="row">		
-					</ul>
-					
-			</nav>
-		</div>
-		<div class="col-md-1">
-		</div>	
-	<div>
+  <div class="row" style="margin-bottom: 100px;">
+    <div class="col-md-1">
+    </div>  
+    <div class="col-md-10">
+      <nav class="indicadores" style="background-color: #FAFAFA;">      
+        <div class="row">   
+          </ul>
+          
+      </nav>
+    </div>
+    <div class="col-md-1">
+    </div>  
+  <div>
 
-	<div class="row">
-	</div>	
+  <div class="row">
+  </div>  
 </div>
 
 <!--UL 04/18-->
@@ -79,18 +79,18 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-  				<th class="camposTabla linksNombres">Registro </th>
-  				<th class="camposTabla linksNombres">Fecha</th>
-  				<th class="camposTabla linksNombres">Descripción</th>
-  				<th class="camposTabla linksNombres">Destinatario</th>
-  				<th class="camposTabla linksNombres">Remitente</th>
-  				<th class="camposTabla linksNombres">Doc. Electrónico</th>
-  				<th class="camposTabla linksNombres">Archivo Físico</th>
+          <th class="camposTabla linksNombres">Registro </th>
+          <th class="camposTabla linksNombres">Fecha</th>
+          <th class="camposTabla linksNombres">Descripción</th>
+          <th class="camposTabla linksNombres">Destinatario</th>
+          <th class="camposTabla linksNombres">Remitente</th>
+          <th class="camposTabla linksNombres">Doc. Electrónico</th>
+          <th class="camposTabla linksNombres">Archivo Físico</th>
             </tr>
         </thead>
 
         <tbody>
-      	{{for doc in registros:}}
+        {{for doc in registros:}}
         <tr>
           <td class="camposTabla">{{=doc.codigo}}</td>
           <td class="camposTabla">{{=doc.fecha_creacion}}</td>
@@ -100,7 +100,7 @@
           <td class="camposTabla">{{=doc.doc_electronico}}</td>
           <td class="camposTabla">{{=doc.archivo_fisico}}</td>
         </tr>
-		    {{pass}}         
+        {{pass}}         
         </tbody>
 
 
@@ -166,39 +166,44 @@
                         <div class="col-sm-11 col11Body">
 
                           <div class="input-group">
-                              <h4 class="">Código</h4>
-                              <input type="text" name="codigo" id="codigo" onload="put_code()" required/>
+                              
+                              <input type="hidden" name="codigo" id="codigo" required/>
                           </div>
 
                           <div class="input-group focus">
                               <h4 class="">Fecha de Creación</h4>
-      				                <input type="date" class="input" name="fecha_creacion" id="fecha_creacion"  required/> 
-      				            </div>
+                              <input type="date" class="input" name="fecha_creacion" id="fecha_creacion"  required/> 
+                          </div>
 
                           <div class="input-group">
                               <h4 class="">Descripción</h4>
                               <input type="text" name="descripcion" id="descripcion" placeholder="Descripción" required/>
                           </div>
 
-      				            <div class="input-group">
+                          <div class="input-group">
                               <h4 class="">Destinatario</h4>
-      				                <input type="text" name="destinatario" id="destinatario" placeholder="Destinatario" required/>
+                              <input type="text" name="destinatario" id="destinatario" placeholder="Destinatario" required/>
                           </div>
                           
-      				            <div class="input-group">
-                              <h4 class="">Remitente</h4>
-      				                <input type="text"  name="remitente" id="remitente" placeholder="Remitente" required/>
-      				            </div>
+                          <div class="input-group">
+                                  <h4 class="">Remitente</h4>
+                              <select name="remitente" id="remitente" class="input" onchange="get_code(this)" required>
+                    <option value=""></option>
+                    {{for dep in dependencias:}}
+                    <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+                    {{pass}}
+                  </select>
+                          </div>
 
-      				            <div class="input-group">
+                          <div class="input-group">
                               <h4 class="">Documento electrónico</h4>
-      				                <input type="text" name="doc_electronico" id="doc_electronico" placeholder="Documento electrónico" required/>
+                              <input type="text" name="doc_electronico" id="doc_electronico" placeholder="Documento electrónico" required/>
                           </div>
                           
                           <div class="input-group">
                               <h4 class="">Archivo físico</h4>
-      				                <input type="text" name="archivo_fisico" id="archivo_fisico" placeholder="Archivo físico" required/>
-      				            </div>
+                              <input type="text" name="archivo_fisico" id="archivo_fisico" placeholder="Archivo físico" required/>
+                          </div>
 
 
                  
@@ -226,17 +231,29 @@
 
 
 <script type="text/javascript">
-
-	function put_code(){
     
-    i = contador + 1;
-    j = i.toString();
-    cod = user + "/" + year + j
-		cod = i[i.selectedIndex].value; // get value
-		document.getElementById("codigo").value = cod;
+
+  function get_code(x){
+    
+    var i = {{=contador}} + 1;
+    if (i < 10) {
+      var j = "00" + i.toString();
+    }
+    else if (i < 100){
+      var j = "0" + i.toString();
+    }
+    else{
+      var j = i.toString(); 
+    }
+
+      
+      dep = x[x.selectedIndex].value;
+      var cod = dep + "/" + "{{=year}}" + "-" + j;
+    
+    document.getElementById("codigo").value = cod;
+  }
 
 
-}
 
 
 </script>

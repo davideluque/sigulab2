@@ -13,7 +13,7 @@
 
 
 import time
-
+import datetime
 
 ## Pagina de Inicio del modulo de Gestion de Informacion Documentada
 def index(): 
@@ -23,27 +23,15 @@ def index():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_documentos():
 
-	# i = int(request.post_vars.numero_anexos)
-	# x = 1
-	# while(x <= i):
-	# 	uno = "anexo_code" + str(x)
-	# 	dos = "anexo_name" + str(x)
-	# 	dic = {
-	# 		"anexo_code": request.post_vars.uno,
-	# 		"anexo_name": request.post_vars.dos
-	# 	}
-	# 	db.anexos.insert(
-	# 		anexo_code=dic["anexo_code"],
-	# 		anexo_name=dic["anexo_name"]
-	# 	)	
-	# 	x += 1
-	
-	print(auth.user.first_name)
+
 	if auth.has_membership("WEBMASTER") or auth.has_membership("DIRECTOR") or auth.user.email=='ulab-calidad@usb.ve':
 		documentos = db().select(db.documentos.ALL)
 	else:
 		print (auth.user.first_name=='Unidad de Administración')
 		documentos = db(db.documentos.responsable==auth.user.first_name).select()
+
+	unaDependencia = request.post_vars.codigo
+		
 	dic = {
 
 		##### Planificación
@@ -53,52 +41,74 @@ def lista_documentos():
 		"responsable": request.post_vars.responsable,
 
 		##### Elaboración
-		"codigo": request.post_vars.codigo,
+		"codigo": unaDependencia,
 		"objetivo": request.post_vars.objetivos,
 		"periodo_rev":request.post_vars.periodo,
 		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
+		"anexo_code1": request.post_vars.anexo_code1,
+		"anexo_name1": request.post_vars.anexo_name1,
+		"anexo_code2": request.post_vars.anexo_code2,
+		"anexo_name2": request.post_vars.anexo_name2,
+		"anexo_code3": request.post_vars.anexo_code3,
+		"anexo_name3": request.post_vars.anexo_name3,
+		"anexo_code4": request.post_vars.anexo_code4,
+		"anexo_name4": request.post_vars.anexo_name4,
+		"anexo_code5": request.post_vars.anexo_code5,
+		"anexo_name5": request.post_vars.anexo_name5,
+		"elaborado1": request.post_vars.elaborado1,
+		"elaborado2": request.post_vars.elaborado2,
+		"elaborado3": request.post_vars.elaborado3,
+		"elaborado4": request.post_vars.elaborado4,
+		"elaborado5": request.post_vars.elaborado5,
 
-		"ubicacion_electronica": request.post_vars.ubicacion_electronica,
-		"ubicacion_fisica": request.post_vars.ubicacion_fisica,
-		# "cod_anexo": request.post_vars.cod_anexo,
-		# "nombre_anexo": request.post_vars.nombre_anexo,
-		
-		
-		"estatus":"Planificado",
-		
-		"aprobado_por": request.post_vars.aprobado,
-		"elaborado_actualizado_por": request.post_vars.elaborado,
-		# "vigencia":
-		"fecha_aprob": request.post_vars.fechaAprobacion,
-		
-		"fecha_control_cambio": request.post_vars.fecha_control_cambio,
-		"cod_control_cambio": request.post_vars.cod_control_cambio,
-		"cod_aprob": request.post_vars.cod_registro,
-		"fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
-		"rev_por_consejo_asesor": request.post_vars.revision_consejo,
-		"fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
-		"fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
-		"rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,
+
+		##### Revisión
 		"rev_contenido_realizado_por": request.post_vars.revision_contenido,
+		"fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
+		"rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,		
+		"fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
+		"fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
+
+
+		##### Aprobación
+		"aprobado_por": request.post_vars.aprobado,
+		"fecha_aprob": request.post_vars.fechaAprobacion,
+		"cod_aprob": request.post_vars.cod_registro,
+		"ubicacion_fisica": request.post_vars.ubicacion_fisica,
+		"ubicacion_electronica": request.post_vars.ubicacion_electronica,
+		"cod_control_cambio": request.post_vars.cod_control_cambio,
+		"fecha_control_cambio": request.post_vars.fecha_control_cambio,
+		"ccelaborado": request.post_vars.ccelaborado,
+		"registro_fisico": request.post_vars.registro_fisico,
+		"registro_electronico": request.post_vars.registro_electronico,
+
+		##### Estatus inicial
+		"estatus":"Planificado"
+			
 		
-		}
+	}
+
+
 
 	planificado = {
-				"tipo_doc": dic["tipo_doc"]=='',
-				"responsable":dic["responsable"],
-				"fecha_prox_rev":dic["fecha_prox_rev"]
-				}
-	elaborado = { "codigo":dic["codigo"],
-				"objetivo":dic["objetivo"],
-				"elaborado_actualizado_por":dic["elaborado_actualizado_por"],
-				"periodo_rev":dic["periodo_rev"]
-				}
-	revisado = {"rev_contenido_realizado_por":dic["rev_contenido_realizado_por"],
-				"fecha_rev_contenido":dic["fecha_rev_contenido"],
-				"rev_especficaciones_doc_realizado_por":dic["rev_especficaciones_doc_realizado_por"],
-				"fecha_rev_especificaciones_doc":dic["fecha_rev_especificaciones_doc"],
-				"fecha_rev_por_consejo_asesor":dic["fecha_rev_por_consejo_asesor"],
-				"rev_por_consejo_asesor":dic["rev_por_consejo_asesor"],
+		"tipo_doc": dic["tipo_doc"]=='',
+		"responsable":dic["responsable"],
+		"nombre_doc":dic["nombre_doc"]
+	}
+
+	elaborado = { 
+		"codigo": dic["codigo"],
+		"objetivo": dic["objetivo"],
+		"periodo_rev": dic["periodo_rev"],
+		"fecha_prox_rev": dic["fecha_prox_rev"]
+	}
+
+	revisado = {
+		"rev_contenido_realizado_por":dic["rev_contenido_realizado_por"],
+		"fecha_rev_contenido":dic["fecha_rev_contenido"],
+		"rev_especficaciones_doc_realizado_por":dic["rev_especficaciones_doc_realizado_por"],
+		"fecha_rev_especificaciones_doc":dic["fecha_rev_especificaciones_doc"],
+		"fecha_rev_por_consejo_asesor":dic["fecha_rev_por_consejo_asesor"],
 	}
 
 	aprobado = {
@@ -109,55 +119,108 @@ def lista_documentos():
 
 
 	if(not('' in elaborado.values())):
-
 		dic["estatus"] = "Elaborado"
+
 	if(not('' in revisado.values())):
-
 		dic["estatus"] = "Revisado"
-	if(not('' in aprobado.values())):
 
+	if(not('' in aprobado.values())):
 		dic["estatus"] = "Aprobado"
-	print(dic["codigo"]!=None)
+
+
+	##### Agregamos el documento
 	if(dic["codigo"]!=None):
 		db.documentos.insert(
+
+			usuario=dic["usuario"],
+			nombre_doc=dic["nombre_doc"],
+			tipo_doc=dic["tipo_doc"],
+			responsable=dic["responsable"],
 			codigo=dic["codigo"],
 			objetivo=dic["objetivo"],
-			ubicacion_electronica=dic["ubicacion_electronica"],
-			ubicacion_fisica=dic["ubicacion_fisica"],
-			# cod_anexo=dic["cod_anexo"],
-			# nombre_anexo=dic["nombre_anexo"],
-			responsable=dic["responsable"],
-			nombre_doc=dic["nombre_doc"],
-			estatus=dic["estatus"],
 			periodo_rev=dic["periodo_rev"],
-			aprobado_por=dic["aprobado_por"],
-			elaborado_actualizado_por=dic["elaborado_actualizado_por"],
-			# vigencia=,
-			fecha_aprob=dic["fecha_aprob"],
 			fecha_prox_rev=dic["fecha_prox_rev"],
-			fecha_control_cambio=dic["fecha_control_cambio"],
-			cod_control_cambio=dic["cod_control_cambio"],
-			cod_aprob=dic["cod_aprob"],
-			fecha_rev_por_consejo_asesor=dic["fecha_rev_por_consejo_asesor"],
-			rev_por_consejo_asesor=dic["rev_por_consejo_asesor"],
-			fecha_rev_especificaciones_doc=dic["fecha_rev_especificaciones_doc"],
+			anexo_code1=dic["anexo_code1"],
+			anexo_name1=dic["anexo_name1"],
+			anexo_code2=dic["anexo_code2"],
+			anexo_name2=dic["anexo_name2"],
+			anexo_code3=dic["anexo_code3"],
+			anexo_name3=dic["anexo_name3"],
+			anexo_code4=dic["anexo_code4"],
+			anexo_name4=dic["anexo_name4"],						
+			anexo_code5=dic["anexo_code5"],
+			anexo_name5=dic["anexo_name5"],
+			elaborado1=dic["elaborado1"],
+			elaborado2=dic["elaborado2"],
+			elaborado3=dic["elaborado3"],
+			elaborado4=dic["elaborado4"],
+			elaborado5=dic["elaborado5"],
+			rev_contenido_realizado_por=dic["rev_contenido_realizado_por"],
 			fecha_rev_contenido=dic["fecha_rev_contenido"],
 			rev_especficaciones_doc_realizado_por=dic["rev_especficaciones_doc_realizado_por"],
-			rev_contenido_realizado_por=dic["rev_contenido_realizado_por"],
-			tipo_doc= dic["tipo_doc"],
+			fecha_rev_especificaciones_doc=dic["fecha_rev_especificaciones_doc"],
+			fecha_rev_por_consejo_asesor=dic["fecha_rev_por_consejo_asesor"],
+			aprobado_por=dic["aprobado_por"],
+			fecha_aprob=dic["fecha_aprob"],
+			cod_aprob=dic["cod_aprob"],
+			ubicacion_fisica=dic["ubicacion_fisica"],
+			ubicacion_electronica=dic["ubicacion_electronica"],
+			cod_control_cambio=dic["cod_control_cambio"],
+			fecha_control_cambio=dic["fecha_control_cambio"],
+			ccelaborado=dic["ccelaborado"],
+			registro_fisico=dic["registro_fisico"],
+			registro_electronico=dic["registro_electronico"],
+			estatus=dic["estatus"]
+			
+		
 		)
+
+		# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+		# t = strings.split(',')
+		# year = t[0]
+		# year = year[2:]
+		# fecha = t[2] + "/" + t[1] + "/" + t[0]
+		# contador = db(db.registros.usuario == auth.user.first_name).count(),
+
+		# contador = contador[0]
+		# contador = int(contador) + 1
+		# if (contador < 10):
+		# 	contador = "00" + str(contador)
+		# elif (contador < 100):
+		# 	contador = "0" + str(contador)
+		# else:
+		# 	contador = str(contador) 		
+
+		# print(unaDependencia)
+		# print(year)
+		# cod = unaDependencia[:3] + "/" + year + "-" + contador
+
+		# dic2 = {
+		# 	"usuario":auth.user.first_name,
+		# 	"codigo": cod,
+		# 	"remitente": auth.user.first_name
+		# }
+
+
+		# if(dic2["remitente"]!=None):
+		# 	db.registros.insert(
+		# 		usuario=dic2["usuario"],
+		# 		codigo=dic2["codigo"],
+		# 		remitente=dic2["remitente"]
+		# 	)
+
 
 
 
 	return dict(
-	            documentos=db().select(db.documentos.ALL),
-				doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
-				doc_revision=db(db.documentos.estatus=="Revisado").count(),
-				doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
-				doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
-				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
-				usuarios = db().select(db.auth_user.first_name)
-				)
+	    documentos=db().select(db.documentos.ALL),
+		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
+		doc_revision=db(db.documentos.estatus=="Revisado").count(),
+		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
+		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
+		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+		usuarios = db().select(db.auth_user.first_name)
+	)
 
 
 
@@ -166,6 +229,11 @@ def lista_documentos():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_registros():
+
+	# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	# t = strings.split(',')
+	# year = t[0]
+	# year = year[2:]
 
 	dic = {
 		"usuario":auth.user.first_name,
@@ -191,18 +259,16 @@ def lista_registros():
 			archivo_fisico=dic["archivo_fisico"],
 		)
 
-	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	t = strings.split(',')
-	year = t[0]
-	print(year[2:])
 
-	return dict(
+	a = dict(
 	    registros=db().select(db.registros.ALL),
 	    codigo_reg=db(db.registros.codigo).count(),
-		contador=db(db.registros.usuario == auth.user.first_name).count()
+	    #year=year,
+		contador=db(db.registros.usuario == auth.user.first_name).count(),
+		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 	)
 
-
+	return a
 
 
 
@@ -271,15 +337,17 @@ def ficha():
 
 	documento =  db(db.documentos.codigo==uname)
 	if(request.post_vars.elaborado=="edicion"):
-		 jQuery('#objetivos').removeAttr('disabled');
-        jQuery('#periodo').removeAttr('disabled');
-        jQuery('#elaborado').removeAttr('disabled');
+		jQuery('#objetivos').removeAttr('disabled');
+		jQuery('#periodo').removeAttr('disabled');
+		jQuery('#elaborado').removeAttr('disabled');
 
-		documento.update(estatus="Elaborado",
+		documento.update(
+			estatus="Elaborado",
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
 			fecha_prox_rev= request.post_vars.fecha_prox_rev
-			)
+		)
+
 	elif (request.post_vars.revisado=="revisado"):
 
 		print("revisado")
@@ -312,7 +380,7 @@ def ficha():
         	cod_control_cambio = request.post_vars.cod_controlCambios,
         	fecha_control_cambio = request.post_vars.fechaControlCambios,
         	ubicacion_fisica = request.post_vars.ubicacion_fisica,
-        	ubicacion_electronica = request.post_vars.archivo_el
+        	ubicacion_electronica = request.post_vars.ubicacion_electronica
         )
 	# 	documento.update(
 
