@@ -494,7 +494,6 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
         bm = db(db.modificacion_bien_mueble.mbn_num == no_bien).select()[0]
-
         response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.mbn_nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
