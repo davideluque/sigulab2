@@ -135,7 +135,7 @@
 			{{ title = "Espacios Físicos" }}
 			{{dependencias = espacios}}
 		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
-			{{ title = "Laboratorios y coordinaciones" }}
+			{{ title = "Dependencias" }}
 		{{else: }}
 			{{ title = "Secciones" }}
 		{{ pass }}
@@ -152,7 +152,11 @@
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{ =espacio.nombre }}
+				{{if espacios:}}
+					{{ =espacio.codigo }}
+				{{else:}}
+					{{ =espacio.nombre }}
+				{{pass}}
 			</div>
 			{{ pass }}
 		</div>
