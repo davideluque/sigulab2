@@ -1,3 +1,117 @@
+// Funcion para tranformar el attributo data-valido de los input para ver 
+// si un input es valido 
+function data_validoToBoolean(selector){
+    if ($(selector).attr("data-valido") === "true"){
+        return true;
+    }
+    else if ($(selector).attr("data-valido") === "false") {
+        return false;
+    }
+}
+
+// Funcion para mostrar errores 
+function mostrarError(selector){
+    if (selector === '[name="telefono_add"]'){
+        if (!($(selector).val().match(/^\d+$/gm)) || $(this).val() < 999999999){
+            $(selector).attr("data-content", "El teléfono tiene el formato incorrecto");
+            $(selector).popover('hide');
+            $(selector).popover('show');
+            $(selector).addClass('input-error');
+        }
+    }
+}
+
+// Funcion que valida los campos cuando el usuario pasa a llenar otro input 
+function validacionTiempoReal(){
+    
+    // Manejo de error del telefono 
+    $('[name="telefono_add"]').blur(function (){
+        if ($(this).val() !== ''){
+            if (!($(this).val().match(/^\d+$/gm)) || $(this).val() < 999999999){
+                $(this).attr("data-content", "El teléfono tiene el formato incorrecto");
+                console.log($(this).popover('show'));
+                $(this).addClass('input-error');
+                $(this).attr("data-valido", "false");
+            }
+            else {
+                $(this).removeClass('input-error');
+                $(this).attr("data-valido", "true");
+            }    
+        }
+    })     
+
+    // Manejo del error de email alternativo
+    $('[name="email_alt_add"]').blur(function (){
+        if ($(this).val() !== ''){
+            if (!($(this).val().match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/)) || $(this).val() < 999999999){
+                $(this).attr("data-content", "El correo no tiene el formato correcto");
+                console.log($(this).popover('show'));
+                $(this).addClass('input-error');
+                $(this).attr("data-valido", "false");
+            }
+            else {
+                $(this).removeClass('input-error');
+                $(this).attr("data-valido", "true");
+            }    
+        }
+    }) 
+
+    // Manejo de error del numero de celular 
+    $('[name="celular_add"]').blur(function (){
+        pasoValidacion = true;
+        if ($(this).val() !== ''){
+            if (!($(this).val().match(/^\d+$/gm)) || $(this).val()<99999999) { // Extension de 1 a 4 digitos
+                $(this).attr('data-content', 'El número de celular tiene el formato incorrecto');
+                $(this).popover('show');
+                $(this).addClass('input-error');
+                $(this).attr("data-valido", "false");
+            }
+            else {
+                $(this).removeClass('input-error');
+                $(this).attr("data-valido", "true");
+            }
+        }
+        return pasoValidacion;
+    });
+
+    // Manejo de error del campo de contacto de emergencia 
+    $('[name="contacto_emergencia_add"]').blur(function (){
+        if ($(this).val() !== ''){
+            pasoValidacion = true;
+            if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
+                $(this).attr("data-content", 'El contacto de emergencia debe tener solo números');
+                $(this).popover('show');
+                $(this).addClass('input-error');
+                pasoValidacion = false;
+            }
+            else {
+                $(this).removeClass('input-error');
+            }
+        }
+        return pasoValidacion;
+    })
+
+    // Manejo de error del campo de pagina de web 
+    $('[name="pagina_web_add"]').blur(function (){
+        if ($(this).val() !== ''){
+            pasoValidacion = true;
+            if (!($(this).val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) { // Extension de 1 a 4 digitos
+                $(this).attr('data-content', "Formato incorrecto de pagina web");
+                $(this).popover('show');
+                $(this).addClass('input-error');
+                $(this).attr("data-valido", "false");
+            }
+            else {
+                $(this).removeClass('input-error');
+                $(this).attr("data-valido", "true");
+            }
+        }
+        return pasoValidacion;
+    })
+    
+}
+
+
 $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 
@@ -24,75 +138,14 @@ $(document).ready(function () {
 
     //-------------------------------- Primera parte del form agregar -----------------------------------------//
 
-    // Manejo de error del telefono 
-    $('[name="telefono_add"]').blur(function (){
-        console.log($(this).val())
-        if ($(this).val() !== ''){
-            if (!($(this).val().match(/^\d+$/gm)) || $(this).val() < 999999999){
-                $(this).attr("data-content", "El teléfono tiene el formato incorrecto");
-                $(this).popover('show');
-                $(this).addClass('input-error');
-                next_step = false;
-            }
-            else {
-                $(this).removeClass('input-error');
-            }    
-        }
-    })
-
-    // Manejo de error del numero de celular 
-    $('[name="celular_add"]').blur(function (){
-        if ($(this).val() !== ''){
-            if (!($(this).val().match(/^\d+$/gm)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
-                $(this).attr('data-content', 'El número de celular tiene el formato incorrecto');
-                $(this).popover('show');
-                $(this).addClass('input-error');
-                next_step = false;
-            }
-            else {
-                $(this).removeClass('input-error');
-            }
-        }
-    });
-
-    // Manejo de error del campo de contacto de emergencia 
-    $('[name="contacto_emergencia_add"]').blur(function (){
-        if ($(this).val() !== ''){
-            if (!($(this).val().match(/[0-9]$/)) || $(this).val()<9999) { // Extension de 1 a 4 digitos
-                $(this).attr("data-content", 'El contacto de emergencia debe tener solo números');
-                $(this).popover('show');
-                $(this).addClass('input-error');
-                next_step = false;
-            }
-            else {
-                $(this).removeClass('input-error');
-            }
-        }
-    })
-
-    // Manejo de error del campo de pagina de web 
-    $('[name="pagina_web_add"]').blur(function (){
-        if ($(this).val() !== ''){
-            if (!($(this).val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) { // Extension de 1 a 4 digitos
-                $(this).attr('data-content', "Formato incorrecto de pagina web");
-                $(this).popover('show');
-                $(this).addClass('input-error');
-                next_step = false;
-            }
-            else {
-                $(this).removeClass('input-error');
-            }
-        }
-    })
+    validacionTiempoReal();
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
         if (parent_fieldset.attr('id') === 'p1') {
-            $(`[name="apellido_add"],
-                [name="ci_add"],
-                [name="email_add"],
+            $(` [name="email_alt_add"],
                 [name="telefono_add"],
                 [name="celular_add"],
                 [name="contacto_emergencia_add"],
@@ -100,17 +153,19 @@ $(document).ready(function () {
                 [name="pagina_web_add"]`).filter(function () {
                     $(this).next().first().hide()
                     $(this).removeClass('input-error')
+                    if (data_validoToBoolean(this) !== undefined && data_validoToBoolean(this) === false){
+                        next_step = data_validoToBoolean(this);
+                        mostrarError(this);
+                    }
                     return $(this).val() === ''
                 }).each(function(idx) {
                     // $(this).next().first().html('Por favor, llene el campo')
                     if ($(this).attr("name") !== "pagina_web_add"){
                         $(this).next().first().show()
                         $(this).addClass('input-error')
-                        if ($(this).attr("value") === ''){
-                            $(this).attr("data-content", "Este campo es requerido");
-                            $(this).popover('show');
-                        }
-                        next_step = false    
+                        $(this).attr("data-content", "Este campo es requerido");
+                        $(this).popover('show');
+                        next_step = false 
                     }
                 })
         } else if (parent_fieldset.attr('id') === 'p2') {
