@@ -14,7 +14,7 @@ def tabla_categoria(tipo):
 
     #Buscamos la tabla general de personal 
     if tipo =="listado":
-        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False).select(db.t_Personal.ALL)
+        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False)(db.t_Personal.f_oculto == False).select(db.t_Personal.ALL)
     
     #Buscamos la tabla general de empleados por validar
     elif tipo == "validacion" :
@@ -30,10 +30,9 @@ def tabla_categoria(tipo):
                 tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
                 
             else:
-                print("Estamos aca")
                 print(auth.user.email)
                 dependencia = str(usuario.f_dependencia)
-                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)&(db.t_Personal.f_oculto == False)
                               ).select(db.t_Personal.ALL)
 
 
@@ -426,6 +425,12 @@ def buscarJefe(dependencia_trabajador):
     print("El id del jefe es: "+ str(idJefe)+ "y su correo es: "+correo)
     return correo
 
+def eliminar():
+    ci = request.post_vars.cedula_eliminar
+    
+    db(db.t_Personal.f_ci == ci).update(f_oculto = True)
+    
+    redirect(URL('listado_estilo'))
 
 def reporte():
     tabla=tabla_categoria()

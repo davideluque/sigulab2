@@ -162,7 +162,9 @@ db.define_table(
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
     Field('f_validado', 'boolean', default=False),
     Field('f_es_supervisor', 'boolean', default = True),
-    Field('f_por_validar', 'boolean', default = False)    
+    Field('f_por_validar', 'boolean', default = False),
+    Field('f_oculto', 'boolean', default = False),
+    Field('f_comentario', 'string', default = "")
     )
 
 db.t_Personal._plural = 'Personal'

@@ -2,9 +2,9 @@
 
 {{block head}}
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
@@ -22,8 +22,7 @@
     <div style="width: 75vw; margin-left: auto; margin-right: auto; margin-bottom: 100px;">
 
       <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header fichaHeader">
+        <div class="modal-header">
           <div class="media">
             <div class="media-left media-middle">
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
@@ -31,10 +30,15 @@
               <div class="media-body fichaMedia">
                 <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
               </div>
-              <div id="editar" class="media-right fichaMedia">
-                  <button type="button" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
-              
+              <div id="editar" class="media-body">
+              <form id="form_eliminacion" method="post"
+                  action="{{=URL('personal', 'eliminar')}}">
+
+                  <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+                   <button type="submit" class="btn buttons-html5" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+              </form>
               </div>
+              
           </div>
         </div>
 
@@ -151,15 +155,15 @@
                   </tbody>
                  </table>
                     
-                 <h5 class=" text-center"><b>Persona de Contacto</b></h5></br>
+                 <h5 class=" text-center"><b>En caso de emergencia llamar a:</b></h5></br>
                     
                  <table class="table contenidoFicha">
                      <tbody>
                     <tr>
-                      <td>Nombre:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
+                      <td class = "text-right" >Nombre:</td><td id="field_persona_contacto" class = "text-left">{{=personal['persona_contacto']}}</td>
                     </tr>
-                    <tr>
-                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia">{{=personal['contacto_emergencia']}}</td>
+                    <tr >
+                      <td class = "text-right">N° de contacto:</td><td id="field_contacto_emergencia" class = "text-left">{{=personal['contacto_emergencia']}}</td>
                     </tr>
                 </tbody>
               </table>
@@ -179,7 +183,6 @@
         {{pass}}
            </div>
         </div>
-    </div>
   </div>
 </div>
 <div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
