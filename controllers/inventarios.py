@@ -700,7 +700,7 @@ def bienes_muebles():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -800,7 +800,7 @@ def bienes_muebles():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -899,7 +899,7 @@ def bienes_muebles():
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1074,7 +1074,7 @@ def material_lab():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1174,7 +1174,7 @@ def material_lab():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1274,7 +1274,7 @@ def material_lab():
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1453,7 +1453,7 @@ def validaciones():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1553,7 +1553,7 @@ def validaciones():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1652,7 +1652,7 @@ def validaciones():
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno

@@ -38,7 +38,7 @@
                         <td class="camposTabla">{{=bm['bm_num']}}</td>
                         <td class="camposTabla">{{=bm['bm_placa']}}</td>
                         <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
-                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['bm_espacio_fisico']).select().first().nombre}}</td>
+                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['bm_espacio_fisico']).select().first().codigo}}</td>
                     </tr>
                   {{pass}}           
                 </tbody>
