@@ -43,7 +43,20 @@
 			</ol>
 
 	</nav><-->
-	<h2 style="text-align: center;"> CONTROL DE DOCUMENTOS </h2>
+	<div class="row">
+		<div class="col-md-10">
+			<h2 style="text-align: center; margin-left: 20%"> CONTROL DE DOCUMENTOS </h2>
+		</div>
+		<div class="col-md-2">
+			<a href="#">
+				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+			</a> 
+			<a href="#">
+				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
+			</a>			
+		</div>
+	</div>	
+
 	<div class="row">
 		<div class="col-md-1">
 		</div>	
@@ -152,12 +165,7 @@
 
 
 	    <div id="buttons">
-	      	<a href="#">
-				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
-			</a> 
-			<a href="#">
-				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
-			</a>
+
 	      <!-- Filtrado -->
 	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
 	      <!-- Filtrado -->   
@@ -310,6 +318,7 @@
 
 								<!-- Campo de Nombre del Documento -->
 								<div class="form-group">
+									<h5>Nombre del Documento</h5>
 									<input type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" required>
 								</div>
 
@@ -342,9 +351,10 @@
 
 
 
-
-								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
-								<button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+								<div style="position: fixed; bottom: 0; right: 0;">
+									<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+									<button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+								</div>	
 							</div>
 						</div>	
 					</fieldset>
@@ -371,11 +381,13 @@
 
 							<!-- Campo de Código -->
 							<div class="form-group">
+								<h5>Código del documento</h5>
 								<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
 							</div>
 
 							<!-- Campo de Objetivos -->
 							<div class="form-group">
+								<h5>Objetivos del documento</h5>
 								<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos"> 
 							</div>
 
@@ -395,12 +407,23 @@
 
 							<!-- Campo de Fecha de entrega para revisión del Documento -->
 							<div class="form-group">
-								<h5>Fecha de entrega para revisión</h5><input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev">
+								<h5>Fecha de entrega para revisión</h5>
+								<input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev">
+							</div>
+
+							<!-- Campo de Número de Anexos -->
+							<div class="form-group">
+								<h5>Número de anexos</h5>
+								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
+							
+								<div id="containerAnexos"/>
 							</div>
 
 
-							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>
 						</div>
 					</fieldset>
 					<!-- Fin Segundo Paso -->
@@ -422,19 +445,13 @@
 						<!-- Aqui va la informacion -->
 						<div class="col-sm-11 col11Body">
 							
-							<h4 class="titulosForm">Fase de Elaboración</h4>
+							<h4 class="titulosForm">Fase de Elaboración   -   Elaboradores</h4>
 
 
-							<!-- Campo de Número de Anexos -->
-							<div class="form-group">
-								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
-							
-								<div id="containerAnexos"/>
-							</div>
 
 							<!-- Campo de Elaboradores del Documento -->
 							<div class="form-group">
-								
+								<h5>Elaboradores del documento</h5>
 								
 								<div id="p_scents">
 									<p>
@@ -448,10 +465,11 @@
 
 					
 						
-
-							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
-							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
 						</div>
 					</fieldset>
 					<!-- Fin Tercer Paso -->					
@@ -476,6 +494,7 @@
 
 							<!-- Campo de responsable de la revisión de contenidos -->
 							<div class="form-group">
+								<h5>Revisión de contenidos</h5>
 								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" />
 							</div> 
 
@@ -487,6 +506,7 @@
 
 							<!-- Campo de responsable de la revisión de especificaciones -->
 							<div class="form-group">
+								<h5>Revisión de especificaciones</h5>
 								<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" /> 
 							</div> 
 
@@ -507,9 +527,11 @@
 								<div id="containerRevision"/>
 							</div> 
 
-							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-							<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
-							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
 						</div>
 					</fieldset>
 					<!-- Fin Cuarto Paso -->
@@ -536,6 +558,7 @@
 
 								<!-- Campo de responsable de aprobación-->
 								<div class="form-group">
+									<h5>Responsable de aprobación</h5>
 									<input type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
 								</div>
 
@@ -547,13 +570,15 @@
 								
 								<!-- Campo de código de registro de aprobación -->
 								<div class="form-group">
+									<h5>Código de registro de la aprobación</h5>
 									<input type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion" /> 
 								</div>
 
 				
-							
-							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
 						</div>
 					</fieldset>
 					<!-- Fin Quinto Paso -->
@@ -578,6 +603,7 @@
 
 								<!-- Campo de ubicación física del documento -->
 								<div class="form-group">
+									<h5>Ubicación física</h5>
 									<input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" />
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 											acceder al documento</h6>
@@ -585,6 +611,7 @@
 
 								<!-- Campo de ubicación electrónica del documento -->
 								<div class="form-group">
+									<h5>Ubicación electrónica</h5>
 									<input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" /> 
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 											acceder al documento</h6>
@@ -592,11 +619,13 @@
 
 								<!-- Campo de vínculo del documento -->
 								<div class="form-group">
-									<label>Vínculo: </label>
+									<h5>Vínculo</h5>
 								</div>
 
-							<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-							<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>
 						</div>
 					</fieldset>
 					<!-- Fin Sexto Paso -->
@@ -624,6 +653,7 @@
 
 								<!-- Campo del control de cambios -->
 								<div class="form-group">
+									<h5>Código de registro de control de cambios</h5>
 									<input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios" /> 
 								</div>
 
@@ -635,11 +665,13 @@
 
 								<!-- Campo de Elaborado por -->
 								<div class="form-group">
+									<h5>Elaborador del control de cambios</h5>
 									<input type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
 								</div>
 
 								<!-- Campo de Ubicación del registro en formato físico -->
 								<div class="form-group">
+									<h5>Ubicación del registro en formato físico</h5>
 									<input type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 												acceder al documento</h6>
@@ -647,14 +679,16 @@
 
 								<!-- Campo deUbicación del registro en formato físicoo -->
 								<div class="form-group">
+									<h5>Ubicación del registro en formato electrónico</h5>
 									<input type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
 									<h6>Indique la carpeta, archivo, estante u otro se puede
 												acceder al documento</h6>
 								</div>
 
-
-								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<div style="position: fixed; bottom: 0; right: 0;">
+									<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+									<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								</div>
 						</div>
 					</fieldset>
 					<!-- Fin Sexto Paso -->
@@ -830,6 +864,63 @@
 
 <!-- Datatable init js -->
 <script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+
+<script>
+  var filtros = false;
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+  }
+</script>
+ 
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
+</script>
 
 <script>
 
