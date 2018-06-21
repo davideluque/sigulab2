@@ -1380,7 +1380,39 @@ def material_lab():
                 unidad_cap = unidad_cap,
                 ) 
 
+# Dado el id de una dependencia, retorna una lista con el agregado de las solicitudes
+# de modificacion y eliminacion para los bienes muebles que existen en los espacios
+# fisicos que pertenecen a esta. 
+def __get_inventario_dep_validaciones(dep_id):
 
+    inventario = {}
+
+    # Obteniendo lista de espacios bajo la dependencia con id dep_id
+    espacios = __get_espacios(dep_id)
+
+    # Agrega los inventarios de los espacios en la lista "espacios"
+    inventario = __sumar_inventarios_bn_validacion(espacios)
+
+    return inventario
+
+def __sumar_inventarios_bn_validacion(espacios):
+
+    inventario_temp = []
+
+    for esp_id in espacios:
+        inventario_temp += __get_inventario_espacio(esp_id)
+
+    inventario_total = []
+
+    for element in inventario_temp:
+        inventario_total += __get_inventario_espacio_bn_validacion(element.bm_num)
+                       
+    return inventario_total
+
+# Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
+# de ese espacio.
+def __get_inventario_espacio_bn_validacion(num=None):
+    return db(db.modificacion_bien_mueble.mbn_num == num).select()
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
 # usuario y la dependencia que tiene a cargo
@@ -1467,7 +1499,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1510,7 +1542,7 @@ def validaciones():
 
                 # Se muestra el inventarios de los espacios que tiene a cargo el usuario en la
                 # seccion actual
-                inventario = __sumar_inventarios(espacios_ids)
+                inventario = __sumar_inventarios_bn_validacion(espacios_ids)
 
                 es_espacio = True
 
@@ -1533,7 +1565,7 @@ def validaciones():
 
             espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
 
-            inventario = __sumar_inventarios(espacios_ids)
+            inventario = __sumar_inventarios_bn_validacion(espacios_ids)
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
@@ -1567,7 +1599,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1626,7 +1658,7 @@ def validaciones():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la seccion del jefe
-            inventario = __get_inventario_dep(user_dep_id)
+            inventario = __get_inventario_dep_validaciones(user_dep_id)
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -1666,7 +1698,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1719,7 +1751,7 @@ def validaciones():
                                          ).select().first().nombre
                 # Se muestra como inventario el egregado de los inventarios que
                 # pertenecen a la dependencia del usuario
-                inventario = __get_inventario_dep(dep_id)
+                inventario = __get_inventario_dep_validaciones(dep_id)
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -1733,7 +1765,7 @@ def validaciones():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
-            inventario = __get_inventario_dep(dep_id)
+            inventario = __get_inventario_dep_validaciones(dep_id)
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
