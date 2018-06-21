@@ -65,8 +65,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
               <ul class=" dropdown-menu">
                 <li><a href="{{=URL('personal','index')}}">Página Principal</a></li>
-                {{personal = db(db.t_Personal.f_usuario == auth.user.id).select(db.t_Personal.ALL).first()}}
-                {{if personal.f_es_supervisor:}}
+                {{_personal = db(db.t_Personal.f_usuario == auth.user.id).select(db.t_Personal.ALL).first()}}
+                {{if _personal.f_es_supervisor:}}
                 <li
                 ><a href="{{=URL('personal','validacion_estilo')}}">Validación de Personal</a></li>
                 {{pass}}
