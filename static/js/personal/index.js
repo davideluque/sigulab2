@@ -80,6 +80,7 @@ $(document).ready( function() {
         var unidad_jerarquica_superior = $(e.relatedTarget).data('unidad_jerarquica_superior');
         var ubicacion = $(e.relatedTarget).data('ubicacion');
         var celular = $(e.relatedTarget).data('celular');
+        var persona_contacto = $(e.relatedTarget).data('persona_contacto');
         var contacto_emergencia = $(e.relatedTarget).data('contacto_emergencia');
         var direccion = $(e.relatedTarget).data('direccion');
         var categoria = $(e.relatedTarget).data('categoria');
@@ -91,7 +92,7 @@ $(document).ready( function() {
 
         f = [ci, gremio, email, fecha_salida, fecha_ingreso, nombre, cargo, estatus, telefono, pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
-               condicion,rol, extension_USB, extension_interna, email_alt];
+               condicion,rol, extension_USB, extension_interna, email_alt, persona_contacto];
         if (categoria === 'Fijo') {
           $('#field_fecha_ingreso').parent().addClass('hide')
           $('#field_fecha_salida').parent().addClass('hide')
@@ -119,6 +120,7 @@ $(document).ready( function() {
         $("#field_unidad_jerarquica_superior").html(unidad_jerarquica_superior);
         $("#field_ubicacion").html(ubicacion);
         $("#field_celular").html(celular);
+        $("#field_persona_contacto").html(persona_contacto);
         $("#field_contacto_emergencia").html(contacto_emergencia);
         $("#field_direccion").html(direccion);
         $("#field_categoria").html(categoria);
@@ -166,7 +168,7 @@ $(document).ready( function() {
 
         fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
-               condicion, rol, extension_USB, extension_interna, email_alt];
+               condicion, rol, extension_USB, extension_interna, email_alt, persona_contacto];
         //$("#field_ci").html(item);
         //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
     });

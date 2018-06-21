@@ -15,7 +15,6 @@
   <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
   <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
-  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
   <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -41,12 +40,12 @@
     <div class="col-sm-2">
             <!-- Boton que lleva al modal -->
             {{ if not usuario.f_es_supervisor :}}
-            <button type="button" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addservice">Editar Perfil</button>
+            <button type="button" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
             {{pass}}
     </div>
     <div id="buttons" class="text-right">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">Filtrado</button>
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5"><i class="fa fa-filter"></i></button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -140,7 +139,7 @@
 <script>
 
   var filtros = false;
-
+  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
   $(document).ready(function() {
       // Setup - add a text input to each footer cell
       $('#datatable tfoot th').each( function () {
@@ -180,34 +179,6 @@
 
   }
 </script>
- 
-<script language="javascript">
-  var table = $('#datatable').DataTable({
-    "dom": "<'row buscar'<'col-md-1'f>>"+"<'row'<'col-md-8'l><'col-md-4'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
-    language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
-   initComplete: function(){
-      var api = this.api();
-
-      new $.fn.dataTable.Buttons(api, {
-         buttons: [
-             {extend:'copy', text:"Copiar"}, 'pdf', 'excel', 'print'
-         ]
-      });
-      api.buttons().container().appendTo('#buttons');
-      $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
-      $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
-      $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
-      $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-      $('#buttons').style.textAlign = "right"
-   }
-   
-  });
-
-
-  var w2p_ajax_confirm_message =
-        "{{=T('')}}";
-</script>
+ <script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>
 
 {{end}}

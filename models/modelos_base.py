@@ -125,6 +125,9 @@ db.define_table(
           notnull=True, label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
+    Field('f_persona_contacto',         'string',
+          requires=IS_MATCH('^\w\w*[\s-]?\w*$',
+                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'), label=T('Persona de Contacto')),
     Field('f_contacto_emergencia',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
 
     Field('f_email',          'string',
@@ -159,7 +162,9 @@ db.define_table(
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
     Field('f_validado', 'boolean', default=False),
     Field('f_es_supervisor', 'boolean', default = True),
-    Field('f_por_validar', 'boolean', default = False)    
+    Field('f_por_validar', 'boolean', default = False),
+    Field('f_oculto', 'boolean', default = False),
+    Field('f_comentario', 'string', default = "")
     )
 
 db.t_Personal._plural = 'Personal'

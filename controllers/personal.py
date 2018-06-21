@@ -14,7 +14,7 @@ def tabla_categoria(tipo):
 
     #Buscamos la tabla general de personal 
     if tipo =="listado":
-        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False).select(db.t_Personal.ALL)
+        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False)(db.t_Personal.f_oculto == False).select(db.t_Personal.ALL)
     
     #Buscamos la tabla general de empleados por validar
     elif tipo == "validacion" :
@@ -30,10 +30,9 @@ def tabla_categoria(tipo):
                 tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
                 
             else:
-                print("Estamos aca")
                 print(auth.user.email)
                 dependencia = str(usuario.f_dependencia)
-                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)&(db.t_Personal.f_oculto == False)
                               ).select(db.t_Personal.ALL)
 
 
@@ -78,6 +77,7 @@ def tabla_categoria(tipo):
             "estatus" : elm.f_estatus,
             "dependencia" : dep,
              "celular" : elm.f_celular,
+             "persona_contacto" : elm.f_persona_contacto,
              "contacto_emergencia" : elm.f_contacto_emergencia,
              "direccion" : elm.f_direccion,
              "gremio" : elm.f_gremio,
@@ -112,7 +112,7 @@ def dropdowns():
     #Dropdown de condiciones
     condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal', 'Otro']
     #Dropdown de roles
-    roles= ['Director', 'Asistente del Director', 'Gestor', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de sección', 'Personas de Dependencia', 'Técnico' ]
+    roles= ['Director', 'Asistente del Director', 'Gestor de SMyDP ', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de la Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de Sección', 'Personal de Dependencia', 'Técnico' ]
     #Dropdown de operadores
     operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
@@ -135,6 +135,7 @@ def add_form():
             "fecha_salida" : request.post_vars.fecha_salida_add,
             "estatus" : request.post_vars.estatus_add,
              "celular" : request.post_vars.operador_add+""+request.post_vars.celular_add,
+             "persona_contacto": request.post_vars.persona_contacto,
              "contacto_emergencia" : request.post_vars.contacto_emergencia_add,
              "direccion" : request.post_vars.direccion_add,
              "gremio" : request.post_vars.gremio_add,
@@ -167,6 +168,7 @@ def add_form():
                                 f_fecha_salida = dic["fecha_salida"],
                                 f_estatus = dic["estatus"],
                               f_celular= dic["celular"],
+            f_persona_contacto = dic['persona_contacto'],
             f_contacto_emergencia= dic["contacto_emergencia"],
             f_direccion= dic["direccion"],
             f_gremio= dic["gremio"],
@@ -210,6 +212,7 @@ class Usuario(object):
             
         
         self.f_direccion = usuario.f_direccion
+        self.f_persona_contacto = usuario.f_persona_contacto
         self.f_contacto_emergencia = usuario.f_contacto_emergencia
         self.f_pagina_web = usuario.f_pagina_web
 
@@ -230,6 +233,7 @@ class Usuario(object):
         self.f_rol = usuario.f_rol
         # dependencia ya dada arriba
         self.f_es_supervisor = usuario.f_es_supervisor
+        self.f_persona_contacto = usuario.f_persona_contacto
         
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -266,10 +270,12 @@ def ficha():
 
     # Buscamos en la base de datos
     personal = db(db.t_Personal.f_ci == ci).select()[0]
+    infoUsuario = db(db.t_Personal.f_ci == ci).select(db.t_Personal.ALL).first()
+    usuario = Usuario(infoUsuario)
 
     #Obtenemos el usuario loggeado
-    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
-    usuario = Usuario(infoUsuario.t_Personal.select().first())
+    infoUsuario_logged=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario_logged = Usuario(infoUsuario_logged.t_Personal.select().first())
 
     #Buscamos el nombre de la dependencia con el id que manda la vista
     elm = personal
@@ -305,6 +311,7 @@ def ficha():
         "estatus" : elm.f_estatus,
         "dependencia" : dep,
         "celular" : elm.f_celular,
+        "persona_contacto" : elm.f_persona_contacto,
         "contacto_emergencia" : elm.f_contacto_emergencia,
         "direccion" : elm.f_direccion,
         "gremio" : elm.f_gremio,
@@ -330,9 +337,25 @@ def ficha():
         print(validacion)
         cambiar_validacion(validacion, personal)
 
+        
+    #Dropdown ubicaciones
+    idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
+    ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
+    #Obtenemos los elementos de los dropdowns
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    
     return dict(
         personal=personal,
-        usuario=usuario,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        roles=roles,
+        operadores=operadores,
+        ubicaciones=ubicaciones,
+        usuario_logged=usuario_logged,
+        usuario = usuario
 
     )
 
@@ -364,6 +387,11 @@ def validacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
     val = contar_notificaciones();
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
+
+    if not usuario.f_es_supervisor:
+        return redirect(URL('listado_estilo'))
     session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
@@ -383,6 +411,8 @@ def contar_notificaciones():
         else:
             dependencia = usuario.f_dependencia
             notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    else:
+        notif=0
     return notif
     
 def buscarJefe(dependencia_trabajador):
@@ -401,6 +431,12 @@ def buscarJefe(dependencia_trabajador):
     print("El id del jefe es: "+ str(idJefe)+ "y su correo es: "+correo)
     return correo
 
+def eliminar():
+    ci = request.post_vars.cedula_eliminar
+    
+    db(db.t_Personal.f_ci == ci).update(f_oculto = True)
+    
+    redirect(URL('listado_estilo'))
 
 def reporte():
     tabla=tabla_categoria()

@@ -1,0 +1,122 @@
+select{ 
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-radius: 0px !important;
+	border-bottom-width: 2px !important;
+	background-color: transparent !important;
+
+}
+
+.nav-link:active{
+    background-color: #0300d7 !important;
+    color:#fff;
+}
+
+th input[type=text]{ 
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-bottom-width: 2px !important;
+	border-radius: 0px;
+	background-color: transparent;
+	height: 35px !important;
+	width: 100%;
+}
+
+th {
+	width: 150px;
+}
+
+#datatable_length select {
+	height: 30px;
+}
+
+#collapseFiltros {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#columnBotonAgregar {
+	text-align: right;
+}
+
+.botonesListado {
+	background-color: #0300d7; 
+	border-color: #0300d7;
+	color: white;
+}
+
+.botonesListado:hover {
+	color: white;
+}
+
+#containerAgregar{
+	margin-top: -30px;
+}
+
+#listadoContainer {
+	padding-top: 25px;
+}
+
+.tablaListado {
+ border: 1.5px !important; 
+ border-style: solid !important; 
+ border-color: #ddd !important;
+}
+
+#titulosListado {
+	background-color: #505050;
+}
+
+.camposTabla {
+	text-align: center;
+}
+
+.linksNombres {
+	color: white;
+}
+
+.linksNombres:hover {
+	color: rgba(6, 164, 252, 1);
+	text-decoration: none;
+}
+
+.filtros {
+	width: 200px;
+}
+
+#filtroInput {
+	margin-left: 100px;
+}
+
+#input-apellido {
+	margin-bottom: 10px;
+}
+
+#input-email{
+	margin-bottom: 10px;
+}
+
+
+#input-telefono{
+	margin-bottom: 10px;
+}
+
+#input-pagina{
+	margin-bottom: 10px;
+}
+
+.botones-form{
+	float: right;
+}
+
+#sel1, #sel2, #sel3 {
+	margin-bottom: 10px;
+}
+
+#input-egreso, #input-ingreso{
+	padding-right:0px;
+}

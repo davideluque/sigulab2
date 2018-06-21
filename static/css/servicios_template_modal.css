@@ -179,6 +179,12 @@ h3 {
     line-height: 30px;
 }
 
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+    background-color:#0300d7;
+    color:#fff;
+}
+
 
 .btn-link-1 .botonForm{
     display: inline-block;

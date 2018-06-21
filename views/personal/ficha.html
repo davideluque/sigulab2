@@ -2,14 +2,19 @@
 
 {{block head}}
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+
+
+
+
 {{end}}
 
 {{block center}}
@@ -17,8 +22,7 @@
     <div style="width: 75vw; margin-left: auto; margin-right: auto; margin-bottom: 100px;">
 
       <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header fichaHeader">
+        <div class="modal-header">
           <div class="media">
             <div class="media-left media-middle">
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
@@ -26,6 +30,15 @@
               <div class="media-body fichaMedia">
                 <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
               </div>
+              <div id="editar" class="media-body">
+              <form id="form_eliminacion" method="post"
+                  action="{{=URL('personal', 'eliminar')}}">
+
+                  <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+                   <button type="submit" class="btn buttons-html5" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+              </form>
+              </div>
+              
           </div>
         </div>
 
@@ -75,7 +88,7 @@
                         <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
                     </tr>
                   <tr>
-                      <td>Unidad Superior: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
+                      <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -94,6 +107,12 @@
                       <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
                     </tr>
                     <tr>
+                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
+                    </tr>
+                    <tr>
                       <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
                     </tr>
                     <tr >
@@ -107,12 +126,6 @@
                     </tr>
                     <tr>
                       <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
-                    </tr>
-                    <tr>
-                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
-                    </tr>
-                    <tr>
-                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
                     <tr>
                       <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
@@ -134,13 +147,23 @@
                       <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
                     </tr>
                     <tr>
-                        <td>Teléfono:</td><td id="field_telefono">{{=personal['telefono']}}</td>
-                    </tr>
-                    <tr>
-                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia">{{=personal['contacto_emergencia']}}</td>
+                        <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
                     </tr>
                     <tr>
                       <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
+                    </tr>
+                  </tbody>
+                 </table>
+                    
+                 <h5 class=" text-center"><b>En caso de emergencia llamar a:</b></h5></br>
+                    
+                 <table class="table contenidoFicha">
+                     <tbody>
+                    <tr>
+                      <td class = "text-right" >Nombre:</td><td id="field_persona_contacto" class = "text-left">{{=personal['persona_contacto']}}</td>
+                    </tr>
+                    <tr >
+                      <td class = "text-right">N° de contacto:</td><td id="field_contacto_emergencia" class = "text-left">{{=personal['contacto_emergencia']}}</td>
                     </tr>
                 </tbody>
               </table>
@@ -160,11 +183,11 @@
         {{pass}}
            </div>
         </div>
-    </div>
   </div>
 </div>
-<div id='logged_user' hidden>{{=usuario.f_email}}</div>
+<div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 
+{{include 'personal/form_agregar.html'}}
 
 <script>
     var superusuario = 'sigulabusb@gmail.com';
@@ -178,9 +201,9 @@
     console.log(email);
 
     if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor){
-        $('#editar').prop('disabled',true);
+        $('#editar').hide();
     }else{
-        $('#editar').removeAttr('disabled');
+        $('#editar').show();
     }
 
     if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe){

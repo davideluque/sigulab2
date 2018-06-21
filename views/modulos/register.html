@@ -40,12 +40,12 @@
             <div class="panel-body">
 
             <!-- Inicio form de registro -->
-            <form action="#" class="form-horizontal form-horizontal m-t-20" enctype="multipart/form-data" method="post">
+            <form autocomplete="new-password" action="#" class="form-horizontal form-horizontal m-t-20" enctype="multipart/form-data" method="post">
 
                 <!-- Nombre -->
                 <div class="form-group" id="auth_user_first_name__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
+                        <input autocomplete="new-password" class="form-control string" id="auth_user_first_name" name="first_name" type="text" placeholder="Nombre" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 <!-- Apellido -->
                 <div class="form-group" id="auth_user_last_name__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellidos" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
+                        <input autocomplete="new-password" class="form-control string" id="auth_user_last_name" name="last_name" type="text" placeholder="Apellidos" onfocusout="isEmpty($(this).val(), $(this).attr('id'))" val="" required>
                         <span class="help-block"></span>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                     </div>
                 
                     <div class="col-xs-9" id="auth_cedula__row">
-                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
+                        <input autocomplete="new-password" class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
                     </div>
                     <div id="cedula_error_group" style="display:none;">
                         <label class="control-label" id="cedula_error"></label>
@@ -80,7 +80,7 @@
                 <!-- Email -->
                 <div class="form-group" id="auth_user_email__row">
                     <div class="col-xs-12">
-                        <input class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" onfocusout="ajax('validar_email', ['email'], ':eval')" onfocus="limpiar_email()" required>
+                        <input autocomplete="new-password" class="form-control string" id="auth_user_email" name="email" type="text" placeholder="Correo Electrónico" onfocusout="ajax('validar_email', ['email'], ':eval')" onfocus="limpiar_email()" required>
                         <div id="email_error_group" style="display:none;">
                             <label class="control-label" id="email_error"></label>
                         </div>
@@ -91,7 +91,7 @@
                 <div class="form-group" id="auth_user_password__row">
                     <div class="col-xs-12">
                         <div class="input-group">
-                            <input class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
+                            <input autocomplete="new-password" class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
                             <div class="input-group-addon" onclick="mostrarContrasena('auth_user_password')"><i class="fa fa-eye"></i></div>
                         </div>    
                         <span class="help-block"></span>
@@ -102,7 +102,7 @@
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
                         <div class="input-group">
-                        <input class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder="Confirmar Contraseña" value="" onfocusout="v_c()" required>
+                        <input autocomplete="new-password" class="form-control password" id="auth_user_password_two" name="password_two" type="password" placeholder="Confirmar Contraseña" value="" onfocusout="v_c()" required>
                         <div class="input-group-addon" onclick="mostrarContrasena('auth_user_password_two')"><i class="fa fa-eye"></i></div>
                         </div>
                         <div id="password_error_group" style="display:none;">
