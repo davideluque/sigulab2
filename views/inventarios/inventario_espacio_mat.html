@@ -38,13 +38,13 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">Cantidad</th>
-                <th class="camposTabla linksNombres">Capacidad</th>
-                <th class="camposTabla linksNombres">Unidad</th>
-                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
-                <th class="camposTabla linksNombres">Presentacion</th>
+                <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Capacidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -53,14 +53,14 @@
           {{for bm in inventario:}}
             <tr>
                 <td class="camposTabla">{{=bm['sb_nombre']}}</td>
-                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
-                <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
-                <td class="camposTabla">{{=bm['sb_unidad']}}</td>
-                <td class="camposTabla">{{=bm['sb_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['sb_marca']}}</td>
                 <td class="camposTabla">{{=bm['sb_modelo']}}</td>
-                <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
+                <td class="camposTabla">{{=bm['sb_descripcion']}}</td>
+
+                <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_unidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+
             </tr>
           {{pass}}           
         </tbody>
