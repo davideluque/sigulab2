@@ -233,6 +233,7 @@ class Usuario(object):
         self.f_rol = usuario.f_rol
         # dependencia ya dada arriba
         self.f_es_supervisor = usuario.f_es_supervisor
+        self.f_persona_contacto = usuario.f_persona_contacto
         
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))

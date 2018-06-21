@@ -147,12 +147,20 @@
   
                             </div>
                             
-                            <div class="form-group col-sm-12">
+                          <div class="rows-plantilla">
+                            <div class="form-group col-sm-6">
+                                <label>Persona de Contacto</label>
+                              <input value="{{=usuario.f_persona_contacto or ''}}" type="text" class="form-control" name="persona_contacto" placeholder="Contacto de Emergencia" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                            <div class="form-group col-sm-6">
                                 <label>Contacto de Emergencia</label>
                               <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required
                                   data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
+                          </div>
 
                           
 
