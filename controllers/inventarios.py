@@ -254,8 +254,8 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         sb_espacio = espacio,
         sb_clasificacion = clasificacion,
         sb_presentacion = presentacion,
-        sb_total = total,
         sb_unidades = unidades,
+        sb_total = total,
         sb_aforado = aforado,
         sb_ubicacion = ubicacion,
         sb_capacidad = capacidad,
@@ -1173,7 +1173,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades-presentacion, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -1275,7 +1275,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades-presentacion, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
 
@@ -1377,7 +1377,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades-presentacion, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
