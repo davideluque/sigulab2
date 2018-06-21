@@ -8,8 +8,6 @@
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
-  <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
-  <script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
@@ -37,6 +35,7 @@
 
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
                   <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
               </form>
               </div>
               
@@ -58,8 +57,6 @@
 
           <div class="tab-content" id="tabla_">
             <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_basicos').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
-                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_basicos">
                 <tbody>
                   <tr>
@@ -97,8 +94,6 @@
             </div>
 
             <div class="tab-pane " id="datos_laborales" role="tabpanel">
-                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_laborales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
-                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_laborales">
                 <tbody>
                     <tr>
@@ -139,8 +134,6 @@
             </div>
 
              <div class="tab-pane" id="datos_personales" role="tabpanel">
-                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_personales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
-                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                     <tr>
@@ -191,85 +184,145 @@
         </div>
   </div>
 </div>
-<div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
+
+<div hidden>
+  <div id="ficha_print">
+    <div style="width: 75vw; margin-left: auto; margin-right: auto; margin-bottom: 100px;">
+      <table>
+        <tr>
+          <td>
+            <img style="width: 20vw;" src="{{=URL('static', 'images/logo-ulab.png')}}">
+          </td>
+          <td>
+            <h1>
+              Ficha de Personal
+            </h1>
+          </td>
+        </tr>
+      </table>
+      <!-- Modal content-->
+        <div class="modal-header">
+          <div class="media">
+              <div class="media-body">
+                <h3 class="modal-title media-heading fichaHeading">{{=personal['nombre']}} {{=personal['apellido']}}</h3>
+              </div>
+          </div>
+        </div>
+        <div class="modal-body">
+            <div>
+              <table class="table contenidoFicha" id="tabla_print">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4><b>Datos Básicos</b></h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nombre:</td><td>{{=personal['nombre']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Apellido:</td><td>{{=personal['apellido']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Correo Electrónico:</td><td>{{=personal['email']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Extensión USB:</td><td>{{=personal['extension_USB']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Extensión Interna:</td><td>{{=personal['extension_interna']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Página Web:</td><td>{{=personal['pagina_web']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Rol:</td><td>{{=personal['rol']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Dependencia:</td><td>{{=personal['dependencia']}}</td>
+                  </tr>
+                    <tr>
+                        <td>Ubicación:</td><td>{{=personal['ubicacion']}}</td>
+                    </tr>
+                  <tr>
+                      <td>Unidad de Adscripción: </td><td>{{=personal['unidad_jerarquica_superior']}}</td>
+                  </tr>
+                  <tr>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4><b>Datos Laborales</b></h4>
+                    </td>
+                  </tr>
+                    <tr>
+                      <td>Cargo:</td><td>{{=personal['cargo']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Gremio:</td><td>{{=personal['gremio']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Categoria:</td><td>{{=personal['categoria']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Estatus:</td><td>{{=personal['estatus']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Condicion:</td><td>{{=personal['condicion']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso:</td><td>{{=personal['fecha_ingreso']}}</td>
+                    </tr>
+                    <tr >
+                      <td>Fecha Salida:</td><td>{{=personal['fecha_salida']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso USB:</td><td>{{=personal['fecha_ingreso_usb']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso ULAB:</td><td >{{=personal['fecha_ingreso_ulab']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso Administracion Publica:</td><td>{{=personal['fecha_ingreso_admin_publica']}}</td>
+                    </tr>
+                    <tr>
+                      <td hidden></td><td hidden>{{=personal['jefe']}}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h4><b>Datos Personales</b></h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Cédula:</td><td>{{=personal['ci']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Correo Alternativo:</td><td>{{=personal['email_alt']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Celular:</td><td>{{=personal['celular']}}</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono de Habitación:</td><td>{{=personal['telefono']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Dirección de Habitación:</td><td>{{=personal['direccion']}}</td>
+                    </tr>
+                    <tr>
+                      <td >Persona de contacto:</td><td class = "text-left">{{=personal['persona_contacto']}}</td>
+                    </tr>
+                    <tr >
+                      <td>N° de contacto:</td><td class = "text-left">{{=personal['contacto_emergencia']}}</td>
+                    </tr>
+                  </tbody>
+              </table>
+           </div>
+        </div>
+  </div>
+</div>
+</div>
 
 {{include 'personal/form_agregar.html'}}
-<script type="text/javascript">
-  jQuery.fn.table2CSV = function(options) {
-    var options = jQuery.extend({
-        separator: ',',
-        header: [],
-        delivery: 'popup' // popup, value
-    },
-    options);
-
-    var csvData = [];
-    var headerArr = [];
-    var el = this;
-
-    //header
-    var numCols = options.header.length;
-    var tmpRow = []; // construct header avalible array
-
-    if (numCols > 0) {
-        for (var i = 0; i < numCols; i++) {
-            tmpRow[tmpRow.length] = formatData(options.header[i]);
-        }
-    } else {
-        $(el).filter(':visible').find('th').each(function() {
-            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
-        });
-    }
-
-    row2CSV(tmpRow);
-
-    // actual data
-    $(el).find('tr').each(function() {
-        var tmpRow = [];
-        $(this).filter(':visible').find('td').each(function() {
-            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
-        });
-        row2CSV(tmpRow);
-    });
-    if (options.delivery == 'popup') {
-        var mydata = csvData.join('\n');
-        return popup(mydata);
-    } else {
-        var mydata = csvData.join('\n');
-        return mydata;
-    }
-
-    function row2CSV(tmpRow) {
-        var tmp = tmpRow.join('') // to remove any blank rows
-        // alert(tmp);
-        if (tmpRow.length > 0 && tmp != '') {
-            var mystr = tmpRow.join(options.separator);
-            csvData[csvData.length] = mystr;
-        }
-    }
-    function formatData(input) {
-        // replace " with “
-        var regexp = new RegExp(/["]/g);
-        var output = input.replace(regexp, "“");
-        //HTML
-        var regexp = new RegExp(/\<[^\<]+\>/g);
-        var output = output.replace(regexp, "");
-        if (output == "") return '';
-        return '"' + output + '"';
-    }
-    function popup(data) {
-        var generator = window.open('', 'csv', 'height=400,width=600');
-        generator.document.write('<html><head><title>CSV</title>');
-        generator.document.write('</head><body >');
-        generator.document.write('<textArea cols=70 rows=15 wrap="off" >');
-        generator.document.write(data);
-        generator.document.write('</textArea>');
-        generator.document.write('</body></html>');
-        generator.document.close();
-        return true;
-    }
-};
-</script>
 <script>
     var superusuario = 'sigulabusb@gmail.com';
     var gestor = 'asis-ulab@usb.ve';
@@ -323,5 +376,9 @@
         }
      }
 </script>
+
+<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/table2csv.js')}}"></script>
 
 {{end}}
