@@ -1161,7 +1161,7 @@ def material_lab():
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, 'Material de Laboratorio')
+                        dep_padre_id, user_id, request.vars.clasificacion)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1262,7 +1262,7 @@ def material_lab():
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, 'Material de Laboratorio')
+                        dep_padre_id, user_id, request.vars.clasificacion)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -1363,7 +1363,7 @@ def material_lab():
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, 'Material de Laboratorio')
+                        dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
