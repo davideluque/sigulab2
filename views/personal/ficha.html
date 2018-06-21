@@ -4,11 +4,12 @@
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
-	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
@@ -35,13 +36,12 @@
                   action="{{=URL('personal', 'eliminar')}}">
 
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
-                   <button type="submit" class="btn buttons-html5" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
               </form>
               </div>
               
           </div>
         </div>
-
         <div class="modal-body">
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
@@ -56,9 +56,11 @@
             </li>
           </ul>
 
-          <div class="tab-content">
+          <div class="tab-content" id="tabla_">
             <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_datos_personales">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_basicos').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_basicos">
                 <tbody>
                   <tr>
                     <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
@@ -95,7 +97,9 @@
             </div>
 
             <div class="tab-pane " id="datos_laborales" role="tabpanel">
-              <table class="table contenidoFicha">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_laborales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_laborales">
                 <tbody>
                     <tr>
                       <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
@@ -135,7 +139,9 @@
             </div>
 
              <div class="tab-pane" id="datos_personales" role="tabpanel">
-              <table class="table contenidoFicha">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_personales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                     <tr>
                       <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
@@ -188,7 +194,82 @@
 <div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 
 {{include 'personal/form_agregar.html'}}
+<script type="text/javascript">
+  jQuery.fn.table2CSV = function(options) {
+    var options = jQuery.extend({
+        separator: ',',
+        header: [],
+        delivery: 'popup' // popup, value
+    },
+    options);
 
+    var csvData = [];
+    var headerArr = [];
+    var el = this;
+
+    //header
+    var numCols = options.header.length;
+    var tmpRow = []; // construct header avalible array
+
+    if (numCols > 0) {
+        for (var i = 0; i < numCols; i++) {
+            tmpRow[tmpRow.length] = formatData(options.header[i]);
+        }
+    } else {
+        $(el).filter(':visible').find('th').each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        });
+    }
+
+    row2CSV(tmpRow);
+
+    // actual data
+    $(el).find('tr').each(function() {
+        var tmpRow = [];
+        $(this).filter(':visible').find('td').each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        });
+        row2CSV(tmpRow);
+    });
+    if (options.delivery == 'popup') {
+        var mydata = csvData.join('\n');
+        return popup(mydata);
+    } else {
+        var mydata = csvData.join('\n');
+        return mydata;
+    }
+
+    function row2CSV(tmpRow) {
+        var tmp = tmpRow.join('') // to remove any blank rows
+        // alert(tmp);
+        if (tmpRow.length > 0 && tmp != '') {
+            var mystr = tmpRow.join(options.separator);
+            csvData[csvData.length] = mystr;
+        }
+    }
+    function formatData(input) {
+        // replace " with “
+        var regexp = new RegExp(/["]/g);
+        var output = input.replace(regexp, "“");
+        //HTML
+        var regexp = new RegExp(/\<[^\<]+\>/g);
+        var output = output.replace(regexp, "");
+        if (output == "") return '';
+        return '"' + output + '"';
+    }
+    function popup(data) {
+        var generator = window.open('', 'csv', 'height=400,width=600');
+        generator.document.write('<html><head><title>CSV</title>');
+        generator.document.write('</head><body >');
+        generator.document.write('<textArea cols=70 rows=15 wrap="off" >');
+        generator.document.write(data);
+        generator.document.write('</textArea>');
+        generator.document.write('</body></html>');
+        generator.document.close();
+        return true;
+    }
+};
+</script>
 <script>
     var superusuario = 'sigulabusb@gmail.com';
     var gestor = 'asis-ulab@usb.ve';
