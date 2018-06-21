@@ -78,6 +78,7 @@ def tabla_categoria(tipo):
             "estatus" : elm.f_estatus,
             "dependencia" : dep,
              "celular" : elm.f_celular,
+             "persona_contacto" : elm.f_persona_contacto,
              "contacto_emergencia" : elm.f_contacto_emergencia,
              "direccion" : elm.f_direccion,
              "gremio" : elm.f_gremio,
@@ -112,7 +113,7 @@ def dropdowns():
     #Dropdown de condiciones
     condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal', 'Otro']
     #Dropdown de roles
-    roles= ['Director', 'Asistente del Director', 'Gestor', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de sección', 'Personas de Dependencia', 'Técnico' ]
+    roles= ['Director', 'Asistente del Director', 'Gestor de SMyDP ', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de la Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de Sección', 'Personal de Dependencia', 'Técnico' ]
     #Dropdown de operadores
     operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
@@ -135,6 +136,7 @@ def add_form():
             "fecha_salida" : request.post_vars.fecha_salida_add,
             "estatus" : request.post_vars.estatus_add,
              "celular" : request.post_vars.operador_add+""+request.post_vars.celular_add,
+             "persona_contacto": request.post_vars.persona_contacto,
              "contacto_emergencia" : request.post_vars.contacto_emergencia_add,
              "direccion" : request.post_vars.direccion_add,
              "gremio" : request.post_vars.gremio_add,
@@ -167,6 +169,7 @@ def add_form():
                                 f_fecha_salida = dic["fecha_salida"],
                                 f_estatus = dic["estatus"],
                               f_celular= dic["celular"],
+            f_persona_contacto = dic['persona_contacto'],
             f_contacto_emergencia= dic["contacto_emergencia"],
             f_direccion= dic["direccion"],
             f_gremio= dic["gremio"],
@@ -210,6 +213,7 @@ class Usuario(object):
             
         
         self.f_direccion = usuario.f_direccion
+        self.f_persona_contacto = usuario.f_persona_contacto
         self.f_contacto_emergencia = usuario.f_contacto_emergencia
         self.f_pagina_web = usuario.f_pagina_web
 
@@ -266,10 +270,12 @@ def ficha():
 
     # Buscamos en la base de datos
     personal = db(db.t_Personal.f_ci == ci).select()[0]
+    infoUsuario = db(db.t_Personal.f_ci == ci).select(db.t_Personal.ALL).first()
+    usuario = Usuario(infoUsuario)
 
     #Obtenemos el usuario loggeado
-    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
-    usuario = Usuario(infoUsuario.t_Personal.select().first())
+    infoUsuario_logged=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario_logged = Usuario(infoUsuario_logged.t_Personal.select().first())
 
     #Buscamos el nombre de la dependencia con el id que manda la vista
     elm = personal
@@ -305,6 +311,7 @@ def ficha():
         "estatus" : elm.f_estatus,
         "dependencia" : dep,
         "celular" : elm.f_celular,
+        "persona_contacto" : elm.f_persona_contacto,
         "contacto_emergencia" : elm.f_contacto_emergencia,
         "direccion" : elm.f_direccion,
         "gremio" : elm.f_gremio,
@@ -330,9 +337,25 @@ def ficha():
         print(validacion)
         cambiar_validacion(validacion, personal)
 
+        
+    #Dropdown ubicaciones
+    idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
+    ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
+    #Obtenemos los elementos de los dropdowns
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    
     return dict(
         personal=personal,
-        usuario=usuario,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        roles=roles,
+        operadores=operadores,
+        ubicaciones=ubicaciones,
+        usuario_logged=usuario_logged,
+        usuario = usuario
 
     )
 
@@ -383,6 +406,8 @@ def contar_notificaciones():
         else:
             dependencia = usuario.f_dependencia
             notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    else:
+        notif=0
     return notif
     
 def buscarJefe(dependencia_trabajador):
