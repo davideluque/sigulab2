@@ -1402,8 +1402,10 @@ def __sumar_inventarios_bn_validacion(espacios):
     for esp_id in espacios:
         inventario_temp += __get_inventario_espacio(esp_id)
 
-    for element in espacios:
-        inventario_total += __get_inventario_espacio_bn_validacion(element.)
+    inventario_total = []
+
+    for element in inventario_temp:
+        inventario_total += __get_inventario_espacio_bn_validacion(element.bm_num)
                        
     return inventario_total
 
@@ -1497,7 +1499,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio_bn_validacion(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1597,7 +1599,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio_bn_validacion(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -1696,7 +1698,7 @@ def validaciones():
                 espacio_visitado = True
 
                 # Busca el inventario del espacio
-                inventario = __get_inventario_espacio_bn_validacion(espacio_id)
+                inventario = __sumar_inventarios_bn_validacion([espacio_id])
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
                 color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',

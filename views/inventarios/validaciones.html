@@ -46,7 +46,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <span class="breadcrumb-item active">Bienes Muebles</span>
+  <span class="breadcrumb-item active">Validaciones</span>
   </div>
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
@@ -57,7 +57,7 @@
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
-	<h3 class="dep-titulo">INVENTARIO DE BIENES MUEBLES</h3>
+	<h3 class="dep-titulo">SOLICITUDES DE MODIFICACIÓN</h3>
 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
 		{{ dep_padre_nombre = 'ULAB'}}
 	{{ pass }}
@@ -68,7 +68,7 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -95,11 +95,11 @@
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('bienes_muebles')}}">
+	    		<a class="boton" href="{{=URL('validaciones')}}">
 					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
 	    		</a>
 	    		{{else:}}
-    			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+    			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
 						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
 				</a>
 	    		{{pass}}
@@ -151,7 +151,7 @@
 			<div class="grid-container" id="secciones" style="display: none">
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
-			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+			<div class="grid-item" onclick="redirect('{{=URL('validaciones',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{ =espacio.nombre }}
 			</div>
 			{{ pass }}
