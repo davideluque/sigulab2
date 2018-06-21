@@ -386,6 +386,11 @@ def validacion():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
     val = contar_notificaciones();
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
+
+    if not usuario.f_es_supervisor:
+        return redirect(URL('listado_estilo'))
     session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
