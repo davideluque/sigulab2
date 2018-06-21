@@ -55,11 +55,11 @@ def lista_documentos():
 		"anexo_name4": request.post_vars.anexo_name4,
 		"anexo_code5": request.post_vars.anexo_code5,
 		"anexo_name5": request.post_vars.anexo_name5,
-		"elaborado1": request.post_vars.elaborado1,
-		"elaborado2": request.post_vars.elaborado2,
-		"elaborado3": request.post_vars.elaborado3,
-		"elaborado4": request.post_vars.elaborado4,
-		"elaborado5": request.post_vars.elaborado5,
+		"elaborador0": request.post_vars.elaborador0,
+		"elaborador1": request.post_vars.elaborador1,
+		"elaborador2": request.post_vars.elaborador2,
+		"elaborador3": request.post_vars.elaborador3,
+		"elaborador4": request.post_vars.elaborador4,
 
 
 		##### Revisión
@@ -150,11 +150,11 @@ def lista_documentos():
 			anexo_name4=dic["anexo_name4"],						
 			anexo_code5=dic["anexo_code5"],
 			anexo_name5=dic["anexo_name5"],
-			elaborado1=dic["elaborado1"],
-			elaborado2=dic["elaborado2"],
-			elaborado3=dic["elaborado3"],
-			elaborado4=dic["elaborado4"],
-			elaborado5=dic["elaborado5"],
+			elaborador0=dic["elaborador0"],
+			elaborador1=dic["elaborador1"],
+			elaborador2=dic["elaborador2"],
+			elaborador3=dic["elaborador3"],
+			elaborador4=dic["elaborador4"],
 			rev_contenido_realizado_por=dic["rev_contenido_realizado_por"],
 			fecha_rev_contenido=dic["fecha_rev_contenido"],
 			rev_especficaciones_doc_realizado_por=dic["rev_especficaciones_doc_realizado_por"],
@@ -215,10 +215,10 @@ def lista_documentos():
 
 	return dict(
 	    documentos=db().select(db.documentos.ALL),
-		doc_aprobado=db(docs.documentos.estatus=="Aprobado").count(),
-		doc_revision=db(docs.documentos.estatus=="Revisado").count(),
-		doc_elaboracion=db(docs.documentos.estatus=="Elaborado").count(),
-		doc_planificacion=db(docs.documentos.estatus=="Planificado").count(),
+		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
+		doc_revision=db(db.documentos.estatus=="Revisado").count(),
+		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
+		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 		usuarios = db().select(db.auth_user.first_name)
 	)
@@ -231,12 +231,12 @@ def lista_documentos():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_registros():
 
-	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	t = strings.split(',')
-	year = t[0]
-	year = year[2:]
+	# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	# t = strings.split(',')
+	# year = t[0]
+	# year = year[2:]
 
-	print(year)
+	# print(year)
 	dic = {
 		"usuario":auth.user.first_name,
 		"codigo": request.post_vars.codigo,
@@ -265,7 +265,7 @@ def lista_registros():
 	a = dict(
 	    registros=db().select(db.registros.ALL),
 	    codigo_reg=db(db.registros.codigo).count(),
-	    year=year,
+	    year="1",
 		contador=db(db.registros.usuario == auth.user.first_name).count(),
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 	)
@@ -296,7 +296,7 @@ def ajax_ficha_registro():
 
 	if(request.post_vars.eliminar=="eliminar"):
 		db(db.registros.codigo==uname).delete()
-		redirect(URL('..', 'sigulab2','informacion_documentada',''))
+		redirect(URL('..', 'sigulab2','informacion_documentada','lista_documentos', ''))
 
 	### END ###
 	return dict(message=row	)
@@ -411,6 +411,9 @@ def ficha():
         	ubicacion_electronica = request.post_vars.ubicacion_electronica
         )###
 
+	if(request.post_vars.eliminar=="eliminar"):
+		db(db.documentos.codigo==uname).delete()
+		redirect(URL('lista_documentos'))
 
 	return dict(documentos=row,
 				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row	)

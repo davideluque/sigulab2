@@ -33,7 +33,7 @@
       margin-right:0px!important;
     }
     .wrapper {
-      max-width: 80%;
+      max-width: 90%;
       margin: auto;
       margin-top: 10px;
     }
@@ -86,7 +86,7 @@
     }
     .content-wrapper {
       margin-top: 30px;
-      padding: 40px 80px;
+      padding: 10px 20px;
     }
     .tab-content {
       display: none;
@@ -100,6 +100,23 @@
     }
     .tab-content.active {
       display: block;
+    }
+
+    tr th {
+      text-align: center;
+      font-size: 24px;
+      border: 8px solid #337ab7;
+      vertical-align: middle;
+      padding: 10px;
+    }
+
+    tr td{
+      padding: 10px;
+      border-bottom: 8px solid #337ab7;
+      border-left: 8px solid #337ab7;
+      border-right: : 8px solid #337ab7; 
+      text-align: center;
+      vertical-align: middle;
     }
     @keyframes fadeIn {
       100% {
@@ -123,16 +140,21 @@
 </nav>
 
   <div class="row" style="margin-bottom: 50px;">
-    <div class="col-md-9">
-      <h2 style="text-align: center; margin-left: 30%"> FICHA DE DOCUMENTOS </h2>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-1">
+      <a href="{{=URL('..', 'sigulab2','informacion_documentada','')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
+    </div>
+    <div class="col-md-7">
+      <h2 style="text-align: center; margin-left: 15%"> FICHA DE DOCUMENTOS </h2>
     </div>
     <div class="col-md-3">
       <form method="POST">
         <p onclick="estatus()" style="display: inline-block;">
-          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-3x" aria-hidden="true"></i></button>
+          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
         </p>
-          <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-3x" aria-hidden="true"></i></button>
-          <button type="submit" class="btn btn-danger btn-lg" name="eliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-3x" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
       </form>
           
     </div>
@@ -155,12 +177,12 @@
   <div class="content-wrapper">
     <div id="tab-1" class="tab-content active">
 
-      <h3><span style="color: #52798c; font-size: 1.2em;">Código: </span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Tipo:      </span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Documento:   </span> </h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Objetivo:   </span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:    {{=doc.periodo}}</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Código: {{=doc.codigo}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Tipo:     {{=doc.tipo_doc}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Documento:  {{=doc.nombre_doc}}.</span> </h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Objetivo:  {{=doc.objetivo}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:    {{=doc.periodo_rev}}.</span></h3>
 
 
 
@@ -177,11 +199,10 @@
           <tr>
             <th>Responsable</th>
             <th>Elaborado por</th>
-            <th>Revisión de contenido realizado por</th>
+            <th>Elaborador de revisión de contenidos</th>
             <th>Fecha de revisión de contenido</th>
-            <th>Revisión de especificaciones del documento realizado por</th>
-            <th>Fecha de revisión de especificaciones del documento</th>
-            <th>Revisión por el Consejo Asesor</th>
+            <th>Elaborador de evisión de especificaciones</th>
+            <th>Fecha de revisión de especificaciones</th>
             <th>Fecha de revisión por el Consejo Asesor</th>
 
           </tr>
@@ -189,14 +210,13 @@
         <tbody>
           <tr>
 
-            <td></td>
-            <td></td>
-            <td></td>
-             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{=doc.responsable}}</td>
+            <td>{{=doc.elaborador0}}, {{=doc.elaborador1}}, {{=doc.elaborador2}}, {{=doc.elaborador3}}, {{=doc.elaborador4}}.</td>
+            <td>{{=doc.rev_contenido_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_contenido}}</td>
+            <td>{{=doc.rev_especficaciones_doc_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_especificaciones_doc}}</td>
+            <td style="border-right: 8px solid #337ab7;">{{=doc.fecha_rev_por_consejo_asesor}}</td>
             
           </tr>
 
@@ -208,11 +228,10 @@
     </div>
     <div id="tab-3" class="tab-content">
   
-      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion:   </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Fecha de registro de Ubicacion:      </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     </span> </p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}     </span></p>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion:  {{=doc.cod_control_cambio}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     {{=doc.registro_electronico}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}.</span></h3>
     
 
     </div>
@@ -639,6 +658,29 @@
 </div>
 </div>
 
+
+<form method="POST">
+  <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <i class="fa fa-exclamation-triangle fa-4x" style="color: orange;" aria-hidden="true"></i>
+          <h4 class="modal-title" id="exampleModalLabel">Eliminar Documento</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          ¿Está seguro que desea eliminar este documento?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" name="eliminar" value="eliminar" class="btn btn-danger">Si</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 
 
 
