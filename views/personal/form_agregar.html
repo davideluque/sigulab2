@@ -102,7 +102,7 @@
                             <label>Celular</label>
                             <div class="form-group form-inline">
                                 <div class="form-group">
-                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador">
+                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true" required>
                                                 <option value="" disabled selected>Codigo</option>
                                             {{for operador in operadores:}}
                                                 <option value='{{=operador}}'>{{=operador}}</option>

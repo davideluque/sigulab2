@@ -71,7 +71,6 @@ function validacionTiempoReal(){
                 $(this).attr("data-valido", "true");
             }
         }
-        return pasoValidacion;
     });
 
     // Manejo de error del campo de contacto de emergencia 
@@ -150,12 +149,20 @@ $(document).ready(function () {
                 [name="celular_add"],
                 [name="contacto_emergencia_add"],
                 [name="direccion_add"],
-                [name="pagina_web_add"]`).filter(function () {
+                [name="pagina_web_add"],
+                [name="operador_add"]`).filter(function () {
                     $(this).next().first().hide()
                     $(this).removeClass('input-error')
                     if (data_validoToBoolean(this) !== undefined && data_validoToBoolean(this) === false){
                         next_step = data_validoToBoolean(this);
                         mostrarError(this);
+                    }
+                    if ($(this).attr("name") === "operador_add" && $(this).val() === null){
+                        $(this).next().first().show()
+                        $(this).addClass('input-error')
+                        $(this).attr("data-content", "Este campo es requerido");
+                        $(this).popover('show');
+                        next_step = false;
                     }
                     return $(this).val() === ''
                 }).each(function(idx) {
@@ -259,7 +266,8 @@ $(document).ready(function () {
         [name="fecha_ingreso_ulab_add"],
         [name="fecha_ingreso_admin_publica_add"],
         [name="fecha_ingreso_add"],
-        [name="fecha_salida_add"]`).on('focus', function(e){
+        [name="fecha_salida_add"],
+        [name="operador_add]`).on('focus', function(e){
         $(this).popover('hide');
         $(this).removeClass('input-error');
     })
