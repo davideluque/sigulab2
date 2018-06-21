@@ -13,6 +13,7 @@ const inputs = [
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
 
+// Funciones que validan toda la pagina 1 del formulario 
 function validaPaginaWeb () {
     const $this = $('[name="pagina_web_add"]')
     if ($this.val() === '') {
@@ -184,6 +185,150 @@ const validadoresPrimerPaso = [
     validaContactoEmergencia
 ]
 
+// Funciones que validan la segunda pagina 
+function validaEstatus(){
+    const $this = $('[name="estatus_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaCategoria(){
+    const $this = $('[name="categoria_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaCondicion(){
+    const $this = $('[name="condicion_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngreso(){
+    const $this = $('[name="fecha_ingreso_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaSalida(){
+    const $this = $('[name="fecha_salida_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoUSB(){
+    const $this = $('[name="fecha_ingreso_usb_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoUlab(){
+    const $this = $('[name="fecha_ingreso_ulab_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoAdminPubl(){
+    const $this = $('[name="fecha_ingreso_admin_publica_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+const validadoresSegundoPasoFijo = [
+    validaEstatus,
+    validaCategoria,
+    validaCondicion,
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
+]
+const validadoresSegundoPaso = [
+    validaEstatus,
+    validaCategoria,
+    validaCondicion,
+    validaFechaIngreso,
+    validaFechaSalida,
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
+]
+
+
 // Funcion que valida los campos cuando el usuario pasa a llenar otro input
 function validacionTiempoReal(){
 
@@ -238,6 +383,14 @@ $(document).ready(function () {
         var next_step = true;
         if (parent_fieldset.attr('id') === 'p1') {
             next_step = validadoresCorrectos(validadoresPrimerPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p2'){
+            if ($('[name="categoria_add"]').val() === 'Fijo'){
+                next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
+            }
+            else {
+                next_step = validadoresCorrectos(validadoresSegundoPaso)
+            }
         }
 
         if (next_step) {
