@@ -71,10 +71,10 @@
     
                             <div class="form-group">
                               <div class="col-sm-6">
-                                <label>Correo Electrónico</label>
-                                <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" id="input-email">
-                                <font color="red"><div id="err_email" hidden></div></font>
-                              </div>  
+                                <label>Página Web</label>
+                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_pagina_web" hidden></div></font>
+                              </div>
                             </div>
 
                           </div>
@@ -82,17 +82,17 @@
                           <div class="rows-planilla">
                             <div class="form-group">
                               <div class="col-sm-6">
-                                <label>Correo Alternativo</label>
-                                <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" >
+                                <label>Correo Electrónico</label>
+                                <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" id="input-email">
                                 <font color="red"><div id="err_email" hidden></div></font>
-                              </div>
+                              </div>  
                             </div>
 
                             <div class="form-group">
                               <div class="col-sm-6">
-                                <label>Teléfono de Habitación</label>
-                                <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required id="input-telefono"
-                                      data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                <label>Email Alternativo</label>
+                                <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_email" hidden></div></font>
                               </div>
                             </div>
 
@@ -102,7 +102,7 @@
                             <label>Celular</label>
                             <div class="form-group form-inline">
                                 <div class="form-group">
-                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador">
+                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true" required>
                                                 <option value="" disabled selected>Codigo</option>
                                             {{for operador in operadores:}}
                                                 <option
@@ -117,40 +117,45 @@
                                 <div class="form-group" >
                                     <div class="col-xs-12">
                                         <input class="form-control" id="celular_add" name="celular_add" type="text" placeholder="Celular" required value="{{=usuario.f_celular or ''}}"
-                                            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
                                     </div>
                                 </div>
                                 <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
                           </div>
 
+                          <div class="rows-planilla">
+
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Dirección de Habitación</label>
+                                  <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required
+                                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                  <font color="red"><div id="err_direccion" hidden></div></font>
+                                </div>
+                              </div>
+  
+                             
+  
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Teléfono Residencial</label>
+                                  <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required id="input-telefono"
+                                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                </div>
+                              </div>
+  
+                            </div>
+                            
                             <div class="form-group col-sm-12">
                                 <label>Contacto de Emergencia</label>
                               <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
                               <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
 
-                          <div class="rows-planilla">
+                          
 
-                            <div class="form-group">
-                              <div class="col-sm-6">
-                                <label>Dirección de Habitación</label>
-                                <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required
-                                      data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                                <font color="red"><div id="err_direccion" hidden></div></font>
-                              </div>
-                            </div>
-
-                            <div class="form-group">
-                              <div class="col-sm-6">
-                                <label>Página Web</label>
-                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                                <font color="red"><div id="err_pagina_web" hidden></div></font>
-                              </div>
-                            </div>
-
-                          </div>
                         </div>
                       </div>
                       <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
