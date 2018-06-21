@@ -8,7 +8,8 @@
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
-	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
@@ -35,13 +36,12 @@
                   action="{{=URL('personal', 'eliminar')}}">
 
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
-                   <button type="submit" class="btn buttons-html5" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
               </form>
               </div>
               
           </div>
         </div>
-
         <div class="modal-body">
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
@@ -59,6 +59,7 @@
           <div class="tab-content" id="tabla_">
             <div class="tab-pane active " id="datos_basicos" role="tabpanel">
                 <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_basicos').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_basicos">
                 <tbody>
                   <tr>
@@ -97,6 +98,7 @@
 
             <div class="tab-pane " id="datos_laborales" role="tabpanel">
                 <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_laborales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_laborales">
                 <tbody>
                     <tr>
@@ -138,6 +140,7 @@
 
              <div class="tab-pane" id="datos_personales" role="tabpanel">
                 <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_personales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
               <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                     <tr>
