@@ -225,7 +225,8 @@ def register():
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
                            f_dependencia = depid,
-                           f_es_supervisor = es_supervisor)
+                           f_es_supervisor = es_supervisor,
+                           f_comentario='Recuerde validar su ficha')
 
     
     # Mapea el usuario al espacio fisico que tiene a cargo    

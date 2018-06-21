@@ -217,12 +217,31 @@
             </div>
         {{if personal['por_validar']:}}
         <div class="modal-footer">
+          <div class="btn-group botonesFicha" id="botones_validacion" >
+              <button type="submit" class="btn btn-primary"
+              id = "validar" name = "validar_ficha"
+               value="True">
+                Validar
+              </button>
+              <button type="submit" class="btn btn-primary"
+              id="rechazar" name = "rechazar_ficha"
+              >
+                Rechazar
+              </button>
+          </div>
           <form method="post">
-
-            <div class="btn-group botonesFicha" id="botones_validacion" >
-                <input id="validacion" name="validacion" hidden value="-1">
-                <button type="submit" class="btn btn-primary" id = "validar" name = "validar_ficha" onclick=confirmar_validacion() value="True">Validar</button>
-                <button type="submit" class="btn btn-primary" id = "rechazar" name = "rechazar_ficha" onclick=confirmar_rechazo()>Rechazar</button>
+            <div id="razon-input" class="form-group hidden">
+              <input id="validacion" name="validacion" hidden value="-1">
+              <div class="col-xs-12">
+                <label>Razón de Rechazo</label> 
+                <textarea type="text" class="form-control" name="razon_add" >
+                </textarea>
+              </div>
+            </div>
+            <div id="confirmar-input" class="form-group hidden">
+              <div class="col-xs-12">
+                <button class="btn btn-default" type='submit'>Confirmar</button>
+              </div>
             </div>
           </form>
       </div>
@@ -372,7 +391,7 @@
   </div>
 </div>
 </div>
-
+<div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 {{include 'personal/form_agregar.html'}}
 <script>
     var superusuario = 'sigulabusb@gmail.com';
@@ -401,9 +420,23 @@
         $("#validar").show();
         $("#rechazar").show();
     }
-</script>
-<script>
-    
+
+    $(function () {
+      $('#rechazar').on('click', function(e) {
+        $('#validacion').val(false)
+        $('[name="razon_add"]').attr('required', 'required')
+        $('#razon-input').removeClass('hidden')
+        $('#confirmar-input').removeClass('hidden')
+      })
+
+      $('#validar').on('click', function(e) {
+        $('#validacion').val(true)
+        $('[name="razon_add"]').attr('required', '')
+        $('#confirmar-input').removeClass('hidden')
+        $('#razon-input').addClass('hidden')
+      })
+    })
+
      function confirmar_validacion(){
          var answer=confirm('Confirme validacion de la ficha');
           if(answer){

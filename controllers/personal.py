@@ -357,9 +357,11 @@ def ficha():
 
 def cambiar_validacion(validacion, personal):
     if(validacion == "true"):
-        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True)
+        mensaje = ''
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True, f_comentario=mensaje)
     elif (validacion == "false"):
-        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=False)
+        mensaje = request.post_vars.razon_add
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=False, f_comentario=mensaje)
     redirect(URL('validacion_estilo'))
 
 
