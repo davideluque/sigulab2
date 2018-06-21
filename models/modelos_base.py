@@ -125,6 +125,9 @@ db.define_table(
           notnull=True, label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
+    Field('f_persona_contacto',         'string',
+          requires=IS_MATCH('^\w\w*[\s-]?\w*$',
+                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'), label=T('Persona de Contacto')),
     Field('f_contacto_emergencia',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
 
     Field('f_email',          'string',
