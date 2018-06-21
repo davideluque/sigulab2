@@ -189,16 +189,28 @@
 	        <tbody>
 	  			{{for doc in documentos:}}
 				<tr>
-					<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
-						{{=doc.nombre_doc.upper()}}
-					</a>
-					</td>
-					<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
-					<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
-					<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
-					<td class="camposTabla" >Deshabilitado temporalmente</td>
-					<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
-					
+					{{if (usuarios == doc.usuario):}}
+						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+							{{=doc.nombre_doc.upper()}}
+						</a>
+						</td>
+						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
+						<td class="camposTabla" >Deshabilitado temporalmente</td>
+						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
+					{{elif usuarios == "Director" or usuarios =="Super Usuario": }}
+						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+							{{=doc.nombre_doc.upper()}}
+						</a>
+						</td>
+						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
+						<td class="camposTabla" >Deshabilitado temporalmente</td>
+						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
+
+					{{pass}}
 				</tr>
 				{{pass}}           
 	        </tbody>
@@ -328,7 +340,7 @@
 									<select name="tipo" id="tipo" class="input" required>
 										<option value=""></option>
 										<option value="Referente Estrategico">Referente Estratégico</option>
-										<option value="Reglamento">Reglameto</option>
+										<option value="Reglamento">Reglamento</option>
 										<option value="Manual">Manual de Organización</option>
 										<option value="Manua2">Manual de Calidad</option>
 										<option value="Manua3">Manual de Proceso de Gestión</option>
