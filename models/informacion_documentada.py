@@ -33,7 +33,7 @@ db.define_table(
 
       Field('archivo_fisico', 'string', label=T('Archivo Fisico')),
 
-      primarykey=['descripcion']
+      primarykey=['codigo']
 )
 
 
