@@ -210,19 +210,11 @@ def lista_documentos():
 		# 	)
 
 
-	log =  auth.user.first_name 
-	print(log == )
-	if (log == "Super Usuario" or log == "Dirección" or log == "Coordinación de la Calidad"):
-		docs = db().select(db.documentos.ALL)
-	else:	
-		docs = db(db.documentos.usuario==log) 
 
-	print("000000000000")
-	db(db.documentos.usuario=="Super Usuario")
 
 
 	return dict(
-	    documentos=docs,
+	    documentos=db().select(db.documentos.ALL),
 		doc_aprobado=db(docs.documentos.estatus=="Aprobado").count(),
 		doc_revision=db(docs.documentos.estatus=="Revisado").count(),
 		doc_elaboracion=db(docs.documentos.estatus=="Elaborado").count(),
