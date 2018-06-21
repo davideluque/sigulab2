@@ -58,7 +58,7 @@ def tabla_categoria(tipo):
         if ext_int: ext_int=ext_int.ext_interna
         
         ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-        if(ubicacion): ubicacion = ubicacion.nombre
+        if(ubicacion): ubicacion = ubicacion.codigo
           
         jefe = buscarJefe(dep)
         
@@ -293,7 +293,7 @@ def ficha():
     if ext_int: ext_int=ext_int.ext_interna
 
     ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-    if(ubicacion): ubicacion = ubicacion.nombre
+    if(ubicacion): ubicacion = ubicacion.codigo
 
 
     personal ={
