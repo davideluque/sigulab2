@@ -100,7 +100,7 @@ def validar_cedula():
   Este método se ejecuta cada vez que se abandona el campo "cedula" del 
   registro de usuarios.
   """
-  ci_format = re.compile("^[0-9]+$")
+  ci_format = re.compile("^[0-9]{6,8}$")
   if not re.match(ci_format, request.post_vars.cedula):
     return "jQuery('#auth_cedula__row').addClass('has-error');\
     jQuery('#cedula_error_group').addClass('has-error');\
