@@ -37,21 +37,18 @@
       margin: auto;
       margin-top: 10px;
     }
-
     .tab-wrapper2 {
       text-align: center;
       display: block;
       margin: auto;
       max-width: 1200px;
     }
-
     .tabs {
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
     }
-
     .tab-link {
       margin: 0 1%;
       list-style: none;
@@ -64,37 +61,33 @@
       border-bottom: solid 3px rgba(255, 255, 255, 0);
       letter-spacing: 1px;
     }
-
     .tab-link:hover {
       color: #999;
       border-color: #999;
     }
-
     .tab-link.active {
       color: #333;
       border-color: #333;
     }
-
     .tab-link:nth-of-type(1).active {
-      color: #60e8f2;
-      border-color: #60e8f2;
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
     }
-
     .tab-link:nth-of-type(2).active {
-      color: #60e8f2;
-      border-color: #60e8f2;
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
     }
-
     .tab-link:nth-of-type(3).active {
-      color: #60e8f2;
-      border-color: #60e8f2;
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
     }
-
     .content-wrapper {
       margin-top: 30px;
       padding: 40px 80px;
     }
-
     .tab-content {
       display: none;
       text-align: left;
@@ -105,18 +98,15 @@
       transform: translateY(15px);
       animation: fadeIn 0.5s ease 1 forwards;
     }
-
     .tab-content.active {
       display: block;
     }
-
     @keyframes fadeIn {
       100% {
         opacity: 1;
         transform: none;
       }
     }
-
   </style>
 
 {{end}}
@@ -131,6 +121,23 @@
   <span class="breadcrumb-item active">Ficha</span>
   </div>
 </nav>
+
+  <div class="row" style="margin-bottom: 50px;">
+    <div class="col-md-9">
+      <h2 style="text-align: center; margin-left: 30%"> FICHA DE DOCUMENTOS </h2>
+    </div>
+    <div class="col-md-3">
+      <form method="POST">
+        <p onclick="estatus()" style="display: inline-block;">
+          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-3x" aria-hidden="true"></i></button>
+        </p>
+          <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-3x" aria-hidden="true"></i></button>
+          <button type="submit" class="btn btn-danger btn-lg" name="eliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-3x" aria-hidden="true"></i></button>
+      </form>
+          
+    </div>
+  </div>  
+
   {{for doc in documentos:}}
 
 
@@ -148,25 +155,14 @@
   <div class="content-wrapper">
     <div id="tab-1" class="tab-content active">
 
-      <p><span style="color: #52798c; font-size: 1.2em;">Código:  <!--{{=doc.codigo}}-->  </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Tipo:    <!--{{=doc.tipo_doc}}-->  </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Documento: <!--{{=doc.nombre_doc}}-->    </span> </p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Objetivo: <!--{{=doc.objetivo}}-->       </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}    </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:  <!--{{=doc.periodo_rev}}-->   </span></p>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Código: </span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Tipo:      </span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Documento:   </span> </h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Objetivo:   </span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:    {{=doc.periodo}}</span></h3>
 
-      <div style="margin-top: 50px; float: right;">
-        <div class="row container-fluid">
-            <form method="POST">
-            <p onclick="estatus()">
-                <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="margin-right: 15px;" >Editar</button>
-               </p>
-                <button type="button" class="btn btn-info btn-lg" style="margin-right: 15px;">Ocultar</button>
-                <button type="submit" class="btn btn-danger btn-lg" name="eliminar" value="eliminar">Eliminar</button>
-            </form>
-        </div>
-      </div>  
-    
+
 
     </div>
 
@@ -193,14 +189,14 @@
         <tbody>
           <tr>
 
-            <td><!--{{=doc.responsable}}--></td>
-            <td><!--{{=doc.elaborado_actualizado_por}}--></td>
-            <td><!--{{=doc.rev_contenido_realizado_por}}--></td>
-            <td><!--{{=doc.fecha_rev_contenido}}--></td>
-            <td><!--{{=doc.rev_especficaciones_doc_realizado_por}}--></td>
-            <td><!--{{=doc.fecha_rev_especificaciones_doc}}--></td>
-            <td><!--{{=doc.rev_por_consejo_asesor}}--></td>
-            <td><!--{{=doc.fecha_rev_por_consejo_asesor}}--></td>
+            <td></td>
+            <td></td>
+            <td></td>
+             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             
           </tr>
 
@@ -212,11 +208,11 @@
     </div>
     <div id="tab-3" class="tab-content">
   
-      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion: <!--{{=doc.registro}}  --></span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion:   </span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Fecha de registro de Ubicacion:      </span></p>
       <p><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     </span> </p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   <!--{{=doc.ubicacion_electronica}}-->  </span></p>
-      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: <!--{{=doc.ubicacion_fisica}}   -->  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></p>
+      <p><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}     </span></p>
     
 
     </div>
@@ -402,14 +398,14 @@
               <h4 class="titulosForm">Fase de Elaboración</h4>
 
               <!-- Campo de Número de Anexos -->
-<!--               <div class="form-group">
+              <div class="form-group">
                 <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
               
                 <div id="containerAnexos"/>
-              </div> -->
+              </div>
 
               <!-- Campo de Elaboradores del Documento -->
-<!--               <div class="form-group">
+              <div class="form-group">
                 
                 
                 <div id="p_scents">
@@ -422,7 +418,7 @@
                                       
               </div>
 
-           -->
+          
             
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
@@ -474,14 +470,14 @@
 
 
               <!-- Campo de confirmación si fué o no revisado por el consejo -->
-<!--               <div class="form-group">
+              <div class="form-group">
                 <label>Revisión del Consejo</label>
                 <br>
                 <input disabled='' type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
                 <br>
                 <input disabled='' type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
                 <div id="containerRevision"/>
-              </div>  -->
+              </div> 
 
               <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
               <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
@@ -656,20 +652,17 @@
   {{pass}}
   <script>
 function estatus(){
-
       if($('.form-group').data('atributo')=='Planificado'){
      
         jQuery('#objetivos').removeAttr('disabled');
         jQuery('#periodo').removeAttr('disabled');
         jQuery('#elaborado').removeAttr('disabled');
-
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
         jQuery('#revision_especificaciones').removeAttr('disabled');
         jQuery('#fecha_revision_especificaciones').removeAttr('disabled');
         jQuery('#revision_consejo').removeAttr('disabled');
         jQuery('#fecha_revision_consejo').removeAttr('disabled');
-
         jQuery('#aprobado').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
         jQuery('#cod_registro').removeAttr('disabled');
@@ -679,26 +672,20 @@ function estatus(){
         jQuery('#archivo_el').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
-
-
       }else if($('.form-group').data('atributo')=='Elaborado'){
-
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
         jQuery('#revision_especificaciones').removeAttr('disabled');
         jQuery('#fecha_revision_especificaciones').removeAttr('disabled');
         jQuery('#revision_consejo').removeAttr('disabled');
         jQuery('#fecha_revision_consejo').removeAttr('disabled');
-
         jQuery('#aprobado').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
-
          jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
-
       }else if($('.form-group').data('atributo')=='Revisado'){
         jQuery('#aprobado').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
@@ -709,15 +696,11 @@ function estatus(){
         jQuery('#archivo_el').removeAttr('disabled');
         
       }else if($('.form-group').data('atributo')=='Aprobado'){
-
-
         jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
-
         
       }
     }
-
   </script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
   <script type="text/javascript">
@@ -734,30 +717,24 @@ function estatus(){
   <script type="text/javascript">
     // Get the modal
     var modal = document.getElementById('adddoc');
-
     // Get the button that opens the modal
     var btn = document.getElementById("botonModal");
-
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
     // When the user clicks on the button, open the modal 
     btn.onclick = function() {
         modal.style.display = "block";
     }
-
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     }
-
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
-
     $('#edit_send').click(function(event){
         window.reload();
     });

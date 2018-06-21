@@ -210,14 +210,23 @@ def lista_documentos():
 		# 	)
 
 
+	log =  auth.user.first_name 
+	print(log == )
+	if (log == "Super Usuario" or log == "Dirección" or log == "Coordinación de la Calidad"):
+		docs = db().select(db.documentos.ALL)
+	else:	
+		docs = db(db.documentos.usuario==log) 
+
+	print("000000000000")
+	db(db.documentos.usuario=="Super Usuario")
 
 
 	return dict(
-	    documentos=db().select(db.documentos.ALL),
-		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
-		doc_revision=db(db.documentos.estatus=="Revisado").count(),
-		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
-		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
+	    documentos=docs,
+		doc_aprobado=db(docs.documentos.estatus=="Aprobado").count(),
+		doc_revision=db(docs.documentos.estatus=="Revisado").count(),
+		doc_elaboracion=db(docs.documentos.estatus=="Elaborado").count(),
+		doc_planificacion=db(docs.documentos.estatus=="Planificado").count(),
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 		usuarios = db().select(db.auth_user.first_name)
 	)
@@ -277,9 +286,8 @@ def lista_registros():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ajax_ficha_registro():
-	print(request.args[0])
-	uname = request.args[0]
-	row = db(db.documentos.codigo==uname).select()
+
+	session.forget(response)
 
 
 	dic = {
@@ -337,52 +345,7 @@ def ficha():
 	# }
 
 	documento =  db(db.documentos.codigo==uname)
-	if(request.post_vars.elaborado=="edicion"):
-		jQuery('#objetivos').removeAttr('disabled');
-		jQuery('#periodo').removeAttr('disabled');
-		jQuery('#elaborado').removeAttr('disabled');
 
-		documento.update(
-			estatus="Elaborado",
-			periodo_rev=request.post_vars.periodo,
-			objetivo=request.post_vars.objetivos,
-			fecha_prox_rev= request.post_vars.fecha_prox_rev
-		)
-
-	elif (request.post_vars.revisado=="revisado"):
-
-		print("revisado")
-		documento.update(estatus="Revisado",
-			periodo_rev=request.post_vars.periodo,
-			objetivo=request.post_vars.objetivos,
-			fecha_prox_rev= request.post_vars.fecha_prox_rev,
-			rev_contenido_realizado_por = request.post_vars.revision_contenido,
-        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
-        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
-       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
-       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
-       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,)
-
-	elif(request.post_vars.aprobado=="aprobado"):
-		print("aprobado")
-		documento.update(estatus="Revisado",
-			periodo_rev=request.post_vars.periodo,
-			objetivo=request.post_vars.objetivos,
-			fecha_prox_rev= request.post_vars.fecha_prox_rev,
-			rev_contenido_realizado_por = request.post_vars.revision_contenido,
-        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
-        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
-       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
-       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
-       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
-       		aprobado_por = request.post_vars.aprobado,
-        	fecha_aprob = request.post_vars.fechaAprobacion,
-        	cod_aprob = request.post_vars.cod_registro,
-        	cod_control_cambio = request.post_vars.cod_controlCambios,
-        	fecha_control_cambio = request.post_vars.fechaControlCambios,
-        	ubicacion_fisica = request.post_vars.ubicacion_fisica,
-        	ubicacion_electronica = request.post_vars.ubicacion_electronica
-        )
 	# 	documento.update(
 
 	# 			objetivo=dic["objetivo"],
@@ -415,6 +378,48 @@ def ficha():
 	# 	redirect(URL('..', 'sigulab2','informacion_documentada',''))
 
 	### END ###
+	if(request.post_vars.elaborado=="edicion"):
+
+		documento.update(estatus="Elaborado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev 
+		)
+	elif (request.post_vars.revisado=="revisado"):
+
+		print("revisado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo)
+	elif(request.post_vars.aprobado=="aprobado"):
+		print("aprobado")
+		documento.update(estatus="Revisado",
+			periodo_rev=request.post_vars.periodo,
+			objetivo=request.post_vars.objetivos,
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			rev_contenido_realizado_por = request.post_vars.revision_contenido,
+        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
+       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		rev_por_consejo_asesor = request.post_vars.revision_consejo,
+       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
+       		aprobado_por = request.post_vars.aprobado,
+        	fecha_aprob = request.post_vars.fechaAprobacion,
+        	cod_aprob = request.post_vars.cod_registro,
+        	cod_control_cambio = request.post_vars.cod_controlCambios,
+        	fecha_control_cambio = request.post_vars.fechaControlCambios,
+        	ubicacion_fisica = request.post_vars.ubicacion_fisica,
+        	ubicacion_electronica = request.post_vars.ubicacion_electronica
+        )###
+
 
 	return dict(documentos=row,
 				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row	)
+
