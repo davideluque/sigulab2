@@ -1,7 +1,7 @@
 var table = $('#datatable').DataTable({
 "dom": "<'row buscar'<'col-md-1'f>>"+"<'row'<'col-md-8'l><'col-md-4'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
 language: {
-  url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+  url: langDT
 },
 initComplete: function(){
   var api = this.api();
