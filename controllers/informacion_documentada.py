@@ -275,20 +275,21 @@ def lista_registros():
 
 
 
-def ficha_reg():
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ajax_ficha_registro():
 	print(request.args[0])
 	uname = request.args[0]
 	row = db(db.documentos.codigo==uname).select()
 
 
 	dic = {
-	"codigo": request.post_vars.codigo,
-	"fecha_creacion": request.post_vars.fecha_creacion,
-	"descripcion": request.post_vars.descripcion,
-	"destinatario": request.post_vars.destinatario,
-	"remitente": request.post_vars.remitente,
-	"doc_electronico": request.post_vars.doc_electronico,
-	"archivo_fisico": request.post_vars.archivo_fisico,
+		"codigo": request.post_vars.codigo,
+		"fecha_creacion": request.post_vars.fecha_creacion,
+		"descripcion": request.post_vars.descripcion,
+		"destinatario": request.post_vars.destinatario,
+		"remitente": request.post_vars.remitente,
+		"doc_electronico": request.post_vars.doc_electronico,
+		"archivo_fisico": request.post_vars.archivo_fisico,
 	}
 
 	registro =  db(db.registros.codigo==uname)
@@ -299,7 +300,6 @@ def ficha_reg():
 
 	### END ###
 	return dict(message=row	)
-
 
 	
 def ficha():

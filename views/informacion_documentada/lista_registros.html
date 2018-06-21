@@ -100,13 +100,13 @@
         <tbody>
         {{for doc in registros:}}
         <tr>
-          <td class="camposTabla">{{=doc.codigo}}</td>
+          <td class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=doc.codigo}});">{{=doc.codigo}}</a></td>
           <td class="camposTabla">{{=doc.fecha_creacion}}</td>
-          <td class="camposTabla">{{=doc.descripcion}}</td>
-          <td class="camposTabla">{{=doc.destinatario}}</td>
-          <td class="camposTabla">{{=doc.remitente}}</td>
-          <td class="camposTabla">{{=doc.doc_electronico}}</td>
-          <td class="camposTabla">{{=doc.archivo_fisico}}</td>
+          <td class="camposTabla">{{=doc.descripcion.upper()}}</td>
+          <td class="camposTabla">{{=doc.destinatario.upper()}}</td>
+          <td class="camposTabla">{{=doc.remitente.upper()}}</td>
+          <td class="camposTabla">{{=doc.doc_electronico.upper()}}</td>
+          <td class="camposTabla">{{=doc.archivo_fisico.upper()}}</td>
         </tr>
         {{pass}}         
         </tbody>
@@ -119,7 +119,35 @@
 
 
 
-<input type="hidden" id="serv" name="serv" value="">
+
+
+
+
+
+
+
+<input type="hidden" id="reg" name="reg" value="">
+
+
+<!-- Ajax abrirFicha-->
+<input type="hidden" id="reg" name="reg" value="">
+
+<!-- Inicio Modal ficha de Servicio -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de servicio -->
+
+
+
+
+
 
 <!-- Inicio Modal ficha de Servicio -->
   <div id="myModal" class="modal fade" role="dialog">
@@ -242,6 +270,19 @@
 
 
 
+
+<script type="text/javascript">
+  function abrirFicha(codigo) {
+    console.log("kasbdakasdalsndas");
+    var x = document.getElementById("reg");
+      x.value = codigo;
+    ajax('ajax_ficha_registro', ['reg'], "ficha_reg");
+  } 
+
+</script>
+
+
+
 <script type="text/javascript">
     
 
@@ -347,11 +388,7 @@
   var w2p_ajax_confirm_message =
         "{{=T('')}}";
   
-  function abrirFicha(servicio) {
-    var x = document.getElementById("serv");
-      x.value = servicio;
-    ajax('ajax_ficha_servicio', ['serv'], "ficha_reg");
-  }
+
   function getAdscripcion(){
     var opcionessede = document.getElementById("sel6");
     var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
