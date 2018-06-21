@@ -91,7 +91,7 @@ $(document).ready(function () {
                     }
                 }
 
-                else if (($(this).attr('name')=="unidades-presentacion")) {
+                else if (($(this).attr('name')=="unidades")) {
                     if (!($(this).val().match(/^[0-9]{1,5}$/))) {
                         $("#err_unidades").html("Ingrese solo dígitos numéricos. Máximo 5 dígitos");
                         $("#err_unidades").show();

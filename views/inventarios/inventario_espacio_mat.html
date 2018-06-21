@@ -263,8 +263,8 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="unidades-presentacion" 
-                            name="unidades-presentacion" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                            <input type="hidden" class="form-control" id="unidades" 
+                            name="unidades" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
                             <font color="red"><div id="err_unidades" hidden></div></font>
                         </div>
 
@@ -386,8 +386,8 @@ del concepto y tipo de ingreso o egreso -->
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
     if (selecion.value == "Material de Laboratorio"){
-      document.getElementById("unidades-presentacion").type = 'hidden';
-      document.getElementById("unidades-presentacion").removeAttribute("required", "");
+      document.getElementById("unidades").type = 'hidden';
+      document.getElementById("unidades").removeAttribute("required", "");
       document.getElementById("total_mat").type = 'hidden';
       document.getElementById("total_mat").removeAttribute("required", "");
       document.getElementById("grupo-presentacion").style.display = 'none';
@@ -413,8 +413,8 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("capacidad").type = 'hidden';
       document.getElementById("grupo-presentacion").style.display = 'block';
       document.getElementById("presentacion").setAttribute("required", "");
-      document.getElementById("unidades-presentacion").type = 'text';
-      document.getElementById("unidades-presentacion").setAttribute("required", "");
+      document.getElementById("unidades").type = 'text';
+      document.getElementById("unidades").setAttribute("required", "");
       document.getElementById("total_mat").type = 'text';
       document.getElementById("total_mat").setAttribute("required", "");
       document.getElementById("grupo-aforado").style.display = 'none';
@@ -507,7 +507,7 @@ del concepto y tipo de ingreso o egreso -->
     return (n == 0)
   }
   function placeholder_total(value){
-    var x = document.getElementById("unidades-presentacion");
+    var x = document.getElementById("unidades");
     var y = document.getElementById("cantidad_mat");
     var z = document.getElementById("total_mat");
     z.placeholder=y.value*x.value
