@@ -238,10 +238,21 @@ h3 {
     color:#0300d7;
 }
 
-#eliminar{
+#eliminar, #rechazar{
     background-color: 	#d9534f !important;
     border-radius: 50%;
 }
+
+.nav-link.active{
+    background-color: #0300d7 !important;
+    text-decoration: underline !important;
+    color:#fff !important;
+}
+
+.nav-link{
+    color:#000 !important;
+}
+
 
 
 /***** Top content *****/
