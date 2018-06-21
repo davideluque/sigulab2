@@ -5,7 +5,6 @@
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
-
 {{block head}}
 
 <meta charset="UTF-8">
@@ -25,6 +24,7 @@
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}"> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -144,11 +144,13 @@
 {{end}}
 
 {{block center}}
-    <h2 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h2>
+    <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
     {{ if bien['bm_placa'] != '': }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
+    <!-- Flash message -->
+    <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
 
 <!-- Inicio Boton Modificar BM -->
@@ -159,7 +161,7 @@
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Modificar Bien</button>
+                <button type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-edit fa-1x"></i></button>
             </div>
         </div>
     </div>
@@ -174,8 +176,8 @@
 				<li class="tab-link" data-tab="2">SUDEBID</li>
                 <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
                 <li class="tab-link" data-tab="4">UBICACIÓN</li>
-                <li class="tab-link" data-tab="5">MANTENIMIENTO</li>
-                <li class="tab-link" data-tab="6">SERVICIOS</li>
+                <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
                 <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
             </ul>
 	</div>
@@ -188,44 +190,90 @@
                         {{=title}}
                     </div>
                     <div class="grid-item">
-                        {{= caracteristicas_dict.get(title)}}
+                        {{ if title == "Uso:": }}
+                            {{ if (caracteristicas_dict.get(title).find("Docencia")) != -1:}}
+                                Docencia<br>
+                            {{pass}}
+                            {{if (caracteristicas_dict.get(title).find("Investigaci")) != -1:}}
+                                Investigación<br>
+                            {{pass}}
+                            {{if (caracteristicas_dict.get(title).find("Extensi")) != -1:}}
+                                Extensión<br>
+                            {{pass}}
+                            {{if (caracteristicas_dict.get(title).find("Apoyo administrativo")) != -1:}}
+                                Apoyo administrativo<br>
+                            {{pass}}
+                        {{ else: }}
+                            {{= caracteristicas_dict.get(title)}}
+                        {{pass}}
                     </div>
                 {{ pass }}
+                {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
+                    <div class="grid-item">
+                        {{ if bien['bm_unidad'] == 'm':}}
+                            Dimensiones (metros):
+                        {{else:}}
+                            Dimensiones (centímetros):
+                        {{pass}}
+                    </div>
+                    <div class="grid-item">                        
+                        {{if bien['bm_ancho'] != None:}}
+                            Ancho: {{=bien['bm_ancho']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['bm_largo'] != None:}}
+                            Largo: {{=bien['bm_largo']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['bm_alto'] != None:}}
+                            Alto: {{=bien['bm_alto']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['bm_diametro'] != None:}}
+                            Diámetro: {{=bien['bm_diametro']}}
+                            <br>
+                        {{pass}}
+                    </div>
+                {{pass}}
             </div>
-            <!-- Pensar como Mostrar esto en el grid-->
-            {{if bien['bm_unidad'] != '':}}
-                {{if bien['bm_unidad'] == 'm':}}
-                    <h4>Dimensiones: metros</h4>
-                {{else:}}
-                    <h4>Dimensiones: centímetros</h4>
-                {{pass}}
-                {{if bien['bm_ancho'] != '':}}
-                    <h4> &emsp;   Ancho: {{=bien['bm_ancho']}} </h4>
-                {{pass}}
-                {{if bien['bm_largo'] != '':}}
-                    <h4>  &emsp;   Largo: {{=bien['bm_largo']}} </h4>
-                {{pass}}
-                {{if bien['bm_alto'] != '':}}
-                    <h4>  &emsp;   Alto: {{=bien['bm_alto']}} </h4>
-                {{pass}}
-                {{if bien['bm_diametro'] != '':}}
-                    <h4>  &emsp;   Diámetro: {{=bien['bm_diametro']}} </h4>
-                {{pass}}
-            {{pass}}
         </div>
 
         <!-- Pensar utilizar grid-->
 		<div id="tab-2" class="tab-content">
-                <h4>Localización: {{=bien['bm_localizacion']}} </h4>
-                <h4>Código Localización: {{=bien['bm_codigo_localizacion']}} </h4>
-                <h4>Categoria: {{=bien['bm_categoria']}}</h4>
+            <div class="grid-container">
+            {{ for title in sudebid_list: }}
+                <div class="grid-item">
+                    {{=title}}
+                </div>
+                <div class="grid-item">
+                    {{= sudebid_dict.get(title)}}
+                </div>
+            {{ pass }}
+            </div>
         </div>
 
 		<div id="tab-3"class="tab-content">En desarrollo</div>
         <div id="tab-4"class="tab-content">
-            <h4> Espacio físico : {{=bien['bm_espacio_fisico']}} </h4>
-            <h4> Unidad de Adscripción : {{=bien['bm_unidad_de_adscripcion']}} </h4>
-            <h4> Dependencia : {{=bien['bm_depedencia']}} </h4>
+            <div class="grid-container">
+                <div class="grid-item">
+                    Espacio físico:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
+                </div>
+                <div class="grid-item">
+                    Unidad de Adscripción:
+                </div>
+                <div class="grid-item">
+                    {{=bien['bm_unidad_de_adscripcion']}}
+                </div>
+                <div class="grid-item">
+                    Dependencia:
+                </div>
+                <div class=grid-item>
+                    {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                </div>
+            </div>
         </div>
 		<div id="tab-5"class="tab-content">En Desarrollo</div>
 		<div id="tab-6"class="tab-content">En desarrollo</div>
@@ -248,8 +296,12 @@
       <div class="modal-header addHeader">
         <div class="row addRow" id="rowHeader">
           <div class="col-sm-1" id="col1Header">
-            <div class="container" id="plus">
-              <h1 id="agregar">+</h1>
+            <div class="container">
+                <i class="fas fa-edit fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
             </div>
           </div>
           <div class="col-sm-11" id="col11Header">
@@ -282,16 +334,16 @@
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">Características del Bien</h4>                
-                      <label>Campos marcados con * son obligatorios.</label>
+                      <label>Campos marcados con * son obligatorios. {{=bien['bm_nombre']}} </label>
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value={{=bien['bm_nombre']}} required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value={{=bien['bm_num']}}  required>
+                            <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value="{{=bien['bm_num']}}" readonly required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
@@ -299,34 +351,40 @@
                             {{if bien['bm_placa']=="":}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             {{else:}}
-                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" value={{=bien['bm_placa']}} placeholder="N° de placa">
+                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" value="{{=bien['bm_placa']}}" placeholder="N° de placa">
                             {{pass}}
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
+                        {{if bien['bm_marca']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" value={{=bien['bm_marca']}} id="marca" name="marca" placeholder="Marca*" required >
+                            <input type="text" class="form-control" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
+                        {{pass}}
 
+                        {{if bien['bm_modelo']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo" value={{=bien['bm_modelo']}} name="modelo" value="" placeholder="Modelo*" required>
-                            <div class="field-error"> <p id="error-modelo"> </p> </div>
+                                <input type="text" class="form-control" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
+                                <div class="field-error"> <p id="error-modelo"> </p> </div>
+                            
                         </div>
+                        {{pass}}
 
+                        {{if bien['bm_serial']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" id="serial" value={{=bien['bm_serial']}} name="serial" placeholder="Serial*" required>
+                            <input type="text" class="form-control" id="serial" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
-                        
+                        {{pass}}
+
                           <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" value={{=bien['bm_descripcion']}} name="descripcion" placeholder="Descripción*" required>
+                            <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
                         
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
                   <button type="button" class="btn btn-next botonForm">Siguiente</button>         
                 </fieldset>
                 <!-- Fin Primer Paso -->
@@ -346,7 +404,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
-                              <select class="form-control" value={{=bien['bm_material']}} type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
@@ -362,7 +420,7 @@
 
   
                           <div class="form-group">
-                              <select class="form-control" type="select" value={{=bien['bm_color']}} id="color" name="color" placeholder="Color" required>
+                              <select class="form-control" type="select" value="{{=bien['bm_color']}}" id="color" name="color" placeholder="Color" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
                                     {{if bien['bm_color']==color:}}
@@ -383,7 +441,7 @@
                                 <option value="">Selecione una unidad</option>
                                 {{ for med in unidad_med:}}
                                     {{if bien['bm_unidad']==med:}}
-                                        <option value="{{=med}}" selected="selected">{{=med}}</option>
+                                        <option value="{{=med}}" selected="selected" >{{=med}}</option>
                                     {{else:}}
                                         <option value="{{=med}}">{{=med}}</option>
                                     {{pass}}
@@ -392,46 +450,68 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
 
-                          <div class="form-group">
-                            {{if bien['bm_ancho']=="":}}
-                                <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                            {{else:}}
-                                <input type="hidden" class="form-control" value={{=bien['bm_ancho']}} id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                            {{pass}}
-                            <font color="red"><div id="err_ancho" hidden></div></font>
-                          </div>
+                          <!-- FALTA ARREGLAR ESTO  -->
+                           {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
+                              <div class="form-group">
+                                    <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                <font color="red"><div id="err_ancho" hidden></div></font>
+                              </div>
 
+                              <div class="form-group">
+                                    <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                <font color="red"><div id="err_largo" hidden></div></font>
+                              </div>
 
-                          <div class="form-group">
-                            
-                            {{if bien['bm_largo']=="":}}
-                                <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                            {{else:}}
-                                <input type="hidden" class="form-control" id="largo" value={{=bien['bm_largo']}} name="largo" title="Formato ##.##" placeholder="Largo" >
-                            {{pass}}
-                            <font color="red"><div id="err_largo" hidden></div></font>
-                          </div>
+                              <div class="form-group">
+                                    <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                <font color="red"><div id="err_alto" hidden></div></font>
+                              </div>
 
-                          <div class="form-group">
-                            
-                            {{if bien['bm_alto']=="":}}
-                                <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                            {{else:}}
-                                <input type="hidden" class="form-control" id="alto" value={{=bien['bm_alto']}} name="alto" title="Formato ##.##" placeholder="Altura" >
-                            {{pass}}
-                            <font color="red"><div id="err_alto" hidden></div></font>
-                          </div>
+                              <div class="form-group">
+                                    <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                <font color="red"><div id="err_diametro" hidden></div></font>
+                              </div>
 
-                          <div class="form-group">
-                            
-                            {{if bien['bm_diametro']=="":}}
-                                <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                            {{else:}}
-                                <input type="hidden" class="form-control" id="diametro" value={{=bien['bm_diametro']}} name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                            {{elif bien['bm_unidad']!=None or bien['bm_unidad']!="":}}
+                                <div class="form-group">
+                                {{if bien['bm_ancho']==None:}}
+                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{else:}}
+                                    <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                {{pass}}
+                                <font color="red"><div id="err_ancho" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_largo']==None:}}
+                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                {{pass}}
+                                <font color="red"><div id="err_largo" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_alto']==None:}}
+                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                {{pass}}
+                                <font color="red"><div id="err_alto" hidden></div></font>
+                              </div>
+
+                              <div class="form-group">
+                                
+                                {{if bien['bm_diametro']==None:}}
+                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{else:}}
+                                    <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                {{pass}}
+                                <font color="red"><div id="err_diametro" hidden></div></font>
+                              </div>
                             {{pass}}
-                            <font color="red"><div id="err_diametro" hidden></div></font>
-                          </div>
-                          
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -453,10 +533,10 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
+                        
                         <div class="form-group">
                             <label>Seleccione un tipo de movilidad*</label>
-                            <select class="form-control" type="select" id="movilidad" value={{=bien['bm_movilidad']}} name="movilidad" placeholder="Movilidad" required>
+                            <select class="form-control" type="select" id="movilidad" value="{{=bien['bm_movilidad']}}" name="movilidad" placeholder="Movilidad" required>
                               <option value="">Seleccione un tipo de movilidad</option>
                               {{ for movilidad in movilidad_list: }}
                                 {{if bien['bm_movilidad']==movilidad:}}
@@ -472,18 +552,21 @@
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
                         {{ for uso in uso_list: }}
+                            {{i=1}}
                             {{if uso in bien['bm_uso']:}}
-                                <input type="checkbox" name="tipo_uso" checked>{{=uso}}
+                                <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}" value="{{=uso}}" checked>{{=uso}}
                             {{else:}}
-                                <input type="checkbox" name="tipo_uso">{{=uso}}
-                            {{pass}} 
+                                <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}" value="{{=uso}}">{{=uso}}
+                            {{pass}}
+                            {{i = i+1}} 
                           <br>
                         {{pass}}
                         </div>
 
+                        {{if bien['bm_calibrar']!="":}}
                         <div class="form-group" id="calibrar">
                           <label>Seleccione si el equipo ha sido calibrado*</label>
-                          <select class="form-control" id="select-calibrar" value={{=bien['bm_calibrar']}} type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
+                          <select class="form-control" id="select-calibrar" type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
                             <option value="">Seleccione una opción</option>
                                 {{if bien['bm_calibrar']=="Si":}}
                                     <option value="Si" selected="selected">Si</option>
@@ -500,21 +583,35 @@
                           </select>
                           <div class="field-error"> <p id="error-calibrar"> </p> </div>
                         </div>
-  
-                        <div class="form-group" id="fecha_calibracion">
+                        {{pass}}
+
+                        {{if bien['bm_calibrar']=="No" or bien['bm_calibrar']=="":}}
+                        <div class="form-group" id="fecha_calibracion" style="display: none">
                           <label>Seleccione la fecha de la última calibración del equipo*</label>
                             {{if bien['bm_fecha_calibracion']=="":}}
                                 <input type="date" class="form-control" name="fecha_calibracion">
                             {{else:}}
-                                <input type="date" class="form-control" value={{=bien['bm_fecha_calibracion']}} name="fecha_calibracion">
+                                <input type="date" class="form-control" value="{{=bien['bm_fecha_calibracion']}}" name="fecha_calibracion">
                             {{pass}}
                           
                           <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
                         </div>
+                        {{elif bien['bm_calibrar']=="Si":}}
+                        <div class="form-group" id="fecha_calibracion" >
+                          <label>Seleccione la fecha de la última calibración del equipo*</label>
+                            {{if bien['bm_fecha_calibracion']=="":}}
+                                <input type="date" class="form-control" name="fecha_calibracion">
+                            {{else:}}
+                                <input type="date" class="form-control" value="{{=bien['bm_fecha_calibracion']}}" name="fecha_calibracion">
+                            {{pass}}
+                          
+                          <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
+                        </div>
+                        {{pass}}
   
                         <div class="form-group">
                           <label>Seleccione el estado del bien mueble*</label>
-                          <select class="form-control" type="select" id="estatus" value={{=bien['bm_estatus']}} name="estatus" placeholder="Estatus del equipo" required>
+                          <select class="form-control" type="select" id="estatus" value="{{=bien['bm_estatus']}}" name="estatus" placeholder="Estatus del equipo" required>
                             <option value="">Seleccione una opción</option>
                             {{ form_estatus = ['Operativo','Inoperativo','En desuso','Inservible'] }}
                             {{ for estatus in form_estatus: }}
@@ -553,7 +650,7 @@
                         
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px" >Ubicación</label>
-                          <select class="form-control" type="select" value={{=bien['bm_localizacion']}} value="" id="localizacion" onchange="placeholder_localizacion(this.value);"  name="localizacion" required>
+                          <select class="form-control" type="select" value="{{=bien['bm_localizacion']}}" value="" id="localizacion" onchange="placeholder_localizacion(this.value);"  name="localizacion" required>
                             <option value="" onchange="placeholder_localizacion(this.value);">Seleccione una localizacion</option>
                             {{for cod in localizacion:}}
                                 {{if bien['bm_localizacion']==cod:}}
@@ -561,7 +658,6 @@
                                 {{else:}}
                                     <option value="{{=cod}}" onchange="placeholder_localizacion(this.value);">{{=cod}}</option>
                                 {{pass}}
-                            
                             {{pass}}
                           </select>
                           <div class="field-error"> <p id="error-cod-localizacion"> </p> </div>
@@ -569,14 +665,14 @@
 
                         <div class="form-group">
                             <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Código de localización</label>
-                            <input type="text" class="form-control" value={{=bien['bm_codigo_localizacion']}} id="cod_loc" name="cod_loc" placeholder="" readonly >
+                            <input type="text" class="form-control" value="{{=bien['bm_codigo_localizacion']}}" id="cod_loc" name="cod_loc" placeholder="" readonly >
                             <div class="field-error"> <p id="error-cod_loc"> </p> </div>
                           </div>
                   
 
                       <div class="form-group">
                           <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Categorias</label>
-                          <select class="form-control" type="select" value={{=bien['bm_categoria']}} id="categoria" onchange="colocar_subcategoria2(2);" name="nombre_cat" required>
+                          <select class="form-control" type="select" value="{{=bien['bm_categoria']}}" id="categoria" onchange="colocar_subcategoria2(2);" name="nombre_cat" required>
                             <option value="" onchange="colocar_subcategoria2(2);" >Seleccione una categorias</option>
                             {{ for categoria in nombre_cat:}}
                                 {{if bien['bm_categoria']==categoria:}}
@@ -594,8 +690,8 @@
                         <div class="form-group">
                             <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Subcategorias</label>
                             <label class="form-group" id="numRegistro2" style="margin-bottom: 0px" ></label>
-                            <select class="form-control" onchange="colocar_subcategoria2(1);" type="select" value={{=bien['bm_subcategoria']}} id="Subcategorias"  name="subcategoria" required>
-                              <option value={{=bien['bm_subcategoria']}} id='Opcion0'>{{=bien['bm_subcategoria']}}</option>
+                            <select class="form-control" onchange="colocar_subcategoria2(1);" type="select" value="{{=bien['bm_subcategoria']}}" id="Subcategorias"  name="subcategoria" required>
+                              <option value="{{=bien['bm_subcategoria']}}" id='Opcion0'>{{=bien['bm_subcategoria']}}</option>
                               <option value="" id="Opcion1" hidden></option>
                               <option value="" id="Opcion2" hidden ></option>
                               <option value="" id="Opcion3" hidden ></option>
@@ -612,7 +708,8 @@
                       </div>
                     </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Modificar</button>                </fieldset>
+                    <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm">Modificar</button>
+                </fieldset>
                 <!-- Fin Tercer Paso -->
               </form>
           </div>
@@ -629,7 +726,7 @@
 
     // Funcion para mostrar campos dependendiendo de la categoria
     function elegir_campos(){
-      var selecion = document.getElementById("clasificacion");
+      var selecion = "{{=bien['bm_clasificacion']}} ";
       if (selecion.value == "Mobiliario"){
         document.getElementById("marca").type = 'hidden';
         document.getElementById("modelo").type = 'hidden';
