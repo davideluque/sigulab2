@@ -37,7 +37,8 @@
                 <tbody>
                   {{for bm in inventario:}}
                     <tr>
-                      <td class="camposTabla">{{=bm['sb_nombre']}}</td>
+                      <td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+
                       <td class="camposTabla">{{=bm['sb_marca']}}</td>
                       <td class="camposTabla">{{=bm['sb_modelo']}}</td>
                       <td class="camposTabla">{{=bm['sb_descripcion']}}</td>

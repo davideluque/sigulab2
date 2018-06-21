@@ -624,6 +624,58 @@ def detalles():
                 caracteristicas_list = caracteristicas_list,
                 caracteristicas_dict = caracteristicas_dict)
 
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_mat():
+    espacio = request.vars['espacio']
+    name = request.vars['nombreMat']
+    bien = db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).select()[0]
+    material_pred = []
+    color = []
+    unidad_med = []
+    movilidad = []
+    uso = []
+    nombre_cat = []
+    cod_localizacion = []
+    localizacion = []
+    nombre_espaciof = []
+    unidad_adscripcion = []
+
+    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+    unidad_med = ['cm','m']
+    movilidad = ['Fijo','Portátil']
+    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+    'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+    cod_localizacion = ['150301','240107']
+    localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+    'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+    caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
+    'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+    caracteristicas_dict = {
+        'Marca:': bien['sb_marca'],
+        'Modelo:': bien['sb_modelo'],
+        'Descripción:': bien['sb_descripcion'],
+        'Material predominante:': bien['sb_material'],
+        'Material secundario': bien['sb_material_sec'],
+
+        'Aforado:': bien['sb_aforado'],
+    }
+    return dict(bien = bien,
+                material_pred = material_pred,
+                color_list = color,
+                unidad_med = unidad_med,
+                movilidad_list = movilidad,
+                uso_list = uso,
+                nombre_cat = nombre_cat,
+                cod_localizacion = cod_localizacion,
+                localizacion = localizacion,
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict)
+
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
 @auth.requires(lambda: __check_role())
