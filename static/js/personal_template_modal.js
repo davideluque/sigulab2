@@ -117,12 +117,14 @@ function validaTelefonoResidencial (){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
+        $this.popover('show')
         return false;
     }
-    if (!($this.val().match(/^\d+$/gm)) || $this.val() < 999999999){
+    if (!($this.val().match(/^\d{11}$/gm))){
         $this.attr("data-content", "El teléfono tiene el formato incorrecto");
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
+        $this.popover('show');
         return false;
     }
     else {
@@ -155,9 +157,10 @@ function validaContactoEmergencia () {
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
+        $this.popover('show');
         return false;
     }
-    if (!$this.val().match(/\d{7}$/)) { // Extension de 1 a 4 digitos
+    if (!$this.val().match(/\d{7}$/)) { 
         $this.attr("data-content", 'El contacto de emergencia debe tener solo números');
         $this.popover('show');
         $this.addClass('input-error');
@@ -234,7 +237,7 @@ $(document).ready(function () {
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
         if (parent_fieldset.attr('id') === 'p1') {
-            next_step = validadoresPrimerPaso.map(fn => fn()).reduce((acc, i) => acc && i, true)
+            next_step = validadoresCorrectos(validadoresPrimerPaso)
         }
 
         if (next_step) {
