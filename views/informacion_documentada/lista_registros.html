@@ -35,10 +35,20 @@
       </ol>
   </nav><-->
 
-    <p style="font-size: 35px; text-align: center;">CONTROL DE REGISTROS</p>
-      
 
-  </div>
+
+
+  <div class="row">
+    <div class="col-md-10">
+      <h2 style="text-align: center; margin-left: 20%"> CONTROL DE REGISTROS </h2>
+    </div>
+    <div class="col-md-2">
+      <a href="#">
+        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; border-color: #337ab7;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+      </a>
+     
+    </div>
+  </div>  
 
 
   <div class="row" style="margin-bottom: 100px;">
@@ -66,9 +76,7 @@
 
 
     <div id="buttons">
-      <a href="#">
-        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; border-color: #337ab7;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
-      </a>
+
       <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
       <!-- Filtrado -->    
@@ -206,9 +214,13 @@
                           </div>
 
 
-                 
-                            <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>
+                          <div style="position: fixed; bottom: 0; right: 0;">
+ 
+                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fa fa-floppy-o"></i></button>
+                          </div>
+
+            
+                            
                           </fieldset>
                     <!-- Fin Primer Paso -->
                     

@@ -193,7 +193,7 @@ def lista_documentos():
 
 		# print(unaDependencia)
 		# print(year)
-		# cod = unaDependencia[:3] + "/" + year + "-" + contador
+		# cod = unaDependencia[:3] + "-" + year + "-" + contador
 
 		# dic2 = {
 		# 	"usuario":auth.user.first_name,
@@ -230,11 +230,12 @@ def lista_documentos():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_registros():
 
-	# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	# t = strings.split(',')
-	# year = t[0]
-	# year = year[2:]
+	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	t = strings.split(',')
+	year = t[0]
+	year = year[2:]
 
+	print(year)
 	dic = {
 		"usuario":auth.user.first_name,
 		"codigo": request.post_vars.codigo,
@@ -263,7 +264,7 @@ def lista_registros():
 	a = dict(
 	    registros=db().select(db.registros.ALL),
 	    codigo_reg=db(db.registros.codigo).count(),
-	    #year=year,
+	    year=year,
 		contador=db(db.registros.usuario == auth.user.first_name).count(),
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 	)
