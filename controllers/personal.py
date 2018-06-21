@@ -201,6 +201,9 @@ class Usuario(object):
         dependencia = usuario.f_dependencia
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
+        
+        unidad_superior = db(db.dependencias.id == dependencia.unidad_de_adscripcion).select(db.dependencias.nombre)
+        self.f_unidad_superior = unidad_superior
         self.f_telefono = usuario.f_telefono
         
         if(usuario.f_celular):
@@ -329,6 +332,8 @@ def ficha():
         "por_validar": elm.f_por_validar,
         "jefe": buscarJefe(dep)
     }
+    print("---------------")
+    print((db(db.dependencias.nombre == personal['dependencia']).select(db.dependencias.id)))
     
     validacion = request.post_vars.validacion
 
