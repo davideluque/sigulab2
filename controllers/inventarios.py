@@ -642,6 +642,7 @@ def detalles_mat():
     nombre_espaciof = []
     unidad_adscripcion = []
 
+    aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
     color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
     'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
@@ -653,16 +654,23 @@ def detalles_mat():
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-    caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
-    'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+    caracteristicas_list = ['Marca:', 'Modelo:', 'Descripción:', 'Capacidad:', 'Unidad de Capacidad:',
+    'Material predominante:', 'Material secundario:', 'Aforado:', 'Tipo:', 'Requiere calibración:', 'Ubicación interna:']
     caracteristicas_dict = {
         'Marca:': bien['sb_marca'],
         'Modelo:': bien['sb_modelo'],
         'Descripción:': bien['sb_descripcion'],
         'Material predominante:': bien['sb_material'],
-        'Material secundario': bien['sb_material_sec'],
+        'Material secundario:': bien['sb_material_sec'],
 
         'Aforado:': bien['sb_aforado'],
+        'Tipo:': bien['sb_clasificacion'],
+        'Requiere calibración:': bien['sb_calibrar'],
+        'Ubicación interna:' : bien['sb_ubicacion'],
+        'Capacidad': bien['sb_capacidad'],
+        'Unidad de capacidad:' : bien['sb_unidad'],
+
+
     }
     return dict(bien = bien,
                 material_pred = material_pred,
@@ -674,7 +682,10 @@ def detalles_mat():
                 cod_localizacion = cod_localizacion,
                 localizacion = localizacion,
                 caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict)
+                caracteristicas_dict = caracteristicas_dict,
+                aforado_options = aforado_options,
+
+                )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
@@ -1155,11 +1166,11 @@ def material_lab():
                     __agregar_material(
                         request.vars.nombre_mat,
                         request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
                         request.vars.capacidad, request.vars.unidad_cap, 
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
             else:
@@ -1256,11 +1267,11 @@ def material_lab():
                     __agregar_material(
                         request.vars.nombre_mat,
                         request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
                         request.vars.capacidad, request.vars.unidad_cap, 
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
@@ -1357,11 +1368,11 @@ def material_lab():
                     __agregar_material(
                         request.vars.nombre_mat,
                         request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibrar_mat,
+                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
                         request.vars.capacidad, request.vars.unidad_cap, 
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material, request.vars.material_sec, request.vars.presentacion, 
+                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
                         request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 

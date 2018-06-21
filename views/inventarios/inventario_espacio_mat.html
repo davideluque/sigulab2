@@ -265,6 +265,17 @@
                               <div class="field-error"> <p id="error-material"> </p> </div>
                         </div>
 
+                        <div class="form-group" id="grupo-material2">
+                            <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario">
+                              <!-- Insertar un for-->
+                              <option type="text" value="">Selecione un material</option>
+                              {{ for material in material_pred: }}
+                              <option value="{{=material}}">{{=material}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                      </div>
+
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -358,6 +369,8 @@ del concepto y tipo de ingreso o egreso -->
       // document.getElementById("total_unidades").type = 'hidden';
       document.getElementById("grupo-aforado").style.display = 'block';
       document.getElementById("grupo-material").style.display = 'block';
+      document.getElementById("grupo-material2").style.display = 'block';
+
       document.getElementById("calibracion_mat").style.display = 'block';
       document.getElementById("grupo-cap").style.display = 'block';
       document.getElementById("aforado").setAttribute("required", "");
@@ -377,6 +390,8 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("grupo-aforado").style.display = 'none';
       document.getElementById("aforado").removeAttribute("required", "");
       document.getElementById("grupo-material").style.display = 'none';
+      document.getElementById("grupo-material2").style.display = 'none';
+
       document.getElementById("material_mat").removeAttribute("required", "");
       document.getElementById("calibracion_mat").style.display = 'none';
       document.getElementById("calibracion_mat").removeAttribute("required", "");

@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}"> 
+
     <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -150,17 +151,17 @@
 
 <!-- Inicio Boton Modificar BM -->
 <div class="container" id="containerAgregar">
-    <div class="row">
-        <div class="col-sm-6"></div>
-        <div id="columnBotonAgregar" class="col-sm-6">
+        <div class="row">
             <div class="col-sm-6"></div>
-            <div class="col-sm-6">
-                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Modificar Bien</button>
+            <div id="columnBotonAgregar" class="col-sm-6">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                    <button type="button" data-toggle="modal" data-target="#addbm"><i class="fa fa-edit fa-1x"></i></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <!-- Fin Boton Agregar Sustancia -->
 
 <div class="wrapper">
@@ -278,7 +279,7 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value={{=bien['sb_nombre']}} required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Material" placeholder="Nombre*" value={{=bien['sb_nombre']}} required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
@@ -298,6 +299,22 @@
                             <input type="text" class="form-control" id="Descripcion" value={{=bien['sb_descripcion']}} name="descripcion" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
+
+                        <label>¿Es aforado?*</label>
+                        <div class="form-group">
+                                <select class="form-control" value="" type="select" id="aforado" name="aforado" placeholder="Aforado" onchange="display_units(this.value)">
+                                <option value="">Selecione una unidad</option>
+                                {{ for option in aforado_options:}}
+                                    {{if bien['sb_aforado']==option:}}
+                                        <option value="{{=option}}" selected="selected" >{{=option}}</option>
+                                    {{else:}}
+                                        <option value="{{=option}}">{{=option}}</option>
+                                    {{pass}}
+                                {{pass}}
+                                </select>
+                            <div class="field-error"> <p id="error-aforado" > </p> </div>
+</div>
+
                         
                     </div>
                   </div>
@@ -320,22 +337,39 @@
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
                           
-                          <div class="form-group">
-                              <select class="form-control" value={{=bien['sb_material']}} type="select" id="material" name="material" placeholder="Material predominante" required>
-                                <!-- Insertar un for-->
-                                <option type="text" value="">Selecione un material*</option>
-                                {{ for material in material_pred: }}
-                                    {{if bien['sb_material']==material:}}
-                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
-                                    {{else:}}
-                                        <option value="{{=material}}">{{=material}}</option>
-                                    {{pass}}
-                                {{pass}}
-                              </select>
-                              <div class="field-error"> <p id="error-material"> </p> </div>
-                          </div>
+
+                        <div class="form-group">
+                                <label>Material predominante</label>
+                                <select class="form-control" value="{{=bien['sb_material']}}" type="select" id="material" name="material" placeholder="Material predominante" required>
+                                  <!-- Insertar un for-->
+                                  <option type="text" value="">Selecione un material*</option>
+                                  {{ for material in material_pred: }}
+                                      {{if bien['sb_material']==material:}}
+                                          <option value="{{=material}}" selected="selected">{{=material}}</option>
+                                      {{else:}}
+                                          <option value="{{=material}}">{{=material}}</option>
+                                      {{pass}}
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
 
   
+                        <label>Material secundario</label>
+                        <div class="form-group">
+                                <select class="form-control" value="{{=bien['sb_material_sec']}}" type="select" id="material_sec" name="material_sec" placeholder="Material predominante">
+                                  <!-- Insertar un for-->
+                                  <option type="text" value="">Selecione un material*</option>
+                                  {{ for material in material_pred: }}
+                                      {{if bien['sb_material_sec']==material:}}
+                                          <option value="{{=material}}" selected="selected">{{=material}}</option>
+                                      {{else:}}
+                                          <option value="{{=material}}">{{=material}}</option>
+                                      {{pass}}
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
 
 
                           <label>Dimensiones</label>
