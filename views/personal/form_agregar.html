@@ -327,6 +327,7 @@
                         <div class="form-group">
                           <div class="col-sm-12">
                             <label>Dependencia</label> 
+                             <input type="text" class="form-control" name="unidad_superior_add" placeholder="Unidad_Superior" readonly required value="{{=usuario.f_dependencia or ''}}">
                             <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
                           </div>
                         </div>
@@ -345,7 +346,7 @@
                               {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
                               selected
                               {{pass}}
-                              value="{{=ubicacion.id}}">{{=ubicacion.nombre}}</option>
+                              value="{{=ubicacion.id}}">{{=ubicacion.codigo}}</option>
                               {{pass}}
                             </select>
                           </div>

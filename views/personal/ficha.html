@@ -4,11 +4,12 @@
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
-	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
@@ -35,13 +36,12 @@
                   action="{{=URL('personal', 'eliminar')}}">
 
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
-                   <button type="submit" class="btn buttons-html5" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
               </form>
               </div>
               
           </div>
         </div>
-
         <div class="modal-body">
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
@@ -56,77 +56,124 @@
             </li>
           </ul>
 
-          <div class="tab-content">
+          <div class="tab-content" id="tabla_">
             <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_datos_personales">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_basicos').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_basicos">
                 <tbody>
+                    {{if bool(personal['nombre']) :}}
                   <tr>
                     <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['apellido']) :}}
                   <tr>
                     <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['email']) :}}
                   <tr>
                     <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['extension_USB']) :}}
                   <tr>
                     <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['extension_interna']) :}}
                   <tr>
                     <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['pagina_web']) :}}
                   <tr>
                     <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['rol']) :}}
                   <tr>
                     <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['dependencia']) :}}
                   <tr>
                     <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
                   </tr>
-                    <tr>
-                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
-                    </tr>
+                    {{pass}}
+                    {{if bool(personal['unidad_jerarquica_superior']) :}}
                   <tr>
                       <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
+                    {{pass}}
+                    {{if bool(personal['ubicacion']) :}}
+                    <tr>
+                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
+                    </tr>
+                    {{pass}}
+                 
                 </tbody>
               </table>
             </div>
 
             <div class="tab-pane " id="datos_laborales" role="tabpanel">
-              <table class="table contenidoFicha">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_laborales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_laborales">
                 <tbody>
+                    {{if bool(personal['cargo']) :}}
                     <tr>
                       <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['gremio']) :}}
+
                     <tr>
                       <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['categoria']) :}}
                     <tr>
                       <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['estatus']) :}}
                     <tr>
                       <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['condicion']) :}}
                     <tr>
                       <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso']) :}}
                     <tr>
                       <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_salida']) :}}
                     <tr >
                       <td>Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_usb']) :}}
                     <tr>
                       <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_ulab']) :}}
                     <tr>
                       <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
                     </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_admin_publica']) :}}
                     <tr>
                       <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
                     </tr>
+                    {{pass}}
+                    
                     <tr>
                       <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
                     </tr>
@@ -135,23 +182,30 @@
             </div>
 
              <div class="tab-pane" id="datos_personales" role="tabpanel">
-              <table class="table contenidoFicha">
+                <button type="button" class="btn btn-success 2csv" onclick="$('#tabla_datos_personales').table2CSV({header:['Personal','{{=personal['nombre']}} {{=personal['apellido']}}']})"><i class="fa fa-table"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_edicion'))"><i class="fa fa-file"></i></button>
+              <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                     <tr>
                       <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
                     </tr>
+                    {{pass}}
                     <tr>
                       <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
                     </tr>
+                    {{pass}}
                     <tr>
                       <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
                     </tr>
+                    {{pass}}
                     <tr>
                         <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
                     </tr>
+                    {{pass}}
                     <tr>
                       <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
                     </tr>
+                    {{pass}}
                   </tbody>
                  </table>
                     
@@ -188,7 +242,82 @@
 <div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 
 {{include 'personal/form_agregar.html'}}
+<script type="text/javascript">
+  jQuery.fn.table2CSV = function(options) {
+    var options = jQuery.extend({
+        separator: ',',
+        header: [],
+        delivery: 'popup' // popup, value
+    },
+    options);
 
+    var csvData = [];
+    var headerArr = [];
+    var el = this;
+
+    //header
+    var numCols = options.header.length;
+    var tmpRow = []; // construct header avalible array
+
+    if (numCols > 0) {
+        for (var i = 0; i < numCols; i++) {
+            tmpRow[tmpRow.length] = formatData(options.header[i]);
+        }
+    } else {
+        $(el).filter(':visible').find('th').each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        });
+    }
+
+    row2CSV(tmpRow);
+
+    // actual data
+    $(el).find('tr').each(function() {
+        var tmpRow = [];
+        $(this).filter(':visible').find('td').each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        });
+        row2CSV(tmpRow);
+    });
+    if (options.delivery == 'popup') {
+        var mydata = csvData.join('\n');
+        return popup(mydata);
+    } else {
+        var mydata = csvData.join('\n');
+        return mydata;
+    }
+
+    function row2CSV(tmpRow) {
+        var tmp = tmpRow.join('') // to remove any blank rows
+        // alert(tmp);
+        if (tmpRow.length > 0 && tmp != '') {
+            var mystr = tmpRow.join(options.separator);
+            csvData[csvData.length] = mystr;
+        }
+    }
+    function formatData(input) {
+        // replace " with “
+        var regexp = new RegExp(/["]/g);
+        var output = input.replace(regexp, "“");
+        //HTML
+        var regexp = new RegExp(/\<[^\<]+\>/g);
+        var output = output.replace(regexp, "");
+        if (output == "") return '';
+        return '"' + output + '"';
+    }
+    function popup(data) {
+        var generator = window.open('', 'csv', 'height=400,width=600');
+        generator.document.write('<html><head><title>CSV</title>');
+        generator.document.write('</head><body >');
+        generator.document.write('<textArea cols=70 rows=15 wrap="off" >');
+        generator.document.write(data);
+        generator.document.write('</textArea>');
+        generator.document.write('</body></html>');
+        generator.document.close();
+        return true;
+    }
+};
+</script>
 <script>
     var superusuario = 'sigulabusb@gmail.com';
     var gestor = 'asis-ulab@usb.ve';
