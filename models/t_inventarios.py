@@ -55,7 +55,7 @@ db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombr
 db.define_table(
     'modificacion_bien_mueble',
     Field('mbn_nombre','string',label=T('Nombre del Bien Mueble')),
-    Field('mbn_num','references bien_mueble', notnull=True, label = T('Número Bien Nacional')),
+    Field('mbn_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
     Field('mbn_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     #No son obligatorios para mobiliario
     Field('mbn_marca','string',label=T('Marca')),
@@ -80,6 +80,7 @@ db.define_table(
     Field('mbn_estatus','string',label=T('Estatus'),requires=IS_EMPTY_OR(IS_IN_SET(['Operativo','Inoperativo','En desuso','Inservible']))),
     Field('mbn_categoria', 'string', label = T('Nombre de la categoría'), requires = IS_EMPTY_OR(IS_IN_SET(['Maquinaria Construccion',
                         'Equipo Transporte', 'Equipo Comunicaciones', 'Equipo Medico', 'Equipo Cientifico Religioso', 'Equipo Oficina']))),
+    Field('mbn_subcategoria', 'string', label = T('Nombre de la subcategoría')),
     Field('mbn_codigo_localizacion','string',label=T('Código de Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['150301','240107']))),
     Field('mbn_localizacion','string',label=T('Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto']))),
     Field('mbn_modifica_ficha', 'reference auth_user', label = T('Usuario que modifica la ficha')),
@@ -88,7 +89,7 @@ db.define_table(
     # Estado = 1  :Aceptado
     Field('estado','integer', default=0, label=T('Estado de Solicitud de Modificacion'), requires=IS_INT_IN_RANGE(-1,2))
     )
-
+ 
 db.modificacion_bien_mueble.mbn_num.requires = IS_IN_DB(db, db.bien_mueble.id, '%(bm_num)s')
 db.modificacion_bien_mueble.mbn_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 
