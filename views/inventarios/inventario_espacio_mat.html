@@ -106,7 +106,7 @@
               text-align: left;
               padding-top: 12px;
               color: white;
-            ">Material de laboratorio<button type="button" class="close" data-dismiss="modal">&times;</button>
+            ">Material<button type="button" class="close" data-dismiss="modal">&times;</button>
             </h4>
           </div>
         </div>
@@ -119,15 +119,44 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                
                 <!-- Primer paso-->
+            <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                  <div class="col-sm-1 col1Body"> 
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Características del Material</h4>                
+                    <label>Campos marcados con * son obligatorios.</label>
+
+                    <div class="form-group">
+                        <label>Seleccione la clasificación del Material*</label>
+                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
+                          <option value="">Seleccione una opción</option>
+                          <option value="Material de Laboratorio">Material de Laboratorio</option>
+                          <option value="Consumible">Consumible</option>
+                        </select>
+                        <div class="field-error"> <p id="error-clasificacion"></p></div>
+                      </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()">Siguiente</button>    
+            </fieldset>
+                
+                <!-- Segundo paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
-                      <span class="step activePass">1</span>
-                      <span class="step">2</span>
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
                       <span class="step">3</span>
+                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -141,7 +170,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numérico"   required>
                             <font color="red"><div id="err_cantidad_mat" hidden></div></font>
                         </div>
 
@@ -152,18 +181,18 @@
                             
 
                         <div class="form-group">
-                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca*" required >
+                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca">
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código*" required>
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código">
                             <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                         </div>
 
-                        <label>Aforado</label>
-                        <div class="form-group">
-                              <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado" required>
+                        <div class="form-group" id="grupo-aforado">
+                              <label>Aforado</label>
+                              <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado">
                                 <!-- Insertar un for-->
                                 <option type="text" value="">¿Es aforado?*</option>
                                 <option value="Si">Si</option>
@@ -172,10 +201,6 @@
                               </select>
                               <div class="field-error"> <p id="err_aforado"> </p> </div>
                         </div>      
-                        
-
-
-
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -189,8 +214,9 @@
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step activePass">2</span>
-                        <span class="step">3</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -199,7 +225,7 @@
   
                         
                         <div class="form-group">
-                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
+                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración">
                                   <!-- Insertar un for-->
                                   <option type="text" value="">¿Requiere calibración?*</option>
                                   <option value="Si">Si</option>
@@ -208,14 +234,15 @@
                                 <div class="field-error"> <p id="err_aforado"> </p> </div>
                         </div>  
 
-                        <label>Capacidad</label>
-                        <div class="form-group">
+                        
+                        <div class="form-group" id="grupo-capacidad">
+                                <label>Capacidad</label>
                                 <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
                                 <font color="red"><div id="err_capacidad" hidden></div></font>
                         </div>
 
 
-                        <div class="form-group">
+                        <div class="form-group" id="grupo-cap">
                                 <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
                                   <option value="">Selecione una unidad</option>
                                   {{ for med in unidad_cap:}}
@@ -225,8 +252,9 @@
                                 <div class="field-error"> <p id="error-unidad" > </p> </div>
                               </div>
                         
-                        <label>Materiales</label>
-                        <div class="form-group">
+                        
+                        <div class="form-group" id="grupo-material">
+                              <label>Material</label>
                               <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
@@ -237,20 +265,6 @@
                               <div class="field-error"> <p id="error-material"> </p> </div>
                         </div>
 
-                          <div class="form-group">
-                                <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material secundario">
-                                  <!-- Insertar un for-->
-                                  <option type="text" value="">Selecione un material secundario</option>
-                                  {{ for material in material_pred: }}
-                                  <option value="{{=material}}">{{=material}}</option>
-                                  {{pass}}
-                                </select>
-                                <div class="field-error"> <p id="error-material-sec"> </p> </div>
-                            </div>
-
-
-
-                          
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -266,11 +280,12 @@
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <h4 class="titulosForm">Características del Material</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
                         <div class="form-group">
@@ -337,30 +352,38 @@ del concepto y tipo de ingreso o egreso -->
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Mobiliario"){
-      document.getElementById("marca").type = 'hidden';
-      document.getElementById("modelo").type = 'hidden';
-      document.getElementById("serial").type = 'hidden';
-      document.getElementById("estatus").type = 'hidden';
-      document.getElementById("calibrar").style.display = 'none';
+    if (selecion.value == "Material de Laboratorio"){
+      // document.getElementById("presentacion").type = 'hidden';
+      // document.getElementById("unidades_presentacion").type = 'hidden';
+      // document.getElementById("total_unidades").type = 'hidden';
+      document.getElementById("grupo-aforado").style.display = 'block';
+      document.getElementById("grupo-material").style.display = 'block';
+      document.getElementById("calibracion_mat").style.display = 'block';
+      document.getElementById("grupo-cap").style.display = 'block';
+      document.getElementById("aforado").setAttribute("required", "");
+      document.getElementById("calibracion_mat").setAttribute("required", "");
+      document.getElementById("material_mat").setAttribute("required", "");
+      document.getElementById("grupo-capacidad").style.display = 'block';
+      document.getElementById("capacidad").type = 'text';
+
     }
     else{
-      document.getElementById("select-calibrar").setAttribute("required", "");
-      document.getElementById("marca").type = 'text';
-      document.getElementById("modelo").type = 'text';
-      document.getElementById("serial").type = 'text';
-      document.getElementById("estatus").type = 'text';
-      document.getElementById("calibrar").style.display = 'block';
-    }
-    document.getElementById("fecha_calibracion").style.display = 'none';
-  }
-  // Mostrar fecha de calibracion
-  function display_date(value){
-    if ( value == "Si" ){
-      document.getElementById("fecha_calibracion").style.display = 'block';
-      document.getElementById("fecha_calibracion").setAttribute("required", "");
-    }else{
-      document.getElementById("fecha_calibracion").style.display = 'none';
+      document.getElementById("grupo-cap").style.display = 'none';
+      document.getElementById("grupo-capacidad").style.display = 'none';
+      document.getElementById("capacidad").type = 'hidden';
+      // document.getElementById("presentacion").type = 'text';
+      // document.getElementById("unidades_presentacion").type = 'text';
+      // document.getElementById("total_unidades").type = 'text';
+      document.getElementById("grupo-aforado").style.display = 'none';
+      document.getElementById("aforado").removeAttribute("required", "");
+      document.getElementById("grupo-material").style.display = 'none';
+      document.getElementById("material_mat").removeAttribute("required", "");
+      document.getElementById("calibracion_mat").style.display = 'none';
+      document.getElementById("calibracion_mat").removeAttribute("required", "");
+
+      // document.getElementById("presentacion").setAttribute("required", "");
+      // document.getElementById("unidades_presentacion").setAttribute("required", "");
+      // document.getElementById("total_unidades").setAttribute("required", "");
     }
   }
   // Mostrar unidades
@@ -384,7 +407,6 @@ del concepto y tipo de ingreso o egreso -->
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
     var error_uso_interno = document.getElementById("error-uso-interno");
-    var fecha_calibracion = document.getElementById("fecha_calibracion")
     // Limpiando los mensajes anteriores de validadores
     if (error_total.innerText != ''){
       error_total.innerText = '';
