@@ -5,7 +5,7 @@
 #-----------------------------------#
 
 def index():
-    redirect(URL('listado'))
+    redirect(URL('listado_estilo'))
     return dict()
 
 #Enviar info a la tabla del listado
@@ -14,7 +14,7 @@ def tabla_categoria(tipo):
 
     #Buscamos la tabla general de personal 
     if tipo =="listado":
-        tb = db().select(db.t_Personal.ALL)
+        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False).select(db.t_Personal.ALL)
     
     #Buscamos la tabla general de empleados por validar
     elif tipo == "validacion" :
@@ -26,11 +26,16 @@ def tabla_categoria(tipo):
         es_supervisor = usuario.f_es_supervisor
         dependencia = None
         if es_supervisor:
-            dependencia = usuario.f_dependencia
-            tb = db((db.t_Personal.f_dependencia == dependencia)&
-                           (db.t_Personal.f_es_supervisor == False)&
-                           (db.t_Personal.f_por_validar == True)
-                          ).select(db.t_Personal.ALL)
+            if(auth.user.email == "sigulabusb@gmail.com" or auth.user.email =="asis-ulab@usb.ve"):
+                tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
+                
+            else:
+                print("Estamos aca")
+                print(auth.user.email)
+                dependencia = str(usuario.f_dependencia)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)
+                              ).select(db.t_Personal.ALL)
+
 
     #Creamos una lista para enviar a la vista
     jsns = []
@@ -56,7 +61,8 @@ def tabla_categoria(tipo):
         ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
         if(ubicacion): ubicacion = ubicacion.nombre
           
-            
+        jefe = buscarJefe(dep)
+        
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -85,9 +91,11 @@ def tabla_categoria(tipo):
              "extension_interna" : ext_int,
              "ubicacion" : ubicacion,
              "es_supervisor": elm.f_es_supervisor,
-             "validado": elm.f_validado
+             "validado": elm.f_validado,
+             "jefe": jefe
              })
-
+    print("La tb es :")
+    print(jsns)
     return jsns
 
 #Mandar informacion a los dropdowns
@@ -169,8 +177,10 @@ def add_form():
             f_ubicacion= dic["ubicacion"],
             f_extension_USB = dic["extension_USB"],
             f_extension_interna = dic["extension_interna"],
+            f_por_validar=True,
+            f_validado=False,
             f_rol= dic["rol"])
-        redirect(URL('listado'))
+        redirect(URL('listado_estilo'))
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
@@ -250,6 +260,95 @@ def listado():
         )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def ficha():
+    # Obtenemos la cédula
+    ci = request.args[0]
+
+    # Buscamos en la base de datos
+    personal = db(db.t_Personal.f_ci == ci).select()[0]
+
+    #Obtenemos el usuario loggeado
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
+
+    #Buscamos el nombre de la dependencia con el id que manda la vista
+    elm = personal
+    named = db(db.dependencias.id == elm.f_dependencia).select(db.dependencias.ALL)
+
+    dep= named[0].nombre if len(named) > 0 else None
+
+    if (dep) : idUSuperior = (db(db.dependencias.nombre==dep).select(db.dependencias.ALL)).first().unidad_de_adscripcion
+    else: idUSuperior=None
+    if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
+    else: Usuperior=None
+    ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
+    ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+    if ext_USB: ext_USB=ext_USB.ext_USB[0]
+    if ext_int: ext_int=ext_int.ext_interna
+
+    ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
+    if(ubicacion): ubicacion = ubicacion.nombre
+
+
+    personal ={
+        "nombre" : elm.f_nombre,
+        "apellido" : elm.f_apellido,
+        "ci" : elm.f_ci,
+        "email" : elm.f_email,
+        "email_alt" : elm.f_email_alt,
+        "telefono" : elm.f_telefono,
+        "pagina_web" : elm.f_pagina_web,
+        "categoria" : elm.f_categoria,
+        "cargo" : elm.f_cargo,
+        "fecha_ingreso" : elm.f_fecha_ingreso,
+        "fecha_salida" : elm.f_fecha_salida,
+        "estatus" : elm.f_estatus,
+        "dependencia" : dep,
+        "celular" : elm.f_celular,
+        "contacto_emergencia" : elm.f_contacto_emergencia,
+        "direccion" : elm.f_direccion,
+        "gremio" : elm.f_gremio,
+        "fecha_ingreso_usb" : elm.f_fecha_ingreso_usb,
+        "fecha_ingreso_ulab" : elm.f_fecha_ingreso_ulab,
+        "fecha_ingreso_admin_publica" : elm.f_fecha_ingreso_admin_publica,
+        "condicion" : elm.f_condicion,
+        "unidad_jerarquica_superior" : Usuperior,
+        "rol" : elm.f_rol,
+        "extension_USB" : ext_USB,
+        "extension_interna" : ext_int,
+        "ubicacion" : ubicacion,
+        "es_supervisor": elm.f_es_supervisor,
+        "validado": elm.f_validado,
+        "por_validar": elm.f_por_validar,
+        "jefe": buscarJefe(dep)
+    }
+    
+    validacion = request.post_vars.validacion
+
+    if(validacion == "true" or validacion == "false"):
+        print("La validacion fue")
+        print(validacion)
+        cambiar_validacion(validacion, personal)
+
+    return dict(
+        personal=personal,
+        usuario=usuario,
+
+    )
+
+def cambiar_validacion(validacion, personal):
+    if(validacion == "true"):
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True)
+        print("validado:" + personal['email'])
+    elif (validacion == "false"):
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=False)
+        print("rechazado")
+    else:
+        print("la cagada")
+    redirect(URL('validacion_estilo'))
+    
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado_estilo():
     return listado()
 
@@ -264,25 +363,43 @@ def validacion():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
+    val = contar_notificaciones();
+    session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
     return dic
 
+def contar_notificaciones():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    if(len(usuario)>1): usuario = usuario[1]
+    else: usuario = usuario.first()
+    print("---------------------------------------")
+    print("Nombre: "+usuario.f_nombre+" /// Correo: "+str(usuario.f_email)+" ///Dependencia: "+str(usuario.f_dependencia))
+    es_supervisor = usuario.f_es_supervisor
+    dependencia = None
+    if es_supervisor:
+        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+            notif = db(db.t_Personal.f_por_validar == True).count()
+        else:
+            dependencia = usuario.f_dependencia
+            notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    return notif
+    
 def buscarJefe(dependencia_trabajador):
     unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
     print("La unidad es: "+str(unidad_adscripcion))
     if unidad_adscripcion:
         print("conisimo"+ str(unidad_adscripcion))
-        idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia)[0].id_jefe_dependencia
+        idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
         print(id)
     else: 
-        idGestor = db(db.auth_group.role == "GESTOR DE PERSONAL").select(db.auth_group.id)[0].id
+        idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id
         print("ID gestor: "+str(idGestor))
-        idJefe = db(db.auth_membership.group_id == idGestor).select(db.auth_membership.user_id)[0].user_id
+        idJefe = db(db.auth_membership.group_id == idGestor).select(db.auth_membership.user_id).first().user_id
 
     correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
     print("El id del jefe es: "+ str(idJefe)+ "y su correo es: "+correo)
-    return idJefe
+    return correo
 
 
 def reporte():

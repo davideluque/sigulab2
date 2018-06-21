@@ -162,3 +162,14 @@ body{
 }
 
 }
+
+#cedula-select{
+	padding-right: 0px;
+	width: 5em;
+}
+
+#auth_cedula__row {
+	padding-left: 0px;
+	padding-right: 4px;
+	width: 21em;
+}

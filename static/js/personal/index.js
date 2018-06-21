@@ -50,14 +50,20 @@ $(document).ready( function() {
     $( "#datepickerUlab" ).datepicker();
     $( "#datepicker5" ).datepicker();
 
+    // Funcion para reiniciar el modal de mostrar ficha cada vez que 
+    // se selecciona una persona 
+    $( ".empleado" ).on("click", function(e){
+      $(".tab-edicion-principal").attr("class", "tab-edicion-principal nav-item active");
+      $(".tab-edicion").attr("class", "tab-edicion nav-item");
+      $(".pane-edicion-principal").attr("class", "pane-edicion-principal tab-pane active");
+      $(".pane-edicion").attr("class", "pane-edicion tab-pane")
+    })
+
     $('#ficha_edicion').on('show.bs.modal', function(e){
-        console.log('camoio')
         var ci = $(e.relatedTarget).data('ci');
         var gremio = $(e.relatedTarget).data('gremio');
         var email = $(e.relatedTarget).data('email');
         var email_alt = $(e.relatedTarget).data('email_alt');
-        console.log("Este es el correo: " )
-        console.log(email_alt)
         var fecha_salida = $(e.relatedTarget).data('fecha_salida');
         var fecha_ingreso = $(e.relatedTarget).data('fecha_ingreso');
         var nombre = $(e.relatedTarget).data('nombre');
@@ -121,8 +127,29 @@ $(document).ready( function() {
         $("#field_fecha_ingreso_admin_publica").html(fecha_ingreso_admin_publica);
         $("#field_condicion").html(condicion);
         $("#field_nombre_completo").html(nombre_completo)
+
+        var superusuario = 'sigulabusb@gmail.com';
+        var gestor = 'asis-ulab@usb.ve';
+        var director = 'ulab@usb.ve';
         const currentlyLogged = $('[name=CORREO_LOGIN]').val()
-        $('#editar').prop('disabled', currentlyLogged !== email)
+        
+        if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor){
+             $('#editar').prop('disabled',true);
+        }else{
+            $('#editar').removeAttr('disabled');
+        }
+        
+        if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && 
+            currentlyLogged != director){
+             $('#tab_datos_personales').hide();
+        }else{
+            $('#tab_datos_personales').show();
+            console.log("aca")
+        }
+        
+        
+        //$('#editar').prop('disabled',( currentlyLogged !== email && currentlyLogged && superusuario && currentlyLogged != gestor))
+
         $('#eliminar').on('click',function(f){
           var answer=confirm('¿Seguro que desea eliminar esta persona?');
           if(answer){
@@ -132,6 +159,7 @@ $(document).ready( function() {
           else{
             f.preventDefault();
           }
+            
 
         });
 
@@ -139,7 +167,6 @@ $(document).ready( function() {
         fields = [ci,gremio,email,fecha_salida,fecha_ingreso,nombre,cargo,estatus,telefono,pagina_web, unidad_jerarquica_superior,
               ubicacion, celular, contacto_emergencia, direccion, categoria,fecha_ingreso_ulab, fecha_ingreso_usb, fecha_ingreso_admin_publica,
                condicion, rol, extension_USB, extension_interna, email_alt];
-        console.log(fields);
         //$("#field_ci").html(item);
         //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
     });

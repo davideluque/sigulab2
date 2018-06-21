@@ -183,6 +183,7 @@ def register():
       acá.
       """
       print("Usuario ya registrado.")
+      response.flash=T("Usuario ya registrado")
 
     """Después de haber hecho la verificación de correo electrónico no tomado
     y que la verificación de contraseñas coincide. Es decir, cuando el
@@ -240,6 +241,7 @@ def register():
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
     # actualización de datos personales.
+    session.flash=T("Registro exitoso")
     return redirect('register')
 
   # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de 
@@ -254,6 +256,7 @@ def register():
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
     
     prefijos_cedula = ['V-','E-', 'P-']
+    print(dependencias)
   
   return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec, prefijos_cedula=prefijos_cedula )
 

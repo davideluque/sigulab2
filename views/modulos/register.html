@@ -31,6 +31,7 @@
 
         <!-- Inicio card box -->
         <div id="boxRegister" class="card-box boxes">
+            <div class="flash "><span class="badge badge-success">{{=response.flash or ''}}</span></div>
             <div class="text-center">
                 <h4 id="titulo" class="text-uppercase font-bold m-b-0">Nuevo Usuario</h4>
             </div>
@@ -58,25 +59,21 @@
                 </div>
 
                 <!-- Cedula de Identidad -->
-                <div class="form-group form-inline">
-                    <div class="form-group">
-                            <select class="form-control" type="select" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
-                                {{for prefijo_cedula in prefijos_cedula:}}
-                                    <option value='{{=prefijo_cedula}}'>{{=prefijo_cedula}}</option>
-                                {{pass}}
-                            </select>
-                        
+                <div class="form-group">
+                    <div class="col-xs-2" id="cedula-select">
+                        <select class="form-control" type="select" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
+                            {{for prefijo_cedula in prefijos_cedula:}}
+                                <option value='{{=prefijo_cedula}}'>{{=prefijo_cedula}}</option>
+                            {{pass}}
+                        </select>
                     </div>
                 
-                    <div class="form-group" id="auth_cedula__row">
-                        <div class="col-xs-12">
-                            <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
-                            
-                        </div>
+                    <div class="col-xs-9" id="auth_cedula__row">
+                        <input class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
                     </div>
                     <div id="cedula_error_group" style="display:none;">
-                                <label class="control-label" id="cedula_error"></label>
-                            </div>
+                        <label class="control-label" id="cedula_error"></label>
+                    </div>
                 </div>
 
 
@@ -115,7 +112,7 @@
                 </div>
                 <div class="form-group"  style=" margin-bottom:6px">
                   <input hidden id="tipo_supervisor" name="tipo_supervisor">Indique tipo de usuario:<br>
-                  <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()"> Dependencia<br>
+                  <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()" required> Dependencia<br>
                   <input type="radio"  name="tipo_usuario" value="False" onclick="setPersonal()"> Personal Interno<br>
                 </div>
 
@@ -125,7 +122,7 @@
                             <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia" onclick="  getSeccionPersonal();">
                                 <option value="" selected hidden disabled>Dependencia</option>
                                 {{for dependencia in dependencias:}}
-                                    {{if dependencia.unidad_de_adscripcion == 1:}}
+                                    {{if dependencia.unidad_de_adscripcion <= 1:}}
                                     <option value='{{=dependencia.id}}'>{{=dependencia.nombre.decode('utf-8').upper()}}</option>
                                     {{pass}}
                                 {{pass}}
@@ -225,10 +222,11 @@
     function getSeccionPersonal(){
         var opcioneslab = document.getElementById("dependencia");
         var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var x = document.getElementById("dephidden");
-        x.value = labelegido;
-        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
-
+        if (labelegido != 1){
+            var x = document.getElementById("dephidden");
+            x.value = labelegido;
+            ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
+        }
     }
     
     function setSupervisor(){

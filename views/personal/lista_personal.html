@@ -13,10 +13,12 @@
 			    <tbody id="dummyID">
 					{{for item in grid:}}
 			          	{{if not item["nombre"] == "Ninguno": }}
-                            {{if  not item['es_supervisor'] :}}
+                            {{if not item['es_supervisor'] :}}
+                                
 
                             <tr id="{{=item['dependencia']}}_{{=item['categoria']}}">
-                                <td><a data-toggle="modal" data-target="#ficha_edicion" type="button"
+                                <td>
+									<a href="/sigulab2/personal/ficha/{{=item['ci']}}" type="button"
                                     data-nombre="{{=item['nombre']}}"
                                     data-apellido="{{=item['apellido']}}"
                                     data-ci="{{=item['ci']}}"
@@ -42,7 +44,10 @@
                                     data-condicion="{{=item['condicion']}}"
                                     data-rol="{{=item['rol']}}"
                                     data-extension_usb="{{= item['extension_USB']}}"
-                                    data-extension_interna="{{=item['extension_interna']}}"
+                                    data-extension_interna="{{=item['extension_interna']}}
+
+                                    "
+                                    data-jefe = "{{=item['jefe']}}"
                                     value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
 
                                 <td>{{= item["email"]}}</td>

@@ -33,15 +33,20 @@
     <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
 	  <div class="breadcrumb">
 	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
-	  <a class="breadcrumb-item" href="{{=URL('..')}}">Personal</a>
+	  <a class="breadcrumb-item" >Personal</a>
 	  </div>
 	</nav>
 <div class="row">
   <h3 class=" text-center"> GESTIÓN DE PERSONAL</h3>
-
-    <div id="buttons">
+    <div class="col-sm-2">
+            <!-- Boton que lleva al modal -->
+            {{ if not usuario.f_es_supervisor :}}
+            <button type="button" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addservice">Editar Perfil</button>
+            {{pass}}
+    </div>
+    <div id="buttons" class="text-right">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">Filtrado</button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -60,7 +65,7 @@
         <tbody>
           {{for item in grid:}}
             <tr>
-                <td class="camposTabla"><a data-toggle="modal" data-target="#ficha_edicion" type="button"
+                <td class="camposTabla"><a href="/sigulab2/personal/ficha/{{=item['ci']}}" type="button"
                                     data-nombre="{{=item['nombre']}}"
                                     data-apellido="{{=item['apellido']}}"
                                     data-ci="{{=item['ci']}}"
@@ -87,6 +92,7 @@
                                     data-rol="{{=item['rol']}}"
                                     data-extension_usb="{{= item['extension_USB']}}"
                                     data-extension_interna="{{=item['extension_interna']}}"
+                                    data-jefe = "{{=item['jefe']}}"
                                     value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
                 <td class="camposTabla">{{=item['email']}}</td>
                 <td class="camposTabla">{{=item['dependencia']}}</td>
@@ -110,6 +116,7 @@
 
 <!-- Fin Listado --> 
 {{include 'personal/ficha_edicion.html'}}
+{{include 'personal/form_agregar.html'}}
 
 <!-- Datatables-->
 
@@ -176,6 +183,7 @@
  
 <script language="javascript">
   var table = $('#datatable').DataTable({
+    "dom": "<'row buscar'<'col-md-1'f>>"+"<'row'<'col-md-8'l><'col-md-4'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
@@ -184,19 +192,22 @@
 
       new $.fn.dataTable.Buttons(api, {
          buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
+             {extend:'copy', text:"Copiar"}, 'pdf', 'excel', 'print'
          ]
       });
-      api.buttons().container().appendTo('#buttons');  
+      api.buttons().container().appendTo('#buttons');
+      $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+      $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+      $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+      $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+      $('#buttons').style.textAlign = "right"
    }
+   
   });
+
 
   var w2p_ajax_confirm_message =
         "{{=T('')}}";
 </script>
-<script>
-    $('#buttons').hide()
-    $('#filtrar').show()
-    
-</script>
+
 {{end}}

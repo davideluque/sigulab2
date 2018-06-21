@@ -22,19 +22,19 @@
         <div class="modal-body">
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
-            <li role="presentation" class="nav-item active">
+            <li role="presentation" class="tab-edicion-principal nav-item active">
               <a href="#datos_basicos" class="nav-link" data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
             </li>
-            <li class="nav-item ">
+            <li class="tab-edicion nav-item ">
               <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+              <a class="nav-link" id = "tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
             </li>
           </ul>
 
           <div class="tab-content">
-            <div class="tab-pane active " id="datos_basicos" role="tabpanel">
+            <div class="pane-edicion-principal tab-pane active " id="datos_basicos" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                   <tr>
@@ -71,7 +71,7 @@
               </table>
             </div>
 
-            <div class="tab-pane " id="datos_laborales" role="tabpanel">
+            <div class="pane-edicion tab-pane" id="datos_laborales" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
@@ -108,7 +108,7 @@
               </table>
             </div>
 
-             <div class="tab-pane" id="datos_personales" role="tabpanel">
+             <div class="pane-edicion tab-pane" id="datos_personales" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                     <tr>
