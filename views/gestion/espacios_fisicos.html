@@ -22,4 +22,62 @@
 
 {{=table}}
 </body>
+<script>
+
+  function validarEspaciosFisicosExt(){
+    const $this = $('#espacios_fisicos_ext_USB')
+    if ($this.val() === '' || !$this.val().match(/^\d{4}$/)){
+      $('[name="espacios_fisicos_ext"]').popover('show');
+      return false; 
+    }
+    else {
+      $('[name="espacios_fisicos_ext"]').popover('hide');
+      return true;
+    }
+  }
+
+  function validarEspaciosFisicosInt(){
+    const $this = $('#espacios_fisicos_ext_interna')
+    if ($this.val() === '' || !$this.val().match(/^\d{2,3}$/)){
+      $('[name="espacios_fisicos_ext_int"]').popover('show');
+      return false;
+    }
+    else {
+      $('[name="espacios_fisicos_ext_int"]').popover('hide');
+      return true;
+    }
+  }
+
+  validacionCorrecta = [
+    validarEspaciosFisicosExt,
+    validarEspaciosFisicosInt
+  ]
+
+  function validadoresCorrectos(validatorsList) {
+    return validatorsList
+        .map(fn => fn())
+        .reduce((acc, i) => acc && i, true)
+  }
+
+  $("#espacios_fisicos_ext_USB").wrap('<a href="#" name="espacios_fisicos_ext" data-toggle="popover" data-trigger="manual" data-placement="bottom" data-content="Debe ser 4 numeros"> </a>')
+  $("#espacios_fisicos_ext_interna").wrap('<a href="#" name="espacios_fisicos_ext_int" data-toggle="popover" data-trigger="manual" data-placement="bottom" data-content="Debe ser entre 2 y 3 numeros"> </a>')
+  
+  $(document).ready(function(){
+
+    $('#submit_record__row .btn').attr("type", 'button');
+    $('#submit_record__row .btn').on('click', function(e){
+
+      var correcto = validadoresCorrectos(validacionCorrecta);
+      if (correcto){
+        $('#submit_record__row .btn').attr("type", 'submit');
+      }
+
+    })
+
+    $(`[name="espacios_fisicos_ext"], [name="espacios_fisicos_ext_int"]`).on('focus change click', function(e){
+      $(this).popover('hide');
+  })
+  });
+
+</script>
 {{end block}}
