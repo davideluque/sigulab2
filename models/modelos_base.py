@@ -115,20 +115,21 @@ db.define_table(
           notnull=True, label=T('Apellido')),
 
     Field('f_gremio',      'string',
-          requires=IS_IN_SET(['Docente', 'Administrativo', 'Estudiante']), label=T('Gremio'),error_message='Por favor introduzca un valor'),
+          requires=IS_IN_SET(['Docente', 'Administrativo', 'Estudiante'],error_message='Por favor introduzca un valor'), label=T('Gremio')),
 
     Field('f_cargo',          'string',
-          requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
+          requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'), label=T('Cargo')),
 
     Field('f_ci',             'string',
           requires=IS_MATCH('^[VEP]-\d{6,8}', error_message='Número de cedula inválido.'),
            label=T('Cédula')),
-    Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
-    Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
+    Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*', error_message='Por favor introduzca un valor'), label=T('Teléfono')),
+    Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*', error_message='Por favor introduzca un valor'), label=T('Celular')),
     Field('f_persona_contacto',         'string',
           requires=IS_MATCH('^\w\w*[\s-]?\w*$',
                             error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'), label=T('Persona de Contacto')),
-    Field('f_contacto_emergencia',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
+    Field('f_contacto_emergencia',       'string', requires=IS_MATCH(
+          '\d{0,4}-?\d*', error_message='Por favor introduzca un valor'), label=T('Contacto de Emergencia')),
 
     Field('f_email',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
@@ -137,13 +138,15 @@ db.define_table(
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
            label=T('Correo Electrónico Alternativo')),
     Field('f_direccion',          'string',
-          requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
+          requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'), label=T('Direccion')),
     Field('f_ubicacion',          'string',
-          requires=IS_NOT_EMPTY(),  label=T('Ubicacion') ,error_message='Por favor introduzca un valor'),
-    Field('f_pagina_web',     'string', requires=IS_URL() ,  label=T('Página web'), error_message='Ingrese un formato válido de url'),
+          requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'),  label=T('Ubicacion')),
+    Field('f_pagina_web',     'string', requires=IS_URL(error_message='Ingrese un formato válido de url'), label=T('Página web')),
 
-    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado', 'Retirado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
-    Field('f_categoria',requires=IS_IN_SET(['Fijo', 'Contratado', 'Pasantía', 'Ayudantía']), label=T('Categoria') ,error_message='Por favor introduzca un valor'),
+    Field('f_estatus',        'string', requires=IS_IN_SET(
+          ['Activo', 'Jubilado', 'Retirado'], error_message='Por favor introduzca un valor'), label=T('Estatus')),
+    Field('f_categoria',requires=IS_IN_SET(
+          ['Fijo', 'Contratado', 'Pasantía', 'Ayudantía'], error_message='Por favor introduzca un valor'), label=T('Categoria')),
     ##Campos condicionales si la categoria es contratado, pasantia o ayudantia.
     Field('f_fecha_ingreso', 'date', label=T('Fecha de Ingreso')),
     Field('f_fecha_salida', 'date', label=T('Fecha de Salida')),
@@ -151,7 +154,7 @@ db.define_table(
     Field('f_fecha_ingreso_usb','date',   label=T('Fecha de Ingreso a la USB')),
     Field('f_fecha_ingreso_ulab', 'date',   label=T('Fecha de Ingreso a la ULAB')),
     Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
-    Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal','Otro']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
+    Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal','Otro'], error_message='Por favor introduzca un valor'), label=T('Condición')),
     Field('f_rol','string', label=T('Rol')),
 
     # #Referencias
