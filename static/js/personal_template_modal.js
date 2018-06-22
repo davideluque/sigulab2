@@ -328,6 +328,78 @@ const validadoresSegundoPaso = [
     validaFechaIngresoAdminPubl
 ]
 
+// Funciones para validar la tercera parte del formulario
+
+function validarCargo(){
+    const $this = $('[name="cargo_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    } 
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarGremio(){
+    const $this = $('[name="gremio_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarUbicacion(){
+    const $this = $('[name="ubicacion_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarRol(){
+    const $this = $('[name="rol_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+const validadoresTercerPaso = [
+    validarCargo,
+    validarGremio,
+    validarUbicacion,
+    validarRol
+]
 
 // Funcion que valida los campos cuando el usuario pasa a llenar otro input
 function validacionTiempoReal(){
@@ -386,6 +458,11 @@ $(document).ready(function () {
         }
         else if (parent_fieldset.attr('id') === 'p2'){
             if ($('[name="categoria_add"]').val() === 'Fijo'){
+                // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
+                // base de datos 
+                $('[name="fecha_ingreso_add"]').attr('value', '');
+                $('[name="fecha_salida_add"]').attr('value', '');
+
                 next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
             }
             else {
@@ -418,8 +495,14 @@ $(document).ready(function () {
     // submit
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
-
-
+        var enviar = validadoresCorrectos(validadoresTercerPaso);
+        
+        if (enviar){
+            $(this).attr("type", "submit");
+        }
+        else {
+            $(this).attr("type", "button");
+        }
 
         parent_fieldset.find('input[type="text"]').each(function () {
             // if (($(this).val() == "") && ($(this).attr('required'))) {
