@@ -288,6 +288,12 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
                  ancho, largo, alto, diametro, material, material_sec, presentacion,
                  unidades,total, user , clasificacion):
 
+    if (db( (db.modificacion_sin_bn.msb_nombre == nombre) & (db.modificacion_sin_bn.msb_espacio==espacio) ).select()):
+        #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
+
+        response.flash = "El  \"{0}\" tiene una modificación pendiente \
+                          Por los momentos no se enviarán solicitudes de modificación.".format(clasificacion)
+        return False
 
     response.flash = "Se ha enviado una solicidad de modificación del \"{0}\"  \"{1}\" \
                         .".format(clasificacion,nombre)

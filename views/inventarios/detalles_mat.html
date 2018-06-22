@@ -286,6 +286,11 @@
                       <label>Campos marcados con * son obligatorios.</label>
 
 
+                      <div class="form-group" tag="Formato:" hidden>
+                        <input type="text" class="form-control" id="clasificacion" name="clasificacion" title="Nombre del material" placeholder="Nombre del material*" value="{{=bien['sb_clasificacion']}}" hidden>
+                        <div class="field-error"> <p id="err_clasificacion"> </p> </div>
+                    </div>
+
                         <div class="form-group" tag="Formato:">
                             <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del material" placeholder="Nombre del material*" value="{{=bien['sb_nombre']}}" readonly>
                             <div class="field-error"> <p id="err_nombre_mat"> </p> </div>
