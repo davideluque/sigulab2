@@ -1,0 +1,978 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+
+
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
+
+
+
+
+{{end}}
+{{block center}}
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada')}}">Control de Documentos</a>
+  <span class="breadcrumb-item active" >Listado de Documentos</span>
+  </div>
+</nav>
+
+<div class="container-fluid" id="container-body">
+	<!--<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Inicio</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Documentos</li>
+			</ol>
+
+	</nav><-->
+	<div class="row">
+		<div class="col-md-10">
+			<h2 style="text-align: center; margin-left: 20%"> CONTROL DE DOCUMENTOS </h2>
+		</div>
+		<div class="col-md-2">
+			<a href="#">
+				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+			</a> 
+			<a href="#">
+				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
+			</a>			
+		</div>
+	</div>	
+
+	<div class="row">
+		<div class="col-md-1">
+		</div>	
+		<div class="col-md-10">
+
+			<nav class="indicadores" style="background-color: #FAFAFA;">			
+				<div class="row">
+
+				  <div style="margin-right: 3%; margin-left: 3%;">
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Planificado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-calendar-check-o fa-4x" style="color: white;"></i>
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right; ">{{=doc_planificacion}} </h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+				    <!-- ./col -->
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Elaborado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-pencil fa-4x" style="color: white; display: inline-block;"></i> 
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right;"> {{=doc_elaboracion}}</h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+
+				    <div class="col-lg-3 col-xs-6">
+				      <!-- small box -->
+				    
+				      <a href="#">
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Revisado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-search fa-4x" style="color: white; display: inline-block;"></i> 
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_revision}} </h2>
+				            </div>
+
+				        </div>
+				      </div>
+				      </a>
+				      
+				    </div>
+
+				    <div class="col-lg-3 col-xs-6">
+
+				      <a href="#" >
+				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+				        <h4  style="color: white; font-size: 25px; margin-bottom: 8px;">Aprobado</h4>
+
+				        <div class="widget-box-2">
+				            <div class="widget-detail-2">
+				                <i class="fa fa-check-circle fa-4x" style="color: white; display: inline-block;"></i> 
+
+				                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_aprobado}} </h2>
+				            </div>
+
+
+
+				        </div>
+				      </div>
+				      </a>
+
+				    </div>
+
+				  </div>   	
+						
+						
+					</ul>
+					
+			</nav>
+		</div>
+		<div class="col-md-1">
+		</div>	
+	<div>
+
+</div>
+
+<div style="margin-top: 100px; padding: 80px;"></div>
+
+
+<div class="container" style="padding: 0px;">
+	<div class="row">
+
+
+	    <div id="buttons">
+
+	      <!-- Filtrado -->
+	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5"><i class="fa fa-filter fa-2x"></i></button>
+	      <!-- Filtrado -->   
+
+	    </div>
+	    <br>
+
+	    <div class="table-responsive no-padding no-margin">
+	      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+	        <thead>
+	            <tr id="titulosListado">
+	                <th class="camposTabla linksNombres">Documento</th>
+	                <th class="camposTabla linksNombres">Código</th>
+	                <th class="camposTabla linksNombres">Tipo</th>
+	                <th class="camposTabla linksNombres">Responsable</th>
+	                <th class="camposTabla linksNombres">Vínculo</th>
+	                <th class="camposTabla linksNombres">Estatus</th>
+	            </tr>
+	        </thead>
+
+	        <tbody>
+	  			{{for doc in documentos:}}
+				<tr>
+						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+							{{=doc.nombre_doc.upper()}}
+						</a>
+						</td>
+						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
+						<td class="camposTabla" >Deshabilitado temporalmente</td>
+						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
+
+				</tr>
+				{{pass}}           
+	        </tbody>
+
+	        <tfoot id="collapseFiltros">
+
+	            <tr>
+	                <th class="camposTabla linksNombres">Documento</th>
+	                <th class="camposTabla linksNombres">Código</th>
+	                <th class="camposTabla linksNombres">Tipo</th>
+	                <th class="camposTabla linksNombres">Responsable</th>
+	                <th class="camposTabla linksNombres">Link de Descarga</th>
+	                <th class="camposTabla linksNombres">Estatus</th>
+	            </tr>
+	        </tfoot>
+
+	      </table>
+	    </div>
+	  </div>
+	</div> 
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="adddoc" role="dialog">
+<div class="modal-dialog">
+
+  <!-- Modal content-->
+  <div class="modal-content">
+
+		<!-- Modal Header -->
+		<div class="modal-header addHeader">
+			<div class="row addRow" id="rowHeader">
+				<div class="col-sm-1" id="col1Header">
+					<div class="container" id="plus">
+						<h1 id="agregar">+</h1>
+					</div>
+				</div>
+					<div class="col-sm-11" id="col11Header">
+					<h4 class="modal-title" id="nuevoServicio">Agregar Documento</h4>
+				</div>
+			</div>
+		</div>
+		<!-- Fin Modal Header -->
+			
+		<!-- Modal Body -->
+		<div class="modal-body addBody">
+		<div class="row addRow">
+			<div class="col-md-12 form-box">
+				<form id="formularioCarga" class="registration-form" method="post">
+
+					<!-- Primer Paso -->
+					<fieldset class="formField">
+						<div class="form-bottom" data-step="1" data-title="Primer Paso">
+							<!-- Aqui va la barra lateral -->
+							<div class="col-sm-1 col1Body">
+								<span class="step activePass">1</span>
+								<span class="step">2</span>
+								<span class="step">3</span>
+								<span class="step">4</span>             
+								<span class="step">5</span>
+								<span class="step">6</span>
+								<span class="step">7</span>
+							</div>
+							<!-- Aqui va la informacion -->
+							<div class="col-sm-11 col11Body">
+								<h4 class="titulosForm">Fase de Planificación</h4>
+
+								<!-- Campo de Nombre del Documento -->
+								<div class="form-group">
+									<h5>Nombre del Documento</h5>
+									<input type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" required>
+								</div>
+
+								<!-- Campo de Tipo del Documento -->
+								<div class="form-group"> 
+									<h5>Tipo del Documento</h5>
+									<select name="tipo" id="tipo" class="input" required>
+										<option value=""></option>
+										<option value="Referente Estrategico">Referente Estratégico</option>
+										<option value="Reglamento">Reglamento</option>
+										<option value="Manual">Manual de Organización</option>
+										<option value="Manua2">Manual de Calidad</option>
+										<option value="Manua3">Manual de Proceso de Gestión</option>
+										<option value="Manua4">Manual de Proceso Técnico</option>
+										<option value="Manua5">Manual de Uso</option>
+										<option value="Otro">Otro</option>
+									</select>
+								</div>
+
+								<!-- Campo de Responsable del Documento -->
+								<div class="form-group"> 
+									<h5>Responsable</h5>
+									<select name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
+										<option value=""></option>
+										{{for dep in dependencias:}}
+										<option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+										{{pass}}
+									</select>
+								</div>
+
+
+
+								<div style="position: fixed; bottom: 0; right: 0;">
+									<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+									<button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+								</div>	
+							</div>
+						</div>	
+					</fieldset>
+					<!-- Fin Primer Paso -->
+								
+					<!-- Segundo Paso -->
+					<fieldset class="formField">
+						<div class="form-bottom" data-step="2" data-title="Segundo Paso">
+						<!-- Aqui va la barra lateral -->
+						<div class="col-sm-1 col1Body">
+							<span class="step">1</span>
+							<span class="step activePass">2</span>
+							<span class="step">3</span>
+							<span class="step">4</span> 
+							<span class="step">5</span>
+							<span class="step">6</span>
+							<span class="step">7</span>
+						</div>
+
+						<!-- Aqui va la informacion -->
+						<div class="col-sm-11 col11Body">
+							
+							<h4 class="titulosForm">Fase de Elaboración</h4>
+
+							<!-- Campo de Código -->
+							<div class="form-group">
+								<h5>Código del documento</h5>
+								<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
+							</div>
+
+							<!-- Campo de Objetivos -->
+							<div class="form-group">
+								<h5>Objetivos del documento</h5>
+								<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos"> 
+							</div>
+
+							<!-- Campo de Período de Revisión -->
+							<div class="form-group">
+								<h5>Período de Revisión</h5>
+								<select name="periodo" id="periodo" class="input">
+									<option value=""></option>
+									<option value="Semestral">Semestral</option>
+									<option value="Anual">Anual</option>
+									<option value="Bienal">Bienal</option>
+									<option value="Trienal">Trienal</option>
+									<option value="Quinquenal">Quinquenal</option>
+								</select> 
+							</div>
+
+
+							<!-- Campo de Fecha de entrega para revisión del Documento -->
+							<div class="form-group">
+								<h5>Fecha de entrega para revisión</h5>
+								<input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev">
+							</div>
+
+							<!-- Campo de Número de Anexos -->
+							<div class="form-group">
+								<h5>Número de anexos</h5>
+								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
+							
+								<div id="containerAnexos"/>
+							</div>
+
+
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>
+						</div>
+					</fieldset>
+					<!-- Fin Segundo Paso -->
+
+					<!-- Tercer Paso -->
+					<fieldset class="formField">
+						<div class="form-bottom" data-step="3" data-title="Tercer Paso">
+						<!-- Aqui va la barra lateral -->
+						<div class="col-sm-1 col1Body">
+							<span class="step">1</span>
+							<span class="step">2</span>
+							<span class="step activePass">3</span>
+							<span class="step">4</span> 
+							<span class="step">5</span>
+							<span class="step">6</span>
+							<span class="step">7</span>
+						</div>
+
+						<!-- Aqui va la informacion -->
+						<div class="col-sm-11 col11Body">
+							
+							<h4 class="titulosForm">Fase de Elaboración   -   Elaboradores</h4>
+
+
+
+							<!-- Campo de Elaboradores del Documento -->
+							<div class="form-group">
+								<h5>Elaboradores del documento</h5>
+								
+								<div id="p_scents">
+									<p>
+										<input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
+									</p>
+								</div>
+
+								<a href="#" id="addScnt"><span class="fa fa-plus"></span></a>
+																			
+							</div>
+
+					
+						
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
+						</div>
+					</fieldset>
+					<!-- Fin Tercer Paso -->					
+
+					<!-- Cuarto Paso -->
+					<fieldset class="formField">
+						<div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+						<!-- Aqui va la barra lateral -->
+							<div class="col-sm-1 col1Body">
+								<span class="step">1</span>
+								<span class="step">2</span>
+								<span class="step">3</span>
+								<span class="step activePass">4</span>
+								<span class="step">5</span> 
+								<span class="step">6</span>
+								<span class="step">7</span> 
+							</div>
+							
+							<!-- Aqui va la informacion -->
+							<div class="col-sm-11 col11Body">
+							<h4 class="titulosForm"> Fase de Revisión </h4>
+
+							<!-- Campo de responsable de la revisión de contenidos -->
+							<div class="form-group">
+								<h5>Revisión de contenidos</h5>
+								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" />
+							</div> 
+
+							<!-- Campo de fecha de la revisión de contenidos -->
+							<div class="form-group">
+								<h5>Fecha de revisión de contenidos</h5>
+								<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" onchange="revision_contenidos()"/> 
+							</div> 
+
+							<!-- Campo de responsable de la revisión de especificaciones -->
+							<div class="form-group">
+								<h5>Revisión de especificaciones</h5>
+								<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" /> 
+							</div> 
+
+							<!-- Campo de fecha de la revisión de especificaciones -->
+							<div class="form-group">
+								<h5>Fecha de revisión de especificaciones</h5>
+								<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" onchange="revision_esp()" /> 
+							</div> 
+
+
+							<!-- Campo de confirmación si fué o no revisado por el consejo -->
+							<div class="form-group">
+								<label>Revisión del Consejo</label>
+								<br>
+								<input type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
+								<br>
+								<input type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
+								<div id="containerRevision"/>
+							</div> 
+
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
+						</div>
+					</fieldset>
+					<!-- Fin Cuarto Paso -->
+
+
+					<!-- Quinto Paso -->
+					<fieldset class="formField">
+							<div class="form-bottom" data-step="5" data-title="Quinto Paso">
+							<!-- Aqui va la barra lateral -->
+								<div class="col-sm-1 col1Body">
+									<span class="step">1</span>
+									<span class="step">2</span>
+									<span class="step">3</span>
+									<span class="step">4</span>
+									<span class="step activePass">5</span> 
+									<span class="step">6</span>
+									<span class="step">7</span>
+								</div>
+
+								<!-- Aqui va la informacion -->
+								<div class="col-sm-11 col11Body" >
+								<h4 class="titulosForm"> Fase de Aprobación </h4>
+
+
+								<!-- Campo de responsable de aprobación-->
+								<div class="form-group">
+									<h5>Responsable de aprobación</h5>
+									<input type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
+								</div>
+
+								<!-- Campo de fecha de aprobación -->
+								<div class="form-group">
+									<h5>Fecha de aprobación</h5>
+									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" onchange="fecha_ap()"/> 
+								</div>	
+								
+								<!-- Campo de código de registro de aprobación -->
+								<div class="form-group">
+									<h5>Código de registro de la aprobación</h5>
+									<input type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion" /> 
+								</div>
+
+				
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>	
+						</div>
+					</fieldset>
+					<!-- Fin Quinto Paso -->
+
+					<!-- Sexto Paso -->
+					<fieldset class="formField">
+							<div class="form-bottom" data-step="6" data-title="Sexto Paso">
+							<!-- Aqui va la barra lateral -->
+								<div class="col-sm-1 col1Body">
+									<span class="step">1</span>
+									<span class="step">2</span>
+									<span class="step">3</span>
+									<span class="step">4</span> 
+									<span class="step">5</span>
+									<span class="step activePass">6</span>
+									<span class="step">7</span>
+								</div>
+
+							<!-- Aqui va la informacion -->
+								<div class="col-sm-11 col11Body" >
+								<h4 class="titulosForm">Ubicación del Documento</h4>
+
+								<!-- Campo de ubicación física del documento -->
+								<div class="form-group">
+									<h5>Ubicación física</h5>
+									<input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" />
+									<h6>Indique la carpeta, archivo, estante u otro se puede
+											acceder al documento</h6>
+								</div>  
+
+								<!-- Campo de ubicación electrónica del documento -->
+								<div class="form-group">
+									<h5>Ubicación electrónica</h5>
+									<input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" /> 
+									<h6>Indique la carpeta, archivo, estante u otro se puede
+											acceder al documento</h6>
+								</div>
+
+								<!-- Campo de vínculo del documento -->
+								<div class="form-group">
+									<h5>Vínculo</h5>
+								</div>
+
+							<div style="position: fixed; bottom: 0; right: 0;">
+								<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+								<button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+							</div>
+						</div>
+					</fieldset>
+					<!-- Fin Sexto Paso -->
+
+
+
+					<!-- Séptimo Paso -->
+					<fieldset class="formField">
+							<div class="form-bottom" data-step="7" data-title="Septimo Paso">
+							<!-- Aqui va la barra lateral -->
+								<div class="col-sm-1 col1Body">
+									<span class="step">1</span>
+									<span class="step">2</span>
+									<span class="step">3</span>
+									<span class="step">4</span> 
+									<span class="step">5</span>
+									<span class="step">6</span>
+									<span class="step activePass">7</span>
+								</div>
+
+								<!-- Aqui va la informacion -->
+								<div class="col-sm-11 col11Body" >
+								<h4 class="titulosForm">Registro de Control de Cambios del documento</h4>
+
+
+								<!-- Campo del control de cambios -->
+								<div class="form-group">
+									<h5>Código de registro de control de cambios</h5>
+									<input type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios" /> 
+								</div>
+
+								<!-- Campo de la fecha del control de cambios -->
+								<div class="form-group">
+									<h5>Fecha de control de cambios</h5>
+									<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" onchange="fecha_cc()"/> 
+								</div>
+
+								<!-- Campo de Elaborado por -->
+								<div class="form-group">
+									<h5>Elaborador del control de cambios</h5>
+									<input type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
+								</div>
+
+								<!-- Campo de Ubicación del registro en formato físico -->
+								<div class="form-group">
+									<h5>Ubicación del registro en formato físico</h5>
+									<input type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
+									<h6>Indique la carpeta, archivo, estante u otro se puede
+												acceder al documento</h6>
+								</div>
+
+								<!-- Campo deUbicación del registro en formato físicoo -->
+								<div class="form-group">
+									<h5>Ubicación del registro en formato electrónico</h5>
+									<input type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
+									<h6>Indique la carpeta, archivo, estante u otro se puede
+												acceder al documento</h6>
+								</div>
+
+								<div style="position: fixed; bottom: 0; right: 0;">
+									<button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+									<button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>  
+								</div>
+						</div>
+					</fieldset>
+					<!-- Fin Sexto Paso -->
+
+
+
+
+ 
+
+
+
+
+				</form>
+			</div>
+		</div>               
+		</div>
+	</div>	
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+	function get_code(i){
+		cod = i[i.selectedIndex].value; // get value
+		document.getElementById("codigo").value = cod + "-";
+}
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+
+	function codigoDoc(){
+		 var codigoDocumento = document.getElementById("codigo").value;
+		 return codigoDocumento;
+	}
+
+	function agregarAnexo(i){
+
+		var number = document.getElementById("numero_anexos").value;
+		var container = document.getElementById("containerAnexos");
+		var c = codigoDoc();
+
+		while (container.hasChildNodes()) {
+			container.removeChild(container.lastChild);
+			container.removeChild(container.lastChild);
+		}
+		for (i=1;i<=number;i++){
+
+			// Create an <input> element, set its type and name attributes
+			var inputCode = document.createElement("input");
+			var inputName = document.createElement("input");
+
+			inputCode.type = "text";
+			inputCode.name = "anexoCode" + i;
+			inputCode.value = c;
+
+			inputName.type = "text";
+			inputName.name = "anexoName" + i;
+			inputName.placeholder = "Nombre de Anexo " + i;
+			
+			container.appendChild(document.createElement("br"));
+			container.appendChild(inputCode);
+			container.appendChild(inputName);
+			container.appendChild(document.createElement("br"));
+		}
+		
+	}
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+
+	$(function() {
+		
+		var scntDiv = $('#p_scents');
+		var i = $('#p_scents p').length + 1;
+		
+		$('.form-group').on('click', '#addScnt', function() {
+			$('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
+			i++;
+			return false;
+		});
+		
+		$('.form-group').on('click', '#remScnt', function() { 
+			if( i > 2 ) {
+				$(this).parents('p').remove();
+				i--;
+			}
+			return false;
+		});
+	});
+
+</script>
+
+
+<script type="text/javascript">
+	function agregarFecha(){
+
+		var container = document.getElementById("containerRevision");
+		var input = document.createElement("input");
+		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
+
+		input.type = "date";
+		input.name = "fecha_revision_consejo";
+		input.min = fecha_revision;
+		input.id = "fecha_revision_consejo";
+		input.placeholder = "Fecha de revisión por el Consejo Asesor";
+
+		var etiqueta = document.createElement("label");
+		etiqueta.innerHTML = "Inserte la fecha de revisión por el consejo asesor";
+
+		container.appendChild(document.createElement("br"));
+		container.appendChild(etiqueta);
+		container.appendChild(input);
+
+		
+	}
+
+	function eliminarFecha(){
+
+		var container = document.getElementById("containerRevision");
+		while (container.hasChildNodes()) {
+			container.removeChild(container.lastChild);
+		}
+
+	}
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+
+	function revision_contenidos(){
+		var fecha_revision = document.getElementById("fecha_prox_rev").value;	
+		document.getElementById("fecha_revision_contenidos").min = fecha_revision;
+	}
+
+	function revision_esp(){
+		var fecha_revision = document.getElementById("fecha_revision_contenidos").value;	
+		document.getElementById("fecha_revision_especificaciones").min = fecha_revision;
+	}
+	
+	function fecha_ap(){
+		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;	
+		document.getElementById("fechaAprobacion").min = fecha_revision;
+	}
+
+	function fecha_cc(){
+		var fecha_revision = document.getElementById("fechaAprobacion").value;	
+		document.getElementById("fechaControlCambios").min = fecha_revision;
+	} 
+
+</script>
+
+
+
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+
+<script>
+  var filtros = false;
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+  }
+</script>
+ 
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
+</script>
+
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css(

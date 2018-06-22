@@ -332,6 +332,7 @@
 'Stylesheet': 'Folha de estilo',
 'Submit': 'Submit',
 'submit': 'submit',
+'Submit': 'Submit',
 'Support': 'Support',
 'Sure you want to delete this object?': 'Tem a certeza que deseja eliminar este objecto?',
 'Sustancia': 'Sustancia',

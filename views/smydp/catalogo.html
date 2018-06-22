@@ -17,17 +17,23 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación --> 
 
-{{if table.create_form:}}
-	{{=table.create_form}}
-{{elif table.update_form:}}
-	{{=table.update_form}}
-{{elif table.view_form:}}
-	{{=table.view_form}}
-{{else:}}
-	<div class="container"> 
-		{{=table}}
+<div>
+	<div class="container">
+		<h3 id="titulo">Catálogo</h3>
 	</div>
-{{pass}}
+
+	{{if table.create_form:}}
+		{{=table.create_form}}
+	{{elif table.update_form:}}
+		{{=table.update_form}}
+	{{elif table.view_form:}}
+		{{=table.view_form}}
+	{{else:}}
+		<div class="container"> 
+			{{=table}}
+		</div>
+	{{pass}}
+</div>
 
 <script>
 	// Eliminando el breadcrumb que trae la forma SQL por defecto

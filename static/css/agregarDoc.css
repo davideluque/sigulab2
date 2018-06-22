@@ -1,0 +1,358 @@
+
+.form-wrapper {
+  position: relative;
+  width: 700px;
+  height: 600px;
+  display: flex;
+  flex-wrap: wrap;
+  background: #FFFFFF;
+  margin: 25px auto;
+  border-radius: 6px;
+  box-shadow: 1.5px 2px 1px 1px rgba(0, 0, 0, 0.5);
+  font-family: 'Source Sans Pro', sans-serif;
+  overflow: hidden;
+  margin-top: 5%;
+}
+
+.tab-wrapper {
+  width: 350px;
+  height: 100%;
+  position: relative;
+  transition: margin 300ms ease;
+}
+
+.progress-bar {
+  width: 150px;
+  background: linear-gradient(#79abc4, #52798c);
+  border-radius: 6px 0 0 6px;
+  padding: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.progress-bar .progress-bar__container .progress-bar__item {
+  position: relative;
+  list-style: none;
+  font-size: 15px;
+  height: 5em;
+  padding-left: 3em;
+}
+.progress-bar .progress-bar__container .progress-bar__item::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1.5px dashed #DCF4FF;
+  border-radius: 100%;
+  top: -3px;
+  left: 0;
+}
+.progress-bar .progress-bar__container .progress-bar__item:last-child::after {
+  content: unset;
+}
+.progress-bar .progress-bar__container .progress-bar__item .link {
+  text-decoration: none;
+  color: #DCF4FF;
+}
+.progress-bar .progress-bar__container .progress-bar__item.complete::before {
+  border: 1px solid #006798;
+  background: #006798;
+}
+.progress-bar .progress-bar__container .progress-bar__item.complete::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0px;
+  height: 2.5em;
+  border: 1px dashed #006798;
+  top: 1.8em;
+  left: 10px;
+  animation: linearGradual 300ms ease-out;
+}
+.progress-bar .progress-bar__container .progress-bar__item.complete:last-of-type::after {
+  content: none;
+}
+.progress-bar .progress-bar__container .progress-bar__item.complete .link {
+  color: #006798;
+}
+.progress-bar .progress-bar__container .progress-bar__item.current a {
+  color: #006798;
+}
+.progress-bar .progress-bar__container .progress-bar__item.current::after {
+  content: "";
+  display: block;
+  width: 17px;
+  height: 17px;
+  background: #006798;
+  border-radius: 100%;
+  position: absolute;
+  top: 0px;
+  left: 3px;
+}
+.progress-bar .progress-bar__container .progress-bar__item.current::before {
+  border-color: #006798;
+}
+
+.tab-panel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 2em;
+  border: transparent;
+}
+.tab-panel legend {
+  font-size: 21px;
+  padding-top: 32px;
+  color: #52798c;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.submit-button {
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 1.5em;
+  position: relative;
+  height: auto;
+}
+.input-group input[type="text"], .input-group input[type="email"],
+.input-group input[type="password"], .input-group input[type="url"],
+.input-group input[type="date"], .input-group select {
+  background: #F5F5F6;
+  height: 32px;
+  width: 350px;
+  padding: 0 1em;
+  border: transparent;
+  border-radius: 6px;
+}
+.input-group input[type="text"]:focus, .input-group input[type="email"]:focus,
+.input-group input[type="password"]:focus, .input-group input[type="url"]:focus,
+.input-group input[type="date"]:focus, .input-group select:focus {
+  border-color: #006798;
+  background-color: white;
+}
+.input-group input[type="text"] option, .input-group input[type="email"] option,
+.input-group input[type="password"] option, .input-group input[type="url"] option,
+.input-group input[type="date"] option, .input-group select option {
+  color: #006798;
+}
+.input-group .input {
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #A7A9AC;
+}
+.input-group .label {
+  position: absolute;
+  top: 9px;
+  left: 1em;
+  font-size: 14px;
+  transition: all 500ms ease-in-out;
+  color: #52798c;
+}
+.input-group.focus .label {
+  top: -19px;
+  font-size: 14px;
+  color: #52798c;
+  left: 0;
+}
+.input-group.error .label, .input-group.error .label-radio {
+  color: #FF6650;
+}
+.input-group.error input, .input-group.error select {
+  border: 1.5px solid #FF6650;
+}
+.input-group.radio input[type="radio"] {
+  display: none;
+}
+.input-group.radio input[type="radio"]:checked + .label-radio::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: #039BE5;
+  border-radius: 100%;
+  position: absolute;
+  top: 10px;
+  left: 4px;
+  animation: expand 500ms linear;
+}
+.input-group.radio .label-radio {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  margin-left: 1em;
+  padding: 0.5em 0;
+  font-size: 15px;
+}
+.input-group.radio .label-radio:first-of-type {
+  margin-left: 0;
+}
+.input-group.radio .label-radio:before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 2px solid #A7A9AC;
+}
+
+.tab-nav {
+  position: absolute;
+  top: 0;
+  right: 1em;
+  width: 2em;
+  height: 100%;
+  padding: 2em 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tab-nav .tab-nav__button {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: transparent;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 500ms ease-in;
+  color: #039BE5;
+}
+.tab-nav .tab-nav__button.prev {
+  align-self: flex-start;
+}
+.tab-nav .tab-nav__button.next {
+  align-self: flex-end;
+}
+.tab-nav .tab-nav__button:hover {
+  background-color: #039BE5;
+  color: #DCF4FF;
+  transition: all 500ms ease-in-out;
+}
+.tab-nav .tab-nav__button:active {
+  transform: skewX(5);
+}
+
+.button {
+  width: 250px;
+  padding: 0.5em;
+  background: #039BE5;
+  border-color: transparent;
+  border-radius: 6px;
+  color: #DCF4FF;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 700;
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  margin-bottom: 1em;
+  transition: all 500ms ease-in;
+}
+.button:hover {
+  background-color: #006798;
+  transition: all 1000ms ease-in-out;
+}
+
+.submit-button {
+  position: absolute;
+  bottom: 0.5em;
+  left: 9.6em;
+  display: none;
+  opacity: 0;
+  transition: all 500ms ease;
+}
+.submit-button.active {
+  display: block;
+  opacity: 1;
+  animation: show 500ms ease;
+}
+
+.overlay {
+  position: absolute;
+  width: 73%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+}
+.overlay span {
+  font-size: 1em;
+}
+.overlay span.load {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #039BE5;
+  border-radius: 100%;
+  animation: load 1000ms infinite ease-in-out;
+}
+.overlay span.success {
+  color: #01AC63;
+}
+
+@keyframes expand {
+  0% {
+    transform: scale(1.5);
+  }
+  50% {
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes linearGradual {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 1.5em;
+  }
+}
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes load {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  80% {
+    transform: scale(2.5);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+.close {
+    color: red;
+    float: right;
+    font-size: 55px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+}

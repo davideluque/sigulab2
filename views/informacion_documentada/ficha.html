@@ -1,0 +1,786 @@
+{{extend 'layout.html'}}
+<h1>Está es la plantilla informacion_documentada/ficha.html</h1>
+{{=BEAUTIFY(response._vars)}}
+
+
+{{block head}}
+  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="{{=URL('static', 'css/agregarDoc.css')}}">
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Poppins:300,400,700'>
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+  <style type="text/css">
+    .row{
+      margin-right:0px!important;
+    }
+    .wrapper {
+      max-width: 90%;
+      margin: auto;
+      margin-top: 10px;
+    }
+    .tab-wrapper2 {
+      text-align: center;
+      display: block;
+      margin: auto;
+      max-width: 1200px;
+    }
+    .tabs {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .tab-link {
+      margin: 0 1%;
+      list-style: none;
+      padding: 10px 40px;
+      font-size: 25px;
+      color: #aaa;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all ease 0.5s;
+      border-bottom: solid 3px rgba(255, 255, 255, 0);
+      letter-spacing: 1px;
+    }
+    .tab-link:hover {
+      color: #999;
+      border-color: #999;
+    }
+    .tab-link.active {
+      color: #333;
+      border-color: #333;
+    }
+    .tab-link:nth-of-type(1).active {
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
+    }
+    .tab-link:nth-of-type(2).active {
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
+    }
+    .tab-link:nth-of-type(3).active {
+      background-color: #337ab7;
+      color: white;
+      border-color: white;
+    }
+    .content-wrapper {
+      margin-top: 30px;
+      padding: 10px 20px;
+    }
+    .tab-content {
+      display: none;
+      text-align: left;
+      color: #888;
+      font-weight: 300;
+      font-size: 15px;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeIn 0.5s ease 1 forwards;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    tr th {
+      text-align: center;
+      font-size: 24px;
+      border: 8px solid #337ab7;
+      vertical-align: middle;
+      padding: 10px;
+    }
+
+    tr td{
+      padding: 10px;
+      border-bottom: 8px solid #337ab7;
+      border-left: 8px solid #337ab7;
+      border-right: : 8px solid #337ab7; 
+      text-align: center;
+      vertical-align: middle;
+    }
+    @keyframes fadeIn {
+      100% {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+
+{{end}}
+
+
+{{block center}}
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Información Documentada</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Listado de Documentos</a>
+  <span class="breadcrumb-item active">Ficha</span>
+  </div>
+</nav>
+
+  <div class="row" style="margin-bottom: 50px;">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-1">
+      <a  href="{{=URL('informacion_documentada', 'lista_documentos')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
+    </div>
+    <div class="col-md-7">
+      <h2 style="text-align: center; margin-left: 15%"> FICHA DE DOCUMENTOS </h2>
+    </div>
+    <div class="col-md-3">
+      <form method="POST">
+        <p onclick="estatus()" style="display: inline-block;">
+          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
+        </p>
+          <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
+      </form>
+          
+    </div>
+  </div>  
+
+  {{for doc in documentos:}}
+
+
+
+<div class="wrapper">
+    
+  <div class="tab-wrapper2">
+    <ul class="tabs">
+        <li class="tab-link active" data-tab="1">Información General</li>
+        <li class="tab-link" data-tab="2">Historial de Revisión</li>
+        <li class="tab-link" data-tab="3">Ubicación</li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <div id="tab-1" class="tab-content active">
+
+      <h3><span style="color: #52798c; font-size: 1.2em;">Código: {{=doc.codigo}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Tipo:     {{=doc.tipo_doc}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Documento:  {{=doc.nombre_doc}}.</span> </h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Objetivo:  {{=doc.objetivo}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:    {{=doc.periodo_rev}}.</span></h3>
+
+
+
+    </div>
+
+
+
+    <div id="tab-2" class="tab-content">
+
+
+
+      <table class="container">
+        <thead>
+          <tr>
+            <th>Responsable</th>
+            <th>Elaborado por</th>
+            <th>Elaborador de revisión de contenidos</th>
+            <th>Fecha de revisión de contenido</th>
+            <th>Elaborador de evisión de especificaciones</th>
+            <th>Fecha de revisión de especificaciones</th>
+            <th>Fecha de revisión por el Consejo Asesor</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>{{=doc.responsable}}</td>
+            <td>{{=doc.elaborador0}}, {{=doc.elaborador1}}, {{=doc.elaborador2}}, {{=doc.elaborador3}}, {{=doc.elaborador4}}.</td>
+            <td>{{=doc.rev_contenido_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_contenido}}</td>
+            <td>{{=doc.rev_especficaciones_doc_realizado_por}}</td>
+            <td>{{=doc.fecha_rev_especificaciones_doc}}</td>
+            <td style="border-right: 8px solid #337ab7;">{{=doc.fecha_rev_por_consejo_asesor}}</td>
+            
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
+    </div>
+    <div id="tab-3" class="tab-content">
+  
+      <h3><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion:  {{=doc.cod_control_cambio}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     {{=doc.registro_electronico}}.</span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></h3>
+      <h3><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}.</span></h3>
+    
+
+    </div>
+  </div>
+  
+</div>    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="adddoc" role="dialog">
+<div class="modal-dialog">
+
+  <!-- Modal content-->
+  <div class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header addHeader">
+      <div class="row addRow" id="rowHeader">
+        <div class="col-sm-1" id="col1Header">
+          <div class="container" id="plus">
+            <h1 id="agregar">+</h1>
+          </div>
+        </div>
+          <div class="col-sm-11" id="col11Header">
+          <h4 class="modal-title" id="nuevoServicio">Agregar Documento</h4>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal Header -->
+      
+    <!-- Modal Body -->
+    <div class="modal-body addBody">
+    <div class="row addRow">
+      <div class="col-md-12 form-box">
+        <form id="formularioCarga" class="registration-form" method="post">
+
+          <!-- Primer Paso -->
+          <fieldset class="formField">
+            <div class="form-bottom" data-step="1" data-title="Primer Paso">
+              <!-- Aqui va la barra lateral -->
+              <div class="col-sm-1 col1Body">
+                <span class="step activePass">1</span>
+                <span class="step">2</span>
+                <span class="step">3</span>
+                <span class="step">4</span>             
+                <span class="step">5</span>
+                <span class="step">6</span>
+                <span class="step">7</span>
+              </div>
+              <!-- Aqui va la informacion -->
+              <div class="col-sm-11 col11Body">
+                <h4 class="titulosForm">Fase de Planificación</h4>
+
+                <!-- Campo de Nombre del Documento -->
+                <div class="form-group" data-atributo="{{=doc.estatus}}">
+                  <input disabled='' type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" value="{{=doc.nombre_doc}}" required>
+                </div>
+
+                <!-- Campo de Tipo del Documento -->
+                <div class="form-group"> 
+                  <h5>Tipo del Documento</h5>
+                  <select disabled="" name="tipo" id="tipo" class="input" required>
+                    <option value="{{=doc.tipo_doc}}">{{=doc.tipo_doc}}</option>
+                   
+                  </select>
+                </div>
+
+                <!-- Campo de Responsable del Documento -->
+                <div class="form-group"> 
+                  <h5>Responsable</h5>
+          
+                  <select disabled="" name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
+                    <option value="{{=doc.responsable}}">{{=doc.responsable}}</option>
+                    {{for dep in dependencias:}}
+                    <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+                    {{pass}}
+                  </select>
+                </div>
+
+
+
+
+                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+                <button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
+            </div>  
+          </fieldset>
+          <!-- Fin Primer Paso -->
+                
+          <!-- Segundo Paso -->
+          <fieldset class="formField">
+            <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+            <!-- Aqui va la barra lateral -->
+            <div class="col-sm-1 col1Body">
+              <span class="step">1</span>
+              <span class="step activePass">2</span>
+              <span class="step">3</span>
+              <span class="step">4</span> 
+              <span class="step">5</span>
+              <span class="step">6</span>
+              <span class="step">7</span>
+            </div>
+
+            <!-- Aqui va la informacion -->
+            <div class="col-sm-11 col11Body">
+              
+              <h4 class="titulosForm">Fase de Elaboración</h4>
+
+              <!-- Campo de Código -->
+              <div class="form-group">
+                <input disabled='' type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()" value="{{=doc.codigo}}" >
+              </div>
+
+              <!-- Campo de Objetivos -->
+              <div class="form-group">
+                <input disabled='' type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos" value="{{=doc.objetivo}}"> 
+              </div>
+
+              <!-- Campo de Período de Revisión -->
+              <div class="form-group">
+                <h5>Período de Revisión</h5>
+                <select disabled="" name="periodo" id="periodo" class="input" >
+                  <option value="{{=doc.periodo_rev}}"></option>
+                  <option value="Semestral">Semestral</option>
+                  <option value="Anual">Anual</option>
+                  <option value="Bienal">Bienal</option>
+                  <option value="Trienal">Trienal</option>
+                  <option value="Quinquenal">Quinquenal</option>
+                </select> 
+              </div>
+
+
+              <!-- Campo de Fecha de entrega para revisión del Documento -->
+              <div class="form-group">
+                <h5>Fecha de entrega para revisión</h5>
+                  <input disabled='' type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" value="{{=doc.fecha_prox_rev}}">
+              </div>
+
+
+              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+            </div>
+          </fieldset>
+          <!-- Fin Segundo Paso -->
+
+          <!-- Tercer Paso -->
+          <fieldset class="formField">
+            <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+            <!-- Aqui va la barra lateral -->
+            <div class="col-sm-1 col1Body">
+              <span class="step">1</span>
+              <span class="step">2</span>
+              <span class="step activePass">3</span>
+              <span class="step">4</span> 
+              <span class="step">5</span>
+              <span class="step">6</span>
+              <span class="step">7</span>
+            </div>
+
+            <!-- Aqui va la informacion -->
+            <div class="col-sm-11 col11Body">
+              
+              <h4 class="titulosForm">Fase de Elaboración</h4>
+
+              <!-- Campo de Número de Anexos -->
+              <div class="form-group">
+                <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
+              
+                <div id="containerAnexos"/>
+              </div>
+
+              <!-- Campo de Elaboradores del Documento -->
+              <div class="form-group">
+                
+                
+                <div id="p_scents">
+                  <p>
+                    <input disabled='' type="text" id="p_scnt" size="20" name="elaborador" value="elaboradorDePrueba" placeholder="Ingrese un elaborador" />
+                  </p>
+                </div>
+
+                <a href="#" id="addScnt"><span class="fa fa-plus"></span></a>
+                                      
+              </div>
+
+          
+            
+
+              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
+              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+            </div>
+          </fieldset>
+          <!-- Fin Tercer Paso -->          
+
+          <!-- Cuarto Paso -->
+          <fieldset class="formField">
+            <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+            <!-- Aqui va la barra lateral -->
+              <div class="col-sm-1 col1Body">
+                <span class="step">1</span>
+                <span class="step">2</span>
+                <span class="step">3</span>
+                <span class="step activePass">4</span>
+                <span class="step">5</span> 
+                <span class="step">6</span>
+                <span class="step">7</span> 
+              </div>
+              
+              <!-- Aqui va la informacion -->
+              <div class="col-sm-11 col11Body">
+              <h4 class="titulosForm"> Fase de Revisión </h4>
+
+              <!-- Campo de responsable de la revisión de contenidos -->
+              <div class="form-group">
+                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required />
+              </div> 
+
+              <!-- Campo de fecha de la revisión de contenidos -->
+              <div class="form-group">
+                <h5>Fecha de revisión de contenidos</h5>
+                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" required/> 
+              </div> 
+
+              <!-- Campo de responsable de la revisión de especificaciones -->
+              <div class="form-group">
+                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required /> 
+              </div> 
+
+              <!-- Campo de fecha de la revisión de especificaciones -->
+              <div class="form-group">
+                <h5>Fecha de revisión de especificaciones</h5>
+                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" required/> 
+              </div> 
+
+
+              <!-- Campo de confirmación si fué o no revisado por el consejo -->
+              <div class="form-group">
+                <label>Revisión del Consejo</label>
+                <br>
+                <input disabled='' type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
+                <br>
+                <input disabled='' type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
+                <div id="containerRevision"/>
+              </div> 
+
+              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
+              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+            </div>
+          </fieldset>
+          <!-- Fin Cuarto Paso -->
+
+
+          <!-- Quinto Paso -->
+          <fieldset class="formField">
+              <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+              <!-- Aqui va la barra lateral -->
+                <div class="col-sm-1 col1Body">
+                  <span class="step">1</span>
+                  <span class="step">2</span>
+                  <span class="step">3</span>
+                  <span class="step">4</span>
+                  <span class="step activePass">5</span> 
+                  <span class="step">6</span>
+                  <span class="step">7</span>
+                </div>
+
+                <!-- Aqui va la informacion -->
+                <div class="col-sm-11 col11Body" >
+                <h4 class="titulosForm"> Fase de Aprobación </h4>
+
+
+                <!-- Campo de responsable de aprobación-->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
+                </div>
+
+                <!-- Campo de fecha de aprobación -->
+                <div class="form-group">
+                  <h5>Fecha de aprobación</h5>
+                  <input disabled='' type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" /> 
+                </div>  
+                
+                <!-- Campo de código de registro de aprobación -->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion" /> 
+                </div>
+
+        
+              
+              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+            </div>
+          </fieldset>
+          <!-- Fin Quinto Paso -->
+
+          <!-- Sexto Paso -->
+          <fieldset class="formField">
+              <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+              <!-- Aqui va la barra lateral -->
+                <div class="col-sm-1 col1Body">
+                  <span class="step">1</span>
+                  <span class="step">2</span>
+                  <span class="step">3</span>
+                  <span class="step">4</span> 
+                  <span class="step">5</span>
+                  <span class="step activePass">6</span>
+                  <span class="step">7</span>
+                </div>
+
+              <!-- Aqui va la informacion -->
+                <div class="col-sm-11 col11Body" >
+                <h4 class="titulosForm">Ubicación del Documento</h4>
+
+                <!-- Campo de ubicación física del documento -->
+                <div class="form-group">
+                  <input  disabled="" type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" value="{{=doc.ubicacion_fisica}}" />
+                  <h6>Indique la carpeta, archivo, estante u otro se puede
+                      acceder al documento</h6>
+                </div>  
+
+                <!-- Campo de ubicación electrónica del documento -->
+                <div class="form-group">
+                  <input disabled=""  type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" vlaue="{{=doc.ubicacion_electronica}}"/> 
+                  <h6>Indique la carpeta, archivo, estante u otro se puede
+                      acceder al documento</h6>
+                </div>
+
+                <!-- Campo de vínculo del documento -->
+                <div class="form-group">
+                  <label>Vínculo: </label>
+                </div>
+
+              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+            </div>
+          </fieldset>
+          <!-- Fin Sexto Paso -->
+
+
+
+          <!-- Séptimo Paso -->
+          <fieldset class="formField">
+              <div class="form-bottom" data-step="7" data-title="Septimo Paso">
+              <!-- Aqui va la barra lateral -->
+                <div class="col-sm-1 col1Body">
+                  <span class="step">1</span>
+                  <span class="step">2</span>
+                  <span class="step">3</span>
+                  <span class="step">4</span> 
+                  <span class="step">5</span>
+                  <span class="step">6</span>
+                  <span class="step activePass">7</span>
+                </div>
+
+                <!-- Aqui va la informacion -->
+                <div class="col-sm-11 col11Body" >
+                <h4 class="titulosForm">Registro de Control de Cambios del documento</h4>
+
+
+                <!-- Campo del control de cambios -->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios" /> 
+                </div>
+
+                <!-- Campo de la fecha del control de cambios -->
+                <div class="form-group">
+                  <h5>Fecha de control de cambios</h5>
+                  <input disabled='' type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" /> 
+                </div>
+
+                <!-- Campo de Elaborado por -->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
+                </div>
+
+                <!-- Campo de Ubicación del registro en formato físico -->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
+                  <h6>Indique la carpeta, archivo, estante u otro se puede
+                        acceder al documento</h6>
+                </div>
+
+                <!-- Campo deUbicación del registro en formato físicoo -->
+                <div class="form-group">
+                  <input disabled='' type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
+                  <h6>Indique la carpeta, archivo, estante u otro se puede
+                        acceder al documento</h6>
+                </div>
+
+
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="aprobado" value="aprobado" ><i class="fa fa-floppy-o"></i></button>  
+            </div>
+          </fieldset>
+          <!-- Fin Sexto Paso -->
+
+        </form>
+      </div>
+    </div>               
+    </div>
+  </div>  
+</div>
+</div>
+
+
+<form method="POST">
+  <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <i class="fa fa-exclamation-triangle fa-4x" style="color: orange;" aria-hidden="true"></i>
+          <h4 class="modal-title" id="exampleModalLabel">Eliminar Documento</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          ¿Está seguro que desea eliminar este documento?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" name="eliminar" value="eliminar" class="btn btn-danger">Si</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+  {{pass}}
+  <script>
+function estatus(){
+      if($('.form-group').data('atributo')=='Planificado'){
+     
+        jQuery('#objetivos').removeAttr('disabled');
+        jQuery('#periodo').removeAttr('disabled');
+        jQuery('#elaborado').removeAttr('disabled');
+        jQuery('#revision_contenido').removeAttr('disabled');
+        jQuery('#fecha_revision_contenidos').removeAttr('disabled');
+        jQuery('#revision_especificaciones').removeAttr('disabled');
+        jQuery('#fecha_revision_especificaciones').removeAttr('disabled');
+        jQuery('#revision_consejo').removeAttr('disabled');
+        jQuery('#fecha_revision_consejo').removeAttr('disabled');
+        jQuery('#aprobado').removeAttr('disabled');
+        jQuery('#fechaAprobacion').removeAttr('disabled');
+        jQuery('#cod_registro').removeAttr('disabled');
+        jQuery('#cod_controlCambios').removeAttr('disabled');
+        jQuery('#fechaControlCambios').removeAttr('disabled');
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+        jQuery('#cod_controlCambios').removeAttr('disabled');
+        jQuery('#fechaControlCambios').removeAttr('disabled');
+      }else if($('.form-group').data('atributo')=='Elaborado'){
+        jQuery('#revision_contenido').removeAttr('disabled');
+        jQuery('#fecha_revision_contenidos').removeAttr('disabled');
+        jQuery('#revision_especificaciones').removeAttr('disabled');
+        jQuery('#fecha_revision_especificaciones').removeAttr('disabled');
+        jQuery('#revision_consejo').removeAttr('disabled');
+        jQuery('#fecha_revision_consejo').removeAttr('disabled');
+        jQuery('#aprobado').removeAttr('disabled');
+        jQuery('#fechaAprobacion').removeAttr('disabled');
+        jQuery('#cod_registro').removeAttr('disabled');
+        jQuery('#cod_controlCambios').removeAttr('disabled');
+        jQuery('#fechaControlCambios').removeAttr('disabled');
+         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+      }else if($('.form-group').data('atributo')=='Revisado'){
+        jQuery('#aprobado').removeAttr('disabled');
+        jQuery('#fechaAprobacion').removeAttr('disabled');
+        jQuery('#cod_registro').removeAttr('disabled');
+        jQuery('#cod_controlCambios').removeAttr('disabled');
+        jQuery('#fechaControlCambios').removeAttr('disabled');
+         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+        
+      }else if($('.form-group').data('atributo')=='Aprobado'){
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#archivo_el').removeAttr('disabled');
+        
+      }
+    }
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <script type="text/javascript">
+    var ficha = "{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}";
+    $('.tab-link').click( function() {
+    
+    var tabID = $(this).attr('data-tab');
+    
+    $(this).addClass('active').siblings().removeClass('active');
+    
+    $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+  });
+  </script>
+  <script type="text/javascript">
+    // Get the modal
+    var modal = document.getElementById('adddoc');
+    // Get the button that opens the modal
+    var btn = document.getElementById("botonModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    $('#edit_send').click(function(event){
+        window.reload();
+    });
+  </script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src="{{=URL('static','js/agregarDoc.js')}}"></script>
+{{end}}
