@@ -21,7 +21,7 @@ function validaPaginaWeb () {
         return true;
     }
     if (!($this.val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) {
-        $this.attr('data-content', "Formato incorrecto de pagina web");
+        $this.attr('data-content', "Formato incorrecto de pagina web. Ejemplo: hola.com");
         $this.popover('show');
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -42,7 +42,7 @@ function validaEmailAlternativo () {
         return true;
     }
     if (!($this.val().match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/))){
-        $this.attr("data-content", "El correo no tiene el formato correcto");
+        $this.attr("data-content", "El correo no tiene el formato correcto. Ejemplo: hola_mundo@dominio.com");
         console.log($this.popover('show'));
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -83,7 +83,7 @@ function validaCelular () {
         return false;
     }
     if (!($this.val().match(/^\d{7}$/gm))) { // Extension de 1 a 4 digitos
-        $this.attr('data-content', 'El número de celular tiene el formato incorrecto');
+        $this.attr('data-content', 'El número de celular tiene el formato incorrecto. Ejemplo 1234567');
         $this.popover('show');
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -122,7 +122,7 @@ function validaTelefonoResidencial (){
         return false;
     }
     if (!($this.val().match(/^\d{11}$/gm))){
-        $this.attr("data-content", "El teléfono tiene el formato incorrecto");
+        $this.attr("data-content", "El teléfono tiene el formato incorrecto. Ejemplo: 02121234567");
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
         $this.popover('show');
@@ -161,8 +161,8 @@ function validaContactoEmergencia () {
         $this.popover('show');
         return false;
     }
-    if (!$this.val().match(/\d{7}$/)) { 
-        $this.attr("data-content", 'El contacto de emergencia debe tener solo números');
+    if (!$this.val().match(/\d{11}$/)) { 
+        $this.attr("data-content", 'El contacto de emergencia debe tener solo números. Ejemplo: 02121234567');
         $this.popover('show');
         $this.addClass('input-error');
         return false;
