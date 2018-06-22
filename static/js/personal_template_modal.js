@@ -40,7 +40,7 @@ function validaEmailAlternativo () {
         $this.popover('hide');
         return true;
     }
-    if (!($this.val().match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/)) || $this.val() < 999999999){
+    if (!($this.val().match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/))){
         $this.attr("data-content", "El correo no tiene el formato correcto");
         console.log($this.popover('show'));
         $this.addClass('input-error');

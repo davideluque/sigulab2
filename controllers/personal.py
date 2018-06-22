@@ -218,11 +218,11 @@ class Usuario(object):
         self.f_estatus = usuario.f_estatus
         self.f_categoria = usuario.f_categoria
         self.f_condicion = usuario.f_condicion
-        self.f_fecha_ingreso = usuario.f_fecha_ingreso
-        self.f_fecha_salida = usuario.f_fecha_salida
-        self.f_fecha_ingreso_usb = usuario.f_fecha_ingreso_usb
-        self.f_fecha_ingreso_ulab = usuario.f_fecha_ingreso_ulab
-        self.f_fecha_ingreso_admin_publica = usuario.f_fecha_ingreso_admin_publica
+        self.f_fecha_ingreso = transformar_fecha(usuario.f_fecha_ingreso) 
+        self.f_fecha_salida = transformar_fecha(usuario.f_fecha_salida) 
+        self.f_fecha_ingreso_usb = transformar_fecha(usuario.f_fecha_ingreso_usb) 
+        self.f_fecha_ingreso_ulab = transformar_fecha(usuario.f_fecha_ingreso_ulab) 
+        self.f_fecha_ingreso_admin_publica = transformar_fecha(usuario.f_fecha_ingreso_admin_publica) 
 
         # pagina 3
         self.f_cargo = usuario.f_cargo
@@ -261,6 +261,30 @@ def listado():
         usuario=usuario
         )
 
+def transformar_fecha(fecha):
+    dias_meses = {
+        1: '01',
+        2: '02',
+        3: '03',
+        4: '04',
+        5: '05',
+        6: '06',
+        7: '07',
+        8: '08',
+        9: '09',
+    }
+    if fecha != None:
+        if fecha.day < 10 and fecha.month < 10:
+            return dias_meses[fecha.day] + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        elif fecha.day < 10:
+            return dias_meses[fecha.day] + "-" + str(fecha.month) + "-" + str(fecha.year)
+        elif fecha.month < 10:
+            return str(fecha.day) + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        else:
+            return str(fecha.day) + "-" + str(fecha.month) + "-" + str(fecha.year)
+
+
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ficha():
     # Obtenemos la cédula
@@ -292,8 +316,7 @@ def ficha():
 
     ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
     if(ubicacion): ubicacion = ubicacion.codigo
-
-
+    
     personal ={
         "nombre" : elm.f_nombre,
         "apellido" : elm.f_apellido,
@@ -304,8 +327,8 @@ def ficha():
         "pagina_web" : elm.f_pagina_web,
         "categoria" : elm.f_categoria,
         "cargo" : elm.f_cargo,
-        "fecha_ingreso" : elm.f_fecha_ingreso,
-        "fecha_salida" : elm.f_fecha_salida,
+        "fecha_ingreso" : transformar_fecha(elm.f_fecha_ingreso),
+        "fecha_salida" : transformar_fecha(elm.f_fecha_salida),
         "estatus" : elm.f_estatus,
         "dependencia" : dep,
         "celular" : elm.f_celular,
@@ -313,9 +336,9 @@ def ficha():
         "contacto_emergencia" : elm.f_contacto_emergencia,
         "direccion" : elm.f_direccion,
         "gremio" : elm.f_gremio,
-        "fecha_ingreso_usb" : elm.f_fecha_ingreso_usb,
-        "fecha_ingreso_ulab" : elm.f_fecha_ingreso_ulab,
-        "fecha_ingreso_admin_publica" : elm.f_fecha_ingreso_admin_publica,
+        "fecha_ingreso_usb" : transformar_fecha(elm.f_fecha_ingreso_usb),
+        "fecha_ingreso_ulab" : transformar_fecha(elm.f_fecha_ingreso_ulab) ,
+        "fecha_ingreso_admin_publica" : transformar_fecha(elm.f_fecha_ingreso_admin_publica),
         "condicion" : elm.f_condicion,
         "unidad_jerarquica_superior" : Usuperior,
         "rol" : elm.f_rol,
@@ -329,17 +352,18 @@ def ficha():
     }
 
     validacion = request.post_vars.validacion
-
     if(validacion == "true" or validacion == "false"):
         cambiar_validacion(validacion, personal)
 
+    
 
     #Dropdown ubicaciones
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
-
+    
+    print(personal['fecha_ingreso'])
     return dict(
         personal=personal,
         categorias=categorias,
