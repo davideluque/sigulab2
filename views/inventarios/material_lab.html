@@ -152,7 +152,11 @@
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('material_lab',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{ =espacio.nombre }}
+				{{if espacios:}}
+					{{ =espacio.codigo }}
+				{{else:}}
+					{{=espacio.nombre}}
+				{{pass}}
 			</div>
 			{{ pass }}
 		</div>
@@ -171,7 +175,7 @@
 		{{include 'inventarios/inventario_seccion_mat.html'}}
 	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
 	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
-		{{include 'inventarios/inventario_laboratorio.html'}}
+		{{include 'inventarios/inventario_laboratorio_mat.html'}}
 	<!-- Se lista el inventario de una seccion -->
 	{{else:}}
 		{{include 'inventarios/inventario_seccion_mat.html'}}
@@ -276,7 +280,9 @@
 	  });
 	  $('#botonModal').addClass('pull-left')
 	  $('#filtrar').addClass('pull-left');
-	  
+	  $('#espacioBuscar').addClass('pull-left');
+
+
 	  $('.dataTables_filter').appendTo('#buttons');
 
 	  api.buttons().container().appendTo('#buttons');

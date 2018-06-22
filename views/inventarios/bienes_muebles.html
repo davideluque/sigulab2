@@ -152,7 +152,11 @@
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('bienes_muebles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{ =espacio.nombre }}
+				{{if espacios:}}
+					{{ =espacio.codigo }}
+				{{else:}}
+					{{ =espacio.nombre }}
+				{{pass}}
 			</div>
 			{{ pass }}
 		</div>

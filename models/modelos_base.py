@@ -156,7 +156,7 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 db.define_table(
     'espacios_fisicos',
     #Atributos;
-    Field('nombre', 'string', unique=True, notnull=True, label=T('Nombre')),
+    Field('codigo', 'string', unique=True, notnull=True, label=T('Nombre')),
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
     

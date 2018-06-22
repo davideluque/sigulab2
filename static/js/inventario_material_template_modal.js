@@ -63,21 +63,19 @@ $(document).ready(function () {
                     //$("#err_nombre").show();
 
                 }
-
-
                 $(this).addClass('input-error');
                 next_step = false;
             }else {
                 if (($(this).attr('name')=="cantidad_mat")) {
                     if (!($(this).val().match(/^[0-9]+$/))) {
-                        $("#err_no_bien").html("Formato Inválido. Ingrese solo dígitos numéricos");
-                        $("#err_no_bien").show();
+                        $("#err_cantidad").html("Formato Inválido. Ingrese solo dígitos numéricos");
+                        $("#err_cantidad").show();
                         $(this).addClass('input-error');
                         next_step = false;
                     }
                     else {
                         $(this).removeClass('input-error');
-                        $("#err_no_bien").hide();
+                        $("#err_cantidad").hide();
                     }
                 }
                 else if (($(this).attr('name')=="capacidad")) {
@@ -92,7 +90,20 @@ $(document).ready(function () {
                         $("#err_placa").hide();
                     }
                 }
-                else if (($(this).attr('name')=="ancho")) {
+
+                else if (($(this).attr('name')=="unidades")) {
+                    if (!($(this).val().match(/^[0-9]{1,5}$/))) {
+                        $("#err_unidades").html("Ingrese solo dígitos numéricos. Máximo 5 dígitos");
+                        $("#err_unidades").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_unidades").hide();
+                    }
+                }
+                else if (($(this).attr('name')=="ancho_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_ancho").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_ancho").show();
@@ -104,7 +115,7 @@ $(document).ready(function () {
                         $("#err_ancho").hide();
                     }
                 }
-                else if (($(this).attr('name')=="largo")) {
+                else if (($(this).attr('name')=="largo_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_largo").html("Ingrese números decimales con punto: 2.5");
                         $("#err_largo").show();
@@ -115,7 +126,7 @@ $(document).ready(function () {
                         $(this).removeClass('input-error');
                         $("#err_largo").hide();
                     }
-                }else if (($(this).attr('name')=="alto")) {
+                }else if (($(this).attr('name')=="alto_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_alto").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_alto").show();
@@ -126,7 +137,8 @@ $(document).ready(function () {
                         $(this).removeClass('input-error');
                         $("#err_alto").hide();
                     }
-                }else if (($(this).attr('name')=="diametro")) {
+                }
+                else if (($(this).attr('name')=="diametro_mat")) {
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
                         $("#err_diametro").html("Ingrese solo números decimales con punto: 2.5");
                         $("#err_diametro").show();

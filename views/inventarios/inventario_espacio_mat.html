@@ -19,7 +19,6 @@
 </div>
 -->
 <!-- Fin Boton Agregar Sustancia -->
-
 <!-- Inicio Listado de sustancias -->
 <div class="container">
 <div class="row">
@@ -29,6 +28,7 @@
       <!-- Filtrado -->
         <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
         <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+        <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -38,12 +38,13 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">N° BM</th>
-                <th class="camposTabla linksNombres">Tipo</th>
-                <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
-                <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Capacidad</th>
+                <th class="camposTabla linksNombres">Unidad</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -51,26 +52,27 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
-                <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
-                <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                <td class="camposTabla">{{=bm['bm_marca']}}</td>
-                <td class="camposTabla">{{=bm['bm_modelo']}}</td>
-                <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+                <td class="camposTabla">{{=bm['sb_descripcion']}}</td>
+
+                <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_unidad']}}</td>
+                <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+
             </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
           <th class="camposTabla linksNombres">Nombre</th>
-          <th class="camposTabla linksNombres">N° BM</th>
-          <th class="camposTabla linksNombres">Tipo</th>
-          <th class="camposTabla linksNombres">Placa</th>
           <th class="camposTabla linksNombres">Marca</th>
           <th class="camposTabla linksNombres">Modelo</th>
-          <th class="camposTabla linksNombres">Serial</th>
+          <th class="camposTabla linksNombres">Descripción</th>
+          <th class="camposTabla linksNombres">Capacidad</th>
+          <th class="camposTabla linksNombres">Unidad</th>
+          <th class="camposTabla linksNombres">Cantidad</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -103,7 +105,7 @@
               text-align: left;
               padding-top: 12px;
               color: white;
-            ">Material de laboratorio<button type="button" class="close" data-dismiss="modal">&times;</button>
+            ">Material<button type="button" class="close" data-dismiss="modal">&times;</button>
             </h4>
           </div>
         </div>
@@ -116,15 +118,44 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                
                 <!-- Primer paso-->
+            <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                  <div class="col-sm-1 col1Body"> 
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step">4</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Características del Material</h4>                
+                    <label>Campos marcados con * son obligatorios.</label>
+
+                    <div class="form-group">
+                        <label>Seleccione la clasificación del Material*</label>
+                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
+                          <option value="">Seleccione una opción</option>
+                          <option value="Material de Laboratorio">Material de Laboratorio</option>
+                          <option value="Consumible">Consumible</option>
+                        </select>
+                        <div class="field-error"> <p id="error-clasificacion"></p></div>
+                      </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()">Siguiente</button>    
+            </fieldset>
+                
+                <!-- Segundo paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
-                      <span class="step activePass">1</span>
-                      <span class="step">2</span>
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
                       <span class="step">3</span>
+                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -133,34 +164,34 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre_mat" name="nombre" title="Nombre del material" placeholder="Nombre del material*"  required>
-                            <div class="field-error"> <p id="err_cantidad_mat"> </p> </div>
+                            <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del material" placeholder="Nombre del material*" required>
+                            <div class="field-error"> <p id="err_nombre_mat"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad" placeholder="Cantidad de ese material*" title="Ingrese un digito numerico"   required>
-                            <font color="red"><div id="err_cantidad_mat" hidden></div></font>
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                            <font color="red"><div id="err_cantidad" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción" >
+                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
                             
 
                         <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca" >
+                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca">
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id="modelo_mat" name="modelo" value="" placeholder="Modelo/Código" >
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código">
                             <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                         </div>
 
-                        <label>Aforado</label>
-                        <div class="form-group">
-                              <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado" required>
+                        <div class="form-group" id="grupo-aforado">
+                              <label>Aforado</label>
+                              <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado">
                                 <!-- Insertar un for-->
                                 <option type="text" value="">¿Es aforado?*</option>
                                 <option value="Si">Si</option>
@@ -169,10 +200,6 @@
                               </select>
                               <div class="field-error"> <p id="err_aforado"> </p> </div>
                         </div>      
-                        
-
-
-
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -186,8 +213,9 @@
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step activePass">2</span>
-                        <span class="step">3</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -196,8 +224,7 @@
   
                         
                         <div class="form-group">
-                          <label>Calibración</label>
-                                <select class="form-control" type="select" id="calibracion" name="calibracion" placeholder="Calibración" required>
+                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración">
                                   <!-- Insertar un for-->
                                   <option type="text" value="">¿Requiere calibración?*</option>
                                   <option value="Si">Si</option>
@@ -206,28 +233,52 @@
                                 <div class="field-error"> <p id="err_aforado"> </p> </div>
                         </div>  
 
-                        <label>Capacidad</label>
-                        <div class="form-group">
+                        
+                        <div class="form-group" id="grupo-capacidad">
+                                <label>Capacidad</label>
                                 <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
                                 <font color="red"><div id="err_capacidad" hidden></div></font>
                         </div>
 
 
-                        <div class="form-group">
+                        <div class="form-group" id="grupo-cap">
                                 <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
-                                  <option value="">Selecione una unidad</option>
+                                  <option value="">Seleccione una unidad</option>
                                   {{ for med in unidad_cap:}}
                                   <option value="{{=med}}">{{=med}}</option>
                                   {{pass}}
                                 </select>
                                 <div class="field-error"> <p id="error-unidad" > </p> </div>
-                              </div>
-                        
-                        <label>Materiales</label>
+                        </div>
+
+                        <div class="form-group" id="grupo-presentacion">
+                                <label>Presentación</label>
+                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" >
+                                  <option value="">Seleccione una presentación*</option>
+                                  {{ for med in presentacion:}}
+                                  <option value="{{=med}}">{{=med}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-unidad" > </p> </div>
+                        </div>
+
                         <div class="form-group">
-                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                            <input type="hidden" class="form-control" id="unidades" 
+                            name="unidades" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                            <font color="red"><div id="err_unidades" hidden></div></font>
+                        </div>
+
+                        <div class="form-group" id="grupo-total">
+                            <label class="form-group" id="total" style="margin-bottom: 0px">Total del Material</label>
+                            <input type="hidden" class="form-control" id="total_mat" name="cod_loc" placeholder="" readonly >
+                            <div class="field-error"> <p id="error-total_mat"> </p> </div>
+                        </div>
+                        
+                        <div class="form-group" id="grupo-material">
+                              <label>Material</label>
+                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
                                 <!-- Insertar un for-->
-                                <option type="text" value="">Selecione un material*</option>
+                                <option type="text" value="">Seleccione un material*</option>
                                 {{ for material in material_pred: }}
                                 <option value="{{=material}}">{{=material}}</option>
                                 {{pass}}
@@ -235,20 +286,17 @@
                               <div class="field-error"> <p id="error-material"> </p> </div>
                         </div>
 
-                          <div class="form-group">
-                                <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material secundario">
-                                  <!-- Insertar un for-->
-                                  <option type="text" value="">Selecione un material secundario</option>
-                                  {{ for material in material_pred: }}
-                                  <option value="{{=material}}">{{=material}}</option>
-                                  {{pass}}
-                                </select>
-                                <div class="field-error"> <p id="error-material-sec"> </p> </div>
-                            </div>
+                        <div class="form-group" id="grupo-material2">
+                            <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario">
+                              <!-- Insertar un for-->
+                              <option type="text" value="">Seleccione un material secundario</option>
+                              {{ for material in material_pred: }}
+                              <option value="{{=material}}">{{=material}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                      </div>
 
-
-
-                          
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -264,17 +312,18 @@
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <h4 class="titulosForm">Características del Material</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
-                        <div class="form-group">
-                        <label>Dimensiones</label>
-                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                            <option value="">Selecione una unidad</option>
+                        <div class="form-group" id="grupo-unidad">
+                          <label>Dimensiones</label>
+                          <select class="form-control" value="" type="select" id="unidad_mat" name="unidad_mat" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                            <option value="">Seleccione una unidad</option>
                             {{ for med in unidad_med:}}
                             <option value="{{=med}}">{{=med}}</option>
                             {{pass}}
@@ -283,23 +332,23 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                          <input type="hidden" class="form-control" id="ancho_mat" name="ancho_mat" title="Formato ##.##" placeholder="Ancho">
                           <font color="red"><div id="err_ancho" hidden></div></font>
                         </div>
 
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                          <input type="hidden" class="form-control" id="largo_mat" name="largo_mat" title="Formato ##.##" placeholder="Largo" >
                           <font color="red"><div id="err_largo" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                          <input type="hidden" class="form-control" id="alto_mat" name="alto_mat" title="Formato ##.##" placeholder="Altura" >
                           <font color="red"><div id="err_alto" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                          <input type="hidden" class="form-control" id="diametro_mat" name="diametro_mat" title="Formato ##.##" placeholder="Diámetro" >
                           <font color="red"><div id="err_diametro" hidden></div></font>
                         </div>
 
@@ -336,46 +385,62 @@ del concepto y tipo de ingreso o egreso -->
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Mobiliario"){
-      document.getElementById("marca").type = 'hidden';
-      document.getElementById("modelo").type = 'hidden';
-      document.getElementById("serial").type = 'hidden';
-      document.getElementById("estatus").type = 'hidden';
-      document.getElementById("calibrar").style.display = 'none';
+    if (selecion.value == "Material de Laboratorio"){
+      document.getElementById("unidades").type = 'hidden';
+      document.getElementById("unidades").removeAttribute("required", "");
+      document.getElementById("total_mat").type = 'hidden';
+      document.getElementById("total_mat").removeAttribute("required", "");
+      document.getElementById("grupo-presentacion").style.display = 'none';
+      document.getElementById("presentacion").removeAttribute("required", "");
+      document.getElementById("grupo-aforado").style.display = 'block';
+      document.getElementById("grupo-material").style.display = 'block';
+      document.getElementById("grupo-material2").style.display = 'block';
+      document.getElementById("grupo-unidad").style.display = 'block';
+      document.getElementById("calibracion_mat").style.display = 'block';
+      document.getElementById("grupo-cap").style.display = 'block';
+      document.getElementById("aforado").setAttribute("required", "");
+      document.getElementById("calibracion_mat").setAttribute("required", "");
+      document.getElementById("material_mat").setAttribute("required", "");
+      document.getElementById("grupo-capacidad").style.display = 'block';
+      document.getElementById("capacidad").type = 'text';
+      document.getElementById("grupo-total").style.display = 'none';
+
     }
     else{
-      document.getElementById("select-calibrar").setAttribute("required", "");
-      document.getElementById("marca").type = 'text';
-      document.getElementById("modelo").type = 'text';
-      document.getElementById("serial").type = 'text';
-      document.getElementById("estatus").type = 'text';
-      document.getElementById("calibrar").style.display = 'block';
-    }
-    document.getElementById("fecha_calibracion").style.display = 'none';
-  }
-  // Mostrar fecha de calibracion
-  function display_date(value){
-    if ( value == "Si" ){
-      document.getElementById("fecha_calibracion").style.display = 'block';
-      document.getElementById("fecha_calibracion").setAttribute("required", "");
-    }else{
-      document.getElementById("fecha_calibracion").style.display = 'none';
+      document.getElementById("grupo-total").style.display = 'block';
+      document.getElementById("grupo-cap").style.display = 'none';
+      document.getElementById("grupo-capacidad").style.display = 'none';
+      document.getElementById("capacidad").type = 'hidden';
+      document.getElementById("grupo-presentacion").style.display = 'block';
+      document.getElementById("presentacion").setAttribute("required", "");
+      document.getElementById("unidades").type = 'text';
+      document.getElementById("unidades").setAttribute("required", "");
+      document.getElementById("total_mat").type = 'text';
+      document.getElementById("total_mat").setAttribute("required", "");
+      document.getElementById("grupo-aforado").style.display = 'none';
+      document.getElementById("aforado").removeAttribute("required", "");
+      document.getElementById("grupo-material").style.display = 'none';
+      document.getElementById("grupo-material2").style.display = 'none';
+      document.getElementById("grupo-unidad").style.display = 'none';
+      document.getElementById("material_mat").removeAttribute("required", "");
+      document.getElementById("calibracion_mat").style.display = 'none';
+      document.getElementById("calibracion_mat").removeAttribute("required", "");
     }
   }
   // Mostrar unidades
   function display_units(value){
     if ( value == '' ){
-      document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho").type = 'hidden';
-      document.getElementById("largo").type = 'hidden';
-      document.getElementById("alto").type = 'hidden';
-      document.getElementById("diametro").type = 'hidden';
+      document.getElementById("unidad_mat").type = 'hidden';
+      document.getElementById("ancho_mat").type = 'hidden';
+      document.getElementById("largo_mat").type = 'hidden';
+      document.getElementById("alto_mat").type = 'hidden';
+      document.getElementById("diametro_mat").type = 'hidden';
     }else{
-      document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho").type = 'text';
-      document.getElementById("largo").type = 'text';
-      document.getElementById("alto").type = 'text';
-      document.getElementById("diametro").type = 'text';
+      document.getElementById("unidad_mat").type = 'text';
+      document.getElementById("ancho_mat").type = 'text';
+      document.getElementById("largo_mat").type = 'text';
+      document.getElementById("alto_mat").type = 'text';
+      document.getElementById("diametro_mat").type = 'text';
     }
   }
   // Valida los campos de la forma en el modal "addbm"
@@ -383,7 +448,6 @@ del concepto y tipo de ingreso o egreso -->
     // Buscando divs para ingresar mensajes de error
     var error_total = document.getElementById("error-total");
     var error_uso_interno = document.getElementById("error-uso-interno");
-    var fecha_calibracion = document.getElementById("fecha_calibracion")
     // Limpiando los mensajes anteriores de validadores
     if (error_total.innerText != ''){
       error_total.innerText = '';
@@ -442,16 +506,12 @@ del concepto y tipo de ingreso o egreso -->
   function is_zero(n){
     return (n == 0)
   }
-  function placeholder_localizacion(value){
-    var x = document.getElementById("cod_loc");
-    var y = document.getElementById("localizacion");
-    if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
-      x.placeholder = '150301';
-      x.value = '150301';
-    }else{;
-      x.placeholder ='240107';
-      x.value = '240107';
-    }
+  function placeholder_total(value){
+    var x = document.getElementById("unidades");
+    var y = document.getElementById("cantidad_mat");
+    var z = document.getElementById("total_mat");
+    z.placeholder=y.value*x.value
+    z.value=y.value*x.value
   }
   function colocar_subcategoria(value){
     var dict = {

@@ -10,6 +10,7 @@
           <div id="buttons">
             <!-- Filtrado -->
               <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+              <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
             <!-- Filtrado -->    
           </div>
             <br>
@@ -18,11 +19,13 @@
               <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                 <thead>
                     <tr id="titulosListado">
-                        <th class="camposTabla linksNombres">Nombre</th>
-                        <th class="camposTabla linksNombres">N° BM</th>
-                        <th class="camposTabla linksNombres">Placa</th>
-                        <th class="camposTabla linksNombres">Tipo</th>
-                        <th class="camposTabla linksNombres">Dependencia</th>
+                      <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Marca</th>
+                      <th class="camposTabla linksNombres">Modelo</th>
+                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Capacidad</th>
+                      <th class="camposTabla linksNombres">Unidad</th>
+                      <th class="camposTabla linksNombres">Cantidad</th>
                         <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                         <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
@@ -30,13 +33,16 @@
                 <tbody>
                   {{for bm in inventario:}}
                     <tr>
-                        <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                         <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                        <td class="camposTabla">{{=bm['bm_num']}}</td>
-                        <td class="camposTabla">{{=bm['bm_placa']}}</td>
-                        <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
-                        <td class="camposTabla">{{=db(db.dependencias.id == bm['bm_depedencia']).select().first().nombre}}</td>
-                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['bm_espacio_fisico']).select().first().nombre}}</td>
+                        <td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                        <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                        <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+                        <td class="camposTabla">{{=bm['sb_descripcion']}}</td>
+        
+                        <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
+                        <td class="camposTabla">{{=bm['sb_unidad']}}</td>
+                        <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>
                     </tr>
                   {{pass}}           
                 </tbody>
@@ -44,11 +50,13 @@
                 <tfoot id="collapseFiltros">
                     <tr>
                       <th class="camposTabla linksNombres">Nombre</th>
-                      <th class="camposTabla linksNombres">N° BM</th>
-                      <th class="camposTabla linksNombres">Placa</th>
-                      <th class="camposTabla linksNombres">Tipo</th>
-                      <th class="camposTabla linksNombres">Dependencia</th>
-                      <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                      <th class="camposTabla linksNombres">Marca</th>
+                      <th class="camposTabla linksNombres">Modelo</th>
+                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Capacidad</th>
+                      <th class="camposTabla linksNombres">Unidad</th>
+                      <th class="camposTabla linksNombres">Cantidad</th>
+                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                       <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
                 </tfoot>
