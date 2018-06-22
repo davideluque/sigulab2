@@ -561,6 +561,13 @@ $(document).ready(function () {
         $(this).removeClass('input-error');
     })
 
+    $('#formularioCarga').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+          e.preventDefault();
+          return false;
+        }
+      });
     // submit
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');

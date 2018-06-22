@@ -121,3 +121,7 @@ th {
 th {
 	background: #0300d7;
 }
+
+.datepicker th {
+	background: transparent;
+}

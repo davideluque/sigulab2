@@ -397,7 +397,7 @@
               <h1 id="agregar">+</h1>
             </div>
           </div>
-          <div class="col-sm-11" id="col11Header">
+          <div class="col-sm-11" id="col11Header" style="background-color: #d9534f;">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
             <h4 class="modal-title" id="nuevoServicio">Ocultar Personal</h4>
           </div>
@@ -406,15 +406,15 @@
       <!-- Fin Modal Header -->
 
       <!-- Modal Body -->
-      <div class="modal-body addBody">
-        <div class="row addRow">
-          <div class="col-md-12 form-box">
+      <div class="modal-body container-fluid">
+        <div class="row">
+          <div class="col-md-12 form-box text-center">
             <h4>¿Seguro desea ocultar a este personal?</h4>
               <form id="form_eliminacion" method="post"
               action="{{=URL('personal', 'eliminar')}}">
-              <input type="hidden" name="cedula_eliminar"  value="{{=personal['ci']}}">
-              <button type="submit" class="btn btn-danger">Ocultar</button>
-              <button data-dismiss="modal" aria-label="Cerrar">Cerrar</button>
+                <input type="hidden" name="cedula_eliminar"  value="{{=personal['ci']}}">
+                <button type="submit" class="btn btn-danger">Ocultar</button>
+                <button data-dismiss="modal" aria-label="Cerrar">Cerrar</button>
               </form>
           </div>
         </div>
