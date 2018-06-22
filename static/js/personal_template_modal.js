@@ -253,12 +253,6 @@ function validaFechaIngreso(){
 }
 
 function voltearFecha(fecha){
-    var dia = fecha.substr(0,2);
-    var mes = fecha.substr(3,2);
-    var anio = fecha.substr(6,9);
-
-    var fecha = anio + "-" + mes + "-" + dia;
-    
     return fecha
 }
 
