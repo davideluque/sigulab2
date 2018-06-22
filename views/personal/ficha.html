@@ -32,9 +32,9 @@
               <form id="form_eliminacion" method="post"
                   action="{{=URL('personal', 'eliminar')}}">
 
-                  <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
-                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
-                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
+                  <button type="button" class="btn btn-primary boton-sigulab" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+                  <button type="submit" class="btn boton-sigulab btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn boton-sigulab btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
               </form>
               </div>
               
@@ -217,8 +217,8 @@
         {{if personal['por_validar']:}}
         <div class="modal-footer">
           <div class=" botonesFicha text-center" id="botones_validacion" >
-            <button type="submit" class="btn btn-primary buttons-html5" id = "validar" name = "validar_ficha" value="True"><i class="fa fa-check"></i></button>
-            <button type="submit" class="btn btn-danger buttons-html5" id = "rechazar" name = "rechazar_ficha" ><i class="fa fa-times"></i></button>
+            <button type="submit" class="btn btn-primary boton-sigulab" id = "validar" name = "validar_ficha" value="True"><i class="fa fa-check"></i></button>
+            <button type="submit" class="btn btn-danger boton-sigulab" id = "rechazar" name = "rechazar_ficha" ><i class="fa fa-times"></i></button>
           </div>
           <form method="post">
             <div id="razon-input" class="form-group hidden">

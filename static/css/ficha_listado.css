@@ -117,3 +117,7 @@ th {
 #input-egreso, #input-ingreso{
 	padding-right:0px;
 }
+
+th {
+	background: #0300d7;
+}

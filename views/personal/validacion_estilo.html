@@ -7,7 +7,7 @@
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
   
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
@@ -35,10 +35,9 @@
 <div class="row">
   <h3 class=" text-center"> LISTADO DE USUARIOS POR VALIDAR</h3>
 
-    <div id="buttons" class="text-right">
+  <div id="buttons" class="text-right">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5"><i class="fa fa-filter"></i></button>
-
+      .
       <!-- Filtrado -->    
     </div>
     <br>
@@ -47,10 +46,10 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">Correo</th>
-                <th class="camposTabla linksNombres">Unidad de Adscripcion</th>
-                <th class="camposTabla linksNombres">Cargo</th>
+                <th class="camposTabla linksNombres">NOMBRE</th>
+                <th class="camposTabla linksNombres">CORREO</th>
+                <th class="camposTabla linksNombres">UNIDA DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
             </tr>
         </thead>
 
@@ -87,10 +86,10 @@
 
                                     "
                                     data-jefe = "{{=item['jefe']}}"
-                                    value="{{=item['ci']}}">{{=item['nombre']}} {{=item['apellido']}}</a></td>
-                <td class="camposTabla">{{=item['email']}}</td>
-                <td class="camposTabla">{{=item['dependencia']}}</td>
-                <td class="camposTabla">{{=item['cargo']}}</td>
+                                    value="{{=item['ci']}}">{{=item['nombre'].upper()}} {{=item['apellido'].upper()}}</a></td>
+                <td class="camposTabla">{{=item['email'].upper()}}</td>
+                <td class="camposTabla">{{=item['dependencia'].upper()}}</td>
+                <td class="camposTabla">{{=item['cargo'].upper()}}</td>
             </tr>
           {{pass}}           
         </tbody>
