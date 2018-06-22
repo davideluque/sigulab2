@@ -257,7 +257,7 @@ db.define_table(
     
     # Referencias a otras tablas
     Field('espacio', 'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), 
           label=T('Espacio Físico'), notnull=True),
     
     Field('sustancia', 'reference t_Sustancia',
@@ -399,7 +399,7 @@ db.define_table(
     Field('composicion', 'string', notnull=False, label=T('Composición')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
-            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), 
             notnull=True, 
             label=T('Espacio físico'),
             represent=lambda id, r: db.espacios_fisicos[id].nombre
@@ -435,7 +435,7 @@ db.define_table(
     Field('concentracion', 'string', requires=IS_NOT_EMPTY(), label=T('Concentración')),
 
     Field('espacio_fisico', 'reference espacios_fisicos', 
-            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), notnull=True, label=T('Espacio físico')), 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), notnull=True, label=T('Espacio físico')), 
 
     Field('seccion', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Unidad de Adscripción'), notnull=True),
 

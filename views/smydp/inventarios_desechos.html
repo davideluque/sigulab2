@@ -127,31 +127,57 @@
 		-->
 		{{ if espacios: }}
 			{{dependencias = espacios}}
-		{{pass}}
-		{{ n = len(dependencias) }}
-		{{ filas = n//4 if n%4 == 0 else n//4+1 }}
-		{{ k = 0 }}
-		{{ while k < filas:}}
-			<div id="fila2" class="row">
-				<div class="col-xs-3 col-sm-1"></div>
-				<div class="col-xs-6 col-sm-10">
-					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-					<div class="col-sm-3 columnas">
-						<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
-					</div>
-					{{ for i in range(1,4): }}
-						{{ if 4*k+i < n: }}
-							<div class="col-sm-3 columnas">
-								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-									{{=dependencias[4*k+i].nombre}}
-								</a>
-							</div>
+			{{ n = len(dependencias) }}
+			{{ filas = n//4 if n%4 == 0 else n//4+1 }}
+			{{ k = 0 }}
+			{{ while k < filas:}}
+				<div id="fila2" class="row">
+					<div class="col-xs-3 col-sm-1"></div>
+					<div class="col-xs-6 col-sm-10">
+						<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+						<div class="col-sm-3 columnas">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].codigo}}</a>
+						</div>
+						{{ for i in range(1,4): }}
+							{{ if 4*k+i < n: }}
+								<div class="col-sm-3 columnas">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[4*k+i].codigo}}
+									</a>
+								</div>
+							{{ pass }}
 						{{ pass }}
-					{{ pass }}
+					</div>
+					<div class="col-xs-3 col-sm-1"></div>
 				</div>
-				<div class="col-xs-3 col-sm-1"></div>
-			</div>
-			{{k=k+1}}
+				{{k=k+1}}
+			{{pass}}
+		{{else:}}
+			{{ n = len(dependencias) }} 
+			{{ filas = n//4 if n%4 == 0 else n//4+1 }} 
+			{{ k = 0 }} 
+			{{ while k < filas:}} 
+				<div id="fila2" class="row">
+					<div class="col-xs-3 col-sm-1"></div>
+					<div class="col-xs-6 col-sm-10">
+					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+						<div class="col-sm-3 columnas">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
+						</div>
+						{{ for i in range(1,4): }} 
+							{{ if 4*k+i < n: }} 
+								<div class="col-sm-3 columnas">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[4*k+i].nombre}}
+									</a>
+								</div>
+							{{ pass }} 
+						{{ pass }}
+					</div>
+		  			<div class="col-xs-3 col-sm-1"></div>
+				</div>
+				{{k=k+1}} 
+			{{pass}}
 		{{pass}}
 	</div>
 
@@ -160,8 +186,9 @@
 <!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
 
 	<!-- Se lista el inventario del espacio fisico visitado -->
-	
-	{{include 'smydp/inventario_desechos_dependencia.html'}}
+	{{if espacio_visitado:}} {{include 'smydp/inventario_desechos_espacio.html'}}
+	<!-- Se lista el inventario agregado de la dependencia visitada-->
+	{{else:}} {{include 'smydp/inventario_desechos_dependencia.html'}} {{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
