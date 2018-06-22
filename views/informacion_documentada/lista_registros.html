@@ -100,7 +100,7 @@
         <tbody>
         {{for doc in registros:}}
         <tr>
-          <td class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=doc.codigo}});">{{=doc.codigo}}</a></td>
+          <td class="camposTabla"><a href="{{=URL('informacion_documentada','ficha_registro',args=[doc.codigo])}}" >{{=doc.codigo}}</a></td>
           <td class="camposTabla">{{=doc.fecha_creacion}}</td>
           <td class="camposTabla">{{=doc.descripcion.upper()}}</td>
           <td class="camposTabla">{{=doc.destinatario.upper()}}</td>

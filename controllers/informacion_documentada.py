@@ -281,29 +281,23 @@ def lista_registros():
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def ajax_ficha_registro():
+def ficha_registro():
 
-	session.forget(response)
+	uname = request.args[0]
+	print("------")
+	print(uname)
+	row = db(db.registros.codigo==uname).select()
+	print(".......")
+	print(row)
+	for x in row:
+		print(x)
+	documento =  db(db.documentos.codigo==uname)
 
-
-	dic = {
-		"codigo": request.post_vars.codigo,
-		"fecha_creacion": request.post_vars.fecha_creacion,
-		"descripcion": request.post_vars.descripcion,
-		"destinatario": request.post_vars.destinatario,
-		"remitente": request.post_vars.remitente,
-		"doc_electronico": request.post_vars.doc_electronico,
-		"archivo_fisico": request.post_vars.archivo_fisico,
-	}
 
 	registro =  db(db.registros.codigo==uname)
 
-	if(request.post_vars.eliminar=="eliminar"):
-		db(db.registros.codigo==uname).delete()
-		redirect(URL('..', 'sigulab2','informacion_documentada','lista_documentos', ''))
-
-	### END ###
-	return dict(message=row	)
+	print(registro)
+	return dict(registros=row)
 
 	
 def ficha():
