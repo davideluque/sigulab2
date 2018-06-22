@@ -401,20 +401,56 @@
                       <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body" >
 
-                        <h4 class="titulosForm">Ubicación del Documento</h4>
-                        <div class="input-group">
-                            <input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica">
-                            <label class="label" for="ubicacion_fisica"><i class="lnr lnr-pushpin"></i>Ubicación física del documento</label>
-                        </div>  
-                        <div class="input-group">
-                            <input type="text" class="input" name="archivo_el" id="archivo_el">
-                            <label class="label" for="archivo_el"><i class="lnr lnr-file-empty"></i>Archivo electrónico</label>
-                        </div>
-                        <div class="input-group">
-                            <input type="text" class="input" name="carpeta_el" id="carpeta_el">
-                            <label class="label" for="carpeta_el"><i class="lnr lnr-enter"></i>Carpeta electrónica</label>
-                        </div>
+                        <h4 class="titulosForm">Recursos</h4>
 
+<!--                           <div class="form-group">
+                            <input type="text" class="form-control" id="item_ensayar" name="itemServicio" placeholder="Item a ensayar*">
+                          </div>
+
+                          <div class="form-group">
+                            <textarea class="form-control" id="requisitos" name="requisitosServicio" placeholder="Requisitos" ></textarea>
+                          </div> -->
+
+                          <!-- Personal Requerido -->
+                          <div class="form-group" >
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Personal Requerido*</h6>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tecnico" value="True">Técnico</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_supervisor" value="True">Supervisor</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_tesista" value="True">Tesista</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_pasante" value="True">Pasante</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_preparador" value="True">Preparador</label>
+                              </div>
+
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="" name="per_obrero" value="True">Obrero</label>
+                              </div>
+                              
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="checkbox_per_otro" name="per_otro" value="True" onclick="cambiar_estado_detalle_ambito($(this).prop('checked'), $(this).attr('id'))">Otro</label>
+                              </div>
+
+                              <input type="text" class="form-control" style="display:none;" id="input_per_otro_detalle" name="per_otro_detalle" placeholder="Otro, especifique:*" value=" ">
+                          </div>
+
+                          <!-- Equipo que presta servicio -->
+                          <div class="form-group">
+                            <label>Equipos Requeridos*</label>
+                            <textarea class="form-control" name="equipo_presta_servicio" placeholder="Nombre / Bien Nacional" required></textarea>
+                          </div>
                         </div>
                       </div>
                       <button type="button" class="btn btn-previous botonForm">Anterior</button>
@@ -422,6 +458,51 @@
                     </fieldset>
                     <!-- Fin Quinto Paso -->
 
+                    <!-- Sexto Paso -->
+                    <fieldset class="formField">
+                      <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                      <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step ready">1</span>
+                          <span class="step ready">2</span>
+                          <span class="step ready">3</span>
+                          <span class="step ready">4</span>
+                          <span class="step ready">5</span> 
+                          <span class="step activePass">6</span>
+                        </div>
+
+                      <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+
+                        <h4 class="titulosForm">Recursos Continuación</h4>
+
+                          <!-- Insumos -->
+                          <div class="form-group">
+                            <label>Insumos*</label>
+                            <textarea class="form-control" name="insumos_servicio" placeholder="Materiales que se requieren para la ejecución del servicio" required></textarea>
+                          </div>
+
+                          <!-- Condicion Ambiental -->
+                          <div class="form-group" >
+                              <h6 id="" style="margin-top: 25px; font-size: 15px;">Condicion Ambiental*</h6>
+
+                              <div class="radio">
+                                <label><input type="radio" id="radio_condicion_ambiental" name="condicion_ambiental" value="True" onclick="cambiar_estado_condicion_ambiental('True', $(this).attr('id'))">Si requiere</label>
+                              </div>
+                              
+                              <div class="radio">
+                                <label><input type="radio" id="radio_condicion_ambiental" name="condicion_ambiental" value="False" onclick="cambiar_estado_condicion_ambiental('False', $(this).attr('id'))">No requiere</label>
+                              </div>
+
+                              <input type="text" class="form-control" style="display:none;" id="input_radio_condicion_ambiental" name="condicion_ambiental_detalle" placeholder="Si requiere, especifique:*" value=" ">
+                          </div>
+
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                      <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                      
+                    </fieldset>
+                    <!-- Fin Sexto Paso -->
 
                 </form>
             </div>
