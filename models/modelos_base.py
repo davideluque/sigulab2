@@ -122,7 +122,7 @@ db.define_table(
 
     Field('f_ci',             'string',
           requires=IS_MATCH('^\d+', error_message='Número de cedula inválido.'),
-          notnull=True, label=T('Cédula')),
+           label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
     Field('f_persona_contacto',         'string',
@@ -160,11 +160,11 @@ db.define_table(
 
     Field('f_dependencia', 'reference dependencias',
           requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
-    Field('f_validado', 'boolean', default=False),
-    Field('f_es_supervisor', 'boolean', default = True),
-    Field('f_por_validar', 'boolean', default = False),
-    Field('f_oculto', 'boolean', default = False),
-    Field('f_comentario', 'string', default = "")
+    Field('f_validado', 'boolean', notnull=True, default=False),
+    Field('f_es_supervisor', 'boolean', notnull=True, default = True),
+    Field('f_por_validar', 'boolean', notnull=True, default = False),
+    Field('f_oculto', 'boolean', notnull=True, default = False),
+    Field('f_comentario', 'string', notnull=True, default = "")
     )
 
 db.t_Personal._plural = 'Personal'
