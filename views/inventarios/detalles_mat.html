@@ -158,6 +158,8 @@
                 <div class="col-sm-6">
                     <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                     <button type="button" data-toggle="modal" data-target="#addbm"><i class="fa fa-edit fa-1x"></i></button>
+                    <!-- Boton que solicita eliminar --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                    <button type="button" data-toggle="modal" data-target="#" onclick=""><i class="fa fa-trash fa-1x"></i></button>
                 </div>
             </div>
         </div>
@@ -475,6 +477,108 @@
                     <button type="button" class="btn btn-previous botonForm">Anterior</button>
                     <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Modificar</button>                </fieldset>
                 <!-- Fin Tercer Paso -->
+              </form>
+          </div>
+        </div>               
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fin Modal Agregar BM -->
+
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="deletebm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Eliminar Bien Mueble<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+ 
+                <!-- Primer paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Bien</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group" tag="Formato:">
+                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Material" placeholder="Nombre*" value={{=bien['sb_nombre']}} required>
+                            <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" value={{=bien['sb_marca']}} id="marca" name="marca" placeholder="Marca*" required >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="modelo" value={{=bien['sb_modelo']}} name="modelo" value="" placeholder="Modelo*" required>
+                            <div class="field-error"> <p id="error-modelo"> </p> </div>
+                        </div>
+
+                        
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="Descripcion" value={{=bien['sb_descripcion']}} name="descripcion" placeholder="Descripción*" required>
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                        </div>
+
+                        <label>¿Es aforado?*</label>
+                        <div class="form-group">
+                                <select class="form-control" value="" type="select" id="aforado" name="aforado" placeholder="Aforado" onchange="display_units(this.value)">
+                                <option value="">Selecione una unidad</option>
+                                {{ for option in aforado_options:}}
+                                    {{if bien['sb_aforado']==option:}}
+                                        <option value="{{=option}}" selected="selected" >{{=option}}</option>
+                                    {{else:}}
+                                        <option value="{{=option}}">{{=option}}</option>
+                                    {{pass}}
+                                {{pass}}
+                                </select>
+                            <div class="field-error"> <p id="error-aforado" > </p> </div>
+</div>
+
+                        
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                </fieldset>
+                <!-- Fin Primer Paso -->
               </form>
           </div>
         </div>               
