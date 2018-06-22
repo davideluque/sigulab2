@@ -41,8 +41,8 @@ th {
 }
 
 .botonesListado {
-	background-color: #0300d7; 
-	border-color: #0300d7;
+	background-color: #337ab7; 
+	border-color: #337ab7;
 	color: white !important;
 }
 
@@ -61,7 +61,7 @@ th {
 }
 
 #titulosListado {
-	background-color: #505050;
+	background-color: #337ab7;
 }
 
 .camposTabla {
