@@ -221,7 +221,7 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 
 
 
-# Registra un nueva bm en el espacio fisico indicado. Si el bm ya
+# Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
 def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
@@ -277,6 +277,50 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
                                 f_medida=unidad_id,
                                 f_inventario=inv_id,
                                 f_sustancia=sustancia_id) """
+
+
+
+# Registra un nueva material/consumible en la tabla de modiciaciones. Si el bm ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo 
+# el bm. 
+def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubicacion,
+                descripcion, aforado, calibrar, capacidad, unidad, unidad_dim, 
+                 ancho, largo, alto, diametro, material, material_sec, presentacion,
+                 unidades,total, user , clasificacion):
+
+
+    response.flash = "Se ha enviado una solicidad de modificación del \"{0}\"  \"{1}\" \
+                        .".format(clasificacion,nombre)
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    inv_id = db.modificacion_sin_bn.insert(
+        msb_cantidad = cantidad,
+        msb_nombre = nombre,   
+        msb_marca = marca, 
+        msb_modelo = modelo, 
+        msb_descripcion = descripcion, 
+        msb_material = material, 
+        msb_material_sec = material_sec,
+        msb_calibrar =  calibrar,
+        msb_unidad = unidad, 
+        msb_ancho = ancho, 
+        msb_largo = largo,
+        msb_alto = alto, 
+        msb_diametro = diametro, 
+        msb_espacio = espacio,
+        msb_clasificacion = clasificacion,
+        msb_presentacion = presentacion,
+        msb_unidades = unidades,
+        msb_total = total,
+        msb_aforado = aforado,
+        msb_ubicacion = ubicacion,
+        msb_capacidad = capacidad,
+        msb_unidad_dim = unidad_dim,
+        msb_modifica_ficha = user,
+    )
+
+    return True
+    #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
@@ -603,6 +647,7 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             mbn_localizacion = localizacion, 
             mbn_modifica_ficha = user
         )
+        response.flash = "Se ha enviado la solicitud de modificación exitosamente"
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
@@ -712,9 +757,19 @@ def detalles():
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_mat():
+    #Recuperamos el espacio
     espacio = request.vars['espacio']
+    #El nombre del material/consumible
     name = request.vars['nombreMat']
+
+    # El usuario que está editando
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+
+    # Busco el material/consumible
     bien = db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).select()[0]
+    
+    #Inicializo variables
     material_pred = []
     color = []
     unidad_med = []
@@ -727,6 +782,18 @@ def detalles_mat():
     unidad_adscripcion = []
     unidad_cap = []
     presentacion=[]
+
+    #Si se edita
+    if request.vars.nombre_mat:
+        __agregar_material_modificar(
+            request.vars.nombre_mat,
+            request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
+            request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
+            request.vars.capacidad, request.vars.unidad_cap, 
+                request.vars.unidad_mat,  
+            request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+            request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
+            request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion)
 
     aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']

@@ -4,6 +4,8 @@
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  	<!-- Para los mensajes con flash -->
+	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
 
 {{block head}}
@@ -148,6 +150,10 @@
     <h2 class="dep-titulo text-center">Detalles de {{=bien['sb_nombre']}}</h2>
     <h4 class="dep-titulo text-center">Descripcion: {{=bien['sb_descripcion']}}</h4>
 {{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
 
 <!-- Inicio Boton Modificar BM -->
 <div class="container" id="containerAgregar">
