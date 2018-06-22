@@ -1,0 +1,47 @@
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+.grid-container-ef {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 20px;
+    justify-content: center;
+}
+
+.grid-container {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 20px;
+    justify-content: center;
+  }
+  .grid-item {
+    color: white;
+    font-size: 13px;
+    padding: 20px;
+    background: #337ab7;
+    text-align: center;
+  }
+
+  .grid-item:hover{
+	background-color: #E1E1E1;
+	color: #606060;
+	transition-timing-function: linear;
+    transition-duration: 0.25s;
+    cursor: pointer;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        0% {opacity: 1;}
+        100% {opacity: 0;} 
+    }

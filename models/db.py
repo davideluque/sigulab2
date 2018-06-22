@@ -102,7 +102,7 @@ auth.settings.login_next = URL('index')
 auth.settings.on_failed_authentication = URL('modulos', 'login')
 auth.settings.on_failed_authorization = URL('modulos', 'login')
 
-auth.settings.register_next = URL('modulos', 'redireccionando')
+auth.settings.register_next = URL('modulos', 'login')
 auth.settings.create_user_groups = None
 
 # -------------------------------------------------------------------------
@@ -113,9 +113,9 @@ auth.settings.create_user_groups = None
 # configure email
 # -------------------------------------------------------------------------
 mail = auth.settings.mailer
-#mail.settings.server = myconf.get('smtp.server')
+mail.settings.server = myconf.get('smtp.server')
 #mail.settings.server = 'logging'
-mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
+#mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
 mail.settings.sender = myconf.get('smtp.sender')
 mail.settings.login = myconf.get('smtp.login')
 #mail.settings.ssl = myconf.get('smtp.ssl')

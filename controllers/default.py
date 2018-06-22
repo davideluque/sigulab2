@@ -8,8 +8,9 @@
 # Pagina principal 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
-    val = contar_notificaciones();
+    val = contar_validaciones();
     session.validaciones_pendientes = val
+    session.ficha_negada = db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_comentario).first().f_comentario
     return dict()
 
 def register():
@@ -22,7 +23,7 @@ def recoverpassword():
 def login():
     return redirect(URL('modulos', 'login', vars=dict(error='invalid_data')))
 
-def contar_notificaciones():
+def contar_validaciones():
     usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
     if(len(usuario)>1): usuario = usuario[1]
     else: usuario = usuario.first()
