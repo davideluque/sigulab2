@@ -1470,7 +1470,17 @@ def inventarios_desechos():
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
+                    
+                    inventario = list(db(
+                        (db.t_inventario_desechos.seccion == request.vars.dependencia)).select())
+                    
                     es_espacio = True
+                
+                else:
+                    inventario = list(db(
+                        (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                        (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                        (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1484,10 +1494,10 @@ def inventarios_desechos():
                 # Se muestra como inventario el egregado de los inventarios que
                 # pertenecen a la dependencia del usuario
 
-                inventario = list(db(
-                (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
-                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
+                # inventario = list(db(
+                # (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                # (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                # (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
