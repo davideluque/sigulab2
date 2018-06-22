@@ -4,11 +4,34 @@
 #                                   #
 #-----------------------------------#
 
-#Enviar info a la tabla del listado
-def tabla_categoria():
+def index():
+    redirect(URL('listado_estilo'))
+    return dict()
 
-    #Buscamos la tabla personal
-    tb = db().select(db.t_Personal.ALL)
+#Enviar info a la tabla del listado
+def tabla_categoria(tipo):
+    tb=[]
+
+    #Buscamos la tabla general de personal
+    if tipo =="listado":
+        tb = db(db.t_Personal.f_validado == True)(db.t_Personal.f_es_supervisor == False)(db.t_Personal.f_oculto == False).select(db.t_Personal.ALL)
+
+    #Buscamos la tabla general de empleados por validar
+    elif tipo == "validacion" :
+        usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+        if(len(usuario)>1): usuario = usuario[1]
+        else: usuario = usuario.first()
+        es_supervisor = usuario.f_es_supervisor
+        dependencia = None
+        if es_supervisor:
+            if(auth.user.email == "sigulabusb@gmail.com" or auth.user.email =="asis-ulab@usb.ve"):
+                tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
+
+            else:
+                dependencia = str(usuario.f_dependencia)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)&(db.t_Personal.f_oculto == False)
+                              ).select(db.t_Personal.ALL)
+
 
     #Creamos una lista para enviar a la vista
     jsns = []
@@ -20,13 +43,28 @@ def tabla_categoria():
         #Buscamos el nombre de la dependencia con el id que manda la vista
         named = db(db.dependencias.id == elm.f_dependencia).select(db.dependencias.ALL)
 
-        dep= named[0] if len(named) > 0 else None
+        dep= named[0].nombre if len(named) > 0 else None
+
+        if (dep) : idUSuperior = (db(db.dependencias.nombre==dep).select(db.dependencias.ALL)).first().unidad_de_adscripcion
+        else: idUSuperior=None
+        if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
+        else: Usuperior=None
+        ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
+        ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+        if ext_USB: ext_USB=ext_USB.ext_USB[0]
+        if ext_int: ext_int=ext_int.ext_interna
+
+        ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
+        if(ubicacion): ubicacion = ubicacion.codigo
+
+        jefe = buscarJefe(dep)
 
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
             "ci" : elm.f_ci,
             "email" : elm.f_email,
+            "email_alt" : elm.f_email_alt,
             "telefono" : elm.f_telefono,
             "pagina_web" : elm.f_pagina_web,
             "categoria" : elm.f_categoria,
@@ -34,30 +72,56 @@ def tabla_categoria():
             "fecha_ingreso" : elm.f_fecha_ingreso,
             "fecha_salida" : elm.f_fecha_salida,
             "estatus" : elm.f_estatus,
-            "dependencia" : dep
+            "dependencia" : dep,
+             "celular" : elm.f_celular,
+             "persona_contacto" : elm.f_persona_contacto,
+             "contacto_emergencia" : elm.f_contacto_emergencia,
+             "direccion" : elm.f_direccion,
+             "gremio" : elm.f_gremio,
+             "fecha_ingreso_usb" : elm.f_fecha_ingreso_usb,
+             "fecha_ingreso_ulab" : elm.f_fecha_ingreso_ulab,
+             "fecha_ingreso_admin_publica" : elm.f_fecha_ingreso_admin_publica,
+             "condicion" : elm.f_condicion,
+             "unidad_jerarquica_superior" : Usuperior,
+             "rol" : elm.f_rol,
+             "extension_USB" : ext_USB,
+             "extension_interna" : ext_int,
+             "ubicacion" : ubicacion,
+             "es_supervisor": elm.f_es_supervisor,
+             "validado": elm.f_validado,
+             "jefe": jefe
              })
-        
     return jsns
 
 #Mandar informacion a los dropdowns
 def dropdowns():
 
-    #Dropdown de categoria
-    cat = ['Docente', 'Administrativo', 'Técnico', 'Obrero']
+    #Dropdown de gremio
+    gremio = ['Docente', 'Administrativo', 'Estudiante']
     #Dropdown de dependencias
-    dep = db(db.dependencias.nombre).select(db.dependencias.ALL)
+    departamento = db(db.dependencias.nombre).select(db.dependencias.ALL)
     #Dropdown de estatus
-    est = ['Activo', 'Jubilado', 'Retirado']
+    estatus = ['Activo', 'Retirado', 'Jubilado']
+    #Dropdown de categoria
+    categoria = ['Fijo' , 'Contratado', 'Pasantía' , 'Ayudantía']
+    #Dropdown de condiciones
+    condiciones = ['En funciones', 'Año Sabático', 'Reposo', 'Permiso Pre-Natal', 'Permiso Post-Natal', 'Otro']
+    #Dropdown de roles
+    roles= ['Director', 'Asistente del Director', 'Gestor de SMyDP ', 'Administrador', 'Coordinador de Adquisiciones', 'Coordinador de Importaciones', 'Coordinador de la Calidad', 'Jefe de Laboratorio', 'Asistente de Laboratorio', 'Jefe de Sección', 'Personal de Dependencia', 'Técnico' ]
+    #Dropdown de operadores
+    operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
-    return (cat,dep,est)
+
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
 
 #Funcion que toma las variables de la vista
 def add_form():
-
+    ubicacion = request.post_vars.ubicacion_add
     dic = {"nombre" : request.post_vars.nombre_add,
             "apellido" : request.post_vars.apellido_add,
             "ci" : request.post_vars.ci_add,
             "email" : request.post_vars.email_add,
+            "email_alt" : request.post_vars.email_alt_add,
             "telefono" : request.post_vars.telefono_add,
             "pagina_web" : request.post_vars.pagina_web_add,
             "categoria" : request.post_vars.categoria_add,
@@ -65,19 +129,32 @@ def add_form():
             "fecha_ingreso" : request.post_vars.fecha_ingreso_add,
             "fecha_salida" : request.post_vars.fecha_salida_add,
             "estatus" : request.post_vars.estatus_add,
-            "dependencia" : request.post_vars.dependencia_add
+             "celular" : request.post_vars.operador_add+""+request.post_vars.celular_add,
+             "persona_contacto": request.post_vars.persona_contacto,
+             "contacto_emergencia" : request.post_vars.contacto_emergencia_add,
+             "direccion" : request.post_vars.direccion_add,
+             "gremio" : request.post_vars.gremio_add,
+             "fecha_ingreso_usb" : request.post_vars.fecha_ingreso_usb_add,
+             "fecha_ingreso_ulab" : request.post_vars.fecha_ingreso_ulab_add,
+             "fecha_ingreso_admin_publica" : request.post_vars.fecha_ingreso_admin_publica_add,
+             "condicion" : request.post_vars.condicion_add,
+             "ubicacion" : request.post_vars.ubicacion_add,
+             "dependencia" : request.post_vars.dependencia_add,
+             "rol" : request.post_vars.rol_add,
+             "extension_USB" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_USB).first(),
+             "extension_interna" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_interna).first()
             }
 
-    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
+    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
 
     #Si el diccionario no esta vacio
     if (not(None in dic.values())):
-
         #Insertamos en la base de datos
-        db.t_Personal.insert(f_nombre = dic["nombre"],
+        db(db.t_Personal.f_email == dic['email'] ).update(f_nombre = dic["nombre"],
                                 f_apellido = dic["apellido"],
                                 f_ci = dic["ci"],
                                 f_email = dic["email"],
+                                f_email_alt = dic["email_alt"],
                                 f_telefono = dic["telefono"],
                                 f_pagina_web = dic["pagina_web"],
                                 f_categoria = dic["categoria"],
@@ -85,111 +162,292 @@ def add_form():
                                 f_fecha_ingreso = dic["fecha_ingreso"],
                                 f_fecha_salida = dic["fecha_salida"],
                                 f_estatus = dic["estatus"],
-                                f_dependencia = dic["dependencia"]
-                                )
-        redirect(URL('listado'))
+                              f_celular= dic["celular"],
+            f_persona_contacto = dic['persona_contacto'],
+            f_contacto_emergencia= dic["contacto_emergencia"],
+            f_direccion= dic["direccion"],
+            f_gremio= dic["gremio"],
+            f_fecha_ingreso_usb= dic["fecha_ingreso_usb"],
+            f_fecha_ingreso_ulab= dic["fecha_ingreso_ulab"],
+            f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
+            f_condicion= dic["condicion"],
+            f_ubicacion= dic["ubicacion"],
+            f_extension_USB = dic["extension_USB"],
+            f_extension_interna = dic["extension_interna"],
+            f_por_validar=True,
+            f_validado=False,
+            f_rol= dic["rol"])
+        redirect(URL('listado_estilo'))
 
-#Funcion que toma las variables de la vista
-def edit_form():
 
-    edic = {"nombre" : request.post_vars.nombre_edit,
-            "apellido" : request.post_vars.apellido_edit,
-            "ci" : request.post_vars.ci_edit,
-            "email" : request.post_vars.email_edit,
-            "telefono" : request.post_vars.telefono_edit,
-            "pagina_web" : request.post_vars.pagina_web_edit,
-            "categoria" : request.post_vars.categoria_edit,
-            "cargo" : request.post_vars.cargo_edit,
-            "fecha_ingreso" : request.post_vars.fecha_ingreso_edit,
-            "fecha_salida" : request.post_vars.fecha_salida_edit,
-            "estatus" : request.post_vars.estatus_edit,
-            "dependencia" : request.post_vars.dependencia_edit
-            }
+#Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
+class Usuario(object):
+    """
+    Esta clase usuario no tiene ninguna relacion con la base de datos, solamente
+    es para facilitar la presentacion en el template.
+    """
+    def __init__(self, usuario):
+        # pagina 1
+        self.f_nombre = usuario.f_nombre
+        self.f_apellido = usuario.f_apellido
+        self.f_ci = usuario.f_ci
+        self.f_email = usuario.f_email
+        self.f_email_alt = usuario.f_email_alt
+        dependencia = usuario.f_dependencia
+        dependencia = db(db.dependencias.id == dependencia).select().first()
+        self.f_dependencia = dependencia.nombre
 
-    #if str(edic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}": 
-    #Si el diccionario no esta vacio
-    if (not(None in edic.values())):
+        unidad_superior = db(db.dependencias.id == dependencia.unidad_de_adscripcion).select(db.dependencias.nombre)
+        self.f_unidad_superior = unidad_superior
+        self.f_telefono = usuario.f_telefono
 
-        #Eliminamos la instancia anterior
-        db(db.t_Personal.f_ci == edic["ci"]).delete()
-        #Insertamos en la base de datos
-        db.t_Personal.insert(f_nombre = edic["nombre"],
-                                f_ci = edic["ci"],
-                                f_apellido = edic["apellido"],
-                                f_email = edic["email"],
-                                f_telefono = edic["telefono"],
-                                f_pagina_web = edic["pagina_web"],
-                                f_categoria = edic["categoria"],
-                                f_cargo = edic["cargo"],
-                                f_fecha_ingreso = edic["fecha_ingreso"],
-                                f_fecha_salida = edic["fecha_salida"],
-                                f_estatus = edic["estatus"],
-                                f_dependencia = edic["dependencia"]
-                                )
-                                
-        redirect(URL('listado'))
+        if(usuario.f_celular):
+            self.f_operador = usuario.f_celular[:6]
+            self.f_celular = usuario.f_celular[6:]
+        else:
+            self.f_operador = None
+            self.f_celular = usuario.f_celular
 
-def index():
-    return dict()
+
+        self.f_direccion = usuario.f_direccion
+        self.f_persona_contacto = usuario.f_persona_contacto
+        self.f_contacto_emergencia = usuario.f_contacto_emergencia
+        self.f_pagina_web = usuario.f_pagina_web
+
+        # pagina 2
+        self.f_estatus = usuario.f_estatus
+        self.f_categoria = usuario.f_categoria
+        self.f_condicion = usuario.f_condicion
+        self.f_fecha_ingreso = transformar_fecha(usuario.f_fecha_ingreso) 
+        self.f_fecha_salida = transformar_fecha(usuario.f_fecha_salida) 
+        self.f_fecha_ingreso_usb = transformar_fecha(usuario.f_fecha_ingreso_usb) 
+        self.f_fecha_ingreso_ulab = transformar_fecha(usuario.f_fecha_ingreso_ulab) 
+        self.f_fecha_ingreso_admin_publica = transformar_fecha(usuario.f_fecha_ingreso_admin_publica) 
+
+        # pagina 3
+        self.f_cargo = usuario.f_cargo
+        self.f_gremio = usuario.f_gremio
+        self.f_ubicacion = usuario.f_ubicacion
+        self.f_rol = usuario.f_rol
+        # dependencia ya dada arriba
+        self.f_es_supervisor = usuario.f_es_supervisor
+        self.f_persona_contacto = usuario.f_persona_contacto
 
 #Funcion que envia los datos a la vista
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
-
+    #Obtenemos el usuario loggeado
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
     #Obtenemos los datos para el listado
-    tabla = tabla_categoria()
+    tabla = tabla_categoria("listado")
 
+    #Dropdown ubicaciones
+    idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
+    ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    temp = dropdowns()
-    cat = temp[0]
-    dep = temp[1]
-    est = temp[2]
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
-    editar = []
-    cedit = request.vars.cedula_editar
-    if (cedit != None):
-        editar.append(cedit)
-        editdata = db(db.t_Personal.f_ci == cedit).select(db.t_Personal.ALL)
-        edic = {"nombre" : editdata[0].f_nombre,
-            "apellido" : editdata[0].f_apellido,
-            "ci" : editdata[0].f_ci,
-            "email" : editdata[0].f_email,
-            "telefono" : editdata[0].f_telefono,
-            "pagina_web" : editdata[0].f_pagina_web,
-            "categoria" : editdata[0].f_categoria,
-            "cargo" : editdata[0].f_cargo,
-            "fecha_ingreso" : editdata[0].f_fecha_ingreso,
-            "fecha_salida" : editdata[0].f_fecha_salida,
-            "estatus" : editdata[0].f_estatus,
-            "dependencia" : editdata[0].f_dependencia
-            }
-    else:
-        edic = {"nombre" :None,
-            "apellido" :None,
-            "ci" :None,
-            "email" :None,
-            "telefono" :None,
-            "pagina_web" :None,
-            "categoria" :None,
-            "cargo" :None,
-            "fecha_ingreso" :None,
-            "fecha_salida" :None,
-            "estatus" :None,
-            "dependencia" : None
-            }
+    return dict(
+        grid=tabla,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        roles=roles,
+        operadores=operadores,
+        ubicaciones=ubicaciones,
+        usuario=usuario
+        )
 
-    #Agregamos los datos del formulario a la base de datos
-    add_form()
+def transformar_fecha(fecha):
+    dias_meses = {
+        1: '01',
+        2: '02',
+        3: '03',
+        4: '04',
+        5: '05',
+        6: '06',
+        7: '07',
+        8: '08',
+        9: '09',
+    }
+    if fecha != None:
+        if fecha.day < 10 and fecha.month < 10:
+            return dias_meses[fecha.day] + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        elif fecha.day < 10:
+            return dias_meses[fecha.day] + "-" + str(fecha.month) + "-" + str(fecha.year)
+        elif fecha.month < 10:
+            return str(fecha.day) + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        else:
+            return str(fecha.day) + "-" + str(fecha.month) + "-" + str(fecha.year)
 
-    #Agregamos los datos del formulario a la base de datos
-    edit_form()
 
-    #Obtenemos la cedula del usuario desde el boton de eliminar
-    ced = request.vars.cedula_eliminar
-    if (ced != None):
-        db(db.t_Personal.f_ci == ced).delete()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ficha():
+    # Obtenemos la cédula
+    ci = request.args[0]
+
+    # Buscamos en la base de datos
+    personal = db(db.t_Personal.f_ci == ci).select()[0]
+    infoUsuario = db(db.t_Personal.f_ci == ci).select(db.t_Personal.ALL).first()
+    usuario = Usuario(infoUsuario)
+
+    #Obtenemos el usuario loggeado
+    infoUsuario_logged=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario_logged = Usuario(infoUsuario_logged.t_Personal.select().first())
+
+    #Buscamos el nombre de la dependencia con el id que manda la vista
+    elm = personal
+    named = db(db.dependencias.id == elm.f_dependencia).select(db.dependencias.ALL)
+
+    dep= named[0].nombre if len(named) > 0 else None
+
+    if (dep) : idUSuperior = (db(db.dependencias.nombre==dep).select(db.dependencias.ALL)).first().unidad_de_adscripcion
+    else: idUSuperior=None
+    if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
+    else: Usuperior=None
+    ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
+    ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+    if ext_USB: ext_USB=ext_USB.ext_USB[0]
+    if ext_int: ext_int=ext_int.ext_interna
+
+    ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
+    if(ubicacion): ubicacion = ubicacion.codigo
+    
+    personal ={
+        "nombre" : elm.f_nombre,
+        "apellido" : elm.f_apellido,
+        "ci" : elm.f_ci,
+        "email" : elm.f_email,
+        "email_alt" : elm.f_email_alt,
+        "telefono" : elm.f_telefono,
+        "pagina_web" : elm.f_pagina_web,
+        "categoria" : elm.f_categoria,
+        "cargo" : elm.f_cargo,
+        "fecha_ingreso" : transformar_fecha(elm.f_fecha_ingreso),
+        "fecha_salida" : transformar_fecha(elm.f_fecha_salida),
+        "estatus" : elm.f_estatus,
+        "dependencia" : dep,
+        "celular" : elm.f_celular,
+        "persona_contacto" : elm.f_persona_contacto,
+        "contacto_emergencia" : elm.f_contacto_emergencia,
+        "direccion" : elm.f_direccion,
+        "gremio" : elm.f_gremio,
+        "fecha_ingreso_usb" : transformar_fecha(elm.f_fecha_ingreso_usb),
+        "fecha_ingreso_ulab" : transformar_fecha(elm.f_fecha_ingreso_ulab) ,
+        "fecha_ingreso_admin_publica" : transformar_fecha(elm.f_fecha_ingreso_admin_publica),
+        "condicion" : elm.f_condicion,
+        "unidad_jerarquica_superior" : Usuperior,
+        "rol" : elm.f_rol,
+        "extension_USB" : ext_USB,
+        "extension_interna" : ext_int,
+        "ubicacion" : ubicacion,
+        "es_supervisor": elm.f_es_supervisor,
+        "validado": elm.f_validado,
+        "por_validar": elm.f_por_validar,
+        "jefe": buscarJefe(dep)
+    }
+
+    validacion = request.post_vars.validacion
+    if(validacion == "true" or validacion == "false"):
+        cambiar_validacion(validacion, personal)
+
+    
+
+    #Dropdown ubicaciones
+    idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
+    ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
+    #Obtenemos los elementos de los dropdowns
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    
+    print(personal['fecha_ingreso'])
+    return dict(
+        personal=personal,
+        categorias=categorias,
+        dependencias=dependencias,
+        estados=estados,
+        gremios=gremios,
+        condiciones=condiciones,
+        roles=roles,
+        operadores=operadores,
+        ubicaciones=ubicaciones,
+        usuario_logged=usuario_logged,
+        usuario = usuario
+
+    )
+
+def cambiar_validacion(validacion, personal):
+    if(validacion == "true"):
+        mensaje = ''
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True, f_comentario=mensaje)
+    elif (validacion == "false"):
+        mensaje = request.post_vars.razon_add
+        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=False, f_comentario=mensaje)
+    redirect(URL('validacion_estilo'))
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def listado_estilo():
+    return listado()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def validacion():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL).first()
+    if(usuario.f_es_supervisor == False):
         redirect(URL('listado'))
+    #diccionario = listado()
+    dic = { 'empleados' : buscarEmpleados()}
+    return dic
 
-    return dict(gridedit = edic, editar = editar, grid= tabla, categorias = cat,dependencias = dep, estados = est)
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def validacion_estilo():
+    val = contar_notificaciones();
+    infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
+    usuario = Usuario(infoUsuario.t_Personal.select().first())
+
+    if not usuario.f_es_supervisor:
+        return redirect(URL('listado_estilo'))
+    session.validaciones_pendientes = val
+    #dic = { 'empleados' : buscarEmpleados()}
+    dic = { 'empleados' : tabla_categoria("validacion")}
+    return dic
+
+def contar_notificaciones():
+    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    if(len(usuario)>1): usuario = usuario[1]
+    else: usuario = usuario.first()
+    es_supervisor = usuario.f_es_supervisor
+    dependencia = None
+    if es_supervisor:
+        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+            notif = db(db.t_Personal.f_por_validar == True).count()
+        else:
+            dependencia = usuario.f_dependencia
+            notif = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)).count()
+    else:
+        notif=0
+    return notif
+
+def buscarJefe(dependencia_trabajador):
+    unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
+    if unidad_adscripcion:
+        idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
+    else:
+        idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id
+        idJefe = db(db.auth_membership.group_id == idGestor).select(db.auth_membership.user_id).first().user_id
+
+    correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
+    return correo
+
+def eliminar():
+    ci = request.post_vars.cedula_eliminar
+
+    db(db.t_Personal.f_ci == ci).update(f_oculto = True)
+
+    redirect(URL('listado_estilo'))
 
 def reporte():
     tabla=tabla_categoria()
@@ -197,21 +455,3 @@ def reporte():
     for persona in tabla:
         personas.append(persona)
     return dict(personas=personas)
-
-# def reporte(tipo,filtro):
-#     tabla=tabla_categoria()
-#     personas=[]
-#     if (tipo=="categoria"):
-#         for persona in tabla:
-#             if (persona["categoria"]==filtro):
-#                 personas.append(persona)
-#     elif (tipo=="dependencia"):
-#         named = db(db.dependencias.id == filtro).select(db.dependencias.ALL)
-#         dep= named[0] if len(named) > 0 else None
-#         for persona in tabla:
-#             if (persona["dependencia"]==dep)
-#                 personas.append(persona)
-#     else:
-#         for persona in tabla:
-#             personas.append(persona)
-#     return dict(personas=personas)

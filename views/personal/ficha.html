@@ -1,0 +1,469 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
+	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
+	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+
+
+
+
+{{end}}
+
+{{block center}}
+ <div id="ficha_edicion">
+    <div style="width: 75vw; margin-left: auto; margin-right: auto; margin-bottom: 100px;">
+
+      <!-- Modal content-->
+        <div class="modal-header">
+          <div class="media">
+
+              <div class="media-body fichaMedia">
+                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
+              </div>
+              <div id="editar" class="media-body">
+              <form id="form_eliminacion" method="post"
+                  action="{{=URL('personal', 'eliminar')}}">
+
+                  <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
+              </form>
+              </div>
+              
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <ul class="nav nav-tabs " id="myTab" role="tablist">
+            <li role="presentation" class="nav-item active">
+              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="tabla_">
+            <div class="tab-pane active " id="datos_basicos" role="tabpanel">
+              <table class="table contenidoFicha" id="tabla_datos_basicos">
+                <tbody>
+                    {{if bool(personal['nombre']) :}}
+                  <tr>
+                    <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['apellido']) :}}
+                  <tr>
+                    <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['email']) :}}
+                  <tr>
+                    <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['extension_USB']) :}}
+                  <tr>
+                    <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['extension_interna']) :}}
+                  <tr>
+                    <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['pagina_web']) :}}
+                  <tr>
+                    <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['rol']) :}}
+                  <tr>
+                    <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['dependencia']) :}}
+                  <tr>
+                    <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['unidad_jerarquica_superior']) :}}
+                  <tr>
+                      <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
+                  </tr>
+                    {{pass}}
+                    {{if bool(personal['ubicacion']) :}}
+                    <tr>
+                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
+                    </tr>
+                    {{pass}}
+                 
+                </tbody>
+              </table>
+            </div>
+
+            <div class="tab-pane " id="datos_laborales" role="tabpanel">
+              <table class="table contenidoFicha" id="tabla_datos_laborales">
+                <tbody>
+                    {{if bool(personal['cargo']) :}}
+                    <tr>
+                      <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['gremio']) :}}
+
+                    <tr>
+                      <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['categoria']) :}}
+                    <tr>
+                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['estatus']) :}}
+                    <tr>
+                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['condicion']) :}}
+                    <tr>
+                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso']) :}}
+                    <tr>
+                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_salida']) :}}
+                    <tr >
+                      <td>Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_usb']) :}}
+                    <tr>
+                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_ulab']) :}}
+                    <tr>
+                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
+                    </tr>
+                    {{pass}}
+                    {{if bool(personal['fecha_ingreso_admin_publica']) :}}
+                    <tr>
+                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
+                    </tr>
+                    {{pass}}
+                    
+                    <tr>
+                      <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+
+             <div class="tab-pane" id="datos_personales" role="tabpanel">
+              <table class="table contenidoFicha" id="tabla_datos_personales">
+                <tbody>
+                    <tr>
+                      <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
+                    </tr>
+                    {{pass}}
+                    <tr>
+                      <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
+                    </tr>
+                    {{pass}}
+                    <tr>
+                      <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
+                    </tr>
+                    {{pass}}
+                    <tr>
+                        <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
+                    </tr>
+                    {{pass}}
+                    <tr>
+                      <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
+                    </tr>
+                    {{pass}}
+                  </tbody>
+                 </table>
+                    
+                 <h5 class=" text-center"><b>En caso de emergencia llamar a:</b></h5></br>
+                    
+                 <table class="table contenidoFicha">
+                     <tbody>
+                    <tr>
+                      <td class = "text-right" >Nombre:</td><td id="field_persona_contacto" class = "text-left">{{=personal['persona_contacto']}}</td>
+                    </tr>
+                    <tr >
+                      <td class = "text-right">N° de contacto:</td><td id="field_contacto_emergencia" class = "text-left">{{=personal['contacto_emergencia']}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+        {{if personal['por_validar']:}}
+        <div class="modal-footer">
+          <div class=" botonesFicha text-center" id="botones_validacion" >
+            <button type="submit" class="btn btn-primary buttons-html5" id = "validar" name = "validar_ficha" value="True"><i class="fa fa-check"></i></button>
+            <button type="submit" class="btn btn-danger buttons-html5" id = "rechazar" name = "rechazar_ficha" ><i class="fa fa-times"></i></button>
+          </div>
+          <form method="post">
+            <div id="razon-input" class="form-group hidden">
+              <input id="validacion" name="validacion" hidden value="-1">
+              <div class="col-xs-12">
+                <label>Razón de Rechazo</label> 
+                <textarea type="text" class="form-control" name="razon_add" >
+                </textarea>
+              </div>
+            </div>
+            <div id="confirmar-input" class="form-group hidden">
+              <div class="col-xs-12">
+                <button class="btn btn-default" type='submit'>Confirmar</button>
+              </div>
+            </div>
+          </form>
+      </div>
+        
+        {{pass}}
+           </div>
+        </div>
+  </div>
+</div>
+
+<div hidden>
+  <div id="ficha_print">
+    <div style="width: 75vw; margin-left: auto; margin-right: auto; margin-bottom: 100px;">
+      <table>
+        <tr>
+          <td>
+              <img style="width: 275px;" src="{{=URL('static', 'images/logo-ulab.png')}}" alt="Logo ULAB">
+          </td>
+          <td>
+            <h1>
+              Ficha de Personal
+            </h1>
+          </td>
+          <td>
+              <img style="width: 100px;" src="{{=URL('static', 'images/personal_icono.png')}}" alt="Icono de Modulo de Personal">
+          </td>
+        </tr>
+      </table>
+      <!-- Modal content-->
+        <div class="modal-header">
+          <div class="media">
+              <div class="media-body">
+                <h3 class="modal-title media-heading fichaHeading">{{=personal['nombre']}} {{=personal['apellido']}}</h3>
+              </div>
+          </div>
+        </div>
+        <div class="modal-body">
+            <div>
+              <table class="table contenidoFicha" id="tabla_print">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4><b>Datos Básicos</b></h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nombre:</td><td>{{=personal['nombre']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Apellido:</td><td>{{=personal['apellido']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Correo Electrónico:</td><td>{{=personal['email']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Extensión USB:</td><td>{{=personal['extension_USB']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Extensión Interna:</td><td>{{=personal['extension_interna']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Página Web:</td><td>{{=personal['pagina_web']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Rol:</td><td>{{=personal['rol']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Dependencia:</td><td>{{=personal['dependencia']}}</td>
+                  </tr>
+                    <tr>
+                        <td>Ubicación:</td><td>{{=personal['ubicacion']}}</td>
+                    </tr>
+                  <tr>
+                      <td>Unidad de Adscripción: </td><td>{{=personal['unidad_jerarquica_superior']}}</td>
+                  </tr>
+                  <tr>
+
+<<<<<<< HEAD
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4><b>Datos Laborales</b></h4>
+                    </td>
+                  </tr>
+                    <tr>
+                      <td>Cargo:</td><td>{{=personal['cargo']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Gremio:</td><td>{{=personal['gremio']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Categoria:</td><td>{{=personal['categoria']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Estatus:</td><td>{{=personal['estatus']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Condicion:</td><td>{{=personal['condicion']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso:</td><td>{{=personal['fecha_ingreso']}}</td>
+                    </tr>
+                    <tr >
+                      <td>Fecha Salida:</td><td>{{=personal['fecha_salida']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso USB:</td><td>{{=personal['fecha_ingreso_usb']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso ULAB:</td><td >{{=personal['fecha_ingreso_ulab']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso Administracion Publica:</td><td>{{=personal['fecha_ingreso_admin_publica']}}</td>
+                    </tr>
+                    <tr>
+                      <td hidden></td><td hidden>{{=personal['jefe']}}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h4><b>Datos Personales</b></h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Cédula:</td><td>{{=personal['ci']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Correo Alternativo:</td><td>{{=personal['email_alt']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Celular:</td><td>{{=personal['celular']}}</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono de Habitación:</td><td>{{=personal['telefono']}}</td>
+                    </tr>
+                    <tr>
+                      <td>Dirección de Habitación:</td><td>{{=personal['direccion']}}</td>
+                    </tr>
+                    <tr>
+                      <td >Persona de contacto:</td><td class = "text-left">{{=personal['persona_contacto']}}</td>
+                    </tr>
+                    <tr >
+                      <td>N° de contacto:</td><td class = "text-left">{{=personal['contacto_emergencia']}}</td>
+                    </tr>
+                  </tbody>
+              </table>
+           </div>
+        </div>
+  </div>
+</div>
+</div>
+<div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
+{{include 'personal/form_agregar.html'}}
+=======
+
+<script>
+    $('.nav-link').on('click', function(){
+    $('.nav-link').removeClass('active');
+    $(this).addClass('active');
+}); 
+</script>
+>>>>>>> origin/gabriel
+<script>
+    var superusuario = 'sigulabusb@gmail.com';
+    var gestor = 'asis-ulab@usb.ve';
+    var director = 'ulab@usb.ve';
+    var jefe  = document.getElementById("field_jefe").innerHTML;
+    var email = document.getElementById("field_email").innerHTML;
+    var currentlyLogged = document.getElementById('logged_user').innerHTML;
+
+    console.log(currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe);
+    console.log(email);
+
+    if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor){
+        $('#editar').hide();
+    }else{
+        $('#editar').show();
+    }
+
+    if( currentlyLogged !== email && currentlyLogged != superusuario && currentlyLogged != gestor && currentlyLogged != jefe){
+         $('#tab_datos_personales').hide();
+         $("#validar").hide();
+         $("#rechazar").hide();
+        
+    }else{
+        $('#tab_datos_personales').show();
+        $("#validar").show();
+        $("#rechazar").show();
+    }
+
+    $(function () {
+      $('#rechazar').on('click', function(e) {
+        $('#validacion').val(false)
+        $('[name="razon_add"]').attr('required', 'required')
+        $('#razon-input').removeClass('hidden')
+        $('#confirmar-input').removeClass('hidden')
+      })
+
+      $('#validar').on('click', function(e) {
+        $('#validacion').val(true)
+        $('[name="razon_add"]').attr('required', '')
+        $('#confirmar-input').removeClass('hidden')
+        $('#razon-input').addClass('hidden')
+      })
+    })
+
+     function confirmar_validacion(){
+         var answer=confirm('Confirme validacion de la ficha');
+          if(answer){
+            alert('Ficha Validada');
+            $("#validacion").val(true);
+          }
+          else{
+            f.preventDefault();
+          }
+     }
+
+    
+     function confirmar_rechazo(){
+     var answer=confirm('¿Quiere rechazar esta ficha?');
+        if(answer){
+            alert('Ficha Rechazada');
+            $("#validacion").val(false);
+        }
+        else{
+        f.preventDefault();
+        }
+     }
+</script>
+
+<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/table2csv.js')}}"></script>
+
+{{end}}

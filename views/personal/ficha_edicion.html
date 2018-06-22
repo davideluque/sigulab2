@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
 
+
+
  <div class="modal fade" id="ficha_edicion" role="dialog">
     <div class="modal-dialog">
 
@@ -11,67 +13,140 @@
                 <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
               </div>
               <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre"></h4>
+                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo"></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
           </div>
-        </div> 
+        </div>
 
         <div class="modal-body">
 
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item active">
-              <a class="nav-link" data-toggle="tab" role="tab" aria-controls="datos">Datos Básicos</a>
+          <ul class="nav nav-tabs " id="myTab" role="tablist">
+            <li role="presentation" class="tab-edicion-principal nav-item active">
+              <a href="#datos_basicos" class="nav-link" data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+            </li>
+            <li class="tab-edicion nav-item ">
+              <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" id = "tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
             </li>
           </ul>
 
           <div class="tab-content">
-            <div class="tab-pane active" id="datos" role="tabpanel">
+            <div class="pane-edicion-principal tab-pane active " id="datos_basicos" role="tabpanel">
               <table class="table contenidoFicha">
                 <tbody>
                   <tr>
-                    <td>Cédula:</td><td id="field_ci"></td>
+                    <td>Nombre:</td><td id="field_nombre"></td>
+                  </tr>
+                  <tr>
+                    <td>Apellido:</td><td id="field_apellido"></td>
                   </tr>
                   <tr>
                     <td>Correo Electrónico:</td><td id="field_email"></td>
                   </tr>
                   <tr>
-                    <td>Extensión:</td><td id="field_telefono"></td>
+                    <td>Extensión USB:</td><td id="field_extension_USB"></td>
+                  </tr>
+                  <tr>
+                    <td>Extensión Interna:</td><td id="field_extension_interna"></td>
                   </tr>
                   <tr>
                     <td>Página Web:</td><td id="field_pagina_web"></td>
                   </tr>
                   <tr>
-                    <td>Gremio:</td><td id="field_categoria"></td>
-                  </tr>
-                  <tr>
-                    <td>Cargo:</td><td id="field_cargo"></td>
+                    <td>Rol:</td><td id="field_rol"></td>
                   </tr>
                   <tr>
                     <td>Dependencia:</td><td id="field_dependencia"></td>
                   </tr>
+                    <tr>
+                        <td>Ubicación:</td><td id="field_ubicacion"></td>
+                    </tr>
                   <tr>
-                    <td>Fecha de Ingreso:</td><td id="field_fecha_i"></td>
-                  </tr>
-                  <tr>
-                    <td>Fecha de Salida:</td><td id="field_fecha_s"></td>
-                  </tr>
-                  <tr>
-                    <td>Estatus:</td><td id="field_estatus"></td>
+                      <td>Unidad Superior: </td><td id="field_unidad_jerarquica_superior"></td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
+
+            <div class="pane-edicion tab-pane" id="datos_laborales" role="tabpanel">
+              <table class="table contenidoFicha">
+                <tbody>
+                    <tr>
+                      <td>Cargo:</td><td id="field_cargo"></td>
+                    </tr>
+                    <tr>
+                      <td>Gremio:</td><td id="field_gremio"></td>
+                    </tr>
+                    <tr>
+                      <td>Categoria:</td><td id="field_categoria"></td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso"></td>
+                    </tr>
+                    <tr >
+                      <td>Fecha Salida:</td><td id="field_fecha_salida"></td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb"></td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab"></td>
+                    </tr>
+                    <tr>
+                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica"></td>
+                    </tr>
+                    <tr>
+                      <td>Estatus:</td><td id="field_estatus"></td>
+                    </tr>
+                    <tr>
+                      <td>Condicion:</td><td id="field_condicion"></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+
+             <div class="pane-edicion tab-pane" id="datos_personales" role="tabpanel">
+              <table class="table contenidoFicha">
+                <tbody>
+                    <tr>
+                      <td>Cédula:</td><td id="field_ci"></td>
+                    </tr>
+                    <tr>
+                      <td>Correo Alternativo:</td><td id="field_email_alt"></td>
+                    </tr>
+                    <tr>
+                      <td>Celular:</td><td id="field_celular"></td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono:</td><td id="field_telefono"></td>
+                    </tr>
+                    <tr>
+                      <td>Contacto de Emergencia:</td><td id="field_contacto_emergencia"></td>
+                    </tr>
+                    <tr>
+                      <td>Dirección de Habitación:</td><td id="field_direccion"></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+           </div>
         </div>
 
         <div class="modal-footer">
           <form method="post">
 
             <div class="btn-group botonesFicha">
-            <button type="submit" class="btn btn-primary btn-success" id = "editar" name = "cedula_editar" value="True">Editar</button>
-
+            <button type="button" class="btn btn-primary btn-success" id = "editar" name = "cedula_editar" value="True" data-toggle="modal" data-target="#addservice" data-dismiss="modal">Editar</button>
+            
+            {{if usuario.f_email == 'sigulabusb@gmail.com' :}}
             <button type="submit" class="btn btn-primary btn-danger" id="eliminar" name = "cedula_eliminar">Eliminar</button>
+            {{pass}}
 
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
@@ -80,56 +155,3 @@
     </div>
   </div>
 </div>
-
-  <script type="text/javascript">
-      $('#ficha_edicion').on('show.bs.modal', function(e){
-          var ci = $(e.relatedTarget).data('ci');
-          var categoria = $(e.relatedTarget).data('categoria');
-          var email = $(e.relatedTarget).data('email');
-          var fecha_s = $(e.relatedTarget).data('fecha_s');
-          var fecha_i = $(e.relatedTarget).data('fecha_i');
-          var nombre = $(e.relatedTarget).data('nombre');
-          var apellido = $(e.relatedTarget).data('apellido');
-          var cargo = $(e.relatedTarget).data('cargo');
-          var dep_name = $(e.relatedTarget).data('dep-name');
-          var estatus = $(e.relatedTarget).data('estatus');
-          var telefono = $(e.relatedTarget).data('telefono');
-          var pagina_web = $(e.relatedTarget).data('pagina_web');
-
-          f = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
-
-          $("#field_ci").html(ci);
-          $("#field_categoria").html(categoria);
-          $("#field_dependencia").html(dep_name);
-          $("#field_email").html(email);
-          $("#field_fecha_s").html(fecha_s);
-          $("#field_fecha_i").html(fecha_i);
-          $("#field_nombre").html(nombre);
-          $("#field_apellido").html(apellido);
-          $("#field_cargo").html(cargo);
-          $("#field_estatus").html(estatus);
-          $("#field_telefono").html(telefono);
-          $("#field_pagina_web").html(pagina_web);
-
-          $('#eliminar').on('click',function(f){
-            var answer=confirm('¿Seguro que desea eliminar esta persona?');
-            if(answer){
-              alert('Persona eliminada!');
-              this.value = $(e.relatedTarget).data('ci');
-            }
-            else{
-              f.preventDefault();      
-            }
-          });
-
-          $('#editar').on('click',function(){
-            this.value = $(e.relatedTarget).data('ci');
-          });
-
-          fields = [ci,categoria,email,fecha_s,fecha_i,nombre,cargo,estatus,telefono,pagina_web];
-          console.log(fields);
-          //$("#field_ci").html(item);
-          //$(e.currentTarget).find('input[name="usbid"]').val(usbid);
-      });
-  </script>
-

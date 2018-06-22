@@ -1,4 +1,4 @@
-# SIGULAB 2 v2.0 beta.0
+# SIGULAB 2 v2.0 beta.1
 
 # Acerca de
 Este repositorio mantiene las últimas actualizaciones de los módulos Servicios, Personal y Sustancias Materiales y Desechos Peligrosos.
@@ -24,3 +24,15 @@ Equipo Synergy desarrollador del Módulo de Personal
 
 Desarrollador del Módulo de Sustancias, Materiales y Desechos Peligrosos
 - Samuel Arleo
+
+Desarollador del Módulo de Desechos Peligrosos
+- Julio Fuenmayor
+
+Desarrolladores del Módulo de Gestión de Personal
+- Yuni Quintero
+- Gabriel Gutierrez
+- Daniel Rodríguez
+- Gustavo Castellanos
+- Francisco Marquez
+- Daniel Francis
+- German Robayo

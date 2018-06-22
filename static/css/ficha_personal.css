@@ -100,7 +100,8 @@ button.btn.botonForm{
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
-    background: #0300d7;
+    background: #505050;
+    ;
     border: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -154,9 +155,7 @@ button.btn.botonForm.active:focus {
 
 
 /*style.css**/
-.close{
-    margin-top:30px;
-}
+
 
 strong {
     font-weight: 500;
@@ -177,12 +176,6 @@ h3 {
     font-weight: 300;
     color: #555;
     line-height: 30px;
-}
-
-.buttons-html5, .buttons-print{
-    border-radius: 50%;
-    background-color:#0300d7;
-    color:#fff;
 }
 
 
@@ -234,6 +227,32 @@ h3 {
     background: rgba(0, 0, 0, 0.3);
     color: #fff;
 }
+
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+    background-color:#0300d7;
+    color:#fff;
+}
+
+#iconoFicha{
+    color:#0300d7;
+}
+
+#eliminar, #rechazar{
+    background-color: 	#d9534f !important;
+    border-radius: 50%;
+}
+
+.nav-link.active{
+    background-color: #0300d7 !important;
+    text-decoration: underline !important;
+    color:#fff !important;
+}
+
+.nav-link{
+    color:#000 !important;
+}
+
 
 
 /***** Top content *****/
