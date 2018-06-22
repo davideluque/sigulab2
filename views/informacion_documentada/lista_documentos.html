@@ -189,17 +189,6 @@
 	        <tbody>
 	  			{{for doc in documentos:}}
 				<tr>
-					{{if (usuarios == doc.usuario):}}
-						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
-							{{=doc.nombre_doc.upper()}}
-						</a>
-						</td>
-						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
-						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
-						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
-						<td class="camposTabla" >Deshabilitado temporalmente</td>
-						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
-					{{elif usuarios == "Director" or usuarios =="Super Usuario": }}
 						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
 							{{=doc.nombre_doc.upper()}}
 						</a>
@@ -210,7 +199,6 @@
 						<td class="camposTabla" >Deshabilitado temporalmente</td>
 						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 
-					{{pass}}
 				</tr>
 				{{pass}}           
 	        </tbody>
@@ -513,7 +501,7 @@
 							<!-- Campo de fecha de la revisión de contenidos -->
 							<div class="form-group">
 								<h5>Fecha de revisión de contenidos</h5>
-								<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" /> 
+								<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" onchange="revision_contenidos()"/> 
 							</div> 
 
 							<!-- Campo de responsable de la revisión de especificaciones -->
@@ -525,7 +513,7 @@
 							<!-- Campo de fecha de la revisión de especificaciones -->
 							<div class="form-group">
 								<h5>Fecha de revisión de especificaciones</h5>
-								<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" /> 
+								<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" onchange="revision_esp()" /> 
 							</div> 
 
 
@@ -577,7 +565,7 @@
 								<!-- Campo de fecha de aprobación -->
 								<div class="form-group">
 									<h5>Fecha de aprobación</h5>
-									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" /> 
+									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" onchange="fecha_ap()"/> 
 								</div>	
 								
 								<!-- Campo de código de registro de aprobación -->
@@ -672,7 +660,7 @@
 								<!-- Campo de la fecha del control de cambios -->
 								<div class="form-group">
 									<h5>Fecha de control de cambios</h5>
-									<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" /> 
+									<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" onchange="fecha_cc()"/> 
 								</div>
 
 								<!-- Campo de Elaborado por -->
@@ -826,9 +814,11 @@
 
 		var container = document.getElementById("containerRevision");
 		var input = document.createElement("input");
+		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
 
 		input.type = "date";
 		input.name = "fecha_revision_consejo";
+		input.min = fecha_revision;
 		input.id = "fecha_revision_consejo";
 		input.placeholder = "Fecha de revisión por el Consejo Asesor";
 
@@ -857,6 +847,29 @@
 
 
 
+<script type="text/javascript">
+
+	function revision_contenidos(){
+		var fecha_revision = document.getElementById("fecha_prox_rev").value;	
+		document.getElementById("fecha_revision_contenidos").min = fecha_revision;
+	}
+
+	function revision_esp(){
+		var fecha_revision = document.getElementById("fecha_revision_contenidos").value;	
+		document.getElementById("fecha_revision_especificaciones").min = fecha_revision;
+	}
+	
+	function fecha_ap(){
+		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;	
+		document.getElementById("fechaAprobacion").min = fecha_revision;
+	}
+
+	function fecha_cc(){
+		var fecha_revision = document.getElementById("fechaAprobacion").value;	
+		document.getElementById("fechaControlCambios").min = fecha_revision;
+	} 
+
+</script>
 
 
 

@@ -208,8 +208,7 @@ def lista_documentos():
 		# 		remitente=dic2["remitente"]
 		# 	)
 
-
-
+	print(auth.user)
 
 
 	return dict(
@@ -219,7 +218,7 @@ def lista_documentos():
 		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
 		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
-		usuarios = auth.user.first_name
+
 	)
 
 
