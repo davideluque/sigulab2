@@ -208,11 +208,17 @@ def lista_documentos():
 		# 		remitente=dic2["remitente"]
 		# 	)
 
-	print(auth.user)
+	dep = auth.user.first_name
+	docs =	db().select(db.documentos.ALL)
+	if (dep == "Dirección" or dep == "Super Usuario" or dep == "Coordinación de la Calidad"):
+		pass
+	else:
+		docs = db(db.documentos.usuario == dep).select(db.documentos.ALL)
+
 
 
 	return dict(
-	    documentos=db().select(db.documentos.ALL),
+	    documentos=docs,
 		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
 		doc_revision=db(db.documentos.estatus=="Revisado").count(),
 		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
@@ -258,9 +264,11 @@ def lista_registros():
 			archivo_fisico=dic["archivo_fisico"],
 		)
 
+	dep = auth.user.first_name
+	reg = db(db.registros.usuario == dep).select(db.registros.ALL)
 
 	a = dict(
-		registros=db().select(db.registros.ALL),
+		registros=reg,
 		codigo_reg=db(db.registros.codigo).count(),
 		year=year,
 		contador=db(db.registros.usuario == auth.user.first_name).count(),
