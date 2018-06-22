@@ -215,7 +215,9 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             bm_crea_ficha = user,
             bm_clasificacion = clasificacion
         )
-    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+    response.flash = "Se ha realizado exitosamente la solicitud de modificación del bien mueble" + str(bm_nombre)
+    return True
+    #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
 
@@ -323,7 +325,7 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
         msb_unidad_dim = unidad_dim,
         msb_modifica_ficha = user,
     )
-
+    response.flash = "Se ha realizado exitosamente la solicitud de modificación del bien mueble" + str(msb_material)
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
