@@ -313,7 +313,6 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
         msb_alto = alto, 
         msb_diametro = diametro, 
         msb_espacio = espacio,
-        msb_clasificacion = clasificacion,
         msb_presentacion = presentacion,
         msb_unidades = unidades,
         msb_total = total,
