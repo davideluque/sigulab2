@@ -723,7 +723,4 @@ if db(db.t_categoria_desechos).isempty():
 
 	for categoria in categorias_iniciales:
 		db.t_categoria_desechos.insert(categoria=categoria)
-    
-db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
-    f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
 
