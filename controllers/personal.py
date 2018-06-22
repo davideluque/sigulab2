@@ -447,6 +447,8 @@ def buscarJefe(dependencia_trabajador):
     return correo
 
 def eliminar():
+    if auth.user.email != 'sigulabusb@gmail.com':
+        return redirect(URL('listado_estilo'))
     ci = request.post_vars.cedula_eliminar
 
     db(db.t_Personal.f_ci == ci).update(f_oculto = True)

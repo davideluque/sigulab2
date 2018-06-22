@@ -33,7 +33,9 @@
                   action="{{=URL('personal', 'eliminar')}}">
 
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+                  {{if auth.user.email == 'sigulabusb@gmail.com':}}
                   <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                  {{pass}}
                 <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
               </form>
               </div>
@@ -214,7 +216,7 @@
                 </tbody>
               </table>
             </div>
-        {{if personal['por_validar']:}}
+            {{if personal['por_validar']:}}
         <div class="modal-footer">
           <div class=" botonesFicha text-center" id="botones_validacion" >
             <button type="submit" class="btn btn-primary buttons-html5" id = "validar" name = "validar_ficha" value="True"><i class="fa fa-check"></i></button>
