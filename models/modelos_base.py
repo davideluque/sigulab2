@@ -121,7 +121,7 @@ db.define_table(
           requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
 
     Field('f_ci',             'string',
-          requires=IS_MATCH('^\d+', error_message='Número de cedula inválido.'),
+          requires=IS_MATCH('^[VEP]-\d{6,8}', error_message='Número de cedula inválido.'),
            label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
@@ -135,7 +135,7 @@ db.define_table(
            label=T('Correo Electrónico')),
     Field('f_email_alt',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
-           label=T('Correo Electrónico')),
+           label=T('Correo Electrónico Alternativo')),
     Field('f_direccion',          'string',
           requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
     Field('f_ubicacion',          'string',
