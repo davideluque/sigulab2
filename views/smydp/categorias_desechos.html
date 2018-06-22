@@ -33,15 +33,17 @@
             <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
         </div>
     </div>
-    <div class="row">
-        <div id="columnBotonAgregar" >
-            <div class="col-lg-12 text-right">
-                <!-- Boton que lleva al modal -->
-                <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" id="botonAgregar" class="btn btn-primary" data-toggle="modal" data-target="#addCategoria">Agregar Categoría</button>
+    {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
+        <div class="row">
+            <div id="columnBotonAgregar" >
+                <div class="col-lg-12 text-right">
+                    <!-- Boton que lleva al modal -->
+                    <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                    <button type="button" id="botonAgregar" class="btn btn-primary" data-toggle="modal" data-target="#addCategoria">Agregar Categoría</button>
+                </div>
             </div>
         </div>
-    </div>
+    {{pass}}
 </div>
 <!-- Fin del área con el título de la página-->
 
@@ -67,11 +69,17 @@
                 <tbody>
                  {{for categoria in categorias:}} 
                     <tr>
-                        <td class="camposTabla" style="text-align: left">
-                            <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
+                        {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
+                            <td class="camposTabla" style="text-align: left">
+                                <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
+                                    {{=categoria.categoria.upper()}}
+                                </a>
+                            </td>
+                        {{else:}}
+                            <td class="camposTabla" style="text-align: left">
                                 {{=categoria.categoria.upper()}}
-                            </a>
-                        </td>
+                            </td>
+                        {{pass}}
                         <td class="camposTabla" style="text-align: left">
                             {{=categoria.descripcion}}
                         </td>
