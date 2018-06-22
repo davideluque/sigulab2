@@ -9,10 +9,7 @@ select{
 
 }
 
-.nav-link:active{
-    background-color: #0300d7 !important;
-    color:#fff;
-}
+
 
 th input[type=text]{ 
 	border-top: 0px !important;

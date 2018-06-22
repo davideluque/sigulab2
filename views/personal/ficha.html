@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
@@ -9,7 +10,7 @@
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
-    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+
 
 
 
@@ -23,9 +24,7 @@
       <!-- Modal content-->
         <div class="modal-header">
           <div class="media">
-            <div class="media-left media-middle">
-                <img id="iconoFicha" src="{{=URL('static', 'images/servicios/folder.png')}}" class="media-object">
-              </div>
+
               <div class="media-body fichaMedia">
                 <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
               </div>
@@ -45,13 +44,13 @@
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
             <li role="presentation" class="nav-item active">
-              <a href="#datos_basicos" class="nav-link" data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
             </li>
           </ul>
 
@@ -217,17 +216,9 @@
             </div>
         {{if personal['por_validar']:}}
         <div class="modal-footer">
-          <div class="btn-group botonesFicha" id="botones_validacion" >
-              <button type="submit" class="btn btn-primary"
-              id = "validar" name = "validar_ficha"
-               value="True">
-                Validar
-              </button>
-              <button type="submit" class="btn btn-primary"
-              id="rechazar" name = "rechazar_ficha"
-              >
-                Rechazar
-              </button>
+          <div class=" botonesFicha text-center" id="botones_validacion" >
+            <button type="submit" class="btn btn-primary buttons-html5" id = "validar" name = "validar_ficha" value="True"><i class="fa fa-check"></i></button>
+            <button type="submit" class="btn btn-danger buttons-html5" id = "rechazar" name = "rechazar_ficha" ><i class="fa fa-times"></i></button>
           </div>
           <form method="post">
             <div id="razon-input" class="form-group hidden">
@@ -319,6 +310,7 @@
                   </tr>
                   <tr>
 
+<<<<<<< HEAD
                   </tr>
                   <tr>
                     <td>
@@ -393,6 +385,15 @@
 </div>
 <div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 {{include 'personal/form_agregar.html'}}
+=======
+
+<script>
+    $('.nav-link').on('click', function(){
+    $('.nav-link').removeClass('active');
+    $(this).addClass('active');
+}); 
+</script>
+>>>>>>> origin/gabriel
 <script>
     var superusuario = 'sigulabusb@gmail.com';
     var gestor = 'asis-ulab@usb.ve';
