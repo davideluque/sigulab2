@@ -1332,13 +1332,13 @@ def inventarios_desechos():
             # pertenecen a la seccion del jefe
             inventario = __get_inventario_dep(user_dep_id)
     
-    elif auth.has_membership("WEBMASTER"):
+    elif auth.has_membership("WEBMASTER_"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Evaluando la correctitud de los parametros del GET 
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios'))
+                redirect(URL('inventarios_desechos'))
 
             espacio_id = request.vars.dependencia
             espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1372,18 +1372,28 @@ def inventarios_desechos():
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
         # regresar a la vista inicial de inventarios
-        elif request.vars.dependencia:
-            dep_id = request.vars.dependencia
-            espacios = list(db(
-                              db.espacios_fisicos.dependencia == dep_id
-                              ).select(db.espacios_fisicos.ALL))
-            dep_nombre = db(db.dependencias.id == dep_id
+        elif request.vars.es_espacio == 'False':
+
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not __acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+            
+            dependencias = list(db(
+                              db.dependencias.id == request.vars.dependencia
+                              ).select())
+            
+            dep_nombre = db(db.dependencias.id == user_dep_id
                            ).select().first().nombre
-            inventario = list(db(
-                (db.dependencias.id == dep_id) & 
-                (db.espacios_fisicos.dependencia == dep_id) & 
-                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
-            es_espacio = True
+
+
+            es_espacio = True                        
+
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
         # entrar a la vista inicial de inventarios
         else:
@@ -1391,11 +1401,8 @@ def inventarios_desechos():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la seccion del jefe
-            inventario = list(db(
-                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+            inventario = list(db(db.t_inventario_desechos.espacio_fisico).select())
 
-            print inventario
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -1433,7 +1440,10 @@ def inventarios_desechos():
                 espacio_visitado = True
 
                 # Se muestra la lista de sustancias que tiene en inventario
-                inventario = __get_inventario_desechos(espacio_id)
+                inventario = list(db(
+                (db.espacios_fisicos.id == espacio_id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
 
                 desechos = list(db(db.t_inventario_desechos.id > 0).select(db.t_inventario_desechos.ALL))
 
@@ -1455,6 +1465,7 @@ def inventarios_desechos():
                 # Si la lista de dependencias es vacia, entonces la dependencia no 
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
+                
                 if len(dependencias) == 0:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
@@ -1472,7 +1483,11 @@ def inventarios_desechos():
                                          ).select().first().nombre
                 # Se muestra como inventario el egregado de los inventarios que
                 # pertenecen a la dependencia del usuario
-                inventario = __get_inventario_dep(dep_id)
+
+                inventario = list(db(
+                (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
