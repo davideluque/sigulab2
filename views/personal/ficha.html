@@ -29,15 +29,11 @@
                 <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
               </div>
               <div id="editar" class="media-body">
-              <form id="form_eliminacion" method="post"
-                  action="{{=URL('personal', 'eliminar')}}">
-
                   <button type="button" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
                   {{if auth.user.email == 'sigulabusb@gmail.com':}}
-                  <button type="submit" class="btn buttons-html5 btn-danger" id="eliminar" name ="cedula_eliminar" value={{=personal['ci']}}><i class="fa fa-trash-o"></i></button>
+                  <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-trash-o" data-toggle="modal" data-ta></i></button>
                   {{pass}}
                 <button type="button" class="btn buttons-html5 btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
-              </form>
               </div>
               
           </div>
@@ -387,6 +383,49 @@
 </div>
 <div id='logged_user' hidden>{{=usuario_logged.f_email}}</div>
 {{include 'personal/form_agregar.html'}}
+
+<div class="modal fade" id="ocultar-usuario-modal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+            <h4 class="modal-title" id="nuevoServicio">Ocultar Personal</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <h4>¿Seguro desea ocultar a este personal?</h4>
+              <form id="form_eliminacion" method="post"
+              action="{{=URL('personal', 'eliminar')}}">
+              <input type="hidden" name="cedula_eliminar"  value="{{=personal['ci']}}">
+              <button type="submit" class="btn btn-danger">Ocultar</button>
+              <button data-dismiss="modal" aria-label="Cerrar">Cerrar</button>
+              </form>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <script>
