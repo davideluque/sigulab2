@@ -34,6 +34,9 @@
     .row{
       margin-right:0px!important;
     }
+    .boton-sigulab, .buttons-print {
+    background-color: #337ab7;
+    }
   </style>
 
 {{end}}
@@ -57,7 +60,7 @@
     <div class="col-sm-2">
             <!-- Boton que lleva al modal -->
             {{ if not usuario.f_es_supervisor :}}
-            <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+            <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7"><i class="fa fa-pencil"></i></button>
             {{pass}}
     </div>
     <div id="buttons" class="text-right">
