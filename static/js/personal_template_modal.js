@@ -249,13 +249,34 @@ function validaFechaIngreso(){
     }
 }
 
+function voltearFecha(fecha){
+    var dia = fecha.substr(0,2);
+    var mes = fecha.substr(3,2);
+    var anio = fecha.substr(6,9);
+
+    var fecha = anio + "-" + mes + "-" + dia;
+    
+    return fecha
+}
+
 function validaFechaSalida(){
     const $this = $('[name="fecha_salida_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
     if ($this.val() === ''){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false;
+    }
+    else if (!moment(fecha_inicio).isBefore(fecha_final) && fecha_inicio !== '--'){
+        $this.attr("data-content", "La fecha de egreso es antes que la de inicio");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
     }
     else{
         $this.removeClass('input-error');
@@ -266,11 +287,21 @@ function validaFechaSalida(){
 
 function validaFechaIngresoUSB(){
     const $this = $('[name="fecha_ingreso_usb_add"]');
+    const fecha_ingreso_ulab = voltearFecha($('[name="fecha_ingreso_ulab_add"]').val());
+    const fecha_ingreso_usb = voltearFecha($this.val());
+
     if ($this.val() === ''){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false
+    }
+    else if (fecha_ingreso_ulab !== '--' && !(moment(fecha_ingreso_usb).isBefore(fecha_ingreso_ulab) || moment(fecha_ingreso_usb).isSame(fecha_ingreso_ulab))){
+        $this.attr("data-content", "La fecha de ingreso al USB tiene que ser antes de la fecha de ingreso al ULAB");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
     }
     else{
         $this.removeClass('input-error');
@@ -281,11 +312,21 @@ function validaFechaIngresoUSB(){
 
 function validaFechaIngresoUlab(){
     const $this = $('[name="fecha_ingreso_ulab_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
+    const fecha_ingreso_ulab = voltearFecha($this.val());
+
     if ($this.val() === ''){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false;
+    }
+    else if (fecha_inicio !== '--' && !(moment(fecha_ingreso_ulab).isBefore(fecha_inicio) || moment(fecha_ingreso_ulab).isSame(fecha_inicio))) {
+        $this.attr("data-content", "La fecha de ingreso al ULAB tiene que ser antes que la fecha de inicio");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
     }
     else{
         $this.removeClass('input-error');
@@ -296,11 +337,21 @@ function validaFechaIngresoUlab(){
 
 function validaFechaIngresoAdminPubl(){
     const $this = $('[name="fecha_ingreso_admin_publica_add"]');
+    const fecha_ingreso_usb = voltearFecha($('[name="fecha_ingreso_usb_add"]').val());
+    const fecha_ingreso_admin_pub = voltearFecha($this.val());
+
     if ($this.val() === ''){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false;
+    }
+    else if (fecha_ingreso_usb !== "--" && !(moment(fecha_ingreso_admin_pub).isBefore(fecha_ingreso_usb) || moment(fecha_ingreso_admin_pub).isSame(fecha_ingreso_usb))){
+        $this.attr("data-content", "La fecha de ingreso a la administración pública debe ser antes de la fecha de ingreso a la USB");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
     }
     else{
         $this.removeClass('input-error');
