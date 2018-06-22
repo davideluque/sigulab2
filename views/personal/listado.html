@@ -3,38 +3,44 @@
 {{block head}}
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
-	<script language="javascript" src="{{=URL('static', 'js/jQuery.js')}}"></script>
+	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/index.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
 {{end}}
 
 {{block center}}
+	<input type="hidden" name="CORREO_LOGIN" value="{{=usuario.f_email}}">
 	<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
 	  <div class="breadcrumb">
 	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
 	  <a class="breadcrumb-item" href="{{=URL('..')}}">Personal</a>
-	  <span class="breadcrumb-item active">Listado General</span>
 	  </div>
 	</nav>
 	<div class="container">
 	    <div class="row">
 	        <div class="col-sm-2">
-	        <!-- Boton que lleva al modal -->
-		      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Agregar Personal</button>
+					<!-- Boton que lleva al modal -->
+					{{ if not usuario.f_es_supervisor :}}
+					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addservice" style="background-color:#0300d7; border-color:#0300d7">Editar Perfil</button>
+					{{pass}}
 		    </div>
 		    <div class="col-sm-4">
-	          <select class="form-control" id="fil_categoria" name="categoria_add" onchange="filter('categoria')" style="margin-left:30px" required>
-	            <option value="1" selected hidden>Categoria</option>
-	            {{for categoria in categorias:}}
-	            <option id="categoria_opt" value="{{=categoria}}">{{=categoria}}</option>
+	          <select class="form-control" id="fil_gremio" name="gremio_add" onchange="filter('gremio')" style="margin-left:30px" required>
+	            <option value="1" selected hidden>Gremio</option>
+	            {{for gremio in gremios:}}
+	            <option id="gremio_opt" value="{{=gremio}}">{{=gremio}}</option>
 	            {{pass}} 
 	          </select>
 	        </div>
 
 	        <div class="col-sm-4">
 	          <select class="form-control" id="fil_dependencia" name="dependencia_add" onchange="filter('dependencia')" style="margin-left:10px" required>
-	            <option value="1" selected hidden>Dependencia</option>
+	            <option value="usuario.dependencia" selected hidden>Dependencia</option>
 	            {{for dependencia in dependencias:}}
 	            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
 	            {{pass}} 
@@ -48,48 +54,5 @@
 {{include 'personal/form_agregar.html'}}
 
 {{include 'personal/ficha_edicion.html'}}
-
-{{include 'personal/form_editar.html'}}
-
-<script type="text/javascript">
-function filter(type){
-	
-	var e = document.getElementById("fil_"+type);
-	var opt = e.options[e.selectedIndex];
-	var trs = document.querySelectorAll('#dummyID tr');
-	for(i = 0; i < trs.length; ++i) {
-	    idtr = trs[i].id.split("_");
-	    if ( type == 'categoria' ){
-	
-	    	trs[i].style.display = 'None';
-	    	if ( idtr[1] == opt.value ){trs[i].style.display = 'table-row';}
-	
-	    }else if ( type == 'dependencia' ){
-
-	    	trs[i].style.display = 'None';
-	    	if ( idtr[0] == opt.innerHTML ){trs[i].style.display = 'table-row';}
-	
-	    }
-	
-	}
-	if (type=='categoria'){
-		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.value);
-	}
-	else {
-		$("#botonreporte").attr("href","reporte?tipo="+type+"&filtro="+opt.innerHTML);
-	}
-}
-</script>
-
-	<div class="container">
-	    <div class="row">
-	        <div class="col-sm-12">
-	        <!-- Boton que lleva al modal -->
-	    	<a id="botonreporte" href="reporte">
-	      		<button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Generar Reporte</button>
-	  		</a>
-	    </div>
-	    </div>
-	</div>
 
 {{end}}

@@ -15,6 +15,8 @@
 #
 ######################################################################################################################
 
+response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js")
+
 # Tabla de Sedes, necesaria para las Dependencias
 
 db.define_table(
@@ -36,10 +38,6 @@ db.define_table(
     Field('unidad_de_adscripcion', 'reference dependencias', requires=False, label=T('Unidad de Adscripción')),
 
     Field('id_sede', 'reference sedes', requires=IS_IN_DB(db, db.sedes.id, '%(nombre)s'), label=T('Sede')),
-
-    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
-
-    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
 
     Field('fax', 'integer', label=T('Fax')),
 
@@ -92,56 +90,87 @@ db.dependencias.id_jefe_dependencia.type = 'reference auth_user'
 # para el funcionamiento de cualquier otro modulo
 #
 #######################################################################################################################
+def date_widget(f,v):
+    wrapper = DIV()
+    inp = SQLFORM.widgets.date.widget
+    jqscr = SCRIPT("jQuery(document).ready(function(){jQuery('#%s').datepicker({dateFormat:'yy-mm-dd'});});" % inp['_id'],_type="text/javascript")
+    wrapper.components.extend([inp,jqscr])
+    return wrapper
+
+
 
 db.define_table(
     #Nombre de la entidad
     't_Personal',
     #Atributos;
     Field('f_nombre',         'string',
-          requires=IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)*$',
+          requires=IS_MATCH('^\w\w*[\s-]?\w*$',
                             error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'),
-
           notnull=True, label=T('Nombre')),
 
     Field('f_apellido',         'string',
-          requires=IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)*$',
+          requires=IS_MATCH('^\w\w*[\s-]?\w*$',
                             error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'),
 
           notnull=True, label=T('Apellido')),
 
-    Field('f_categoria',      'string',
-          requires=IS_IN_SET(['Docente', 'Administrativo', 'Técnico', 'Obrero']), notnull=True, label=T('Categoría')),
+    Field('f_gremio',      'string',
+          requires=IS_IN_SET(['Docente', 'Administrativo', 'Estudiante']), label=T('Gremio'),error_message='Por favor introduzca un valor'),
 
     Field('f_cargo',          'string',
-          requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
+          requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
 
-    Field('f_ci',             'integer',
-          requires=IS_INT_IN_RANGE(minimum=1,maximum=999999999, error_message='Número de cedula no válido.'),
-          notnull=True, label=T('Cédula')),
+    Field('f_ci',             'string',
+          requires=IS_MATCH('^[VEP]-\d{6,8}', error_message='Número de cedula inválido.'),
+           label=T('Cédula')),
+    Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
+    Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
+    Field('f_persona_contacto',         'string',
+          requires=IS_MATCH('^\w\w*[\s-]?\w*$',
+                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'), label=T('Persona de Contacto')),
+    Field('f_contacto_emergencia',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Contacto de Emergencia'),error_message='Por favor introduzca un valor'),
 
     Field('f_email',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
-          notnull=True, label=T('Correo Electrónico')),
+           label=T('Correo Electrónico')),
+    Field('f_email_alt',          'string',
+          requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
+           label=T('Correo Electrónico Alternativo')),
+    Field('f_direccion',          'string',
+          requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
+    Field('f_ubicacion',          'string',
+          requires=IS_NOT_EMPTY(),  label=T('Ubicacion') ,error_message='Por favor introduzca un valor'),
+    Field('f_pagina_web',     'string', requires=IS_URL() ,  label=T('Página web'), error_message='Ingrese un formato válido de url'),
 
-    Field('f_telefono',       'integer',  default = '00', label=T('Teléfono')),
-    Field('f_pagina_web',     'string', default = 'N/A', label=T('Página web')),
-
-    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado', 'Retirado']),
-          default='Activo', notnull=True, label=T('Estatus')),
-
-    Field('f_fecha_ingreso',  'string', default='N/A', label=T('Fecha de Ingreso')),
-    Field('f_fecha_salida',   'string', default='N/A', label=T('Fecha de Salida')),
+    Field('f_estatus',        'string', requires=IS_IN_SET(['Activo', 'Jubilado', 'Retirado']), label=T('Estatus') ,error_message='Por favor introduzca un valor'),
+    Field('f_categoria',requires=IS_IN_SET(['Fijo', 'Contratado', 'Pasantía', 'Ayudantía']), label=T('Categoria') ,error_message='Por favor introduzca un valor'),
+    ##Campos condicionales si la categoria es contratado, pasantia o ayudantia.
+    Field('f_fecha_ingreso', 'date', label=T('Fecha de Ingreso')),
+    Field('f_fecha_salida', 'date', label=T('Fecha de Salida')),
+    ##
+    Field('f_fecha_ingreso_usb','date',   label=T('Fecha de Ingreso a la USB')),
+    Field('f_fecha_ingreso_ulab', 'date',   label=T('Fecha de Ingreso a la ULAB')),
+    Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
+    Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal','Otro']), label=T('Condición') ,error_message='Por favor introduzca un valor'),
+    Field('f_rol','string', label=T('Rol')),
 
     # #Referencias
      Field('f_usuario', 'reference auth_user',
            requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),
 
     Field('f_dependencia', 'reference dependencias',
-          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))
+          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Dependencia')),
+    Field('f_validado', 'boolean', notnull=True, default=False),
+    Field('f_es_supervisor', 'boolean', notnull=True, default = True),
+    Field('f_por_validar', 'boolean', notnull=True, default = False),
+    Field('f_oculto', 'boolean', notnull=True, default = False),
+    Field('f_comentario', 'string', notnull=True, default = "")
     )
 
 db.t_Personal._plural = 'Personal'
 db.t_Personal._singular = 'Personal'
+
+db.t_Personal.f_fecha_salida.widget=SQLFORM.widgets.time.widget
 
 db.auth_membership.f_personal_membership.type = 'reference t_Personal'
 db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None)
@@ -159,6 +188,10 @@ db.define_table(
     Field('codigo', 'string', unique=True, notnull=True, label=T('Nombre')),
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
+    
+    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
+
+    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
     
     Field('dependencia', 'reference dependencias',
         requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))

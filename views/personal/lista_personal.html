@@ -1,4 +1,4 @@
-	<div class="container" style="padding-top:25px">
+<div class="container" style="padding-top:25px">
 		<div class="table-responsive" >
 			<table class="table table-hover" style="border: 1.5px !important; border-style: solid !important; border-color: #ddd !important;">
 				<thead>
@@ -6,35 +6,55 @@
 							<th><button class="btn-link" name="order" value="nombre" 	id="f_nombre">Nombre</button></th>
 							<th><button class="btn-link" name="order" value="email" 	id="f_email">Correo Electrónico</button></th>
 							<th><button class="btn-link" name="order" value="seccion" 	id="f_dependencia">Unidad de Adscripción</button></th>
-							<th><button class="btn-link" name="order" value="telefono" 	id="f_telefono">Extensión</button></th>
+							<th><button class="btn-link" name="order" value="extension" 	id="f_extension">Extensión</button></th>
 					</tr>
 				</thead>
-			    
+
 			    <tbody id="dummyID">
 					{{for item in grid:}}
-						{{print item['dependencia']}}
-			          	{{print "HOLA"}}
-			          	{{if not item["nombre"] == "Ninguno":}}
-						<tr id="{{=item['dependencia']['nombre']}}_{{=item['categoria']}}">
-				            <td><button data-toggle="modal" data-target="#ficha_edicion" type="button"
-				            	data-apellido="{{=item['apellido']}}" 
-				            	data-ci="{{=item['ci']}}" 
-				            	data-categoria="{{=item['categoria']}}" 
-				            	data-email="{{=item['email']}}" 
-				            	data-nombre="{{=item['nombre']}}" 
-				            	data-fecha_i="{{=item['fecha_ingreso']}}" 
-				            	data-fecha_s="{{=item['fecha_salida']}}" 
-				            	data-estatus="{{=item['estatus']}}" 
-				            	data-telefono="{{=item['telefono']}}" 
-				            	data-pagina_web="{{=item['pagina_web']}}" 
-				            	data-cargo="{{=item['cargo']}}"
-				            	data-dep-name="{{=item['dependencia']['nombre']}}"
-				            	value="{{=item['ci']}}">{{=item["nombre"]}}</button></td>
-			              	
-			              	<td>{{= item["email"]}}</td>
-			              	<td>{{= item["dependencia"]["nombre"]}}</td>
-			              	<td>{{= item["telefono"]}}</td>
-						</tr>
+			          	{{if not item["nombre"] == "Ninguno": }}
+                            {{if not item['es_supervisor'] :}}
+                                
+
+                            <tr id="{{=item['dependencia']}}_{{=item['categoria']}}">
+                                <td>
+									<a href="/sigulab2/personal/ficha/{{=item['ci']}}" type="button"
+                                    data-nombre="{{=item['nombre']}}"
+                                    data-apellido="{{=item['apellido']}}"
+                                    data-ci="{{=item['ci']}}"
+                                    data-categoria="{{=item['categoria']}}"
+                                    data-email="{{=item['email']}}"
+                                    data-email_alt="{{=item['email_alt']}}"
+                                    data-fecha_ingreso="{{=item['fecha_ingreso']}}"
+                                    data-fecha_salida="{{=item['fecha_salida']}}"
+                                    data-estatus="{{=item['estatus']}}"
+                                    data-telefono="{{=item['telefono']}}"
+                                    data-pagina_web="{{=item['pagina_web']}}"
+                                    data-cargo="{{=item['cargo']}}"
+                                    data-dep-name="{{=item['dependencia']}}"
+                                    data-gremio="{{=item['gremio']}}"
+                                    data-unidad_jerarquica_superior="{{=item['unidad_jerarquica_superior']}}"
+                                    data-ubicacion="{{=item['ubicacion']}}"
+                                    data-celular="{{=item['celular']}}"
+                                    data-contacto_emergencia="{{=item['contacto_emergencia']}}"
+                                    data-direccion="{{=item['direccion']}}"
+                                    data-fecha_ingreso_usb="{{=item['fecha_ingreso_usb']}}"
+                                    data-fecha_ingreso_ulab="{{=item['fecha_ingreso_ulab']}}"
+                                    data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
+                                    data-condicion="{{=item['condicion']}}"
+                                    data-rol="{{=item['rol']}}"
+                                    data-extension_usb="{{= item['extension_USB']}}"
+                                    data-extension_interna="{{=item['extension_interna']}}
+
+                                    "
+                                    data-jefe = "{{=item['jefe']}}"
+                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
+
+                                <td>{{= item["email"]}}</td>
+                                <td>{{= item["dependencia"]}}</td>
+                                <td>{{= item["extension_USB"]}}</td>
+                            </tr>
+                            {{pass}}
 			          	{{pass}}
 					{{pass}}
 				</tbody>
@@ -49,4 +69,3 @@
 			</table>
 		</div>
 	</div>
-

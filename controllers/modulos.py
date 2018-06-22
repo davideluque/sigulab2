@@ -100,7 +100,7 @@ def validar_cedula():
   Este método se ejecuta cada vez que se abandona el campo "cedula" del 
   registro de usuarios.
   """
-  ci_format = re.compile("^[0-9]+$")
+  ci_format = re.compile("^[0-9]{6,8}$")
   if not re.match(ci_format, request.post_vars.cedula):
     return "jQuery('#auth_cedula__row').addClass('has-error');\
     jQuery('#cedula_error_group').addClass('has-error');\
@@ -183,6 +183,7 @@ def register():
       acá.
       """
       print("Usuario ya registrado.")
+      response.flash=T("Usuario ya registrado")
 
     """Después de haber hecho la verificación de correo electrónico no tomado
     y que la verificación de contraseñas coincide. Es decir, cuando el
@@ -191,37 +192,44 @@ def register():
     en la tabla "es_tecnico" si el usuario tiene el rol de tecnico.
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
+    es_supervisor = request.post_vars.tipo_supervisor
 
+    
+    if request.post_vars.rol and es_supervisor :
+        rolid = request.post_vars.rol
+        roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+    else:
+        rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
+        roltype = "PERSONAL INTERNO"
+        depid= request.post_vars.dependencia
+        
+        
+    if request.post_vars.laboratorio:
+        depid = request.post_vars.laboratorio
     if request.post_vars.seccion:
       # El registrado pertenece directamente a una sección de un laboratorio.
       depid = request.post_vars.seccion
-    else:
-      depid = request.post_vars.laboratorio
 
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id, 
-                                                    group_id=request.post_vars.rol,
+                                                    group_id=rolid,
                                                     dependencia_asociada=depid,
                                                     f_personal_membership=request.post_vars.cedula)
 
+    
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
     nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
                            f_apellido = request.post_vars.last_name,
-                           f_ci = request.post_vars.cedula,
+                           f_ci = request.post_vars.tipo_cedula+request.post_vars.cedula,
                            f_email = request.post_vars.email,
                            f_usuario = user.id,
-                           f_telefono = 0,
-                           f_pagina_web = "N/A",
-                           f_categoria = "N/A",
-                           f_cargo = "N/A", # *?* No deberia ser request.vars.rol?
-                           f_fecha_ingreso = "1/01/1989",
-                           f_fecha_salida = "1/02/1989",
-                           f_dependencia = depid)
+                           f_dependencia = depid,
+                           f_es_supervisor = es_supervisor,
+                           f_comentario='Recuerde validar su ficha')
 
-    # Mapea el usuario al espacio fisico que tiene a cargo
-    rolid = request.post_vars.rol
-    roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+    
+    # Mapea el usuario al espacio fisico que tiene a cargo    
     
     if roltype == "TÉCNICO":
       # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
@@ -234,6 +242,7 @@ def register():
     # Registro exitoso. Retornar redirección a la misma página para evitar el
     # problema de doble POST con mensaje de exito y recordatorio de 
     # actualización de datos personales.
+    session.flash=T("Registro exitoso")
     return redirect('register')
 
   # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de 
@@ -242,10 +251,15 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-
-  roles=list(db(db.auth_group.role != 'WEBMASTER').select(db.auth_group.ALL))
-
-  return dict(roles=roles)
+    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
+    roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
+    dependencias=list(db().select(db.dependencias.ALL))
+    idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
+    
+    prefijos_cedula = ['V-','E-', 'P-']
+    print(dependencias)
+  
+  return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec, prefijos_cedula=prefijos_cedula )
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
 def ajax_unidad_rol():

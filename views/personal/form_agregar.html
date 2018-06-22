@@ -1,14 +1,4 @@
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-    $( function() {
-      var d1=$( "#datepicker" ).datepicker({maxDate:'0'});
-      $( "#datepicker2" ).datepicker({maxDate:'0'});
-    } );
-  </script>
-
-  <div class="modal fade" id="addservice" role="dialog">
+<div class="modal fade" id="addservice" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -23,68 +13,165 @@
               </div>
             </div>
             <div class="col-sm-11" id="col11Header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
               <h4 class="modal-title" id="nuevoServicio">Nuevo Personal</h4>
             </div>
           </div>
         </div>
         <!-- Fin Modal Header -->
-        
+
         <!-- Modal Body -->
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioCarga" class="registration-form" method="post"
+                  action="{{=URL('personal', 'add_form')}}">
 
                     <!-- Primer Paso -->
-                    <fieldset class="formField">
+                    <fieldset id="p1" class="formField">
                       <div class="form-bottom" data-step="1" data-title="Primer Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
                           <span class="step activePass">1</span>
-                          <span class="step">2</span> 
-                          <span class="step">3</span>           
+                          <span class="step">2</span>
+                          <span class="step">3</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Básicos</h4>
+                            <div class="rows-planilla">
+                              <div class="form-group">
+                                <div class="col-sm-6" >
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="nombre_add" placeholder="Nombre"  required readonly value="{{=usuario.f_nombre or ''}}">
+                                    <font color="red"><div id="err_nombre" hidden></div></font>
+                                </div>
+                              </div>
+                            
+
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Apellido</label>
+                                  <input type="text" class="form-control rows-planilla" name="apellido_add" placeholder="Apellido" readonly required value="{{=usuario.f_apellido or ''}}" id="input-apellido">
+                                  <font color="red"><div id="err_apellido" hidden></div></font>
+                                </div>
+                              </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="nombre_add" placeholder="Nombre" required>
-                              <font color="red"><div id="err_nombre" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Cédula</label>
+                                <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required readonly value="{{=usuario.f_ci or ''}}">
+                                <font color="red"><div id="err_ci" hidden></div></font>
+                              </div>
+                            </div>
+    
+                            <div class="form-group">
+                              <div class="col-sm-6">
+                                <label>Página Web</label>
+                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_pagina_web" hidden></div></font>
+                              </div>
+                            </div>
+
+                          </div>
+                          
+                          <div class="rows-planilla">
+                            <div class="form-group">
+                              <div class="col-sm-6">
+                                <label>Correo Electrónico</label>
+                                <input type="text" class="form-control" name="email_add" placeholder="Correo" required readonly value="{{=usuario.f_email}}" id="input-email">
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>  
                             </div>
 
                             <div class="form-group">
-                              <input type="text" class="form-control" name="apellido_add" placeholder="Apellido" required>
-                              <font color="red"><div id="err_apellido" hidden></div></font>
+                              <div class="col-sm-6">
+                                <label>Email Alternativo</label>
+                                <input type="text" class="form-control" name="email_alt_add" placeholder="Correo" value="{{=usuario.f_email_alt or ''}}" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_email" hidden></div></font>
+                              </div>
                             </div>
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="ci_add" placeholder="Cédula" required>
-                              <font color="red"><div id="err_ci" hidden></div></font>
-                            </div>
+                          </div>
+                          
+                          <div class="col-sm-12">
+                            <label>Celular</label>
+                            <div class="form-group form-inline">
+                                <div class="form-group">
+                                        <select class="form-control" type="select" id="operador_add" name="operador_add" placeholder="Operador" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true" required>
+                                                <option value="" disabled selected>Codigo</option>
+                                            {{for operador in operadores:}}
+                                                <option
+                                                {{if usuario.f_operador == operador:}}
+                                                selected
+                                                {{pass}}
+                                                value='{{=operador}}'>{{=operador}}</option>
+                                            {{pass}}
+                                        </select>
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="email_add" placeholder="Correo" required>
-                              <font color="red"><div id="err_email" hidden></div></font>
+                                </div>
+                                <div class="form-group" >
+                                    <div class="col-xs-12">
+                                        <input class="form-control" id="celular_add" name="celular_add" type="text" placeholder="Celular" required value="{{=usuario.f_celular or ''}}"
+                                            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                    </div>
+                                </div>
+                                <font color="red"><div id="err_celular" hidden></div></font>
                             </div>
+                          </div>
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="telefono_add" placeholder="Extension" required>
-                              <font color="red"><div id="err_telefono" hidden></div></font>
-                            </div>
+                          <div class="rows-planilla">
 
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="pagina_web_add" placeholder="Página Web">
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Dirección de Habitación</label>
+                                  <input value="{{=usuario.f_direccion or ''}}" type="text" class="form-control" name="direccion_add" placeholder="Direccion" required
+                                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                  <font color="red"><div id="err_direccion" hidden></div></font>
+                                </div>
+                              </div>
+  
+                             
+  
+                              <div class="form-group">
+                                <div class="col-sm-6">
+                                  <label>Teléfono Residencial</label>
+                                  <input value="{{=usuario.f_telefono or ''}}" type="text" class="form-control" name="telefono_add" placeholder="Teléfono" required id="input-telefono"
+                                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                </div>
+                              </div>
+  
                             </div>
+                            
+                          <div class="rows-plantilla">
+                            <div class="form-group col-sm-6">
+                                <label>Persona de Contacto</label>
+                              <input value="{{=usuario.f_persona_contacto or ''}}" type="text" class="form-control" name="persona_contacto" placeholder="Contacto de Emergencia" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label>Contacto de Emergencia</label>
+                              <input value="{{=usuario.f_contacto_emergencia or ''}}" type="text" class="form-control" name="contacto_emergencia_add" placeholder="Contacto de Emergencia" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div>
+
+                          
 
                         </div>
                       </div>
-                      <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                      <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
                     </fieldset>
                     <!-- Fin Primer Paso -->
-                    
+
                     <!-- Segundo Paso -->
-                    <fieldset class="formField">
+                    <fieldset class="formField" id="p2">
                         <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                           <!-- Aqui va la barra lateral -->
                           <div class="col-sm-1 col1Body">
@@ -97,31 +184,106 @@
                           <div class="col-sm-11 col11Body">
                           <h4 class="titulosForm">Datos Laborales</h4>
                               <div class="form-group">
-                                <select class="form-control" id="sel1" name="estatus_add">
-                                  <option value="1" selected hidden>Estatus</option>
-                                  {{for estatus in estados:}}
-                                  <option value="{{=estatus}}">{{=estatus}}</option>
-                                  {{pass}} 
-                                </select>
+                                <div class="col-sm-12">
+                                    <label>Estatus</label>
+                                  <select class="form-control" id="sel1" name="estatus_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option disabled  value=""
+                                    {{ if not usuario.f_estatus :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Estatus</option>
+                                    {{for estatus in estados:}}
+                                    <option
+                                    {{ if estatus == usuario.f_estatus: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=estatus}}">{{=estatus}}</option>
+  
+                                    {{pass}}
+                                  </select>
+                                </div>
+                              </div>
+                              <font color="red"><div id="err_estatus" hidden></div></font>
+                              <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label>Categoría</label>
+                                  <select class="form-control" id="sel2" name="categoria_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option disabled  value=""
+                                    {{ if not usuario.f_categoria :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Categoría</option>
+                                    {{for categoria in categorias:}}
+                                    <option
+                                    {{ if categoria == usuario.f_categoria: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=categoria}}">{{=categoria}}</option>
+                                    {{pass}}
+                                  </select>
+                                </div>
                               </div>
 
-                              <p>Fecha de Ingreso: <input name = "fecha_ingreso_add" type="text" id="datepicker" required></p>
-                              <font color="red"><div id="err_fecha_ingreso" hidden></div></font>
+                              <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label>Condición</label>
+                                  <select class="form-control" id="sel3" name="condicion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                    <option  disabled value=""
+                                    {{ if not usuario.f_condicion :}}
+                                    selected
+                                    disabled
+                                    {{pass}}
+                                    >Condición</option>
+                                    {{for condicion in condiciones:}}
+                                    <option
+                                    {{ if condicion == usuario.f_condicion: }}
+                                    selected
+                                    {{pass}}
+                                    value="{{=condicion}}">{{=condicion}}</option>
+                                    {{pass}}
+                                  </select>
+                                </div>
+                              </div>
+                              <div id="fsalida"
+                              {{if usuario.f_categoria == 'Fijo' :}}
+                              hidden
+                              {{pass}}
+                              >   
+                                <div class="col-sm-6">
+                                  <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                </div>
+                                <div class="col-sm-6">
+                                  <p ><label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                </div>
+                              </div>
 
-                              <p id="fsalida" hidden>Fecha de Egreso: <input name = "fecha_salida_add" type="text" id="datepicker2"></p>
-                              <font color="red"><div id="err_fecha_salida" hidden></div></font>
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
+                              </div>
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+                              
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
 
                             <!--<div class="form-group">
                               <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
                             </div>-->
                           </div>
-                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                        <button type="button" class="btn btn-next botonForm">Siguiente</button>
+                        <div class="botones-form">
+                          <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                          <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                        </div>
                     </fieldset>
                     <!-- Fin Segundo Paso -->
 
                     <!-- Tercer Paso -->
-                    <fieldset class="formField">
+                    <fieldset class="formField" id="p3">
                       <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
@@ -129,43 +291,106 @@
                           <span class="step">2</span>
                           <span class="step activePass">3</span>
                         </div>
-                        
+
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos Laborales</h4>
 
                         <div class="form-group">
-                          <input type="text" class="form-control" name="cargo_add" placeholder="Cargo">
-                          <font color="red"><div id="err_cargo" hidden></div></font>
+                          <div class="col-sm-12">
+                            <label>Cargo</label> 
+                            <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                            <font color="red"><div id="err_cargo" hidden></div></font>
+                          </div>
                         </div>
 
                         <div class="form-group">
-                          <select class="form-control" id="sel1" name="categoria_add" required>
-                            <option value="1" selected hidden>Gremio</option>
-                            {{for categoria in categorias:}}
-                            <option value="{{=categoria}}">{{=categoria}}</option>
-                            {{pass}} 
-                          </select>
+                          <div class="col-sm-12">
+                              <label>Gremio</label> 
+                            <select class="form-control" id="sel1" name="gremio_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_gremio :}}
+                              selected
+                              {{pass}}
+                              >Gremio</option>
+                              {{for gremio in gremios:}}
+                              <option
+                              {{ if gremio == usuario.f_gremio: }}
+                              selected
+                              {{pass}}
+                              value="{{=gremio}}">{{=gremio}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
                         </div>
 
                         <div class="form-group">
-                          <select class="form-control" id="sel1" name="dependencia_add" required>
-                            <option value="1" selected hidden>Dependencia</option>
-                            {{for dependencia in dependencias:}}
-                            <option value="{{=dependencia['id']}}">{{=dependencia["nombre"]}}</option>
-                            {{pass}} 
-                          </select>
+                          <div class="col-sm-12">
+                            <label>Dependencia</label> 
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
+                          </div>
                         </div>
-                  
-                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>
+                            
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                              <label>Ubicación</label> 
+                            <select class="form-control" id="sel1" name="ubicacion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_ubicacion :}}
+                              selected
+                              {{pass}}
+                              >Ubicación</option>
+                              {{for ubicacion in ubicaciones:}}
+                              <option
+                              {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
+                              selected
+                              {{pass}}
+                              value="{{=ubicacion.id}}">{{=ubicacion.codigo}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                        </div>
+                        <div hidden class="form-group">
+                          <div class="col-sm-12">
+                            <label>Extension</label> 
+                            <input type="text" class="form-control" name="extension_add" placeholder="Extension" >
+                          </div>
+                        </div>
+
+                        
+
+                      
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                              <label>Rol</label> 
+                              <select class="form-control" id="sel1" name="rol_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                            <option selected hidden disabled
+                            {{ if not usuario.f_rol :}}
+                              selected
+                              {{pass}}
+                              >Rol</option>
+                              {{for rol in roles:}}
+                              <option
+                              {{ if rol == usuario.f_rol: }}
+                              selected
+                              {{pass}}
+                              value="{{=rol}}">{{=rol}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                        </div>
+                      
+                      <div class="botones-form">
+                          <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-plus-circle" title="Anterior"/></button>
+                      </div>
                       </div>
                     </fieldset>
                     <!-- Fin Tercer Paso -->
 
                 </form>
             </div>
-          </div>               
+          </div>
 
 
         </div>
