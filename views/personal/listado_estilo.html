@@ -34,7 +34,12 @@
 	  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
 	  <a class="breadcrumb-item" >Personal</a>
 	  </div>
-	</nav>
+  </nav>
+{{if session.ficha_negada :}}
+<div class="jumbotron">
+  <p>Motivo de Rechazo:{{=session.ficha_negada}}</p>
+</div>
+{{pass}}
 <div class="row">
   <h3 class=" text-center"> GESTIÓN DE PERSONAL</h3>
     <div class="col-sm-2">

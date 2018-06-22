@@ -113,10 +113,18 @@
        <li class="dropdown">
           <div class="dropdown">
                 <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{{=session.validaciones_pendientes}} Fichas por Validar"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
-
           </div>
         </li>
        {{pass}}
+       {{if session.ficha_negada: }}
+
+        <li class="dropdown">
+            <div class="dropdown">
+                  <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Ficha Negada, revise su ficha"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
+            </div>
+          </li>
+        {{pass}}
+
           
       {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
         or auth.has_membership('WEBMASTER')\
