@@ -436,8 +436,9 @@ def contar_notificaciones():
     return notif
 
 def buscarJefe(dependencia_trabajador):
-    unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
-    if unidad_adscripcion:
+    unidad_adscripcion = db(db.dependencias.nombre == dependencia_trabajador).select(db.dependencias.id)[0].id
+
+     if unidad_adscripcion:
         idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
     else:
         idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id
