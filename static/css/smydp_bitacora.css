@@ -1,0 +1,23 @@
+/* Estilos de la bitacora de las sustancias */
+.titulos{
+	text-align: center;
+}
+
+#titulo{
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+@media only screen and (min-width: 768px){ 
+	#inventario-dependencia{
+		padding-bottom: 270px;
+	}
+}
+
+@media only screen and (max-width: 767px){ 
+
+	#inventario-dependencia{
+		padding-bottom: 100px;
+	}
+
+}

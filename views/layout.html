@@ -19,10 +19,12 @@
   <meta name="robots" content="noindex" />
 
   <link rel="icon" type="image/png" sizes="16x16" href="{{=URL('static', 'favicon.ico')}}">
-
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
   
   <script src="{{=URL('static','js/jquery.min.js')}}"></script>
   <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
@@ -58,15 +60,15 @@
             <li class="dropdown active-item" id="inicio">
               <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2')}}">INICIO</a>
             </li>
-
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
               <ul class=" dropdown-menu">
                 <li><a href="{{=URL('personal','index')}}">Página Principal</a></li>
-                <li><a href="{{=URL('personal','listado')}}">Listado General de Personal</a></li>
-                <li><a href="#">Listado por Categorías de Personal</a></li>
-                <li><a href="#">Listado por Dependencias de Personal</a></li>
-                <li><a href="#">Listado por Años de Servicio de Personal</a></li>
+                {{_personal = db(db.t_Personal.f_usuario == auth.user.id).select(db.t_Personal.ALL).first()}}
+                {{if _personal.f_es_supervisor:}}
+                <li
+                ><a href="{{=URL('personal','validacion_estilo')}}">Validación de Personal</a></li>
+                {{pass}}
               </ul>
             </li>
             
@@ -89,16 +91,52 @@
                 <li><a href="{{=URL('smydp', 'index')}}">Página Principal</a></li>
                   <li><a href="{{=URL('smydp', 'catalogo')}}">Listado de Sustancias</a></li>
                   <li><a href="{{=URL('smydp', 'inventarios')}}">Inventario</a></li>
+                  <li><a href="{{=URL('smydp', 'solicitudes')}}">Solicitudes</a></li>
+                 </ul>
+            </li> 
+            <li class="dropdown active-item" id="smydp">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INFORMACIÓN DOCUMENTADA<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{=URL('informacion_documentada', 'index')}}">Página Principal</a></li>
+                  <li><a href="{{=URL('informacion_documentada', 'lista_documentos')}}">Listado de Documentos</a></li>
+                  <li><a href="{{=URL('informacion_documentada', 'lista_registros')}}">Listado de Registros</a></li>
                  </ul>
             </li> 
 
+            <li class="dropdown active-item" id="inventario">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INVENTARIOS<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{=URL('inventarios', 'index')}}">Página Principal</a></li>
+                  <li><a href="{{=URL('inventarios', 'bienes_muebles')}}">Bienes Muebles</a></li>
+                  <li><a href="{{=URL('inventarios', 'material_lab')}}">Material de laboratorio</a></li>
+                  <li><a href="{{=URL('inventarios', 'prestamos')}}">Préstamos</a></li>
+                  <li><a href="{{=URL('inventarios', 'mantenimiento')}}">Mantenimiento</a></li>
+                  <li><a href="{{=URL('inventarios', 'validaciones')}}">Validaciones</a></li>
+                </ul>
+            </li> 
         </ul>
 
       <ul class="nav navbar-nav navbar-right">
+       {{if session.validaciones_pendientes>0:}}
+       <li class="dropdown">
+          <div class="dropdown">
+                <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{{=session.validaciones_pendientes}} Fichas por Validar"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
+          </div>
+        </li>
+       {{pass}}
+       {{if session.ficha_negada: }}
+
+        <li class="dropdown">
+            <div class="dropdown">
+                  <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Ficha Negada, revise su ficha"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
+            </div>
+          </li>
+        {{pass}}
+
+          
       {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
         or auth.has_membership('WEBMASTER')\
-        or auth.has_membership('DIRECTOR')\
-        or (auth.user.email == "ulab-calidad@usb.ve"): }}
+        or auth.has_membership('DIRECTOR'): }}
         <li class="dropdown">
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
@@ -130,7 +168,6 @@
   </div>
 </nav>
 <!-- Fin de la barra de navegación principal -->
-
 <div class="fondoblanco"></div> 
 <div class="separador"></div>
 
@@ -144,6 +181,13 @@
   else if (window.location.pathname.includes('servicios')){
     $('li#servicios').addClass("active");
   }
+</script>
+<script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+    $("#iconoNotificacion").popover
+
 </script>
 </body>
 </html>

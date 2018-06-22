@@ -67,6 +67,7 @@ body{
 	width:100%;
 }
 
+
 @media only screen and (max-width: 767px){ 
 
 .navbar-brand {
@@ -161,4 +162,15 @@ body{
 	right: 0;
 }
 
+}
+
+#cedula-select{
+	padding-right: 0px;
+	width: 5em;
+}
+
+#auth_cedula__row {
+	padding-left: 0px;
+	padding-right: 4px;
+	width: 21em;
 }

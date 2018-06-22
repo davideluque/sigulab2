@@ -1,0 +1,13 @@
+
+.grid-container {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 50%);
+    justify-content: center;
+}
+  .grid-item {
+    font-size: 18px;
+    text-align: left;
+    border-bottom: 1px solid grey;  
+  }

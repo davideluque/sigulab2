@@ -68,7 +68,7 @@ textarea:focus,
 textarea.form-control:focus {
     outline: 0;
     background: #fff;
-    border: 3px solid #ccc;
+    border: 1px solid #ccc;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -100,8 +100,7 @@ button.btn.botonForm{
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
-    background: #505050;
-    ;
+    background: #0300d7;
     border: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -155,7 +154,9 @@ button.btn.botonForm.active:focus {
 
 
 /*style.css**/
-
+.close{
+    margin-top:30px;
+}
 
 strong {
     font-weight: 500;
@@ -176,6 +177,12 @@ h3 {
     font-weight: 300;
     color: #555;
     line-height: 30px;
+}
+
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+    background-color:#0300d7;
+    color:#fff;
 }
 
 
@@ -270,4 +277,3 @@ form .form-bottom .input-error {
 form.registration-form fieldset {
     display: none;
 }
-
