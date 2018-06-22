@@ -725,6 +725,8 @@ def detalles_mat():
     localizacion = []
     nombre_espaciof = []
     unidad_adscripcion = []
+    unidad_cap = []
+    presentacion=[]
 
     aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
@@ -738,6 +740,8 @@ def detalles_mat():
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+    presentacion=["Caja", "Paquete", "Unidad", "Otro"]
     caracteristicas_list = ['Marca:', 'Modelo:', 'Descripción:', 'Capacidad:', 'Unidad de Capacidad:',
     'Material predominante:', 'Material secundario:', 'Aforado:', 'Tipo:', 'Requiere calibración:', 'Ubicación interna:']
     caracteristicas_dict = {
@@ -768,7 +772,8 @@ def detalles_mat():
                 caracteristicas_list = caracteristicas_list,
                 caracteristicas_dict = caracteristicas_dict,
                 aforado_options = aforado_options,
-
+                unidad_cap = unidad_cap,
+                presentacion = presentacion
                 )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
@@ -1257,7 +1262,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -1359,7 +1364,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
 
@@ -1461,7 +1466,7 @@ def material_lab():
                          request.vars.unidad_mat,  
                         request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                         request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total, dep_padre_unid_ads, 
+                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
