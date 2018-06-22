@@ -75,14 +75,15 @@ function validaOperador () {
 
 function validaCelular () {
     const $this = $('[name="celular_add"]')
-    if ($this.val() === '') {
+    const val = $this.val().replace(/-/g, '')
+    if (val === '') {
         $this.attr('data-content', requiredFieldMessage);
         $this.popover('show');
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
         return false;
     }
-    if (!($this.val().match(/^\d{7}$/gm))) { // Extension de 1 a 4 digitos
+    if (!(val.match(/^\d{7}$/gm))) { // Extension de 1 a 4 digitos
         $this.attr('data-content', 'El número de celular tiene el formato incorrecto. Ejemplo 1234567');
         $this.popover('show');
         $this.addClass('input-error');
@@ -114,14 +115,15 @@ function validaDireccionHab () {
 
 function validaTelefonoResidencial (){
     const $this = $('[name="telefono_add"]')
-    if ($this.val() === '') {
+    const val = $this.val().replace(/[()-]/g, '')
+    if (val === '') {
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
         $this.popover('show')
         return false;
     }
-    if (!($this.val().match(/^\d{11}$/gm))){
+    if (!(val.match(/^\d{11}$/gm))){
         $this.attr("data-content", "El teléfono tiene el formato incorrecto. Ejemplo: 02121234567");
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -154,14 +156,15 @@ function validaPersonaContacto () {
 
 function validaContactoEmergencia () {
     const $this = $('[name="contacto_emergencia_add"]')
-    if ($this.val() === '') {
+    const val = $this.val().replace(/[()-]/g, '')
+    if (val === '') {
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
         $this.popover('show');
         return false;
     }
-    if (!$this.val().match(/\d{11}$/)) { 
+    if (!val.match(/\d{11}$/)) { 
         $this.attr("data-content", 'El contacto de emergencia debe tener solo números. Ejemplo: 02121234567');
         $this.popover('show');
         $this.addClass('input-error');
@@ -485,6 +488,21 @@ function validadoresCorrectos(validatorsList) {
 }
 
 $(document).ready(function () {
+    new Cleave('[name="telefono_add"]', {
+        // delimiter: '-',
+        delimiters: ['(', ')', '-'],
+        blocks: [0, 4, 3, 4],
+    })
+    new Cleave('[name="contacto_emergencia_add"]', {
+        // delimiter: '-',
+        delimiters: ['(', ')', '-'],
+        blocks: [0, 4, 3, 4],
+    })
+    new Cleave('[name="celular_add"]', {
+        delimiter: '-',
+        blocks: [3, 4]
+    })
+
     $('.registration-form fieldset:first-child').fadeIn('slow');
 
     $('#sel2').change(function (){
