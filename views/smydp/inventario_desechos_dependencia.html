@@ -25,16 +25,16 @@
                 </thead>
 
                 <tbody>
-                     {{for desecho in inventario:}}
-                    <tr>
-                        <td class="camposTabla">{{=desecho['categoria']['categoria']}}</td>
-                        <td class="camposTabla">{{=desecho['espacio_fisico']['nombre']}}</td>
-                        <td class="camposTabla">{{=desecho['cantidad']}}</td>
-                        <td class="camposTabla">{{=desecho['seccion']['nombre']}}</td>
-                        <td class="camposTabla">{{=desecho['responsable']['f_nombre']}}</td>
-                    </tr>
-                    {{pass}}
-                </tbody>
+                    {{for desecho in inventario:}}
+                   <tr>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.espacio_fisico']['nombre']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.cantidad']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.seccion']['nombre']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre']}}</td>
+                   </tr>
+                   {{pass}} 
+               </tbody>
 
                 <tfoot id="collapseFiltros">
                     <tr id="titulosListado">

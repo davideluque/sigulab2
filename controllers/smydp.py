@@ -1331,6 +1331,71 @@ def inventarios_desechos():
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la seccion del jefe
             inventario = __get_inventario_dep(user_dep_id)
+    
+    elif auth.has_membership("WEBMASTER"):
+        # Si el jefe de seccion ha seleccionado un espacio fisico
+        if request.vars.es_espacio == 'True':
+            # Evaluando la correctitud de los parametros del GET 
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios'))
+
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
+                           ).select().first().nombre
+
+            # Guardando el ID y nombre de la dependencia a la que pertenece el 
+            # espacio fisico visitado
+            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                             ).select().first().dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                 ).select().first().nombre
+
+            espacio_visitado = True
+                            # Se muestra la lista de sustancias que tiene en inventario
+            inventario = list(db(
+                (db.espacios_fisicos.id == espacio_id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+            print inventario
+            #desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.uso_interno,
+                                    request.vars.unidad)
+
+
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # regresar a la vista inicial de inventarios
+        elif request.vars.dependencia:
+            dep_id = request.vars.dependencia
+            espacios = list(db(
+                              db.espacios_fisicos.dependencia == dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            dep_nombre = db(db.dependencias.id == dep_id
+                           ).select().first().nombre
+            inventario = list(db(
+                (db.dependencias.id == dep_id) & 
+                (db.espacios_fisicos.dependencia == dep_id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+            es_espacio = True
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # entrar a la vista inicial de inventarios
+        else:
+            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la seccion del jefe
+            inventario = list(db(
+                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+
+            print inventario
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -1416,11 +1481,16 @@ def inventarios_desechos():
 
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
-            dependencias = list(db(db.dependencias.nombre.like('Laboratorio %')).select(db.dependencias.ALL))
+            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
-            inventario = __get_inventario_dep(dep_id)
+            inventario = list(db(
+                (db.dependencias.id == dep_id) & 
+                (db.espacios_fisicos.dependencia == dep_id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+           # __get_inventario_dep(dep_id)
+            print inventario
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1437,9 +1507,108 @@ def inventarios_desechos():
                 retroceder=retroceder)
 
 
+########################################
+#          BITÁCORA DESECHOS           #
+# FUNCIONES AUXILIARES Y CONTROLADORES #
+########################################
+
+# Muestra los movimientos de la bitacora comenzando por el mas reciente
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def bitacora_desechos():
+
+    # INICIO Datos del modal de agregar un registro
+    # Conceptos
+    conceptos = ['Ingreso','Consumo']
+
+    # Tipos de consumos
+    #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
+    tipos_egreso = ['Docencia','Investigación','Extensión']
+
+    # Tipos de ingresos
+    #tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
+    tipos_ingreso = ['Compra','Almacén']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    # Lista de almacences
+    almacenes = db(db.espacios_fisicos.id > 0).select()
+
+    # Lista de servicios
+    servicios = db(db.servicios.id > 0).select()
+    # FIN Datos del modal de agregar un registro
+
+    # Obteniendo la entrada en t_Personal del usuario conectado
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+
+    if request.vars.inv is None:
+        redirect(URL('inventarios'))
+
+    inventario_id = int(request.vars.inv)
+
+    # Si el id de inventario no es valido, retornar al inventario del
+    # espacio fisico que se estaba consultando
+    if not __is_valid_id(inventario_id, db.t_inventario_desechos):
+        response.flash = "La bitácora consultada no es correcta."
+        redirect(URL('inventarios'))
+
+    # Inventario al que pertenecen los registros que se desean consultar
+    inventario = db((db.t_inventario_desechos.id == inventario_id) & 
+                    (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id)
+                   ).select()[0]
+
+    # Espacio al que pertenece la bitacora consultada
+    espacio_id = inventario['t_inventario_desechos'].espacio_fisico
+
+    # Unidad de medida en que es expresada la sustancia en el inventariobaking cheats
+    unidad_medida = db(db.t_Unidad_de_medida.id == inventario.t_inventario_desechos.unidad_medida
+                      ).select()[0]
+
+    # Se valida que el usuario tenga acceso a la bitacora indicada
+    # para consultar la bitacora. 
+    if not __acceso_permitido(user, espacio_id, "True"):
+        redirect(URL('inventarios'))
+
+   # composicion = inventario['composicion']
+    espacio_nombre = inventario['espacios_fisicos'].nombre
+
+    bitacora = db((db.t_Bitacora_desechos.inventario == inventario_id) &
+                  (db.t_Bitacora_desechos.created_by == db.auth_user.id) &
+                  (db.auth_user.id == db.t_Personal.f_usuario) &
+                  (db.t_Bitacora_desechos.unidad_medida_bitacora == db.t_Unidad_de_medida.id)).select()
+    
+    # *!* Hacer esto cuando se cree el registro y ponerlo en reg['f_descripcion']
+    # Obteniendo la descripcion de cada fila y guardandola como un atributo
+    for reg in bitacora:
+        descripcion = __get_descripcion(reg['t_Bitacora_desechos'])
+        reg['t_Bitacora_desechos']['descripcion'] = descripcion
+
+    # Si se han enviado datos para agregar un nuevo registro
+    concepto = request.vars.concepto
+    if concepto:
+        __agregar_registro(concepto)
+
+
+    return dict(bitacora=bitacora,
+                unidad_medida=unidad_medida,
+                inventario=inventario,
+                composicion=composicion,
+                espacio_nombre=espacio_nombre,
+                espacio_id=espacio_id,
+                conceptos=conceptos,
+                tipos_egreso=tipos_egreso,
+                tipos_ingreso=tipos_ingreso,
+                unidades_de_medida=unidades_de_medida,
+                almacenes=almacenes,
+                servicios=servicios)
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def desechos():
     return locals()
+
+
 
 #--------------------- Catalogo de Sustancias y Materiales ----------
 
