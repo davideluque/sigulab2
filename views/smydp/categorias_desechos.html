@@ -60,6 +60,7 @@
                 <thead>
                     <tr id="titulosListado" style="text-align: left">
                         <th class="camposTabla linksNombres">Categoría</th>
+                        <th class="camposTabla linksNombres">Descripción</th>
                     </tr>
                 </thead>
 
@@ -67,9 +68,12 @@
                  {{for categoria in categorias:}} 
                     <tr>
                         <td class="camposTabla" style="text-align: left">
-                            <a onclick="editarCategoria('{{=categoria.categoria}}', {{=categoria.id}})">
+                            <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
                                 {{=categoria.categoria.upper()}}
                             </a>
+                        </td>
+                        <td class="camposTabla" style="text-align: left">
+                            {{=categoria.descripcion}}
                         </td>
                     </tr>
                 {{pass}}
@@ -78,6 +82,7 @@
                 <tfoot id="collapseFiltros">
                     <tr>
                         <th class="camposTabla linksNombres">Categoría</th>
+                        <th class="camposTabla linksNombres">Descripción</th>
                     </tr>
                 </tfoot>
 
@@ -134,6 +139,10 @@
                                                 <p id="error-nombre-categoria"> </p>
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row opciones-modal-footer">
@@ -183,7 +192,7 @@
         }
     }
 
-    function editarCategoria(categoria, id) {
+    function editarCategoria(categoria, descripcion, id) {
         // Cambia el valor del botón de enviar formulario del modal de 'Agregar categoría' por 'Actualizar categoría'
         document.getElementById('submit').innerHTML = 'Actualizar categoría';
 
@@ -192,6 +201,7 @@
 
         //Precarga los valores de la categoría en el modal
         document.getElementById('nombre-categoria').value = categoria;
+        document.getElementById('descripcion-categoria').value = descripcion;
         document.getElementById('id_categoria').value = id;
 
         //Muestra el modal

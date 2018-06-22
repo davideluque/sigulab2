@@ -1103,20 +1103,20 @@ def categorias_desechos():
                 if request.vars.id_categoria != '':
                     id_categoria = int(request.vars.id_categoria)
                 
-                __agregar_categoria(request.vars.categoria, id_categoria)
+                __agregar_categoria(request.vars.categoria, request.vars.descripcion, id_categoria)
     else:
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
     return locals()
 
 
-def __agregar_categoria(nombre_categoria, id_categoria):
+def __agregar_categoria(nombre_categoria, descripcion_categoria, id_categoria):
     # Si el id_categoria es distinto de -1, es porque ya exista la categoría y se va a actualizar
     if id_categoria != -1:
-        db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria)
+        db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria, descripcion = descripcion_categoria)
     else:
         #De lo contrario, la categoría no existe y se tiene que crear
-        db.t_categoria_desechos.insert(categoria = nombre_categoria)
+        db.t_categoria_desechos.insert(categoria = nombre_categoria, descripcion = descripcion_categoria)
 
     response.flash = "Categoría agregada exitosamente"
     return redirect(URL(host=True)) 
