@@ -42,7 +42,7 @@
                         <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
                         <td class="camposTabla">{{=bm['sb_unidad']}}</td>
                         <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
-                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().nombre}}</td>
+                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>
                     </tr>
                   {{pass}}           
                 </tbody>

@@ -41,12 +41,16 @@ db.define_table(
     Field('bm_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('bm_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
     Field('bm_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
-
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    # Estado = 2  :Sin solicitud
+    Field('bm_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
     Field('bm_clasificacion', 'string', notnull = True, label = T('Clasificacion del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario']))
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
-db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.bien_mueble.bm_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.bien_mueble.bm_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
 db.bien_mueble.bm_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
@@ -127,7 +131,7 @@ db.define_table(
     Field('p_responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), label=T('Responsable')),
     Field('p_prestado','string',notnull=True,label=T('Prestado a'), requires = IS_IN_DB(db, db.t_Personal.f_nombre, '%(f_nombre)s')),
     Field('p_dependencia','reference dependencias', unique=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'), notnull=True,label=T('Dependencia')),
-    Field('p_ubicacion','reference espacios_fisicos', requires=IS_IN_DB(db,db.espacios_fisicos.nombre,'%(nombre)s'), notnull=True,label=T('Ubicación')),
+    Field('p_ubicacion','reference espacios_fisicos', requires=IS_IN_DB(db,db.espacios_fisicos.codigo,'%(codigo)s'), notnull=True,label=T('Ubicación')),
     ##A los campos de depedencia y ubicacon se le deben añadir lo siguiente en lineas separadas
     Field('p_devolucion','date',notnull=True,label=T('Fecha de devolución'),requires=IS_DATE(format=('%d-%m-%Y'))),
     Field('p_observaciones','text',label=T('Observaciones')),
@@ -191,11 +195,15 @@ db.define_table(
     Field('sb_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('sb_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
     Field('sb_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
-
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    # Estado = 2  :Sin solicitud
+    Field('sb_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
     Field('sb_clasificacion', 'string', notnull = True, label = T('Clasificacion del consumible/material'), requires=IS_IN_SET(['Material de Laboratorio','Consumible']))
 	)
 
-db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.sin_bn.sb_nombre.requires=IS_NOT_IN_DB(db(db.sin_bn.sb_espacio==request.vars.sb_espacio),'sin_bn.sb_nombre')
 db.sin_bn.sb_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.sin_bn.sb_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
@@ -237,7 +245,7 @@ db.define_table(
     )
 
 db.modificacion_sin_bn.msb_nombre.requires =IS_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
-db.modificacion_sin_bn.msb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.modificacion_sin_bn.msb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 #db.modificacion_sin_bn.msb_nombre.requires=IS_NOT_IN_DB(db(db.modificacion_sin_bn.msb_espacio==request.vars.msb_espacio),'modificacion_sin_bn.msb_nombre')
 db.modificacion_sin_bn.msb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 
@@ -256,4 +264,4 @@ db.define_table(
     Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
     )
 db.solicitud_eliminar_sin_bn.eliminar_nombre.requires = IS_IN_DB(db,db.sin_bn.id,'%(sb_nombre)s')
-db.solicitud_eliminar_sin_bn.eliminar_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(nombre)s')
+db.solicitud_eliminar_sin_bn.eliminar_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')

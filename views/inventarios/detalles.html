@@ -259,7 +259,7 @@
                     Espacio físico:
                 </div>
                 <div class="grid-item">
-                    {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().nombre}}
+                    {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
                 </div>
                 <div class="grid-item">
                     Unidad de Adscripción:

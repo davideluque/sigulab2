@@ -239,7 +239,7 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
         sust = db(db.t_Sustancia.id == sustancia_id).select()[0]
 
         response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
-                          al espacio \"{1}\".".format(sust.f_nombre, espacio.nombre)
+                          al espacio \"{1}\".".format(sust.f_nombre, espacio.codigo)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
@@ -614,7 +614,7 @@ def bitacora():
 
     sust_nombre = inventario['t_Sustancia'].f_nombre
 
-    espacio_nombre = inventario['espacios_fisicos'].nombre
+    espacio_nombre = inventario['espacios_fisicos'].codigo
 
     bitacora = db((db.t_Bitacora.f_inventario == inventario_id) &
                   (db.t_Bitacora.created_by == db.auth_user.id) &
@@ -711,7 +711,7 @@ def inventarios():
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -794,7 +794,7 @@ def inventarios():
             espacio_id = request.vars.dependencia
             espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
             dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
-                           ).select().first().nombre
+                           ).select().first().codigo
 
             # Guardando el ID y nombre de la dependencia a la que pertenece el 
             # espacio fisico visitado
@@ -876,7 +876,7 @@ def inventarios():
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.nombre
+                dep_nombre = espacio.codigo
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
