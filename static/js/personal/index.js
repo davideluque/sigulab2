@@ -26,7 +26,7 @@ function filter(type){
 	}
 }
 
-$.fn.datepicker.defaults.format = "dd-mm-yyyy"
+$.fn.datepicker.defaults.format = "yyyy-mm-dd"
 $.fn.datepicker.dates['en'] = {
     days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],

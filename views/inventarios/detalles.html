@@ -550,9 +550,10 @@
                         </div>
 
                         <label>Tipo de Uso</label>
+                        <font color="red"><div id="err_tipo_uso" hidden></div></font>
                         <div class="checkbox-group">
+                        {{i=1}}
                         {{ for uso in uso_list: }}
-                            {{i=1}}
                             {{if uso in bien['bm_uso']:}}
                                 <input type="checkbox" name="tipo_uso" id="tipo_uso{{=i}}" value="{{=uso}}" checked>{{=uso}}
                             {{else:}}
@@ -561,6 +562,7 @@
                             {{i = i+1}} 
                           <br>
                         {{pass}}
+
                         </div>
 
                         {{if bien['bm_calibrar']!="":}}

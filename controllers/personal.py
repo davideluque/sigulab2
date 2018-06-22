@@ -172,8 +172,6 @@ def add_form():
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
             f_ubicacion= dic["ubicacion"],
-            f_extension_USB = dic["extension_USB"],
-            f_extension_interna = dic["extension_interna"],
             f_por_validar=True,
             f_validado=False,
             f_comentario="",
@@ -220,11 +218,11 @@ class Usuario(object):
         self.f_estatus = usuario.f_estatus
         self.f_categoria = usuario.f_categoria
         self.f_condicion = usuario.f_condicion
-        self.f_fecha_ingreso = transformar_fecha(usuario.f_fecha_ingreso) 
-        self.f_fecha_salida = transformar_fecha(usuario.f_fecha_salida) 
-        self.f_fecha_ingreso_usb = transformar_fecha(usuario.f_fecha_ingreso_usb) 
-        self.f_fecha_ingreso_ulab = transformar_fecha(usuario.f_fecha_ingreso_ulab) 
-        self.f_fecha_ingreso_admin_publica = transformar_fecha(usuario.f_fecha_ingreso_admin_publica) 
+        self.f_fecha_ingreso = (usuario.f_fecha_ingreso) 
+        self.f_fecha_salida = (usuario.f_fecha_salida) 
+        self.f_fecha_ingreso_usb = (usuario.f_fecha_ingreso_usb) 
+        self.f_fecha_ingreso_ulab = (usuario.f_fecha_ingreso_ulab) 
+        self.f_fecha_ingreso_admin_publica = (usuario.f_fecha_ingreso_admin_publica) 
 
         # pagina 3
         self.f_cargo = usuario.f_cargo
@@ -436,8 +434,9 @@ def contar_notificaciones():
     return notif
 
 def buscarJefe(dependencia_trabajador):
-    unidad_adscripcion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.unidad_de_adscripcion)[0].unidad_de_adscripcion
-    if unidad_adscripcion:
+    unidad_adscripcion = db(db.dependencias.nombre == dependencia_trabajador).select(db.dependencias.id)[0].id
+
+     if unidad_adscripcion:
         idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
     else:
         idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id

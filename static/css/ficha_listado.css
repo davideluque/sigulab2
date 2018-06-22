@@ -41,8 +41,8 @@ th {
 }
 
 .botonesListado {
-	background-color: #0300d7; 
-	border-color: #0300d7;
+	background-color: #337ab7; 
+	border-color: #337ab7;
 	color: white;
 }
 
@@ -116,4 +116,12 @@ th {
 
 #input-egreso, #input-ingreso{
 	padding-right:0px;
+}
+
+th {
+	background: #337ab7;
+}
+
+.datepicker th {
+	background: transparent;
 }
