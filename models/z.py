@@ -589,16 +589,17 @@ if db(db.auth_membership).isempty():
     db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
-# Unidades de medida
+# Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar la funcion 
+# __sumar_cantidad del controlador __agregar_inventarios de smydp)
 if db(db.t_Unidad_de_medida).isempty():
 	db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
 	db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')
 	db.t_Unidad_de_medida.insert(f_nombre='Gramos', f_abreviatura='g')
 	db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
-    
+
 
 # Catalogo de sustancias
-"""
+
 if db(db.t_Sustancia).isempty():
     db.t_Sustancia.insert(f_nombre='Acetato de Etilo', f_cas='141-78-6', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
@@ -666,7 +667,8 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Amonio (salitre de chile)', f_cas='6484-52-2', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='7697-37-2', f_pureza='99', 
+    # *!* Tenia el mismo CAS que el acido nitrico
+    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='10361-46-3', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
     db.t_Sustancia.insert(f_nombre='Nitrato de Calcio', f_cas='13477-34-4', f_pureza='99', 
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
@@ -710,6 +712,7 @@ if db(db.t_Sustancia).isempty():
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Irritante','Comburente'])
     db.t_Sustancia.insert(f_nombre='4-metilpentan-2-ona (Metilisobutilcetona)', f_cas='108-10-1', f_pureza='99', 
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
-    	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
-"""
+    # Tiene el mismo CAS que fosforos blancos
+    #db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
+    #	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
+

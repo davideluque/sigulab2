@@ -437,7 +437,6 @@ def certificaciones():
                 certificaciones_a_recibir=listado_de_certificaciones_a_recibir.filas,
                 categorias=listar_categorias(db), tipos=listar_tipos(db), sedes=listar_sedes(db))
 
-
 # ---- GESTIONAR HISTORIAL ---- #
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def historial():
@@ -1156,3 +1155,4 @@ def __obtener_jerarquia():
         rol = 1
 
     return [rol, dependencia]
+

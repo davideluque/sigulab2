@@ -1,0 +1,92 @@
+/* Estilos de inventarios.html */ 
+
+select{ 
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-radius: 0px !important;
+	border-bottom-width: 2px !important;
+	background-color: transparent !important;
+
+}
+
+th input[type=text]{ 
+	border-top: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	box-shadow: none !important;
+	border-bottom-width: 2px !important;
+	border-radius: 0px;
+	background-color: transparent;
+	height: 35px !important;
+	width: 100%;
+}
+
+th {
+	width: 150px;
+}
+
+#datatable_length select {
+	height: 30px;
+}
+
+#collapseFiltros {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#columnBotonAgregar {
+	text-align: right;
+}
+
+.botonesListado {
+	background-color: #337ab7; 
+	border-color: #337ab7;
+	color: white !important;
+}
+
+#containerAgregar{
+	margin-top: -30px;
+}
+
+#listadoContainer {
+	padding-top: 25px;
+}
+
+.tablaListado {
+ border: 1.5px !important; 
+ border-style: solid !important; 
+ border-color: #ddd !important;
+}
+
+#titulosListado {
+	background-color: #337ab7;
+}
+
+.camposTabla {
+	text-align: center;
+}
+
+.linksNombres {
+	color: white;
+}
+
+.linksNombres:hover {
+	color: rgba(6, 164, 252, 1);
+	text-decoration: none;
+}
+
+.filtros {
+	width: 200px;
+}
+
+#filtroInput {
+	margin-left: 100px;
+}
+
+/* Estilos de inventario_espacio.html */ 
+
+.field-error{
+	color:#B70101;
+}

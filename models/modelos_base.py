@@ -181,7 +181,6 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 #
 #######################################################################################################################
 
-
 # Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
 db.define_table(
     'espacios_fisicos',
@@ -195,8 +194,8 @@ db.define_table(
     Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
     
     Field('dependencia', 'reference dependencias',
-        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), 
-        migrate=True)
+        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
+
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
