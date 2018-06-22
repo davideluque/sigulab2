@@ -208,11 +208,17 @@ def lista_documentos():
 		# 		remitente=dic2["remitente"]
 		# 	)
 
-	print(auth.user)
+	dep = auth.user.first_name
+	docs =	db().select(db.documentos.ALL)
+	if (dep == "Dirección" or dep == "Super Usuario" or dep == "Coordinación de la Calidad"):
+		pass
+	else:
+		docs = db(db.documentos.usuario == dep).select(db.documentos.ALL)
+
 
 
 	return dict(
-	    documentos=db().select(db.documentos.ALL),
+	    documentos=docs,
 		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
 		doc_revision=db(db.documentos.estatus=="Revisado").count(),
 		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
@@ -258,9 +264,11 @@ def lista_registros():
 			archivo_fisico=dic["archivo_fisico"],
 		)
 
+	dep = auth.user.first_name
+	reg = db(db.registros.usuario == dep).select(db.registros.ALL)
 
 	a = dict(
-		registros=db().select(db.registros.ALL),
+		registros=reg,
 		codigo_reg=db(db.registros.codigo).count(),
 		year=year,
 		contador=db(db.registros.usuario == auth.user.first_name).count(),
@@ -273,29 +281,23 @@ def lista_registros():
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def ajax_ficha_registro():
+def ficha_registro():
 
-	session.forget(response)
+	uname = request.args[0]
+	print("------")
+	print(uname)
+	row = db(db.registros.codigo==uname).select()
+	print(".......")
+	print(row)
+	for x in row:
+		print(x)
+	documento =  db(db.documentos.codigo==uname)
 
-
-	dic = {
-		"codigo": request.post_vars.codigo,
-		"fecha_creacion": request.post_vars.fecha_creacion,
-		"descripcion": request.post_vars.descripcion,
-		"destinatario": request.post_vars.destinatario,
-		"remitente": request.post_vars.remitente,
-		"doc_electronico": request.post_vars.doc_electronico,
-		"archivo_fisico": request.post_vars.archivo_fisico,
-	}
 
 	registro =  db(db.registros.codigo==uname)
 
-	if(request.post_vars.eliminar=="eliminar"):
-		db(db.registros.codigo==uname).delete()
-		redirect(URL('..', 'sigulab2','informacion_documentada','lista_documentos', ''))
-
-	### END ###
-	return dict(message=row	)
+	print(registro)
+	return dict(registros=row)
 
 	
 def ficha():

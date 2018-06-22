@@ -139,6 +139,8 @@
   </div>
 </nav>
 
+  {{for doc in documentos:}}
+
   <div class="row" style="margin-bottom: 50px;">
     <div class="col-md-1">
     </div>
@@ -150,9 +152,11 @@
     </div>
     <div class="col-md-3">
       <form method="POST">
-        <p onclick="estatus()" style="display: inline-block;">
-          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
-        </p>
+        {{if doc.estatus!="Aprobado":}}
+          <p onclick="estatus()" style="display: inline-block;">
+            <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
+          </p>
+        {{pass}}  
           <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
           <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
       </form>
@@ -160,7 +164,7 @@
     </div>
   </div>  
 
-  {{for doc in documentos:}}
+  
 
 
 
@@ -307,6 +311,7 @@
 
                 <!-- Campo de Nombre del Documento -->
                 <div class="form-group" data-atributo="{{=doc.estatus}}">
+                  <h5>Nombre del Documento</h5>
                   <input disabled='' type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" value="{{=doc.nombre_doc}}" required>
                 </div>
 
@@ -315,14 +320,12 @@
                   <h5>Tipo del Documento</h5>
                   <select disabled="" name="tipo" id="tipo" class="input" required>
                     <option value="{{=doc.tipo_doc}}">{{=doc.tipo_doc}}</option>
-                   
                   </select>
                 </div>
 
                 <!-- Campo de Responsable del Documento -->
                 <div class="form-group"> 
                   <h5>Responsable</h5>
-          
                   <select disabled="" name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
                     <option value="{{=doc.responsable}}">{{=doc.responsable}}</option>
                     {{for dep in dependencias:}}
@@ -332,10 +335,10 @@
                 </div>
 
 
-
-
-                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
-                <button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+                <div style="position: fixed; bottom: 0; right: 0;">
+                  <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+                  <button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
+                </div>
               </div>
             </div>  
           </fieldset>
@@ -362,11 +365,13 @@
 
               <!-- Campo de Código -->
               <div class="form-group">
+                <h5>Código del documento</h5>
                 <input disabled='' type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()" value="{{=doc.codigo}}" >
               </div>
 
               <!-- Campo de Objetivos -->
               <div class="form-group">
+                <h5>Objetivos del documento</h5>
                 <input disabled='' type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos" value="{{=doc.objetivo}}"> 
               </div>
 
@@ -390,9 +395,17 @@
                   <input disabled='' type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" value="{{=doc.fecha_prox_rev}}">
               </div>
 
+              <!-- Campo de Número de Anexos -->
+              <div class="form-group">
+                <h5>Número de anexos</h5>
+                <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
+                <div id="containerAnexos"/>
+              </div>
 
-              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              <div style="position: fixed; bottom: 0; right: 0;">
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
             </div>
           </fieldset>
           <!-- Fin Segundo Paso -->
@@ -414,18 +427,13 @@
             <!-- Aqui va la informacion -->
             <div class="col-sm-11 col11Body">
               
-              <h4 class="titulosForm">Fase de Elaboración</h4>
+              <h4 class="titulosForm">Fase de Elaboración   -   Elaboradores</h4>
 
-              <!-- Campo de Número de Anexos -->
-              <div class="form-group">
-                <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
-              
-                <div id="containerAnexos"/>
-              </div>
+
 
               <!-- Campo de Elaboradores del Documento -->
               <div class="form-group">
-                
+                <h5>Elaboradores del documento</h5>
                 
                 <div id="p_scents">
                   <p>
@@ -439,10 +447,11 @@
 
           
             
-
-              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
-              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              <div style="position: fixed; bottom: 0; right: 0;">
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
+                <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
             </div>
           </fieldset>
           <!-- Fin Tercer Paso -->          
@@ -467,6 +476,7 @@
 
               <!-- Campo de responsable de la revisión de contenidos -->
               <div class="form-group">
+                <h5>Revisión de contenidos</h5>
                 <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required />
               </div> 
 
@@ -478,6 +488,7 @@
 
               <!-- Campo de responsable de la revisión de especificaciones -->
               <div class="form-group">
+                <h5>Revisión de especificaciones</h5>
                 <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required /> 
               </div> 
 
@@ -498,9 +509,11 @@
                 <div id="containerRevision"/>
               </div> 
 
-              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-              <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
-              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              <div style="position: fixed; bottom: 0; right: 0;">
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
+                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
+                <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
             </div>
           </fieldset>
           <!-- Fin Cuarto Paso -->
@@ -527,6 +540,7 @@
 
                 <!-- Campo de responsable de aprobación-->
                 <div class="form-group">
+                  <h5>Responsable de aprobación</h5>
                   <input disabled='' type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
                 </div>
 
@@ -538,13 +552,15 @@
                 
                 <!-- Campo de código de registro de aprobación -->
                 <div class="form-group">
+                  <h5>Código de registro de la aprobación</h5>
                   <input disabled='' type="text" class="input" name="cod_registro" id="cod_registro" placeholder="Código de Registro de Aprobacion" /> 
                 </div>
 
         
-              
-              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              <div style="position: fixed; bottom: 0; right: 0;">
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+                <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
             </div>
           </fieldset>
           <!-- Fin Quinto Paso -->
@@ -569,6 +585,7 @@
 
                 <!-- Campo de ubicación física del documento -->
                 <div class="form-group">
+                  <h5>Ubicación física</h5>
                   <input  disabled="" type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" value="{{=doc.ubicacion_fisica}}" />
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                       acceder al documento</h6>
@@ -576,6 +593,7 @@
 
                 <!-- Campo de ubicación electrónica del documento -->
                 <div class="form-group">
+                  <h5>Ubicación electrónica</h5>
                   <input disabled=""  type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" vlaue="{{=doc.ubicacion_electronica}}"/> 
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                       acceder al documento</h6>
@@ -586,9 +604,11 @@
                   <label>Vínculo: </label>
                 </div>
 
-              <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-              <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
-            </div>
+              <div style="position: fixed; bottom: 0; right: 0;">
+                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+                <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
+              </div>
+           </div>
           </fieldset>
           <!-- Fin Sexto Paso -->
 
@@ -615,6 +635,7 @@
 
                 <!-- Campo del control de cambios -->
                 <div class="form-group">
+                  <h5>Código de registro de control de cambios</h5>
                   <input disabled='' type="text" class="input" name="cod_controlCambios" id="cod_controlCambios" placeholder="Cod Registro de control de cambios" /> 
                 </div>
 
@@ -626,11 +647,13 @@
 
                 <!-- Campo de Elaborado por -->
                 <div class="form-group">
+                  <h5>Elaborador del control de cambios</h5>
                   <input disabled='' type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
                 </div>
 
                 <!-- Campo de Ubicación del registro en formato físico -->
                 <div class="form-group">
+                  <h5>Ubicación del registro en formato físico</h5>
                   <input disabled='' type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                         acceder al documento</h6>
@@ -638,14 +661,16 @@
 
                 <!-- Campo deUbicación del registro en formato físicoo -->
                 <div class="form-group">
+                  <h5>Ubicación del registro en formato electrónico</h5>
                   <input disabled='' type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
                   <h6>Indique la carpeta, archivo, estante u otro se puede
                         acceder al documento</h6>
                 </div>
 
-
-                <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
-                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="aprobado" value="aprobado" ><i class="fa fa-floppy-o"></i></button>  
+                <div style="position: fixed; bottom: 0; right: 0;">
+                  <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>  
+                  <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="aprobado" value="aprobado" ><i class="fa fa-floppy-o"></i></button>  
+                </div>
             </div>
           </fieldset>
           <!-- Fin Sexto Paso -->
