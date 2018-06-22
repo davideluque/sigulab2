@@ -20,6 +20,8 @@
                 <thead>
                     <tr id="titulosListado">
                       <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Tipo</th>
+            
                       <th class="camposTabla linksNombres">Marca</th>
                       <th class="camposTabla linksNombres">Modelo</th>
                       <th class="camposTabla linksNombres">Descripción</th>
@@ -35,8 +37,11 @@
                     <tr>
                         <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                         <td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                        
+                        <td class="camposTabla">{{=bm['sb_clasificacion']}}</td>
                         <td class="camposTabla">{{=bm['sb_marca']}}</td>
                         <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+        
                         <td class="camposTabla">{{=bm['sb_descripcion']}}</td>
         
                         <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
@@ -50,6 +55,8 @@
                 <tfoot id="collapseFiltros">
                     <tr>
                       <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Tipo</th>
+            
                       <th class="camposTabla linksNombres">Marca</th>
                       <th class="camposTabla linksNombres">Modelo</th>
                       <th class="camposTabla linksNombres">Descripción</th>
