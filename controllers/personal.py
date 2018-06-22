@@ -387,7 +387,8 @@ def cambiar_validacion(validacion, personal):
         db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True, f_comentario=mensaje)
     elif (validacion == "false"):
         mensaje = request.post_vars.razon_add
-        db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=False, f_comentario=mensaje)
+        db(db.t_Personal.f_email == personal['email']).update(
+            f_por_validar=False, f_validado=False, f_comentario='Motivo de Rechazo: {}'.format(mensaje))
     redirect(URL('validacion_estilo'))
 
 
@@ -436,7 +437,7 @@ def contar_notificaciones():
 def buscarJefe(dependencia_trabajador):
     unidad_adscripcion = db(db.dependencias.nombre == dependencia_trabajador).select(db.dependencias.id)[0].id
 
-     if unidad_adscripcion:
+    if unidad_adscripcion:
         idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
     else:
         idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id
