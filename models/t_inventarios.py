@@ -174,7 +174,7 @@ db.define_table(
 	Field('sb_modelo', 'string', label = T('Modelo/código del elemento')),
 	Field('sb_cantidad', 'integer', notnull = True, label = T('Cantidad'), requires = IS_INT_IN_RANGE(0,99999999)),
 	Field('sb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
-	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna'), requires = IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro'])),
+	Field('sb_ubicacion', 'string', notnull = True, label = T('Ubicacion interna')),
 	Field('sb_descripcion', 'text', label = T('Descripción del elemento')),
 	Field('sb_aforado', 'string', label = T('Condición de aforado'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No', 'N/A']))),
 	Field('sb_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
@@ -215,12 +215,12 @@ db.sin_bn.sb_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 db.define_table(
     'modificacion_sin_bn',
     #El nombre no se puede modificar, referencia al bm que se quiere cambiar
-    Field('msb_nombre', 'reference sin_bn', notnull = True, label = T('Nombre del elemento')),
+    Field('msb_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
     Field('msb_marca', 'string', label = T('Marca del elemento')),
     Field('msb_modelo', 'string', label = T('Modelo/código del elemento')),
     Field('msb_cantidad', 'integer', label = T('Cantidad'), requires = IS_EMPTY_OR(IS_INT_IN_RANGE(0,99999999))),
     Field('msb_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
-    Field('msb_ubicacion', 'string', label = T('Ubicacion interna'), requires = IS_EMPTY_OR(IS_IN_SET(['Estante', 'Anaquel', 'Gaveta', 'Mesón', 'Archivo', 'Otro']))),
+    Field('msb_ubicacion', 'string', label = T('Ubicacion interna')),
     Field('msb_descripcion', 'string', label = T('Descripción del elemento')),
     Field('msb_aforado', 'string', label = T('Condición de aforado'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No', 'N/A']))),
     Field('msb_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
