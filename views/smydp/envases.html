@@ -109,7 +109,7 @@
                             <label for="">Espacio físico:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.espacio_fisico.nombre}}</span>
+                            <span>{{=contenedor.espacio_fisico.codigo}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -263,9 +263,9 @@
                                                 <select class="select-envases" name="espacio_fisico" id="espacio_fisico" value='{{=cont.espacio_fisico.id}}'>
                                                     {{for espacio_fisico in espacios_fisicos_adscritos:}}
                                                         {{if espacio_fisico.id == cont.espacio_fisico.id:}}
-                                                            <option selected value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>
+                                                            <option selected value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>
                                                         {{else:}}
-                                                            <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>                                                        
+                                                            <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>                                                        
                                                         {{pass}}
                                                     {{pass}}
                                                 </select>
@@ -376,7 +376,7 @@
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.tipo_boca}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.descripcion}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.espacio_fisico.nombre}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.espacio_fisico.codigo}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
                             </tr>
                             {{pass}}
@@ -521,7 +521,7 @@
                                                 <br>
                                                 <select class="select-envases" name="espacio_fisico" id="espacio_fisico">
                                                     {{for espacio_fisico in espacios_fisicos_adscritos:}}
-                                                        <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.nombre}}</option>
+                                                        <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>
                                                     {{pass}}
                                                 </select>
                                                 <div class="field-error">
