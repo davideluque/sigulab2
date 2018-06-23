@@ -350,15 +350,9 @@
                         <thead>
                             <tr id="titulosListado" style="text-align: left">
                                 <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
-                                <th class="camposTabla linksNombres">Forma</th>
-                                <th class="camposTabla linksNombres">Material</th>
-                                <th class="camposTabla linksNombres">Tipo de boca</th>
-                                <th class="camposTabla linksNombres">Descripción</th>
                                 <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Espacio físico</th>
                                 <th class="camposTabla linksNombres">Categoría</th>
-        
+                                <th class="camposTabla linksNombres">Capacidad</th>
                             </tr>
                         </thead>
         
@@ -370,14 +364,9 @@
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}}{{=contenedor.unidad_medida}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.forma}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.material}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.tipo_boca}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.descripcion}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.espacio_fisico.codigo}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}}{{=contenedor.unidad_medida}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
@@ -385,14 +374,9 @@
                         <tfoot id="collapseFiltros">
                             <tr>
                                 <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
-                                <th class="camposTabla linksNombres">Forma</th>
-                                <th class="camposTabla linksNombres">Material</th>
-                                <th class="camposTabla linksNombres">Tipo de boca</th>
-                                <th class="camposTabla linksNombres">Descripción</th>
                                 <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Espacio físico</th>
                                 <th class="camposTabla linksNombres">Categoría</th>
+                                <th class="camposTabla linksNombres">Capacidad</th>
                             </tr>
                         </tfoot>
         
@@ -447,7 +431,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase*">
+                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase* (Ej: 2000)">
                                                 <input type="hidden" class="form-control" name="id_envase" id="id_envase">
                                                 <input type="hidden" class="form-control" name="borrar_envase" id="borrar_envase" value="False">
                                                 <div class="field-error">
