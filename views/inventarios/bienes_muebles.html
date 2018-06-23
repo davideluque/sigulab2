@@ -217,89 +217,91 @@
 </script>
 <script>
 
-  var filtros = false;
-
-  $(document).ready(function() {
-      // Setup - add a text input to each footer cell
-      $('#datatable tfoot th').each( function () {
-          var title = $(this).text();
-          $(this).html( '<input type="text" placeholder="Filtro" />' );
-      } );
+	var filtros = false;
+  
+	$(document).ready(function() {
+		// Setup - add a text input to each footer cell
+		$('#datatable tfoot th').each( function () {
+			var title = $(this).text();
+			$(this).html( '<input type="text" placeholder="Filtro" />' );
+		} );
+	 
+		// DataTable
+		var table = $('#datatable').DataTable();
+	 
+		// Apply the search
+		table.columns().every( function () {
+			var that = this;
+	 
+			$( 'input', this.footer() ).on( 'keyup change', function () {
+				if ( that.search() !== this.value ) {
+					that
+						.search( this.value )
+						.draw();
+				}
+			} );
+		} );
+  
+		$('#datatable tfoot tr').appendTo('#datatable thead');
+		$("#datatable thead tr").not("#titulosListado").css("display","none");
+	} );
+  
+	function mostrarFiltro() {
+		if (filtros){
+		  $("#datatable thead tr").not("#titulosListado").css("display","none");
+		  filtros = false
+		}
+		else{
+		  $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+		  filtros = true
+		}
+  
+	}
+  </script>
    
-      // DataTable
-      var table = $('#datatable').DataTable();
-   
-      // Apply the search
-      table.columns().every( function () {
-          var that = this;
-   
-          $( 'input', this.footer() ).on( 'keyup change', function () {
-              if ( that.search() !== this.value ) {
-                  that
-                      .search( this.value )
-                      .draw();
-              }
-          } );
-      } );
-
-      $('#datatable tfoot tr').appendTo('#datatable thead');
-      $("#datatable thead tr").not("#titulosListado").css("display","none");
-  } );
-
-  function mostrarFiltro() {
-      if (filtros){
-        $("#datatable thead tr").not("#titulosListado").css("display","none");
-        filtros = false
-      }
-      else{
-        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
-        filtros = true
-      }
-
-  }
-</script>
- 
- <script language="javascript">
-
-		var table = $('#datatable').DataTable({
-		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-		  //dom: 'Bfrtip',
-		  language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-		  },
-		 initComplete: function(){
-			var api = this.api();
-	  
-			new $.fn.dataTable.Buttons(api, {
-			  buttons: [
-	  
-				  {
-					  extend: 'collection',
-					  text: '<i class="fa fa-save btn"></i>',
-					  buttons: [
-						  { extend:'copy', text: 'Copiar' } ,
-						  'excel',
-						  'csv',
-						  'pdf'
-					  ]
-				  },
-			  ]
-			});
-			$('#botonModal').addClass('pull-left')
-			$('#filtrar').addClass('pull-left');
-			$('#espacioBuscar').addClass('pull-left');
-			
-			$('.dataTables_filter').appendTo('#buttons');
-	  
-			api.buttons().container().appendTo('#buttons');
-			$('#buttons').append('<br><br>');
-			$('.dataTables_info').addClass('pull-right');
-			
-			$('.dataTables_filter').addClass('pull-left');
-	  
-			
-		 }
+  <script language="javascript">
+  
+	var table = $('#datatable').DataTable({
+	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  //dom: 'Bfrtip',
+	  language: {
+		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  },
+	 initComplete: function(){
+		var api = this.api();
+  
+		new $.fn.dataTable.Buttons(api, {
+		  buttons: [
+  
+			  {
+				  extend: 'collection',
+				  text: '<i class="fas fa-floppy-o"></i>',
+				  buttons: [
+					  { extend:'copy', text: 'Copiar' } ,
+					  'excel',
+					  'csv',
+					  'pdf'
+				  ]
+			  },
+			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+		  ]
 		});
-	  
-	  </script>
+		$('#botonModal').addClass('pull-left')
+		$('#filtrar').addClass('pull-left');
+		$('#espacioBuscar').addClass('pull-left');
+  
+  
+		$('.dataTables_filter').appendTo('#buttons');
+  
+		api.buttons().container().appendTo('#buttons');
+		$('#buttons').append('<br><br>');
+		$('.dataTables_info').addClass('pull-right');
+		
+		$('.dataTables_filter').addClass('pull-left');
+  
+		
+	 }
+	});
+  
+  </script>
 {{end}}
