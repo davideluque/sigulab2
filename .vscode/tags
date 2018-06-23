@@ -1,0 +1,476 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Certificacion	../modules/servicios_libreria.py	/^class Certificacion(object):$/;"	kind:class	line:1109
+DEVELOPMENT_MENU	../models/menu.py	/^DEVELOPMENT_MENU = True$/;"	kind:variable	line:35
+FONT	../controllers/appadmin.py	/^    def FONT(*args, **kwargs):$/;"	kind:function	line:520
+GetInHMS	../controllers/appadmin.py	/^    def GetInHMS(seconds):$/;"	kind:function	line:425
+Historial	../modules/servicios_libreria.py	/^class Historial(object):$/;"	kind:class	line:1224
+ListaHistorial	../modules/servicios_libreria.py	/^class ListaHistorial(object):$/;"	kind:class	line:1378
+ListaServicios	../modules/servicios_libreria.py	/^class ListaServicios(object):$/;"	kind:class	line:414
+ListaSolicitudes	../modules/servicios_libreria.py	/^class ListaSolicitudes(object):$/;"	kind:class	line:989
+Servicio	../modules/servicios_libreria.py	/^class Servicio(object):$/;"	kind:class	line:6
+Solicitud	../modules/servicios_libreria.py	/^class Solicitud(object):$/;"	kind:class	line:609
+_	../models/menu.py	/^def _():$/;"	kind:function	line:42
+__acceso_permitido	../controllers/smydp.py	/^def __acceso_permitido(user, dep_id, es_espacio):$/;"	kind:function	line:110
+__agregar_sustancia	../controllers/smydp.py	/^def __agregar_sustancia(espacio, sustancia_id, total, excedente, unidad_id):$/;"	kind:function	line:88
+__check_role	../controllers/smydp.py	/^def __check_role():$/;"	kind:function	line:19
+__enviar_correo	../controllers/servicios.py	/^def __enviar_correo(destinatario, asunto, cuerpo):$/;"	kind:function	line:1092
+__find_dep_id	../controllers/smydp.py	/^def __find_dep_id(dependencias, nombre):$/;"	kind:function	line:59
+__get_inventario	../controllers/smydp.py	/^def __get_inventario(espacio_id=None, dep_id=None):$/;"	kind:function	line:76
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, auth, registro = None, id_responsable_solicitud = None,$/;"	kind:member	line:611
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, auth, solicitud = None):$/;"	kind:member	line:1226
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, auth, tipo_listado, orden=False, columna='id', central=1):$/;"	kind:member	line:1380
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, auth, tipo_listado, orden=False, columna='id', central=1):$/;"	kind:member	line:991
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, dependencia, rol, orden=False, columna='id', central=1):$/;"	kind:member	line:416
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, nombre = None, tipo = None, categoria = None,$/;"	kind:member	line:14
+__init__	../modules/servicios_libreria.py	/^    def __init__(self, db, registro=None, responsable_solicitud=None, fecha_solicitud=None,$/;"	kind:member	line:1111
+__is_bool	../controllers/smydp.py	/^def __is_bool(bool_var):$/;"	kind:function	line:51
+__is_valid_id	../controllers/smydp.py	/^def __is_valid_id(id_, tabla):$/;"	kind:function	line:38
+__obtener_jerarquia	../controllers/servicios.py	/^def __obtener_jerarquia():$/;"	kind:function	line:1138
+__obtener_priviliegios	../controllers/servicios.py	/^def __obtener_priviliegios():$/;"	kind:function	line:1114
+__queries_enviar_correo	../controllers/servicios.py	/^def __queries_enviar_correo():$/;"	kind:function	line:1098
+__str__	../modules/servicios_libreria.py	/^    def __str__(self):$/;"	kind:member	line:1220
+__str__	../modules/servicios_libreria.py	/^    def __str__(self):$/;"	kind:member	line:123
+__str__	../modules/servicios_libreria.py	/^    def __str__(self):$/;"	kind:member	line:1270
+__str__	../modules/servicios_libreria.py	/^    def __str__(self):$/;"	kind:member	line:669
+_id	../models/menu.py	/^                  _id="web2py-logo")$/;"	kind:variable	line:10
+actualizar	../modules/servicios_libreria.py	/^    def actualizar(self, id):$/;"	kind:member	line:293
+actualizar	../modules/servicios_libreria.py	/^    def actualizar(self, id):$/;"	kind:member	line:755
+add_form	../controllers/personal.py	/^def add_form():$/;"	kind:function	line:55
+ajax_certificar_servicio	../controllers/servicios.py	/^def ajax_certificar_servicio():$/;"	kind:function	line:805
+ajax_eliminar_espacio	../controllers/modulos.py	/^def ajax_eliminar_espacio():$/;"	kind:function	line:345
+ajax_ficha_certificacion	../controllers/servicios.py	/^def ajax_ficha_certificacion():$/;"	kind:function	line:648
+ajax_ficha_historial	../controllers/servicios.py	/^def ajax_ficha_historial():$/;"	kind:function	line:658
+ajax_ficha_servicio	../controllers/servicios.py	/^def ajax_ficha_servicio():$/;"	kind:function	line:499
+ajax_ficha_servicio_catalogo	../controllers/servicios.py	/^def ajax_ficha_servicio_catalogo():$/;"	kind:function	line:587
+ajax_ficha_solicitud	../controllers/servicios.py	/^def ajax_ficha_solicitud():$/;"	kind:function	line:638
+ajax_listado_certificaciones_a_generar	../controllers/servicios.py	/^def ajax_listado_certificaciones_a_generar():$/;"	kind:function	line:953
+ajax_listado_certificaciones_a_recibir	../controllers/servicios.py	/^def ajax_listado_certificaciones_a_recibir():$/;"	kind:function	line:978
+ajax_listado_historial	../controllers/servicios.py	/^def ajax_listado_historial():$/;"	kind:function	line:1006
+ajax_listado_servicios	../controllers/servicios.py	/^def ajax_listado_servicios():$/;"	kind:function	line:845
+ajax_listado_solicitudes_generadas	../controllers/servicios.py	/^def ajax_listado_solicitudes_generadas():$/;"	kind:function	line:895
+ajax_listado_solicitudes_recibidas	../controllers/servicios.py	/^def ajax_listado_solicitudes_recibidas():$/;"	kind:function	line:925
+ajax_membership	../controllers/modulos.py	/^def ajax_membership():$/;"	kind:function	line:274
+ajax_mostrar_espacios	../controllers/modulos.py	/^def ajax_mostrar_espacios():$/;"	kind:function	line:351
+ajax_obtener_adscripcion	../controllers/servicios.py	/^def ajax_obtener_adscripcion():$/;"	kind:function	line:670
+ajax_obtener_adscripcion_editar	../controllers/servicios.py	/^def ajax_obtener_adscripcion_editar():$/;"	kind:function	line:712
+ajax_obtener_datos_depen_ejecutora	../controllers/servicios.py	/^def ajax_obtener_datos_depen_ejecutora():$/;"	kind:function	line:790
+ajax_obtener_dependencia	../controllers/servicios.py	/^def ajax_obtener_dependencia():$/;"	kind:function	line:681
+ajax_obtener_dependencia_editar	../controllers/servicios.py	/^def ajax_obtener_dependencia_editar():$/;"	kind:function	line:723
+ajax_obtener_nombre_servicio	../controllers/servicios.py	/^def ajax_obtener_nombre_servicio():$/;"	kind:function	line:753
+ajax_obtener_proposito_servicio	../controllers/servicios.py	/^def ajax_obtener_proposito_servicio():$/;"	kind:function	line:764
+ajax_obtener_responsable	../controllers/servicios.py	/^def ajax_obtener_responsable():$/;"	kind:function	line:702
+ajax_obtener_responsable_editar	../controllers/servicios.py	/^def ajax_obtener_responsable_editar():$/;"	kind:function	line:743
+ajax_obtener_ubicacion	../controllers/servicios.py	/^def ajax_obtener_ubicacion():$/;"	kind:function	line:692
+ajax_obtener_ubicacion_editar	../controllers/servicios.py	/^def ajax_obtener_ubicacion_editar():$/;"	kind:function	line:734
+ajax_registro_espacio	../controllers/modulos.py	/^def ajax_registro_espacio():$/;"	kind:function	line:299
+ajax_registro_seccion	../controllers/modulos.py	/^def ajax_registro_seccion():$/;"	kind:function	line:287
+ajax_seleccionar_espacio	../controllers/modulos.py	/^def ajax_seleccionar_espacio():$/;"	kind:function	line:322
+ajax_unidad_rol	../controllers/modulos.py	/^def ajax_unidad_rol():$/;"	kind:function	line:251
+appadmin.py	../controllers/appadmin.py	1;"	kind:file	line:1
+ar.py	../languages/ar.py	1;"	kind:file	line:1
+args	../controllers/appadmin.py	/^                 args=[request.application])], [T('db'), False,$/;"	kind:variable	line:63
+auth	../models/db.py	/^auth = Auth(db, host_names=myconf.get('host.names'))$/;"	kind:variable	line:93
+authenticate	../controllers/modulos.py	/^def authenticate():$/;"	kind:function	line:21
+buscador	../controllers/tests.py	/^def buscador():$/;"	kind:function	line:7
+ca.py	../languages/ca.py	1;"	kind:file	line:1
+call	../controllers/default.py	/^def call():$/;"	kind:function	line:36
+cambiar_columna	../modules/servicios_libreria.py	/^    def cambiar_columna(self, columna):$/;"	kind:member	line:1079
+cambiar_columna	../modules/servicios_libreria.py	/^    def cambiar_columna(self, columna):$/;"	kind:member	line:1471
+cambiar_columna	../modules/servicios_libreria.py	/^    def cambiar_columna(self, columna):$/;"	kind:member	line:499
+cambiar_estado	../modules/servicios_libreria.py	/^    def cambiar_estado(self, estado, request):$/;"	kind:member	line:858
+cambiar_ordenamiento	../modules/servicios_libreria.py	/^    def cambiar_ordenamiento(self, orden):$/;"	kind:member	line:1075
+cambiar_ordenamiento	../modules/servicios_libreria.py	/^    def cambiar_ordenamiento(self, orden):$/;"	kind:member	line:1467
+cambiar_ordenamiento	../modules/servicios_libreria.py	/^    def cambiar_ordenamiento(self, orden):$/;"	kind:member	line:508
+cambiar_pagina	../modules/servicios_libreria.py	/^    def cambiar_pagina(self, nueva_pagina):$/;"	kind:member	line:1064
+cambiar_pagina	../modules/servicios_libreria.py	/^    def cambiar_pagina(self, nueva_pagina):$/;"	kind:member	line:1456
+cambiar_pagina	../modules/servicios_libreria.py	/^    def cambiar_pagina(self, nueva_pagina):$/;"	kind:member	line:493
+capturar_conjunto_por_rol	../modules/servicios_libreria.py	/^    def capturar_conjunto_por_rol(self, dependencia, rol):$/;"	kind:member	line:511
+capturar_objetos	../modules/servicios_libreria.py	/^    def capturar_objetos(self):$/;"	kind:member	line:1082
+capturar_objetos	../modules/servicios_libreria.py	/^    def capturar_objetos(self):$/;"	kind:member	line:1474
+capturar_objetos	../modules/servicios_libreria.py	/^    def capturar_objetos(self):$/;"	kind:member	line:527
+catalogo	../controllers/smydp.py	/^def catalogo():$/;"	kind:function	line:413
+catalogo	../modules/servicios_libreria.py	/^    def catalogo(self, categoria):$/;"	kind:member	line:544
+catalogoServicios	../controllers/servicios.py	/^def catalogoServicios():$/;"	kind:function	line:489
+ccache	../controllers/appadmin.py	/^def ccache():$/;"	kind:function	line:356
+certificaciones	../controllers/servicios.py	/^def certificaciones():$/;"	kind:function	line:407
+certificar	../modules/servicios_libreria.py	/^    def certificar(self):$/;"	kind:member	line:1210
+certificar	../modules/servicios_libreria.py	/^    def certificar(self, request):$/;"	kind:member	line:886
+check_reserved	../models/db.py	/^             check_reserved=['all'])$/;"	kind:variable	line:38
+check_role	../controllers/modulos.py	/^def check_role():$/;"	kind:function	line:74
+checkear_tags	../modules/servicios_libreria.py	/^    def checkear_tags(self, tags, string):$/;"	kind:member	line:386
+codigo_registro	../models/z.py	/^		codigo_registro="UL")$/;"	kind:variable	line:105
+codigo_registro	../models/z.py	/^		codigo_registro="UL01")$/;"	kind:variable	line:165
+codigo_registro	../models/z.py	/^		codigo_registro="UL02")$/;"	kind:variable	line:171
+codigo_registro	../models/z.py	/^		codigo_registro="UL03")$/;"	kind:variable	line:159
+codigo_registro	../models/z.py	/^		codigo_registro="UL04")$/;"	kind:variable	line:177
+codigo_registro	../models/z.py	/^		codigo_registro="UL05")$/;"	kind:variable	line:183
+codigo_registro	../models/z.py	/^		codigo_registro="ULLA")$/;"	kind:variable	line:115
+codigo_registro	../models/z.py	/^		codigo_registro="ULLB")$/;"	kind:variable	line:121
+codigo_registro	../models/z.py	/^		codigo_registro="ULLC")$/;"	kind:variable	line:127
+codigo_registro	../models/z.py	/^		codigo_registro="ULLD")$/;"	kind:variable	line:133
+codigo_registro	../models/z.py	/^		codigo_registro="ULLE")$/;"	kind:variable	line:139
+codigo_registro	../models/z.py	/^		codigo_registro="ULLF")$/;"	kind:variable	line:145
+codigo_registro	../models/z.py	/^		codigo_registro="ULLG")$/;"	kind:variable	line:151
+configurar_botones	../modules/servicios_libreria.py	/^    def configurar_botones(self):$/;"	kind:member	line:1044
+configurar_botones	../modules/servicios_libreria.py	/^    def configurar_botones(self):$/;"	kind:member	line:1435
+configurar_botones	../modules/servicios_libreria.py	/^    def configurar_botones(self):$/;"	kind:member	line:473
+conseguir_atributos	../modules/servicios_libreria.py	/^    def conseguir_atributos(self):$/;"	kind:member	line:779
+conseguir_categorias	../modules/servicios_libreria.py	/^    def conseguir_categorias(self):$/;"	kind:member	line:347
+correoCambioEstadoSolicitud	../modules/servicios_libreria.py	/^    def correoCambioEstadoSolicitud(self):$/;"	kind:member	line:921
+correoCertificacionFinalizada	../modules/servicios_libreria.py	/^    def correoCertificacionFinalizada(self):$/;"	kind:member	line:967
+correoHacerSolicitud	../modules/servicios_libreria.py	/^    def correoHacerSolicitud(self):$/;"	kind:member	line:897
+correoSolicitudFinalizada	../modules/servicios_libreria.py	/^    def correoSolicitudFinalizada(self):$/;"	kind:member	line:936
+cs.py	../languages/cs.py	1;"	kind:file	line:1
+csv	../controllers/appadmin.py	/^def csv():$/;"	kind:function	line:163
+d3_graph_model	../controllers/appadmin.py	/^def d3_graph_model():$/;"	kind:function	line:653
+databases	../controllers/appadmin.py	/^databases = get_databases(None)$/;"	kind:variable	line:88
+db	../models/db.py	/^    db = DAL('google:datastore+ndb')$/;"	kind:variable	line:43
+db	../models/db.py	/^    db = DAL(myconf.get('db.uri'),$/;"	kind:variable	line:35
+db.py	../models/db.py	1;"	kind:file	line:1
+de.py	../languages/de.py	1;"	kind:file	line:1
+default.py	../controllers/default.py	1;"	kind:file	line:1
+default_language	../routes.example.py	/^        default_language=possible_languages['default'][0],$/;"	kind:variable	line:33
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id$/;"	kind:variable	line:232
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE ADQUISICIONES').select()[0].id$/;"	kind:variable	line:424
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id$/;"	kind:variable	line:248
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE IMPORTACIONES').select()[0].id$/;"	kind:variable	line:436
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id$/;"	kind:variable	line:240
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'COORDINACIÓN DE LA CALIDAD').select()[0].id$/;"	kind:variable	line:430
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:193
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:266
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:390
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:396
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:402
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:408
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:416
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id$/;"	kind:variable	line:277
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id$/;"	kind:variable	line:457
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id$/;"	kind:variable	line:285
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id$/;"	kind:variable	line:463
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id$/;"	kind:variable	line:293
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id$/;"	kind:variable	line:469
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id$/;"	kind:variable	line:301
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id$/;"	kind:variable	line:475
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id$/;"	kind:variable	line:309
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id$/;"	kind:variable	line:481
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id$/;"	kind:variable	line:317
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id$/;"	kind:variable	line:487
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id$/;"	kind:variable	line:325
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id$/;"	kind:variable	line:493
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'OFICINA DE PROTECCIÓN RADIOLÓGICA').select()[0].id$/;"	kind:variable	line:449
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id$/;"	kind:variable	line:258
+dep	../models/z.py	/^	dep = db(db.dependencias.nombre == 'UNIDAD DE ADMINISTRACIÓN').select()[0].id$/;"	kind:variable	line:443
+dependencias	../controllers/gestion.py	/^def dependencias():$/;"	kind:function	line:23
+desechos	../controllers/smydp.py	/^def desechos():$/;"	kind:function	line:407
+detallesServicios	../controllers/servicios.py	/^def detallesServicios():$/;"	kind:function	line:448
+direccionid	../models/z.py	/^	direccionid = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id$/;"	kind:variable	line:107
+download	../controllers/appadmin.py	/^def download():$/;"	kind:function	line:157
+download	../controllers/default.py	/^def download():$/;"	kind:function	line:28
+dropdowns	../controllers/personal.py	/^def dropdowns():$/;"	kind:function	line:43
+edit_form	../controllers/personal.py	/^def edit_form():$/;"	kind:function	line:93
+editar	../modules/servicios_libreria.py	/^    def editar(self, nombre, tipo, categoria, objetivo, alcance, metodo,$/;"	kind:member	line:237
+editar	../modules/servicios_libreria.py	/^    def editar(self, registro, id_responsable_solicitud, fecha_solicitud,$/;"	kind:member	line:739
+editprofile	../controllers/modulos.py	/^def editprofile():$/;"	kind:function	line:64
+eliminar	../modules/servicios_libreria.py	/^    def eliminar(self, id):$/;"	kind:member	line:1348
+eliminar	../modules/servicios_libreria.py	/^    def eliminar(self, id):$/;"	kind:member	line:775
+en.py	../languages/en.py	1;"	kind:file	line:1
+enviar_correo	../modules/servicios_libreria.py	/^def enviar_correo(auth, destinatario, asunto, cuerpo):$/;"	kind:function	line:1635
+error_message	../models/modelos_base.py	/^                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'),$/;"	kind:variable	line:102
+error_message	../models/modelos_base.py	/^                            error_message='Debe ser no vacío y contener sólo letras, guiones o espacios.'),$/;"	kind:variable	line:108
+error_message	../models/smydp.py	/^                                error_message='El CAS debe contener tres números separados entre sí por guiones. Por ejemplo, 7732-18-5')],$/;"	kind:variable	line:24
+es.py	../languages/es.py	1;"	kind:file	line:1
+espacios_fisicos	../controllers/gestion.py	/^def espacios_fisicos():$/;"	kind:function	line:32
+estado_string	../modules/servicios_libreria.py	/^    def estado_string(self):$/;"	kind:member	line:874
+eval_in_global_env	../controllers/appadmin.py	/^def eval_in_global_env(text):$/;"	kind:function	line:90
+f_dependencia	../models/z.py	/^		f_dependencia=dep)$/;"	kind:variable	line:263
+f_dependencia	../models/z.py	/^		f_dependencia=dep)$/;"	kind:variable	line:282
+f_dependencia	../models/z.py	/^		f_dependencia=dep)$/;"	kind:variable	line:290
+filtrar_por_tags	../modules/servicios_libreria.py	/^    def filtrar_por_tags(self, filtro, tags=None):$/;"	kind:member	line:590
+fr-ca.py	../languages/fr-ca.py	1;"	kind:file	line:1
+fr.py	../languages/fr.py	1;"	kind:file	line:1
+generacion_pdf	../modules/servicios_libreria.py	/^    def generacion_pdf(self):$/;"	kind:member	line:1352
+generador_num_registro	../modules/servicios_libreria.py	/^def generador_num_registro():$/;"	kind:function	line:1604
+gestion.py	../controllers/gestion.py	1;"	kind:file	line:1
+get_database	../controllers/appadmin.py	/^def get_database(request):$/;"	kind:function	line:95
+get_databases	../controllers/appadmin.py	/^def get_databases(request):$/;"	kind:function	line:77
+get_query	../controllers/appadmin.py	/^def get_query(request):$/;"	kind:function	line:111
+get_table	../controllers/appadmin.py	/^def get_table(request):$/;"	kind:function	line:102
+global_env	../controllers/appadmin.py	/^global_env = copy.copy(globals())$/;"	kind:variable	line:19
+guardar_en_historial	../modules/servicios_libreria.py	/^    def guardar_en_historial(self):$/;"	kind:member	line:892
+heading	../controllers/appadmin.py	/^                              heading=T('Manage Access Control'),$/;"	kind:variable	line:43
+hi.py	../languages/hi.py	1;"	kind:file	line:1
+historial	../controllers/servicios.py	/^def historial():$/;"	kind:function	line:443
+hooks	../controllers/appadmin.py	/^def hooks():$/;"	kind:function	line:605
+hosts	../controllers/appadmin.py	/^    hosts = (http_host, )$/;"	kind:variable	line:29
+hosts	../controllers/appadmin.py	/^    hosts = (http_host, socket.gethostname(),$/;"	kind:variable	line:25
+http_host	../controllers/appadmin.py	/^http_host = request.env.http_host.split(':')[0]$/;"	kind:variable	line:22
+hu.py	../languages/hu.py	1;"	kind:file	line:1
+id.py	../languages/id.py	1;"	kind:file	line:1
+ignore_rw	../controllers/appadmin.py	/^ignore_rw = True$/;"	kind:variable	line:59
+import_csv	../controllers/appadmin.py	/^def import_csv(table, file):$/;"	kind:function	line:176
+index	../controllers/appadmin.py	/^def index():$/;"	kind:function	line:135
+index	../controllers/default.py	/^def index():$/;"	kind:function	line:10
+index	../controllers/personal.py	/^def index():$/;"	kind:function	line:132
+index	../controllers/servicios.py	/^def index():$/;"	kind:function	line:18
+index	../controllers/smydp.py	/^def index():$/;"	kind:function	line:28
+inicializar_ambito	../modules/servicios_libreria.py	/^    def inicializar_ambito(self, ambito_in_situ, ambito_en_campo, ambito_otro,$/;"	kind:member	line:87
+inicializar_condicion_ambiental	../modules/servicios_libreria.py	/^    def inicializar_condicion_ambiental(self, condicion_ambiental,$/;"	kind:member	line:96
+inicializar_per_requerido	../modules/servicios_libreria.py	/^    def inicializar_per_requerido(self, per_tecnico, cant_per_tecnico, per_supervisor, cant_per_supervisor,$/;"	kind:member	line:103
+insert	../controllers/appadmin.py	/^def insert():$/;"	kind:function	line:144
+insertar	../modules/servicios_libreria.py	/^    def insertar(self):$/;"	kind:member	line:1189
+insertar	../modules/servicios_libreria.py	/^    def insertar(self):$/;"	kind:member	line:1274
+insertar	../modules/servicios_libreria.py	/^    def insertar(self):$/;"	kind:member	line:128
+insertar	../modules/servicios_libreria.py	/^    def insertar(self):$/;"	kind:member	line:673
+instanciacion_ambito	../modules/servicios_libreria.py	/^    def instanciacion_ambito(self, instancia):$/;"	kind:member	line:211
+instanciacion_condicion_ambiental	../modules/servicios_libreria.py	/^    def instanciacion_condicion_ambiental(self, instancia):$/;"	kind:member	line:217
+instanciacion_per_requerido	../modules/servicios_libreria.py	/^    def instanciacion_per_requerido(self, instancia):$/;"	kind:member	line:221
+instanciar	../modules/servicios_libreria.py	/^    def instanciar(self, id):$/;"	kind:member	line:1151
+instanciar	../modules/servicios_libreria.py	/^    def instanciar(self, id):$/;"	kind:member	line:1308
+instanciar	../modules/servicios_libreria.py	/^    def instanciar(self, id):$/;"	kind:member	line:159
+instanciar	../modules/servicios_libreria.py	/^    def instanciar(self, id):$/;"	kind:member	line:692
+inventarios	../controllers/smydp.py	/^def inventarios():$/;"	kind:function	line:177
+invertir_ordenamiento	../modules/servicios_libreria.py	/^    def invertir_ordenamiento(self):$/;"	kind:member	line:1072
+invertir_ordenamiento	../modules/servicios_libreria.py	/^    def invertir_ordenamiento(self):$/;"	kind:member	line:1464
+invertir_ordenamiento	../modules/servicios_libreria.py	/^    def invertir_ordenamiento(self):$/;"	kind:member	line:505
+is_gae	../controllers/appadmin.py	/^is_gae = request.env.web2py_runtime_gae or False$/;"	kind:variable	line:15
+it.py	../languages/it.py	1;"	kind:file	line:1
+key_table	../controllers/appadmin.py	/^    def key_table(keys):$/;"	kind:function	line:501
+label	../models/modelos_base.py	/^          label=T('Dependencia Asociada al Rol')),$/;"	kind:variable	line:75
+label	../models/servicios.py	/^          label=T('Dependencias')),$/;"	kind:variable	line:80
+label	../models/servicios.py	/^          label=T('Encargado')),$/;"	kind:variable	line:75
+label	../models/servicios.py	/^          label=T('Espacio Físico')),$/;"	kind:variable	line:126
+label	../models/servicios.py	/^          label=T('Ubicación Física')),$/;"	kind:variable	line:85
+label	../models/servicios.py	/^        label=T('Cargo del Responsable de la Solicitud')),$/;"	kind:variable	line:259
+label	../models/servicios.py	/^        label=T('Categoría del Servicio')),$/;"	kind:variable	line:231
+label	../models/servicios.py	/^        label=T('Certificado de calibración')),$/;"	kind:variable	line:96
+label	../models/servicios.py	/^        label=T('Certificado de conformidad del producto (ensayado o calibrado)')),$/;"	kind:variable	line:94
+label	../models/servicios.py	/^        label=T('Correo del Responsable de la Solicitud')),$/;"	kind:variable	line:253
+label	../models/servicios.py	/^        label=T('Cédula del Responsable de la Solicitud')),$/;"	kind:variable	line:250
+label	../models/servicios.py	/^        label=T('Descripción de la Solicitud')),$/;"	kind:variable	line:241
+label	../models/servicios.py	/^        label=T('Descripción del Propósito del Servicio Solicitado')),$/;"	kind:variable	line:238
+label	../models/servicios.py	/^        label=T('Entrega de Resultados')),$/;"	kind:variable	line:90
+label	../models/servicios.py	/^        label=T('Fecha de Aprobación de la Solicitud')),$/;"	kind:variable	line:291
+label	../models/servicios.py	/^        label=T('Fecha de Certificación de la Solicitud')),$/;"	kind:variable	line:301
+label	../models/servicios.py	/^        label=T('Fecha de Elaboración de la Solicitud')),$/;"	kind:variable	line:295
+label	../models/servicios.py	/^        label=T('Fecha de Solicitud')),$/;"	kind:variable	line:272
+label	../models/servicios.py	/^        label=T('Informe de ensayo o calibración')),$/;"	kind:variable	line:92
+label	../models/servicios.py	/^        label=T('Lugar de Ejecución del Servicio')),$/;"	kind:variable	line:284
+label	../models/servicios.py	/^        label=T('Nombre de la Dependencia Ejecutora')),$/;"	kind:variable	line:275
+label	../models/servicios.py	/^        label=T('Nombre de la Dependencia Solicitante')),$/;"	kind:variable	line:262
+label	../models/servicios.py	/^        label=T('Nombre del Jefe de la Dependencia Ejecutora')),$/;"	kind:variable	line:278
+label	../models/servicios.py	/^        label=T('Nombre del Jefe de la Dependencia Solicitante')),$/;"	kind:variable	line:265
+label	../models/servicios.py	/^        label=T('Nombre del Servicio')),$/;"	kind:variable	line:225
+label	../models/servicios.py	/^        label=T('Número de Proyecto'))$/;"	kind:variable	line:304
+label	../models/servicios.py	/^        label=T('Número de Registro de la Solicitud')),$/;"	kind:variable	line:222
+label	../models/servicios.py	/^        label=T('Número de Registro')),$/;"	kind:variable	line:164
+label	../models/servicios.py	/^        label=T('Observaciones de la Solicitud')),$/;"	kind:variable	line:244
+label	../models/servicios.py	/^        label=T('Propósito del servicio solicitado')),$/;"	kind:variable	line:180
+label	../models/servicios.py	/^        label=T('Responsable de la Solicitud')),$/;"	kind:variable	line:168
+label	../models/servicios.py	/^        label=T('Responsable de la Solicitud')),$/;"	kind:variable	line:247
+label	../models/servicios.py	/^        label=T('Servicio Solicitado')),$/;"	kind:variable	line:176
+label	../models/servicios.py	/^        label=T('Solicitud Aprobada Por')),$/;"	kind:variable	line:287
+label	../models/servicios.py	/^        label=T('Solicitud Elaborada por')),$/;"	kind:variable	line:298
+label	../models/servicios.py	/^        label=T('Teléfono del Responsable de la Solicitud')),$/;"	kind:variable	line:256
+label	../models/servicios.py	/^        label=T('Tipo del Servicio')),$/;"	kind:variable	line:228
+label	../models/servicios.py	/^        label=T('Unidad de Adscripción de la Dependencia Ejecutora')),$/;"	kind:variable	line:281
+label	../models/servicios.py	/^        label=T('Unidad de Adscripción de la Dependencia Solicitante')),$/;"	kind:variable	line:268
+label	../models/servicios.py	/^    label=T('Propósito del Servicio Solicitado')),$/;"	kind:variable	line:234
+listado	../controllers/personal.py	/^def listado():$/;"	kind:function	line:136
+listado	../controllers/servicios.py	/^def listado(): $/;"	kind:function	line:35
+listar_categorias	../modules/servicios_libreria.py	/^def listar_categorias(db):$/;"	kind:function	line:1492
+listar_sedes	../modules/servicios_libreria.py	/^def listar_sedes(db):$/;"	kind:function	line:1502
+listar_tipos	../modules/servicios_libreria.py	/^def listar_tipos(db):$/;"	kind:function	line:1497
+login	../controllers/default.py	/^def login():$/;"	kind:function	line:20
+login	../controllers/modulos.py	/^def login():$/;"	kind:function	line:44
+logout	../controllers/modulos.py	/^def logout():$/;"	kind:function	line:460
+mail	../models/db.py	/^mail = auth.settings.mailer$/;"	kind:variable	line:115
+manage	../controllers/appadmin.py	/^def manage():$/;"	kind:function	line:563
+manager_action	../controllers/appadmin.py	/^        manager_action = dict(role=auth.settings.auth_manager_role,$/;"	kind:variable	line:42
+manager_action	../controllers/appadmin.py	/^    manager_action = auth.settings.manager_actions.get(request.args(0), None)$/;"	kind:variable	line:40
+manager_role	../controllers/appadmin.py	/^    manager_role = manager_action.get('role', None) if manager_action else None$/;"	kind:variable	line:47
+menu	../controllers/appadmin.py	/^    menu = False$/;"	kind:variable	line:50
+menu	../controllers/appadmin.py	/^    menu = True$/;"	kind:variable	line:57
+menu.py	../models/menu.py	1;"	kind:file	line:1
+migrate	../models/modelos_base.py	/^        migrate=True)$/;"	kind:variable	line:166
+migrate_enabled	../models/db.py	/^             migrate_enabled=myconf.get('db.migrate'),$/;"	kind:variable	line:37
+modelos_base.py	../models/modelos_base.py	1;"	kind:file	line:1
+modulos.py	../controllers/modulos.py	1;"	kind:file	line:1
+my-mm.py	../languages/my-mm.py	1;"	kind:file	line:1
+my.py	../languages/my.py	1;"	kind:file	line:1
+myconf	../models/db.py	/^myconf = AppConfig(reload=True)$/;"	kind:variable	line:29
+nl.py	../languages/nl.py	1;"	kind:file	line:1
+obtenerListaPropositos	../modules/servicios_libreria.py	/^    def obtenerListaPropositos(self):$/;"	kind:member	line:365
+orden_y_filtrado	../modules/servicios_libreria.py	/^    def orden_y_filtrado(self):$/;"	kind:member	line:1099
+orden_y_filtrado	../modules/servicios_libreria.py	/^    def orden_y_filtrado(self):$/;"	kind:member	line:1481
+orden_y_filtrado	../modules/servicios_libreria.py	/^    def orden_y_filtrado(self):$/;"	kind:member	line:540
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:48
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:72
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:75
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:78
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:81
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:84
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:87
+password	../models/z.py	/^											password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:90
+password	../models/z.py	/^											password=db.auth_user.password.validate('s1gul4bu5b')[0])$/;"	kind:variable	line:22
+password	../models/z.py	/^		password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:26
+password	../models/z.py	/^		password=db.auth_user.password.validate('0000')[0])$/;"	kind:variable	line:34
+pdf_certificado	../controllers/servicios.py	/^def pdf_certificado():$/;"	kind:function	line:1076
+pdf_solicitud	../controllers/servicios.py	/^def pdf_solicitud():$/;"	kind:function	line:1048
+personal.py	../controllers/personal.py	1;"	kind:file	line:1
+personal.py	../models/personal.py	1;"	kind:file	line:1
+pl.py	../languages/pl.py	1;"	kind:file	line:1
+plugins	../models/db.py	/^plugins = PluginManager()$/;"	kind:variable	line:95
+plural-cs.py	../languages/plural-cs.py	1;"	kind:file	line:1
+plural-en.py	../languages/plural-en.py	1;"	kind:file	line:1
+plural-es.py	../languages/plural-es.py	1;"	kind:file	line:1
+plural-ru.py	../languages/plural-ru.py	1;"	kind:file	line:1
+plural-uk.py	../languages/plural-uk.py	1;"	kind:file	line:1
+pool_size	../models/db.py	/^             pool_size=myconf.get('db.pool_size'),$/;"	kind:variable	line:36
+posicionar_ultimo	../modules/servicios_libreria.py	/^    def posicionar_ultimo(self):$/;"	kind:member	line:1069
+posicionar_ultimo	../modules/servicios_libreria.py	/^    def posicionar_ultimo(self):$/;"	kind:member	line:1461
+posicionar_ultimo	../modules/servicios_libreria.py	/^    def posicionar_ultimo(self):$/;"	kind:member	line:502
+possible_languages	../routes.example.py	/^possible_languages = read_possible_languages(abspath('applications', app))$/;"	kind:variable	line:26
+pt-br.py	../languages/pt-br.py	1;"	kind:file	line:1
+pt.py	../languages/pt.py	1;"	kind:file	line:1
+query_by_table_type	../controllers/appadmin.py	/^def query_by_table_type(tablename, db, request=request):$/;"	kind:function	line:118
+query_ficha	../modules/servicios_libreria.py	/^def query_ficha(db, idv):$/;"	kind:function	line:1513
+recoverpassword	../controllers/default.py	/^def recoverpassword():$/;"	kind:function	line:16
+register	../controllers/default.py	/^def register():$/;"	kind:function	line:13
+register	../controllers/modulos.py	/^def register():$/;"	kind:function	line:160
+remote_addr	../controllers/appadmin.py	/^remote_addr = request.env.remote_addr$/;"	kind:variable	line:23
+reporte	../controllers/personal.py	/^def reporte():$/;"	kind:function	line:194
+requires	../models/modelos_base.py	/^            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None)), $/;"	kind:variable	line:176
+requires	../models/modelos_base.py	/^            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))$/;"	kind:variable	line:179
+requires	../models/modelos_base.py	/^           requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s | %(email)s'), label=T('Usuario Asociado')),$/;"	kind:variable	line:137
+requires	../models/modelos_base.py	/^          requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),$/;"	kind:variable	line:123
+requires	../models/modelos_base.py	/^          requires=IS_INT_IN_RANGE(minimum=1,maximum=999999999, error_message='Número de cedula no válido.'),$/;"	kind:variable	line:119
+requires	../models/modelos_base.py	/^          requires=IS_IN_DB(db, db.dependencias, '%(nombre)s'), label=T('Pertenece A'))$/;"	kind:variable	line:140
+requires	../models/modelos_base.py	/^          requires=IS_IN_SET(['Docente', 'Administrativo', 'Técnico', 'Obrero']), notnull=True, label=T('Categoría')),$/;"	kind:variable	line:113
+requires	../models/modelos_base.py	/^          requires=IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+[\\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+)*$',$/;"	kind:variable	line:101
+requires	../models/modelos_base.py	/^          requires=IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+[\\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+)*$',$/;"	kind:variable	line:107
+requires	../models/modelos_base.py	/^          requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),$/;"	kind:variable	line:116
+requires	../models/modelos_base.py	/^        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), $/;"	kind:variable	line:165
+requires	../models/servicios.py	/^          requires=IS_DATE(format=('%d-%m-%Y')), $/;"	kind:variable	line:171
+requires	../models/servicios.py	/^          requires=IS_IN_DB(db, db.categorias_servicios, '%(nombre)s'), label=T('Categoría')),$/;"	kind:variable	line:62
+requires	../models/servicios.py	/^          requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s'), $/;"	kind:variable	line:79
+requires	../models/servicios.py	/^          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s'), $/;"	kind:variable	line:84
+requires	../models/servicios.py	/^          requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), $/;"	kind:variable	line:74
+requires	../models/servicios.py	/^          requires=IS_IN_DB(db, db.tipos_servicios, '%(nombre)s'), label=T('Tipo')),$/;"	kind:variable	line:59
+requires	../models/servicios.py	/^        requires=IS_DATE(format=('%d-%m-%Y')), $/;"	kind:variable	line:271
+requires	../models/servicios.py	/^        requires=IS_DATE(format=('%d-%m-%Y')), $/;"	kind:variable	line:290
+requires	../models/servicios.py	/^        requires=IS_DATE(format=('%d-%m-%Y')), $/;"	kind:variable	line:294
+requires	../models/servicios.py	/^        requires=IS_IN_DB(db, db.propositos.id, '%(tipo)s'), $/;"	kind:variable	line:179
+requires	../models/servicios.py	/^        requires=IS_IN_DB(db, db.servicios.id, '%(nombre)s'), $/;"	kind:variable	line:175
+requires	../models/servicios.py	/^        requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s'), $/;"	kind:variable	line:167
+requires	../models/servicios.py	/^        requires=IS_NOT_EMPTY(), $/;"	kind:variable	line:237
+requires	../models/servicios.py	/^        requires=IS_NOT_EMPTY(), label=T('Descripción del propósito')),$/;"	kind:variable	line:183
+requires	../models/smydp.py	/^          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), label=T('Espacio Físico'), notnull=True),$/;"	kind:variable	line:67
+requires	../models/smydp.py	/^          requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), label=T('Sustancia'), notnull=True),$/;"	kind:variable	line:69
+requires	../models/smydp.py	/^          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),$/;"	kind:variable	line:64
+requires	../models/smydp.py	/^          requires=IS_IN_SET(['Inflamable','Tóxico','Tóxico para el ambiente','Corrosivo','Comburente','Nocivo','Explosivo','Irritante'],$/;"	kind:variable	line:37
+resetpassword	../controllers/modulos.py	/^def resetpassword():$/;"	kind:function	line:364
+ro.py	../languages/ro.py	1;"	kind:file	line:1
+role	../models/z.py	/^	role = db(db.auth_group.role == 'ASISTENTE DEL DIRECTOR').select()[0].id$/;"	kind:variable	line:409
+role	../models/z.py	/^	role = db(db.auth_group.role == 'CLIENTE INTERNO').select()[0].id$/;"	kind:variable	line:391
+role	../models/z.py	/^	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id$/;"	kind:variable	line:425
+role	../models/z.py	/^	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id$/;"	kind:variable	line:431
+role	../models/z.py	/^	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id$/;"	kind:variable	line:437
+role	../models/z.py	/^	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id$/;"	kind:variable	line:444
+role	../models/z.py	/^	role = db(db.auth_group.role == 'COORDINADOR').select()[0].id$/;"	kind:variable	line:450
+role	../models/z.py	/^	role = db(db.auth_group.role == 'DIRECTOR').select()[0].id$/;"	kind:variable	line:417
+role	../models/z.py	/^	role = db(db.auth_group.role == 'GESTOR DE SMyDP').select()[0].id$/;"	kind:variable	line:403
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:458
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:464
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:470
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:476
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:482
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:488
+role	../models/z.py	/^	role = db(db.auth_group.role == 'JEFE DE LABORATORIO').select()[0].id$/;"	kind:variable	line:494
+role	../models/z.py	/^	role = db(db.auth_group.role == 'WEBMASTER').select()[0].id$/;"	kind:variable	line:397
+routers	../routes.example.py	/^routers = {$/;"	kind:variable	line:31
+routes.example.py	../routes.example.py	1;"	kind:file	line:1
+ru.py	../languages/ru.py	1;"	kind:file	line:1
+select	../controllers/appadmin.py	/^def select():$/;"	kind:function	line:180
+service	../models/db.py	/^service = Service()$/;"	kind:variable	line:94
+servicios.py	../controllers/servicios.py	1;"	kind:file	line:1
+servicios.py	../models/servicios.py	1;"	kind:file	line:1
+servicios_libreria.py	../modules/servicios_libreria.py	1;"	kind:file	line:1
+sigulab2	../controllers/modulos.py	/^def sigulab2():$/;"	kind:function	line:17
+similar	../modules/servicios_libreria.py	/^def similar(a, b):$/;"	kind:function	line:1644
+sk.py	../languages/sk.py	1;"	kind:file	line:1
+smydp.py	../controllers/smydp.py	1;"	kind:file	line:1
+smydp.py	../models/smydp.py	1;"	kind:file	line:1
+solicitudes	../controllers/servicios.py	/^def solicitudes():$/;"	kind:function	line:295
+state	../controllers/appadmin.py	/^def state():$/;"	kind:function	line:352
+sustancias	../controllers/smydp.py	/^def sustancias():$/;"	kind:function	line:33
+tabla_categoria	../controllers/personal.py	/^def tabla_categoria():$/;"	kind:function	line:8
+table_template	../controllers/appadmin.py	/^def table_template(table):$/;"	kind:function	line:517
+tables	../controllers/appadmin.py	/^                              tables=[auth.table_user(),$/;"	kind:variable	line:44
+tests.py	../controllers/tests.py	1;"	kind:file	line:1
+tr.py	../languages/tr.py	1;"	kind:file	line:1
+ts	../controllers/appadmin.py	/^    ts = TicketStorage()$/;"	kind:variable	line:74
+types	../controllers/appadmin.py	/^    def types(field):$/;"	kind:function	line:523
+uk.py	../languages/uk.py	1;"	kind:file	line:1
+update	../controllers/appadmin.py	/^def update():$/;"	kind:function	line:308
+user	../models/z.py	/^	user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id$/;"	kind:variable	line:209
+user	../models/z.py	/^	user = db(db.auth_user.email == 'asis-ulab@usb.ve').select()[0].id$/;"	kind:variable	line:407
+user	../models/z.py	/^	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id$/;"	kind:variable	line:202
+user	../models/z.py	/^	user = db(db.auth_user.email == 'funindes@usb.ve').select()[0].id$/;"	kind:variable	line:389
+user	../models/z.py	/^	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id$/;"	kind:variable	line:196
+user	../models/z.py	/^	user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id$/;"	kind:variable	line:395
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id$/;"	kind:variable	line:156
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id$/;"	kind:variable	line:259
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id$/;"	kind:variable	line:442
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id	$/;"	kind:variable	line:162
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id$/;"	kind:variable	line:233
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id$/;"	kind:variable	line:423
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id$/;"	kind:variable	line:174
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id$/;"	kind:variable	line:241
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id$/;"	kind:variable	line:429
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id$/;"	kind:variable	line:168
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id$/;"	kind:variable	line:249
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id$/;"	kind:variable	line:435
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id$/;"	kind:variable	line:180
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id$/;"	kind:variable	line:267
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id$/;"	kind:variable	line:448
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id$/;"	kind:variable	line:216
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab-smdp@usb.ve').select()[0].id$/;"	kind:variable	line:401
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id$/;"	kind:variable	line:103
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id$/;"	kind:variable	line:223
+user	../models/z.py	/^	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id$/;"	kind:variable	line:415
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id$/;"	kind:variable	line:112
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id$/;"	kind:variable	line:278
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id$/;"	kind:variable	line:456
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id$/;"	kind:variable	line:118
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id$/;"	kind:variable	line:286
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id$/;"	kind:variable	line:462
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id	$/;"	kind:variable	line:124
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id$/;"	kind:variable	line:294
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id$/;"	kind:variable	line:468
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id$/;"	kind:variable	line:130
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id$/;"	kind:variable	line:302
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id$/;"	kind:variable	line:474
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id$/;"	kind:variable	line:136
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id$/;"	kind:variable	line:310
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id$/;"	kind:variable	line:480
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id$/;"	kind:variable	line:142
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id$/;"	kind:variable	line:318
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id$/;"	kind:variable	line:486
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id$/;"	kind:variable	line:148
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id$/;"	kind:variable	line:326
+user	../models/z.py	/^	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id$/;"	kind:variable	line:492
+usuario	../controllers/servicios.py	/^def usuario():$/;"	kind:function	line:30
+usuarios	../controllers/gestion.py	/^def usuarios():$/;"	kind:function	line:14
+validador_registro_solicitudes	../modules/servicios_libreria.py	/^def validador_registro_solicitudes(request, db, registro, contador=0):$/;"	kind:function	line:1612
+validar_cedula	../controllers/modulos.py	/^def validar_cedula():$/;"	kind:function	line:98
+validar_email	../controllers/modulos.py	/^def validar_email():$/;"	kind:function	line:128
+vars	../controllers/appadmin.py	/^                 vars=dict(send=URL(args=request.args, vars=request.vars))))$/;"	kind:variable	line:54
+z.py	../models/z.py	1;"	kind:file	line:1
+zh-cn.py	../languages/zh-cn.py	1;"	kind:file	line:1
+zh-tw.py	../languages/zh-tw.py	1;"	kind:file	line:1
+zh.py	../languages/zh.py	1;"	kind:file	line:1
