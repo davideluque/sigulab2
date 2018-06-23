@@ -19,15 +19,15 @@
 	</style>
  	
  	<!-- Estilos de modales y listados -->
- 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
- 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
- 	<script src="{{=URL('static', 'js/inventario_material_template_modal.js')}}"></script>	
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+  	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -267,7 +267,7 @@
 
             {
                 extend: 'collection',
-                text: '<i class="fa fa-save"></i>',
+                text: '<i class="fas fa-floppy-o"></i>',
                 buttons: [
                     { extend:'copy', text: 'Copiar' } ,
                     'excel',
@@ -275,7 +275,7 @@
                     'pdf'
                 ]
 			},
-			{ extend:'print', text: '<i class="fa fa-print"></i>'}
+			{ extend:'print', text: '<i class="fas fa-print"></i>'}
         ]
 	  });
 	  $('#botonModal').addClass('pull-left')

@@ -1,33 +1,19 @@
 {{extend 'layout.html'}}
-
-  <!-- Estilo del listado de Solicitudes de Servicios -->
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-  	<!-- Para los mensajes con flash -->
-	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
-
 {{block head}}
 
 <meta charset="UTF-8">
 
     <!-- Para los mensajes con flash -->
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
-    <!-- DataTables -->
-    <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  
     
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
     <!-- Estilos de modales y listados -->
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
-    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}"> 
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -147,8 +133,7 @@
 {{end}}
 
 {{block center}}
-    <h2 class="dep-titulo text-center">Detalles de {{=bien['sb_nombre']}}</h2>
-    <h4 class="dep-titulo text-center">Descripcion: {{=bien['sb_descripcion']}}</h4>
+    <h3 class="dep-titulo text-center">Detalles de {{=bien['sb_nombre']}}</h3>
 {{pass}}
 
 <!-- Flash message -->
@@ -163,9 +148,7 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6">
                     <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button type="button" data-toggle="modal" data-target="#addbm"><i class="fa fa-edit fa-1x"></i></button>
-                    <!-- Boton que solicita eliminar --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button type="button" data-toggle="modal" data-target="#" onclick=""><i class="fa fa-trash fa-1x"></i></button>
+                    <button type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 </div>
             </div>
         </div>
@@ -177,12 +160,8 @@
 	<div class="tab-wrapper">
 		<ul class="tabs">
 				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
-				<li class="tab-link" data-tab="2">SUDEBID</li>
-                <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
-                <li class="tab-link" data-tab="4">UBICACIÓN</li>
-                <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
-                <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
-                <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+                <li class="tab-link" data-tab="2">UBICACIÓN</li>
+                <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
             </ul>
 	</div>
 
@@ -190,52 +169,68 @@
 		<div id="tab-1" class="tab-content active">
             <div class="grid-container">
                 {{ for title in caracteristicas_list: }}
-                    <div class="grid-item">
-                        {{=title}}
-                    </div>
-                    <div class="grid-item">
-                        {{= caracteristicas_dict.get(title)}}
-                    </div>
+                    {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{= caracteristicas_dict.get(title)}}
+                        </div>
+                    {{pass}}
                 {{ pass }}
+                {{if bien['sb_ancho'] != None or bien['sb_largo'] != None or bien['sb_alto'] != None or bien['sb_diametro'] != None:}}
+                    <div class="grid-item">
+                        {{ if bien['sb_unidad'] == 'm':}}
+                            Dimensiones (metros):
+                        {{else:}}
+                            Dimensiones (centímetros):
+                        {{pass}}
+                    </div>
+                    <div class="grid-item">                        
+                        {{if bien['sb_ancho'] != None:}}
+                            Ancho: {{=bien['sb_ancho']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_largo'] != None:}}
+                            Largo: {{=bien['sb_largo']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_alto'] != None:}}
+                            Alto: {{=bien['sb_alto']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_diametro'] != None:}}
+                            Diámetro: {{=bien['sb_diametro']}}
+                            <br>
+                        {{pass}}
+                    </div>
+                {{pass}}
             </div>
-            <!-- Pensar como Mostrar esto en el grid-->
-            {{if bien['sb_unidad_dim'] != '':}}
-                {{if bien['sb_unidad_dim'] == 'm':}}
-                    <h4>Dimensiones: metros</h4>
-                {{else:}}
-                    <h4>Dimensiones: centímetros</h4>
-                {{pass}}
-                {{if bien['sb_ancho'] != '':}}
-                    <h4> &emsp;   Ancho: {{=bien['sb_ancho']}} </h4>
-                {{pass}}
-                {{if bien['sb_largo'] != '':}}
-                    <h4>  &emsp;   Largo: {{=bien['sb_largo']}} </h4>
-                {{pass}}
-                {{if bien['sb_alto'] != '':}}
-                    <h4>  &emsp;   Alto: {{=bien['sb_alto']}} </h4>
-                {{pass}}
-                {{if bien['sb_diametro'] != '':}}
-                    <h4>  &emsp;   Diámetro: {{=bien['sb_diametro']}} </h4>
-                {{pass}}
-            {{pass}}
         </div>
-
-
-
-		<div id="tab-3"class="tab-content">En desarrollo</div>
-        <div id="tab-4"class="tab-content">
-            <h4> Espacio físico : {{=bien['sb_espacio']}} </h4>
-            <h4> Unidad de Adscripción : {{=bien['sb_unidad_de_adscripcion']}} </h4>
-            <h4> Dependencia : {{=bien['sb_depedencia']}} </h4>
+        <div id="tab-2"class="tab-content">
+            <div class="grid-container">
+                <div class="grid-item">
+                    Espacio físico:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.espacios_fisicos.id == bien['sb_espacio']).select().first().codigo}}
+                </div>
+                <div class="grid-item">
+                    Unidad de Adscripción:
+                </div>
+                <div class="grid-item">
+                    {{=bien['sb_unidad_de_adscripcion']}}
+                </div>
+                <div class="grid-item">
+                    Dependencia:
+                </div>
+                <div class=grid-item>
+                    {{=db(db.dependencias.id == bien['sb_depedencia']).select().first().nombre}}
+                </div>
+            </div>
         </div>
-		<div id="tab-5"class="tab-content">En Desarrollo</div>
-		<div id="tab-6"class="tab-content">En desarrollo</div>
-		<div id="tab-7"class="tab-content">En desarrollo</div>
-
-
-
+        <div id="tab-3"class="tab-content">En desarrollo</div>
 	</div>
-	
 </div>
 
 <!-- Modal modificar un material -->
@@ -249,8 +244,12 @@
       <div class="modal-header addHeader">
         <div class="row addRow" id="rowHeader">
           <div class="col-sm-1" id="col1Header">
-            <div class="container" id="plus">
-              <h1 id="agregar">+</h1>
+            <div class="container">
+                <i class="fas fa-pencil-alt fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
             </div>
           </div>
           <div class="col-sm-11" id="col11Header">
@@ -357,7 +356,7 @@
                         {{pass}}  
                     </div>
                   </div>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
@@ -486,8 +485,8 @@
                         {{pass}}
                         </div>
                       </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
                   <!-- Fin tercer Paso -->
 
@@ -594,8 +593,8 @@
                         </div>
                       </div>
 
-                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Modificar</button>                </fieldset>    
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>                </fieldset>    
                   </fieldset>
                   <!-- Fin tercer paso-->
 
@@ -696,8 +695,8 @@
                         
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Primer Paso -->
               </form>
@@ -911,4 +910,15 @@
     
   }
 }
+</script>
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
 </script>

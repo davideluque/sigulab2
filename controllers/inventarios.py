@@ -815,24 +815,37 @@ def detalles_mat():
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
     unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
     presentacion=["Caja", "Paquete", "Unidad", "Otro"]
-    caracteristicas_list = ['Marca:', 'Modelo:', 'Descripción:', 'Capacidad:', 'Unidad de Capacidad:',
-    'Material predominante:', 'Material secundario:', 'Aforado:', 'Tipo:', 'Requiere calibración:', 'Ubicación interna:']
-    caracteristicas_dict = {
-        'Marca:': bien['sb_marca'],
-        'Modelo:': bien['sb_modelo'],
-        'Descripción:': bien['sb_descripcion'],
-        'Material predominante:': bien['sb_material'],
-        'Material secundario:': bien['sb_material_sec'],
-
-        'Aforado:': bien['sb_aforado'],
-        'Tipo:': bien['sb_clasificacion'],
-        'Requiere calibración:': bien['sb_calibrar'],
-        'Ubicación interna:' : bien['sb_ubicacion'],
-        'Capacidad': bien['sb_capacidad'],
-        'Unidad de capacidad:' : bien['sb_unidad'],
-
-
-    }
+    if bien['sb_clasificacion'] == "Material de Laboratorio":
+        caracteristicas_list = ['Cantidad:', 'Descripción:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
+        'Capacidad:', 'Unidad de medida:', 'Material predominante:', 'Material secundario:', 'Tipo:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'Cantidad:': bien['sb_cantidad'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Material predominante:': bien['sb_material'],
+            'Material secundario:': bien['sb_material_sec'],
+            'Aforado:': bien['sb_aforado'],
+            'Tipo:': bien['sb_clasificacion'],
+            'Requiere calibración:': bien['sb_calibrar'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Capacidad:': bien['sb_capacidad'],
+            'Unidad de medida:' : bien['sb_unidad'],
+        }
+    else:
+        caracteristicas_list = ["Marca:", "Modelo:", "Presentación:", "Unidades por presentación:", "Cantidad:", 
+        "Total(U.):", "Descripción:", "Ubicación interna:"]
+        caracteristicas_dict = {
+            'Presentación:': bien['sb_presentacion'],
+            'Unidades por presentación:': bien['sb_unidades'],
+            'Cantidad:': bien['sb_cantidad'],
+            'Total(U.):': bien['sb_total'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Tipo:': bien['sb_clasificacion']
+        }
     return dict(bien = bien,
                 material_pred = material_pred,
                 color_list = color,
