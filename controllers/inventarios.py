@@ -693,6 +693,14 @@ def detalles():
             response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
                                 Por los momentos no se enviarán solicitudes de eliminación.".format(bien['bm_nombre'])
         request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['bm_oculto'] == 0:
+            db(db.bien_mueble.id == bien['id']).select().first().update_record(bm_oculto = 1)
+            response.flash = "Ahora " + str(bien['bm_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['bm_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
 
     # Elementos que deben ser mostrados como una lista en el modal
     # de modificar BM
@@ -819,6 +827,14 @@ def detalles_mat():
             response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
                                 Por los momentos no se enviarán solicitudes de eliminación.".format(bien['sb_nombre'])
         request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['sb_oculto'] == 0:
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_oculto = 1)
+            response.flash = "Ahora " + str(bien['sb_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['sb_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
 
     aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
