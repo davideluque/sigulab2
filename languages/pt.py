@@ -220,6 +220,8 @@
 'Memberships': 'Memberships',
 'Menu Model': 'Menu do Modelo',
 'Modelo': 'Modelo',
+'Modificacion bien muebles': 'Modificacion bien muebles',
+'Modificacion sin bns': 'Modificacion sin bns',
 'Modified By': 'Modified By',
 'Modified On': 'Modified On',
 'Movilidad': 'Movilidad',

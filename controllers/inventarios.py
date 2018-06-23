@@ -622,7 +622,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0] #Se busca de la tabla de bm para tener el nombre original
-        response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.bm_nombre)
+        response.flash = "El  \"{0}\" tiene una modificación pendiente \
+                        Por los momentos no se enviarán solicitudes de modificación.".format(nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
@@ -683,6 +684,15 @@ def detalles():
             request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion,
             user_id)
         request.vars.modificacion = None
+    
+    if request.vars.eliminacion:
+        if bien['bm_eliminar'] == 2: 
+            db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['bm_nombre'])
+        request.vars.eliminacion = None
 
     # Elementos que deben ser mostrados como una lista en el modal
     # de modificar BM
@@ -800,6 +810,15 @@ def detalles_mat():
             request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
             request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
             request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion)
+
+    if request.vars.eliminacion:
+        if bien['sb_eliminar'] == 2: 
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['sb_nombre'])
+        request.vars.eliminacion = None
 
     aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']

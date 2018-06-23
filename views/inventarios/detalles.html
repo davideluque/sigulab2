@@ -149,6 +149,8 @@
             <div class="col-sm-6">
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                 <button type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <!-- Boton para eliminar bien mueble-->
+                <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
             </div>
         </div>
     </div>
@@ -262,6 +264,52 @@
 	
 </div>
 
+<div class="modal fade" id="confirmdelete" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header" style="background-color: red;">
+              <div class="container">
+                  <i class="fas fa-trash fa-2x" style="
+                  display:block;
+                  margin-left: -16px;
+                  margin-top: 8px;
+                  color: white;
+                  "></i>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header" style="background-color: red;">
+              <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+              ">Confirmar eliminación<button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <br>
+            <form method="post" style="text-align: center;">
+                <h4>¿Desea solicitar la eliminación de {{=bien['bm_nombre']}}?</h4>
+                <br>
+                <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+            </form>
+            <br>
+        </div>
+      </div>
+    </div>
+</div>
+
 <!-- Modal añadir un BM nuevo al inventario -->
 <div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
@@ -291,6 +339,8 @@
           </div>
         </div>
       </div>
+      </div>
+  </div>
       <!-- Fin Modal Header -->
       
       <!-- Modal Body -->
