@@ -1,0 +1,70 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modulos.css')}}"> 
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <span class="breadcrumb-item active">Inicio</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+
+  <div class="container">
+      <div id="fila1" class="row">
+      </div>
+
+      <div id="fila2" class="row">
+
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm-8">
+
+          <div class="col-sm-4 columnas">
+            <a href="{{=URL('..', 'sigulab2', 'personal')}}">
+              <img class="iconos" src="{{=URL('static', 'images/personal_icono.png')}}">
+              <h3 class="opciones">Personal</h3>
+            </a>
+          </div>
+
+          <div class="col-sm-4 columnas">
+            <a href="{{=URL('..', 'sigulab2', 'smydp')}}">
+              <img class="iconos" src="{{=URL('static', 'images/smydp_icono.png')}}">
+              <h3 class="opciones">SMyDP</h3>
+            </a>
+          </div>
+
+          <div class="col-sm-4 columnas">
+            <a href="{{=URL('..','sigulab2', 'servicios') }}">
+              <img class="iconos" src="{{=URL('static', 'images/servicios_icono.png')}}" >
+              <h3 class="opciones">Servicios</h3>
+            </a>
+          </div>
+          <div class="col-sm-4 columnas">
+            <a href="{{=URL('..','sigulab2', 'informacion_documentada') }}">
+              <img class="iconos" id="gid_icon" style="height:100px;" src="{{=URL('static', 'images/gid_icon1.svg')}}" >
+              <h3 class="opciones">Información Documentada</h3>
+            </a>
+          </div>
+           <div class="col-sm-4 columnas">
+            <a href="{{=URL('..','sigulab2', 'informacion_documentada') }}">
+              <img class="iconos" id="gid_icon"  style="height:100px;" src="{{=URL('static', 'images/gid_icon2.svg')}}" >
+              <h3 class="opciones">Información Documentada</h3>
+            </a>
+          </div>
+         
+          <div class="col-sm-2"></div>
+
+        </div>
+      </div>
+  </div>
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("inicio").className += " active";
+</script>
+{{end}}

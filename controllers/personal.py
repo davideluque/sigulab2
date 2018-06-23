@@ -176,7 +176,9 @@ def add_form():
             f_extension_interna = dic["extension_interna"],
             f_por_validar=True,
             f_validado=False,
+            f_comentario="",
             f_rol= dic["rol"])
+        session.ficha_negada=""
         redirect(URL('listado_estilo'))
 
 
@@ -236,6 +238,8 @@ class Usuario(object):
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
+    session.ficha_negada = db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_comentario).first().f_comentario
+
     #Obtenemos el usuario loggeado
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
     usuario = Usuario(infoUsuario.t_Personal.select().first())
@@ -443,6 +447,8 @@ def buscarJefe(dependencia_trabajador):
     return correo
 
 def eliminar():
+    if auth.user.email != 'sigulabusb@gmail.com':
+        return redirect(URL('listado_estilo'))
     ci = request.post_vars.cedula_eliminar
 
     db(db.t_Personal.f_ci == ci).update(f_oculto = True)

@@ -1,0 +1,146 @@
+#navegation{
+	    padding: 2.5rem 1rem;
+	    background-color: #333!important;
+}
+
+.navegation{
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.vertical-menu {
+    width: 300px; /* Set a width if you like */
+    margin-left: 0;
+    padding-right: 0!important;
+}
+
+.vertical-menu a {
+    background-color: #2e86de; /* Grey background color */
+    color: white; /* Black text color */
+    display: block; /* Make the links appear below each other */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.vertical-menu a:hover {
+	color: #2e86de;
+    background-color: #c8d6e5; /* Dark grey background on mouse-over */
+}
+
+.vertical-menu a.active {
+	color: #2e86de;
+    background-color: #c8d6e5; /* Add a green color to the "active/current" link */
+}	
+
+#father-1{
+	margin-top: 30px;
+	margin-left: 0;
+}
+
+#son-1-f1{
+	padding-right: 0;
+	margin-right: 0!important;
+	width: 400px;
+}
+
+#title{
+	margin-top: 20px;
+	text-align: right;
+}
+
+input[type=text] {
+    width: 200px;
+    transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+    width: 100%;
+}
+
+.btn-info{
+	background-color: #2e86de;
+	border-color: transparent;  
+}
+
+.btn-danger{
+	background-color: #ee5253;
+	border-color: transparent; 
+}
+
+.btn-info:hover{
+	background-color: #54a0ff;
+	border-color: transparent;  
+}
+
+.btn-danger:hover{
+	background-color: #ff6b6b;
+	border-color: transparent; 
+}
+
+    nav ul #status{
+      display: inline-block;
+      width: 25%;
+      height: 13%;
+      font-size: 17px;
+      padding-left: 5px;
+      margin-right:5px;
+
+    }
+    .indicadores{
+      background-color: white;
+      margin-top: 60px;
+      
+    }
+    #status p{
+
+      font-size: 25px;
+    }
+
+    #container-body{
+       margin-top:3%;
+        padding-left:4%;
+        padding-right:4%;
+
+    }
+    .icon_card{
+        width:20%;
+        height:20%;
+        margin-left:20%;
+    }
+    li p,span{
+        margin-left:10%;
+    }
+    .card{
+        box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    }
+    .navBar{
+	width: 90%;
+	height: 30%;
+	background-color: yellow
+
+}
+.menu-grid ul {
+  list-style: none;
+  overflow: hidden; /* Limpiamos errores de float */
+}
+ 
+.menu-grid ul .opt {
+
+  float: left;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: 1px solid #7C7C7C;
+  
+}
+ 
+.menu-grid ul li a {
+  display: block; /* Convertimos los elementos a en elementos bloque para manipular el padding */
+  padding: 10px;
+  color: blue;
+  text-decoration: none;
+}
+ 
+.menu-grid ul .opt:hover {
+  background: #D6EAF8;
+}

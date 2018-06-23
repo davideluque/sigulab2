@@ -283,7 +283,7 @@
                     <!-- Fin Segundo Paso -->
 
                     <!-- Tercer Paso -->
-                    <fieldset class="formField">
+                    <fieldset class="formField" id="p3">
                       <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
@@ -299,7 +299,7 @@
                         <div class="form-group">
                           <div class="col-sm-12">
                             <label>Cargo</label> 
-                            <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo">
+                            <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                             <font color="red"><div id="err_cargo" hidden></div></font>
                           </div>
                         </div>
@@ -307,7 +307,7 @@
                         <div class="form-group">
                           <div class="col-sm-12">
                               <label>Gremio</label> 
-                            <select class="form-control" id="sel1" name="gremio_add" required>
+                            <select class="form-control" id="sel1" name="gremio_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                               <option selected hidden disabled value=""
                               {{ if not usuario.f_gremio :}}
                               selected
@@ -334,7 +334,7 @@
                         <div class="form-group">
                           <div class="col-sm-12">
                               <label>Ubicación</label> 
-                            <select class="form-control" id="sel1" name="ubicacion_add" required>
+                            <select class="form-control" id="sel1" name="ubicacion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                               <option selected hidden disabled value=""
                               {{ if not usuario.f_ubicacion :}}
                               selected
@@ -363,7 +363,7 @@
                         <div class="form-group">
                           <div class="col-sm-12">
                               <label>Rol</label> 
-                              <select class="form-control" id="sel1" name="rol_add" required>
+                              <select class="form-control" id="sel1" name="rol_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
                             <option selected hidden disabled
                             {{ if not usuario.f_rol :}}
                               selected
@@ -381,8 +381,8 @@
                         </div>
                       
                       <div class="botones-form">
-                        <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                        <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit">Agregar</button>
+                          <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-plus-circle" title="Anterior"/></button>
                       </div>
                       </div>
                     </fieldset>

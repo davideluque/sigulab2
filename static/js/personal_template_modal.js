@@ -13,6 +13,7 @@ const inputs = [
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
 
+// Funciones que validan toda la pagina 1 del formulario 
 function validaPaginaWeb () {
     const $this = $('[name="pagina_web_add"]')
     if ($this.val() === '') {
@@ -20,7 +21,7 @@ function validaPaginaWeb () {
         return true;
     }
     if (!($this.val().match(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/))) {
-        $this.attr('data-content', "Formato incorrecto de pagina web");
+        $this.attr('data-content', "Formato incorrecto de pagina web. Ejemplo: hola.com");
         $this.popover('show');
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -41,7 +42,7 @@ function validaEmailAlternativo () {
         return true;
     }
     if (!($this.val().match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/))){
-        $this.attr("data-content", "El correo no tiene el formato correcto");
+        $this.attr("data-content", "El correo no tiene el formato correcto. Ejemplo: hola_mundo@dominio.com");
         console.log($this.popover('show'));
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -82,7 +83,7 @@ function validaCelular () {
         return false;
     }
     if (!($this.val().match(/^\d{7}$/gm))) { // Extension de 1 a 4 digitos
-        $this.attr('data-content', 'El número de celular tiene el formato incorrecto');
+        $this.attr('data-content', 'El número de celular tiene el formato incorrecto. Ejemplo 1234567');
         $this.popover('show');
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
@@ -121,7 +122,7 @@ function validaTelefonoResidencial (){
         return false;
     }
     if (!($this.val().match(/^\d{11}$/gm))){
-        $this.attr("data-content", "El teléfono tiene el formato incorrecto");
+        $this.attr("data-content", "El teléfono tiene el formato incorrecto. Ejemplo: 02121234567");
         $this.addClass('input-error');
         $this.attr("data-valido", "false");
         $this.popover('show');
@@ -160,8 +161,8 @@ function validaContactoEmergencia () {
         $this.popover('show');
         return false;
     }
-    if (!$this.val().match(/\d{7}$/)) { 
-        $this.attr("data-content", 'El contacto de emergencia debe tener solo números');
+    if (!$this.val().match(/\d{11}$/)) { 
+        $this.attr("data-content", 'El contacto de emergencia debe tener solo números. Ejemplo: 02121234567');
         $this.popover('show');
         $this.addClass('input-error');
         return false;
@@ -182,6 +183,273 @@ const validadoresPrimerPaso = [
     validaTelefonoResidencial,
     validaPersonaContacto,
     validaContactoEmergencia
+]
+
+// Funciones que validan la segunda pagina 
+function validaEstatus(){
+    const $this = $('[name="estatus_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaCategoria(){
+    const $this = $('[name="categoria_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaCondicion(){
+    const $this = $('[name="condicion_add"]')
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngreso(){
+    const $this = $('[name="fecha_ingreso_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function voltearFecha(fecha){
+    var dia = fecha.substr(0,2);
+    var mes = fecha.substr(3,2);
+    var anio = fecha.substr(6,9);
+
+    var fecha = anio + "-" + mes + "-" + dia;
+    
+    return fecha
+}
+
+function validaFechaSalida(){
+    const $this = $('[name="fecha_salida_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    }
+    else if (!moment(fecha_inicio).isBefore(fecha_final) && fecha_inicio !== '--'){
+        $this.attr("data-content", "La fecha de egreso es antes que la de inicio");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoUSB(){
+    const $this = $('[name="fecha_ingreso_usb_add"]');
+    const fecha_ingreso_ulab = voltearFecha($('[name="fecha_ingreso_ulab_add"]').val());
+    const fecha_ingreso_usb = voltearFecha($this.val());
+
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else if (fecha_ingreso_ulab !== '--' && !(moment(fecha_ingreso_usb).isBefore(fecha_ingreso_ulab) || moment(fecha_ingreso_usb).isSame(fecha_ingreso_ulab))){
+        $this.attr("data-content", "La fecha de ingreso al USB tiene que ser antes de la fecha de ingreso al ULAB");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoUlab(){
+    const $this = $('[name="fecha_ingreso_ulab_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
+    const fecha_ingreso_ulab = voltearFecha($this.val());
+
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    }
+    else if (fecha_inicio !== '--' && !(moment(fecha_ingreso_ulab).isBefore(fecha_inicio) || moment(fecha_ingreso_ulab).isSame(fecha_inicio))) {
+        $this.attr("data-content", "La fecha de ingreso al ULAB tiene que ser antes que la fecha de inicio");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaIngresoAdminPubl(){
+    const $this = $('[name="fecha_ingreso_admin_publica_add"]');
+    const fecha_ingreso_usb = voltearFecha($('[name="fecha_ingreso_usb_add"]').val());
+    const fecha_ingreso_admin_pub = voltearFecha($this.val());
+
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    }
+    else if (fecha_ingreso_usb !== "--" && !(moment(fecha_ingreso_admin_pub).isBefore(fecha_ingreso_usb) || moment(fecha_ingreso_admin_pub).isSame(fecha_ingreso_usb))){
+        $this.attr("data-content", "La fecha de ingreso a la administración pública debe ser antes de la fecha de ingreso a la USB");
+        $this.addClass('input-error');
+        $this.popover('show');
+        return false;
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+const validadoresSegundoPasoFijo = [
+    validaEstatus,
+    validaCategoria,
+    validaCondicion,
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
+]
+const validadoresSegundoPaso = [
+    validaEstatus,
+    validaCategoria,
+    validaCondicion,
+    validaFechaIngreso,
+    validaFechaSalida,
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
+]
+
+// Funciones para validar la tercera parte del formulario
+
+function validarCargo(){
+    const $this = $('[name="cargo_add"]');
+    if ($this.val() === ''){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    } 
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarGremio(){
+    const $this = $('[name="gremio_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarUbicacion(){
+    const $this = $('[name="ubicacion_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validarRol(){
+    const $this = $('[name="rol_add"]');
+    if ($this.val() === null){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", "false");
+        $this.popover('show');
+        return false;
+    }
+    else {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+const validadoresTercerPaso = [
+    validarCargo,
+    validarGremio,
+    validarUbicacion,
+    validarRol
 ]
 
 // Funcion que valida los campos cuando el usuario pasa a llenar otro input
@@ -239,6 +507,19 @@ $(document).ready(function () {
         if (parent_fieldset.attr('id') === 'p1') {
             next_step = validadoresCorrectos(validadoresPrimerPaso)
         }
+        else if (parent_fieldset.attr('id') === 'p2'){
+            if ($('[name="categoria_add"]').val() === 'Fijo'){
+                // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
+                // base de datos 
+                $('[name="fecha_ingreso_add"]').attr('value', '');
+                $('[name="fecha_salida_add"]').attr('value', '');
+
+                next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
+            }
+            else {
+                next_step = validadoresCorrectos(validadoresSegundoPaso)
+            }
+        }
 
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
@@ -265,8 +546,14 @@ $(document).ready(function () {
     // submit
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
-
-
+        var enviar = validadoresCorrectos(validadoresTercerPaso);
+        
+        if (enviar){
+            $(this).attr("type", "submit");
+        }
+        else {
+            $(this).attr("type", "button");
+        }
 
         parent_fieldset.find('input[type="text"]').each(function () {
             // if (($(this).val() == "") && ($(this).attr('required'))) {

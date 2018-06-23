@@ -121,7 +121,7 @@ db.define_table(
           requires=IS_NOT_EMPTY(), label=T('Cargo'),error_message='Por favor introduzca un valor'),
 
     Field('f_ci',             'string',
-          requires=IS_MATCH('^\d+', error_message='Número de cedula inválido.'),
+          requires=IS_MATCH('^[VEP]-\d{6,8}', error_message='Número de cedula inválido.'),
            label=T('Cédula')),
     Field('f_telefono',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Teléfono') ,error_message='Por favor introduzca un valor'),
     Field('f_celular',       'string', requires=IS_MATCH('\d{0,4}-?\d*'), label=T('Celular') ,error_message='Por favor introduzca un valor'),
@@ -135,7 +135,7 @@ db.define_table(
            label=T('Correo Electrónico')),
     Field('f_email_alt',          'string',
           requires=IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'),
-           label=T('Correo Electrónico')),
+           label=T('Correo Electrónico Alternativo')),
     Field('f_direccion',          'string',
           requires=IS_NOT_EMPTY(), label=T('Direccion') ,error_message='Por favor introduzca un valor'),
     Field('f_ubicacion',          'string',
@@ -182,9 +182,6 @@ db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.i
 #
 #######################################################################################################################
 
-# import pdb
-# pdb.set_trace()
-
 # Tabla de Espacios Fisicos, incluira el nombre, la direccion de este y bajo que dependencia esta adscrito
 db.define_table(
     'espacios_fisicos',
@@ -198,8 +195,8 @@ db.define_table(
     Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
     
     Field('dependencia', 'reference dependencias',
-        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')), 
-        migrate=True)
+        requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
+
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'
