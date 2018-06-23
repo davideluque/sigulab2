@@ -992,9 +992,8 @@ def envases():
 
     # Listas de espacios físicos de los cuáles el usuario logueado es responsable
     espacios_fisicos_adscritos = list(db(
-        (db.t_Personal.id == user_id) &
-        (db.dependencias.id == db.t_Personal.f_dependencia) &
-        (db.espacios_fisicos.dependencia == db.dependencias.id)
+        (db.espacios_fisicos.dependencia == db.dependencias.id) &
+        (db.dependencias.id_jefe_dependencia == user_id)
     ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
 
     unidades_de_medida = list(db(db.t_Unidad_de_medida).select(db.t_Unidad_de_medida.ALL))
@@ -1511,8 +1510,6 @@ def inventarios_desechos():
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
             inventario = list(db(
-                (db.dependencias.id == dep_id) & 
-                (db.espacios_fisicos.dependencia == dep_id) & 
                 (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
            # __get_inventario_dep(dep_id)
             print inventario
