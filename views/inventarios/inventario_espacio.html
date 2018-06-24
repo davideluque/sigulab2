@@ -197,10 +197,8 @@
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
   
-
-                          
                           <div class="form-group">
-                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
@@ -210,16 +208,24 @@
                               <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
 
-  
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" id="otro_material" placeholder="Material*" required>
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                          </div>
   
                           <div class="form-group">
-                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" required>
+                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
                                 <option value="{{=color}}">{{=color}}</option>
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" id="otro_color" placeholder="Color*" required>
+                            <div class="field-error"> <p id="error-color"> </p> </div>
                           </div>
 
                           <label>Dimensiones</label>
@@ -419,6 +425,37 @@
 del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
+
+  // Funcion para agregar otro material
+  function agregar_otro_mat(){
+    var material = document.getElementById("material")
+    var otro_material = document.getElementById("otro_material")
+    if ( material.value === "Otro" ){
+      material.removeAttribute("name");
+      otro_material.setAttribute("name","material");
+      otro_material.type =  "text";
+    }else{
+      otro_material.removeAttribute("name");
+      otro_material.type = "hidden";
+      material.setAttribute("name","material");
+    }
+  }
+
+  // Funcion para agregar otro color
+  function agregar_otro_color(){
+    var color = document.getElementById("color")
+    var otro_color = document.getElementById("otro_color")
+
+    if ( color.value === "Otro color" ){
+      color.removeAttribute("name");
+      otro_color.setAttribute("name","color");
+      otro_color.type =  "text";
+    }else{
+      otro_color.removeAttribute("name");
+      otro_color.type = "hidden";
+      color.setAttribute("name","color");
+    }
+  }
 
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){

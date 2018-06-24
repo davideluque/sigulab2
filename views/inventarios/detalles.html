@@ -148,7 +148,7 @@
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 <!--Boton para ocultar el bien mueble-->
@@ -409,7 +409,7 @@
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">Características del Bien</h4>                
-                      <label>Campos marcados con * son obligatorios. {{=bien['bm_nombre']}} </label>
+                      <label>Campos marcados con * son obligatorios.</label>
 
 
                         <div class="form-group" tag="Formato:">
@@ -479,35 +479,43 @@
                         <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
-                              <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
-                                    {{if bien['bm_material']==material:}}
-                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
-                                    {{else:}}
-                                        <option value="{{=material}}">{{=material}}</option>
-                                    {{pass}}
+                                    <option value="{{=material}}">{{=material}}</option>
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
 
-  
+                        <div class="form-group">
+                            {{ if bien['bm_material'] in material_pred: }}
+                                <input type="hidden" class="form-control" id="otro_material" placeholder="Material*" required>
+                            {{ else: }}
+                                <input type="text" class="form-control" id="otro_material" value="{{=bien['bm_material']}}" placeholder="Material*" required>
+                            {{ pass }}
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+
                           <div class="form-group">
-                              <select class="form-control" type="select" value="{{=bien['bm_color']}}" id="color" name="color" placeholder="Color" required>
+                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
-                                    {{if bien['bm_color']==color:}}
-                                        <option value="{{=color}}" selected="selected">{{=color}}</option>
-                                    {{else:}}
-                                        <option value="{{=color}}">{{=color}}</option>
-                                    {{pass}}
-                                
+                                    <option value="{{=color}}">{{=color}}</option>                                
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
                           </div>
+
+                        <div class="form-group">
+                            {{ if bien['bm_color'] in color_list: }}
+                                <input type="hidden" class="form-control" id="otro_color" placeholder="Color*" required>
+                            {{ else: }}
+                                <input type="text" class="form-control" value="{{=bien['bm_color']}}" id="otro_color" placeholder="Color*" required>
+                            {{ pass }}
+                            <div class="field-error"> <p id="error-color"> </p> </div>
+                        </div>
 
                           <label>Dimensiones</label>
 
@@ -800,6 +808,59 @@
 
 
 <script type="text/javascript">
+
+    // Funcion para seleccionar valores de los select
+    function select_values(){
+        // selecciono valor del select de materiales
+        var material = document.getElementById("material");
+        var value = "{{=bien['bm_material']}}"
+        var material_bool = "{{=bien['bm_material'] in material_pred}}"
+        if ( material_bool == "True"){
+            material.value = value;
+        }else{
+            material.value = "Otro"
+        }
+        //selecciono el valor del select de colores
+        var material = document.getElementById("color");
+        var value = "{{=bien['bm_color']}}"
+        var color_bool = "{{=bien['bm_color'] in color_list}}"
+        if ( color_bool == "True"){
+            color.value = value;
+        }else{
+            color.value = "Otro color"
+        }
+    }
+
+    // Funcion para agregar otro material
+    function agregar_otro_mat(){
+        var material = document.getElementById("material")
+        var otro_material = document.getElementById("otro_material")
+        if ( material.value === "Otro" ){
+        material.removeAttribute("name");
+        otro_material.setAttribute("name","material");
+        otro_material.type =  "text";
+        }else{
+        otro_material.removeAttribute("name");
+        otro_material.type = "hidden";
+        material.setAttribute("name","material");
+        }
+    }
+
+    // Funcion para agregar otro color
+    function agregar_otro_color(){
+        var color = document.getElementById("color")
+        var otro_color = document.getElementById("otro_color")
+
+        if ( color.value === "Otro color" ){
+        color.removeAttribute("name");
+        otro_color.setAttribute("name","color");
+        otro_color.type =  "text";
+        }else{
+        otro_color.removeAttribute("name");
+        otro_color.type = "hidden";
+        color.setAttribute("name","color");
+        }
+    }
 
     // Funcion para mostrar campos dependendiendo de la categoria
     function elegir_campos(){
