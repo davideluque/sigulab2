@@ -813,20 +813,26 @@
     function select_values(){
         // selecciono valor del select de materiales
         var material = document.getElementById("material");
+        var otro_material = document.getElementById("otro_material")
         var value = "{{=bien['bm_material']}}"
         var material_bool = "{{=bien['bm_material'] in material_pred}}"
         if ( material_bool == "True"){
             material.value = value;
         }else{
+            material.removeAttribute("name");
+            otro_material.setAttribute("name","material");
             material.value = "Otro"
         }
         //selecciono el valor del select de colores
         var material = document.getElementById("color");
+        var otro_color = document.getElementById("otro_color")
         var value = "{{=bien['bm_color']}}"
         var color_bool = "{{=bien['bm_color'] in color_list}}"
         if ( color_bool == "True"){
             color.value = value;
         }else{
+            color.removeAttribute("name");
+            otro_color.setAttribute("name","color");
             color.value = "Otro color"
         }
     }
