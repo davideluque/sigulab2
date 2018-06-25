@@ -477,25 +477,25 @@
               <!-- Campo de responsable de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Revisión de contenidos</h5>
-                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" required />
+                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" value="{{=doc.rev_contenido_realizado_por}}" required />
               </div> 
 
               <!-- Campo de fecha de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Fecha de revisión de contenidos</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" required/> 
+                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" value="{{=doc.fecha_rev_contenido}}" required/> 
               </div> 
 
               <!-- Campo de responsable de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Revisión de especificaciones</h5>
-                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" required /> 
+                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" value="{{=doc.rev_especficaciones_doc_realizado_por}}" required /> 
               </div> 
 
               <!-- Campo de fecha de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Fecha de revisión de especificaciones</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" required/> 
+                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" value="{{=doc.fecha_rev_especificaciones_doc}}" required/> 
               </div> 
 
 
@@ -541,7 +541,7 @@
                 <!-- Campo de responsable de aprobación-->
                 <div class="form-group">
                   <h5>Responsable de aprobación</h5>
-                  <input disabled='' type="text" class="input" name="aprobado" id="aprobado" placeholder="Aprobado Por:" /> 
+                  <input disabled='' type="text" class="input" name="aprobado_por" id="aprobado_por" placeholder="Aprobado Por:" /> 
                 </div>
 
                 <!-- Campo de fecha de aprobación -->
@@ -754,7 +754,7 @@ function estatus(){
          jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
       }else if($('.form-group').data('atributo')=='Revisado'){
-        jQuery('#aprobado').removeAttr('disabled');
+        jQuery('#aprobado_por').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');

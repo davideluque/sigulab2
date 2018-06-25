@@ -390,7 +390,7 @@ def ficha():
        		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo)
 	elif(request.post_vars.aprobado=="aprobado"):
 		print("aprobado")
-		documento.update(estatus="Revisado",
+		documento.update(estatus="Aprobado",
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
 			fecha_prox_rev= request.post_vars.fecha_prox_rev,
@@ -400,7 +400,7 @@ def ficha():
        		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
        		rev_por_consejo_asesor = request.post_vars.revision_consejo,
        		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
-       		aprobado_por = request.post_vars.aprobado,
+       		aprobado_por = request.post_vars.aprobado_por,
         	fecha_aprob = request.post_vars.fechaAprobacion,
         	cod_aprob = request.post_vars.cod_registro,
         	cod_control_cambio = request.post_vars.cod_controlCambios,
