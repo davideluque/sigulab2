@@ -55,116 +55,9 @@
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
-<!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
+<div class="container titulo">
 	<h3 class="dep-titulo">SOLICITUDES DE VALIDACIÓN</h3>
-<!-- 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
-		{{ dep_padre_nombre = 'ULAB'}}
-	{{ pass }}
-	{{if es_tecnico:}} -->
-		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
-		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
-		debe poder regresar al nivel superior de la jerarquia -->
-		<!-- {{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
-				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
-		</div>
-		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		<div class="col-xs-2"> </div> -->
-		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
-<!-- 		{{else:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		{{pass}}
-
-	{{else:}} -->
-		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
-		siguiente nivel superior de jerarquia -->
-		<!-- {{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno"> -->
-				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-				en el controlador-->
-				<!--{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('validaciones')}}">
-					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
-	    		</a>
-	    		{{else:}}
-    			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
-				</a>
-	    		{{pass}}
-		</div>
-		<div class="col-xs-8">
-			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		<div class="col-xs-2"> </div> -->
-		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
-		el nombre de la dependecia a la que pertenece el usuario -->
-		<!-- {{else:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			{{ if dep_nombre == 'DIRECCIÓN': }}
-				<h3 class="dep-titulo"> ULAB</h3>
-			{{ else: }}
-				<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-			{{ pass }}
-		</div>
-		{{pass}}
-	{{pass}}
-	</div> -->
-
-	<!-- 
-		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
-		sera utilizada en lugar de la variable dependencias 
-	-->
-	<!-- <div class="container">
-		<div id="fila1" class="row">
-		</div>
-		{{ if espacios: }}
-			{{ title = "Espacios Físicos" }}
-			{{dependencias = espacios}}
-		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
-			{{ title = "Dependencias" }}
-		{{else: }}
-			{{ title = "Secciones" }}
-		{{ pass }}
-		{{ if len(dependencias) > 0: }}
-			<button onclick="show_seccion()">
-				{{=title}}
-				<span class="caret"></span>
-			</button>
-		{{ pass }}
-		{{ if espacios: }}
-			<div class="grid-container-ef" id="secciones" style="display: none">
-		{{ else: }}
-			<div class="grid-container" id="secciones" style="display: none">
-		{{ pass }}	
-			{{ for espacio in dependencias: }}
-			<div class="grid-item" onclick="redirect('{{=URL('validaciones',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{ if espacios: }}
-					{{ =espacio.codigo }}
-				{{ else: }}
-					{{=espacio.nombre}}
-				{{ pass }}
-			</div>
-			{{ pass }}
-		</div>
-	</div> -->
-	
-
-<!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
-
+</div>
 <!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
 
 <div class="container">
@@ -298,47 +191,47 @@
   }
 </script>
  
- <script language="javascript">
-
-		var table = $('#datatable').DataTable({
-		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-		  //dom: 'Bfrtip',
-		  language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-		  },
-		 initComplete: function(){
-			var api = this.api();
-	  
-			new $.fn.dataTable.Buttons(api, {
-			  buttons: [
-	  
-				  {
-					  extend: 'collection',
-					  text: '<i class="fa fa-save"></i>',
-					  buttons: [
-						  { extend:'copy', text: 'Copiar' } ,
-						  'excel',
-						  'csv',
-						  'pdf'
-					  ]
-				  },
-				  { extend:'print', text: '<i class="fa fa-print"></i>'}
-			  ]
-			});
-			$('#botonModal').addClass('pull-left')
-			$('#filtrar').addClass('pull-left');
-			
-			$('.dataTables_filter').appendTo('#buttons');
-	  
-			api.buttons().container().appendTo('#buttons');
-			$('#buttons').append('<br><br>');
-			$('.dataTables_info').addClass('pull-right');
-			
-			$('.dataTables_filter').addClass('pull-left');
-	  
-			
-		 }
+<script language="javascript">
+  
+	var table = $('#datatable').DataTable({
+	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  //dom: 'Bfrtip',
+	  language: {
+		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  },
+	 initComplete: function(){
+		var api = this.api();
+  
+		new $.fn.dataTable.Buttons(api, {
+		  buttons: [
+  
+			  {
+				  extend: 'collection',
+				  text: '<i class="fas fa-floppy-o"></i>',
+				  buttons: [
+					  { extend:'copy', text: 'Copiar' } ,
+					  'excel',
+					  'csv',
+					  'pdf'
+				  ]
+			  },
+			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+		  ]
 		});
-	  
-	  </script>
+		$('#botonModal').addClass('pull-left')
+		$('#filtrar').addClass('pull-left');
+		$('#espacioBuscar').addClass('pull-left');
+  
+  
+		$('.dataTables_filter').appendTo('#buttons');
+  
+		api.buttons().container().appendTo('#buttons');
+		$('.dt-buttons').append($('#boton-retorno'));
+		$('#buttons').append('<br><br>');
+		$('.dataTables_info').addClass('pull-right');
+		
+		$('.dataTables_filter').addClass('pull-left');
+	 }
+	});
+</script>
 {{end}}
