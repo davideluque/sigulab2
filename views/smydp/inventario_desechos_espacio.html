@@ -101,7 +101,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post" onsubmit_="return validar_campos()">
+                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
                   <!-- Primer Paso -->
                   <fieldset class="formField">
@@ -124,14 +124,14 @@
                           </div>
                           <div class="form-group">
                             <label for="cantidad">Cantidad de desecho generado*:</label>
-                            <input class="form-control" type="text" name="cantidad" required placeholder="150"/>
+                            <input class="form-control" type="text" name="cantidad" id="cantidad" required placeholder="150"/>
                             <div class="field-error">
                               <p id="error-cantidad"> </p>
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="concentracion">Concentración del desecho generado*:</label>
-                            <input class="form-control" type="text" name="concentracion" required placeholder="Ej.: 90" />
+                            <input class="form-control" type="text" name="concentracion" id="concentracion" required placeholder="Ej.: 90" />
                             <div class="field-error">
                               <p id="error-concentracion"> </p>
                             </div>
@@ -180,60 +180,58 @@
 <!-- Fin Modal Agregar Servicio -->
 
 <script type="text/javascript">
+
   // Valida los campos de la forma en el modal "addsustancia"
   function validar_campos(){
 
     // Buscando divs para ingresar mensajes de error
-    var error_total = document.getElementById("error-total");
-    var error_excedente = document.getElementById("error-excedente");
+    var error_envase = document.getElementById("error-envase");
+    var error_cantidad = document.getElementById("error-cantidad");
+    var error_concentracion = document.getElementById("error-concentracion");
+    var error_peligrosidad = document.getElementById("error-peligrosidad");
+    var error_tratamiento = document.getElementById("error-tratamiento");
 
     // Limpiando los mensajes anteriores de validadores
-    if (error_total.innerText != ''){
-      error_total.innerText = '';
+    if (error_envase.innerText != ''){
+      error_envase.innerText = '';
     }
-    if (error_excedente.innerText != ''){
-      error_excedente.innerText = '';
+    if (error_cantidad.innerText != ''){
+      error_cantidad.innerText = '';
+    }
+    if (error_concentracion.innerText != '') {
+      error_concentracion.innerText = '';
+    }
+    if (error_peligrosidad.innerText != '') {
+      error_peligrosidad.innerText = '';
+    }
+    if (error_tratamiento.innerText != '') {
+      error_tratamiento.innerText = '';
     }
      
+
+
     // Buscando los valores ingresados por el usuario en cada campo
-    var total = document.forms['formularioCarga']['total'].value;
-    var excedente = document.forms['formularioCarga']['excedente'].value;
+    var envase = document.forms['formularioCarga']['envase'].value;
+    var cantidad = document.forms['formularioCarga']['cantidad'].value;
+    var concentracion = document.forms['formularioCarga']['concentracion'].value;
+    var peligrosidad = document.forms['formularioCarga']['peligrosidad'].value;
+    var tratamiento = document.forms['formularioCarga']['tratamiento'].value;
+    
 
     // Mensajes de error
-    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
-    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
-    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
-    var mensaje_error_excedente = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+    var mensaje_error_envase = "Por favor ingrese la identificación de un envase";
+    var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
+    var mensaje_error_concentracion = "Por favor ingrese un valor numérico no negativo en el rango entre 1 y 100.";
+    var mensaje_error_peligrosidad = "Por favor seleccione al menos una peligrosidad de la lista. Puede seleccionar múltiples opciones haciendo click mientras mantiene presionada la tecla Crtl.";
+    var mensaje_error_tratamiento = "Por favor ingrese una opción de tratamiento para el desecho.";
 
-    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
-    if (!is_number(total)) {
-      error_total.innerText = mensaje_error_tipo;
+    if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
+      error_cantidad.innerText = mensaje_error_cantidad;
       return false;
     }
     
-    if (is_negative(total)) {
-      error_total.innerText = mensaje_error_negativo;
-      return false;
-    }
-
-    if (is_zero(total)) {
-      error_total.innerText = mensaje_error_nulo;
-      return false;
-    }
-
-    /* Validando el campo excedente */
-    if (!is_number(excedente)) {
-      error_excedente.innerText = mensaje_error_tipo;
-      return false;
-    }
-    
-    if (is_negative(excedente)) {
-      error_excedente.innerText = mensaje_error_negativo;
-      return false;
-    }
-    // La cantidad de sustancia como excedente no puede ser mayor al total
-    if (excedente > total) {
-      error_excedente.innerText = mensaje_error_excedente;
+    if (!is_number(concentracion) || is_negative(concentracion) || is_zero(concentracion)) {
+      error_concentracion.innerText = mensaje_error_concentracion;
       return false;
     }
 
