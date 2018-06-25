@@ -26,6 +26,14 @@
 	color:#fff;
 }
 
+.titulo-modal-desecho{
+	color: white !important;
+	padding-left: 12px;
+    padding-top: 12px;
+	text-align: left;
+}
+
+
 h3{
     font-size: 2em;
 }       
