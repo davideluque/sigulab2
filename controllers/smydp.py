@@ -1444,12 +1444,31 @@ def inventarios_desechos():
                 (db.espacios_fisicos.dependencia == db.dependencias.id) & 
                 (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
 
-                desechos = list(db(db.t_inventario_desechos.id > 0).select(db.t_inventario_desechos.ALL))
+                desechos = list(db(
+                    (db.espacios_fisicos.id == espacio_id) &
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.composicion, 
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.responsable,
+                    db.t_inventario_desechos.unidad_medida,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |                 
+                     db.t_inventario_desechos.composicion | 
+                     db.t_inventario_desechos.responsable |
+                    db.t_inventario_desechos.unidad_medida
+                ))
+
+                #print desechos
 
                 envases = list(db(db.t_envases.espacio_fisico == espacio_id).select())
 
-                # Si se esta agregando una nueva sustancia, se registra en la DB
+                # Si se esta agregando un nuevo desecho, se registra en la DB
                 if request.vars.envase:
+
+                    #Se busca la información del envase en la DB
                     envase = list(db(db.t_envases.id == request.vars.envase).select())
 
                     __agregar_desecho(envase[0],
