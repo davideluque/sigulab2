@@ -45,7 +45,7 @@
 		height: 590px !important;
 	}
 
-	#nuevaSustancia{
+	#nuevaSustancia, #nuevaCategoria{
 		text-align: left;
 		padding-top: 12px;
 		color: white;
@@ -254,4 +254,10 @@
 		text-align: left !important;
 	}
 
+}
+
+#nuevaSustancia, #nuevaCategoria{
+		text-align: left;
+		padding-top: 12px;
+		color: white;
 }

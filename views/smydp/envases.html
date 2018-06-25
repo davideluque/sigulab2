@@ -1,0 +1,727 @@
+{{extend 'layout.html'}} 
+    {{block head}}
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_contenedores_desechos.css')}}"> 
+        <!-- DataTables -->
+        <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+        <!-- Estilos de modales y listados -->
+        <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}">
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">
+        <script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>
+        <link rel="stylesheet" href="{{=URL('static', 'css/smydp_categorias_desechos.css')}}">
+    {{end}} 
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+    <div class="breadcrumb">
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">Desechos peligrosos</a>
+        <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">Inventario de Contenedores</a>
+    </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación -->
+
+
+{{if ('edit' in request.args) or ('view' in request.args):}}
+    {{cont = ''}}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+                <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+            </div>
+        </div>
+        <div class="row">
+            <div id="columnBotonAgregar">
+                <div class="col-lg-12 text-right">
+                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor">Editar Contenedor</button>
+                </div>
+            </div>
+        </div>
+        <div class="row contenedor-filas-detalle-envase">
+             {{for contenedor in contenedores:}}
+                {{if contenedor.id == int(request.args[1]):}}
+                    {{cont = contenedor}}
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Identificación:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.identificacion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Capacidad:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Forma:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.forma}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Material:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.material}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Tipo de boca:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.tipo_boca}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Descripción:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.descripcion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Composición:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.composicion}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Espacio físico:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.espacio_fisico.codigo}}</span>
+                        </div>
+                    </div>
+                    <div class="row fila-detalle-envase">
+                        <div class="col-sm-5 ">
+                            <label for="">Categoría de desecho:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{=contenedor.categoria.categoria}}</span>
+                        </div>
+                    </div>
+                {{pass}}
+            {{pass}}
+        </div>
+    </div>
+    <!-- Modal editar envase -->
+    <div class="modal fade" id="editContenedor" role="dialog">
+        <div class="modal-dialog modal-md">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+    
+                <!-- Modal Header -->
+                <div class="modal-header addHeader">
+                    <div class="row addRow" id="rowHeader">
+                        <div class="col-sm-1" id="col1Header">
+                            <div class="container" id="plus">
+                                <h1 id="agregar">+</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-10" id="col11Header">
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Editar contenedor
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Header -->
+    
+                <!-- Modal Body -->
+                <div class="modal-body addBody">
+                    <div class="row addRow">
+                        <div class="col-md-12 form-box">
+                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                                <fieldset class="formField">
+                                    <div class="form-bottom">
+                                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                        <div class="col-sm-1 col1Body"> </div>
+                                        <!-- Aqui va la informacion -->
+                                        <div class="col-sm-11 col11Body">
+                                            <h4 class="titulosForm">Datos de ingreso</h4>
+                                            <label>Campos marcados con * son obligatorios.</label>
+                                            
+                                            <div class="form-group">
+                                                <input type="hidden" class="form-control" name="id_envase" id="id_envase" value='{{=cont.id}}'>
+                                                <input type="hidden" class="form-control" name="borrar_envase" id="borrar_envase" value="False">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="identificacion" id="identificacion" placeholder="Identificación del contenedor*" value='{{=cont.identificacion}}'>
+                                                <div class="field-error">
+                                                    <p id="error-identificacion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase*" value='{{=cont.capacidad}}'>
+                                                <div class="field-error">
+                                                    <p id="error-capacidad"> </p>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="unidad_medida">Unidad de medida*</label>
+                                                <br>
+                                                <select class="select-envases" name="unidad_medida" id="unidad_medida" placeholder="Unidad de medida*" value='{{=cont.unidad_medida.id}}'>
+                                                    {{for unidad in unidades_de_medida:}}
+                                                        {{if unidad.id == cont.unidad_medida.id:}}
+                                                            <option selected value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                        {{pass}}
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-editar-unidad-medida"> </p>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="forma">Forma*</label>
+                                                <br>
+                                                <select class="select-envases" name="forma" id="forma" value='{{=cont.forma}}'>
+                                                    {{for forma in formas:}}
+                                                        {{if forma == cont.forma:}}
+                                                            <option selected value="{{=forma}}">{{=forma}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=forma}}">{{=forma}}</option>
+                                                        {{pass}}
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-forma"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="material">Material*</label>
+                                                <br>
+                                                <select class="select-envases" name="material" id="material" value='{{=cont.material}}'>
+                                                    {{for material in materiales:}}
+                                                        {{if material == cont.material:}}
+                                                            <option selected value="{{=material}}">{{=material}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=material}}">{{=material}}</option>
+                                                        {{pass}}                                                        
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-material"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tipo_boca">Tipo de boca*</label>
+                                                <br>
+                                                <select class="select-envases" name="tipo_boca" id="tipo_boca" value='{{=cont.tipo_boca}}'>
+                                                    {{for tipo_boca in tipos_de_boca:}}
+                                                        {{if tipo_boca == cont.tipo_boca:}}
+                                                            <option selected value="{{=tipo_boca}}">{{=tipo_boca}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=tipo_boca}}">{{=tipo_boca}}</option>    
+                                                        {{pass}}                                                    
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-tipo-boca"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción" value='{{=cont.descripcion}}'>
+                                                <div class="field-error">
+                                                    <p id="error-descripcion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="composicion" id="composicion" placeholder="Composición del desecho peligroso: mezcla de X + Y" value='{{=cont.composicion}}'>
+                                                <div class="field-error">
+                                                    <p id="error-composicion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="espacio_fisico">Espacio físico*</label>
+                                                <br>
+                                                <select class="select-envases" name="espacio_fisico" id="espacio_fisico" value='{{=cont.espacio_fisico.id}}'>
+                                                    {{for espacio_fisico in espacios_fisicos_adscritos:}}
+                                                        {{if espacio_fisico.id == cont.espacio_fisico.id:}}
+                                                            <option selected value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>                                                        
+                                                        {{pass}}
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-espacio-fisico"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="categoria">Categoría de desecho*</label>
+                                                <br>
+                                                <select class="select-envases" name="categoria" id="categoria" value='{{=cont.categoria.id}}'>
+                                                    {{for categoria in categorias_de_desecho:}}
+                                                        {{if categoria.id == cont.categoria.id:}}
+                                                            <option selected value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                        {{else:}}
+                                                            <option value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                        {{pass}}                                                        
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-categoria"> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row modal-envases-footer">
+                                        <div class="col-sm-6 text-center">
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit"><li class="fa-plus-circle"/></button>
+                                        </div>
+                                        <div class="col-sm-6 text-center">
+                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar contenedor</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Body-->
+            </div>
+        </div>
+    </div>
+
+
+{{elif ('new' in request.args):}}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">NUEVO CONTENEDOR</h3>
+                <img class="iconos" src="{{=URL('static', 'images/nuevocontenedor.png')}}">
+            </div>
+        </div>
+    </div>
+{{else:}}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="inicio-titulo">GESTIÓN DE CONTENEDORES - ULAB</h3>
+                <img class="iconos" src="{{=URL('static', 'images/listadocontenedores.png')}}">
+            </div>
+        </div>
+        
+        <!-- Inicio Listado de contenedores -->
+        <div class="container">
+            <div class="row">
+                <div id="buttons" class="text-right">
+                    <!-- Agregar contenedor -->
+                    <button type="button" id="botonAgregar" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addContenedor">
+                        <li class="fa fa-plus-circle" />
+                    </button>
+                    <!-- Filtrado -->
+                    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
+                        <i class="fa fa-filter"></i>
+                    </button>
+                    <!-- Filtrado -->
+                </div>
+                <br>
+        
+                <div class="table-responsive no-padding no-margin">
+                    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                        <thead>
+                            <tr id="titulosListado" style="text-align: left">
+                                <th class="camposTabla linksNombres">Identificación</th>
+                                <th class="camposTabla linksNombres">Composición</th>
+                                <th class="camposTabla linksNombres">Categoría</th>
+                                <th class="camposTabla linksNombres">Capacidad</th>
+                            </tr>
+                        </thead>
+        
+                        <tbody>
+                            {{for contenedor in contenedores:}}
+                            <tr>
+                                <td class="camposTabla" style="text-align: left">
+                                    <a href={{=URL('..', 'sigulab2', 'smydp/envases', args=['view', contenedor.id])}}>
+                                        {{=contenedor.identificacion}}
+                                    </a>
+                                </td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}}{{=contenedor.unidad_medida}}</td>
+                            </tr>
+                            {{pass}}
+                        </tbody>
+        
+                        <tfoot id="collapseFiltros">
+                            <tr>
+                                <th class="camposTabla linksNombres">Identificación</th>
+                                <th class="camposTabla linksNombres">Composición</th>
+                                <th class="camposTabla linksNombres">Categoría</th>
+                                <th class="camposTabla linksNombres">Capacidad</th>
+                            </tr>
+                        </tfoot>
+        
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Fin Listado de contenedores -->
+    </div>
+
+    <!-- Modal añadir envase -->
+    <div class="modal fade" id="addContenedor" role="dialog">
+        <div class="modal-dialog modal-md">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+    
+                <!-- Modal Header -->
+                <div class="modal-header addHeader">
+                    <div class="row addRow" id="rowHeader">
+                        <div class="col-sm-1" id="col1Header">
+                            <div class="container" id="plus">
+                                <h1 id="agregar">+</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-10" id="col11Header">
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Nuevo contenedor
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Header -->
+    
+                <!-- Modal Body -->
+                <div class="modal-body addBody">
+                    <div class="row addRow">
+                        <div class="col-md-12 form-box">
+                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                                <fieldset class="formField">
+                                    <div class="form-bottom">
+                                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                        <div class="col-sm-1 col1Body"> </div>
+                                        <!-- Aqui va la informacion -->
+                                        <div class="col-sm-11 col11Body">
+                                            <h4 class="titulosForm">Datos de ingreso</h4>
+                                            <label>Campos marcados con * son obligatorios.</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="identificacion" id="identificacion" placeholder="Identificación del contenedor*">
+                                                <div class="field-error">
+                                                    <p id="error-identificacion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase* (Ej: 2000)">
+                                                <input type="hidden" class="form-control" name="id_envase" id="id_envase">
+                                                <input type="hidden" class="form-control" name="borrar_envase" id="borrar_envase" value="False">
+                                                <div class="field-error">
+                                                    <p id="error-capacidad"> </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="unidad_medida">Unidad de medida*</label>
+                                                <br>
+                                                <select class="select-envases" name="unidad_medida" id="unidad_medida" placeholder="Unidad de medida*">
+                                                    {{for unidad in unidades_de_medida:}}
+                                                        <option value="{{=unidad.id}}">{{=unidad.f_abreviatura}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-unidad-medida"> </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="forma">Forma*</label>
+                                                <br>
+                                                <select class="select-envases" name="forma" id="forma">
+                                                    {{for forma in formas:}}
+                                                        <option value="{{=forma}}">{{=forma}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-forma"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="material">Material*</label>
+                                                <br>
+                                                <select class="select-envases" name="material" id="material">
+                                                    {{for material in materiales:}}
+                                                    <option value="{{=material}}">{{=material}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-material"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tipo_boca">Tipo de boca*</label>
+                                                <br>
+                                                <select class="select-envases" name="tipo_boca" id="tipo_boca">
+                                                    {{for tipo_boca in tipos_de_boca:}}
+                                                    <option value="{{=tipo_boca}}">{{=tipo_boca}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-tipo-boca"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción">
+                                                <div class="field-error">
+                                                    <p id="error-descripcion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="composicion" id="composicion" placeholder="Composición del desecho peligroso: mezcla de X + Y">
+                                                <div class="field-error">
+                                                    <p id="error-composicion"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="espacio_fisico">Espacio físico*</label>
+                                                <br>
+                                                <select class="select-envases" name="espacio_fisico" id="espacio_fisico">
+                                                    {{for espacio_fisico in espacios_fisicos_adscritos:}}
+                                                        <option value="{{=espacio_fisico.id}}">{{=espacio_fisico.codigo}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-espacio-fisico"> </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="categoria">Categoría de desecho*</label>
+                                                <br>
+                                                <select class="select-envases" name="categoria" id="categoria">
+                                                    {{for categoria in categorias_de_desecho:}}
+                                                    <option value="{{=categoria.id}}">{{=categoria.categoria}}</option>
+                                                    {{pass}}
+                                                </select>
+                                                <div class="field-error">
+                                                    <p id="error-categoria"> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row modal-envases-footer">
+                                        <div class="col-sm-6 text-center">
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar contenedor</button>
+                                        </div>
+                                        <div class="col-sm-6 text-center">
+                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar contenedor</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Body-->
+            </div>
+        </div>
+    </div>
+
+    {{pass}} 
+{{pass}}
+
+<script>
+    // Eliminando el breadcrumb que trae la forma SQL por defecto
+    //document.getElementsByClassName("web2py_breadcrumbs")[0].style.display = 'none';
+    // Set blue bar below INICIO text.
+    document.getElementById("smydp").className += " active";
+
+    var edit_contenedor_modal = document.getElementById("editContenedor");
+
+    function validar_campos() {
+            
+            // Buscando divs para ingresar mensajes de error
+            var error_identificacion = document.getElementById("error-identificacion");
+            var error_capacidad = document.getElementById("error-capacidad");
+            var error_unidad_medida = document.getElementById("error-unidad-medida");
+            var error_forma = document.getElementById("error-forma");
+            var error_material = document.getElementById("error-material");
+            var error_tipo_boca = document.getElementById("error-tipo-boca");
+            var error_composicion = document.getElementById("error-composicion");
+            var error_espacio_fisico = document.getElementById("error-espacio-fisico");
+            var error_categoria = document.getElementById("error-categoria");
+
+            // Limpiando los mensajes anteriores de validadores
+            if (error_identificacion.innerText != '') {
+                error_identificacion.innerText = '';
+                document.getElementById("identificacion").style.border = "3px solid #ddd";
+            }
+            if(error_capacidad.innerText != '') {
+                error_capacidad.innerText = '';
+                document.getElementById("capacidad").style.border = "3px solid #ddd";
+            }
+            if(error_composicion.innerText != '') {
+                error_composicion.innerText = '';
+                document.getElementById("composicion").style.border = "3px solid #ddd";
+            }
+            
+            // Buscando los valores ingresados por el usuario en cada campo
+            var identificacion = document.forms['formularioCarga']['identificacion'];
+            var capacidad = document.forms['formularioCarga']['capacidad'];
+            var unidad_medida = document.forms['formularioCarga']['unidad_medida'];
+            var forma = document.forms['formularioCarga']['forma'];
+            var material = document.forms['formularioCarga']['material'];
+            var tipo_boca = document.forms['formularioCarga']['tipo_boca'];
+            var descripcion = document.forms['formularioCarga']['descripcion'];
+            var composicion = document.forms['formularioCarga']['composicion'];
+            var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
+            var categoria = document.forms['formularioCarga']['categoria'];
+
+            // Mensajes de error
+            var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
+            var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
+            var mensaje_error_unidad_medida = "Por favor, ingrese una unidad de medida válida.";
+            var mensaje_error_forma = "Por favor, ingrese una forma de recipiente válida.";
+            var mensaje_error_material = "Por favor, ingrese un material válido.";
+            var mensaje_error_tipo_boca = "Por favor, ingrese un tipo de boca válido.";
+            var mensaje_error_composicion = "Por favor, ingrese una composición válida.";
+            var mensaje_error_espacio_fisico = "Por favor, ingrese un espacio físico válido.";
+            var mensaje_error_categoria = "Por favor, ingrese una categoría de desecho válida.";
+
+            if (identificacion.value === '' || identificacion.value.length === 0) {
+                error_identificacion.innerText = mensaje_error_identificacion;
+                identificacion.style.border = "1px solid red";
+                return false;
+            }
+            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value)) {
+                error_capacidad.innerText = mensaje_error_capacidad;
+                capacidad.style.border = "1px solid red";
+                return false;
+            }
+            if(composicion.value === '' || composicion.value.length === 0){
+                error_composicion.innerText = mensaje_error_composicion;
+                composicion.style.border = "1px solid red";
+                return false;
+            }
+        }
+
+        function dialogoAdvertencia() {
+                if (confirm('Está seguro de que desea eliminar el contenedor?')) {
+                    document.getElementById("borrar_envase").value = "True";
+                    return true;
+
+                } else {
+                    return false;
+                }
+            }
+
+</script> 
+
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+    var filtros = false;
+
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#datatable tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Filtro" />');
+        });
+
+        // DataTable
+        var table = $('#datatable').DataTable();
+
+        // Apply the search
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        $('#datatable tfoot tr').appendTo('#datatable thead');
+        $("#datatable thead tr").not("#titulosListado").css("display", "none");
+    });
+
+    function mostrarFiltro() {
+        if (filtros) {
+            $("#datatable thead tr").not("#titulosListado").css("display", "none");
+            filtros = false
+        }
+        else {
+            $("#datatable thead tr").not("#titulosListado").css("display", "table-row");
+            filtros = true
+        }
+
+    }
+</script>
+
+<script language="javascript">
+    var table = $('#datatable').DataTable({
+            "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
+            language: {
+                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            initComplete: function () {
+                var api = this.api();
+
+                new $.fn.dataTable.Buttons(api, {
+                    buttons: [
+                        { extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
+                    ]
+                });
+                api.buttons().container().appendTo('#buttons');
+                $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+                $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+                $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+                $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+                $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+                $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+                $('#buttons').style.textAlign = "right";
+            }
+
+        });
+        var w2p_ajax_confirm_message =
+            "{{=T('')}}";
+
+</script> 
+{{end}}

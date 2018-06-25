@@ -1,0 +1,323 @@
+{{extend 'layout.html'}} {{block head}}
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_catalogo.css')}}"> 
+
+<!-- DataTables -->
+<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+<!-- Estilos de modales y listados -->
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_categorias_desechos.css')}}">
+{{end}} {{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+    <div class="breadcrumb">
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">Desechos peligrosos</a>
+        <span class="breadcrumb-item active">Categorías de Desechos</span>
+    </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación -->
+
+<!-- Area con el título de la página-->
+<div class="container titulo">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
+            <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
+        </div>
+    </div>
+    {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
+        <div id="buttons" class="text-right">
+            <!-- Agregar categoría -->
+            <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addCategoria">
+                <li class="fa fa-plus-circle" />
+            </button>
+            <!-- Filtrado -->
+            <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
+                <i class="fa fa-filter"></i>
+            </button>
+            <!-- Filtrado -->
+        </div>
+    {{else:}}
+        <div id="buttons" class="text-right">
+            <!-- Filtrado -->
+            <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
+                <i class="fa fa-filter"></i>
+            </button>
+            <!-- Filtrado -->
+        </div>
+    {{pass}}
+</div>
+<!-- Fin del área con el título de la página-->
+
+<!-- Inicio Listado de categorías de desechos -->
+<div class="container">
+    <div class="row">
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado" style="text-align: left">
+                        <th class="camposTabla linksNombres">Categoría</th>
+                        <th class="camposTabla linksNombres">Descripción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                 {{for categoria in categorias:}} 
+                    <tr>
+                        {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
+                            <td class="camposTabla" style="text-align: left">
+                                <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
+                                    {{=categoria.categoria.upper()}}
+                                </a>
+                            </td>
+                        {{else:}}
+                            <td class="camposTabla" style="text-align: left">
+                                {{=categoria.categoria.upper()}}
+                            </td>
+                        {{pass}}
+                        <td class="camposTabla" style="text-align: left">
+                            {{=categoria.descripcion}}
+                        </td>
+                    </tr>
+                {{pass}}
+                </tbody>
+
+                <tfoot id="collapseFiltros">
+                    <tr>
+                        <th class="camposTabla linksNombres">Categoría</th>
+                        <th class="camposTabla linksNombres">Descripción</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Fin Listado de categorías de desecho -->
+
+
+<!-- Modal añadir una categoría de desecho nueva al inventario -->
+<div class="modal fade" id="addCategoria" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+                <div class="row addRow" id="rowHeader">
+                    <div class="col-sm-1" id="col1Header">
+                        <div class="container" id="plus">
+                            <h1 id="agregar">+</h1>
+                        </div>
+                    </div>
+                    <div class="col-sm-10" id="col11Header">
+                        <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Nueva Categoría
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal Header -->
+
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <div class="row addRow">
+                    <div class="col-md-12 form-box">
+                        <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                            <fieldset class="formField">
+                                <div class="form-bottom">
+                                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                    <div class="col-sm-1 col1Body"> </div>
+                                    <!-- Aqui va la informacion -->
+                                    <div class="col-sm-11 col11Body">
+                                        <h4 class="titulosForm">Datos de ingreso</h4>
+                                        <label>Campos marcados con * son obligatorios.</label>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="categoria" id="nombre-categoria" placeholder="Nombre de la categoría*">
+                                            <input type="hidden" class="form-control" name="id_categoria" id="id_categoria">
+                                            <input type="hidden" class="form-control" name="borrar_categoria" id="borrar_categoria" value="False">
+                                            <div class="field-error">
+                                                <p id="error-nombre-categoria"> </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row opciones-modal-footer">
+                                    <div class="col-sm-4 text-center">
+                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar categoría</button>
+                                    </div>
+                                    <div class="col-sm-4 text-center">
+                                        <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar categoría</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal Body-->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Set blue bar below INICIO text.
+    document.getElementById("smydp").className += " active";
+
+    // Valida los campos de la forma en el modal "addsustancia"
+    function validar_campos() {
+        
+        // Buscando divs para ingresar mensajes de error
+        var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_nombre_categoria.innerText != '') {
+            error_nombre_categoria.innerText = '';
+            nombre_categoria.style.border = "none";
+        }
+
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+
+        // Mensajes de error
+        var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+
+        if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
+            error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
+            nombre_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
+
+    function editarCategoria(categoria, descripcion, id) {
+        // Cambia el valor del botón de enviar formulario del modal de 'Agregar categoría' por 'Actualizar categoría'
+        document.getElementById('submit').innerHTML = 'Actualizar categoría';
+
+        // Cambiar el valor del títutlo del modal de creación de categoría a 'Editar categoría'
+        document.getElementById('nuevaCategoria').innerHTML = document.getElementById('nuevaCategoria').innerHTML.replace("Nueva Categoría", "Editar categoría");
+
+        //Precarga los valores de la categoría en el modal
+        document.getElementById('nombre-categoria').value = categoria;
+        document.getElementById('descripcion-categoria').value = descripcion;
+        document.getElementById('id_categoria').value = id;
+
+        //Muestra el modal
+        $("#addCategoria").modal('show');
+    }
+
+    function dialogoAdvertencia(){
+        if (confirm('Está seguro de que desea eliminar la categoría?')) {
+            document.getElementById("borrar_categoria").value = "True";
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+</script> 
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+    var filtros = false;
+  
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#datatable tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Filtro" />' );
+        } );
+     
+        // DataTable
+        var table = $('#datatable').DataTable();
+     
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+     
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+  
+        $('#datatable tfoot tr').appendTo('#datatable thead');
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+    } );
+  
+    function mostrarFiltro() {
+        if (filtros){
+          $("#datatable thead tr").not("#titulosListado").css("display","none");
+          filtros = false
+        }
+        else{
+          $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+          filtros = true
+        }
+  
+    }
+  </script>
+   
+<script language="javascript">
+    var table = $('#datatable').DataTable({
+        "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
+        language: {
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+        },
+        initComplete: function () {
+            var api = this.api();
+
+            new $.fn.dataTable.Buttons(api, {
+                buttons: [
+                    { extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
+                ]
+            });
+            api.buttons().container().appendTo('#buttons');
+            $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+            $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+            $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+            $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+            $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+            $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+            $('#buttons').style.textAlign = "right";
+        }
+
+    });
+    var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+
+</script>
+{{end}}

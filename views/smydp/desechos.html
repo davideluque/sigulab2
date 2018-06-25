@@ -1,0 +1,63 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_desechos.css')}}"> 
+{{end}}
+
+{{block center}}
+
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+  <span class="breadcrumb-item active">Desechos peligrosos</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
+
+		<div id="fila2" class="row">
+			<div class="col-sm-2">
+			</div>
+
+			<div class="col-sm-8">	
+				<!-- Link a los grupos de desechos -->
+				<div class="col-sm-4 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'categorias_desechos')}}">
+						<img class="iconos" src="{{=URL('static', 'images/checklist.png')}}">
+						<h3 class="opciones">Categorías de Desechos</h3>
+					</a>
+				</div>
+				<!-- Link al inventario de desechos -->
+				<div class="col-sm-4 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'inventarios_desechos')}}">
+						<img class="iconos" src="{{=URL('static', 'images/warehouse.png')}}">
+						<h3 class="opciones">Inventario de Desechos</h3>
+					</a>
+				</div>
+				<!-- Link al listado de contenedores -->
+				<div class="col-sm-4 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'envases')}}">
+						<img class="iconos" src="{{=URL('static', 'images/envases.png')}}">
+						<h3 class="opciones">Listado de Contenedores</h3>
+					</a>
+				</div>
+					
+				
+			  <div class="col-sm-2">
+			  </div>
+
+			</div>
+	  </div>	
+  </div>
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("smydp").className += " active";
+</script>
+{{end}}

@@ -1,0 +1,200 @@
+{{extend "layout.html"}}
+
+{{block head}}
+  
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
+  <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
+    <span class="breadcrumb-item active">Bitácora</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrumb de navegación --> 
+
+<!-- Inicio Listado -->
+<div id="inventario-dependencia" class="container">
+<div class="row">
+  <div>
+    <h3 id="titulo" class="titulos"> Bitácora</h3>
+    <!-- <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3> -->
+  </div>
+  <!-- Inicio Boton Agregar Sustancia -->
+  <div class="container" id="containerAgregar">
+      <div class="row">
+          <div class="col-sm-6"></div>
+          <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addregister">Agregar Registro</button>
+            </div>
+          </div>
+      </div>
+  </div>
+  <!-- Fin Boton Agregar Sustancia -->
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Fecha</th>
+                <th class="camposTabla linksNombres">Hora</th>
+                <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
+                <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
+                <th class="camposTabla linksNombres">Total ({{=unidad_medida.f_abreviatura}})</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          {{for registro in bitacora:}}
+            {{auth_user = registro['auth_user']}}
+            {{reg = registro['t_Bitacora']}}
+            {{usuario = registro['t_Personal']}}
+            {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
+            <tr>
+                <td class="camposTabla">{{=fecha[0]}}</td>
+                <td class="camposTabla">{{=fecha[1]}}</td>
+                <td class="camposTabla">{{=reg['descripcion']}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
+                <td class="camposTabla">{{=reg.f_cantidad_total}}</td>
+            </tr>
+          {{pass}}
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Fecha</th>
+                <th class="camposTabla linksNombres">Hora</th>
+                <th class="camposTabla linksNombres">Descripción</th>
+                <th class="camposTabla linksNombres">Ingreso</th>
+                <th class="camposTabla linksNombres">Consumo</th>
+                <th class="camposTabla linksNombres">Total</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado --> 
+
+<!-- Modal para agregar un registro a la bitacora --> 
+{{include 'smydp/bitacora_agregar.html'}}
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+ 
+<script language="javascript">
+  var table = $('#datatable').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons');  
+   }
+  });
+
+</script>
+{{end}}
+

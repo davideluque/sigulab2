@@ -1,0 +1,148 @@
+/* Estilos del inventario de sustancias */
+
+.icono_regresar {
+	width: 40px;
+}
+
+@media (max-width: @screen-xs) {
+    body{font-size: 10px;}
+}
+
+@media (max-width: @screen-sm) {
+    body{font-size: 14px;}
+}
+
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+	background-color: #337ab7;
+    border-color: #337ab7;
+    color:#fff;
+}
+
+.buttons-html5, .buttons-copy{
+    border-radius: 50%;
+	background-color: #337ab7;
+    border-color: #337ab7;
+	color:#fff;
+}
+
+h3{
+    font-size: 2em;
+}       
+
+/* Para subir el titulo y la flecha de retorno */
+.separador{
+	height: 100px;
+}
+
+.titulo{
+	padding-top: 30px;
+	padding-bottom: 30px;
+	text-align: center;
+}
+
+.inicio-titulo{
+	font-weight: bold;
+	text-transform: uppercase;
+	text-align: center;
+	color: #464646;
+	font-size: 22px;
+}
+
+.dep-titulo{
+	text-transform: uppercase;
+	text-align: center;
+	color: #464646;
+}
+
+.iconos {
+	text-align: center;
+	height: 64px;
+	width: 64px;
+}
+
+.boton-retorno{
+	text-align: center;
+	border-color: #464646;
+	padding-left: 20px;
+}
+
+.columnas {
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.dependencia{
+	padding: 50px 2px;
+	margin: 0 5px 0 5px;
+	background-color: #03A5FE;
+	color: #F0F0F0;
+	box-shadow: 10px 10px 10px #B1B1B1;
+	text-transform: uppercase;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.dependencia:hover{
+	background-color: #E1E1E1;
+	color: #606060;
+	transition-timing-function: linear;
+	transition-duration: 0.25s;
+}
+
+a[class="dependencia"]{
+	display: block;
+	height: 100%;
+	width: 100%;
+	text-decoration: none !important;
+}
+
+.opciones {
+	text-align: center;
+	color: #606060;
+}
+
+div.col-sm-9 {
+	padding: 0px auto;
+	width: 50%;
+}
+
+.form-control-static {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.control-label {
+	padding: 0px !important;
+}
+
+.form-horizontal.web2py_form {
+	width: 80%;
+	margin: 0px auto;
+}
+
+.botones-edicion {
+	margin: 15px;
+}
+
+.botones-busqueda {
+	margin: 15px 15px 15px 0px;
+}
+
+tr.w2p_odd.odd.with_id > td, tr.w2p_even.even.with_id > td {
+	text-align: center;
+}
+
+tr.w2p_odd.odd.with_id, tr.w2p_even.even.with_id {
+	border-bottom: solid 1px #CECECE;
+}
+
+.modal-title.titulo-modal-categoria{
+	color: white !important;
+	padding-left: 12px;
+	text-align: left;
+}
+
+div.opciones-modal-footer {
+	margin: 15px auto;
+}
