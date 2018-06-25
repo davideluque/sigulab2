@@ -57,15 +57,15 @@
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
-	<h3 class="dep-titulo">SOLICITUDES DE MODIFICACIÓN</h3>
-	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
+	<h3 class="dep-titulo">SOLICITUDES DE VALIDACIÓN</h3>
+<!-- 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
 		{{ dep_padre_nombre = 'ULAB'}}
 	{{ pass }}
-	{{if es_tecnico:}}
+	{{if es_tecnico:}} -->
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
-		{{if espacios or es_espacio or espacio_visitado:}}
+		<!-- {{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
 			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
@@ -76,25 +76,25 @@
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
-		<div class="col-xs-2"> </div>
+		<div class="col-xs-2"> </div> -->
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
-		{{else:}}
+<!-- 		{{else:}}
 		<div class="col-xs-12">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		{{pass}}
 
-	{{else:}}
+	{{else:}} -->
 		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
 		siguiente nivel superior de jerarquia -->
-		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
+		<!-- {{if dep_padre_id:}}
+		<div class="col-xs-2 boton-retorno"> -->
 				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
-				{{if dep_padre_id == direccion_id:}}
+				<!--{{if dep_padre_id == direccion_id:}}
 	    		<a class="boton" href="{{=URL('validaciones')}}">
 					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
 	    		</a>
@@ -108,10 +108,10 @@
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
-		<div class="col-xs-2"> </div>
+		<div class="col-xs-2"> </div> -->
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
-		{{else:}}
+		<!-- {{else:}}
 		<div class="col-xs-12">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			{{ if dep_nombre == 'DIRECCIÓN': }}
@@ -122,13 +122,13 @@
 		</div>
 		{{pass}}
 	{{pass}}
-	</div>
+	</div> -->
 
 	<!-- 
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
 	-->
-	<div class="container">
+	<!-- <div class="container">
 		<div id="fila1" class="row">
 		</div>
 		{{ if espacios: }}
@@ -160,29 +160,67 @@
 			</div>
 			{{ pass }}
 		</div>
-	</div>
+	</div> -->
 	
 
 <!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
 
-<!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
 
-	<!-- Se lista el inventario del espacio fisico visitado -->
-	{{if espacio_visitado:}}
-		{{include 'inventarios/inventario_espacio.html'}}
-	<!-- Se lista el inventario de una dependencia de apoyo -->
-	{{elif (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_seccion.html'}}
-	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
-	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
-		{{include 'inventarios/inventario_laboratorio.html'}}
-	<!-- Se lista el inventario de una seccion -->
-	{{else:}}
-		{{include 'inventarios/inventario_seccion.html'}}
-	{{pass}}
+<div class="container">
+	<div class="row">
+		<br>
+		<div id="buttons">
+		  <!-- Filtrado -->
+		  <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+		  <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
+		  <!-- Filtrado -->    
+		</div>
+		<br>
+	
+		<div class="table-responsive no-padding no-margin">
+		  <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+			<thead>
+				<tr id="titulosListado">
+					<th class="camposTabla linksNombres">Nombre</th>
+					<th class="camposTabla linksNombres">N° BM</th>
+					<th class="camposTabla linksNombres">Placa</th>
+					<th class="camposTabla linksNombres">Marca</th>
+					<th class="camposTabla linksNombres">Modelo</th>
+					<th class="camposTabla linksNombres">Serial</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+			  {{for bm in inventario:}}
+				<tr>
+					<td class="camposTabla">{{=bm['mbn_nombre']}}</td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">{{=bm['mbn_num']}}</td>
+					<td class="camposTabla">{{=bm['mbn_placa']}}</td>
+					<td class="camposTabla">{{=bm['mbn_marca']}}</td>
+					<td class="camposTabla">{{=bm['mbn_modelo']}}</td>
+					<td class="camposTabla">{{=bm['mbn_serial']}}</td>
+				</tr>
+			  {{pass}}           
+			</tbody>
+	
+			<tfoot id="collapseFiltros">
+			  <th class="camposTabla linksNombres">Nombre</th>
+			  <th class="camposTabla linksNombres">N° BM</th>
+			  <th class="camposTabla linksNombres">Placa</th>
+			  <th class="camposTabla linksNombres">Marca</th>
+			  <th class="camposTabla linksNombres">Modelo</th>
+			  <th class="camposTabla linksNombres">Serial</th>
+				</tr>
+			</tfoot>
+	
+		  </table>
+		</div>
+	</div>
+</div> 
 
-<!-- Fin de la seccion con la lista de sustancias en el inventario --> 
-
+<!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
 
 <script type="text/javascript">
 	// Funcion para que mostrar el grid de espacios fisicos
