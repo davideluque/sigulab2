@@ -8,7 +8,6 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
 	        </div>
         </div>
     </div>
@@ -19,11 +18,14 @@
 <div class="container">
 <div class="row">
   <h3> Inventario </h3>
-
-    <div id="buttons">
+    <div id="buttons" class="text-right">
+      <!-- Agregar contenedor -->
+      <button type="button" id="botonAgregar" class="btn botonesListado buttons-html5" data-toggle="modal" data-target="#adddesecho">
+        <li class="fa fa-plus"></li>
+      </button>
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->    
+      <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5"><i class="fa fa-filter"></i></button>
+      <!-- Filtrado -->
     </div>
     <br>
 
@@ -72,7 +74,7 @@
 
 
 <!-- Modal añadir una sustancia nueva al inventario -->
-  <div class="modal fade" id="addsustancia" role="dialog">
+  <div class="modal fade" id="adddesecho" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -87,7 +89,7 @@
               </div>
             </div>
             <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nuevo Grupo de Desecho
+              <h4 class="modal-title" id="nuevoDesecho">Nuevo desecho
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </h4>
             </div>
@@ -111,31 +113,42 @@
                         <h4 class="titulosForm">Datos de ingreso</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
                           <div class="form-group">
-                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                              <option value="" selected hidden >Sustancia*</option>
-                              {{for desecho in desechos:}}
-                              <option value="{{=desecho.id}}">{{=desecho.categoria}})</option>
+                            <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                            <select class="form-control" type="select" id="envase" name="envase" required>
+                              <option value="" selected hidden >Envase*</option>
+                              {{for envase in envases:}}
+                              <option value="{{=envase.id}}">{{=envase.identificacion}}</option>
                               {{pass}}
                             </select>
-                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
+                            <div class="field-error"> <p id="error-envase"> </p> </div>
                           </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="excedente" placeholder="Excedente*" required>
-                            <div class="field-error"> <p id="error-excedente"> </p> </div>
-                          </div>
-                          <div class="form-group" style="padding-bottom: 50px">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
-                              {{pass}}
+                            <label for="peligrosidad">Peligrosidad del desecho generado:</label>
+                            <select type="text" class="form-control" name="peligrosidad" id="peligrosidad" required>
+                              <option value="Sustancia Explosiva (EX)">Sustancia Explosiva (EX)</option>
+                              <option value="Sustancia Inflamable (IN)">Sustancia Inflamable (IN)</option>
+                              <option value="Sustancia Comburente (CB)">Sustancia Comburente (CB)</option>
+                              <option value="Gaso Bajo Presión (GZ)">Gaso Bajo Presión (GZ)</option>
+                              <option value="Corrosiva (CR)">Corrosiva (CR)</option>
+                              <option value="Toxicidad Aguda (TO)">Toxicidad Aguda (TO)</option>
+                              <option value="Peligro para la Salud (DA)">Peligro para la Salud (DA)</option>
+                              <option value="Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)">Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)</option>
+                              <option value="Dañino para el Medio Ambiente Acuático (EN)">Dañino para el Medio Ambiente Acuático (EN)</option>
                             </select>
+                            <div class="field-error"> <p id="error-peligrosidad"> </p> </div>
                           </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+                          <div class="form-group">
+                            <label for="tratamiento">Tipo de tratamiento del desecho generado:</label>
+                            <select type="text" class="form-control" name="tratamiento" id="tratamiento" required>
+                              <option value="Reutilizable">Reutilizable</option>
+                              <option value="Recuperable">Recuperable</option>
+                              <option value="Tratable">Tratable</option>
+                              <option value="Disposición final">Disposición final</option>
+                            </select>
+                            <div class="field-error">
+                              <p id="error-tratamiento"> </p>
+                            </div>
+                          </div>
                       </div>
                     </div>
                     <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
