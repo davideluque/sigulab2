@@ -67,11 +67,10 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 		</div>
-		<button button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button">
-			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+		<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button"
+			href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 				<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
-		</button>
+		</a>
 		<div class="col-xs-8">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -91,21 +90,19 @@
 		{{if dep_padre_id:}}
 		<div class="col-xs-2">
 		</div>
-		<button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button">
-			<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-			los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-			request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-			en el controlador-->
-			{{if dep_padre_id == direccion_id:}}
-			<a class="boton" href="{{=URL('bienes_muebles')}}">
+		<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
+		los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
+		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
+		en el controlador-->
+		{{if dep_padre_id == direccion_id:}}
+			<a id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('bienes_muebles')}}">
 				<i class="fas fa-arrow-left" style="color: black"></i>	
 			</a>
-			{{else:}}
-			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-					<i class="fas fa-arrow-left" style="color:black;"></i>	    		
+		{{else:}}
+			<a id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+				<i class="fas fa-arrow-left" style="color:black;"></i>	    		
 			</a>
-			{{pass}}
-		</button>
+		{{pass}}
 		<div class="col-xs-8">
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
