@@ -1,0 +1,291 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+	<meta charset="UTF-8">
+
+	<!-- Para los mensajes con flash -->
+  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
+ 	<!-- DataTables -->
+ 	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ 	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
+ 	
+ 	<!-- Estilos de modales y listados -->
+ 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
+ 	<!-- Web2py JS - Especialmente para AJAX -->
+ 	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+ 	<style>
+   	.row{
+     	margin-right:0px!important;
+   	}
+ 	</style>
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">Desechos Peligrosos</a>
+  <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos')}}">Inventarios</a>
+  </div>
+</nav>
+
+<!-- Fin del Breadcrumb de navegación -->
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
+	<div class="container titulo">
+	
+	{{if es_tecnico:}}
+		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
+		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
+		debe poder regresar al nivel superior de la jerarquia -->
+		{{if espacios or es_espacio or espacio_visitado:}}
+		<div class="col-xs-2 boton-retorno">
+			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+			</a>
+		</div>
+		<div class="col-xs-8">
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			{{if dep_nombre == "Alta Tensión":}}
+				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{pass}}
+		</div>
+		<div class="col-xs-2"> </div>
+		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
+		{{else:}}
+		<div class="col-xs-12">
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
+		</div>
+		{{pass}}
+
+	{{else:}}
+		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
+		siguiente nivel superior de jerarquia -->
+		{{if dep_padre_id:}}
+		<div class="col-xs-2 boton-retorno">
+			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
+				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
+				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
+				en el controlador-->
+				{{if dep_padre_id == direccion_id:}}
+	    		<a class="boton" href="{{=URL('inventarios_desechos')}}">
+		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+	    		</a>
+	    		{{else:}}
+    			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+	    		</a>
+	    		{{pass}}
+		</div>
+		<div class="col-xs-8">
+			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			{{if dep_nombre == "Alta Tensión":}}
+				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{pass}}
+		</div>
+		<div class="col-xs-2"> </div>
+		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
+		el nombre de la dependecia a la que pertenece el usuario -->
+		{{else:}}
+		<div class="col-xs-12">
+			<h3 class="inicio-titulo"> Inventario de DP - ULAB </h3>
+			<img class="iconos" src="{{=URL('static', 'images/ulab.png')}}">
+
+		</div>
+		{{pass}}
+	{{pass}}
+	</div>
+
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
+		<!-- 
+		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
+		sera utilizada en lugar de la variable dependencias 
+		-->
+		{{ if espacios: }}
+			{{dependencias = espacios}}
+			{{ n = len(dependencias) }}
+			{{ filas = n//4 if n%4 == 0 else n//4+1 }}
+			{{ k = 0 }}
+			{{ while k < filas:}}
+				<div id="fila2" class="row">
+					<div class="col-xs-3 col-sm-1"></div>
+					<div class="col-xs-6 col-sm-10">
+						<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+						<div class="col-sm-3 columnas">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].codigo}}</a>
+						</div>
+						{{ for i in range(1,4): }}
+							{{ if 4*k+i < n: }}
+								<div class="col-sm-3 columnas">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[4*k+i].codigo}}
+									</a>
+								</div>
+							{{ pass }}
+						{{ pass }}
+					</div>
+					<div class="col-xs-3 col-sm-1"></div>
+				</div>
+				{{k=k+1}}
+			{{pass}}
+		{{else:}}
+			{{ n = len(dependencias) }} 
+			{{ filas = n//4 if n%4 == 0 else n//4+1 }} 
+			{{ k = 0 }} 
+			{{ while k < filas:}} 
+				<div id="fila2" class="row">
+					<div class="col-xs-3 col-sm-1"></div>
+					<div class="col-xs-6 col-sm-10">
+					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+						<div class="col-sm-3 columnas">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
+						</div>
+						{{ for i in range(1,4): }} 
+							{{ if 4*k+i < n: }} 
+								<div class="col-sm-3 columnas">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[4*k+i].nombre}}
+									</a>
+								</div>
+							{{ pass }} 
+						{{ pass }}
+					</div>
+		  			<div class="col-xs-3 col-sm-1"></div>
+				</div>
+				{{k=k+1}} 
+			{{pass}}
+		{{pass}}
+	</div>
+
+<!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
+
+<!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
+
+	<!-- Se lista el inventario del espacio fisico visitado -->
+	{{if espacio_visitado:}} {{include 'smydp/inventario_desechos_espacio.html'}}
+	<!-- Se lista el inventario agregado de la dependencia visitada-->
+	{{else:}} {{include 'smydp/inventario_desechos_dependencia.html'}} {{pass}}
+
+<!-- Fin de la seccion con la lista de sustancias en el inventario --> 
+
+<script>
+  // Set blue bar below INICIO text.
+  document.getElementById("smydp").className += " active";
+  
+</script>
+
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+ 
+<script language="javascript">
+	var table = $('#datatable').DataTable({
+		"dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
+		language: {
+			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+		},
+		initComplete: function () {
+			var api = this.api();
+
+			new $.fn.dataTable.Buttons(api, {
+				buttons: [
+					{ extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
+				]
+			});
+			api.buttons().container().appendTo('#buttons');
+			$('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+			$('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+			$('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+			$('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+			$('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+			$('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+			$('#buttons').style.textAlign = "right";
+		}
+
+	});
+	var w2p_ajax_confirm_message =
+		"{{=T('')}}";
+
+</script>
+{{end}}

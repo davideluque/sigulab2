@@ -257,7 +257,7 @@ db.define_table(
     
     # Referencias a otras tablas
     Field('espacio', 'reference espacios_fisicos',
-          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(nombre)s', zero=None), 
+          requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), 
           label=T('Espacio Físico'), notnull=True),
     
     Field('sustancia', 'reference t_Sustancia',
@@ -268,6 +268,10 @@ db.define_table(
     # para los logs de la tabla
     auth.signature
     )
+
+db.t_Inventario._singular='Inventario'
+db.t_Inventario._plural='Inventario'
+
 
 # *!* Ver not nulls y constraints de t_Bitacora
 
@@ -351,6 +355,146 @@ db.define_table(
     Field('f_respuesta_solicitud', 'reference t_Respuesta',
           requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Respuesta.id, '%(f_tipo_respuesta)s', zero=None)), 
           label=T('Respuesta de solicitud')),
+
+    # Agrega los campos adicionales created_by, created_on, modified_by, modified_on 
+    # para los logs de la tabla
+    auth.signature
+    )
+
+
+    ## Desechos peligrosos
+
+    # Tabla de Categorías de Desechos peligrosos. Cada desecho peligroso pertenece a un cierto categoria (tipo), los cuáles
+# se definen en esta tabla. Contiene los campos: categoria de desecho, estado, peligrosidad.
+db.define_table(
+    't_categoria_desechos',
+    #Atributos;
+    Field('categoria', 'string', unique=True, notnull=True, label=T('Categoría')),
+    Field('descripcion', 'string', label=T('Descripción'))
+)
+
+
+db.t_categoria_desechos._plural = 'Categoría de Desecho'
+db.t_categoria_desechos._singular = 'Categorías de Desechos'
+
+    # Tabla de envases en donde serán almacenados los desechos peligrosos
+db.define_table(
+    't_envases',
+    #Atributos;
+    Field('identificacion', 'string', notnull=True, unique=True, requires=IS_NOT_EMPTY(), label=T('Identificación')),
+
+    Field('capacidad', 'double', requires=IS_NOT_EMPTY(), label=T('Capacidad'), notnull=True),
+
+    Field('unidad_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_abreviatura)s', zero=None), label=T('Unidad de medida'), notnull=True,
+          represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
+
+    Field('forma', 'string', requires=IS_IN_SET(['Cilíndrica', 'Cuadrada', 'Rectangular', 'Otra']), notnull=True, label=T('Forma')),
+
+    Field('material', 'string', requires=IS_IN_SET(['Plástico', 'Polietileno (HDPE)', 'Polietileno (PE)', 'Vidrio', 'Metal', 'Acero', 'Otro']), notnull=True, label=T('Material')),
+    
+    Field('tipo_boca', 'string', requires=IS_IN_SET(['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']), notnull=True, label=T('Tipo de boca')),
+
+    Field('descripcion', 'string', notnull=False, label=T('Descripción')),
+
+    Field('composicion', 'string', notnull=False, label=T('Composición')),
+
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), 
+            notnull=True, 
+            label=T('Espacio físico'),
+            represent=lambda id, r: db.espacios_fisicos[id].nombre
+            ), 
+
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), 
+            notnull=True, label=T('Categoría de Desecho'),
+            represent=lambda id, r: db.t_categoria_desechos[id].categoria
+        
+    ),
+
+
+)
+
+db.t_envases._plural = 'Envases'
+db.t_envases._singular = 'Envase'
+
+# Tabla de Desechos peligrosos. Contiene los campos: espacio_físico, cantidad, sección, responsable, categoria.
+db.define_table(
+    't_inventario_desechos',
+    #Atributos;
+    Field('categoria', 'reference t_categoria_desechos', 
+            requires=IS_IN_DB(db, db.t_categoria_desechos.id, '%(categoria)s', zero=None), notnull=True, label=T('Categoría de Desecho')),
+
+    Field('cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad'), notnull=True),
+
+    Field('unidad_medida', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True),
+
+    Field('composicion', 'string', requires=IS_NOT_EMPTY(), label=T('Composición')),
+
+    Field('concentracion', 'string', requires=IS_NOT_EMPTY(), label=T('Concentración')),
+
+    Field('espacio_fisico', 'reference espacios_fisicos', 
+            requires=IS_IN_DB(db, db.espacios_fisicos.id, '%(codigo)s', zero=None), notnull=True, label=T('Espacio físico')), 
+
+    Field('seccion', 'reference dependencias', requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Unidad de Adscripción'), notnull=True),
+
+    Field('responsable', 'reference t_Personal', 
+            requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s | %(f_email)s', zero=None), notnull=True, label=T('Responsable')),
+
+   Field('envase', 'reference t_envases', 
+            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), notnull=True, label=T('Envase')),
+
+    Field('tratamiento', 'string', requires=IS_IN_SET(['Reutilizable', 'Recuperable', 'Tratable', 'Disposición final']), notnull=True, label=T('Tratamiento')),
+
+     Field('peligrosidad', 'list:string', 
+          requires=IS_IN_SET(['Sustancia Explosiva (EX)','Sustancia Inflamable (IN)','Sustancia Comburente (CB)', 'Gaso Bajo Presión (GZ)', 
+                            'Corrosiva (CR)', 'Toxicidad Aguda (TO)', 'Peligro para la Salud (DA)', 'Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)', 'Dañino para el Medio Ambiente Acuático (EN)'],
+          multiple = True), widget=SQLFORM.widgets.checkboxes.widget, label=T('Peligrosidad'), notnull=True)
+)
+
+
+db.t_inventario_desechos._plural = 'Inventarios de Desechos Peligrosos'
+db.t_inventario_desechos._singular = 'Inventarios de Desecho Peligrosos'
+
+#Tabla de la Bitacora de los movimientos en los inventarios de todos los espacios fisicos. Contiene los campos:
+db.define_table(
+    #Nombre de la entidad
+    't_Bitacora_desechos',
+
+    #Atributos;
+    
+    # Fecha registro
+    Field('fecha', 'string', notnull=True, label=T('Fecha de movimiento')),
+
+    # Descripción (proceso de generación)
+    Field('descripcion', 'string', notnull=True, label=T('Descripcion de movimiento')),
+
+    # Cantidad generada
+    Field('cantidad_generada', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad generada')),
+
+    # Cantidad retirada
+    Field('cantidad_retirada', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad retirada')),
+
+    # Saldo luego del movimiento
+    Field('saldo', 'double', requires=IS_NOT_EMPTY(), label=T('Saldo')),
+
+    # Unidad de medida del desecho
+    Field('unidad_medida_bitacora', 'reference t_Unidad_de_medida',
+          requires=IS_IN_DB(db, db.t_Unidad_de_medida.id, '%(f_nombre)s', zero=None), label=T('Unidad de medida'), notnull=True,
+          represent=lambda id, r: db.t_Unidad_de_medida[id].f_nombre),
+
+    # Identificación del recipiente del desecho
+    Field('envase', 'reference t_envases', 
+            requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_envases.id, '%(identificacion)s', zero=None)), notnull=True, label=T('Envase')),
+    
+    # Referencia hacia el inventario al cual pertenece el registro de la bitacora
+    Field('inventario', 'reference t_inventario_desechos',
+          requires=IS_IN_DB(db, db.t_Inventario.id, zero=None), 
+          label=T('Inventario'), notnull=True,
+          represent=lambda id, r: db.t_inventario_desechos[id].nombre),
+
 
     # Agrega los campos adicionales created_by, created_on, modified_by, modified_on 
     # para los logs de la tabla

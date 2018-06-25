@@ -178,6 +178,7 @@ db.t_Personal.f_fecha_salida.widget=SQLFORM.widgets.time.widget
 db.auth_membership.f_personal_membership.type = 'reference t_Personal'
 db.auth_membership.f_personal_membership.requires = IS_IN_DB(db, db.t_Personal.id, '%(f_ci)s', zero=None)
 
+
 #######################################################################################################################
 #
 # Tablas Generales
@@ -198,7 +199,6 @@ db.define_table(
     
     Field('dependencia', 'reference dependencias',
         requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
-
 
 db.espacios_fisicos._plural = 'Espacio Fisico'
 db.espacios_fisicos._singular = 'Espacio Fisico'

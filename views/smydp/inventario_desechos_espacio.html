@@ -1,0 +1,229 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
+
+<!-- Inicio Boton Agregar Sustancia -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+	        <div class="col-sm-6"></div>
+	        <div class="col-sm-6">
+	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
+	        </div>
+        </div>
+    </div>
+</div>
+<!-- Fin Boton Agregar Sustancia -->
+
+<!-- Inicio Listado de sustancias -->
+<div class="container">
+<div class="row">
+  <h3> Inventario </h3>
+
+    <div id="buttons">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Grupo de Desecho</th>
+                <th class="camposTabla linksNombres">Espacio físico</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Sección</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          {{for desecho in inventario:}}
+            <tr>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo']}}</td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['cantidad']}}</td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre']}}</td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre']}}</td>
+            </tr>
+          {{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Grupo de Desecho</th>
+                <th class="camposTabla linksNombres">Espacio físico</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Sección</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+            </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de sustancias --> 
+
+<!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
+<input type="hidden" id="serv" name="serv" value="">
+
+
+<!-- Modal añadir una sustancia nueva al inventario -->
+  <div class="modal fade" id="addsustancia" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+              <div class="container" id="plus">
+                <h1 id="agregar">+</h1>
+              </div>
+            </div>
+            <div class="col-sm-10" id="col11Header">
+              <h4 class="modal-title" id="nuevaSustancia">Nuevo Grupo de Desecho
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+          <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+
+                  <!-- Primer Paso -->
+                  <fieldset class="formField">
+                    <div class="form-bottom">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
+                              <option value="" selected hidden >Sustancia*</option>
+                              {{for desecho in desechos:}}
+                              <option value="{{=desecho.id}}">{{=desecho.categoria}})</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="excedente" placeholder="Excedente*" required>
+                            <div class="field-error"> <p id="error-excedente"> </p> </div>
+                          </div>
+                          <div class="form-group" style="padding-bottom: 50px">
+                            <select class="form-control" type="select" id="unidad" name="unidad" required>
+                              <option value="" selected hidden >Unidad de medida*</option>
+                              {{for u in unidades_de_medida:}}
+                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+                      </div>
+                    </div>
+                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
+                  </fieldset>
+                  <!-- Fin Primer Paso -->
+                </form>
+            </div>
+          </div>               
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Fin Modal Agregar Servicio -->
+
+<script type="text/javascript">
+  // Valida los campos de la forma en el modal "addsustancia"
+  function validar_campos(){
+
+    // Buscando divs para ingresar mensajes de error
+    var error_total = document.getElementById("error-total");
+    var error_excedente = document.getElementById("error-excedente");
+
+    // Limpiando los mensajes anteriores de validadores
+    if (error_total.innerText != ''){
+      error_total.innerText = '';
+    }
+    if (error_excedente.innerText != ''){
+      error_excedente.innerText = '';
+    }
+     
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var excedente = document.forms['formularioCarga']['excedente'].value;
+
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+    var mensaje_error_excedente = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+
+    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+    if (!is_number(total)) {
+      error_total.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(total)) {
+      error_total.innerText = mensaje_error_negativo;
+      return false;
+    }
+
+    if (is_zero(total)) {
+      error_total.innerText = mensaje_error_nulo;
+      return false;
+    }
+
+    /* Validando el campo excedente */
+    if (!is_number(excedente)) {
+      error_excedente.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(excedente)) {
+      error_excedente.innerText = mensaje_error_negativo;
+      return false;
+    }
+    // La cantidad de sustancia como excedente no puede ser mayor al total
+    if (excedente > total) {
+      error_excedente.innerText = mensaje_error_excedente;
+      return false;
+    }
+
+  }
+
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n)
+  }
+
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0)
+  }
+
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0)
+  }
+
+</script>
