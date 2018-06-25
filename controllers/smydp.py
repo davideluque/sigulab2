@@ -1358,7 +1358,6 @@ def inventarios_desechos():
                 (db.espacios_fisicos.id == espacio_id) &
                 (db.espacios_fisicos.dependencia == db.dependencias.id) & 
                 (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
-            print inventario
             #desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
 
             # Si se esta agregando una nueva sustancia, se registra en la DB
@@ -1450,12 +1449,15 @@ def inventarios_desechos():
                 envases = list(db(db.t_envases.espacio_fisico == espacio_id).select())
 
                 # Si se esta agregando una nueva sustancia, se registra en la DB
-                if request.vars.sustancia:
-                    __agregar_sustancia(espacio,
-                                        request.vars.sustancia, 
-                                        request.vars.total,
-                                        request.vars.uso_interno,
-                                        request.vars.unidad)
+                if request.vars.envase:
+                    envase = list(db(db.t_envases.id == request.vars.envase).select())
+
+                    __agregar_desecho(envase[0],
+                                        request.vars.peligrosidad,
+                                        request.vars.tratamiento,
+                                        request.vars.cantidad,
+                                        request.vars.concentracion
+                    )
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -1515,7 +1517,6 @@ def inventarios_desechos():
             inventario = list(db(
                 (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
            # __get_inventario_dep(dep_id)
-            print inventario
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1537,6 +1538,21 @@ def inventarios_desechos():
 #          BITÁCORA DESECHOS           #
 # FUNCIONES AUXILIARES Y CONTROLADORES #
 ########################################
+
+# Agrega un nuevo desecho peligroso al inventario de un espacio físico
+def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion):
+        
+    db.t_inventario_desechos.insert(categoria = envase.categoria,
+                                    cantidad = cantidad,
+                                    unidad_medida = envase.unidad_medida,
+                                    composicion = envase.composicion,
+                                    concentracion = concentracion,
+                                    espacio_fisico = envase.espacio_fisico,
+                                    seccion = envase.espacio_fisico.dependencia,
+                                    responsable = auth.user_id,
+                                    envase = envase.id,
+                                    tratamiento = tratamiento,
+                                    peligrosidad = peligrosidad)
 
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
