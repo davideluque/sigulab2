@@ -1129,8 +1129,6 @@ def __eliminar_categoria(categoria_id):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios_desechos():
-
-
     # Inicializando listas de espacios fisicos y dependencias
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
@@ -1140,7 +1138,9 @@ def inventarios_desechos():
     dep_padre_id = ""
     dep_padre_nombre = ""
     envases = []
-    mostrar_campo_dependencia = False
+    # Este valor indica si se muestra el campo "Dependencia" en la tabla del inventario 
+    # si se esta visitando el menu principal del inventario, o si se está visitando una sección
+    mostrar_campo_dependencia = False 
 
     # Lista de sustancias en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
@@ -1174,240 +1174,8 @@ def inventarios_desechos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
-        # Si el tecnico ha seleccionado un espacio fisico
-        if request.vars.dependencia:
-            if request.vars.es_espacio == "True":
-                # Evaluando la correctitud de los parametros del GET 
-                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                        __is_bool(request.vars.es_espacio)):
-                    redirect(URL('inventarios'))
 
-                # Determinando si el usuario tiene privilegios suficientes para
-                # consultar la dependencia en request.vars.dependencia
-                if not __acceso_permitido(user, 
-                                    int(request.vars.dependencia), 
-                                        request.vars.es_espacio):
-                    redirect(URL('inventarios'))
-
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
-
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
-
-                espacio_visitado = True
-
-                # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
-
-                desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
-
-                # Si se esta agregando una nueva sustancia, se registra en la DB
-                if request.vars.sustancia:
-                    __agregar_sustancia(espacio,
-                                        request.vars.sustancia, 
-                                        request.vars.total,
-                                        request.vars.uso_interno,
-                                        request.vars.unidad)
-            else:
-                # Espacios a cargo del usuario user_id que pertenecen a la seccion
-                # en request.vars.dependencia
-                espacios = [row.espacios_fisicos for row in db(
-                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id) & 
-                    (db.espacios_fisicos.dependencia == int(request.vars.dependencia)) & 
-                    (db.es_encargado.tecnico == user_id)).select()]
-
-                espacios_ids = [e.id for e in espacios]
-
-                dep_id = int(request.vars.dependencia)
-                dep_nombre = db(db.dependencias.id == dep_id).select()[0].nombre
-
-                dep_padre_nombre = "Secciones"
-
-                # Se suman los inventarios de los espacios que tiene a cargo el usuario en la
-                # seccion actual
-                inventario = __sumar_inventarios(espacios_ids)
-
-                es_espacio = True
-
-        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
-        # entrar a la opcion de inventarios
-        else:
-            # Se buscan las secciones a las que pertenecen los espacios que
-            # tiene a cargo el usuario
-            espacios_a_cargo = db(
-                (db.es_encargado.tecnico == user_id) & 
-                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
-                                 ).select()
-
-            secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
-
-            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0], 
-                               secciones_ids)
-
-            dep_nombre = "Secciones"
-
-            espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
-
-            inventario = __sumar_inventarios(espacios_ids)
-
-    elif auth.has_membership("JEFE DE SECCIÓN"):
-        # Si el jefe de seccion ha seleccionado un espacio fisico
-        if request.vars.es_espacio == 'True':
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user, 
-                                int(request.vars.dependencia), 
-                                    request.vars.es_espacio):
-                redirect(URL('inventarios'))
-
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios'))
-
-
-            espacio_id = request.vars.dependencia
-            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
-                           ).select().first().codigo
-
-            # Guardando el ID y nombre de la dependencia a la que pertenece el 
-            # espacio fisico visitado
-            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                             ).select().first().dependencia
-            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                 ).select().first().nombre
-
-            espacio_visitado = True
-                            # Se muestra la lista de sustancias que tiene en inventario
-            inventario = __get_inventario_espacio(espacio_id)
-
-            desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
-
-            # Si se esta agregando una nueva sustancia, se registra en la DB
-            if request.vars.sustancia:
-                __agregar_sustancia(espacio,
-                                    request.vars.sustancia, 
-                                    request.vars.total,
-                                    request.vars.uso_interno,
-                                    request.vars.unidad)
-
-
-        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
-        # regresar a la vista inicial de inventarios
-        elif request.vars.es_espacio == 'False':
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    __is_bool(request.vars.es_espacio)):
-                    redirect(URL('inventarios'))
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user, 
-                                int(request.vars.dependencia), 
-                                    request.vars.es_espacio):
-                redirect(URL('inventarios'))
-            espacios = list(db(
-                              db.espacios_fisicos.dependencia == user_dep_id
-                              ).select(db.espacios_fisicos.ALL))
-            dep_nombre = db(db.dependencias.id == user_dep_id
-                           ).select().first().nombre
-
-            es_espacio = True                        
-        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
-        # entrar a la vista inicial de inventarios
-        else:
-            espacios = list(db(
-                              db.espacios_fisicos.dependencia == user_dep_id
-                              ).select(db.espacios_fisicos.ALL))
-            dep_nombre = db(db.dependencias.id == user_dep_id
-                           ).select().first().nombre
-
-            es_espacio = True
-
-            # Se muestra como inventario el egregado de los inventarios que
-            # pertenecen a la seccion del jefe
-            inventario = __get_inventario_dep(user_dep_id)
-    
-    elif auth.has_membership("WEBMASTER_"):
-        # Si el jefe de seccion ha seleccionado un espacio fisico
-        if request.vars.es_espacio == 'True':
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios_desechos'))
-
-            espacio_id = request.vars.dependencia
-            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
-                           ).select().first().nombre
-
-            # Guardando el ID y nombre de la dependencia a la que pertenece el 
-            # espacio fisico visitado
-            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                             ).select().first().dependencia
-            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                 ).select().first().nombre
-
-            espacio_visitado = True
-                            # Se muestra la lista de sustancias que tiene en inventario
-            inventario = list(db(
-                (db.espacios_fisicos.id == espacio_id) &
-                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
-            #desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
-
-            # Si se esta agregando una nueva sustancia, se registra en la DB
-            if request.vars.sustancia:
-                __agregar_sustancia(espacio,
-                                    request.vars.sustancia, 
-                                    request.vars.total,
-                                    request.vars.uso_interno,
-                                    request.vars.unidad)
-
-
-        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
-        # regresar a la vista inicial de inventarios
-        elif request.vars.es_espacio == 'False':
-
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    __is_bool(request.vars.es_espacio)):
-                    redirect(URL('inventarios'))
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user, 
-                                int(request.vars.dependencia), 
-                                    request.vars.es_espacio):
-                redirect(URL('inventarios'))
-            
-            dependencias = list(db(
-                              db.dependencias.id == request.vars.dependencia
-                              ).select())
-            
-            dep_nombre = db(db.dependencias.id == user_dep_id
-                           ).select().first().nombre
-
-
-            es_espacio = True                        
-
-        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
-        # entrar a la vista inicial de inventarios
-        else:
-            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
-
-            # Se muestra como inventario el egregado de los inventarios que
-            # pertenecen a la seccion del jefe
-            inventario = list(db(db.t_inventario_desechos.espacio_fisico).select())
-
-
-    # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
-    # pues la jerarquia de dependencias esta almacenada en la misma tabla
-    # con una lista de adyacencias
-    else:
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
 
@@ -1587,7 +1355,158 @@ def inventarios_desechos():
                 ))
 
             mostrar_campo_dependencia = True
+        
+    elif auth.has_membership("TÉCNICO"):
+        # Si el tecnico ha seleccionado un espacio fisico
+        if request.vars.dependencia:
+            if request.vars.es_espacio == "True":
+                # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
 
+                # Determinando si el usuario tiene privilegios suficientes para
+                # consultar la dependencia en request.vars.dependencia
+                if not __acceso_permitido(user, 
+                                    int(request.vars.dependencia), 
+                                        request.vars.es_espacio):
+                    redirect(URL('inventarios'))
+
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.codigo
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = espacio.dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+
+                espacio_visitado = True
+
+                # Busca el inventario del espacio
+                inventario = __get_inventario_espacio(espacio_id)
+
+                desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
+
+                # Si se esta agregando una nueva sustancia, se registra en la DB
+                if request.vars.sustancia:
+                    __agregar_sustancia(espacio,
+                                        request.vars.sustancia, 
+                                        request.vars.total,
+                                        request.vars.uso_interno,
+                                        request.vars.unidad)
+            else:
+                # Espacios a cargo del usuario user_id que pertenecen a la seccion
+                # en request.vars.dependencia
+                espacios = [row.espacios_fisicos for row in db(
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id) & 
+                    (db.espacios_fisicos.dependencia == int(request.vars.dependencia)) & 
+                    (db.es_encargado.tecnico == user_id)).select()]
+
+                espacios_ids = [e.id for e in espacios]
+
+                dep_id = int(request.vars.dependencia)
+                dep_nombre = db(db.dependencias.id == dep_id).select()[0].nombre
+
+                dep_padre_nombre = "Secciones"
+
+                # Se suman los inventarios de los espacios que tiene a cargo el usuario en la
+                # seccion actual
+                inventario = __sumar_inventarios(espacios_ids)
+
+                es_espacio = True
+
+        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
+        # entrar a la opcion de inventarios
+        else:
+            # Se buscan las secciones a las que pertenecen los espacios que
+            # tiene a cargo el usuario
+            espacios_a_cargo = db(
+                (db.es_encargado.tecnico == user_id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
+
+            secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
+
+            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0], 
+                               secciones_ids)
+
+            dep_nombre = "Secciones"
+
+            espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
+
+            inventario = __sumar_inventarios(espacios_ids)
+
+
+        # Si el jefe de seccion ha seleccionado un espacio fisico
+        if request.vars.es_espacio == 'True':
+            # Evaluando la correctitud de los parametros del GET 
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios_desechos'))
+
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
+                           ).select().first().nombre
+
+            # Guardando el ID y nombre de la dependencia a la que pertenece el 
+            # espacio fisico visitado
+            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                             ).select().first().dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                 ).select().first().nombre
+
+            espacio_visitado = True
+                            # Se muestra la lista de sustancias que tiene en inventario
+            inventario = list(db(
+                (db.espacios_fisicos.id == espacio_id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
+            #desechos = list(db(db.desechos.id > 0).select(db.desechos.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.uso_interno,
+                                    request.vars.unidad)
+
+
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # regresar a la vista inicial de inventarios
+        elif request.vars.es_espacio == 'False':
+
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not __acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+            
+            dependencias = list(db(
+                              db.dependencias.id == request.vars.dependencia
+                              ).select())
+            
+            dep_nombre = db(db.dependencias.id == user_dep_id
+                           ).select().first().nombre
+
+
+            es_espacio = True                        
+
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # entrar a la vista inicial de inventarios
+        else:
+            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la seccion del jefe
+            inventario = list(db(db.t_inventario_desechos.espacio_fisico).select())
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
