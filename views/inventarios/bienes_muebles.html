@@ -4,12 +4,12 @@
 	<meta charset="UTF-8">
 
 	<!-- Para los mensajes con flash -->
-  	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
 	<!--DATATABLES-->
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
-
+ 
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
@@ -19,15 +19,15 @@
 	</style>
  	
  	<!-- Estilos de modales y listados -->
- 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
- 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
- 	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>	
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+  	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -36,7 +36,6 @@
    	}
 	 </style>
 {{end}}
-
 
 
 {{block center}}
@@ -140,10 +139,12 @@
 			{{ title = "Secciones" }}
 		{{ pass }}
 		{{ if len(dependencias) > 0: }}
-			<button onclick="show_seccion()">
-				{{=title}}
-				<span class="caret"></span>
-			</button>
+			<h4>Navegar por: 
+				<button onclick="show_seccion()">
+					{{=title}}
+					<span class="caret"></span>
+				</button>
+			</h4>
 		{{ pass }}
 		{{ if espacios: }}
 			<div class="grid-container-ef" id="secciones" style="display: none">
@@ -218,89 +219,91 @@
 </script>
 <script>
 
-  var filtros = false;
-
-  $(document).ready(function() {
-      // Setup - add a text input to each footer cell
-      $('#datatable tfoot th').each( function () {
-          var title = $(this).text();
-          $(this).html( '<input type="text" placeholder="Filtro" />' );
-      } );
+	var filtros = false;
+  
+	$(document).ready(function() {
+		// Setup - add a text input to each footer cell
+		$('#datatable tfoot th').each( function () {
+			var title = $(this).text();
+			$(this).html( '<input type="text" placeholder="Filtro" />' );
+		} );
+	 
+		// DataTable
+		var table = $('#datatable').DataTable();
+	 
+		// Apply the search
+		table.columns().every( function () {
+			var that = this;
+	 
+			$( 'input', this.footer() ).on( 'keyup change', function () {
+				if ( that.search() !== this.value ) {
+					that
+						.search( this.value )
+						.draw();
+				}
+			} );
+		} );
+  
+		$('#datatable tfoot tr').appendTo('#datatable thead');
+		$("#datatable thead tr").not("#titulosListado").css("display","none");
+	} );
+  
+	function mostrarFiltro() {
+		if (filtros){
+		  $("#datatable thead tr").not("#titulosListado").css("display","none");
+		  filtros = false
+		}
+		else{
+		  $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+		  filtros = true
+		}
+  
+	}
+  </script>
    
-      // DataTable
-      var table = $('#datatable').DataTable();
-   
-      // Apply the search
-      table.columns().every( function () {
-          var that = this;
-   
-          $( 'input', this.footer() ).on( 'keyup change', function () {
-              if ( that.search() !== this.value ) {
-                  that
-                      .search( this.value )
-                      .draw();
-              }
-          } );
-      } );
-
-      $('#datatable tfoot tr').appendTo('#datatable thead');
-      $("#datatable thead tr").not("#titulosListado").css("display","none");
-  } );
-
-  function mostrarFiltro() {
-      if (filtros){
-        $("#datatable thead tr").not("#titulosListado").css("display","none");
-        filtros = false
-      }
-      else{
-        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
-        filtros = true
-      }
-
-  }
-</script>
- 
- <script language="javascript">
-
-		var table = $('#datatable').DataTable({
-		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-		  //dom: 'Bfrtip',
-		  language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-		  },
-		 initComplete: function(){
-			var api = this.api();
-	  
-			new $.fn.dataTable.Buttons(api, {
-			  buttons: [
-	  
-				  {
-					  extend: 'collection',
-					  text: '<i class="fa fa-save btn"></i>',
-					  buttons: [
-						  { extend:'copy', text: 'Copiar' } ,
-						  'excel',
-						  'csv',
-						  'pdf'
-					  ]
-				  },
-			  ]
-			});
-			$('#botonModal').addClass('pull-left')
-			$('#filtrar').addClass('pull-left');
-			$('#espacioBuscar').addClass('pull-left');
-			
-			$('.dataTables_filter').appendTo('#buttons');
-	  
-			api.buttons().container().appendTo('#buttons');
-			$('#buttons').append('<br><br>');
-			$('.dataTables_info').addClass('pull-right');
-			
-			$('.dataTables_filter').addClass('pull-left');
-	  
-			
-		 }
+  <script language="javascript">
+  
+	var table = $('#datatable').DataTable({
+	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  //dom: 'Bfrtip',
+	  language: {
+		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  },
+	 initComplete: function(){
+		var api = this.api();
+  
+		new $.fn.dataTable.Buttons(api, {
+		  buttons: [
+  
+			  {
+				  extend: 'collection',
+				  text: '<i class="fas fa-floppy-o"></i>',
+				  buttons: [
+					  { extend:'copy', text: 'Copiar' } ,
+					  'excel',
+					  'csv',
+					  'pdf'
+				  ]
+			  },
+			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+		  ]
 		});
-	  
-	  </script>
+		$('#botonModal').addClass('pull-left')
+		$('#filtrar').addClass('pull-left');
+		$('#espacioBuscar').addClass('pull-left');
+  
+  
+		$('.dataTables_filter').appendTo('#buttons');
+  
+		api.buttons().container().appendTo('#buttons');
+		$('#buttons').append('<br><br>');
+		$('.dataTables_info').addClass('pull-right');
+		
+		$('.dataTables_filter').addClass('pull-left');
+  
+		
+	 }
+	});
+  
+  </script>
 {{end}}

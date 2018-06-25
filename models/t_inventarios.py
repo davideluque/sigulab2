@@ -46,7 +46,10 @@ db.define_table(
     # Estado = 1  :Aceptado
     # Estado = 2  :Sin solicitud
     Field('bm_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
-    Field('bm_clasificacion', 'string', notnull = True, label = T('Clasificacion del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario']))
+    Field('bm_clasificacion', 'string', notnull = True, label = T('Clasificacion del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario'])),
+    # Estado = 0 : Visible
+    # Estado = 1 : Oculto
+    Field('bm_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
     #Field('bm_uso_espacio_fisico', 'reference espacios_fisicos',notnull=True, label = T('Uso del espacio fisico'))
     )
 db.bien_mueble.bm_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
@@ -70,7 +73,7 @@ db.define_table(
     Field('mbn_material','string',label=T('Material Predominante'), requires=IS_EMPTY_OR(IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']))),
     Field('mbn_color','string',label=T('Color'),requires=IS_EMPTY_OR(IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']))),
     #Solo lo poseen los equipos
-    Field('mbm_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
+    Field('mbn_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
     Field('mbn_fecha_calibracion','date',label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
     #
     Field('mbn_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
@@ -121,28 +124,6 @@ db.define_table(
     )
 db.mantenimiento.m_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(first_name)s %(last_name)s | %(email)s') 
 
-###Solicitudes de prestamo###
-db.define_table(
-    'solicitud_prestamo_bien_mueble',
-    #Claves
-    Field('p_anio','integer',unique=True,notnull=True,label=T('Año'),requires=IS_INT_IN_RANGE(1,100)),
-    Field('p_num_correlativo','integer',unique=True,notnull=True,label=T('Número de registro'),requires=IS_INT_IN_RANGE(1,1000)),
-    Field('p_fecha','date',notnull=True,label=T('Fecha'), requires = IS_DATE(format=('%d-%m-%Y'))),
-    Field('p_responsable', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_nombre)s'), label=T('Responsable')),
-    Field('p_prestado','string',notnull=True,label=T('Prestado a'), requires = IS_IN_DB(db, db.t_Personal.f_nombre, '%(f_nombre)s')),
-    Field('p_dependencia','reference dependencias', unique=True,requires=IS_IN_DB(db,db.dependencias.nombre,'%(nombre)s'), notnull=True,label=T('Dependencia')),
-    Field('p_ubicacion','reference espacios_fisicos', requires=IS_IN_DB(db,db.espacios_fisicos.codigo,'%(codigo)s'), notnull=True,label=T('Ubicación')),
-    ##A los campos de depedencia y ubicacon se le deben añadir lo siguiente en lineas separadas
-    Field('p_devolucion','date',notnull=True,label=T('Fecha de devolución'),requires=IS_DATE(format=('%d-%m-%Y'))),
-    Field('p_observaciones','text',label=T('Observaciones')),
-    
-    # Estado = -1 :Denegado
-    # Estado = 0  :Por validación
-    # Estado = 1  :Aceptado
-    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
-    )
-db.solicitud_prestamo_bien_mueble.p_prestado.requires = IS_IN_DB(db,db.t_Personal.id,'%(f_usuario)s') 
-
 ### Servicios ###
 db.define_table(
     'servicio_bien_mueble',
@@ -154,17 +135,6 @@ db.define_table(
     #En servicios no se tiene nada sobre horas, hay que preguntar esto
     )
 db.servicio_bien_mueble.s_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s') 
-
-### Solicitud de eliminacion ###
-db.define_table(
-    'solicitud_eliminar_bien_mueble',
-    # Estado = -1 :Denegado
-    # Estado = 0  :Por validación
-    # Estado = 1  :Aceptado
-    Field('eliminar_NroBM', 'reference bien_mueble', unique=True, notnull=True, label = T('Número Bien Nacional')),
-    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
-    )
-db.solicitud_eliminar_bien_mueble.eliminar_NroBM.requires = IS_IN_DB(db,db.bien_mueble.id,'%(bm_num)s')
 
 ### Tabla general para bienes muebles que no poseen numero de bien nacional ###
 db.define_table(
@@ -200,8 +170,11 @@ db.define_table(
     # Estado = 1  :Aceptado
     # Estado = 2  :Sin solicitud
     Field('sb_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
-    Field('sb_clasificacion', 'string', notnull = True, label = T('Clasificacion del consumible/material'), requires=IS_IN_SET(['Material de Laboratorio','Consumible']))
-	)
+    Field('sb_clasificacion', 'string', notnull = True, label = T('Clasificacion del consumible/material'), requires=IS_IN_SET(['Material de Laboratorio','Consumible'])),
+	# Estado = 0 : Visible
+    # Estado = 1 : Oculto
+    Field('sb_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
+    )
 
 db.sin_bn.sb_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.sin_bn.sb_nombre.requires=IS_NOT_IN_DB(db(db.sin_bn.sb_espacio==request.vars.sb_espacio),'sin_bn.sb_nombre')
@@ -253,15 +226,3 @@ db.modificacion_sin_bn.msb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, 
 #		Colocar la opción de especificar dede el front para el field "prsentacion" en sin_bn y en "material" en sin_bn
 # 		Calculo de la cantidad total de unidades que se hace multiplicando el número de unidades por la cantidad 
 #		sb_unidad es obligatorio si se rellena sb_capacidad
-
-db.define_table(
-    'solicitud_eliminar_sin_bn',
-    # Estado = -1 :Denegado
-    # Estado = 0  :Por validación
-    # Estado = 1  :Aceptado
-    Field('eliminar_nombre', 'string', notnull = True, label = T('Nombre del elemento')),
-    Field('eliminar_espacio', 'reference espacios_fisicos', notnull = True, label = T('Espacio físico al que pertenece')), 
-    Field('estado','integer', default=0, label=T('Estado de Solicitud'), requires=IS_INT_IN_RANGE(-1,2))
-    )
-db.solicitud_eliminar_sin_bn.eliminar_nombre.requires = IS_IN_DB(db,db.sin_bn.id,'%(sb_nombre)s')
-db.solicitud_eliminar_sin_bn.eliminar_espacio.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')

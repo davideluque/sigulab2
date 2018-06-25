@@ -313,7 +313,6 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
         msb_alto = alto, 
         msb_diametro = diametro, 
         msb_espacio = espacio,
-        msb_clasificacion = clasificacion,
         msb_presentacion = presentacion,
         msb_unidades = unidades,
         msb_total = total,
@@ -623,7 +622,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0] #Se busca de la tabla de bm para tener el nombre original
-        response.flash = "Ya ha sido ingresada una solicitud de modificación del BM \"{0}\".".format(bm.bm_nombre)
+        response.flash = "El  \"{0}\" tiene una modificación pendiente \
+                        Por los momentos no se enviarán solicitudes de modificación.".format(nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
@@ -684,6 +684,23 @@ def detalles():
             request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion,
             user_id)
         request.vars.modificacion = None
+    
+    if request.vars.eliminacion:
+        if bien['bm_eliminar'] == 2: 
+            db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['bm_nombre'])
+        request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['bm_oculto'] == 0:
+            db(db.bien_mueble.id == bien['id']).select().first().update_record(bm_oculto = 1)
+            response.flash = "Ahora " + str(bien['bm_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['bm_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
 
     # Elementos que deben ser mostrados como una lista en el modal
     # de modificar BM
@@ -802,6 +819,23 @@ def detalles_mat():
             request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
             request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion)
 
+    if request.vars.eliminacion:
+        if bien['sb_eliminar'] == 2: 
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['sb_nombre'])
+        request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['sb_oculto'] == 0:
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_oculto = 1)
+            response.flash = "Ahora " + str(bien['sb_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['sb_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
+
     aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
     color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
@@ -816,24 +850,37 @@ def detalles_mat():
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
     unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
     presentacion=["Caja", "Paquete", "Unidad", "Otro"]
-    caracteristicas_list = ['Marca:', 'Modelo:', 'Descripción:', 'Capacidad:', 'Unidad de Capacidad:',
-    'Material predominante:', 'Material secundario:', 'Aforado:', 'Tipo:', 'Requiere calibración:', 'Ubicación interna:']
-    caracteristicas_dict = {
-        'Marca:': bien['sb_marca'],
-        'Modelo:': bien['sb_modelo'],
-        'Descripción:': bien['sb_descripcion'],
-        'Material predominante:': bien['sb_material'],
-        'Material secundario:': bien['sb_material_sec'],
-
-        'Aforado:': bien['sb_aforado'],
-        'Tipo:': bien['sb_clasificacion'],
-        'Requiere calibración:': bien['sb_calibrar'],
-        'Ubicación interna:' : bien['sb_ubicacion'],
-        'Capacidad': bien['sb_capacidad'],
-        'Unidad de capacidad:' : bien['sb_unidad'],
-
-
-    }
+    if bien['sb_clasificacion'] == "Material de Laboratorio":
+        caracteristicas_list = ['Cantidad:', 'Descripción:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
+        'Capacidad:', 'Unidad de medida:', 'Material predominante:', 'Material secundario:', 'Tipo:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'Cantidad:': bien['sb_cantidad'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Material predominante:': bien['sb_material'],
+            'Material secundario:': bien['sb_material_sec'],
+            'Aforado:': bien['sb_aforado'],
+            'Tipo:': bien['sb_clasificacion'],
+            'Requiere calibración:': bien['sb_calibrar'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Capacidad:': bien['sb_capacidad'],
+            'Unidad de medida:' : bien['sb_unidad'],
+        }
+    else:
+        caracteristicas_list = ["Marca:", "Modelo:", "Presentación:", "Unidades por presentación:", "Cantidad:", 
+        "Total(U.):", "Descripción:", "Ubicación interna:"]
+        caracteristicas_dict = {
+            'Presentación:': bien['sb_presentacion'],
+            'Unidades por presentación:': bien['sb_unidades'],
+            'Cantidad:': bien['sb_cantidad'],
+            'Total(U.):': bien['sb_total'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Tipo:': bien['sb_clasificacion']
+        }
     return dict(bien = bien,
                 material_pred = material_pred,
                 color_list = color,
