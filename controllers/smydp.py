@@ -1140,6 +1140,7 @@ def inventarios_desechos():
     dep_padre_id = ""
     dep_padre_nombre = ""
     envases = []
+    mostrar_campo_dependencia = False
 
     # Lista de sustancias en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
@@ -1467,8 +1468,6 @@ def inventarios_desechos():
                     (db.t_envases.id not in envases_en_bitacora)
                 ).select())
 
-                envases = list(db(db.t_envases.espacio_fisico == espacio_id).select())
-
                 # Si se esta agregando un nuevo desecho, se registra en la DB
                 if request.vars.envase:
 
@@ -1500,14 +1499,49 @@ def inventarios_desechos():
                     
                     inventario = list(db(
                         (db.t_inventario_desechos.seccion == request.vars.dependencia)).select())
-                    
+
+                    inventario = list(db(
+                    (db.dependencias.id == dep_id) & 
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
+                     db.t_inventario_desechos.espacio_fisico |
+                    db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
+                    ))
+
                     es_espacio = True
                 
                 else:
                     inventario = list(db(
-                        (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                    (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
                         (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                        (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
+                        (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
+                     db.t_inventario_desechos.espacio_fisico |
+                     db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
+                    ))
+
+                    mostrar_campo_dependencia = True
 
                 # Guardando el ID y nombre de la dependencia padre para el link 
                 # de navegacion de retorno
@@ -1518,13 +1552,7 @@ def inventarios_desechos():
                 if dep_padre_id:
                     dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                          ).select().first().nombre
-                # Se muestra como inventario el egregado de los inventarios que
-                # pertenecen a la dependencia del usuario
 
-                # inventario = list(db(
-                # (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
-                # (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                # (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)).select())
 
         else:
             # Dependencia a la que pertenece el usuario o que tiene a cargo
@@ -1539,7 +1567,27 @@ def inventarios_desechos():
             # pertenecen a la dependencia del usuario
             inventario = list(db(
                 (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)).select())
-           # __get_inventario_dep(dep_id)
+
+            inventario = list(db(
+                (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id)
+                ).select(
+                db.t_inventario_desechos.categoria,
+                db.t_inventario_desechos.espacio_fisico,
+                db.t_inventario_desechos.seccion,
+                db.t_inventario_desechos.cantidad.sum(),
+                db.t_inventario_desechos.unidad_medida,
+                db.t_inventario_desechos.responsable,
+                groupby = 
+                    db.t_inventario_desechos.categoria |
+                    db.t_inventario_desechos.espacio_fisico |
+                    db.t_inventario_desechos.seccion |
+                db.t_inventario_desechos.unidad_medida | 
+                db.t_inventario_desechos.responsable
+                ))
+
+            mostrar_campo_dependencia = True
+
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1554,7 +1602,8 @@ def inventarios_desechos():
                 desechos=desechos,
                 envases=envases,
                 unidades_de_medida=unidades_de_medida,
-                retroceder=retroceder)
+                retroceder=retroceder,
+                mostrar_campo_dependencia = mostrar_campo_dependencia)
 
 
 ########################################
