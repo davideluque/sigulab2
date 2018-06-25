@@ -102,9 +102,10 @@ ENV/
 __init__.py
 cache/ 
 databases/
-errors/ 
-sessions/  
+errors/*
+sessions/
 private/
 uploads/
 .hg/
-
+*.bak
+.merge*

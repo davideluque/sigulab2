@@ -1,18 +1,30 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-  <!-- DataTables -->
+  <!--DATATABLES-->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+	<style type="text/css">
+		div.dt-buttons {
+		  float: right;
+		  padding-right: 10ex;
+		}
+		
+  </style>
+  
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
 
   <script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
   <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+  <script src="{{=URL('static', 'js/cleave.js')}}"></script>
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
   <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
   <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -21,6 +33,9 @@
   <style>
     .row{
       margin-right:0px!important;
+    }
+    .boton-sigulab, .buttons-print {
+    background-color: #337ab7;
     }
   </style>
 
@@ -37,7 +52,7 @@
   </nav>
 {{if session.ficha_negada :}}
 <div class="jumbotron">
-  <p>Motivo de Rechazo:{{=session.ficha_negada}}</p>
+  <p>{{=session.ficha_negada}}</p>
 </div>
 {{pass}}
 <div class="row">
@@ -45,12 +60,12 @@
     <div class="col-sm-2">
             <!-- Boton que lleva al modal -->
             {{ if not usuario.f_es_supervisor :}}
-            <button type="button" class="btn btn-default buttons-html5" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
+            <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7"><i class="fa fa-pencil"></i></button>
             {{pass}}
     </div>
     <div id="buttons" class="text-right">
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5"><i class="fa fa-filter"></i></button>
+      .
       <!-- Filtrado -->    
     </div>
     <br>
@@ -59,10 +74,10 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">Correo</th>
-                <th class="camposTabla linksNombres">Unidad de Adscripcion</th>
-                <th class="camposTabla linksNombres">Extension Interna</th>
+                <th class="camposTabla linksNombres">NOMBRE</th>
+                <th class="camposTabla linksNombres">CORREO</th>
+                <th class="camposTabla linksNombres">UNIDA DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
             </tr>
         </thead>
 
@@ -97,10 +112,10 @@
                                     data-extension_usb="{{= item['extension_USB']}}"
                                     data-extension_interna="{{=item['extension_interna']}}"
                                     data-jefe = "{{=item['jefe']}}"
-                                    value="{{=item['ci']}}">{{=item["nombre"]}} {{=item["apellido"]}}</a></td>
-                <td class="camposTabla">{{=item['email']}}</td>
+                                    value="{{=item['ci']}}">{{=item["nombre"].upper()}} {{=item["apellido"].upper()}}</a></td>
+                <td class="camposTabla">{{=item['email'].upper()}}</td>
                 <td class="camposTabla">{{=item['dependencia']}}</td>
-                <td class="camposTabla">{{=item['extension_interna']}}</td>
+                <td class="camposTabla">{{=item['extension_interna'].upper()}}</td>
             </tr>
           {{pass}}           
         </tbody>
