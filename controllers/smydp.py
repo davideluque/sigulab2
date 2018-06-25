@@ -1461,7 +1461,11 @@ def inventarios_desechos():
                     db.t_inventario_desechos.unidad_medida
                 ))
 
-                #print desechos
+                envases_en_bitacora = list(db(db.t_Bitacora_desechos).select(db.t_Bitacora_desechos.envase))
+                envases = list(db(
+                    (db.t_envases.espacio_fisico == espacio_id) &
+                    (db.t_envases.id not in envases_en_bitacora)
+                ).select())
 
                 envases = list(db(db.t_envases.espacio_fisico == espacio_id).select())
 
