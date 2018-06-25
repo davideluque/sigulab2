@@ -1553,6 +1553,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                     envase = envase.id,
                                     tratamiento = tratamiento,
                                     peligrosidad = peligrosidad)
+    return redirect(URL(host=True)) 
 
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
