@@ -716,3 +716,11 @@ if db(db.t_Sustancia).isempty():
     #db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
     #	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
 
+# Categorias de desechos
+
+if db(db.t_categoria_desechos).isempty():
+	categorias_iniciales = ['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes']
+
+	for categoria in categorias_iniciales:
+		db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
+

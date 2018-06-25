@@ -1,0 +1,51 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
+
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+    <div class="row">
+        <div id="buttons" class="pull-right">
+            <!-- Filtrado -->
+            <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+            <!-- Filtrado -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado">
+                        <th class="camposTabla linksNombres">Grupo de Desecho</th>
+                        <th class="camposTabla linksNombres">Espacio físico</th>
+                        <th class="camposTabla linksNombres">Cantidad</th>
+                        <th class="camposTabla linksNombres">Sección</th>
+                        <th class="camposTabla linksNombres">Responsable</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{for desecho in inventario:}}
+                   <tr>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.espacio_fisico']['codigo']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.cantidad']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.seccion']['nombre']}}</td>
+                       <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre']}}</td>
+                   </tr>
+                   {{pass}} 
+               </tbody>
+
+                <tfoot id="collapseFiltros">
+                    <tr>
+                        <th class="camposTabla linksNombres">Grupo de Desecho</th>
+                        <th class="camposTabla linksNombres">Espacio físico</th>
+                        <th class="camposTabla linksNombres">Cantidad</th>
+                        <th class="camposTabla linksNombres">Sección</th>
+                        <th class="camposTabla linksNombres">Responsable</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Fin Listado de sustancias -->

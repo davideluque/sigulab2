@@ -6,3 +6,17 @@
 .field-error{
 	color:#B70101;
 }
+
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+	background-color: #337ab7;
+    border-color: #337ab7;
+    color:#fff;
+}
+
+.buttons-html5, .buttons-copy{
+    border-radius: 50%;
+	background-color: #337ab7;
+    border-color: #337ab7;
+	color:#fff;
+}
