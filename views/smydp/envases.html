@@ -358,14 +358,14 @@
                         <tbody>
                             {{for contenedor in contenedores:}}
                             <tr>
-                                <td class="camposTabla" style="text-align: left">
+                                <td class="camposTabla" style="text-align: center">
                                     <a href={{=URL('..', 'sigulab2', 'smydp/envases', args=['view', contenedor.id])}}>
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}}{{=contenedor.unidad_medida}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>

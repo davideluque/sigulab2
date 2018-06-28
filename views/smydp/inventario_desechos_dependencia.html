@@ -27,7 +27,7 @@
                     <tbody>
                         {{for desecho in inventario:}} {{print desecho}}
                         <tr>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
+                            <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
                             <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre']}}</td>
                             <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo']}}</td>
                             <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre']}}</td>

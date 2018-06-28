@@ -73,7 +73,7 @@
                  {{for categoria in categorias:}} 
                     <tr>
                         {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
-                            <td class="camposTabla" style="text-align: left">
+                            <td class="camposTabla" style="text-align: center">
                                 <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
                                     {{=categoria.categoria.upper()}}
                                 </a>
