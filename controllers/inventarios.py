@@ -729,16 +729,18 @@ def detalles():
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
     if bien['bm_clasificacion']=="Equipo":
-
-        caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 'Descripción:', 
+        
+        caracteristicas_list = ['Marca:', 'Modelo:', 'Serial:', 
         'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
 
+        if bien['bm_descripcion']!="" and bien['bm_descripcion']!=None:
+            caracteristicas_list.append('Observaciones:')
 
         caracteristicas_dict = {
             'Marca:': bien['bm_marca'],
             'Modelo:': bien['bm_modelo'],
             'Serial:': bien['bm_serial'],
-            'Descripción:': bien['bm_descripcion'],
+            'Observaciones:': bien['bm_descripcion'],
             'Material predominante:': bien['bm_material'],
             'Color:': bien['bm_color'],
             'Movilidad:': bien['bm_movilidad'],
@@ -746,10 +748,13 @@ def detalles():
         }
     elif bien['bm_clasificacion']=="Mobiliario":
 
-        caracteristicas_list = ['Descripción:', 'Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+        caracteristicas_list = ['Material predominante:', 'Color:', 'Movilidad:', 'Uso:']
+
+        if bien['bm_descripcion']!="" and bien['bm_descripcion']!=None:
+            caracteristicas_list.append('Observaciones:')
 
         caracteristicas_dict = {
-            'Descripción:': bien['bm_descripcion'],
+            'Observaciones:': bien['bm_descripcion'],
             'Material predominante:': bien['bm_material'],
             'Color:': bien['bm_color'],
             'Movilidad:': bien['bm_movilidad'],
