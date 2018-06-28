@@ -1037,8 +1037,9 @@ def envases():
 
 
 def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, tipo_boca, descripcion, composicion, espacio_fisico, categoria, id_envase):
-    # Si el id_envase es distinto de -1, es porque ya exista la categoría y se va a actualizar
+    # Si el id_envase es distinto de -1, es porque ya existe el envase y se va a actualizar su informacion
     if id_envase != -1:
+        print len(list(db(db.t_envases.identificacion == identificacion).select()))
         db(db.t_envases.id == id_envase).update(
             identificacion = identificacion,
             capacidad = capacidad, 
@@ -1051,28 +1052,36 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
             espacio_fisico = espacio_fisico, 
             categoria = categoria
         )
-    else:
-        #De lo contrario, el envase aún no existe y se tiene que crear
-        db.t_envases.insert(
-            identificacion = identificacion,
-            capacidad = capacidad, 
-            unidad_medida = unidad_medida, 
-            forma = forma, 
-            material = material, 
-            tipo_boca = tipo_boca, 
-            descripcion = descripcion, 
-            composicion = composicion, 
-            espacio_fisico = espacio_fisico, 
-            categoria = categoria
-        )
 
-    response.flash = "Contenedor creado exitosamente"
-    return redirect(URL(host=True)) 
+        response.flash = T("Información del contenedor actualizada correctamente.")
+
+    else:
+        # Se verifica si la identificación del envase que se quiere crear fue previamente utilizada
+        if len(list(db(db.t_envases.identificacion == identificacion).select())) > 0:
+            response.flash = T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
+            
+        else:
+            #De lo contrario, el envase aún no existe y se tiene que crear
+            db.t_envases.insert(
+                identificacion = identificacion,
+                capacidad = capacidad, 
+                unidad_medida = unidad_medida, 
+                forma = forma, 
+                material = material, 
+                tipo_boca = tipo_boca, 
+                descripcion = descripcion, 
+                composicion = composicion, 
+                espacio_fisico = espacio_fisico, 
+                categoria = categoria
+            )
+
+            response.flash = T("Contenedor creado exitosamente.")
+
 
 
 def __eliminar_envase(id_envase):
     db(db.t_envases.id == id_envase).delete()
-    return redirect(URL(host=True)) 
+    response.flash = T("Contenedor eliminado exitosamente.")
 
 ########################################
 #         CATEGORIAS DE DESECHOS       #
@@ -1499,7 +1508,10 @@ def inventarios_desechos():
 
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
-            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
+            dependencias = list(db(
+                (db.dependencias.nombre.startswith('LAB')) &
+                (db.dependencias.id == dep_id)
+            ).select(db.dependencias.ALL))
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
@@ -1560,6 +1572,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                     tratamiento = tratamiento,
                                     peligrosidad = peligrosidad)
     return redirect(URL(host=True)) 
+
 
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
 @auth.requires(lambda: __check_role())
