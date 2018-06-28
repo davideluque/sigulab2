@@ -10,7 +10,7 @@
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
- 	
+
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
 		<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
@@ -122,10 +122,11 @@
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
 		-->
+
 		{{ if espacios: }}
 			{{dependencias = espacios}}
 			{{ n = len(dependencias) }}
-			{{ filas = n//4 if n%4 == 0 else n//4+1 }}
+			{{ filas = n//10 if n%10 == 0 else n//10+1 }}
 			{{ k = 0 }}
 			{{ while k < filas:}}
 				<div id="fila2" class="row">
@@ -133,13 +134,13 @@
 					<div class="col-xs-6 col-sm-10">
 						<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
 						<div class="col-sm-3 columnas">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].codigo}}</a>
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[10*k].codigo}}</a>
 						</div>
-						{{ for i in range(1,4): }}
-							{{ if 4*k+i < n: }}
+						{{ for i in range(1,10): }}
+							{{ if 10*k+i < n: }}
 								<div class="col-sm-3 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[4*k+i].codigo}}
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[10*k+i].codigo}}
 									</a>
 								</div>
 							{{ pass }}
@@ -151,27 +152,25 @@
 			{{pass}}
 		{{else:}}
 			{{ n = len(dependencias) }} 
-			{{ filas = n//4 if n%4 == 0 else n//4+1 }} 
+			{{ filas = n//7 if n%7 == 0 else n//7+1 }} 
 			{{ k = 0 }} 
 			{{ while k < filas:}} 
 				<div id="fila2" class="row">
-					<div class="col-xs-3 col-sm-1"></div>
-					<div class="col-xs-6 col-sm-10">
+					<div class="col-xs-12 col-sm-12" style="display:flex; padding-left: 0px; padding-right:0px;">
 					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-						<div class="col-sm-3 columnas">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
+						<div class="col-sm-2 columnas" style="padding-left: 0px;">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[7*k].nombre}}</a>
 						</div>
-						{{ for i in range(1,4): }} 
-							{{ if 4*k+i < n: }} 
-								<div class="col-sm-3 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[4*k+i].nombre}}
+						{{ for i in range(1,7): }} 
+							{{ if 7*k+i < n: }} 
+								<div class="col-sm-2 columnas">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+										{{=dependencias[7*k+i].nombre}}
 									</a>
 								</div>
 							{{ pass }} 
 						{{ pass }}
 					</div>
-		  			<div class="col-xs-3 col-sm-1"></div>
 				</div>
 				{{k=k+1}} 
 			{{pass}}

@@ -1,5 +1,34 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
-
+			{{ if espacios: }}
+				{{ title = "Espacios Físicos" }}
+				{{dependencias = espacios}}
+			{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
+			{{ title = " " }}
+			{{else: }}
+				{{ title = "Secciones" }}
+			{{ pass }}
+			{{ if len(dependencias) > 0: }}
+				<button onclick="show_seccion()">
+					{{=title}}
+					<span class="caret"></span>
+				</button>
+			{{ pass }}
+			{{ if espacios: }}
+				<div class="grid-container-ef" id="secciones" style="display: none">
+			{{ else: }}
+				<div class="grid-container" id="secciones" style="display: none">
+			{{ pass }}	
+				{{ for espacio in dependencias: }}
+				<div class="grid-item" onclick="redirect('{{=URL('inventarios_desechos',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+					{{if espacios:}}
+						{{ =espacio.codigo }}
+					{{else:}}
+						{{ =espacio.nombre }}
+					{{pass}}
+				</div>
+				{{ pass }}
+			</div>
+		</div>
 <!-- Inicio Listado de sustancias -->
 <div id="inventario-dependencia" class="container">
     <div class="row">
