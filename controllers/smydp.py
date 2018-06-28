@@ -1560,6 +1560,20 @@ def inventarios_desechos():
 # Agrega un nuevo desecho peligroso al inventario de un espacio físico
 def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion):
         
+    # Verifica que no existe en el inventario una entrada repetida 
+    # se considera que una entrada es una única cuando una determinada composición
+    # con una determinada unidad de medida ya se encuentra en un determinado especifico
+    busqueda = 0
+    busqueda = len(list(db(
+        (db.t_inventario_desechos.composicion == envase.composicion) &
+        (db.t_inventario_desechos.espacio_fisico == envase.espacio_fisico) &
+        (db.t_inventario_desechos.unidad_medida == envase.unidad_medida) 
+    ).select()))
+
+    if busqueda == 0:
+        # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
+        # del envase seleccionado
+        if int(cantidad) <= int(envase.capacidad): 
     db.t_inventario_desechos.insert(categoria = envase.categoria,
                                     cantidad = cantidad,
                                     unidad_medida = envase.unidad_medida,
@@ -1571,7 +1585,11 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                     envase = envase.id,
                                     tratamiento = tratamiento,
                                     peligrosidad = peligrosidad)
-    return redirect(URL(host=True)) 
+        else:
+            response.flash = T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
+    else:
+        response.flash = T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
+
 
 
 # Muestra los movimientos de la bitacora comenzando por el mas reciente
