@@ -453,10 +453,7 @@
                           </div>
                         {{pass}}
 
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
+                          
                         
                     </div>
                   </div>
@@ -709,8 +706,13 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                                <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
+                                <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                            </div>
                         </div>
+                        
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
