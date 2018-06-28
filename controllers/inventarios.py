@@ -722,8 +722,8 @@ def detalles():
     unidad_med = ['cm','m']
     movilidad = ['Fijo','Portátil']
     uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-    nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-    'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+    'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -844,8 +844,8 @@ def detalles_mat():
     unidad_med = ['cm','m']
     movilidad = ['Fijo','Portátil']
     uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-    nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-    'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -991,8 +991,8 @@ def bienes_muebles():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1091,8 +1091,8 @@ def bienes_muebles():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1190,8 +1190,8 @@ def bienes_muebles():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1366,8 +1366,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1468,8 +1468,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1570,8 +1570,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1784,8 +1784,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1884,8 +1884,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1983,8 +1983,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']

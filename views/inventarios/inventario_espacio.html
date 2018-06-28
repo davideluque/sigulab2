@@ -169,11 +169,6 @@
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
                         
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
-                        
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -332,8 +327,14 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Observaciones">
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
+                        </div>
+
+                        
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -596,7 +597,7 @@ del concepto y tipo de ingreso o egreso -->
 
   function colocar_subcategoria(value){
     var dict = {
-		'Maquinaria Construcción':
+		'Maquinaria y demás equipos de construcción, campo, industria y taller':
 			["Maquinaria y equipos de construcción y mantenimiento",
 			"Maquinarias y equipos para mantenimiento de automotores",
 			"Maquinarias y equipos agrícolas y pecuarios",
@@ -606,7 +607,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Maquinarias y equipos de riego y acueductos",
 			"Equipos de almacen",
 			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-		"Equipo Transporte":
+		"Equipos de transporte, tracción y elevación":
 			["Vehículos automotores terrestres",
 			"Equipos ferroviarios y de cables aéreos",
 			"Equipos marítimos de transporte",
@@ -614,16 +615,16 @@ del concepto y tipo de ingreso o egreso -->
 			"Vehículos de tracción no motorizados",
 			"Equipos auxiliares de transporte",
 			"Otros equipos de transporte, tracción y elevación"],
-		"Equipo Comunicaciones":
+		"Equipos de comunicaciones y de señalamiento":
 			["Equipos de telecomunicaciones",
 			"Equipos de señalamiento",
 			"Equipos de control de tráfico aéreo",
 			"Equipos de correo",
 			"Otros equipos de comunicaciones y de señalamiento"],
-		"Equipo Médico":
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
 			["Equipos médicos - quirúrgicos, dentales y veterinarios",
 			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-		"Equipo Científico Religioso":
+		"Equipos científicos, religiosos, de enseñanza y recreación":
 			["Equipos científicos y de laboratorio",
 			"Equipos de enseñanza, deporte y recreación",
 			"Obras de arte",
@@ -631,7 +632,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Equipos religiosos",
 			"Instrumentos musicales",
 			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
-		"Equipo Oficina" : 
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
 			["Mobiliario y equipos de oficina",
 			"Equipos de procesamiento de datos",
 			"Mobiliario y equipos de alojamiento",
