@@ -1571,7 +1571,9 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
-            db.t_inventario_desechos.insert(categoria = envase.categoria,
+
+            #Agrega el desecho al inventario
+            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
                                             unidad_medida = envase.unidad_medida,
                                             composicion = envase.composicion,
@@ -1582,6 +1584,19 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             envase = envase.id,
                                             tratamiento = tratamiento,
                                             peligrosidad = peligrosidad)
+
+            # Crea la entrada inicial en la bitácora de desechos
+            db.t_Bitacora_desechos.insert(
+                fecha = str(datetime.datetime.now()),
+                descripcion = "ENTRADA INICIAL",
+                cantidad_generada = cantidad,
+                cantidad_retirada = 0,
+                saldo = cantidad,
+                unidad_medida_bitacora = envase.unidad_medida,
+                envase = envase.id,
+                inventario = nueva_entrada_id
+            )
+
         else:
             response.flash = T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
     else:
