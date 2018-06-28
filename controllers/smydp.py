@@ -1191,14 +1191,14 @@ def inventarios_desechos():
             # Evaluando la correctitud de los parametros del GET 
             if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
                     __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios'))
+                redirect(URL('inventarios_desechos'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('inventarios'))
+                redirect(URL('inventarios_desechos'))
 
             if request.vars.es_espacio == "True":
         
@@ -1235,11 +1235,7 @@ def inventarios_desechos():
                     db.t_inventario_desechos.unidad_medida
                 ))
 
-                envases_en_bitacora = list(db(db.t_Bitacora_desechos).select(db.t_Bitacora_desechos.envase))
-                envases = list(db(
-                    (db.t_envases.espacio_fisico == espacio_id) &
-                    (db.t_envases.id not in envases_en_bitacora)
-                ).select())
+                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
 
                 # Si se esta agregando un nuevo desecho, se registra en la DB
                 if request.vars.envase:
@@ -1411,9 +1407,10 @@ def inventarios_desechos():
 
                 envases_en_bitacora = list(db(db.t_Bitacora_desechos).select(db.t_Bitacora_desechos.envase))
                 envases = list(db(
-                    (db.t_envases.espacio_fisico == espacio_id) &
-                    (db.t_envases.id not in envases_en_bitacora)
+                    (db.t_envases.espacio_fisico == espacio_id) 
                 ).select())
+
+                
 
                 # Si se esta agregando un nuevo desecho, se registra en la DB
                 if request.vars.envase:
@@ -1559,7 +1556,7 @@ def inventarios_desechos():
 
 # Agrega un nuevo desecho peligroso al inventario de un espacio físico
 def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion):
-        
+    
     # Verifica que no existe en el inventario una entrada repetida 
     # se considera que una entrada es una única cuando una determinada composición
     # con una determinada unidad de medida ya se encuentra en un determinado especifico
@@ -1574,17 +1571,17 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
-    db.t_inventario_desechos.insert(categoria = envase.categoria,
-                                    cantidad = cantidad,
-                                    unidad_medida = envase.unidad_medida,
-                                    composicion = envase.composicion,
-                                    concentracion = concentracion,
-                                    espacio_fisico = envase.espacio_fisico,
-                                    seccion = envase.espacio_fisico.dependencia,
-                                    responsable = auth.user_id,
-                                    envase = envase.id,
-                                    tratamiento = tratamiento,
-                                    peligrosidad = peligrosidad)
+            db.t_inventario_desechos.insert(categoria = envase.categoria,
+                                            cantidad = cantidad,
+                                            unidad_medida = envase.unidad_medida,
+                                            composicion = envase.composicion,
+                                            concentracion = concentracion,
+                                            espacio_fisico = envase.espacio_fisico,
+                                            seccion = envase.espacio_fisico.dependencia,
+                                            responsable = auth.user_id,
+                                            envase = envase.id,
+                                            tratamiento = tratamiento,
+                                            peligrosidad = peligrosidad)
         else:
             response.flash = T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
     else:

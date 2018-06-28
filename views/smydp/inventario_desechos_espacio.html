@@ -114,7 +114,7 @@
                             <select class="form-control" type="select" id="envase" name="envase" required>
                               <option value="" selected hidden >Envase*</option>
                               {{for envase in envases:}}
-                              <option value="{{=envase.id}}">{{=envase.identificacion}}</option>
+                              <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
                               {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-envase"> </p> </div>
