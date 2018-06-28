@@ -226,3 +226,47 @@ db.modificacion_sin_bn.msb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, 
 #		Colocar la opción de especificar dede el front para el field "prsentacion" en sin_bn y en "material" en sin_bn
 # 		Calculo de la cantidad total de unidades que se hace multiplicando el número de unidades por la cantidad 
 #		sb_unidad es obligatorio si se rellena sb_capacidad
+
+
+###Tabla para herramientas###
+db.define_table(
+    'herramienta',
+    Field('hr_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
+    Field('hr_num','string',unique=True,requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
+    #
+    Field('hr_marca','string',label=T('Marca')),
+    Field('hr_modelo','string',label=T('Modelo')),
+    Field('hr_serial','string',label=T('Serial')),
+    #
+    Field('hr_presentacion','string',notnull=True,label=T('Presentación'),requires=IS_IN_SET(['Unidad','Conjunto'])),
+    Field('hr_numpiezas','string',notnull=True,label=T('Nro de piezas'),default='1',length=3),
+    Field('hr_contenido','text',label=T('Contenido')),
+    Field('hr_descripcion','text',label=T('Descripción de Presentación')),
+    Field('hr_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro'])),
+    #
+    Field('hr_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
+    Field('hr_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('hr_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('hr_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('hr_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+
+    Field('hr_ubicacion','string',notnull=True,label=T('Ubicacion interna'),requires=IS_NOT_EMPTY()),
+    Field('hr_observacion','text',label=T('Observaciones')),
+   
+    Field('hr_espacio_fisico', 'reference espacios_fisicos', notnull=True, label=T('Nombre del espacio fisico')),
+    Field('hr_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
+    Field('hr_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
+    Field('hr_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    # Estado = 2  :Sin solicitud
+    Field('hr_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
+    # Estado = 0 : Visible
+    # Estado = 1 : Oculto
+    Field('hr_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
+    )
+db.herramienta.hr_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.herramienta.hr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
+db.herramienta.hr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
+db.herramienta.hr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
