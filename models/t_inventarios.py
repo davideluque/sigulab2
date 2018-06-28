@@ -15,7 +15,7 @@ db.define_table(
     Field('bm_modelo','string',label=T('Modelo')),
     Field('bm_serial','string',label=T('Serial')),
     #
-    Field('bm_descripcion','text',notnull=True,label=T('Descripción'),requires=IS_NOT_EMPTY()),
+    Field('bm_descripcion','text', label=T('Descripción'),requires=IS_NOT_EMPTY()),
     Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro'])),
     Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
     #Solo lo poseen los equipos
@@ -46,6 +46,7 @@ db.define_table(
     # Estado = 1  :Aceptado
     # Estado = 2  :Sin solicitud
     Field('bm_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
+    Field('bm_desc_eliminar', 'string', length = 140, label = T('Razon de Eliminacion')),
     Field('bm_clasificacion', 'string', notnull = True, label = T('Clasificacion del bien mueble'), requires=IS_IN_SET(['Equipo','Mobiliario'])),
     # Estado = 0 : Visible
     # Estado = 1 : Oculto
