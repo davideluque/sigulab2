@@ -125,3 +125,15 @@ th {
 .datepicker th {
 	background: transparent;
 }
+
+#datatable_filter{
+	text-align: left !important;
+	float: left !important;
+	margin: 15px;
+}
+
+.dt-buttons {
+	float: right !important;
+	padding-right: 0 !important;
+	vertical-align: bottom !important;
+}
