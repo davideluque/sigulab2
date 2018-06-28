@@ -10,8 +10,9 @@ import datetime
 # roles necesarios
 def __check_role():
 
-    roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
-                        'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'TÉCNICO', 
+    roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR',
+                        'COORDINADOR', 'PERSONAL DE DEPENDENCIA', 
+                        'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL INTERNO', 
                         'GESTOR DE SMyDP']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
 
@@ -349,7 +350,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
 
     # Si el usuario es tecnico se busca en la tabla de es_encargado si el usuario 
     # es encargado del espacio con id dep_id
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("PERSONAL INTERNO"):
         encargado = db(db.es_encargado.espacio_fisico == dep_id).select().first()
         if encargado:
             permitido = encargado.tecnico == user.id
@@ -843,8 +844,8 @@ def detalles_mat():
     unidad_med = ['cm','m']
     movilidad = ['Fijo','Portátil']
     uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-    nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-    'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
     cod_localizacion = ['150301','240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -942,7 +943,7 @@ def bienes_muebles():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("TÉCNICO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -950,7 +951,7 @@ def bienes_muebles():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("PERSONAL INTERNO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1050,7 +1051,7 @@ def bienes_muebles():
 
             inventario = __sumar_inventarios(espacios_ids)
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("COORDINADOR"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
@@ -1090,8 +1091,8 @@ def bienes_muebles():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1189,8 +1190,8 @@ def bienes_muebles():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1317,7 +1318,7 @@ def material_lab():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("TÉCNICO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -1325,7 +1326,7 @@ def material_lab():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("PERSONAL INTERNO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1365,8 +1366,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1427,7 +1428,7 @@ def material_lab():
 
             inventario = __sumar_inventarios_materiales(espacios_ids)
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("COORDINADOR"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
@@ -1467,8 +1468,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1569,8 +1570,8 @@ def material_lab():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1735,7 +1736,7 @@ def validaciones():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("TÉCNICO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -1743,7 +1744,7 @@ def validaciones():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("PERSONAL INTERNO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1783,8 +1784,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1843,7 +1844,7 @@ def validaciones():
 
             inventario = __sumar_inventarios_bn_validacion(espacios_ids)
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("COORDINADOR"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
@@ -1883,8 +1884,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
@@ -1982,8 +1983,8 @@ def validaciones():
                 unidad_med = ['cm','m']
                 movilidad = ['Fijo','Portátil']
                 uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
                 cod_localizacion = ['150301','240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
