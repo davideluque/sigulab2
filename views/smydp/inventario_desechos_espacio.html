@@ -43,7 +43,7 @@
         <tbody>
           {{for desecho in inventario:}}
             <tr>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
+                <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
                 <td class="camposTabla">{{=desecho['t_inventario_desechos']['composicion']}}</td>
                 <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre']}}</td>
                 <td class="camposTabla">{{=desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
@@ -114,7 +114,7 @@
                             <select class="form-control" type="select" id="envase" name="envase" required>
                               <option value="" selected hidden >Envase*</option>
                               {{for envase in envases:}}
-                              <option value="{{=envase.id}}">{{=envase.identificacion}}</option>
+                              <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
                               {{pass}}
                             </select>
                             <div class="field-error"> <p id="error-envase"> </p> </div>
@@ -163,7 +163,7 @@
                           </div>
                       </div>
                     </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
+                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>         
                   </fieldset>
                   <!-- Fin Primer Paso -->
                 </form>
