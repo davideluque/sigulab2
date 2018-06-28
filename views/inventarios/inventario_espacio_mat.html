@@ -25,7 +25,7 @@
     <br>
     <div id="buttons">
       <!-- Filtrado -->
-        <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+        <button class="btn" id='botonModal' data-toggle="modal" onclick="elegir_campos()" data-target="#addbm"><i class="fa fa-plus"></i></button>
         <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
         <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
       <!-- Filtrado -->    
@@ -122,36 +122,9 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
 
-                <!-- Primer paso-->
-            <fieldset class="formField">
-                <div class="form-bottom" data-step="1" data-title="Primer Paso">
-                  <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                  <div class="col-sm-1 col1Body"> 
-                    <span class="step activePass">1</span>
-                    <span class="step">2</span>
-                    <span class="step">3</span>
-                    <span class="step">4</span>
-                  </div>
-                  <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Características del Material</h4>                
-                    <label>Campos marcados con * son obligatorios.</label>
 
-                    <div class="form-group">
-                        <label>Seleccione la clasificación del Material*</label>
-                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
-                          <option value="">Seleccione una opción</option>
-                          <option value="Material de Laboratorio">Material de Laboratorio</option>
-                          <option value="Consumible">Consumible</option>
-                        </select>
-                        <div class="field-error"> <p id="error-clasificacion"></p></div>
-                      </div>
-                  </div>
-                </div>
-                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()"><i class="fas fa-arrow-right"></i></button>    
-            </fieldset>
                 
-                <!-- Segundo paso-->
+                <!-- Primer paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -165,6 +138,16 @@
                     <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">Características del Material</h4>                
                       <label>Campos marcados con * son obligatorios.</label>
+
+                      <div class="form-group" hidden>
+                        <label>Seleccione la clasificación del Material*</label>
+                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
+                          <option value="">Seleccione una opción</option>
+                          <option value="Material de Laboratorio" selected >Material de Laboratorio</option>
+                          <option value="Consumible">Consumible</option>
+                        </select>
+                        <div class="field-error"> <p id="error-clasificacion"></p></div>
+                      </div>
 
 
                         <div class="form-group" tag="Formato:">
