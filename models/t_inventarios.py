@@ -17,7 +17,7 @@ db.define_table(
     #
     Field('bm_descripcion','text', label=T('Descripción')),
     Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro'])),
-    Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
+    Field('bm_color','string',notnull=True,label=T('Color')),
     #Solo lo poseen los equipos
     Field('bm_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
     Field('bm_fecha_calibracion','date',label=T('Fecha de Calibracion')),
@@ -72,7 +72,7 @@ db.define_table(
     #
     Field('mbn_descripcion','text',label=T('Descripción')),
     Field('mbn_material','string',label=T('Material Predominante'), requires=IS_EMPTY_OR(IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']))),
-    Field('mbn_color','string',label=T('Color'),requires=IS_EMPTY_OR(IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']))),
+    Field('mbn_color','string',label=T('Color')),
     #Solo lo poseen los equipos
     Field('mbn_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
     Field('mbn_fecha_calibracion','date',label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),

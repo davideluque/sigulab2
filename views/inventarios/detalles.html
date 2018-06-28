@@ -133,7 +133,7 @@
 {{block center}}
     <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa'] != None: }}
+    {{ if bien['bm_placa']!=None or bien['bm_placa']!="": }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
     <!-- Flash message -->
