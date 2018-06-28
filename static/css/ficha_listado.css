@@ -130,10 +130,24 @@ th {
 	text-align: left !important;
 	float: left !important;
 	margin: 15px;
+	border-collapse: collapse;
 }
 
 .dt-buttons {
 	float: right !important;
 	padding-right: 0 !important;
-	vertical-align: bottom !important;
+	bottom: 0 !important;
+	margin-top: 1.8%;
+
+}
+
+#datatable_info {
+	border-collapse: collapse;
+	float: right;
+	text-align: right;
+}
+
+.paginate_button{
+	padding: 0 !important;
+	margin: 0 !important;
 }

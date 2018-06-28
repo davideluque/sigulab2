@@ -1,5 +1,5 @@
 var table = $('#datatable').DataTable({
-"dom": "<'row buscar'f>"+"<'row'<'col-md-8'l><'col-md-4'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+"dom": "<'row buscar'f>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
 language: {
   url: langDT
 },
@@ -34,11 +34,8 @@ initComplete: function(){
      ]
   });
   api.buttons().container().appendTo('.buscar');
-$('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-  $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
-  $('#buttons').style.textAlign = "right";
-
-
+  $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+  $('#datatable_next').html('<span class="fa fa-arrow-right" />');
   
   
 }
@@ -51,6 +48,8 @@ window.onclick = function(event) {
   if (!event.target.matches('.dropDown')) {
     $(".dt-button-collection").hide();
   }
+  $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+  $('#datatable_next').html('<span class="fa fa-arrow-right" />');
 }
         
       
