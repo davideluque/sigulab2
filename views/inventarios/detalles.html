@@ -413,7 +413,7 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
+                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
@@ -433,14 +433,14 @@
 
                         {{if bien['bm_marca']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
                         {{pass}}
 
                         {{if bien['bm_modelo']!="":}}
                         <div class="form-group">
-                                <input type="text" class="form-control" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
                                 <div class="field-error"> <p id="error-modelo"> </p> </div>
                             
                         </div>
@@ -448,7 +448,7 @@
 
                         {{if bien['bm_serial']!="":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" id="serial" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
+                            <input type="text" class="form-control" id="serial" style="text-transform:uppercase" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
                         {{pass}}
@@ -707,7 +707,7 @@
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
                         <div class="form-group">
-                                <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
                                 <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                             </div>
                         </div>
