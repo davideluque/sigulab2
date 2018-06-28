@@ -28,10 +28,10 @@
         <div class="modal-header">
           <div class="media">
 
-              <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
+              <div class="media-body fichaMedia text-center">
+                <h2 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h2>
               </div>
-              <div id="editar" class="media-body">
+              <div id="editar" class="text-right">
                   <button type="button" class="btn btn-primary boton-sigulab" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
                   {{if auth.user.email == 'sigulabusb@gmail.com':}}
                   <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-trash-o" data-toggle="modal" data-ta></i></button>

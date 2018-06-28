@@ -50,13 +50,14 @@
 	  <a class="breadcrumb-item" >Personal</a>
 	  </div>
   </nav>
-{{if session.ficha_negada :}}
-<div class="jumbotron">
-  <p>{{=session.ficha_negada}}</p>
-</div>
-{{pass}}
+
 <div class="row">
   <h3 class=" text-center"> GESTIÓN DE PERSONAL</h3>
+  {{if session.ficha_negada :}}
+    <div class="jumbotron">
+    <p>{{=session.ficha_negada}}</p>
+    </div>
+  {{pass}}
     <div class="col-sm-2">
             <!-- Boton que lleva al modal -->
             {{ if not usuario.f_es_supervisor :}}
