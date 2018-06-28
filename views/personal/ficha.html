@@ -34,9 +34,9 @@
               <div id="editar" class="text-right">
                   <button type="button" class="btn btn-primary boton-sigulab" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
                   {{if auth.user.email == 'sigulabusb@gmail.com':}}
-                  <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-trash-o" data-toggle="modal" data-ta></i></button>
+                  <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-eye-slash" data-toggle="modal" data-ta></i></button>
                   {{pass}}
-                  <button type="button" class="btn boton-sigulab btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
+                  <button type="button" class="btn boton-sigulab btn-primary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
               </div>
               
           </div>
@@ -207,10 +207,10 @@
                  <table class="table contenidoFicha">
                      <tbody>
                     <tr>
-                      <td class = "text-right" >Nombre:</td><td id="field_persona_contacto" class = "text-left">{{=personal['persona_contacto']}}</td>
+                      <td >Contacto:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
                     </tr>
                     <tr >
-                      <td class = "text-right">N° de contacto:</td><td id="field_contacto_emergencia" class = "text-left">{{=personal['contacto_emergencia']}}</td>
+                      <td>Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
                     </tr>
                 </tbody>
               </table>
