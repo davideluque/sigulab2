@@ -8,7 +8,6 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
 	        </div>
         </div>
     </div>
@@ -19,11 +18,14 @@
 <div class="container">
 <div class="row">
   <h3> Inventario </h3>
-
-    <div id="buttons">
+    <div id="buttons" class="text-right">
+      <!-- Agregar contenedor -->
+      <button type="button" id="botonAgregar" class="btn botonesListado buttons-html5" data-toggle="modal" data-target="#adddesecho">
+        <li class="fa fa-plus"></li>
+      </button>
       <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->    
+      <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5"><i class="fa fa-filter"></i></button>
+      <!-- Filtrado -->
     </div>
     <br>
 
@@ -32,33 +34,43 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                <th class="camposTabla linksNombres">Espacio físico</th>
-                <th class="camposTabla linksNombres">Cantidad</th>
-                <th class="camposTabla linksNombres">Sección</th>
+                <th class="camposTabla linksNombres">Composición</th>
                 <th class="camposTabla linksNombres">Responsable</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Peligrosidad</th>
+                <th class="camposTabla linksNombres">Tratamiento</th>
             </tr>
         </thead>
 
         <tbody>
           {{for desecho in inventario:}}
             <tr>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo']}}</td>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['cantidad']}}</td>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre']}}</td>
+                <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
+                <td class="camposTabla">
+                  <a href="{{=URL('bitacora_desechos',vars=dict(inv=desecho['t_inventario_desechos']['composicion']))}}">{{=desecho['t_inventario_desechos']['composicion']}}</a>
+                </td>
                 <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre']}}</td>
-            </tr>
+                <td class="camposTabla">{{=desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
+                {{peligrosidades = ""}}
+                {{for peligrosidad in desecho['t_inventario_desechos']['peligrosidad']:}}
+                  {{peligrosidades += peligrosidad + ", "}}
+                {{pass}}
+                {{peligrosidades = peligrosidades[:-2]}}
+                <td class="camposTabla">{{=peligrosidades}} </td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento']}} </td>
+              </tr>
           {{pass}}           
         </tbody>
 
         <tfoot id="collapseFiltros">
             <tr>
                 <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                <th class="camposTabla linksNombres">Espacio físico</th>
-                <th class="camposTabla linksNombres">Cantidad</th>
-                <th class="camposTabla linksNombres">Sección</th>
+                <th class="camposTabla linksNombres">Composición</th>
                 <th class="camposTabla linksNombres">Responsable</th>
-            </tr>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Peligrosidad</th>
+                <th class="camposTabla linksNombres">Tratamiento</th>
+              </tr>
         </tfoot>
 
       </table>
@@ -72,7 +84,7 @@
 
 
 <!-- Modal añadir una sustancia nueva al inventario -->
-  <div class="modal fade" id="addsustancia" role="dialog">
+  <div class="modal fade" id="adddesecho" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -86,8 +98,8 @@
                 <h1 id="agregar">+</h1>
               </div>
             </div>
-            <div class="col-sm-10" id="col11Header">
-              <h4 class="modal-title" id="nuevaSustancia">Nuevo Grupo de Desecho
+            <div class="col-sm-10 modal-header-wrapper" id="col11Header">
+              <h4 class="modal-title titulo-modal-desecho" id="nuevoDesecho">Nuevo desecho
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </h4>
             </div>
@@ -109,36 +121,62 @@
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos de ingreso</h4>                
-                        <label>Campos marcados con * son obligatorios.</label>
+                        <p>Campos marcados con * son obligatorios.</p>
                           <div class="form-group">
-                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
-                              <option value="" selected hidden >Sustancia*</option>
-                              {{for desecho in desechos:}}
-                              <option value="{{=desecho.id}}">{{=desecho.categoria}})</option>
+                            <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                            <select class="form-control" type="select" id="envase" name="envase" required>
+                              <option value="" selected hidden >Envase*</option>
+                              {{for envase in envases:}}
+                              <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
                               {{pass}}
                             </select>
-                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
+                            <div class="field-error"> <p id="error-envase"> </p> </div>
                           </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
+                            <label for="cantidad">Cantidad de desecho generado*:</label>
+                            <input class="form-control" type="text" name="cantidad" id="cantidad" required placeholder="150"/>
+                            <div class="field-error">
+                              <p id="error-cantidad"> </p>
+                            </div>
                           </div>
                           <div class="form-group">
-                            <input type="text" class="form-control" name="excedente" placeholder="Excedente*" required>
-                            <div class="field-error"> <p id="error-excedente"> </p> </div>
+                            <label for="concentracion">Concentración del desecho generado*:</label>
+                            <input class="form-control" type="text" name="concentracion" id="concentracion" required placeholder="Ej.: 90" />
+                            <div class="field-error">
+                              <p id="error-concentracion"> </p>
+                            </div>
                           </div>
-                          <div class="form-group" style="padding-bottom: 50px">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
-                              {{pass}}
+                          <div class="form-group">
+                            <label for="peligrosidad">Peligrosidad del desecho generado*:</label>
+                            <select type="text" class="form-control" name="peligrosidad" id="peligrosidad" required multiple>
+                              <option value="Sustancia Explosiva (EX)">Sustancia Explosiva (EX)</option>
+                              <option value="Sustancia Inflamable (IN)">Sustancia Inflamable (IN)</option>
+                              <option value="Sustancia Comburente (CB)">Sustancia Comburente (CB)</option>
+                              <option value="Gaso Bajo Presión (GZ)">Gaso Bajo Presión (GZ)</option>
+                              <option value="Corrosiva (CR)">Corrosiva (CR)</option>
+                              <option value="Toxicidad Aguda (TO)">Toxicidad Aguda (TO)</option>
+                              <option value="Peligro para la Salud (DA)">Peligro para la Salud (DA)</option>
+                              <option value="Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)">Peligro Grave para la Salud - Cancerígeno Mutágeno (MU)</option>
+                              <option value="Dañino para el Medio Ambiente Acuático (EN)">Dañino para el Medio Ambiente Acuático (EN)</option>
                             </select>
+                            <p>Presione Crtl y haga click en las peligrosidad para seleccionar varias</p>
+                            <div class="field-error"> <p id="error-peligrosidad"> </p> </div>
                           </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+                          <div class="form-group">
+                            <label for="tratamiento">Tipo de tratamiento del desecho generado*:</label>
+                            <select type="text" class="form-control" name="tratamiento" id="tratamiento" required>
+                              <option value="Reutilizable">Reutilizable</option>
+                              <option value="Recuperable">Recuperable</option>
+                              <option value="Tratable">Tratable</option>
+                              <option value="Disposición final">Disposición final</option>
+                            </select>
+                            <div class="field-error">
+                              <p id="error-tratamiento"> </p>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>         
+                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>         
                   </fieldset>
                   <!-- Fin Primer Paso -->
                 </form>
@@ -152,60 +190,58 @@
 <!-- Fin Modal Agregar Servicio -->
 
 <script type="text/javascript">
+
   // Valida los campos de la forma en el modal "addsustancia"
   function validar_campos(){
 
     // Buscando divs para ingresar mensajes de error
-    var error_total = document.getElementById("error-total");
-    var error_excedente = document.getElementById("error-excedente");
+    var error_envase = document.getElementById("error-envase");
+    var error_cantidad = document.getElementById("error-cantidad");
+    var error_concentracion = document.getElementById("error-concentracion");
+    var error_peligrosidad = document.getElementById("error-peligrosidad");
+    var error_tratamiento = document.getElementById("error-tratamiento");
 
     // Limpiando los mensajes anteriores de validadores
-    if (error_total.innerText != ''){
-      error_total.innerText = '';
+    if (error_envase.innerText != ''){
+      error_envase.innerText = '';
     }
-    if (error_excedente.innerText != ''){
-      error_excedente.innerText = '';
+    if (error_cantidad.innerText != ''){
+      error_cantidad.innerText = '';
+    }
+    if (error_concentracion.innerText != '') {
+      error_concentracion.innerText = '';
+    }
+    if (error_peligrosidad.innerText != '') {
+      error_peligrosidad.innerText = '';
+    }
+    if (error_tratamiento.innerText != '') {
+      error_tratamiento.innerText = '';
     }
      
+
+
     // Buscando los valores ingresados por el usuario en cada campo
-    var total = document.forms['formularioCarga']['total'].value;
-    var excedente = document.forms['formularioCarga']['excedente'].value;
+    var envase = document.forms['formularioCarga']['envase'].value;
+    var cantidad = document.forms['formularioCarga']['cantidad'].value;
+    var concentracion = document.forms['formularioCarga']['concentracion'].value;
+    var peligrosidad = document.forms['formularioCarga']['peligrosidad'].value;
+    var tratamiento = document.forms['formularioCarga']['tratamiento'].value;
+    
 
     // Mensajes de error
-    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
-    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
-    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
-    var mensaje_error_excedente = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+    var mensaje_error_envase = "Por favor ingrese la identificación de un envase";
+    var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
+    var mensaje_error_concentracion = "Por favor ingrese un valor numérico no negativo en el rango entre 1 y 100.";
+    var mensaje_error_peligrosidad = "Por favor seleccione al menos una peligrosidad de la lista. Puede seleccionar múltiples opciones haciendo click mientras mantiene presionada la tecla Crtl.";
+    var mensaje_error_tratamiento = "Por favor ingrese una opción de tratamiento para el desecho.";
 
-    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
-    if (!is_number(total)) {
-      error_total.innerText = mensaje_error_tipo;
+    if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
+      error_cantidad.innerText = mensaje_error_cantidad;
       return false;
     }
     
-    if (is_negative(total)) {
-      error_total.innerText = mensaje_error_negativo;
-      return false;
-    }
-
-    if (is_zero(total)) {
-      error_total.innerText = mensaje_error_nulo;
-      return false;
-    }
-
-    /* Validando el campo excedente */
-    if (!is_number(excedente)) {
-      error_excedente.innerText = mensaje_error_tipo;
-      return false;
-    }
-    
-    if (is_negative(excedente)) {
-      error_excedente.innerText = mensaje_error_negativo;
-      return false;
-    }
-    // La cantidad de sustancia como excedente no puede ser mayor al total
-    if (excedente > total) {
-      error_excedente.innerText = mensaje_error_excedente;
+    if (!is_number(concentracion) || is_negative(concentracion) || is_zero(concentracion)) {
+      error_concentracion.innerText = mensaje_error_concentracion;
       return false;
     }
 

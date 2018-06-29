@@ -1,5 +1,9 @@
 {{extend 'layout.html'}} 
     {{block head}}
+
+        <!-- Para los mensajes con flash -->
+        <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}" />
+
         <link rel="stylesheet" href="{{=URL('static', 'css/smydp_contenedores_desechos.css')}}"> 
         <!-- DataTables -->
         <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
@@ -27,6 +31,15 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
+<!-- Flash message -->
+{{if response.flash:}}
+    <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{=response.flash}}
+    </div>
+{{pass}}
+
+
 
 {{if ('edit' in request.args) or ('view' in request.args):}}
     {{cont = ''}}
@@ -40,7 +53,7 @@
         <div class="row">
             <div id="columnBotonAgregar">
                 <div class="col-lg-12 text-right">
-                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor">Editar Contenedor</button>
+                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor"><i class="fa fa-pencil"></i></button>
                 </div>
             </div>
         </div>
@@ -293,10 +306,10 @@
                                     </div>
                                     <div class="row modal-envases-footer">
                                         <div class="col-sm-6 text-center">
-                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit"><li class="fa-plus-circle"/></button>
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-plus-circle"/></button>
                                         </div>
                                         <div class="col-sm-6 text-center">
-                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar contenedor</button>
+                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();"><i class="fa fa-trash-o"></i></button>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -358,14 +371,14 @@
                         <tbody>
                             {{for contenedor in contenedores:}}
                             <tr>
-                                <td class="camposTabla" style="text-align: left">
+                                <td class="camposTabla" style="text-align: center">
                                     <a href={{=URL('..', 'sigulab2', 'smydp/envases', args=['view', contenedor.id])}}>
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
                                 <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}}{{=contenedor.unidad_medida}}</td>
+                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
@@ -527,10 +540,10 @@
                                     </div>
                                     <div class="row modal-envases-footer">
                                         <div class="col-sm-6 text-center">
-                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar contenedor</button>
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><i class="fa fa-plus-circle"></i></button>
                                         </div>
                                         <div class="col-sm-6 text-center">
-                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar contenedor</button>
+                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();"><i class="fa fa-trash-o"></i></button>
                                         </div>
                                     </div>
                                 </fieldset>
