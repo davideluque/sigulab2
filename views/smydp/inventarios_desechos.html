@@ -96,10 +96,12 @@
 		</div>
 		<div class="col-xs-8">
 			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
-			{{if dep_nombre == "Alta Tensión":}}
+			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
-			{{else:}}
+			{{elif  "LABORATORIO" in dep_nombre.upper():}} 
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
 			{{pass}}
 		</div>
 		<div class="col-xs-2"> </div>
@@ -124,56 +126,131 @@
 		-->
 
 		{{ if espacios: }}
-			{{dependencias = espacios}}
-			{{ n = len(dependencias) }}
-			{{ filas = n//10 if n%10 == 0 else n//10+1 }}
-			{{ k = 0 }}
-			{{ while k < filas:}}
-				<div id="fila2" class="row">
-					<div class="col-xs-3 col-sm-1"></div>
-					<div class="col-xs-6 col-sm-10">
-						<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-						<div class="col-sm-3 columnas">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[10*k].codigo}}</a>
-						</div>
-						{{ for i in range(1,10): }}
-							{{ if 10*k+i < n: }}
-								<div class="col-sm-3 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[10*k+i].codigo}}
-									</a>
-								</div>
-							{{ pass }}
-						{{ pass }}
-					</div>
-					<div class="col-xs-3 col-sm-1"></div>
+			{{if request.vars.dependencia and request.vars.es_espacio == "False":}}
+				<div class="row">
+					<button onclick="show_seccion()">
+						Espacios físicos
+						<span class="caret"></span>
+					</button>
 				</div>
-				{{k=k+1}}
+				<div id="contenedor-filas" style="display: none">
+					{{dependencias = espacios}}
+					{{ n = len(dependencias) }}
+					{{ filas = n//10 if n%10 == 0 else n//10+1 }}
+					{{ k = 0 }}
+					{{ while k < filas:}}
+						<div id="fila2" class="row">
+							<div class="col-xs-6 col-sm-10" style="padding-left: 0px;">
+								<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+								<div class="col-sm-1 columnas" style="padding-left: 0px;">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[10*k].codigo}}</a>
+								</div>
+								{{ for i in range(1,10): }}
+									{{ if 10*k+i < n: }}
+										<div class="col-sm-1 columnas">
+											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+												{{=dependencias[10*k+i].codigo}}
+											</a>
+										</div>
+									{{ pass }}
+								{{ pass }}
+							</div>
+							<div class="col-xs-3 col-sm-1"></div>
+						</div>
+						{{k=k+1}}
+					{{pass}}
+				</div>
+			{{else:}}
+				<div id="contenedor-filas">
+					{{dependencias = espacios}}
+					{{ n = len(dependencias) }}
+					{{ filas = n//10 if n%10 == 0 else n//10+1 }}
+					{{ k = 0 }}
+					{{ while k < filas:}}
+						<div id="fila2" class="row">
+							<div class="col-xs-6 col-sm-10" style="padding-left: 0px;">
+								<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+								<div class="col-sm-1 columnas" style="padding-left: 0px;">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[10*k].codigo}}</a>
+								</div>
+								{{ for i in range(1,10): }}
+									{{ if 10*k+i < n: }}
+										<div class="col-sm-1 columnas">
+											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+												{{=dependencias[10*k+i].codigo}}
+											</a>
+										</div>
+									{{ pass }}
+								{{ pass }}
+							</div>
+							<div class="col-xs-3 col-sm-1"></div>
+						</div>
+						{{k=k+1}}
+					{{pass}}
+				</div>
 			{{pass}}
+			
 		{{else:}}
-			{{ n = len(dependencias) }} 
-			{{ filas = n//7 if n%7 == 0 else n//7+1 }} 
-			{{ k = 0 }} 
-			{{ while k < filas:}} 
-				<div id="fila2" class="row">
-					<div class="col-xs-12 col-sm-12" style="display:flex; padding-left: 0px; padding-right:0px;">
-					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-						<div class="col-sm-2 columnas" style="padding-left: 0px;">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[7*k].nombre}}</a>
-						</div>
-						{{ for i in range(1,7): }} 
-							{{ if 7*k+i < n: }} 
-								<div class="col-sm-2 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[7*k+i].nombre}}
-									</a>
-								</div>
-							{{ pass }} 
-						{{ pass }}
-					</div>
+			{{if request.vars.dependencia and request.vars.es_espacio == "False":}}
+				<div class="row">
+					<button onclick="show_seccion()">
+						Dependencias
+						<span class="caret"></span>
+					</button>
 				</div>
-				{{k=k+1}} 
+				<div id="contenedor-filas" style="display: none">
+					{{ n = len(dependencias) }} 
+					{{ filas = n//7 if n%7 == 0 else n//7+1 }} 
+					{{ k = 0 }} 
+					{{ while k < filas:}} 
+						<div id="fila2" class="row" >
+							<div class="col-xs-12 col-sm-12" style="display:flex; padding-left: 0px; padding-right:0px;">
+							<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+								<div class="col-sm-2 columnas" style="padding-left: 0px;">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[7*k].nombre}}</a>
+								</div>
+								{{ for i in range(1,10): }} 
+									{{ if 10*k+i < n: }} 
+										<div class="col-sm-2 columnas">
+											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+												{{=dependencias[10*k+i].nombre}}
+											</a>
+										</div>
+									{{ pass }} 
+								{{ pass }}
+							</div>
+						</div>
+						{{k=k+1}} 
+					{{pass}}
+				</div>
+			{{else:}}
+				<div id="contenedor-filas">
+					{{ n = len(dependencias) }} 
+					{{ filas = n//7 if n%7 == 0 else n//7+1 }} 
+					{{ k = 0 }} 
+					{{ while k < filas:}} 
+						<div id="fila2" class="row" >
+							<div class="col-xs-12 col-sm-12" style="display:flex; padding-left: 0px; padding-right:0px;">
+							<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
+								<div class="col-sm-2 columnas" style="padding-left: 0px;">
+									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[7*k].nombre}}</a>
+								</div>
+								{{ for i in range(1,7): }} 
+									{{ if 7*k+i < n: }} 
+										<div class="col-sm-2 columnas">
+											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+												{{=dependencias[7*k+i].nombre}}
+											</a>
+										</div>
+									{{ pass }} 
+								{{ pass }}
+							</div>
+						</div>
+						{{k=k+1}} 
+					{{pass}}
+				</div>
 			{{pass}}
+			
 		{{pass}}
 	</div>
 
@@ -284,5 +361,22 @@
 	var w2p_ajax_confirm_message =
 		"{{=T('')}}";
 
+</script>
+
+
+<script>
+	function show_seccion() {
+		var x = document.getElementById("contenedor-filas");
+		if (x.style.display === "none") {
+			x.style.display = "grid";
+			x.style.webkitAnimation = "fadein 2s";
+			x.style.marginTop = "20px";
+		} else {
+			x.style.webkitAnimation = "fadeOut 1s";
+			setTimeout(function () {
+				x.style.display = "none";
+			}, 500);
+		}
+	}
 </script>
 {{end}}
