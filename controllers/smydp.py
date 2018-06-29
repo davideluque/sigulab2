@@ -1684,52 +1684,42 @@ def bitacora_desechos():
     inventario = db((db.t_inventario_desechos.id == inventario_id) & 
                     (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id)
                    ).select()[0]
+    
+    # print inventario['t_inventario_desechos']['composicion']
 
     # Espacio al que pertenece la bitacora consultada
-    espacio_id = inventario['t_inventario_desechos'].espacio_fisico
+    espacio_id = inventario['t_inventario_desechos']['espacio_fisico']['id']
 
-    # Unidad de medida en que es expresada la sustancia en el inventariobaking cheats
-    unidad_medida = db(db.t_Unidad_de_medida.id == inventario.t_inventario_desechos.unidad_medida
-                      ).select()[0]
+    # Unidad de medida en que es expresada la sustancia en el inventario
+    unidad_medida = inventario['t_inventario_desechos']['unidad_medida']['id']
 
-    # Se valida que el usuario tenga acceso a la bitacora indicada
-    # para consultar la bitacora. 
-    # if not __acceso_permitido(user, espacio_id, "True"):
-    #     redirect(URL('inventarios'))
+    espacio_nombre = inventario['t_inventario_desechos']['espacio_fisico']['codigo']
 
-    # composicion = inventario['composicion']
-    espacio_nombre = inventario['espacios_fisicos'].nombre
+    bitacora = list(db((db.t_Bitacora_desechos.inventario == inventario_id)).select())
 
-    bitacora = db((db.t_Bitacora_desechos.inventario == inventario_id) &
-                  (db.t_Bitacora_desechos.created_by == db.auth_user.id) &
-                  (db.auth_user.id == db.t_Personal.f_usuario) &
-                  (db.t_Bitacora_desechos.unidad_medida_bitacora == db.t_Unidad_de_medida.id)).select()
+    print bitacora
     
     # *!* Hacer esto cuando se cree el registro y ponerlo en reg['f_descripcion']
     # Obteniendo la descripcion de cada fila y guardandola como un atributo
-    for reg in bitacora:
-        descripcion = __get_descripcion(reg['t_Bitacora_desechos'])
-        reg['t_Bitacora_desechos']['descripcion'] = descripcion
+    # for reg in bitacora:
+    #     descripcion = __get_descripcion(reg['t_Bitacora_desechos'])
+    #     reg['t_Bitacora_desechos']['descripcion'] = descripcion
 
     # Si se han enviado datos para agregar un nuevo registro
-    concepto = request.vars.concepto
-    if concepto:
-        __agregar_registro(concepto)
+    # concepto = request.vars.concepto
+    # if concepto:
+    #     __agregar_registro(concepto)
 
 
 
     return dict(bitacora=bitacora,
                 unidad_medida=unidad_medida,
                 inventario=inventario,
-                composicion=composicion,
+                composicion=inventario['t_inventario_desechos']['composicion'],
                 espacio_nombre=espacio_nombre,
                 espacio_id=espacio_id,
                 conceptos=conceptos,
-                tipos_egreso=tipos_egreso,
-                tipos_ingreso=tipos_ingreso,
-                unidades_de_medida=unidades_de_medida,
-                almacenes=almacenes,
-                servicios=servicios)
+                unidades_de_medida=unidades_de_medida)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def desechos():
