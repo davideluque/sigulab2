@@ -147,7 +147,7 @@
 						{{dependencias = espacios}} 
 						 {{for dependencia in dependencias:}}
 							<div class="grid-item">
-								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}">
+								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white; padding-bottom: 20px">
 									{{=dependencia.codigo}}
 								</a>
 							</div>
@@ -160,7 +160,7 @@
 					<div class="grid-container">
 						{{dependencias = espacios}} {{for dependencia in dependencias:}}
 						<div class="grid-item">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white;">
 								{{=dependencia.codigo}}
 							</a>
 						</div>
@@ -181,7 +181,7 @@
 					<div class="grid-container">
 						{{for dependencia in dependencias:}}
 							<div class="grid-item">
-								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}">
+								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}" style="color: white;">
 									{{=dependencia.nombre}}
 								</a>
 							</div>
@@ -193,7 +193,7 @@
 					<div class="grid-container">
 						{{for dependencia in dependencias:}}
 						<div class="grid-item">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white;">
 								 {{=dependencia.nombre}}
 							</a>
 						</div>
