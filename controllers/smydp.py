@@ -994,7 +994,7 @@ def envases():
     # Si el usuario es un gestor o webmaster, puede crear envases en cualquier espacio físico
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         espacios_fisicos_adscritos = list(db(
-            (db.espacios_fisicos.dependencia == db.dependencias.id)
+            (db.espacios_fisicos)
         ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
     else:
         #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
