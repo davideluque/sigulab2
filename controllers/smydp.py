@@ -991,10 +991,19 @@ def envases():
     contenedores = list(db(db.t_envases).select(db.t_envases.ALL))
 
     # Listas de espacios físicos de los cuáles el usuario logueado es responsable
-    espacios_fisicos_adscritos = list(db(
-        (db.espacios_fisicos.dependencia == db.dependencias.id) &
-        (db.dependencias.id_jefe_dependencia == user_id)
-    ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
+    # Si el usuario es un gestor o webmaster, puede crear envases en cualquier espacio físico
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
+        espacios_fisicos_adscritos = list(db(
+            (db.espacios_fisicos.dependencia == db.dependencias.id)
+        ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
+    else:
+        #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
+        #jurisdicción
+        espacios_fisicos_adscritos = list(db(
+            (db.espacios_fisicos.dependencia == db.dependencias.id) &
+            (db.dependencias.id_jefe_dependencia == user_id)
+        ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
+
 
     unidades_de_medida = list(db(db.t_Unidad_de_medida).select(db.t_Unidad_de_medida.ALL))
 
