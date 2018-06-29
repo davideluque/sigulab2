@@ -132,6 +132,7 @@
                         <div class="col-sm-6">
                             <span>{{=contenedor.categoria.categoria}}</span>
                         </div>
+                        
                     </div>
                 {{pass}}
             {{pass}}
@@ -532,6 +533,10 @@
                                                     <option value="{{=categoria.id}}">{{=categoria.categoria}}</option>
                                                     {{pass}}
                                                 </select>
+                                                <br>
+                                                <p>Para ver una descripción de cada una de las categorías disponibles, haga click
+                                                    <a href="{{=URL('..', 'sigulab2', 'smydp/categorias_desechos')}}">aquí</a>
+                                                </p>
                                                 <div class="field-error">
                                                     <p id="error-categoria"> </p>
                                                 </div>
