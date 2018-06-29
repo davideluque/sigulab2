@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}">
   
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
 
@@ -30,9 +31,9 @@
   <div class="breadcrumb">
     <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
     <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
-    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
-    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
-    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">DP</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos')}}">Inventarios</a>
+    <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
     <span class="breadcrumb-item active">Bitácora</span>
   </div>
 </nav>
@@ -42,28 +43,26 @@
 <div id="inventario-dependencia" class="container">
 <div class="row">
   <div>
-    <h3 id="titulo" class="titulos"> Bitácora</h3>
-    <!-- <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3> -->
-  </div>
-  <!-- Inicio Boton Agregar Sustancia -->
-  <div class="container" id="containerAgregar">
-      <div class="row">
-          <div class="col-sm-6"></div>
-          <div id="columnBotonAgregar" class="col-sm-6">
-            <div class="col-sm-6"></div>
-            <div class="col-sm-6">
-                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addregister">Agregar Registro</button>
-            </div>
-          </div>
+    <div class="row text-center">
+              <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
+    </div>
+    <div class="row">
+      <h3 id="titulo" class="titulos">{{=espacio_nombre}} - Bitácora</h3>
+      <!-- <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3> -->
       </div>
-  </div>
-  <!-- Fin Boton Agregar Sustancia -->
+    </div>
 
-    <div id="buttons">
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->    
+    <div class="row">
+      <div id="buttons" class="pull-right">
+        <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addregister">
+          <i class="fa fa-plus-circle"></i>
+        </button>
+        <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
+          <i class="fa fa-filter"></i>
+        </button>
+        <!-- Filtrado -->
+      </div>
     </div>
     <br>
 
@@ -102,6 +101,7 @@
                 <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
                 <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
                 <th class="camposTabla linksNombres">Saldo ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Responsable</th>
             </tr>
         </tfoot>
 
@@ -176,20 +176,31 @@
  
 <script language="javascript">
   var table = $('#datatable').DataTable({
+    "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
     language: {
       url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
-   initComplete: function(){
+    initComplete: function () {
       var api = this.api();
 
       new $.fn.dataTable.Buttons(api, {
-         buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
-         ]
+        buttons: [
+          { extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
+        ]
       });
-      api.buttons().container().appendTo('#buttons');  
-   }
+      api.buttons().container().appendTo('#buttons');
+      $('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+      $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+      $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+      $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
+      $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+      $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+      $('#buttons').style.textAlign = "right";
+    }
+
   });
+  var w2p_ajax_confirm_message =
+    "{{=T('')}}";
 
 </script>
 {{end}}
