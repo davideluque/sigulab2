@@ -211,11 +211,11 @@
 								<div class="col-sm-2 columnas" style="padding-left: 0px;">
 									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[7*k].nombre}}</a>
 								</div>
-								{{ for i in range(1,10): }} 
-									{{ if 10*k+i < n: }} 
+								{{ for i in range(1,7): }} 
+									{{ if 7*k+i < n: }} 
 										<div class="col-sm-2 columnas">
-											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[10*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-												{{=dependencias[10*k+i].nombre}}
+											<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[7*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
+												{{=dependencias[7*k+i].nombre}}
 											</a>
 										</div>
 									{{ pass }} 
