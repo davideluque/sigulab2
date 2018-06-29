@@ -37,6 +37,8 @@
                 <th class="camposTabla linksNombres">Composición</th>
                 <th class="camposTabla linksNombres">Responsable</th>
                 <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Peligrosidad</th>
+                <th class="camposTabla linksNombres">Tratamiento</th>
             </tr>
         </thead>
 
@@ -44,10 +46,19 @@
           {{for desecho in inventario:}}
             <tr>
                 <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
-                <td class="camposTabla">{{=desecho['t_inventario_desechos']['composicion']}}</td>
+                <td class="camposTabla">
+                  <a href="{{=URL('bitacora_desechos',vars=dict(inv=desecho['t_inventario_desechos']['composicion']))}}">{{=desecho['t_inventario_desechos']['composicion']}}</a>
+                </td>
                 <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre']}}</td>
                 <td class="camposTabla">{{=desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
-            </tr>
+                {{peligrosidades = ""}}
+                {{for peligrosidad in desecho['t_inventario_desechos']['peligrosidad']:}}
+                  {{peligrosidades += peligrosidad + ", "}}
+                {{pass}}
+                {{peligrosidades = peligrosidades[:-2]}}
+                <td class="camposTabla">{{=peligrosidades}} </td>
+                <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento']}} </td>
+              </tr>
           {{pass}}           
         </tbody>
 
@@ -57,7 +68,9 @@
                 <th class="camposTabla linksNombres">Composición</th>
                 <th class="camposTabla linksNombres">Responsable</th>
                 <th class="camposTabla linksNombres">Cantidad</th>
-            </tr>
+                <th class="camposTabla linksNombres">Peligrosidad</th>
+                <th class="camposTabla linksNombres">Tratamiento</th>
+              </tr>
         </tfoot>
 
       </table>
