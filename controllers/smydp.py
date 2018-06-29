@@ -1228,11 +1228,15 @@ def inventarios_desechos():
                     db.t_inventario_desechos.cantidad.sum(),
                     db.t_inventario_desechos.responsable,
                     db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.peligrosidad,
+                    db.t_inventario_desechos.tratamiento,
                     groupby = 
                      db.t_inventario_desechos.categoria |                 
                      db.t_inventario_desechos.composicion | 
                      db.t_inventario_desechos.responsable |
-                    db.t_inventario_desechos.unidad_medida
+                     db.t_inventario_desechos.unidad_medida |
+                     db.t_inventario_desechos.peligrosidad |
+                     db.t_inventario_desechos.tratamiento 
                 ))
 
                 envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
@@ -1571,7 +1575,9 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
-            db.t_inventario_desechos.insert(categoria = envase.categoria,
+
+            #Agrega el desecho al inventario
+            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
                                             unidad_medida = envase.unidad_medida,
                                             composicion = envase.composicion,
@@ -1582,6 +1588,19 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             envase = envase.id,
                                             tratamiento = tratamiento,
                                             peligrosidad = peligrosidad)
+
+            # Crea la entrada inicial en la bitácora de desechos
+            db.t_Bitacora_desechos.insert(
+                fecha = str(datetime.datetime.now()),
+                descripcion = "ENTRADA INICIAL",
+                cantidad_generada = cantidad,
+                cantidad_retirada = 0,
+                saldo = cantidad,
+                unidad_medida_bitacora = envase.unidad_medida,
+                envase = envase.id,
+                inventario = nueva_entrada_id
+            )
+
         else:
             response.flash = T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
     else:
@@ -1609,19 +1628,14 @@ def bitacora_desechos():
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
 
-    # Lista de almacences
-    almacenes = db(db.espacios_fisicos.id > 0).select()
-
-    # Lista de servicios
-    servicios = db(db.servicios.id > 0).select()
     # FIN Datos del modal de agregar un registro
 
     # Obteniendo la entrada en t_Personal del usuario conectado
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
 
-    if request.vars.inv is None:
-        redirect(URL('inventarios'))
+    # if request.vars.inv is None:
+        #redirect(URL('inventarios'))
 
     inventario_id = int(request.vars.inv)
 
