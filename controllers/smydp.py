@@ -1235,7 +1235,7 @@ def inventarios_desechos():
                     db.t_inventario_desechos.unidad_medida
                 ))
 
-                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                 # Si se esta agregando un nuevo desecho, se registra en la DB
                 if request.vars.envase:
