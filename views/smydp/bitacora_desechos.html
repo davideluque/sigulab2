@@ -72,27 +72,25 @@
         <thead>
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Hora</th>
                 <th class="camposTabla linksNombres">Descripción</th>
-                <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
-                <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
-                <th class="camposTabla linksNombres">Total ({{=unidad_medida.f_abreviatura}})</th>
+                <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Saldo ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Responsable</th>
             </tr>
         </thead>
 
         <tbody>
           {{for registro in bitacora:}}
-            {{auth_user = registro['auth_user']}}
-            {{reg = registro['t_Bitacora']}}
-            {{usuario = registro['t_Personal']}}
-            {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
+          
+            {{fecha = registro.t_Bitacora_desechos.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
             <tr>
-                <td class="camposTabla">{{=fecha[0]}}</td>
-                <td class="camposTabla">{{=fecha[1]}}</td>
-                <td class="camposTabla">{{=reg['descripcion']}}</td>
-                <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
-                <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
-                <td class="camposTabla">{{=reg.f_cantidad_total}}</td>
+              <td class="camposTabla">{{=fecha[0]}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion']}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_generada']}} {{=unidad_medida}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_retirada']}} {{=unidad_medida}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['saldo']}} {{=unidad_medida}}</td>
+              <td class="camposTabla">{{=registro['auth_user']['first_name']}} {{=registro['auth_user']['last_name']}}</td>
             </tr>
           {{pass}}
         </tbody>
@@ -100,11 +98,10 @@
         <tfoot id="collapseFiltros">
             <tr>
                 <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Hora</th>
                 <th class="camposTabla linksNombres">Descripción</th>
-                <th class="camposTabla linksNombres">Ingreso</th>
-                <th class="camposTabla linksNombres">Consumo</th>
-                <th class="camposTabla linksNombres">Total</th>
+                <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">Saldo ({{=unidad_medida}})</th>
             </tr>
         </tfoot>
 
@@ -115,7 +112,6 @@
 <!-- Fin Listado --> 
 
 <!-- Modal para agregar un registro a la bitacora --> 
-{{include 'smydp/bitacora_agregar.html'}}
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>

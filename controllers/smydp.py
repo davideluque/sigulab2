@@ -1691,14 +1691,15 @@ def bitacora_desechos():
     espacio_id = inventario['t_inventario_desechos']['espacio_fisico']['id']
 
     # Unidad de medida en que es expresada la sustancia en el inventario
-    unidad_medida = inventario['t_inventario_desechos']['unidad_medida']['id']
+    unidad_medida = inventario['t_inventario_desechos']['unidad_medida']['f_abreviatura']
 
     espacio_nombre = inventario['t_inventario_desechos']['espacio_fisico']['codigo']
 
-    bitacora = list(db((db.t_Bitacora_desechos.inventario == inventario_id)).select())
+    bitacora = list(db(
+        (db.t_Bitacora_desechos.inventario == inventario_id) &
+        (db.t_Bitacora_desechos.created_by == db.auth_user.id)
+    ).select())
 
-    print bitacora
-    
     # *!* Hacer esto cuando se cree el registro y ponerlo en reg['f_descripcion']
     # Obteniendo la descripcion de cada fila y guardandola como un atributo
     # for reg in bitacora:
