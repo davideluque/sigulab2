@@ -65,10 +65,10 @@
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
+		<div class="col-xs-2">
 		</div>
-		<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button"
-			href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+		<button button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button">
+			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 				<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 		</a>
 		<div class="col-xs-8">
@@ -95,13 +95,13 @@
 		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 		en el controlador-->
 		{{if dep_padre_id == direccion_id:}}
-			<a id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('bienes_muebles')}}">
-				<i class="fas fa-arrow-left" style="color: black"></i>	
-			</a>
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('bienes_muebles')}}')">
+			<i class="fas fa-arrow-left"></i>	
+		</button>
 		{{else:}}
-			<a id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-				<i class="fas fa-arrow-left" style="color:black;"></i>	    		
-			</a>
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}')">
+			<i class="fas fa-arrow-left"></i>	    		
+		</button>
 		{{pass}}
 		<div class="col-xs-8">
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
@@ -131,15 +131,15 @@
 		<div id="fila1" class="row">
 		</div>
 		{{ if espacios: }}
-			{{ title = "Espacios Físicos" }}
+			{{ title = "Espacio Físico" }}
 			{{dependencias = espacios}}
 		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
-			{{ title = "Dependencias" }}
+			{{ title = "Dependencia" }}
 		{{else: }}
 			{{ title = "Secciones" }}
 		{{ pass }}
 		{{ if len(dependencias) > 0: }}
-			<h4>Navegar por: 
+			<h4>Seleccionar: 
 				<button onclick="show_seccion()">
 					{{=title}}
 					<span class="caret"></span>
@@ -278,6 +278,7 @@
 			  {
 				  extend: 'collection',
 				  text: '<i class="fas fa-floppy-o"></i>',
+				  className: 'boton-sigulab',
 				  buttons: [
 					  { extend:'copy', text: 'Copiar' } ,
 					  'excel',
@@ -285,7 +286,7 @@
 					  'pdf'
 				  ]
 			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
 		  ]
 		});
 		$('#botonModal').addClass('pull-left')
@@ -296,10 +297,10 @@
 		$('.dataTables_filter').appendTo('#buttons');
   
 		api.buttons().container().appendTo('#buttons');
-		$('.dt-buttons').append($('#boton-retorno'));
+		$('.dt-buttons').append($('#botonModal'));
+		$('.dt-buttons').append($('#filtrar'));
 		$('#buttons').append('<br><br>');
 		$('.dataTables_info').addClass('pull-right');
-		
 		$('.dataTables_filter').addClass('pull-left');
   
 		

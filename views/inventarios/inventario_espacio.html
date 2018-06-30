@@ -4,9 +4,8 @@
     <br>
     <div id="buttons">
       <!-- Filtrado -->
-      <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
-      <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
-      <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
+      <button class="dt-button btn boton-sigulab" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+      <button class="dt-button btn boton-sigulab" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-filter"></i></button>
       <!-- Filtrado -->    
     </div>
     <br>
@@ -120,7 +119,7 @@
                       </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()"><i class="fas fa-arrow-right"></i></button>    
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos(this);"><i class="fas fa-arrow-right"></i></button>    
             </fieldset>
           
                 
@@ -141,47 +140,72 @@
 
 
                         <div class="form-group" tag="Formato:">
+                            <label>Nombre*</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*"  required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Número de Bien Nacional*</label>
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)"   required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
+                            <label>N° de placa</label>
                             <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             <font color="red"><div id="err_placa" hidden></div></font>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
-                            <div class="field-error"> <p id="error-marca"> </p> </div>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
-                            <div class="field-error"> <p id="error-modelo"> </p> </div>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
-                            <div class="field-error"> <p id="error-serial"> </p> </div>
-                          </div>
-                        
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
                         
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
+                                
+                <!-- Segundo paso 2-->
+                <fieldset class="formField" id='segundo-paso' >
+                    <div class="form-bottom" id='segundoPaso' data-step="2" data-title="Segundo Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+  
+                          <div class="form-group">
+                              <label>Marca*</label>
+                              <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
+                              <div class="field-error"> <p id="error-marca"> </p> </div>
+                          </div>
+  
+                          <div class="form-group">
+                              <label>Modelo*</label>
+                              <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
+                              <div class="field-error"> <p id="error-modelo"> </p> </div>
+                          </div>
+  
+                          <div class="form-group">
+                              <label>Serial*</label>
+                              <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
+                              <div class="field-error"> <p id="error-serial"> </p> </div>
+                            </div>
+                          
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  </fieldset>
+                  <!-- Fin Segundo Paso -->
+  
+  
                 <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="3" data-title="Tercer Paso">
@@ -198,6 +222,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
   
                           <div class="form-group">
+                              <label>Material*</label>
                               <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
@@ -214,6 +239,7 @@
                           </div>
   
                           <div class="form-group">
+                              <label>Color*</label>
                               <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
@@ -240,23 +266,27 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group" id="grupo-ancho" hidden>
+                              <label>Ancho</label>
                             <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                             <font color="red"><div id="err_ancho" hidden></div></font>
                           </div>
 
 
-                          <div class="form-group">
+                          <div class="form-group" id="grupo-largo" hidden>
+                            <label>Largo</label>
                             <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                             <font color="red"><div id="err_largo" hidden></div></font>
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group" id="grupo-altura" hidden>
+                            <label>Altura</label>
                             <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                             <font color="red"><div id="err_alto" hidden></div></font>
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group" id="grupo-diametro" hidden>
+                            <label>Diámetro</label>
                             <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                             <font color="red"><div id="err_diametro" hidden></div></font>
                           </div>
@@ -266,7 +296,7 @@
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin tercer Paso -->
+                  <!-- Fin Tercer Paso -->
 
 
                 <!--Tercer Paso parte 2-->
@@ -276,8 +306,9 @@
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
-                        <span class="step">4</span>
+                        <span class="step activePas">3</span>
+                        <span class="steps">4</span>
+                        
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -333,14 +364,19 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Observaciones">
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
+                        </div>
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin tercer paso-->
+                  <!-- Fin Tercer paso-->
 
                 <!-- Comienzo Cuarto Paso Parte 1-->
                 <fieldset class="formField">
@@ -350,11 +386,12 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
-                        <span class="step activePass">4</span>
+                        <span class="step">4</span>
+                        <span class="step activePass">5</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">SUDEBID</h4>
                       <label>Importante: llene según requerimientos de SUDEBID</label>
                         
@@ -461,6 +498,8 @@ del concepto y tipo de ingreso o egreso -->
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
     if (selecion.value == "Mobiliario"){
+      //$('#segundo-paso').hide();
+      //$('#segundoPaso').hide();
       document.getElementById("marca").type = 'hidden';
       document.getElementById("modelo").type = 'hidden';
       document.getElementById("serial").type = 'hidden';
@@ -496,14 +535,23 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("largo").type = 'hidden';
       document.getElementById("alto").type = 'hidden';
       document.getElementById("diametro").type = 'hidden';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
     }else{
       document.getElementById("unidad").type = 'text';
       document.getElementById("ancho").type = 'text';
       document.getElementById("largo").type = 'text';
       document.getElementById("alto").type = 'text';
       document.getElementById("diametro").type = 'text';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
     }
   }
+
 
   // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
@@ -597,7 +645,7 @@ del concepto y tipo de ingreso o egreso -->
 
   function colocar_subcategoria(value){
     var dict = {
-		'Maquinaria Construcción':
+		'Maquinaria y demás equipos de construcción, campo, industria y taller':
 			["Maquinaria y equipos de construcción y mantenimiento",
 			"Maquinarias y equipos para mantenimiento de automotores",
 			"Maquinarias y equipos agrícolas y pecuarios",
@@ -607,7 +655,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Maquinarias y equipos de riego y acueductos",
 			"Equipos de almacen",
 			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-		"Equipo Transporte":
+		"Equipos de transporte, tracción y elevación":
 			["Vehículos automotores terrestres",
 			"Equipos ferroviarios y de cables aéreos",
 			"Equipos marítimos de transporte",
@@ -615,16 +663,16 @@ del concepto y tipo de ingreso o egreso -->
 			"Vehículos de tracción no motorizados",
 			"Equipos auxiliares de transporte",
 			"Otros equipos de transporte, tracción y elevación"],
-		"Equipo Comunicaciones":
+		"Equipos de comunicaciones y de señalamiento":
 			["Equipos de telecomunicaciones",
 			"Equipos de señalamiento",
 			"Equipos de control de tráfico aéreo",
 			"Equipos de correo",
 			"Otros equipos de comunicaciones y de señalamiento"],
-		"Equipo Médico":
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
 			["Equipos médicos - quirúrgicos, dentales y veterinarios",
 			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-		"Equipo Científico Religioso":
+		"Equipos científicos, religiosos, de enseñanza y recreación":
 			["Equipos científicos y de laboratorio",
 			"Equipos de enseñanza, deporte y recreación",
 			"Obras de arte",
@@ -632,7 +680,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Equipos religiosos",
 			"Instrumentos musicales",
 			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
-		"Equipo Oficina" : 
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
 			["Mobiliario y equipos de oficina",
 			"Equipos de procesamiento de datos",
 			"Mobiliario y equipos de alojamiento",

@@ -133,7 +133,7 @@
 {{block center}}
     <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa'] != '': }}
+    {{ if bien['bm_placa'] != None: }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
     <!-- Flash message -->
@@ -161,110 +161,120 @@
 
 <div class="wrapper">
 		
-	<div class="tab-wrapper">
-		<ul class="tabs">
-				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
-				<li class="tab-link" data-tab="2">SUDEBID</li>
-                <li class="tab-link" data-tab="3">UBICACIÓN</li>
-                <li class="tab-link" data-tab="4">HISTORIAL DE MANTENIMIENTO</li>
-            </ul>
-	</div>
-
-	<div class="content-wrapper">
-		<div id="tab-1" class="tab-content active">
-            <div class="grid-container">
-                {{ for title in caracteristicas_list: }}
+        <div class="tab-wrapper">
+            <ul class="tabs">
+                    <li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
+                    <li class="tab-link" data-tab="2">SUDEBID</li>
+                    <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                    <li class="tab-link" data-tab="4">UBICACIÓN</li>
+                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
+                    <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+                </ul>
+        </div>
+    
+        <div class="content-wrapper">
+            <div id="tab-1" class="tab-content active">
+                <div class="grid-container">
+                    {{ for title in caracteristicas_list: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{ if title == "Uso:": }}
+                                {{ if (caracteristicas_dict.get(title).find("Docencia")) != -1:}}
+                                    Docencia<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Investigaci")) != -1:}}
+                                    Investigación<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Extensi")) != -1:}}
+                                    Extensión<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Apoyo administrativo")) != -1:}}
+                                    Apoyo administrativo<br>
+                                {{pass}}
+                            {{ else: }}
+                                {{= caracteristicas_dict.get(title)}}
+                            {{pass}}
+                        </div>
+                    {{ pass }}
+                    {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
+                        <div class="grid-item">
+                            {{ if bien['bm_unidad'] == 'm':}}
+                                Dimensiones (metros):
+                            {{else:}}
+                                Dimensiones (centímetros):
+                            {{pass}}
+                        </div>
+                        <div class="grid-item">                        
+                            {{if bien['bm_ancho'] != None:}}
+                                Ancho: {{=bien['bm_ancho']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_largo'] != None:}}
+                                Largo: {{=bien['bm_largo']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_alto'] != None:}}
+                                Alto: {{=bien['bm_alto']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_diametro'] != None:}}
+                                Diámetro: {{=bien['bm_diametro']}}
+                                <br>
+                            {{pass}}
+                        </div>
+                    {{pass}}
+                </div>
+            </div>
+    
+            <!-- Pensar utilizar grid-->
+            <div id="tab-2" class="tab-content">
+                <div class="grid-container">
+                {{ for title in sudebid_list: }}
                     <div class="grid-item">
                         {{=title}}
                     </div>
                     <div class="grid-item">
-                        {{ if title == "Uso:": }}
-                            {{ if (caracteristicas_dict.get(title).find("Docencia")) != -1:}}
-                                Docencia<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Investigaci")) != -1:}}
-                                Investigación<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Extensi")) != -1:}}
-                                Extensión<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Apoyo administrativo")) != -1:}}
-                                Apoyo administrativo<br>
-                            {{pass}}
-                        {{ else: }}
-                            {{= caracteristicas_dict.get(title)}}
-                        {{pass}}
+                        {{= sudebid_dict.get(title)}}
                     </div>
                 {{ pass }}
-                {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
+                </div>
+            </div>
+    
+            <div id="tab-3"class="tab-content">En desarrollo</div>
+            <div id="tab-4"class="tab-content">
+                <div class="grid-container">
                     <div class="grid-item">
-                        {{ if bien['bm_unidad'] == 'm':}}
-                            Dimensiones (metros):
-                        {{else:}}
-                            Dimensiones (centímetros):
-                        {{pass}}
+                        Espacio físico:
                     </div>
-                    <div class="grid-item">                        
-                        {{if bien['bm_ancho'] != None:}}
-                            Ancho: {{=bien['bm_ancho']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_largo'] != None:}}
-                            Largo: {{=bien['bm_largo']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_alto'] != None:}}
-                            Alto: {{=bien['bm_alto']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_diametro'] != None:}}
-                            Diámetro: {{=bien['bm_diametro']}}
-                            <br>
-                        {{pass}}
+                    <div class="grid-item">
+                        {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
                     </div>
-                {{pass}}
-            </div>
-        </div>
-
-        <!-- Pensar utilizar grid-->
-		<div id="tab-2" class="tab-content">
-            <div class="grid-container">
-            {{ for title in sudebid_list: }}
-                <div class="grid-item">
-                    {{=title}}
-                </div>
-                <div class="grid-item">
-                    {{= sudebid_dict.get(title)}}
-                </div>
-            {{ pass }}
-            </div>
-        </div>
-        <div id="tab-3"class="tab-content">
-            <div class="grid-container">
-                <div class="grid-item">
-                    Espacio físico:
-                </div>
-                <div class="grid-item">
-                    {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
-                </div>
-                <div class="grid-item">
-                    Unidad de Adscripción:
-                </div>
-                <div class="grid-item">
-                    {{=bien['bm_unidad_de_adscripcion']}}
-                </div>
-                <div class="grid-item">
-                    Dependencia:
-                </div>
-                <div class=grid-item>
-                    {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                    <div class="grid-item">
+                        Unidad de Adscripción:
+                    </div>
+                    <div class="grid-item">
+                        {{=bien['bm_unidad_de_adscripcion']}}
+                    </div>
+                    <div class="grid-item">
+                        Dependencia:
+                    </div>
+                    <div class=grid-item>
+                        {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                    </div>
                 </div>
             </div>
+            <div id="tab-5"class="tab-content">En Desarrollo</div>
+            <div id="tab-6"class="tab-content">En desarrollo</div>
+            <div id="tab-7"class="tab-content">En desarrollo</div>
+    
+    
+    
         </div>
-        <div id="tab-4"class="tab-content">En Desarrollo</div>
+        
     </div>
-	
-</div>
 
 <!--Modal para eliminar bm-->
 <div class="modal fade" id="confirmdelete" role="dialog">
@@ -413,17 +423,20 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
+                                <label>Nombre*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Número de Bien Nacional*</label>
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value="{{=bien['bm_num']}}" readonly required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            {{if bien['bm_placa']=="":}}
+                            <label>N° de placa</label>
+                            {{if bien['bm_placa']==None:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             {{else:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" value="{{=bien['bm_placa']}}" placeholder="N° de placa">
@@ -431,33 +444,31 @@
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
-                        {{if bien['bm_marca']!="":}}
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
+                            <label>Marca*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
                         {{pass}}
 
-                        {{if bien['bm_modelo']!="":}}
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
-                                <input type="text" class="form-control" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
+                                <label>Modelo*</label>
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
                                 <div class="field-error"> <p id="error-modelo"> </p> </div>
                             
                         </div>
                         {{pass}}
 
-                        {{if bien['bm_serial']!="":}}
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" id="serial" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
+                            <label>Serial*</label>
+                            <input type="text" class="form-control" id="serial" style="text-transform:uppercase" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
                         {{pass}}
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
-                        
+ 
                     </div>
                   </div>
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
@@ -479,11 +490,16 @@
                         <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
+                                <label>Material*</label>
                               <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
+                                {{if bien['bm_material']==material:}}
+                                    <option value="{{=material}}" selected="selected">{{=material}}</option>
+                                {{else:}}
                                     <option value="{{=material}}">{{=material}}</option>
+                                {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
@@ -499,10 +515,15 @@
                         </div>
 
                           <div class="form-group">
+                                <label>Color*</label>
                               <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
-                                    <option value="{{=color}}">{{=color}}</option>                                
+                                {{if bien['bm_color']==color:}}
+                                    <option value="{{=color}}" selected="selected">{{=color}}</option>
+                                {{else:}}
+                                    <option value="{{=color}}">{{=color}}</option>
+                                {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
@@ -535,22 +556,26 @@
 
                           <!-- FALTA ARREGLAR ESTO  -->
                            {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-ancho1" hidden>
+                                    <label>Ancho</label>
                                     <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                                 <font color="red"><div id="err_ancho" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-largo1" hidden>
+                                    <label>Largo</label>
                                     <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                                 <font color="red"><div id="err_largo" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-alto1" hidden>
+                                    <label>Altura</label>
                                     <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                                 <font color="red"><div id="err_alto" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-diametro1" hidden>
+                                    <label>Diámetro</label>
                                     <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                                 <font color="red"><div id="err_diametro" hidden></div></font>
                               </div>
@@ -647,8 +672,8 @@
                         {{pass}}
 
                         </div>
-
-                        {{if bien['bm_calibrar']!="":}}
+                        
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group" id="calibrar">
                           <label>Seleccione si el equipo ha sido calibrado*</label>
                           <select class="form-control" id="select-calibrar" type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
@@ -709,8 +734,18 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                                <label>Observacion</label>
+                                {{if bien['bm_descripcion']!="":}}
+                                    <input type="text" class="form-control" style="text-transform:uppercase" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
+                                {{else:}}
+                                <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Observaciones">
+                                {{pass}}
+                                <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                            </div>
                         </div>
+                        
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -729,7 +764,7 @@
                       </div>
   
                       <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">SUDEBID</h4>
                       <label>Importante: llene según requerimientos de SUDEBID</label>
                         
@@ -907,12 +942,20 @@
         document.getElementById("largo").type = 'hidden';
         document.getElementById("alto").type = 'hidden';
         document.getElementById("diametro").type = 'hidden';
+        $('#grupo-ancho1').hide()
+        $('#grupo-largo1').hide()
+        $('#grupo-alto1').hide()
+        $('#grupo-diametro1').hide()
       }else{
         document.getElementById("unidad").type = 'text';
         document.getElementById("ancho").type = 'text';
         document.getElementById("largo").type = 'text';
         document.getElementById("alto").type = 'text';
         document.getElementById("diametro").type = 'text';
+        $('#grupo-ancho1').show()
+        $('#grupo-largo1').show()
+        $('#grupo-alto1').show()
+        $('#grupo-diametro1').show()
       }
     }
   
@@ -1009,46 +1052,46 @@
     function colocar_subcategoria2(indicador){
     value = document.getElementById('categoria').value;
       var dict = {
-          'Maquinaria Construcción':
-              ["Maquinaria y equipos de construcción y mantenimiento",
-              "Maquinarias y equipos para mantenimiento de automotores",
-              "Maquinarias y equipos agrícolas y pecuarios",
-              "Maquinarias y equipos de artes gráficas y reproducción",
-              "Maquinarias y equipos industriales y de taller",
-              "Maquinarias y equipos de energía",
-              "Maquinarias y equipos de riego y acueductos",
-              "Equipos de almacen",
-              "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-          "Equipo Transporte":
-              ["Vehículos automotores terrestres",
-              "Equipos ferroviarios y de cables aéreos",
-              "Equipos marítimos de transporte",
-              "Equipos aéreos de transporte",
-              "Vehículos de tracción no motorizados",
-              "Equipos auxiliares de transporte",
-              "Otros equipos de transporte, tracción y elevación"],
-          "Equipo Comunicaciones":
-              ["Equipos de telecomunicaciones",
-              "Equipos de señalamiento",
-              "Equipos de control de tráfico aéreo",
-              "Equipos de correo",
-              "Otros equipos de comunicaciones y de señalamiento"],
-          "Equipo Médico":
-              ["Equipos médicos - quirúrgicos, dentales y veterinarios",
-              "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-          "Equipo Científico Religioso":
-              ["Equipos científicos y de laboratorio",
-              "Equipos de enseñanza, deporte y recreación",
-              "Obras de arte",
-              "Libros y revistas",
-              "Equipos religiosos",
-              "Instrumentos musicales",
-              "Otros equipos científicos, religiosos, de enseñanza y recreación"],
-          "Equipo Oficina" : 
-              ["Mobiliario y equipos de oficina",
-              "Equipos de procesamiento de datos",
-              "Mobiliario y equipos de alojamiento",
-              "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+        'Maquinaria y demás equipos de construcción, campo, industria y taller':
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipos de transporte, tracción y elevación":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipos de comunicaciones y de señalamiento":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipos científicos, religiosos, de enseñanza y recreación":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
     var n = 1;
     var x;
     var y = document.getElementById("numRegistro2");
