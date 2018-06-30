@@ -4,127 +4,25 @@
 
 
 {{block head}}
-  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="{{=URL('static', 'css/agregarDoc.css')}}">
-  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Poppins:300,400,700'>
-
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-  
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
-
-
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
   <!-- DataTables -->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
-  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
-
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
-  <style type="text/css">
-    .row{
-      margin-right:0px!important;
-    }
-    .wrapper {
-      max-width: 90%;
-      margin: auto;
-      margin-top: 10px;
-    }
-    .tab-wrapper2 {
-      text-align: center;
-      display: block;
-      margin: auto;
-      max-width: 1200px;
-    }
-    .tabs {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-    }
-    .tab-link {
-      margin: 0 1%;
-      list-style: none;
-      padding: 10px 40px;
-      font-size: 25px;
-      color: #aaa;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all ease 0.5s;
-      border-bottom: solid 3px rgba(255, 255, 255, 0);
-      letter-spacing: 1px;
-    }
-    .tab-link:hover {
-      color: #999;
-      border-color: #999;
-    }
-    .tab-link.active {
-      color: #333;
-      border-color: #333;
-    }
-    .tab-link:nth-of-type(1).active {
-      background-color: #337ab7;
-      color: white;
-      border-color: white;
-    }
-    .tab-link:nth-of-type(2).active {
-      background-color: #337ab7;
-      color: white;
-      border-color: white;
-    }
-    .tab-link:nth-of-type(3).active {
-      background-color: #337ab7;
-      color: white;
-      border-color: white;
-    }
-    .content-wrapper {
-      margin-top: 30px;
-      padding: 10px 20px;
-    }
-    .tab-content {
-      display: none;
-      text-align: left;
-      color: #888;
-      font-weight: 300;
-      font-size: 15px;
-      opacity: 0;
-      transform: translateY(15px);
-      animation: fadeIn 0.5s ease 1 forwards;
-    }
-    .tab-content.active {
-      display: block;
-    }
 
-    tr th {
-      text-align: center;
-      font-size: 24px;
-      border: 8px solid #337ab7;
-      vertical-align: middle;
-      padding: 10px;
-    }
-
-    tr td{
-      padding: 10px;
-      border-bottom: 8px solid #337ab7;
-      border-left: 8px solid #337ab7;
-      border-right: : 8px solid #337ab7; 
-      text-align: center;
-      vertical-align: middle;
-    }
-    @keyframes fadeIn {
-      100% {
-        opacity: 1;
-        transform: none;
-      }
-    }
-  </style>
 
 {{end}}
 
@@ -148,7 +46,7 @@
       <a  href="{{=URL('informacion_documentada', 'lista_documentos')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
     </div>
     <div class="col-md-7">
-      <h2 style="text-align: center; margin-left: 15%"> FICHA DE DOCUMENTOS </h2>
+      <h3 style="text-align: center; margin-left: 25%"> FICHA DE DOCUMENTOS </h3>
     </div>
     <div class="col-md-3">
       <form method="POST">
@@ -179,17 +77,17 @@
   </div>
 
   <div class="content-wrapper">
-    <div id="tab-1" class="tab-content active">
-
-      <h3><span style="color: #52798c; font-size: 1.2em;">Código: {{=doc.codigo}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Tipo:     {{=doc.tipo_doc}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Documento:  {{=doc.nombre_doc}}.</span> </h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Objetivo:  {{=doc.objetivo}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Estatus:  {{=doc.estatus}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Período de Revisión:    {{=doc.periodo_rev}}.</span></h3>
-
-
-
+    <div id="tab-1" class="tab-content active" role="tabpanel">
+      <table class="table contenidoFicha" id="tabla_inf_general">
+        <tbody>
+          <td><span style="color: #52798c;">Código</span></td><td>{{=doc.codigo}}</td>
+          <td><span style="color: #52798c;">Tipo</span></td><td>{{=doc.tipo_doc}}</td>
+          <td><span style="color: #52798c;">Documento</span></td><td>{{=doc.nombre_doc}}</td>
+          <td><span style="color: #52798c;">Objetivo</span></td><td>{{=doc.objetivo}}</td>
+          <td><span style="color: #52798c;">Estatus</span></td><td>{{=doc.estatus}}</td>
+          <td><span style="color: #52798c;">Período de Revisión</span></td><td>{{=doc.periodo_rev}}</td>
+        </tbody>
+      </table>
     </div>
 
 
@@ -232,23 +130,16 @@
     </div>
     <div id="tab-3" class="tab-content">
   
-      <h3><span style="color: #52798c; font-size: 1.2em;">Código de registro de Ubicacion:  {{=doc.cod_control_cambio}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Carpeta electrónica:     {{=doc.registro_electronico}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Ubicación física del documento: {{=doc.ubicacion_fisica}}.</span></h3>
+      <h3><span style="color: #52798c;">Código de registro de Ubicacion:  {{=doc.cod_control_cambio}}.</span></h3>
+      <h3><span style="color: #52798c;">Carpeta electrónica:     {{=doc.registro_electronico}}.</span></h3>
+      <h3><span style="color: #52798c;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></h3>
+      <h3><span style="color: #52798c;">Ubicación física del documento: {{=doc.ubicacion_fisica}}.</span></h3>
     
 
     </div>
   </div>
   
 </div>    
-
-
-
-
-
-
-
 
 
 

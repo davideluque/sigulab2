@@ -5,6 +5,8 @@
 
   <!-- DataTables -->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+  <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
@@ -16,16 +18,6 @@
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
-  <style>
-    .row{
-      margin-right:0px!important;
-    }
-    .buttons-print{
-  background: #fff;
-  color: #333;
-}
-  </style>
-
 
 
 
@@ -49,28 +41,28 @@
 	</nav><-->
 	<div class="row">
 		<div class="col-md-10">
-			<h2 style="text-align: center; margin-left: 20%"> CONTROL DE DOCUMENTOS </h2>
+			<h3 style="text-align: center; margin-left: 20%"> CONTROL DE DOCUMENTOS </h3>
 		</div>
 		<div class="col-md-2">
 			<a href="#">
-				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
 			</a> 
 			<a href="#">
-				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-3x" aria-hidden="true"></i></button>
+				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-2x" aria-hidden="true"></i></button>
 			</a>			
 		</div>
 	</div>	
 
 	<div class="row">
-		<div class="col-md-1">
+		<div class="col-md-3">
 		</div>	
-		<div class="col-md-10">
+		<div class="col-md-8">
 
 			<nav class="indicadores" style="background-color: #FAFAFA;">			
 				<div class="row">
 
 				  <div style="margin-right: 3%; margin-left: 3%;">
-				    <div class="col-lg-3 col-xs-6">
+				    <div class="col-lg-2 col-xs-6">
 
 				      <a href="#">
 				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
@@ -89,7 +81,7 @@
 
 				    </div>
 				    <!-- ./col -->
-				    <div class="col-lg-3 col-xs-6">
+				    <div class="col-lg-2 col-xs-6">
 
 				      <a href="#">
 				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
@@ -108,7 +100,7 @@
 
 				    </div>
 
-				    <div class="col-lg-3 col-xs-6">
+				    <div class="col-lg-2 col-xs-6">
 				      <!-- small box -->
 				    
 				      <a href="#">
@@ -127,7 +119,7 @@
 				      
 				    </div>
 
-				    <div class="col-lg-3 col-xs-6">
+				    <div class="col-lg-2 col-xs-6">
 
 				      <a href="#" >
 				      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
@@ -155,7 +147,7 @@
 					
 			</nav>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-2">
 		</div>	
 	<div>
 
@@ -334,10 +326,10 @@
 										<option value="Referente Estrategico">Referente Estratégico</option>
 										<option value="Reglamento">Reglamento</option>
 										<option value="Manual">Manual de Organización</option>
-										<option value="Manua2">Manual de Calidad</option>
-										<option value="Manua3">Manual de Proceso de Gestión</option>
-										<option value="Manua4">Manual de Proceso Técnico</option>
-										<option value="Manua5">Manual de Uso</option>
+										<option value="Manual2">Manual de Calidad</option>
+										<option value="Manual3">Manual de Proceso de Gestión</option>
+										<option value="Manual4">Manual de Proceso Técnico</option>
+										<option value="Manual5">Manual de Uso</option>
 										<option value="Otro">Otro</option>
 									</select>
 								</div>
@@ -348,7 +340,7 @@
 									<select name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
 										<option value=""></option>
 										{{for dep in dependencias:}}
-										<option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+											<option id="{{=dep.codigo_registro}}" value="{{=dep.nombre}}">{{=dep.nombre}}</option>
 										{{pass}}
 									</select>
 								</div>
@@ -412,15 +404,20 @@
 							<!-- Campo de Fecha de entrega para revisión del Documento -->
 							<div class="form-group">
 								<h5>Fecha de entrega para revisión</h5>
-								<input type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev">
+								<input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
 							</div>
 
 							<!-- Campo de Número de Anexos -->
 							<div class="form-group">
 								<h5>Número de anexos</h5>
-								<input type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
-							
-								<div id="containerAnexos"/>
+
+								<div id="p_anexo">
+									<p>
+
+									</p>
+								</div>
+
+								<a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
 							</div>
 
 
@@ -463,7 +460,7 @@
 									</p>
 								</div>
 
-								<a href="#" id="addScnt"><span class="fa fa-plus"></span></a>
+								<a href="#" id="addScnt"><span class="fa fa-plus">Agregar Elaborador</span></a>
 																			
 							</div>
 
@@ -499,25 +496,25 @@
 							<!-- Campo de responsable de la revisión de contenidos -->
 							<div class="form-group">
 								<h5>Revisión de contenidos</h5>
-								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" />
+								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Contenido revisado por:" />
 							</div> 
 
 							<!-- Campo de fecha de la revisión de contenidos -->
 							<div class="form-group">
 								<h5>Fecha de revisión de contenidos</h5>
-								<input type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" onchange="revision_contenidos()"/> 
+								<input class="datepicker" name="fecha_revision_contenidos" id="fecha_revision_contenidos" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
 							</div> 
 
 							<!-- Campo de responsable de la revisión de especificaciones -->
 							<div class="form-group">
 								<h5>Revisión de especificaciones</h5>
-								<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" /> 
+								<input type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Especificaciones realizadas por:" /> 
 							</div> 
 
 							<!-- Campo de fecha de la revisión de especificaciones -->
 							<div class="form-group">
 								<h5>Fecha de revisión de especificaciones</h5>
-								<input type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" onchange="revision_esp()" /> 
+								<input class="datepicker" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"> 
 							</div> 
 
 
@@ -569,7 +566,7 @@
 								<!-- Campo de fecha de aprobación -->
 								<div class="form-group">
 									<h5>Fecha de aprobación</h5>
-									<input type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" onchange="fecha_ap()"/> 
+									<input class="datepicker" name="fechaAprobacion" id="fechaAprobacion" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"> 
 								</div>	
 								
 								<!-- Campo de código de registro de aprobación -->
@@ -624,6 +621,7 @@
 								<!-- Campo de vínculo del documento -->
 								<div class="form-group">
 									<h5>Vínculo</h5>
+									<input type="text" class="input" name="vinculo" id="vinculo" placeholder="Ingrese el vinculo" /> 
 								</div>
 
 							<div style="position: fixed; bottom: 0; right: 0;">
@@ -664,7 +662,7 @@
 								<!-- Campo de la fecha del control de cambios -->
 								<div class="form-group">
 									<h5>Fecha de control de cambios</h5>
-									<input type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" onchange="fecha_cc()"/> 
+									<input class="datepicker" name="fechaControlCambios" id="fechaControlCambios" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
 								</div>
 
 								<!-- Campo de Elaborado por -->
@@ -731,16 +729,47 @@
 
 
 
+
 <script type="text/javascript">
 
 	function get_code(i){
-		cod = i[i.selectedIndex].value; // get value
+		cod = i[i.selectedIndex].id; // get value
 		document.getElementById("codigo").value = cod + "-";
-}
+	}
+
 
 </script>
 
 
+<script type="text/javascript">
+	$(function() {
+		$('.datepicker').datepicker({
+    		format: 'dd-mm-yyyy'
+    	})	
+	});
+
+	$(function() {
+		
+		var scntDiv = $('#p_scents');
+		var i = $('#p_scents p').length + 1;
+
+		
+		$('.form-group').on('click', '#addScnt', function() {
+			$('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
+			i++;
+			return false;
+		});
+		
+		$('.form-group').on('click', '#remScnt', function() { 
+			if( i > 2 ) {
+				$(this).parents('p').remove();
+				i--;
+			}
+			return false;
+		});
+	});
+
+</script>
 
 
 <script type="text/javascript">
@@ -750,53 +779,17 @@
 		 return codigoDocumento;
 	}
 
-	function agregarAnexo(i){
-
-		var number = document.getElementById("numero_anexos").value;
-		var container = document.getElementById("containerAnexos");
-		var c = codigoDoc();
-
-		while (container.hasChildNodes()) {
-			container.removeChild(container.lastChild);
-			container.removeChild(container.lastChild);
-		}
-		for (i=1;i<=number;i++){
-
-			// Create an <input> element, set its type and name attributes
-			var inputCode = document.createElement("input");
-			var inputName = document.createElement("input");
-
-			inputCode.type = "text";
-			inputCode.name = "anexoCode" + i;
-			inputCode.value = c;
-
-			inputName.type = "text";
-			inputName.name = "anexoName" + i;
-			inputName.placeholder = "Nombre de Anexo " + i;
-			
-			container.appendChild(document.createElement("br"));
-			container.appendChild(inputCode);
-			container.appendChild(inputName);
-			container.appendChild(document.createElement("br"));
-		}
-		
-	}
-
-
-</script>
-
-
-
-
-<script type="text/javascript">
-
 	$(function() {
 		
-		var scntDiv = $('#p_scents');
-		var i = $('#p_scents p').length + 1;
+		var scntDiv = $('#p_anexo');
+		var i = $('#p_anexo p').length + 1;
 		
-		$('.form-group').on('click', '#addScnt', function() {
-			$('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
+		var c = codigoDoc();
+		console.log(c);
+		console.log("asda");
+
+		$('.form-group').on('click', '#addAnexo', function() {
+			$('<p><input type="text"  name="anexoCode' + i +'" value=" '+ c +' "  /> </p><p><input type="text"  name="anexoName' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
 			i++;
 			return false;
 		});
@@ -820,11 +813,11 @@
 		var input = document.createElement("input");
 		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
 
-		input.type = "date";
+		input.type = "text";
+		input.class = "datepicker"
 		input.name = "fecha_revision_consejo";
-		input.min = fecha_revision;
 		input.id = "fecha_revision_consejo";
-		input.placeholder = "Fecha de revisión por el Consejo Asesor";
+
 
 		var etiqueta = document.createElement("label");
 		etiqueta.innerHTML = "Inserte la fecha de revisión por el consejo asesor";
@@ -851,29 +844,7 @@
 
 
 
-<script type="text/javascript">
 
-	function revision_contenidos(){
-		var fecha_revision = document.getElementById("fecha_prox_rev").value;	
-		document.getElementById("fecha_revision_contenidos").min = fecha_revision;
-	}
-
-	function revision_esp(){
-		var fecha_revision = document.getElementById("fecha_revision_contenidos").value;	
-		document.getElementById("fecha_revision_especificaciones").min = fecha_revision;
-	}
-	
-	function fecha_ap(){
-		var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;	
-		document.getElementById("fechaAprobacion").min = fecha_revision;
-	}
-
-	function fecha_cc(){
-		var fecha_revision = document.getElementById("fechaAprobacion").value;	
-		document.getElementById("fechaControlCambios").min = fecha_revision;
-	} 
-
-</script>
 
 
 
@@ -896,7 +867,9 @@
 
 
 <script>
+
   var filtros = false;
+  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
   $(document).ready(function() {
       // Setup - add a text input to each footer cell
       $('#datatable tfoot th').each( function () {
@@ -919,9 +892,11 @@
               }
           } );
       } );
+
       $('#datatable tfoot tr').appendTo('#datatable thead');
       $("#datatable thead tr").not("#titulosListado").css("display","none");
   } );
+
   function mostrarFiltro() {
       if (filtros){
         $("#datatable thead tr").not("#titulosListado").css("display","none");
@@ -931,52 +906,7 @@
         $("#datatable thead tr").not("#titulosListado").css("display","table-row");
         filtros = true
       }
+
   }
 </script>
- 
-<script language="javascript">
-  var table = $('#datatable').DataTable({
-    language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
-   initComplete: function(){
-      var api = this.api();
-      new $.fn.dataTable.Buttons(api, {
-         buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
-         ]
-      });
-      api.buttons().container().appendTo('#buttons');  
-   }
-  });
-</script>
-
-<script>
-
-  var filtros = false;
-
-  $(document).ready(function() {
-      // Setup - add a text input to each footer cell
-      $('#datatable tfoot th').each( function () {
-          var title = $(this).text();
-          $(this).html( '<input type="text" placeholder="Filtro" />' );
-      } );
-   
-      // DataTable
-      var table = $('#datatable').DataTable();
-   
-      // Apply the search
-      table.columns().every( function () {
-          var that = this;
-   
-          $( 'input', this.footer() ).on( 'keyup change', function () {
-              if ( that.search() !== this.value ) {
-                  that
-                      .search( this.value )
-                      .draw();
-              }
-          } );
-      } );
-
-      $('#datatable tfoot tr').appendTo('#datatable thead');
-      $("#datatable thead tr").not("#titulosListado").css(
+ <script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>

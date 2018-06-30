@@ -23,11 +23,6 @@ def index():
 def lista_documentos():
 
 
-	if auth.has_membership("WEBMASTER") or auth.has_membership("DIRECTOR") or auth.user.email=='ulab-calidad@usb.ve':
-		documentos = db().select(db.documentos.ALL)
-	else:
-		print (auth.user.first_name=='Unidad de Administración')
-		documentos = db(db.documentos.responsable==auth.user.first_name).select()
 
 	unaDependencia = request.post_vars.codigo
 		
@@ -80,6 +75,7 @@ def lista_documentos():
 		"ccelaborado": request.post_vars.ccelaborado,
 		"registro_fisico": request.post_vars.registro_fisico,
 		"registro_electronico": request.post_vars.registro_electronico,
+		"vinculo": request.post_vars.vinculo,
 
 		##### Estatus inicial
 		"estatus":"Planificado"
@@ -107,13 +103,13 @@ def lista_documentos():
 		"fecha_rev_contenido":dic["fecha_rev_contenido"],
 		"rev_especficaciones_doc_realizado_por":dic["rev_especficaciones_doc_realizado_por"],
 		"fecha_rev_especificaciones_doc":dic["fecha_rev_especificaciones_doc"],
-		"fecha_rev_por_consejo_asesor":dic["fecha_rev_por_consejo_asesor"],
+		"fecha_rev_por_consejo_asesor":dic["fecha_rev_por_consejo_asesor"]
 	}
 
 	aprobado = {
 		"aprobado_por":dic["aprobado_por"],
 		"fecha_aprob":dic["fecha_aprob"],
-		"cod_aprob":dic["cod_aprob"],
+		"cod_aprob":dic["cod_aprob"]
 	}
 
 
@@ -126,6 +122,7 @@ def lista_documentos():
 	if(not('' in aprobado.values())):
 		dic["estatus"] = "Aprobado"
 
+	print(dic["fecha_prox_rev"])	
 
 	##### Agregamos el documento
 	if(dic["codigo"]!=None):
@@ -169,61 +166,24 @@ def lista_documentos():
 			ccelaborado=dic["ccelaborado"],
 			registro_fisico=dic["registro_fisico"],
 			registro_electronico=dic["registro_electronico"],
+			vinculo=dic["vinculo"],
 			estatus=dic["estatus"]
 			
 		
 		)
 
-		# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-		# t = strings.split(',')
-		# year = t[0]
-		# year = year[2:]
-		# fecha = t[2] + "/" + t[1] + "/" + t[0]
-		# contador = db(db.registros.usuario == auth.user.first_name).count(),
 
-		# contador = contador[0]
-		# contador = int(contador) + 1
-		# if (contador < 10):
-		# 	contador = "00" + str(contador)
-		# elif (contador < 100):
-		# 	contador = "0" + str(contador)
-		# else:
-		# 	contador = str(contador) 		
-
-		# print(unaDependencia)
-		# print(year)
-		# cod = unaDependencia[:3] + "-" + year + "-" + contador
-
-		# dic2 = {
-		# 	"usuario":auth.user.first_name,
-		# 	"codigo": cod,
-		# 	"remitente": auth.user.first_name
-		# }
-
-
-		# if(dic2["remitente"]!=None):
-		# 	db.registros.insert(
-		# 		usuario=dic2["usuario"],
-		# 		codigo=dic2["codigo"],
-		# 		remitente=dic2["remitente"]
-		# 	)
-
-	dep = auth.user.first_name
-	docs =	db().select(db.documentos.ALL)
-	if (dep == "Dirección" or dep == "Super Usuario" or dep == "Coordinación de la Calidad"):
-		pass
-	else:
-		docs = db(db.documentos.usuario == dep).select(db.documentos.ALL)
+	dependencasOrdenadas = db().select(db.dependencias.nombre, db.dependencias.codigo_registro, orderby=db.dependencias.nombre)
 
 
 
 	return dict(
-	    documentos=docs,
+	    documentos=db().select(db.documentos.ALL),
 		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
 		doc_revision=db(db.documentos.estatus=="Revisado").count(),
 		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
 		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
-		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+		dependencias = dependencasOrdenadas,
 
 	)
 
@@ -299,7 +259,7 @@ def ficha_registro():
 	print(registro)
 	return dict(registros=row)
 
-	
+
 def ficha():
 
 	uname = request.args[0]
@@ -414,5 +374,4 @@ def ficha():
 		redirect(URL('lista_documentos'))
 
 	return dict(documentos=row,
-				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row	)
-
+				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row
