@@ -18,16 +18,16 @@
 		
 	</style>
  	
- 	<!-- Estilos de modales y listados -->
- 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
- 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
+	 <!-- Estilos de modales y listados -->
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
- 	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>	
+	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -46,7 +46,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <span class="breadcrumb-item active">Validaciones</span>
+  <span class="breadcrumb-item active">VALIDACIONES PENDIENTES</span>
   </div>
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
@@ -56,31 +56,28 @@
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <div class="container titulo">
-	<h3 class="dep-titulo">SOLICITUDES DE VALIDACIÓN</h3>
+	<h3 class="dep-titulo">VALIDACIONES PENDIENTES</h3>
 </div>
 <!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
 
 <div class="container">
 	<div class="row">
-		<br>
-		<div id="buttons">
-		  <!-- Filtrado -->
-		  <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
-		  <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
-		  <!-- Filtrado -->    
-		</div>
-		<br>
+			<br>
+			<div id="buttons">
+				<!-- Filtrado -->
+				<button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
+				<button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+				<span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
+				<!-- Filtrado -->    
+			</div>
+			<br>
 	
 		<div class="table-responsive no-padding no-margin">
 		  <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
 			<thead>
 				<tr id="titulosListado">
-					<th class="camposTabla linksNombres">Nombre</th>
-					<th class="camposTabla linksNombres">N° BM</th>
-					<th class="camposTabla linksNombres">Placa</th>
-					<th class="camposTabla linksNombres">Marca</th>
-					<th class="camposTabla linksNombres">Modelo</th>
-					<th class="camposTabla linksNombres">Serial</th>
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">TIPO</th>
 				</tr>
 			</thead>
 	
@@ -89,22 +86,14 @@
 				<tr>
 					<td class="camposTabla">{{=bm['mbn_nombre']}}</td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-					<td class="camposTabla">{{=bm['mbn_num']}}</td>
-					<td class="camposTabla">{{=bm['mbn_placa']}}</td>
-					<td class="camposTabla">{{=bm['mbn_marca']}}</td>
-					<td class="camposTabla">{{=bm['mbn_modelo']}}</td>
-					<td class="camposTabla">{{=bm['mbn_serial']}}</td>
+					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion}}</td>
 				</tr>
 			  {{pass}}           
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
-			  <th class="camposTabla linksNombres">Nombre</th>
-			  <th class="camposTabla linksNombres">N° BM</th>
-			  <th class="camposTabla linksNombres">Placa</th>
-			  <th class="camposTabla linksNombres">Marca</th>
-			  <th class="camposTabla linksNombres">Modelo</th>
-			  <th class="camposTabla linksNombres">Serial</th>
+			  <th class="camposTabla linksNombres">NOMBRE</th>
+			  <th class="camposTabla linksNombres">TIPO</th>
 				</tr>
 			</tfoot>
 	
@@ -231,7 +220,9 @@
 		$('.dataTables_info').addClass('pull-right');
 		
 		$('.dataTables_filter').addClass('pull-left');
+  
+		
 	 }
 	});
-</script>
+  </script>
 {{end}}
