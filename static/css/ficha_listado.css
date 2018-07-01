@@ -126,7 +126,7 @@ th {
 	background: transparent;
 }
 
-#datatable_filter{
+#datatable1_filter, #datatable2_filter{
 	text-align: left !important;
 	float: left !important;
 	margin: 15px;
@@ -141,7 +141,7 @@ th {
 
 }
 
-#datatable_info {
+#datatable_info1, #datatable_info2{
 	border-collapse: collapse;
 	float: right;
 	text-align: right;

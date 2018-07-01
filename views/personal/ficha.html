@@ -45,13 +45,13 @@
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
             <li role="presentation" class="nav-item active">
-              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Datos Básicos</b></a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Datos Laborales</b></a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Datos Personales</b></a>
             </li>
           </ul>
 
@@ -128,11 +128,6 @@
                       <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
                     </tr>
                     {{pass}}
-                    {{if bool(personal['categoria']) :}}
-                    <tr>
-                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
-                    </tr>
-                    {{pass}}
                     {{if bool(personal['estatus']) :}}
                     <tr>
                       <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
@@ -143,6 +138,12 @@
                       <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
                     {{pass}}
+                    {{if bool(personal['categoria']) :}}
+                    <tr>
+                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
+                    </tr>
+                    {{pass}}
+
                     {{if bool(personal['fecha_ingreso']) :}}
                     <tr>
                       <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>

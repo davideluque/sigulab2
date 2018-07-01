@@ -250,6 +250,9 @@ def listado():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
+    empleados = validacion_estilo()['empleados']
+
+
     return dict(
         grid=tabla,
         categorias=categorias,
@@ -260,7 +263,8 @@ def listado():
         roles=roles,
         operadores=operadores,
         ubicaciones=ubicaciones,
-        usuario=usuario
+        usuario=usuario,
+        empleados = empleados
         )
 
 def transformar_fecha(fecha):
@@ -411,8 +415,6 @@ def validacion_estilo():
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
     usuario = Usuario(infoUsuario.t_Personal.select().first())
 
-    if not usuario.f_es_supervisor:
-        return redirect(URL('listado_estilo'))
     session.validaciones_pendientes = val
     #dic = { 'empleados' : buscarEmpleados()}
     dic = { 'empleados' : tabla_categoria("validacion")}
