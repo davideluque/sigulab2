@@ -18,35 +18,122 @@ import datetime
 def index(): 
 	return dict(message="hello from informacion_documentada.py")
 
+
+# Función que te devuelve los dos últimos dígitos del año en curso.
 def anioEnCurso():
 
 	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
 	t = strings.split(',')
 	year = t[0]
 	year = year[2:]
+
 	return year
 
+# Función que regresa la dependencia al que está ligado el personal loggeado
 def dependenciaAsociadaUsuario():
+
+	# idDependencia es una variable que contiene el id de la dependencia al que está ligado
+	# el usuario loggeado.
 	idDependencia =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_dependencia)[0]
+	# dependencia es toda la información de la dependencia ligada al usuario loggeado y se encuentra
+	# haciendo match entre el idDependencia y el id de todas las dependencias.
 	dependencia = db(db.dependencias.id == idDependencia.f_dependencia).select(db.dependencias.nombre)
+	
 	return dependencia
 
+# Esta función se encarga de generar el código de registro
+
 def generarCodigoRegistro():
+
 	dependencia = dependenciaAsociadaUsuario()
-
-
 	nroRegistros = db(db.registros.dependencia_asociada == dependencia).count() + 1
 	if (nroRegistros < 10):
 		nroRegistros = "00" + str(nroRegistros)
 	elif (nroRegistros < 100):
 		nroRegistros = "0" + str(nroRegistros)
-
 	codDep = db(db.dependencias.nombre == dependencia[0].nombre).select(db.dependencias.ALL)[0]
-
 	codigoRegistro = codDep.codigo_registro + "/" + anioEnCurso() + "-" + nroRegistros
 
-
 	return codigoRegistro
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def lista_registros():
+
+	# Generamos el codigo de un registro nuevo.
+	cod = generarCodigoRegistro()
+	# Buscamos la dependencia asociada al usuario loggeado.
+	dependencia = dependenciaAsociadaUsuario()
+
+	dic = {
+		"dependencia_asociada":dependencia,
+		"codigo": cod,
+		"fecha_creacion": request.post_vars.fecha_creacion,
+		"descripcion": request.post_vars.descripcion,
+		"destinatario": request.post_vars.destinatario,
+		"remitente": request.post_vars.remitente,
+		"doc_electronico": request.post_vars.doc_electronico,
+		"ubicacion_doc_electronico": request.post_vars.ubicacion_doc_electronico,
+		"archivo_fisico": request.post_vars.archivo_fisico,
+	}
+
+	# Agregams el registro.
+	if(dic["descripcion"]!=None):
+		db.registros.insert(
+			dependencia_asociada=dic["dependencia_asociada"],
+			codigo=dic["codigo"],
+			fecha_creacion=dic["fecha_creacion"],
+			descripcion=dic["descripcion"],
+			destinatario=dic["destinatario"],
+			remitente=dic["remitente"],
+			doc_electronico=dic["doc_electronico"],
+			ubicacion_doc_electronico=dic["ubicacion_doc_electronico"],
+			archivo_fisico=dic["archivo_fisico"],
+		)
+
+	# Hacemos el filtrado (sólo se mostraran registros asociados a cada dependencia)
+	registros_mostrar = db(db.registros.dependencia_asociada == dependencia).select(db.registros.ALL)
+
+	return dict(
+		registros=registros_mostrar,
+		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+	)
+
+
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ficha_registro():
+
+
+	cod = request.args[0] + "/" + request.args[1]
+	# Encontramos el registro con el código pasado como parámetro.
+	registro =  db(db.registros.codigo == cod).select(db.registros.ALL)
+	rgEditable = db(db.registros.codigo == cod)
+
+	# Sección de edición del registro.
+	if (request.post_vars.fecha_creacion != None):
+		rgEditable.update(
+			codigo = cod,
+			fecha_creacion = request.post_vars.fecha_creacion,
+			descripcion = request.post_vars.descripcion,
+			destinatario = request.post_vars.destinatario,
+			remitente = request.post_vars.remitente,
+			doc_electronico = request.post_vars.doc_electronico,
+			ubicacion_doc_electronico = request.post_vars.ubicacion_doc_electronico,
+			archivo_fisico = request.post_vars.archivo_fisico,
+		)
+
+		redirect(URL('informacion_documentada','ficha_registro',args=[cod]))
+
+	# Sección de eliminación del registro.
+	if(request.post_vars.eliminar=="eliminar"):
+		db(db.registros.codigo==cod).delete()
+		redirect(URL('lista_registros'))
+	
+	return dict(
+		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+		registros=registro
+	)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -234,82 +321,6 @@ def lista_documentos():
 
 
 
-def lista_registros():
-
-	cod = generarCodigoRegistro()
-	dependencia = dependenciaAsociadaUsuario()
-
-
-	dic = {
-		"dependencia_asociada":dependencia,
-		"codigo": cod,
-		"fecha_creacion": request.post_vars.fecha_creacion,
-		"descripcion": request.post_vars.descripcion,
-		"destinatario": request.post_vars.destinatario,
-		"remitente": request.post_vars.remitente,
-		"doc_electronico": request.post_vars.doc_electronico,
-		"ubicacion_doc_electronico": request.post_vars.ubicacion_doc_electronico,
-		"archivo_fisico": request.post_vars.archivo_fisico,
-	}
-
-
-	if(dic["descripcion"]!=None):
-		db.registros.insert(
-			dependencia_asociada=dic["dependencia_asociada"],
-			codigo=dic["codigo"],
-			fecha_creacion=dic["fecha_creacion"],
-			descripcion=dic["descripcion"],
-			destinatario=dic["destinatario"],
-			remitente=dic["remitente"],
-			doc_electronico=dic["doc_electronico"],
-			ubicacion_doc_electronico=dic["ubicacion_doc_electronico"],
-			archivo_fisico=dic["archivo_fisico"],
-		)
-
-
-	registros_mostrar = db(db.registros.dependencia_asociada == dependencia).select(db.registros.ALL)
-
-	return dict(
-		registros=registros_mostrar,
-		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
-	)
-
-
-
-
-@auth.requires_login(otherwise=URL('modulos', 'login'))
-def ficha_registro():
-
-
-	cod = request.args[0] + "/" + request.args[1]
-	registro =  db(db.registros.codigo == cod).select(db.registros.ALL)
-	rgEditable = db(db.registros.codigo == cod)
-
-	
-
-	if (request.post_vars.fecha_creacion != None):
-		rgEditable.update(
-			codigo = cod,
-			fecha_creacion = request.post_vars.fecha_creacion,
-			descripcion = request.post_vars.descripcion,
-			destinatario = request.post_vars.destinatario,
-			remitente = request.post_vars.remitente,
-			doc_electronico = request.post_vars.doc_electronico,
-			ubicacion_doc_electronico = request.post_vars.ubicacion_doc_electronico,
-			archivo_fisico = request.post_vars.archivo_fisico,
-		)
-		
-		redirect(URL('informacion_documentada','ficha_registro',args=[cod]))
-
-
-	if(request.post_vars.eliminar=="eliminar"):
-		db(db.registros.codigo==cod).delete()
-		redirect(URL('lista_registros'))
-	
-	return dict(
-		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
-		registros=registro
-		)
 
 
 def ficha():

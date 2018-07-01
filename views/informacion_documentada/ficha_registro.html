@@ -6,7 +6,6 @@
 {{block head}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
@@ -14,6 +13,7 @@
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
 
   <!-- DataTables -->
@@ -290,10 +290,8 @@
   <div class="modal fade" id="adddoc" role="dialog">
     <div class="modal-dialog">
 
-      <!-- Modal content-->
       <div class="modal-content">
 
-        <!-- Modal Header -->
         <div class="modal-header addHeader">
           <div class="row addRow" id="rowHeader">
             <div class="col-sm-1" id="col1Header">
@@ -308,9 +306,7 @@
             </div>
           </div>
         </div>
-        <!-- Fin Modal Header -->
-        
-        <!-- Modal Body -->
+
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
@@ -378,9 +374,7 @@
             
                             
                           </fieldset>
-                    <!-- Fin Primer Paso -->
-                    
-                    
+
 
                 </form>
             </div>
@@ -450,6 +444,15 @@
       $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
   });
     
+
+</script>
+<script type="text/javascript">
+  $(function() {
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd'
+    })  
+  });
+
 
 </script>
 

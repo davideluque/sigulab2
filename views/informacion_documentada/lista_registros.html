@@ -2,8 +2,6 @@
 {{block head}}
  
 
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- DataTables -->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
@@ -30,15 +28,6 @@
 </nav>
 
 <div class="container-fluid" id="container-body" style="">
-  <!--<nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Documentos</li>
-      </ol>
-  </nav><-->
-
-
-
 
   <div class="row">
     <div class="col-md-10">
@@ -149,7 +138,6 @@
 
 
 
-<!-- Inicio Modal ficha de Servicio -->
   <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -159,9 +147,7 @@
 
     </div>
   </div>
-<!-- Fin Modal ficha de servicio -->
 
-<!-- Modal añadir un servicio -->
   <div class="modal fade" id="adddoc" role="dialog">
     <div class="modal-dialog">
 
@@ -178,7 +164,7 @@
             </div>
             <div class="col-sm-10" id="col11Header">
               <h4 class="modal-title" id="nuevoServicio">Nuevo Registro
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" onclick="limpiarCampos()">&times;</button>
               </h4>
             </div>
           </div>
@@ -218,13 +204,13 @@
                           </div>
                           
                           <div class="input-group">
-                                  <h4 class="">Remitente</h4>
+                              <h4 class="">Remitente</h4>
                               <select name="remitente" id="remitente" class="input" onchange="get_code(this)" required>
-                    <option value=""></option>
-                    {{for dep in dependencias:}}
-                    <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
-                    {{pass}}
-                  </select>
+                              <option value=""></option>
+                              {{for dep in dependencias:}}
+                              <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+                              {{pass}}
+                            </select>
                           </div>
 
                           <div class="input-group">
@@ -268,21 +254,9 @@
     </div>
   </div>
 
-<!-- Fin Modal Agregar Servicio -->
 
 
 
-
-
-<script type="text/javascript">
-  function abrirFicha(codigo) {
-    console.log("kasbdakasdalsndas");
-    var x = document.getElementById("reg");
-      x.value = codigo;
-    ajax('ajax_ficha_registro', ['reg'], "ficha_reg");
-  } 
-
-</script>
 
 
 
@@ -314,6 +288,14 @@
       format: 'yyyy-mm-dd'
     })  
   });
+</script>
+<script type="text/javascript">
+   function limpiarCampos() {    
+
+    $('.registration-form').find('input:text').val('');
+    $('.registration-form').find('select').val('');
+    location.reload();
+  }
 </script>
 <script>
 
