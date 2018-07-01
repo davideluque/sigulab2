@@ -319,7 +319,7 @@
 								</div>
 
 								<!-- Campo de Tipo del Documento -->
-								<div class="form-group"> 
+								<div class="form-group" id="tipos"> 
 									<h5>Tipo del Documento</h5>
 									<select name="tipo" id="tipo" class="input" required>
 										<option value=""></option>
@@ -332,6 +332,7 @@
 										<option value="Manual de Uso">Manual de Uso</option>
 										<option value="Otro">Otro</option>
 									</select>
+									<div id="otros"></div>
 								</div>
 
 								<!-- Campo de Responsable del Documento -->
@@ -348,6 +349,27 @@
 								<div class="form-group">
 									<h5>Código del documento</h5>
 									<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
+								</div>
+
+
+
+								<!-- Campo de Objetivos -->
+								<div class="form-group">
+									<h5>Objetivos del documento</h5>
+									<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos"> 
+								</div>
+
+								<!-- Campo de Período de Revisión -->
+								<div class="form-group">
+									<h5>Período de Revisión</h5>
+									<select name="periodo" id="periodo" class="input">
+										<option value=""></option>
+										<option value="Semestral">Semestral</option>
+										<option value="Anual">Anual</option>
+										<option value="Bienal">Bienal</option>
+										<option value="Trienal">Trienal</option>
+										<option value="Quinquenal">Quinquenal</option>
+									</select> 
 								</div>
 
 
@@ -378,34 +400,7 @@
 						<div class="col-sm-11 col11Body">
 							
 							<h4 class="titulosForm">Fase de Elaboración</h4>
-
-
-
-							<!-- Campo de Objetivos -->
-							<div class="form-group">
-								<h5>Objetivos del documento</h5>
-								<input type="text" class="input" name="objetivos" id="objetivos" placeholder="Objetivos"> 
-							</div>
-
-							<!-- Campo de Período de Revisión -->
-							<div class="form-group">
-								<h5>Período de Revisión</h5>
-								<select name="periodo" id="periodo" class="input">
-									<option value=""></option>
-									<option value="Semestral">Semestral</option>
-									<option value="Anual">Anual</option>
-									<option value="Bienal">Bienal</option>
-									<option value="Trienal">Trienal</option>
-									<option value="Quinquenal">Quinquenal</option>
-								</select> 
-							</div>
-
-
-							<!-- Campo de Fecha de entrega para revisión del Documento -->
-							<div class="form-group">
-								<h5>Fecha de entrega para revisión</h5>
-								<input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-							</div>
+							
 
 							<!-- Campo de Número de Anexos -->
 							<div class="form-group">
@@ -464,6 +459,13 @@
 																			
 							</div>
 
+
+							<!-- Campo de Fecha de entrega para revisión del Documento -->
+							<div class="form-group">
+								<h5>Fecha de elaboración</h5>
+								<input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+							</div>
+
 					
 						
 							<div style="position: fixed; bottom: 0; right: 0;">
@@ -495,13 +497,13 @@
 
 							<!-- Campo de responsable de la revisión de contenidos -->
 							<div class="form-group">
-								<h5>Revisión de contenidos</h5>
+								<h5>Revisión de contenido</h5>
 								<input type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Contenido revisado por:" />
 							</div> 
 
 							<!-- Campo de fecha de la revisión de contenidos -->
 							<div class="form-group">
-								<h5>Fecha de revisión de contenidos</h5>
+								<h5>Fecha de revisión de contenido</h5>
 								<input class="datepicker" name="fecha_revision_contenidos" id="fecha_revision_contenidos" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
 							</div> 
 
@@ -520,7 +522,7 @@
 
 							<!-- Campo de confirmación si fué o no revisado por el consejo -->
 							<div class="form-group">
-								<label>Revisión del Consejo</label>
+								<label>Revisión por el Consejo Asesor -ULAB”</label>
 								<br>
 								<input type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
 								<br>
@@ -606,16 +608,14 @@
 								<div class="form-group">
 									<h5>Ubicación física</h5>
 									<input type="text" class="input" name="ubicacion_fisica" id="ubicacion_fisica" placeholder="Ubicación física del documento" />
-									<h6>Indique la carpeta, archivo, estante u otro se puede
-											acceder al documento</h6>
+									<h6 style="color: gray;">Indique la carpeta, archivo, estante u otro se puede acceder al documento</h6>
 								</div>  
 
 								<!-- Campo de ubicación electrónica del documento -->
 								<div class="form-group">
 									<h5>Ubicación electrónica</h5>
 									<input type="text" class="input" name="archivo_el" id="archivo_el" placeholder="Archivo electrónico" /> 
-									<h6>Indique la carpeta, archivo, estante u otro se puede
-											acceder al documento</h6>
+									<h6 style="color: gray;">Indique el nombre del archivo electrónico, carpeta o ruta para acceder al el mismo</h6>
 								</div>
 
 								<!-- Campo de vínculo del documento -->
@@ -675,16 +675,14 @@
 								<div class="form-group">
 									<h5>Ubicación del registro en formato físico</h5>
 									<input type="text" class="input" name="registro_fisico" id="registro_fisico" placeholder="Ubicación del registro en formato físico" /> 
-									<h6>Indique la carpeta, archivo, estante u otro se puede
-												acceder al documento</h6>
+									<h6 style="color: gray;">Indique la carpeta, archivo, estante u otro se puede acceder al documento</h6>
 								</div>
 
 								<!-- Campo deUbicación del registro en formato físicoo -->
 								<div class="form-group">
 									<h5>Ubicación del registro en formato electrónico</h5>
 									<input type="text" class="input" name="registro_electronico" id="registro electronico" placeholder="Ubicación del registro en formato electrónico" /> 
-									<h6>Indique la carpeta, archivo, estante u otro se puede
-												acceder al documento</h6>
+									<h6 style="color: gray;">Indique el nombre del archivo electrónico, carpeta o ruta para acceder al el mismo</h6>
 								</div>
 
 								<div style="position: fixed; bottom: 0; right: 0;">
@@ -737,9 +735,23 @@
 		document.getElementById("codigo").value = cod + "-";
 	}
 
-
 </script>
 
+<script type="text/javascript">
+	$('#tipo').change(function(){
+		if( $(this).val() == 'Otro'){
+			$('#otros').append('<h5 id="titulo_otro_tipo"><br>Especifique el tipo de Documento</h5><input type="text" class="input" name="otro_tipo" id="otro_tipo" placeholder="Nombre del Tipo" required>');
+		}else{
+			$('#otro_tipo').remove();
+			$('#titulo_otro_tipo').remove();
+		}
+	});
+
+
+
+									
+
+</script>
 
 <script type="text/javascript">
 	$(function() {

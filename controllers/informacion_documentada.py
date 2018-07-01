@@ -25,20 +25,22 @@ def lista_documentos():
 
 
 	unaDependencia = request.post_vars.codigo
-	print("-------------------------------")
-	print(request.post_vars.fecha_prox_rev)
+
+
 	dic = {
 
 		##### Planificación
 		"usuario":auth.user.first_name,
 		"nombre_doc": request.post_vars.nombre_documento,
 		"tipo_doc":request.post_vars.tipo,
+		"otro_tipo":request.post_vars.otro_tipo,
 		"responsable": request.post_vars.responsable,
 		"codigo": unaDependencia,
-
-		##### Elaboración
 		"objetivo": request.post_vars.objetivos,
 		"periodo_rev":request.post_vars.periodo,
+		
+
+		##### Elaboración
 		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
 		"anexo_code1": request.post_vars.anexo_code1,
 		"anexo_name1": request.post_vars.anexo_name1,
@@ -132,6 +134,7 @@ def lista_documentos():
 			usuario=dic["usuario"],
 			nombre_doc=dic["nombre_doc"],
 			tipo_doc=dic["tipo_doc"],
+			otro_tipo=dic["otro_tipo"],
 			responsable=dic["responsable"],
 			codigo=dic["codigo"],
 			objetivo=dic["objetivo"],

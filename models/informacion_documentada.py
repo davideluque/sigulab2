@@ -65,6 +65,10 @@ db.define_table(
             'Manual de Uso', 'Otro'])
       ),
 
+
+      Field('otro_tipo', 'string', label=T('Otro tipo de documento')),
+
+
       Field('responsable', 'string', label=T('Dependencia responsable del Documento'),
             requires=IS_IN_SET(['DIRECCIÓN','LABORATORIO A','LABORATORIO B', \
             'LABORATORIO C','LABORATORIO D','LABORATORIO E',\
@@ -77,17 +81,18 @@ db.define_table(
       Field('codigo', 'string', label=T('Codigo del registro')),
 
 
-
-
-      ################ Fase de Elaboración
-      
-
       Field('objetivo', 'string', label=T('Objetivo del documento')),
 
       Field('periodo_rev', 'string', label=T('Periodo de revision del Documento'),
             widget=SQLFORM.widgets.options.widget,
             requires=IS_IN_SET(['Semestral', 'Anual','Bienal','Trienal','Quinqueanual'])
       ),
+
+
+
+
+      ################ Fase de Elaboración
+
 
       Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
             label=T('Fecha de proxima revision del Documento')
