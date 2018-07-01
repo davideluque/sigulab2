@@ -172,8 +172,6 @@ def add_form():
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
             f_ubicacion= dic["ubicacion"],
-            f_extension_USB = dic["extension_USB"],
-            f_extension_interna = dic["extension_interna"],
             f_por_validar=True,
             f_validado=False,
             f_comentario="",
