@@ -1,6 +1,4 @@
 {{extend 'layout.html'}}
-<h1>Está es la plantilla informacion_documentada/ficha.html</h1>
-{{=BEAUTIFY(response._vars)}}
 
 
 {{block head}}
@@ -11,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
   <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
   <!-- DataTables -->
@@ -18,7 +17,15 @@
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
+ 
+ 
+  <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
 
+
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+  
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
@@ -171,7 +178,7 @@
           </div>
         </div>
           <div class="col-sm-11" id="col11Header">
-          <h4 class="modal-title" id="nuevoServicio">Agregar Documento</h4>
+          <h4 class="modal-title" id="nuevoServicio">Editar Documento</h4>
         </div>
       </div>
     </div>
@@ -226,8 +233,7 @@
                 </div>
 
 
-                <div style="position: fixed; bottom: 0; right: 0;">
-                  <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="envio" value="edicion" ><i class="fa fa-floppy-o"></i></button>   
+                <div style="position: fixed; bottom: 0; right: 0;">  
                   <button type="button" class="btn btn-next add botonForm"><i class="fa fa-arrow-right"></i></button>
                 </div>
               </div>
@@ -281,16 +287,26 @@
 
 
               <!-- Campo de Fecha de entrega para revisión del Documento -->
-              <div class="form-group">
-                <h5>Fecha de entrega para revisión</h5>
-                  <input disabled='' type="date" class="input" name="fecha_prox_rev" id="fecha_prox_rev" value="{{=doc.fecha_prox_rev}}">
+
+            
+                <div class="form-group">
+                <h5>Fecha de elaboración</h5>
+                <input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
               </div>
+
 
               <!-- Campo de Número de Anexos -->
               <div class="form-group">
-                <h5>Número de anexos</h5>
-                <input disabled='' type="number" class="input" name="numero_anexos" id="numero_anexos" placeholder="Número de Anexos" onchange="agregarAnexo(this)" />  
-                <div id="containerAnexos"/>
+                <div class="form-group">
+                <h5>Anexos</h5>
+
+                <div id="p_anexo">
+                  <p>
+
+                  </p>
+                </div>
+
+                <a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
               </div>
 
               <div style="position: fixed; bottom: 0; right: 0;">
@@ -328,11 +344,11 @@
                 
                 <div id="p_scents">
                   <p>
-                    <input disabled='' type="text" id="p_scnt" size="20" name="elaborador" value="elaboradorDePrueba" placeholder="Ingrese un elaborador" />
+                    <input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
                   </p>
                 </div>
 
-                <a href="#" id="addScnt"><span class="fa fa-plus"></span></a>
+                <a href="#" id="addScnt"><span class="fa fa-plus">Agregar Elaborador</span></a>
                                       
               </div>
 
@@ -608,12 +624,151 @@
 
 
   {{pass}}
+
+<script type="text/javascript">
+
+  function get_code(i){
+    cod = i[i.selectedIndex].id; // get value
+    document.getElementById("codigo").value = cod + "-";
+  }
+
+</script>
+
+<script type="text/javascript">
+  $(function() {
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd'
+      })  
+  });
+
+  $(function() {
+    
+    var scntDiv = $('#p_scents');
+    var i = $('#p_scents p').length + 1;
+
+    
+    $('.form-group').on('click', '#addScnt', function() {
+      $('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
+      i++;
+      return false;
+    });
+    
+    $('.form-group').on('click', '#remScnt', function() { 
+      if( i > 2 ) {
+        $(this).parents('p').remove();
+        i--;
+      }
+      return false;
+    });
+  });
+
+</script>
+
+<script type="text/javascript">
+
+  function codigoDoc(){
+     var codigoDocumento = document.getElementById("codigo").value;
+     return codigoDocumento;
+  }
+
+  $(function() {
+    
+    var scntDiv = $('#p_anexo');
+    var i = $('#p_anexo p').length + 1;
+    
+    var c = codigoDoc();
+
+    $('.form-group').on('click', '#addAnexo', function() {
+      $('<p><input type="text" id="anexoCode' + i +'"  name="anexoCode' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input id="anexoName' + i +'" type="text"  name="anexoName' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
+      i++;
+      return false;
+    });
+    
+    $('.form-group').on('click', '#remScnt', function() { 
+      if( i > 1 ) {
+        $(this).parents('p').remove();
+        i--;
+      }
+      return false;
+    });
+  });
+
+</script>
+
+<script type="text/javascript">
+  function agregarFecha(){
+
+    var container = document.getElementById("containerRevision");
+    var input = document.createElement("input");
+    var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
+
+    input.type = "text";
+    input.class = "datepicker"
+    input.name = "fecha_revision_consejo";
+    input.id = "fecha_revision_consejo";
+
+
+    var etiqueta = document.createElement("label");
+    etiqueta.innerHTML = "Inserte la fecha de revisión por el consejo asesor";
+
+    container.appendChild(document.createElement("br"));
+    container.appendChild(etiqueta);
+    container.appendChild(input);
+
+    
+  }
+
+  function eliminarFecha(){
+
+    var container = document.getElementById("containerRevision");
+    while (container.hasChildNodes()) {
+      container.removeChild(container.lastChild);
+    }
+
+  }
+
+
+</script>
+
+
   <script>
+  $(function() {
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd'
+      })  
+  });
 function estatus(){
       if($('.form-group').data('atributo')=='Planificado'){
      
         jQuery('#objetivos').removeAttr('disabled');
         jQuery('#periodo').removeAttr('disabled');
+        jQuery('#fecha_prox_rev').removeAttr('disabled');
+
+
+      jQuery('#anexo_code1', 'string',  label=T('Codigo del anexo')),
+
+      jQuery('#anexo_name1', 'string', label=T('Nombre del anexo del Documento')),
+
+
+      jQuery('#anexo_code2', 'string',  label=T('Codigo del anexo')),
+
+      jQuery('#anexo_name2', 'string', label=T('Nombre del anexo del Documento')),
+
+
+      jQuery('#anexo_code3', 'string',  label=T('Codigo del anexo')),
+
+      jQuery('#anexo_name3', 'string', label=T('Nombre del anexo del Documento')),
+
+
+      jQuery('#anexo_code4', 'string',  label=T('Codigo del anexo')),
+
+      jQuery('#anexo_name4', 'string', label=T('Nombre del anexo del Documento')),
+
+
+      jQuery('#anexo_code5', 'string',  label=T('Codigo del anexo')),
+
+      jQuery('#anexo_name5', 'string', label=T('Nombre del anexo del Documento')),
+
         jQuery('#elaborado').removeAttr('disabled');
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
@@ -659,18 +814,8 @@ function estatus(){
         
       }
     }
-  </script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <script type="text/javascript">
-    var ficha = "{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}";
-    $('.tab-link').click( function() {
-    
-    var tabID = $(this).attr('data-tab');
-    
-    $(this).addClass('active').siblings().removeClass('active');
-    
-    $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
-  });
+
+
   </script>
   <script type="text/javascript">
     // Get the modal
@@ -696,7 +841,11 @@ function estatus(){
     $('#edit_send').click(function(event){
         window.reload();
     });
+
+
   </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 <script src="{{=URL('static','js/agregarDoc.js')}}"></script>
+
+
 {{end}}
