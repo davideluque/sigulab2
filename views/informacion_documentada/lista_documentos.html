@@ -344,7 +344,11 @@
 										{{pass}}
 									</select>
 								</div>
-
+								<!-- Campo de Código -->
+								<div class="form-group">
+									<h5>Código del documento</h5>
+									<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
+								</div>
 
 
 								<div style="position: fixed; bottom: 0; right: 0;">
@@ -375,11 +379,7 @@
 							
 							<h4 class="titulosForm">Fase de Elaboración</h4>
 
-							<!-- Campo de Código -->
-							<div class="form-group">
-								<h5>Código del documento</h5>
-								<input type="text" class="input" name="codigo" id="codigo" placeholder="Código Documento" onchange="codigoDoc()">
-							</div>
+
 
 							<!-- Campo de Objetivos -->
 							<div class="form-group">
@@ -744,7 +744,7 @@
 <script type="text/javascript">
 	$(function() {
 		$('.datepicker').datepicker({
-    		format: 'dd-mm-yyyy'
+    		format: 'yyyy-mm-dd'
     	})	
 	});
 
@@ -789,13 +789,13 @@
 		console.log("asda");
 
 		$('.form-group').on('click', '#addAnexo', function() {
-			$('<p><input type="text"  name="anexoCode' + i +'" value=" '+ c +' "  /> </p><p><input type="text"  name="anexoName' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
+			$('<p><input type="text"  name="anexoCode' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input type="text"  name="anexoName' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
 			i++;
 			return false;
 		});
 		
 		$('.form-group').on('click', '#remScnt', function() { 
-			if( i > 2 ) {
+			if( i > 1 ) {
 				$(this).parents('p').remove();
 				i--;
 			}

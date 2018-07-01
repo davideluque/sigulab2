@@ -74,11 +74,13 @@ db.define_table(
             ])
       ),
 
+      Field('codigo', 'string', label=T('Codigo del registro')),
+
+
 
 
       ################ Fase de Elaboración
-
-      Field('codigo', 'string', label=T('Codigo del registro')),
+      
 
       Field('objetivo', 'string', label=T('Objetivo del documento')),
 
@@ -87,7 +89,7 @@ db.define_table(
             requires=IS_IN_SET(['Semestral', 'Anual','Bienal','Trienal','Quinqueanual'])
       ),
 
-      Field('fecha_prox_rev', 'string', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
             label=T('Fecha de proxima revision del Documento')
       ),
 
@@ -137,7 +139,7 @@ db.define_table(
 
       Field('rev_contenido_realizado_por', 'string', label=T('Nombre de quien reviso el contenido del Documento')),
 
-      Field('fecha_rev_contenido', 'string', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_contenido', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision del contenido del Documento')
       ),
 
@@ -145,11 +147,11 @@ db.define_table(
           label=T('Nombre de quien realizo la revision de las especificaciones')
       ),
 
-      Field('fecha_rev_especificaciones_doc', 'string', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_especificaciones_doc', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision de las especificaciones del Documento')
       ),
 
-      Field('fecha_rev_por_consejo_asesor', 'string', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_por_consejo_asesor', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision por el Consejo Asesor')
       ),
 
@@ -159,7 +161,7 @@ db.define_table(
 
       Field('aprobado_por', 'string', label=T('Nombre de quien aprobo el Documento')),
 
-      Field('fecha_aprob', 'string', requires=IS_DATE(format=('%d-%m-%Y')), 
+      Field('fecha_aprob', 'date', requires=IS_DATE(format=('%Y-%m-%d')), 
             label=T('Fecha de aprobacion del Documento')
       ),
 
@@ -171,7 +173,7 @@ db.define_table(
 
       Field('cod_control_cambio', 'string', label=T('Codigo de registro de control de cambios del Documento')),
 
-      Field('fecha_control_cambio', 'string', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_control_cambio', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
             label=T('Fecha de registro de control de cambios en el Documento')
       ),
 

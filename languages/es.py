@@ -9,6 +9,7 @@
 '%(nrows)s records found': '%(nrows)s registros encontrados',
 '%d-%m-%Y': '%d-%m-%Y',
 '%d/%m/%Y': '%d/%m/%Y',
+'%m/%d/%Y': '%m/%d/%Y',
 '%s %%{position}': '%s %%{posición}',
 '%s %%{row} deleted': '%s %%{fila} %%{eliminada}',
 '%s %%{row} updated': '%s %%{fila} %%{actualizada}',

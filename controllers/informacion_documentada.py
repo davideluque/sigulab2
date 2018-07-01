@@ -25,7 +25,8 @@ def lista_documentos():
 
 
 	unaDependencia = request.post_vars.codigo
-		
+	print("-------------------------------")
+	print(request.post_vars.fecha_prox_rev)
 	dic = {
 
 		##### Planificación
@@ -33,9 +34,9 @@ def lista_documentos():
 		"nombre_doc": request.post_vars.nombre_documento,
 		"tipo_doc":request.post_vars.tipo,
 		"responsable": request.post_vars.responsable,
+		"codigo": unaDependencia,
 
 		##### Elaboración
-		"codigo": unaDependencia,
 		"objetivo": request.post_vars.objetivos,
 		"periodo_rev":request.post_vars.periodo,
 		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
@@ -122,7 +123,7 @@ def lista_documentos():
 	if(not('' in aprobado.values())):
 		dic["estatus"] = "Aprobado"
 
-	print(dic["fecha_prox_rev"])	
+	
 
 	##### Agregamos el documento
 	if(dic["codigo"]!=None):
