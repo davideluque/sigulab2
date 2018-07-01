@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- DataTables -->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+  <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
@@ -16,12 +18,6 @@
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
-  <style type="text/css">
-    .buttons-print{
-  background: #fff;
-  color: #333;
-}
-  </style>
 
 {{end}}
 {{block center}}
@@ -46,11 +42,11 @@
 
   <div class="row">
     <div class="col-md-10">
-      <h2 style="text-align: center; margin-left: 20%"> CONTROL DE REGISTROS </h2>
+      <h3 style="text-align: center; margin-left: 18%"> CONTROL DE REGISTROS </h3>
     </div>
     <div class="col-md-2">
       <a href="#">
-        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; border-color: #337ab7;"><i class="fa fa-plus fa-3x" aria-hidden="true"></i></button>
+        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; border-color: #337ab7;"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
       </a>
      
     </div>
@@ -95,11 +91,10 @@
             <tr id="titulosListado">
           <th class="camposTabla linksNombres">Registro </th>
           <th class="camposTabla linksNombres">Fecha</th>
-          <th class="camposTabla linksNombres">Descripción</th>
+          <th class="camposTabla linksNombres" style="padding-left: 120px; padding-right: 120px;">Descripción</th>
           <th class="camposTabla linksNombres">Destinatario</th>
           <th class="camposTabla linksNombres">Remitente</th>
-          <th class="camposTabla linksNombres">Doc. Electrónico</th>
-          <th class="camposTabla linksNombres">Archivo Físico</th>
+
             </tr>
         </thead>
 
@@ -110,9 +105,8 @@
           <td class="camposTabla">{{=doc.fecha_creacion}}</td>
           <td class="camposTabla">{{=doc.descripcion.upper()}}</td>
           <td class="camposTabla">{{=doc.destinatario.upper()}}</td>
-          <td class="camposTabla">{{=doc.remitente.upper()}}</td>
-          <td class="camposTabla">{{=doc.doc_electronico.upper()}}</td>
-          <td class="camposTabla">{{=doc.archivo_fisico.upper()}}</td>
+          <td class="camposTabla">{{=auth.user.first_name}}</td>
+
         </tr>
         {{pass}}         
         </tbody>
@@ -214,7 +208,7 @@
 
                           <div class="input-group focus">
                               <h4 class="">Fecha de Creación</h4>
-                              <input type="date" class="input" name="fecha_creacion" id="fecha_creacion"  required/> 
+                              <input class="datepicker" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" name="fecha_creacion" id="fecha_creacion"  required/> 
                           </div>
 
                           <div class="input-group">
@@ -337,8 +331,17 @@
 
 <!-- Datatable init js -->
 <script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+<script type="text/javascript">
+  $(function() {
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd'
+    })  
+  });
+</script>
 <script>
+
   var filtros = false;
+  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
   $(document).ready(function() {
       // Setup - add a text input to each footer cell
       $('#datatable tfoot th').each( function () {
@@ -361,9 +364,11 @@
               }
           } );
       } );
+
       $('#datatable tfoot tr').appendTo('#datatable thead');
       $("#datatable thead tr").not("#titulosListado").css("display","none");
   } );
+
   function mostrarFiltro() {
       if (filtros){
         $("#datatable thead tr").not("#titulosListado").css("display","none");
@@ -373,147 +378,12 @@
         $("#datatable thead tr").not("#titulosListado").css("display","table-row");
         filtros = true
       }
-  }
-</script>
- 
-<script language="javascript">
-  var table = $('#datatable').DataTable({
-    language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
-   initComplete: function(){
-      var api = this.api();
-      new $.fn.dataTable.Buttons(api, {
-         buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
-         ]
-      });
-      api.buttons().container().appendTo('#buttons');  
-   }
-  });
-  var w2p_ajax_confirm_message =
-        "{{=T('')}}";
-  
 
-  function getAdscripcion(){
-    var opcionessede = document.getElementById("sel6");
-    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
-    var x = document.getElementById("sede");
-      x.value = sedeelegida;
-    ajax('ajax_obtener_adscripcion', ['sede'], "adscripciondiv");
-  }
-  function getDependencia(){
-      var opcionesads = document.getElementById("sel4");
-      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
-      var x = document.getElementById("adscripcion");
-        x.value = adselegida;
-      ajax('ajax_obtener_dependencia', ['adscripcion'], "dependenciadiv");
-   }
-  function getUbicacion(){
-      var opcionesdep = document.getElementById("sel3");
-      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
-      var x = document.getElementById("dependencia");
-        x.value = dependenciaelegida;
-      ajax('ajax_obtener_ubicacion', ['dependencia'], "ubicaciondiv");
-   }
-  function getResponsable(){
-      var opcionesdep = document.getElementById("sel3");
-      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
-      var x = document.getElementById("dependencia");
-        x.value = dependenciaelegida;
-      ajax('ajax_obtener_responsable', ['dependencia'], "responsablediv");
-   }
-  // AJAX EDICION
-  function getAdscripcionEdit(){
-    var opcionessede = document.getElementById("sel6-edit");
-    var sedeelegida = opcionessede.options[opcionessede.selectedIndex].value;
-    var x = document.getElementById("sede");
-      x.value = sedeelegida;
-    ajax('ajax_obtener_adscripcion_editar', ['sede'], "adscripciondiv-edit");
-  }
-  function getDependenciaEdit(){
-      var opcionesads = document.getElementById("sel4-edit");
-      var adselegida = opcionesads.options[opcionesads.selectedIndex].value;
-      var x = document.getElementById("adscripcion");
-        x.value = adselegida;
-      ajax('ajax_obtener_dependencia_editar', ['adscripcion'], "dependenciadiv-edit");
-   }
-  function getUbicacionEdit(){
-      var opcionesdep = document.getElementById("sel3-edit");
-      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
-      var x = document.getElementById("dependencia");
-        x.value = dependenciaelegida;
-      ajax('ajax_obtener_ubicacion_editar', ['dependencia'], "ubicaciondiv-edit");
-   }
-  function getResponsableEdit(){
-      var opcionesdep = document.getElementById("sel3-edit");
-      var dependenciaelegida = opcionesdep.options[opcionesdep.selectedIndex].value;
-      var x = document.getElementById("dependencia");
-        x.value = dependenciaelegida;
-      ajax('ajax_obtener_responsable_editar', ['dependencia'], "responsablediv-edit");
-   }
-  function cambiar_estado_detalle_ambito(is_otro_checked, id){
-    if (id == 'checkbox_ambito_otro'){
-      if (is_otro_checked){
-        $("#input_ambito_otro_detalle").show();
-      }
-      else{
-        $("#input_ambito_otro_detalle").hide();
-        $("#input_ambito_otro_detalle").val(' ');
-      }
-    }
-    else if (id == 'editar_checkbox_ambito_otro'){
-      if (is_otro_checked){
-        $("#editar_input_ambito_otro_detalle").show();
-      }
-      else{
-        $("#editar_input_ambito_otro_detalle").hide();
-        $("#editar_input_ambito_otro_detalle").val(' ');
-        $("#editar_input_ambito_otro_detalle").attr("placeholder", "Otro, Especifique:*");
-      }   
-    }
-    else if (id == 'checkbox_per_otro'){
-      if (is_otro_checked){
-        $("#input_per_otro_detalle").show();
-      }
-      else{
-        $("#input_per_otro_detalle").hide();
-        $("#input_per_otro_detalle").val(' ');
-      }      
-    }
-    else if (id == 'editar_checkbox_per_otro'){
-      if (is_otro_checked){
-        $("#editar_input_per_otro_detalle").show();
-      }
-      else{
-        $("#editar_input_per_otro_detalle").hide();
-        $("#editar_input_per_otro_detalle").val(' ');
-        $("#editar_input_per_otro_detalle").attr("placeholder", "Otro, Especifique:*");
-      }   
-    }
-  }
-  function cambiar_estado_condicion_ambiental(is_otro_checked, id){
-    if (id == 'radio_condicion_ambiental'){
-      if (is_otro_checked == "True"){
-        $("#input_radio_condicion_ambiental").show();
-      }
-      else{
-        $("#input_radio_condicion_ambiental").hide();
-        $("#input_radio_condicion_ambiental").val(' ');
-      }
-    }
-    else if (id == 'editar_radio_condicion_ambiental'){
-      if (is_otro_checked == "True"){
-        $("#editar_input_radio_condicion_ambiental").show();
-      }
-      else{
-        $("#editar_input_radio_condicion_ambiental").hide();
-        $("#editar_input_radio_condicion_ambiental").val(' ');
-        $("#editar_input_radio_condicion_ambiental").attr("placeholder", "Si requiere, Especifique:*");
-      }   
-    }
   }
 </script>
+<script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>
+ 
+
 
 
 
