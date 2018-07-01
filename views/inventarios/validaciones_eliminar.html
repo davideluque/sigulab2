@@ -1,0 +1,156 @@
+<div class="row">
+    <br>
+    <div id="buttons1">
+      <!-- Filtrado -->
+      <button class="dt-button btn boton-sigulab" id="filtrar" onclick="mostrarFiltro1()"><i class="fa fa-filter"></i></button>
+      <!-- Filtrado -->    
+    </div>
+    <br>
+
+  <div class="table-responsive no-padding no-margin">
+    <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+    <thead>
+      <tr id="titulosListado">
+        <th class="camposTabla linksNombres">NOMBRE</th>
+        <th class="camposTabla linksNombres">TIPO</th>
+        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
+        <th class="camposTabla linksNombres">ACCIÓN</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{for bm in inventario_eliminar[0]:}}
+      <tr>
+        <td class="camposTabla">{{=bm['bm_nombre'].upper()}}</td>
+        <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+        <td class="camposTabla">{{=bm['bm_clasificacion'].upper()}}</td>
+        <td class="camposTabla">{{=bm['bm_desc_eliminar']}}</td>
+        <td class="camposTabla">
+          <button>aceptar</button>
+          <button>eliminar</button>
+        </td>
+      </tr>
+      {{pass}}
+      {{for material in inventario_eliminar[1]:}}
+      <tr>
+        <td class="camposTabla">{{=material['sb_nombre'].upper()}}</td>
+        <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+        <td class="camposTabla">MATERIAL DE LABORATORIO</td>
+        <td class="camposTabla">{{=material['sb_desc_eliminar']}}</td>
+        <td class="camposTabla">
+            <button>aceptar</button>
+            <button>eliminar</button>
+          </td>
+      </tr>
+      {{pass}}
+      {{for material in inventario_eliminar[2]:}}
+      <tr>
+        <td class="camposTabla">{{=material['msb_nombre'].upper()}}</td>
+        <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+        <td class="camposTabla">CONSUMIBLES</td>
+        <td class="camposTabla">{{=material['sb_desc_eliminar']}}</td>
+        <td class="camposTabla">
+            <button>aceptar</button>
+            <button>eliminar</button>
+          </td>
+      </tr>
+      {{pass}}               
+    </tbody>
+
+    <tfoot id="collapseFiltros">
+      <th class="camposTabla linksNombres">NOMBRE</th>
+      <th class="camposTabla linksNombres">TIPO</th>
+      </tr>
+    </tfoot>
+
+    </table>
+  </div>
+</div>
+<script>
+
+var filtros = false;
+
+$(document).ready(function() {
+    // Setup - add a text input to each footer cell
+    $('#datatable1 tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Filtro" />' );
+    } );
+  
+    // DataTable
+    var table = $('#datatable1').DataTable();
+  
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+  
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+
+    $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
+    $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+} );
+
+function mostrarFiltro1() {
+    if (filtros){
+      $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+      filtros = false
+    }
+    else{
+      $("#datatable1 thead tr").not("#titulosListado").css("display","table-row");
+      filtros = true
+    }
+
+}
+</script>
+
+<script language="javascript">
+
+var table = $('#datatable1').DataTable({
+  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+  //dom: 'Bfrtip',
+  language: {
+  url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+  },
+  initComplete: function(){
+  var api = this.api();
+
+  new $.fn.dataTable.Buttons(api, {
+    buttons: [
+
+      {
+        extend: 'collection',
+        text: '<i class="fas fa-floppy-o"></i>',
+        className: 'boton-sigulab',
+        buttons: [
+          { extend:'copy', text: 'Copiar' } ,
+          'excel',
+          'csv',
+          'pdf'
+        ]
+      },
+      { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
+    ]
+  });
+  $('#botonModal').addClass('pull-left')
+  $('#filtrar').addClass('pull-left');
+  $('#espacioBuscar').addClass('pull-left');
+
+
+  $('.dataTables_filter').appendTo('#buttons1');
+
+  api.buttons().container().appendTo('#buttons1');
+  $('.dt-buttons').append($('#botonModal'));
+  $('.dt-buttons').append($('#filtrar'));
+  $('#buttons1').append('<br><br>');
+  $('.dataTables_info').addClass('pull-right');
+  $('.dataTables_filter').addClass('pull-left');		
+  }
+});
+</script>
