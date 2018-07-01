@@ -16,11 +16,12 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">N° BM</th>
-                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
                 <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Estatus</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -31,11 +32,12 @@
                 <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_marca']}}</td>
                 <td class="camposTabla">{{=bm['bm_modelo']}}</td>
                 <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla">{{=bm['bm_estatus']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -48,6 +50,7 @@
           <th class="camposTabla linksNombres">Marca</th>
           <th class="camposTabla linksNombres">Modelo</th>
           <th class="camposTabla linksNombres">Serial</th>
+          <th class="camposTabla linksNombres">Estatus</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>

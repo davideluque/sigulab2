@@ -230,7 +230,7 @@
 	 
 		// DataTable
 		var table = $('#datatable').DataTable();
-	 
+		
 		// Apply the search
 		table.columns().every( function () {
 			var that = this;
@@ -269,6 +269,10 @@
 	  language: {
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 	  },
+	  "columnDefs": [
+		{ "width": "30%", "targets": 0 },
+		{ "width": "10%", "targets": [1,2,3] }
+	  ],
 	 initComplete: function(){
 		var api = this.api();
   

@@ -131,7 +131,7 @@
 {{end}}
 
 {{block center}}
-    <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
+    <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
     {{ if bien['bm_placa'] != None: }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
@@ -151,8 +151,6 @@
                 <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
-                <!--Boton para ocultar el bien mueble-->
-                <button type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye-slash fa-1x"></i></button>
             </div>
         </div>
     </div>

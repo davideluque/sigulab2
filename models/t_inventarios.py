@@ -9,7 +9,7 @@ db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
-    Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
+    Field('bm_placa','string', default="00000", label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     #No son obligatorios para mobiliario
     Field('bm_marca','string',label=T('Marca')),
     Field('bm_modelo','string',label=T('Modelo')),
