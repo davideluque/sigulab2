@@ -281,14 +281,35 @@ def lista_registros():
 def ficha_registro():
 
 
-	cod = request.args[0]
+	cod = request.args[0] + "/" + request.args[1]
 	registro =  db(db.registros.codigo == cod).select(db.registros.ALL)
+	rgEditable = db(db.registros.codigo == cod)
 
-	print(registro)
-	print("______________")
+	
+
+	if (request.post_vars.fecha_creacion != None):
+		rgEditable.update(
+			codigo = cod,
+			fecha_creacion = request.post_vars.fecha_creacion,
+			descripcion = request.post_vars.descripcion,
+			destinatario = request.post_vars.destinatario,
+			remitente = request.post_vars.remitente,
+			doc_electronico = request.post_vars.doc_electronico,
+			ubicacion_doc_electronico = request.post_vars.ubicacion_doc_electronico,
+			archivo_fisico = request.post_vars.archivo_fisico,
+		)
+		
+		redirect(URL('informacion_documentada','ficha_registro',args=[cod]))
 
 
-	return dict(registros=registro)
+	if(request.post_vars.eliminar=="eliminar"):
+		db(db.registros.codigo==cod).delete()
+		redirect(URL('lista_registros'))
+	
+	return dict(
+		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+		registros=registro
+		)
 
 
 def ficha():
