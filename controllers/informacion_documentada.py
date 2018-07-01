@@ -18,27 +18,53 @@ import datetime
 def index(): 
 	return dict(message="hello from informacion_documentada.py")
 
+def anioEnCurso():
+
+	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	t = strings.split(',')
+	year = t[0]
+	year = year[2:]
+	return year
+
+def dependenciaAsociadaUsuario():
+	idDependencia =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_dependencia)[0]
+	dependencia = db(db.dependencias.id == idDependencia.f_dependencia).select(db.dependencias.nombre)
+	return dependencia
+
+def generarCodigoRegistro():
+	dependencia = dependenciaAsociadaUsuario()
+
+
+	nroRegistros = db(db.registros.dependencia_asociada == dependencia).count() + 1
+	if (nroRegistros < 10):
+		nroRegistros = "00" + str(nroRegistros)
+	elif (nroRegistros < 100):
+		nroRegistros = "0" + str(nroRegistros)
+
+	codDep = db(db.dependencias.nombre == dependencia[0].nombre).select(db.dependencias.ALL)[0]
+
+	codigoRegistro = codDep.codigo_registro + "/" + anioEnCurso() + "-" + nroRegistros
+
+
+	return codigoRegistro
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_documentos():
 
 
-
-	unaDependencia = request.post_vars.codigo
-
-
 	dic = {
 
 		##### Planificación
-		"usuario":auth.user.first_name,
+		"dependencia_asociada":dependenciaAsociadaUsuario(),
 		"nombre_doc": request.post_vars.nombre_documento,
 		"tipo_doc":request.post_vars.tipo,
 		"otro_tipo":request.post_vars.otro_tipo,
 		"responsable": request.post_vars.responsable,
-		"codigo": unaDependencia,
+		"codigo": request.post_vars.codigo,
 		"objetivo": request.post_vars.objetivos,
 		"periodo_rev":request.post_vars.periodo,
-		
+
 
 		##### Elaboración
 		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
@@ -131,7 +157,7 @@ def lista_documentos():
 	if(dic["codigo"]!=None):
 		db.documentos.insert(
 
-			usuario=dic["usuario"],
+			dependencia_asociada=dic["dependencia_asociada"],
 			nombre_doc=dic["nombre_doc"],
 			tipo_doc=dic["tipo_doc"],
 			otro_tipo=dic["otro_tipo"],
@@ -176,9 +202,21 @@ def lista_documentos():
 		
 		)
 
+		db.registros.insert(
+			dependencia_asociada=dic["dependencia_asociada"],
+			codigo= generarCodigoRegistro(),
+			fecha_creacion=dic["fecha_prox_rev"],
+			descripcion="Carga de Documento",
+			destinatario="Destinatario",
+			remitente=dic["responsable"],
+			doc_electronico=dic["registro_electronico"],
+			ubicacion_doc_electronico=dic["ubicacion_electronica"],
+			archivo_fisico=dic["ubicacion_fisica"],
+		)
+
+
 
 	dependencasOrdenadas = db().select(db.dependencias.nombre, db.dependencias.codigo_registro, orderby=db.dependencias.nombre)
-
 
 
 	return dict(
@@ -198,48 +236,43 @@ def lista_documentos():
 
 def lista_registros():
 
-	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	t = strings.split(',')
-	year = t[0]
-	year = year[2:]
+	cod = generarCodigoRegistro()
+	dependencia = dependenciaAsociadaUsuario()
 
-	print(year)
+
 	dic = {
-		"usuario":auth.user.first_name,
-		"codigo": request.post_vars.codigo,
+		"dependencia_asociada":dependencia,
+		"codigo": cod,
 		"fecha_creacion": request.post_vars.fecha_creacion,
 		"descripcion": request.post_vars.descripcion,
 		"destinatario": request.post_vars.destinatario,
 		"remitente": request.post_vars.remitente,
 		"doc_electronico": request.post_vars.doc_electronico,
+		"ubicacion_doc_electronico": request.post_vars.ubicacion_doc_electronico,
 		"archivo_fisico": request.post_vars.archivo_fisico,
 	}
 
 
 	if(dic["descripcion"]!=None):
 		db.registros.insert(
-			usuario=dic["usuario"],
+			dependencia_asociada=dic["dependencia_asociada"],
 			codigo=dic["codigo"],
 			fecha_creacion=dic["fecha_creacion"],
 			descripcion=dic["descripcion"],
 			destinatario=dic["destinatario"],
 			remitente=dic["remitente"],
 			doc_electronico=dic["doc_electronico"],
+			ubicacion_doc_electronico=dic["ubicacion_doc_electronico"],
 			archivo_fisico=dic["archivo_fisico"],
 		)
 
-	dep = auth.user.first_name
-	reg = db(db.registros.usuario == dep).select(db.registros.ALL)
 
-	a = dict(
-		registros=reg,
-		codigo_reg=db(db.registros.codigo).count(),
-		year=year,
-		contador=db(db.registros.usuario == auth.user.first_name).count(),
+	registros_mostrar = db(db.registros.dependencia_asociada == dependencia).select(db.registros.ALL)
+
+	return dict(
+		registros=registros_mostrar,
 		dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 	)
-
-	return a
 
 
 
@@ -247,21 +280,15 @@ def lista_registros():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ficha_registro():
 
-	uname = request.args[0]
-	print("------")
-	print(uname)
-	row = db(db.registros.codigo==uname).select()
-	print(".......")
-	print(row)
-	for x in row:
-		print(x)
-	documento =  db(db.documentos.codigo==uname)
 
-
-	registro =  db(db.registros.codigo==uname)
+	cod = request.args[0]
+	registro =  db(db.registros.codigo == cod).select(db.registros.ALL)
 
 	print(registro)
-	return dict(registros=row)
+	print("______________")
+
+
+	return dict(registros=registro)
 
 
 def ficha():

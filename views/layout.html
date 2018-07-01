@@ -60,28 +60,29 @@
             <li class="dropdown active-item" id="inicio">
               <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2')}}">INICIO</a>
             </li>
-            
-            <li class="dropdown active-item" id="smydp">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INFORMACIÓN DOCUMENTADA<span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                  <li><a href="{{=URL('informacion_documentada', 'index')}}">Página Principal</a></li>
-                    <li><a href="{{=URL('informacion_documentada', 'lista_documentos')}}">Listado de Documentos</a></li>
-                    <li><a href="{{=URL('informacion_documentada', 'lista_registros')}}">Listado de Registros</a></li>
-                   </ul>
-              </li> 
-  
-              <li class="dropdown active-item" id="inventario">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INVENTARIOS<span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                  <li><a href="{{=URL('inventarios', 'index')}}">Página Principal</a></li>
+
+
+            <li class="dropdown active-item" id="inf_doc">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INFORMACIÓN DOCUMENTADA<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{=URL('informacion_documentada', 'index')}}">Página Principal</a></li>
+                  <li><a href="{{=URL('informacion_documentada', 'lista_documentos')}}">Control de Documentos</a></li>
+                  <li><a href="{{=URL('informacion_documentada', 'lista_registros')}}">Control de Registros</a></li>
+                 </ul>
+            </li> 
+
+            <li class="dropdown active-item" id="inventario">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INVENTARIOS<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{=URL('inventarios', 'index')}}">Página Principal</a></li>
                   <li><a href="{{=URL('inventarios', 'bienes_muebles')}}">Bienes Muebles</a></li>
                   <li><a href="{{=URL('inventarios', 'material_lab')}}">Material de laboratorio</a></li>
-                  <li><a href="{{=URL('inventarios', 'consumibles')}}">Consumibles</a></li>
-                  <li><a href="{{=URL('inventarios', 'herramientas')}}">Herramientas</a></li>
+                  <li><a href="{{=URL('inventarios', 'prestamos')}}">Préstamos</a></li>
                   <li><a href="{{=URL('inventarios', 'mantenimiento')}}">Mantenimiento</a></li>
                   <li><a href="{{=URL('inventarios', 'validaciones')}}">Validaciones</a></li>
-                  </ul>
-              </li> 
+                </ul>
+            </li> 
+
 
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
@@ -92,7 +93,6 @@
             </li>
             
             <li class="dropdown active-item" id="servicios">
-
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVICIOS<span class="caret"></span></a>
                 <ul class=" dropdown-menu">
                 <li><a href="{{=URL('servicios','index')}}">Página Principal</a></li>
@@ -110,14 +110,11 @@
                 <li><a href="{{=URL('smydp', 'index')}}">Página Principal</a></li>
                 <li><a href="{{=URL('smydp', 'inventarios')}}">Inventario de sustancias</a></li>
                   <li><a href="{{=URL('smydp', 'catalogo')}}">Listado de Sustancias</a></li>
-                  <li><a href="{{=URL('smydp', 'solicitudes')}}">Solicitudes de sustancias</a></li>
-                  <li><a href="{{=URL('smydp', 'categorias_desechos')}}">Categorías de desechos peligrosos</a></li>
-                  <li><a href="{{=URL('smydp', 'envases')}}">Contenedores de desechos peligrosos</a></li>
-                  <li><a href="{{=URL('smydp', 'inventarios_desechos')}}">Inventario de desechos peligrosos</a></li>
-
+                  <li><a href="{{=URL('smydp', 'inventarios')}}">Inventario</a></li>
+                  <li><a href="{{=URL('smydp', 'solicitudes')}}">Solicitudes</a></li>
                  </ul>
             </li> 
-
+            
         </ul>
 
       <ul class="nav navbar-nav navbar-right">

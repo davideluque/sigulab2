@@ -1,20 +1,18 @@
 {{extend 'layout.html'}}
-<h1>Está es la plantilla informacion_documentada/ficha.html</h1>
+<h1>Está es la plantilla informacion_documentada/ficha_registro.html</h1>
 {{=BEAUTIFY(response._vars)}}
 
 
 {{block head}}
-  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel="stylesheet" href="{{=URL('static', 'css/agregarDoc.css')}}">
-  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Poppins:300,400,700'>
-
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-  
   <script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+
 
 
   <!-- DataTables -->
@@ -22,38 +20,36 @@
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
-  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <style>
 
-
-  <!-- Web2py JS - Especialmente para AJAX -->
-  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
-
-  <style type="text/css">
     .row{
       margin-right:0px!important;
     }
+
     .wrapper {
-      max-width: 90%;
+      max-width: 1100px;
       margin: auto;
-      margin-top: 10px;
+      margin-top: 80px;
     }
-    .tab-wrapper2 {
+
+    .tab-wrapper {
       text-align: center;
       display: block;
       margin: auto;
-      max-width: 1200px;
+      max-width: 400px;
     }
+
     .tabs {
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
     }
+
     .tab-link {
       margin: 0 1%;
       list-style: none;
-      padding: 10px 40px;
-      font-size: 25px;
+      padding: 10px 20px;
       color: #aaa;
       cursor: pointer;
       font-weight: 700;
@@ -61,70 +57,107 @@
       border-bottom: solid 3px rgba(255, 255, 255, 0);
       letter-spacing: 1px;
     }
+
     .tab-link:hover {
       color: #999;
       border-color: #999;
     }
+
     .tab-link.active {
       color: #333;
       border-color: #333;
     }
+
     .tab-link:nth-of-type(1).active {
-      background-color: #337ab7;
+      background-color: #1790D2;
       color: white;
-      border-color: white;
+      border-color: #aaa;
+      vertical-align: middle;
     }
+
     .tab-link:nth-of-type(2).active {
-      background-color: #337ab7;
+      background-color: #1790D2;
       color: white;
-      border-color: white;
+      border-color: #aaa;
+      vertical-align: middle;
     }
+
+    .tab-link:nth-of-type(4).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #aaa;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(5).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #aaa;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(6).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #aaa;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(7).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #aaa;
+      vertical-align: middle;
+    }
+
     .tab-link:nth-of-type(3).active {
-      background-color: #337ab7;
+      background-color: #1790D2;
       color: white;
-      border-color: white;
+      border-color: #aaa;
+      vertical-align: middle;
     }
+
     .content-wrapper {
-      margin-top: 30px;
-      padding: 10px 20px;
+      padding: 20px 80px;
     }
+
     .tab-content {
       display: none;
       text-align: left;
-      color: #888;
-      font-weight: 300;
-      font-size: 15px;
+      color:  #464646;
+      font-weight: 200;
+      font-size: 20px;
       opacity: 0;
       transform: translateY(15px);
       animation: fadeIn 0.5s ease 1 forwards;
     }
+
     .tab-content.active {
       display: block;
     }
 
-    tr th {
-      text-align: center;
-      font-size: 24px;
-      border: 8px solid #337ab7;
-      vertical-align: middle;
-      padding: 10px;
-    }
-
-    tr td{
-      padding: 10px;
-      border-bottom: 8px solid #337ab7;
-      border-left: 8px solid #337ab7;
-      border-right: : 8px solid #337ab7; 
-      text-align: center;
-      vertical-align: middle;
-    }
     @keyframes fadeIn {
       100% {
-        opacity: 1;
-        transform: none;
+          opacity: 1;
+          transform: none;
       }
     }
-  </style>
+
+    .grid-container {
+      display: grid;
+      width: 100%;
+      margin: 0 auto;
+      grid-template-columns: repeat(2, 50%);
+      justify-content: center;
+    }
+
+    .grid-item {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid grey;  
+    }
+  </style>    
+
 
 {{end}}
 
@@ -134,60 +167,114 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Información Documentada</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Listado de Registros</a>
-  <span class="breadcrumb-item active">Ficha</span>
+  <a class="breadcrumb-item" href="{{=URL('informacion_documentada', 'lista_registros')}}">Control de Registros</a>
+  <span class="breadcrumb-item active">Ficha de Registro</span>
   </div>
 </nav>
 
-  {{for reg in registros:}}
-    {{reg}}
 
-  <div class="row" style="margin-bottom: 50px;">
-    <div class="col-md-1">
-    </div>
-    <div class="col-md-1">
-      <a  href="{{=URL('informacion_documentada', 'lista_registros')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
-    </div>
-    <div class="col-md-7">
-      <h2 style="text-align: center; margin-left: 15%"> FICHA DE REGISTRO </h2>
-    </div>
-    <div class="col-md-3">
 
+    <div class="row" style="margin-bottom: 50px;">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-1">
+        <a  href="{{=URL('informacion_documentada', 'lista_registros')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
+      </div>
+      <div class="col-md-7">
+        <h3 style="text-align: center; margin-left: 12%"> FICHA DE REGISTRO </h3>
+      </div>
+      <div class="col-md-2" style="text-align: right;">
+        <form method="POST">
+
+          <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
+ 
+          <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
+        
+        </form>
+      </div>  
           
-    </div>
-  </div>  
+      <div class="col-md-1"></div>
+    </div>  
 
-  
-
+    
 
 
 <div class="wrapper">
     
-  <div class="tab-wrapper2">
+  <div class="tab-wrapper">
     <ul class="tabs">
-        <li class="tab-link active" data-tab="1">Información General</li>
-
+      <li class="tab-link active" data-tab="1">Inf. General</li>
+      <li class="tab-link" data-tab="2">Ubicación</li>    
     </ul>
   </div>
 
   <div class="content-wrapper">
     <div id="tab-1" class="tab-content active">
+      <div class="grid-container">
+        <div class="grid-item">
+          Código del Registro
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Fecha de Creación
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Descripción
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Destinatario
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Remitente
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
 
-      <h3><span style="color: #52798c; font-size: 1.2em;">Código: {{=reg.codigo}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Fecha de creación:     {{=reg.fecha_creacion}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Descripción:  {{=reg.descripcion}}.</span> </h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Destinatario:  {{=reg.destinatario}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Remitente:  {{=reg.remitente}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Documento electrónico:    {{=reg.doc_electronico}}.</span></h3>
-      <h3><span style="color: #52798c; font-size: 1.2em;">Archivo físico:    {{=reg.archivo_fisico}}.</span></h3>
+        
 
-
-
+      </div>
     </div>
 
-  </div>
+    <div id="tab-2" class="tab-content">
+      <div class="grid-container">
+        <div class="grid-item">
+          Archivo electrónico
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Ubicación del archivo electrónico
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+        <div class="grid-item">
+          Ubicación del registro en formato físico
+        </div>
+        <div class="grid-item">
+            xx
+        </div>
+
+
+      </div>
+    </div>
+
+
   
-</div>    
+</div>
 
 
 
@@ -209,8 +296,6 @@
 
 
 
-
-  {{pass}}
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 

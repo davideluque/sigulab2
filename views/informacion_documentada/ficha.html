@@ -220,7 +220,7 @@
                   <select disabled="" name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
                     <option value="{{=doc.responsable}}">{{=doc.responsable}}</option>
                     {{for dep in dependencias:}}
-                    <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+                      <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
                     {{pass}}
                   </select>
                 </div>

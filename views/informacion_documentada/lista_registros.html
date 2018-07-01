@@ -25,7 +25,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada')}}">Información Documentada</a>
-  <span class="breadcrumb-item active" >Listado de Registros</span>
+  <span class="breadcrumb-item active" >Control de Registros</span>
   </div>
 </nav>
 
@@ -201,10 +201,6 @@
                           <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
 
-                          <div class="input-group">
-                              
-                              <input type="hidden" name="codigo" id="codigo" required/>
-                          </div>
 
                           <div class="input-group focus">
                               <h4 class="">Fecha de Creación</h4>
@@ -232,13 +228,20 @@
                           </div>
 
                           <div class="input-group">
-                              <h4 class="">Documento electrónico</h4>
+                              <h4 class="">Archivo electrónico</h4>
                               <input type="text" name="doc_electronico" id="doc_electronico" placeholder="Documento electrónico" required/>
+                          </div>
+
+                          <div class="input-group">
+                              <h4 class="">Ubicación del archivo electrónico</h4>
+                              <input type="text" name="ubicacion_doc_electronico" id="ubicacion_doc_electronico" placeholder="Ubicación del registro electrónico" required/>
+                              <h6 style="color: gray;">Indique el nombre del archivo electrónico, carpeta o ruta para acceder al el mismo</h6>
                           </div>
                           
                           <div class="input-group">
-                              <h4 class="">Archivo físico</h4>
+                              <h4 class="">Ubicación del registro en formato físico</h4>
                               <input type="text" name="archivo_fisico" id="archivo_fisico" placeholder="Archivo físico" required/>
+                              <h6 style="color: gray;">Indique la carpeta, archivo, estante u otro se puede acceder al documento</h6>
                           </div>
 
 
@@ -283,33 +286,7 @@
 
 
 
-<script type="text/javascript">
-    
 
-  function get_code(x){
-    
-    var i = {{=contador}} + 1;
-    if (i < 10) {
-      var j = "00" + i.toString();
-    }
-    else if (i < 100){
-      var j = "0" + i.toString();
-    }
-    else{
-      var j = i.toString(); 
-    }
-
-      
-      dep = x[x.selectedIndex].value;
-      var cod = dep + "/" + "{{=year}}" + "-" + j;
-    
-    document.getElementById("codigo").value = cod;
-  }
-
-
-
-
-</script>
 
 
 

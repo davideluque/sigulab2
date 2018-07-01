@@ -17,7 +17,7 @@ db.define_table(
 
       'registros',
 
-      Field('usuario', 'string', label=T('Usuario creador del registro')),
+      Field('dependencia_asociada', 'string', label=T('Dependencia asociada del creador del registro')),
 
       Field('codigo', 'string', label=T('Codigo del registro'), requires=IS_NOT_EMPTY()),
 
@@ -30,6 +30,8 @@ db.define_table(
       Field('remitente', 'string', label=T('Remitente del registro')),
 
       Field('doc_electronico', 'string', label=T('Doc. Electrónico')),
+
+      Field('ubicacion_doc_electronico', 'string', label=T('Ubicación del Doc. Electrónico')),
 
       Field('archivo_fisico', 'string', label=T('Archivo Fisico')),
 
