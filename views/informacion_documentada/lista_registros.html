@@ -16,6 +16,15 @@
 
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  
+  <style>
+
+    #datatable_filter{
+      text-align: left;
+      margin-top: -55px
+    }
+  
+  </style>
 
 {{end}}
 {{block center}}
@@ -62,20 +71,17 @@
 
 <!--UL 04/18-->
 
-<div class="container" style="margin-top: 50px;">
-<div class="row">
+<div class="container" style="padding: 0px;">
+  <div class="row">
 
-
-    <div id="buttons">
-
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5"><i class="fa fa-filter fa-2x"></i></button>
-      <!-- Filtrado -->    
-    </div>
     <br>
-
     <div class="table-responsive no-padding no-margin">
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <div id="buttons" style="text-align: right; " >
+      
+
+    </div>
+    <br>
         <thead>
             <tr id="titulosListado">
           <th class="camposTabla linksNombres">Registro </th>
@@ -104,7 +110,7 @@
       </table>
     </div>
   </div>
-
+</div>
 
 
 

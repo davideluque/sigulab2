@@ -18,7 +18,7 @@
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
  
- 
+
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
 
 
@@ -31,6 +31,171 @@
 
 
 
+
+  <style>
+
+    h4{
+      margin-top: 15px;
+    }
+
+    table.dataTable thead > tr > th {
+      padding-left: 8px;
+      padding-right: 23px;
+      vertical-align: middle;
+    }
+
+    #datatable_filter{
+      text-align: left;
+      margin-top: -65px
+    }
+
+    .table-responsive{
+      overflow-x: visible;
+    }
+
+    .row{
+      margin-right:0px!important;
+    }
+
+    .wrapper {
+      max-width: 1600px;
+      margin: auto;
+      margin-top: 80px;
+    }
+
+    .tab-wrapper {
+      text-align: center;
+      display: block;
+      margin: auto;
+      max-width: 400px;
+    }
+
+    .tabs {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tab-link {
+      margin: 0 1%;
+      list-style: none;
+      padding: 10px 20px;
+      color: #aaa;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all ease 0.5s;
+      border-bottom: solid 3px rgba(255, 255, 255, 0);
+      letter-spacing: 1px;
+      font-size: 20px;
+    }
+
+    .tab-link:hover {
+      color: #999;
+      border-color: #999;
+    }
+
+    .tab-link.active {
+      color: #333;
+      border-color: #333;
+    }
+
+    .tab-link:nth-of-type(1).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(2).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(4).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(5).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(6).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(7).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .tab-link:nth-of-type(3).active {
+      background-color: #1790D2;
+      color: white;
+      border-color: #eaeaea;
+      vertical-align: middle;
+    }
+
+    .content-wrapper {
+      padding: 20px 80px;
+    }
+
+    .tab-content {
+      display: none;
+      text-align: left;
+      color:  #464646;
+      font-weight: 200;
+      font-size: 20px;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeIn 0.5s ease 1 forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      100% {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .grid-container {
+      display: grid;
+      width: 100%;
+      margin: 0 auto;
+      grid-template-columns: 35% 65%;
+      justify-content: center;
+    }
+
+    .grid-item {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #adadad;  
+       
+    }
+
+
+  </style>  
+
+
+
+
 {{end}}
 
 
@@ -39,7 +204,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Información Documentada</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2','informacion_documentada','')}}">Listado de Documentos</a>
+  <a class="breadcrumb-item" href="{{=URL('informacion_documentada', 'lista_documentos')}}">Listado de Documentos</a>
   <span class="breadcrumb-item active">Ficha</span>
   </div>
 </nav>
@@ -53,18 +218,29 @@
       <a  href="{{=URL('informacion_documentada', 'lista_documentos')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
     </div>
     <div class="col-md-7">
-      <h3 style="text-align: center; margin-left: 25%"> FICHA DE DOCUMENTOS </h3>
+      <h3 style="text-align: center; margin-left: 18%;"> {{=doc.nombre_doc.upper()}} </h3>
+      <h4 style="text-align: center; margin-left: 18%;">{{=doc.codigo}}</h4>
     </div>
     <div class="col-md-3">
-      <form method="POST">
+      <form method="POST" style="display: inline-block;">
         {{if doc.estatus!="Aprobado":}}
           <p onclick="estatus()" style="display: inline-block;">
             <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
           </p>
         {{pass}}  
-          <button type="button" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
-          <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
       </form>
+      <form method="POST" style="display: inline-block;">  
+
+        {{if doc.visibilidad == "Si":}}
+          <input type="hidden" name="visibilidad" value="No">
+          <button type="submit" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
+        {{else:}}
+          <input type="hidden" name="visibilidad" value="Si">
+          <button type="submit" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye fa-2x" aria-hidden="true"></i></button>
+        {{pass}}  
+      </form>  
+      <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
+      
           
     </div>
   </div>  
@@ -73,88 +249,157 @@
 
 
 
-<div class="wrapper">
-    
-  <div class="tab-wrapper2">
-    <ul class="tabs">
+
+
+  <div class="wrapper">
+      
+    <div class="tab-wrapper">
+      <ul class="tabs">
         <li class="tab-link active" data-tab="1">Información General</li>
-        <li class="tab-link" data-tab="2">Historial de Revisión</li>
-        <li class="tab-link" data-tab="3">Ubicación</li>
-    </ul>
-  </div>
-
-  <div class="content-wrapper">
-    <div id="tab-1" class="tab-content active" role="tabpanel">
-      <table class="table contenidoFicha" id="tabla_inf_general">
-        <tbody>
-          <td><span style="color: #52798c;">Código</span></td><td>{{=doc.codigo}}</td>
-          <td><span style="color: #52798c;">Tipo</span></td><td>{{=doc.tipo_doc}}</td>
-          <td><span style="color: #52798c;">Documento</span></td><td>{{=doc.nombre_doc}}</td>
-          <td><span style="color: #52798c;">Objetivo</span></td><td>{{=doc.objetivo}}</td>
-          <td><span style="color: #52798c;">Estatus</span></td><td>{{=doc.estatus}}</td>
-          <td><span style="color: #52798c;">Período de Revisión</span></td><td>{{=doc.periodo_rev}}</td>
-        </tbody>
-      </table>
+        <li class="tab-link" data-tab="2">Ubicación</li>
+        <li class="tab-link" data-tab="3">Historial de Revisión</li>    
+      </ul>
     </div>
 
+    <div class="content-wrapper">
+      <div id="tab-1" class="tab-content active">
+        <div class="grid-container">
+
+          <div class="grid-item">
+            Código del Documento
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.codigo}}
+          </div>
+          <div class="grid-item">
+            Tipo
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.tipo_doc}}
+          </div>
+          <div class="grid-item">
+            Nombre del Documento
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.nombre_doc}}
+          </div>
+          <div class="grid-item">
+            Objetivo
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.objetivo}}
+          </div>
+          <div class="grid-item">
+            Estatus
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.estatus}}
+          </div>
+          <div class="grid-item">
+            Período de Revisión
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.periodo_rev}}
+          </div>
+
+          
+
+        </div>
+      </div>
+
+      <div id="tab-2" class="tab-content">
+        <div class="grid-container">
+          <div class="container" style="padding: 0px; width: 1500px;">
+            <div class="row">
+
+              <br>
+              <div class="table-responsive no-padding no-margin">
+                <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                  <div id="buttons" style="text-align: right; " >
+                
+
+              </div>
+              <br>
+                  <thead>
 
 
-    <div id="tab-2" class="tab-content">
+                    <tr id="titulosListado">
+                      <th class="camposTabla linksNombres">Responsable</th>
+                      <th class="camposTabla linksNombres">Elaborado por</th>
+                      <th class="camposTabla linksNombres">Elaborador de revisión de contenidos</th>
+                      <th class="camposTabla linksNombres">Fecha de revisión de contenido</th>
+                      <th class="camposTabla linksNombres">Elaborador de evisión de especificaciones</th>
+                      <th class="camposTabla linksNombres">Fecha de revisión de especificaciones</th>
+                      <th class="camposTabla linksNombres">Fecha de revisión por el Consejo Asesor</th>
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                  <tr>
+
+                    <td class="camposTabla">{{=doc.responsable}}</td>
+                    <td class="camposTabla">{{=doc.elaborador0}}, {{=doc.elaborador1}}, {{=doc.elaborador2}}, {{=doc.elaborador3}}, {{=doc.elaborador4}}.</td>
+                    <td class="camposTabla">{{=doc.rev_contenido_realizado_por}}</td>
+                    <td class="camposTabla">{{=doc.fecha_rev_contenido}}</td>
+                    <td class="camposTabla">{{=doc.rev_especficaciones_doc_realizado_por}}</td>
+                    <td class="camposTabla">{{=doc.fecha_rev_especificaciones_doc}}</td>
+                    <td class="camposTabla">{{=doc.fecha_rev_por_consejo_asesor}}</td>
+
+                  </tr>
+       
+                  </tbody>
 
 
-
-      <table class="container">
-        <thead>
-          <tr>
-            <th>Responsable</th>
-            <th>Elaborado por</th>
-            <th>Elaborador de revisión de contenidos</th>
-            <th>Fecha de revisión de contenido</th>
-            <th>Elaborador de evisión de especificaciones</th>
-            <th>Fecha de revisión de especificaciones</th>
-            <th>Fecha de revisión por el Consejo Asesor</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-
-            <td>{{=doc.responsable}}</td>
-            <td>{{=doc.elaborador0}}, {{=doc.elaborador1}}, {{=doc.elaborador2}}, {{=doc.elaborador3}}, {{=doc.elaborador4}}.</td>
-            <td>{{=doc.rev_contenido_realizado_por}}</td>
-            <td>{{=doc.fecha_rev_contenido}}</td>
-            <td>{{=doc.rev_especficaciones_doc_realizado_por}}</td>
-            <td>{{=doc.fecha_rev_especificaciones_doc}}</td>
-            <td style="border-right: 8px solid #337ab7;">{{=doc.fecha_rev_por_consejo_asesor}}</td>
-            
-          </tr>
-
-        </tbody>
-      </table>
+                </table>
+              </div>
+            </div>
+          </div>
+          
 
 
+        </div>
+      </div>
+
+      <div id="tab-3" class="tab-content">
+        <div class="grid-container">
+
+
+          <div class="grid-item">
+            Código de registro de Ubicacion
+          </div>
+          <div class="grid-item" id="ans">
+              {{=doc.cod_control_cambio}}
+          </div>
+          
+          <div class="grid-item">
+            Carpeta electrónica
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.registro_electronico}}
+          </div>
+
+          <div class="grid-item">
+            Archivo electrónico
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.ubicacion_electronica}}
+          </div>
+
+          <div class="grid-item">
+            Ubicación física del documento
+          </div>
+          <div class="grid-item" id="ans">
+            {{=doc.ubicacion_fisica}}
+          </div>
+
+        </div>
+      </div>
 
     </div>
-    <div id="tab-3" class="tab-content">
-  
-      <h3><span style="color: #52798c;">Código de registro de Ubicacion:  {{=doc.cod_control_cambio}}.</span></h3>
-      <h3><span style="color: #52798c;">Carpeta electrónica:     {{=doc.registro_electronico}}.</span></h3>
-      <h3><span style="color: #52798c;">Archivo electrónico:   {{=doc.ubicacion_electronica}}  </span></h3>
-      <h3><span style="color: #52798c;">Ubicación física del documento: {{=doc.ubicacion_fisica}}.</span></h3>
     
-
-    </div>
   </div>
-  
-</div>    
-
-
-
-
-
-
-
-
 
 
 
@@ -297,8 +542,10 @@
                   </p>
                 </div>
 
+
                 <a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
               </div>
+
 
 
               <div style="position: fixed; bottom: 0; right: 0;">
@@ -631,7 +878,9 @@
 
   {{pass}}
 
+
 <script type="text/javascript">
+
 
   function get_code(i){
     cod = i[i.selectedIndex].id; // get value
@@ -639,6 +888,7 @@
   }
 
 </script>
+
 
 <script type="text/javascript">
   $(function() {
@@ -652,6 +902,7 @@
     var scntDiv = $('#p_scents');
     var i = $('#p_scents p').length + 1;
     console.log("elaborador inicial");
+
     $('.form-group').on('click', '#addScnt', function() {
       console.log(i)
       $('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
@@ -675,6 +926,7 @@
   
   $(function() {
     console.log("fincion de anexo");
+
     var scntDiv = $('#p_anexo');
     var i = $('#p_anexo p').length + 1;
     
@@ -683,6 +935,7 @@
     $('.form-group').on('click', '#addAnexo', function() {
       console.log("campo de anexo");
       $('<p><input type="text"  name="anexo_code' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input type="text"  name="anexo_name' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
+
       i++;
       return false;
     });
@@ -695,24 +948,29 @@
       return false;
     });
   });
+
   function codigoDoc(){
      var codigoDocumento = document.getElementById("codigo").value;
      return codigoDocumento;
   }
+
 
 </script>
 
 <script type="text/javascript">
   function agregarFecha(){
 
+
     var container = document.getElementById("containerRevision");
     var input = document.createElement("input");
     var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
+
 
     input.type = "text";
     input.class = "datepicker"
     input.name = "fecha_revision_consejo";
     input.id = "fecha_revision_consejo";
+
 
 
     var etiqueta = document.createElement("label");
@@ -726,13 +984,13 @@
   }
 
   function eliminarFecha(){
-
     var container = document.getElementById("containerRevision");
     while (container.hasChildNodes()) {
       container.removeChild(container.lastChild);
     }
 
   }
+
 
 
 </script>
@@ -750,7 +1008,6 @@ function estatus(){
         jQuery('#objetivos').removeAttr('disabled');
         jQuery('#periodo').removeAttr('disabled');
         jQuery('#fecha_prox_rev').removeAttr('disabled');
-        //jQuery('#addAnexo').removeAttr('disabled');
 
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
@@ -797,7 +1054,6 @@ function estatus(){
       }
     }
 
-
   </script>
   <script type="text/javascript">
     // Get the modal
@@ -827,8 +1083,8 @@ function estatus(){
 
   </script>
 
-<script src="{{=URL('static','js/agregarDoc.js')}}"></script>
 
+<script src="{{=URL('static','js/agregarDoc.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>

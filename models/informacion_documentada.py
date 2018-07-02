@@ -57,7 +57,7 @@ db.define_table(
 
       ################ Fase de Planificación
 
-      Field('usuario', 'string', label=T('Usuario creador del documento')),
+      Field('dependencia_asociada', 'string', label=T('Dependencia asociada del creador del documento')),
     
       Field('nombre_doc', 'string', label=T('Nombre del Documento'), unique=True, notnull=True),
 
@@ -193,11 +193,21 @@ db.define_table(
       Field('vinculo', 'text', label=T("Vinculo electrónico")),
 
 
-      ############### ESTATUS DEL DOCUMENTO
+      ############### Estatus del Documento
 
       Field('estatus', 'string', label=T('Estatus del Documento'), widget=SQLFORM.widgets.options.widget,
           requires=IS_IN_SET(['Planificado','Elaborado','Revisado','Aprobado'])
       ),
+
+      ############### Indicador de Visibilidad
+
+      Field('visibilidad', 'string', label=T('Visibilidad')),
+      
+
+      ############### Indicador de Vencimiento
+
+      Field('vencimiento', 'string', label=T('Vencimiento')),
+
 
 
     primarykey=['codigo']

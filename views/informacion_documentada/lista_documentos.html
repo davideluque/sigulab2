@@ -16,8 +16,8 @@
   
 	<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
 
-  <!-- Web2py JS - Especialmente para AJAX -->
-  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+	<!-- Web2py JS - Especialmente para AJAX -->
+	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
 <style>
 	#datatable_filter{
@@ -26,6 +26,7 @@
 	}
 
 </style>
+
 
 {{end}}
 {{block center}}
@@ -67,87 +68,87 @@
 
 			  <div style="margin-right: 3%; margin-left: 3%;">
 
-			    <div class="col-lg-2"></div>
+				<div class="col-lg-2"></div>
 
-			    <div class="col-lg-2 col-xs-6">
+				<div class="col-lg-2 col-xs-6">
 
-			      <a href="#">
-			      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
-			        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Planificado</h4>
+				  <a href="#">
+				  <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+					<h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Planificado</h4>
 
-			        <div class="widget-box-2">
-			            <div class="widget-detail-2">
-			                <i class="fa fa-calendar-check-o fa-4x" style="color: white;"></i>
+					<div class="widget-box-2">
+						<div class="widget-detail-2">
+							<i class="fa fa-calendar-check-o fa-4x" style="color: white;"></i>
 
-			                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right; ">{{=doc_planificacion}} </h2>
-			            </div>
+							<h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right; ">{{=doc_planificacion}} </h2>
+						</div>
 
-			        </div>
-			      </div>
-			      </a>
+					</div>
+				  </div>
+				  </a>
 
-			    </div>
-			    <!-- ./col -->
-			    <div class="col-lg-2 col-xs-6">
+				</div>
+				<!-- ./col -->
+				<div class="col-lg-2 col-xs-6">
 
-			      <a href="#">
-			      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
-			        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Elaborado</h4>
+				  <a href="#">
+				  <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+					<h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Elaborado</h4>
 
-			        <div class="widget-box-2">
-			            <div class="widget-detail-2">
-			                <i class="fa fa-pencil fa-4x" style="color: white; display: inline-block;"></i> 
+					<div class="widget-box-2">
+						<div class="widget-detail-2">
+							<i class="fa fa-pencil fa-4x" style="color: white; display: inline-block;"></i> 
 
-			                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right;"> {{=doc_elaboracion}}</h2>
-			            </div>
+							<h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px; text-align: right;"> {{=doc_elaboracion}}</h2>
+						</div>
 
-			        </div>
-			      </div>
-			      </a>
+					</div>
+				  </div>
+				  </a>
 
-			    </div>
+				</div>
 
-			    <div class="col-lg-2 col-xs-6">
-			      <!-- small box -->
-			    
-			      <a href="#">
-			      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
-			        <h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Revisado</h4>
+				<div class="col-lg-2 col-xs-6">
+				  <!-- small box -->
+				
+				  <a href="#">
+				  <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+					<h4 style="color: white; font-size: 25px; margin-bottom: 8px;">Revisado</h4>
 
-			        <div class="widget-box-2">
-			            <div class="widget-detail-2">
-			                <i class="fa fa-search fa-4x" style="color: white; display: inline-block;"></i> 
-			                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_revision}} </h2>
-			            </div>
+					<div class="widget-box-2">
+						<div class="widget-detail-2">
+							<i class="fa fa-search fa-4x" style="color: white; display: inline-block;"></i> 
+							<h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_revision}} </h2>
+						</div>
 
-			        </div>
-			      </div>
-			      </a>
-			      
-			    </div>
+					</div>
+				  </div>
+				  </a>
+				  
+				</div>
 
-			    <div class="col-lg-2 col-xs-6">
+				<div class="col-lg-2 col-xs-6">
 
-			      <a href="#" >
-			      <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
-			        <h4  style="color: white; font-size: 25px; margin-bottom: 8px;">Aprobado</h4>
+				  <a href="#" >
+				  <div class="card-box" style="background-color: #337ab7; padding: 20px; margin-top: 40px; box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);">
+					<h4  style="color: white; font-size: 25px; margin-bottom: 8px;">Aprobado</h4>
 
-			        <div class="widget-box-2">
-			            <div class="widget-detail-2">
-			                <i class="fa fa-check-circle fa-4x" style="color: white; display: inline-block;"></i> 
+					<div class="widget-box-2">
+						<div class="widget-detail-2">
+							<i class="fa fa-check-circle fa-4x" style="color: white; display: inline-block;"></i> 
 
-			                <h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_aprobado}} </h2>
-			            </div>
+							<h2 class="m-b-0" data-plugin="counterup" style="color: white; display: inline-block; font-size: 50px;"> {{=doc_aprobado}} </h2>
+						</div>
 
 
 
-			        </div>
-			      </div>
-			      </a>
+					</div>
+				  </div>
+				  </a>
 
-			    </div>
+				</div>
 
-			    <div class="col-lg-2"></div>
+				<div class="col-lg-2"></div>
 
 			  </div>   	
 					
@@ -203,24 +204,39 @@
 						<td class="camposTabla" ><button type="button">Descargar</button></td>
 						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 
+
+						{{pass}}
+
+
+					{{else:}}
+						<tr>
+								<td class="camposTabla" style="text-align: left; padding-left: 34px" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}">{{=doc.nombre_doc.upper()}}</a>
+								</td>
+								<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+								<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+								<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
+								<td class="camposTabla" ><button type="button">Descargar</button></td>
+								<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
+
+						</tr>
+					{{pass}}
+				{{pass}}	           
+			</tbody>
+
+			<tfoot id="collapseFiltros">
+
+				<tr>
+					<th class="camposTabla linksNombres">Documento</th>
+					<th class="camposTabla linksNombres">Código</th>
+					<th class="camposTabla linksNombres">Tipo</th>
+					<th class="camposTabla linksNombres">Responsable</th>
+					<th class="camposTabla linksNombres">Link de Descarga</th>
+					<th class="camposTabla linksNombres">Estatus</th>
 				</tr>
-				{{pass}}           
-	        </tbody>
+			</tfoot>
 
-	        <tfoot id="collapseFiltros">
-
-	            <tr>
-	                <th class="camposTabla linksNombres">Documento</th>
-	                <th class="camposTabla linksNombres">Código</th>
-	                <th class="camposTabla linksNombres">Tipo</th>
-	                <th class="camposTabla linksNombres">Responsable</th>
-	                <th class="camposTabla linksNombres">Link de Descarga</th>
-	                <th class="camposTabla linksNombres">Estatus</th>
-	            </tr>
-	        </tfoot>
-
-	      </table>
-	    </div>
+		  </table>
+		</div>
 	  </div>
 	</div> 
 </div>
@@ -765,14 +781,14 @@
 	$(function() {
 		console.log("datapicker");
 		$('.datepicker').datepicker({
-    		format: 'yyyy-mm-dd'
-    	})	
+			format: 'yyyy-mm-dd'
+		})	
 	});
 
 	$(function() {
 		
 		var scntDiv = $('#p_scents');
-		var i = $('#p_scents p').length + 1;
+		var i = $('#p_scents p').length;
 
 		
 		$('.form-group').on('click', '#addScnt', function() {
@@ -797,6 +813,7 @@
 
 	function codigoDoc(){
 		 var codigoDocumento = document.getElementById("codigo").value;
+		 console.log(codigoDocumento);
 		 return codigoDocumento;
 	}
 
@@ -805,12 +822,15 @@
 		var scntDiv = $('#p_anexo');
 		var i = $('#p_anexo p').length + 1;
 		
-		var c = codigoDoc();
-		console.log(c);
-		console.log("asda");
+		
 
 		$('.form-group').on('click', '#addAnexo', function() {
-			$('<p><input type="text"  name="anexo_code' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input type="text"  name="anexo_name' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
+			
+			var c = codigoDoc();
+			console.log(c);
+			console.log("asda");
+
+			$('<p><input type="text"  name="anexo_code' + i +'" value="'+ c +'"  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input type="text"  name="anexo_name' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
 			i++;
 			return false;
 		});
@@ -891,41 +911,41 @@
   var filtros = false;
   const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
   $(document).ready(function() {
-      // Setup - add a text input to each footer cell
-      $('#datatable tfoot th').each( function () {
-          var title = $(this).text();
-          $(this).html( '<input type="text" placeholder="Filtro" />' );
-      } );
+	  // Setup - add a text input to each footer cell
+	  $('#datatable tfoot th').each( function () {
+		  var title = $(this).text();
+		  $(this).html( '<input type="text" placeholder="Filtro" />' );
+	  } );
    
-      // DataTable
-      var table = $('#datatable').DataTable();
+	  // DataTable
+	  var table = $('#datatable').DataTable();
    
-      // Apply the search
-      table.columns().every( function () {
-          var that = this;
+	  // Apply the search
+	  table.columns().every( function () {
+		  var that = this;
    
-          $( 'input', this.footer() ).on( 'keyup change', function () {
-              if ( that.search() !== this.value ) {
-                  that
-                      .search( this.value )
-                      .draw();
-              }
-          } );
-      } );
+		  $( 'input', this.footer() ).on( 'keyup change', function () {
+			  if ( that.search() !== this.value ) {
+				  that
+					  .search( this.value )
+					  .draw();
+			  }
+		  } );
+	  } );
 
-      $('#datatable tfoot tr').appendTo('#datatable thead');
-      $("#datatable thead tr").not("#titulosListado").css("display","none");
+	  $('#datatable tfoot tr').appendTo('#datatable thead');
+	  $("#datatable thead tr").not("#titulosListado").css("display","none");
   } );
 
   function mostrarFiltro() {
-      if (filtros){
-        $("#datatable thead tr").not("#titulosListado").css("display","none");
-        filtros = false
-      }
-      else{
-        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
-        filtros = true
-      }
+	  if (filtros){
+		$("#datatable thead tr").not("#titulosListado").css("display","none");
+		filtros = false
+	  }
+	  else{
+		$("#datatable thead tr").not("#titulosListado").css("display","table-row");
+		filtros = true
+	  }
 
   }
 </script>

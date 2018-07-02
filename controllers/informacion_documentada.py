@@ -29,6 +29,7 @@ def anioEnCurso():
 
 	return year
 
+
 # Función que regresa la dependencia al que está ligado el personal loggeado
 def dependenciaAsociadaUsuario():
 
@@ -46,7 +47,14 @@ def dependenciaAsociadaUsuario():
 def generarCodigoRegistro():
 
 	dependencia = dependenciaAsociadaUsuario()
-	nroRegistros = db(db.registros.dependencia_asociada == dependencia).count() + 1
+	nroRegistros = db(db.registros.dependencia_asociada == dependencia[0].nombre).count() + 1
+
+	for x in db().select(db.registros.ALL):
+		print("::::::")
+		print(type(x.dependencia_asociada))
+		print(type(dependencia[0].nombre))
+		print(x.dependencia_asociada == dependencia)
+
 	if (nroRegistros < 10):
 		nroRegistros = "00" + str(nroRegistros)
 	elif (nroRegistros < 100):
@@ -55,6 +63,43 @@ def generarCodigoRegistro():
 	codigoRegistro = codDep.codigo_registro + "/" + anioEnCurso() + "-" + nroRegistros
 
 	return codigoRegistro
+
+
+def analizadorVencimiento():
+
+	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	t = strings.split(',')
+	fechaActual = t[0] + "-" + t[1] + "-" + t[2]
+	anioActual = t[0]
+	mesActual = t[1]
+
+	for doc in db().select(db.documentos.ALL):
+		anio = ""
+
+		if (doc.fecha_prox_rev != None):
+			mes = str(doc.fecha_prox_rev).split("-")[1]
+			anio = str(doc.fecha_prox_rev).split("-")[0]
+
+
+		if (doc.periodo_rev == "Semestral"):
+
+			if (fechaActual == str(doc.fecha_prox_rev)):
+				doc.vencimiento = "Si"
+		elif (doc.periodo_rev == "Anual"):
+			if (str(int(anio) + 1) == anioActual):
+				doc.vencimiento = "Si"
+		elif (doc.periodo_rev == "Bienal"):
+			if (str(int(anio) + 2) == anioActual):
+				doc.vencimiento = "Si"
+		elif (doc.periodo_rev == "Trienal"):
+			if (str(int(anio) + 3) == anioActual):
+				doc.vencimiento = "Si"
+		elif (doc.periodo_rev == "Quinquenal"):	
+			if (str(int(anio) + 4) == anioActual):
+				doc.vencimiento = "Si"		
+
+
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_registros():
@@ -136,9 +181,12 @@ def ficha_registro():
 	)
 
 
+
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def lista_documentos():
 
+	analizadorVencimiento()
 
 	dic = {
 
@@ -284,7 +332,10 @@ def lista_documentos():
 			registro_fisico=dic["registro_fisico"],
 			registro_electronico=dic["registro_electronico"],
 			vinculo=dic["vinculo"],
-			estatus=dic["estatus"]
+			estatus=dic["estatus"],
+			visibilidad="Si",
+			vencimiento="No"
+
 			
 		
 		)
@@ -307,22 +358,20 @@ def lista_documentos():
 
 
 	return dict(
+
 	    documentos=db().select(db.documentos.ALL),
 		doc_aprobado=db(db.documentos.estatus=="Aprobado").count(),
 		doc_revision=db(db.documentos.estatus=="Revisado").count(),
 		doc_elaboracion=db(db.documentos.estatus=="Elaborado").count(),
 		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
 		dependencias = dependencasOrdenadas,
+		depAsoc=dependenciaAsociadaUsuario()[0].nombre,
 
 	)
 
 
 
-
-
-
-
-
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def ficha():
 
 	uname = request.args[0]
@@ -425,5 +474,19 @@ def ficha():
 		db(db.documentos.codigo==uname).delete()
 		redirect(URL('lista_documentos'))
 
-	return dict(documentos=row,
-				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row
+	if(request.post_vars.visibilidad != None):
+		if request.post_vars.visibilidad == "Si":
+			documento.update(visibilidad="Si")
+			redirect(URL('informacion_documentada','ficha',args=[uname]))
+		if request.post_vars.visibilidad == "No":
+			documento.update(visibilidad="No")
+			redirect(URL('informacion_documentada','ficha',args=[uname]))
+
+
+
+	
+	return dict(
+		documentos=row,
+		dependencias=db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
+		
+	) 
