@@ -151,3 +151,16 @@ th {
 	padding: 0 !important;
 	margin: 0 !important;
 }
+
+
+#icono_mensaje_notificacion{
+	background-color: transparent !important;
+}
+
+#mensaje_notificacion{
+	border: red;
+	border-width: 3px;
+	border-style: solid;
+	padding: 1%;
+	margin: 1%;
+}

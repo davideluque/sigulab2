@@ -45,21 +45,21 @@
   </nav>
 
 <div class="row">
-  <h3 class=" text-center"> GESTIÓN DE PERSONAL</h3>
+  <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7"><i class="fa fa-pencil"></i></button>
+  <h3 class=" text-center" id="titulo_modulo"> GESTIÓN DE PERSONAL</h3>
   {{if session.ficha_negada :}}
-    <div class="jumbotron">
-    <p>{{=session.ficha_negada}}</p>
-    </div>
+  <br>
+</div>
+  <div id="mensaje_notificacion" class="row text-center">
+    <h4><i id="icono_mensaje_notificacion" class="fa fa-bell-o"></i>  {{=session.ficha_negada}}</h4>
+  </div>
   {{pass}}
     <div class="row">
-            <!-- Boton que lleva al modal -->
-            {{ if not usuario.f_es_supervisor :}}
-            <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7"><i class="fa fa-pencil"></i></button>
-            {{pass}}
+      <!-- Boton que lleva al modal -->
+      {{ if not usuario.f_es_supervisor :}}
+      {{pass}}
     </div>
-  </div>
-    <br>
-
+  
     <!-- Inicio lista de validacion -->
     {{if session.validaciones_pendientes>0:}}
     <div class = "container">
@@ -137,9 +137,7 @@
     </div>    
     {{pass}}
     <!-- Fin lista validacion -->    
-    <br>
-    <br>
-    
+
     <div class="container">
 
     <div class="row" >
