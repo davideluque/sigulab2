@@ -252,7 +252,14 @@ function validaFechaIngreso(){
     }
 }
 
+// Funcion que se encarga de voltear la fecha y se muestre en el formato pedido
 function voltearFecha(fecha){
+    var dia = fecha.substr(0,2);
+    var mes = fecha.substr(3,2);
+    var anio = fecha.substr(6,10);
+
+    var fecha = anio + "-" + mes + "-" + dia;
+    
     return fecha
 }
 
