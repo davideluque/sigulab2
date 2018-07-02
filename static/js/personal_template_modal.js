@@ -268,14 +268,7 @@ function validaFechaSalida(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
 
-    if ($this.val() === ''){
-        $this.attr("data-content", requiredFieldMessage);
-        $this.addClass('input-error');
-        $this.attr("data-valido", 'false');
-        $this.popover('show');
-        return false;
-    }
-    else if (!moment(fecha_inicio).isBefore(fecha_final) && fecha_inicio !== '--'){
+    if (!moment(fecha_inicio).isBefore(fecha_final) && fecha_inicio !== '--'){
         $this.attr("data-content", "La fecha de egreso es antes que la de inicio");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
