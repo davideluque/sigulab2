@@ -47,12 +47,12 @@ def dependenciaAsociadaUsuario():
 def generarCodigoRegistro():
 
 	dependencia = dependenciaAsociadaUsuario()
-	nroRegistros = db(db.registros.dependencia_asociada == dependencia[0].nombre).count() + 1
+	nroRegistros = db(db.registros.dependencia_asociada == dependencia).count() + 1
 
 	for x in db().select(db.registros.ALL):
 		print("::::::")
 		print(type(x.dependencia_asociada))
-		print(type(dependencia[0].nombre))
+		print(type(dependencia))
 		print(x.dependencia_asociada == dependencia)
 
 	if (nroRegistros < 10):
@@ -66,37 +66,37 @@ def generarCodigoRegistro():
 
 
 def analizadorVencimiento():
+	print("holi")
+	# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	# t = strings.split(',')
+	# fechaActual = t[0] + "-" + t[1] + "-" + t[2]
+	# anioActual = t[0]
+	# mesActual = t[1]
 
-	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	t = strings.split(',')
-	fechaActual = t[0] + "-" + t[1] + "-" + t[2]
-	anioActual = t[0]
-	mesActual = t[1]
+	# for doc in db().select(db.documentos.ALL):
+	# 	anio = ""
 
-	for doc in db().select(db.documentos.ALL):
-		anio = ""
-
-		if (doc.fecha_prox_rev != None):
-			mes = str(doc.fecha_prox_rev).split("-")[1]
-			anio = str(doc.fecha_prox_rev).split("-")[0]
+	# 	if (doc.fecha_prox_rev != None):
+	# 		mes = str(doc.fecha_prox_rev).split("-")[1]
+	# 		anio = str(doc.fecha_prox_rev).split("-")[0]
 
 
-		if (doc.periodo_rev == "Semestral"):
+	# 	if (doc.periodo_rev == "Semestral"):
 
-			if (fechaActual == str(doc.fecha_prox_rev)):
-				doc.vencimiento = "Si"
-		elif (doc.periodo_rev == "Anual"):
-			if (str(int(anio) + 1) == anioActual):
-				doc.vencimiento = "Si"
-		elif (doc.periodo_rev == "Bienal"):
-			if (str(int(anio) + 2) == anioActual):
-				doc.vencimiento = "Si"
-		elif (doc.periodo_rev == "Trienal"):
-			if (str(int(anio) + 3) == anioActual):
-				doc.vencimiento = "Si"
-		elif (doc.periodo_rev == "Quinquenal"):	
-			if (str(int(anio) + 4) == anioActual):
-				doc.vencimiento = "Si"		
+	# 		if (fechaActual == str(doc.fecha_prox_rev)):
+	# 			doc.vencimiento = "Si"
+	# 	elif (doc.periodo_rev == "Anual"):
+	# 		if (str(int(anio) + 1) == anioActual):
+	# 			doc.vencimiento = "Si"
+	# 	elif (doc.periodo_rev == "Bienal"):
+	# 		if (str(int(anio) + 2) == anioActual):
+	# 			doc.vencimiento = "Si"
+	# 	elif (doc.periodo_rev == "Trienal"):
+	# 		if (str(int(anio) + 3) == anioActual):
+	# 			doc.vencimiento = "Si"
+	# 	elif (doc.periodo_rev == "Quinquenal"):	
+	# 		if (str(int(anio) + 4) == anioActual):
+	# 			doc.vencimiento = "Si"		
 
 
 
