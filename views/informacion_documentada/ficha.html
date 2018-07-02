@@ -291,7 +291,7 @@
             
                 <div class="form-group">
                 <h5>Fecha de elaboración</h5>
-                <input disabled="" class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                <input disabled="" class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_prox_rev}}">
               </div>
 
 
@@ -390,9 +390,10 @@
               <!-- Campo de fecha de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Fecha de revisión de contenidos</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" value="{{=doc.fecha_rev_contenido}}" /> 
-              </div> 
-
+                <input disabled="" class="datepicker" name="fecha_revision_contenidos" id="fecha_revision_contenidos" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_contenido}}">
+               
+              </div>
+ 
               <!-- Campo de responsable de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Revisión de especificaciones</h5>
@@ -402,7 +403,8 @@
               <!-- Campo de fecha de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Fecha de revisión de especificaciones</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" value="{{=doc.fecha_rev_especificaciones_doc}}" /> 
+                <input disabled="" class="datepicker" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_especificaciones_doc}}">
+
               </div> 
 
 
@@ -454,7 +456,7 @@
                 <!-- Campo de fecha de aprobación -->
                 <div class="form-group">
                   <h5>Fecha de aprobación</h5>
-                  <input disabled='' type="date" class="input" name="fechaAprobacion" id="fechaAprobacion" placeholder="Fecha de Aprobación" /> 
+                  <input disabled="" class="datepicker" name="fechaAprobacion" id="fechaAprobacion" type="text" data-trigger="manual" data-content="Seleccione una fecha" > 
                 </div>  
                 
                 <!-- Campo de código de registro de aprobación -->
@@ -549,7 +551,9 @@
                 <!-- Campo de la fecha del control de cambios -->
                 <div class="form-group">
                   <h5>Fecha de control de cambios</h5>
-                  <input disabled='' type="date" class="input" name="fechaControlCambios" id="fechaControlCambios" placeholder="Fecha de reg de control de cambios" /> 
+                
+                   <input disabled="" class="datepicker" name="fechaControlCambios" id="fechaControlCambios" type="text" data-trigger="manual" data-content="Seleccione una fecha">
+
                 </div>
 
                 <!-- Campo de Elaborado por -->
