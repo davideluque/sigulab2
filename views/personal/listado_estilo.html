@@ -22,7 +22,6 @@
   <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
   <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
   <!-- Web2py JS - Especialmente para AJAX -->
-  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
   <style>
     .row {
       margin-right: 0 !important;
@@ -71,7 +70,7 @@
             <div class="table-responsive no-padding no-margin">
               <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                 <thead>
-                    <tr id="titulosListado">
+                    <tr id="titulosListado2">
                         <th class="camposTabla linksNombres">NOMBRE</th>
                         <th class="camposTabla linksNombres">CORREO</th>
                         <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
@@ -121,7 +120,7 @@
                     </tr>
                   {{pass}}           
                 </tbody>
-                  <tfoot id="collapseFiltros">
+                  <tfoot id="collapseFiltros2">
                     <tr>
                       <th class="camposTabla linksNombres">NOMBRE</th>
                       <th class="camposTabla linksNombres">CORREO</th>
@@ -135,78 +134,80 @@
             </div>
         </div>
       </div>
-    </div>
-    
+    </div>    
     {{pass}}
     <!-- Fin lista validacion -->    
     <br>
     <br>
     
     <div class="container">
-    <div class="row">
 
-    <div class="table-responsive no-padding no-margin">
-      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-        <thead>
-            <tr id="titulosListado">
-              <th class="camposTabla linksNombres">NOMBRE</th>
-              <th class="camposTabla linksNombres">CORREO</th>
-              <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
-              <th class="camposTabla linksNombres">EXTENSIÓN</th>
-              <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
-            </tr>
-        </thead>
+    <div class="row" >
+    <h3 onclick="change_status_list('#lista-validados')" title="Ocultar/Mostrar"> Lista de Personal <i class="fa fa-caret-up" id="lista-validados-caret"></i></h3>
+    <div class="row" id="lista-validados">
+      <div class="table-responsive no-padding no-margin">
+        <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+          <thead>
+              <tr id="titulosListado1">
+                <th class="camposTabla linksNombres">NOMBRE</th>
+                <th class="camposTabla linksNombres">CORREO</th>
+                <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+              </tr>
+          </thead>
 
-        <tbody>
-          {{for item in grid:}}
-            <tr>
-                <td class="camposTabla"><a href="/sigulab2/personal/ficha/{{=item['ci']}}" type="button"
-                                    data-nombre="{{=item['nombre']}}"
-                                    data-apellido="{{=item['apellido']}}"
-                                    data-ci="{{=item['ci']}}"
-                                    data-categoria="{{=item['categoria']}}"
-                                    data-email="{{=item['email']}}"
-                                    data-email_alt="{{=item['email_alt']}}"
-                                    data-fecha_ingreso="{{=item['fecha_ingreso']}}"
-                                    data-fecha_salida="{{=item['fecha_salida']}}"
-                                    data-estatus="{{=item['estatus']}}"
-                                    data-telefono="{{=item['telefono']}}"
-                                    data-pagina_web="{{=item['pagina_web']}}"
-                                    data-cargo="{{=item['cargo']}}"
-                                    data-dep-name="{{=item['dependencia']}}"
-                                    data-gremio="{{=item['gremio']}}"
-                                    data-unidad_jerarquica_superior="{{=item['unidad_jerarquica_superior']}}"
-                                    data-ubicacion="{{=item['ubicacion']}}"
-                                    data-celular="{{=item['celular']}}"
-                                    data-contacto_emergencia="{{=item['contacto_emergencia']}}"
-                                    data-direccion="{{=item['direccion']}}"
-                                    data-fecha_ingreso_usb="{{=item['fecha_ingreso_usb']}}"
-                                    data-fecha_ingreso_ulab="{{=item['fecha_ingreso_ulab']}}"
-                                    data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
-                                    data-condicion="{{=item['condicion']}}"
-                                    data-rol="{{=item['rol']}}"
-                                    data-extension_usb="{{= item['extension_USB']}}"
-                                    data-extension_interna="{{=item['extension_interna']}}"
-                                    data-jefe = "{{=item['jefe']}}"
-                                    value="{{=item['ci']}}">{{=item["nombre"].upper()}} {{=item["apellido"].upper()}}</a></td>
-                <td class="camposTabla">{{=item['email'].upper()}}</td>
-                <td class="camposTabla">{{=item['dependencia']}}</td>
-                <td class="camposTabla">{{=item['extension_USB']}}</td>
-                <td class="camposTabla">{{=item['extension_interna']}}</td>
-            </tr>
-          {{pass}}           
-        </tbody>
-          <tfoot id="collapseFiltros">
-            <tr>
-              <th class="camposTabla linksNombres">NOMBRE</th>
-              <th class="camposTabla linksNombres">CORREO</th>
-              <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
-              <th class="camposTabla linksNombres">EXTENSIÓN</th>
-              <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
-            </tr>
-        </tfoot>
+          <tbody>
+            {{for item in grid:}}
+              <tr>
+                  <td class="camposTabla"><a href="/sigulab2/personal/ficha/{{=item['ci']}}" type="button"
+                                      data-nombre="{{=item['nombre']}}"
+                                      data-apellido="{{=item['apellido']}}"
+                                      data-ci="{{=item['ci']}}"
+                                      data-categoria="{{=item['categoria']}}"
+                                      data-email="{{=item['email']}}"
+                                      data-email_alt="{{=item['email_alt']}}"
+                                      data-fecha_ingreso="{{=item['fecha_ingreso']}}"
+                                      data-fecha_salida="{{=item['fecha_salida']}}"
+                                      data-estatus="{{=item['estatus']}}"
+                                      data-telefono="{{=item['telefono']}}"
+                                      data-pagina_web="{{=item['pagina_web']}}"
+                                      data-cargo="{{=item['cargo']}}"
+                                      data-dep-name="{{=item['dependencia']}}"
+                                      data-gremio="{{=item['gremio']}}"
+                                      data-unidad_jerarquica_superior="{{=item['unidad_jerarquica_superior']}}"
+                                      data-ubicacion="{{=item['ubicacion']}}"
+                                      data-celular="{{=item['celular']}}"
+                                      data-contacto_emergencia="{{=item['contacto_emergencia']}}"
+                                      data-direccion="{{=item['direccion']}}"
+                                      data-fecha_ingreso_usb="{{=item['fecha_ingreso_usb']}}"
+                                      data-fecha_ingreso_ulab="{{=item['fecha_ingreso_ulab']}}"
+                                      data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
+                                      data-condicion="{{=item['condicion']}}"
+                                      data-rol="{{=item['rol']}}"
+                                      data-extension_usb="{{= item['extension_USB']}}"
+                                      data-extension_interna="{{=item['extension_interna']}}"
+                                      data-jefe = "{{=item['jefe']}}"
+                                      value="{{=item['ci']}}">{{=item["nombre"].upper()}} {{=item["apellido"].upper()}}</a></td>
+                  <td class="camposTabla">{{=item['email'].upper()}}</td>
+                  <td class="camposTabla">{{=item['dependencia']}}</td>
+                  <td class="camposTabla">{{=item['extension_USB']}}</td>
+                  <td class="camposTabla">{{=item['extension_interna']}}</td>
+              </tr>
+            {{pass}}           
+          </tbody>
+            <tfoot id="collapseFiltros">
+              <tr>
+                <th class="camposTabla linksNombres">NOMBRE</th>
+                <th class="camposTabla linksNombres">CORREO</th>
+                <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+              </tr>
+          </tfoot>
 
-      </table>
+        </table>
+      </div>
     </div>
 
   
@@ -271,16 +272,16 @@
       } );
 
       $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
-      $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+      $("#datatable1 thead tr").not("#titulosListado1").css("display","none");
   } );
 
-  function mostrarFiltro() {
+  function mostrarFiltro1() {
       if (filtros){
-        $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+        $("#datatable1 thead tr").not("#titulosListado1").css("display","none");
         filtros = false
       }
       else{
-        $("#datatable1 thead tr").not("#titulosListado").css("display","table-row");
+        $("#datatable1 thead tr").not("#titulosListado1").css("display","table-row");
         filtros = true
       }
 
@@ -288,8 +289,7 @@
 </script>
 <script>
 
-  var filtros = false;
-  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+  var filtros2 = false;
   $(document).ready(function() {
       // Setup - add a text input to each footer cell
       $('#datatable2 tfoot th').each( function () {
@@ -314,23 +314,27 @@
       } );
 
       $('#datatable2 tfoot tr').appendTo('#datatable2 thead');
-      $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+      $("#datatable2 thead tr").not("#titulosListado2").css("display","none");
   } );
 
-  function mostrarFiltro() {
-      if (filtros){
-        $("#datatable2 thead tr").not("#titulosListado").css("display","none");
-        filtros = false
+  function mostrarFiltro2() {
+      if (filtros2){
+        $("#datatable2 thead tr").not("#titulosListado2").css("display","none");
+        filtros2 = false
       }
       else{
-        $("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
-        filtros = true
+        $("#datatable2 thead tr").not("#titulosListado2").css("display","table-row");
+        filtros2 = true
       }
 
   }
 </script>
+
+
 <script language = "javascript">
   mostrar_lista = 1;
+  mostrar_validados = 1;
+
   function change_status_list(list){
       if (list == '#lista-por-validar'){
         if (mostrar_lista == 1){
@@ -344,6 +348,20 @@
           mostrar_lista = 1;
           $('#lista-por-validar-caret').removeClass('fa-caret-down');
           $('#lista-por-validar-caret').addClass('fa-caret-up');
+        }
+      }
+      if (list == '#lista-validados'){
+        if (mostrar_validados == 1){
+            $('#lista-validados').hide();
+            mostrar_validados = 0;
+            $('#lista-validados-caret').removeClass('fa-caret-up');
+            $('#lista-validados-caret').addClass('fa-caret-down');
+          }
+        else {
+          $('#lista-validados').show();
+          mostrar_validados = 1;
+          $('#lista-validados-caret').removeClass('fa-caret-down');
+          $('#lista-validados-caret').addClass('fa-caret-up');
         }
       }
   }

@@ -11,7 +11,7 @@ initComplete: function(){
        {
           text:'<i class="fa fa-filter"></i>',
           action: function(){
-            mostrarFiltro()
+            mostrarFiltro1()
           },
           className: 'boton-sigulab'
        },
@@ -54,7 +54,7 @@ var table1 = $('#datatable2').DataTable({
          {
             text:'<i class="fa fa-filter"></i>',
             action: function(){
-              mostrarFiltro()
+              mostrarFiltro2()
             },
             className: 'boton-sigulab'
          },
