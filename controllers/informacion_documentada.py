@@ -329,82 +329,56 @@ def ficha():
 	row = db(db.documentos.codigo==uname).select()
 
 
-	# dic = {
-	# "codigo": request.post_vars.codigo,
-	# "objetivo": request.post_vars.objetivos,
-	# "ubicacion_electronica": request.post_vars.ubicacion_electronica,
-	# "ubicacion_fisica": request.post_vars.ubicacion_fisica,
-	# # "cod_anexo": request.post_vars.cod_anexo,
-	# # "nombre_anexo": request.post_vars.nombre_anexo,
-	# "responsable": request.post_vars.responsable,
-	# "nombre_doc": request.post_vars.nombre_documento,
-	# "estatus":"Planificado",
-	# "periodo_rev":request.post_vars.periodo,
-	# "aprobado_por": request.post_vars.aprobado,
-	# "elaborado_actualizado_por": request.post_vars.elaborado,
-	# # "vigencia":
-	# "fecha_aprob": request.post_vars.fechaAprobacion,
-	# "fecha_prox_rev": request.post_vars.fecha_prox_rev,
-	# "fecha_control_cambio": request.post_vars.fecha_control_cambio,
-	# "cod_control_cambio": request.post_vars.cod_control_cambio,
-	# "cod_aprob": request.post_vars.cod_registro,
-	# "fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
-	# "rev_por_consejo_asesor": request.post_vars.revision_consejo,
-	# "fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
-	# "fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
-	# "rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,
-	# "rev_contenido_realizado_por": request.post_vars.revision_contenido,
-	# "tipo_doc":request.post_vars.tipo,
-	# }
 
 	documento =  db(db.documentos.codigo==uname)
 
-	# 	documento.update(
 
-	# 			objetivo=dic["objetivo"],
-	# 			ubicacion_electronica=dic["ubicacion_electronica"],
-	# 			ubicacion_fisica=dic["ubicacion_fisica"],
-	# 			# cod_anexo=dic["cod_anexo"],
-	# 			# nombre_anexo=dic["nombre_anexo"],
-	# 			#responsable=dic["responsable"],
-	# 			nombre_doc=dic["nombre_doc"],
-	# 			#estatus=dic["estatus"],
-	# 			periodo_rev=dic["periodo_rev"],
-	# 			aprobado_por=dic["aprobado_por"],
-	# 			elaborado_actualizado_por=dic["elaborado_actualizado_por"],
-
-	# 			fecha_aprob=dic["fecha_aprob"],
-	# 			fecha_prox_rev=dic["fecha_prox_rev"],
-	# 			fecha_control_cambio=dic["fecha_control_cambio"],
-	# 			cod_control_cambio=dic["cod_control_cambio"],
-	# 			cod_aprob=dic["cod_aprob"],
-	# 			fecha_rev_por_consejo_asesor=dic["fecha_rev_por_consejo_asesor"],
-	# 			rev_por_consejo_asesor=dic["rev_por_consejo_asesor"],
-	# 			fecha_rev_especificaciones_doc=dic["fecha_rev_especificaciones_doc"],
-	# 			fecha_rev_contenido=dic["fecha_rev_contenido"],
-	# 			rev_especficaciones_doc_realizado_por=dic["rev_especficaciones_doc_realizado_por"],
-	# 			rev_contenido_realizado_por=dic["rev_contenido_realizado_por"],
-	# 			tipo_doc= dic["tipo_doc"],
-	# 		)
-	# if(request.post_vars.eliminar=="eliminar"):
-	# 	db(db.documentos.codigo==uname).delete()
-	# 	redirect(URL('..', 'sigulab2','informacion_documentada',''))
-
-	### END ###
-	if(request.post_vars.elaborado=="edicion"):
-
-		documento.update(estatus="Elaborado",
+	if(request.post_vars.elaborado=="elaborado"):
+		print("elaborado")
+		documento.update(
+			estatus="Elaborado",
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
-			fecha_prox_rev= request.post_vars.fecha_prox_rev 
+			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			anexo_code1= request.post_vars.anexo_code2,
+			anexo_name1= request.post_vars.anexo_name2,
+			anexo_code2= request.post_vars.anexo_code3,
+			anexo_name2= request.post_vars.anexo_name3,
+			anexo_code3= request.post_vars.anexo_code4,
+			anexo_name3= request.post_vars.anexo_name4,
+			anexo_code4= request.post_vars.anexo_code5,
+			anexo_name4= request.post_vars.anexo_name5,
+			anexo_code5= request.post_vars.anexo_code6,
+			anexo_name5= request.post_vars.anexo_name6,
+			elaborador0= request.post_vars.elaborador1,
+			elaborador1= request.post_vars.elaborador2,
+			elaborador2= request.post_vars.elaborador3,
+			elaborador3= request.post_vars.elaborador4,
+			elaborador4= request.post_vars.elaborador5,
 		)
 	elif (request.post_vars.revisado=="revisado"):
 
 		print("revisado")
 		documento.update(estatus="Revisado",
+
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
 			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			anexo_code1= request.post_vars.anexo_code2,
+			anexo_name1= request.post_vars.anexo_name2,
+			anexo_code2= request.post_vars.anexo_code3,
+			anexo_name2= request.post_vars.anexo_name3,
+			anexo_code3= request.post_vars.anexo_code4,
+			anexo_name3= request.post_vars.anexo_name4,
+			anexo_code4= request.post_vars.anexo_code5,
+			anexo_name4= request.post_vars.anexo_name5,
+			anexo_code5= request.post_vars.anexo_code6,
+			anexo_name5= request.post_vars.anexo_name6,
+			elaborador0= request.post_vars.elaborador1,
+			elaborador1= request.post_vars.elaborador2,
+			elaborador2= request.post_vars.elaborador3,
+			elaborador3= request.post_vars.elaborador4,
+			elaborador4= request.post_vars.elaborador5,
 			rev_contenido_realizado_por = request.post_vars.revision_contenido,
         	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
         	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
@@ -417,6 +391,21 @@ def ficha():
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
 			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			anexo_code1= request.post_vars.anexo_code2,
+			anexo_name1= request.post_vars.anexo_name2,
+			anexo_code2= request.post_vars.anexo_code3,
+			anexo_name2= request.post_vars.anexo_name3,
+			anexo_code3= request.post_vars.anexo_code4,
+			anexo_name3= request.post_vars.anexo_name4,
+			anexo_code4= request.post_vars.anexo_code5,
+			anexo_name4= request.post_vars.anexo_name5,
+			anexo_code5= request.post_vars.anexo_code6,
+			anexo_name5= request.post_vars.anexo_name6,
+			elaborador0= request.post_vars.elaborador1,
+			elaborador1= request.post_vars.elaborador2,
+			elaborador2= request.post_vars.elaborador3,
+			elaborador3= request.post_vars.elaborador4,
+			elaborador4= request.post_vars.elaborador5,
 			rev_contenido_realizado_por = request.post_vars.revision_contenido,
         	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
         	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
@@ -430,7 +419,7 @@ def ficha():
         	fecha_control_cambio = request.post_vars.fechaControlCambios,
         	ubicacion_fisica = request.post_vars.ubicacion_fisica,
         	ubicacion_electronica = request.post_vars.ubicacion_electronica
-        )###
+        )
 
 	if(request.post_vars.eliminar=="eliminar"):
 		db(db.documentos.codigo==uname).delete()

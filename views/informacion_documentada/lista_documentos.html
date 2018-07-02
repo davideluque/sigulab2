@@ -19,7 +19,13 @@
   <!-- Web2py JS - Especialmente para AJAX -->
   <script src="{{=URL('static', 'js/web2py.js')}}"></script>
 
+<style>
+	#datatable_filter{
+		text-align: left;
+		margin-top: -30px
+	}
 
+</style>
 
 {{end}}
 {{block center}}
@@ -159,18 +165,20 @@
 <div class="container" style="padding: 0px;">
 	<div class="row">
 
-
-	    <div id="buttons">
-
-	      <!-- Filtrado -->
-	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5"><i class="fa fa-filter fa-2x"></i></button>
-	      <!-- Filtrado -->   
-
-	    </div>
+	
+	   
 	    <br>
 
 	    <div class="table-responsive no-padding no-margin">
+	    
 	      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+	       <div id="buttons" style="text-align: right; " >
+
+	      <!-- Filtrado 
+	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5"><i class="fa fa-filter fa-2x"></i></button>-->
+	      <!-- Filtrado -->   
+
+	    </div>
 	        <thead>
 	            <tr id="titulosListado">
 	                <th class="camposTabla linksNombres">Documento</th>
@@ -185,14 +193,14 @@
 	        <tbody>
 	  			{{for doc in documentos:}}
 				<tr>
-						<td class="camposTabla" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
+						<td class="camposTabla" style="text-align: left; padding-left: 34px" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
 							{{=doc.nombre_doc.upper()}}
 						</a>
 						</td>
 						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
 						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
 						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
-						<td class="camposTabla" >Deshabilitado temporalmente</td>
+						<td class="camposTabla" ><button type="button">Descargar</button></td>
 						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 
 				</tr>

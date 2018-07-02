@@ -210,13 +210,13 @@
                 <!-- Campo de Nombre del Documento -->
                 <div class="form-group" data-atributo="{{=doc.estatus}}">
                   <h5>Nombre del Documento</h5>
-                  <input disabled='' type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" value="{{=doc.nombre_doc}}" required>
+                  <input disabled='' type="text" class="input" name="nombre_documento" id="nombre_documento" placeholder="Nombre del Documento" value="{{=doc.nombre_doc}}" >
                 </div>
 
                 <!-- Campo de Tipo del Documento -->
                 <div class="form-group"> 
                   <h5>Tipo del Documento</h5>
-                  <select disabled="" name="tipo" id="tipo" class="input" required>
+                  <select disabled="" name="tipo" id="tipo" class="input" >
                     <option value="{{=doc.tipo_doc}}">{{=doc.tipo_doc}}</option>
                   </select>
                 </div>
@@ -224,10 +224,10 @@
                 <!-- Campo de Responsable del Documento -->
                 <div class="form-group"> 
                   <h5>Responsable</h5>
-                  <select disabled="" name="responsable" id="responsable" class="input" onchange="get_code(this)" required>
+                  <select disabled="" name="responsable" id="responsable" class="input" onchange="get_code(this)" >
                     <option value="{{=doc.responsable}}">{{=doc.responsable}}</option>
                     {{for dep in dependencias:}}
-                      <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
+                    <option value="{{=dep.codigo_registro}}" id="{{=dep.nombre}}">{{=dep.nombre}}</option>
                     {{pass}}
                   </select>
                 </div>
@@ -291,7 +291,7 @@
             
                 <div class="form-group">
                 <h5>Fecha de elaboración</h5>
-                <input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                <input disabled="" class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
               </div>
 
 
@@ -306,7 +306,7 @@
                   </p>
                 </div>
 
-                <a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
+                <a disabled="" href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
               </div>
 
               <div style="position: fixed; bottom: 0; right: 0;">
@@ -384,25 +384,25 @@
               <!-- Campo de responsable de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Revisión de contenidos</h5>
-                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" value="{{=doc.rev_contenido_realizado_por}}" required />
+                <input disabled='' type="text" class="input" name="revision_contenido" id="revision_contenido" placeholder="Revisión de contenido realizado por:" value="{{=doc.rev_contenido_realizado_por}}"  />
               </div> 
 
               <!-- Campo de fecha de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Fecha de revisión de contenidos</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" value="{{=doc.fecha_rev_contenido}}" required/> 
+                <input disabled='' type="date" class="input" name="fecha_revision_contenidos" id="fecha_revision_contenidos" placeholder="Fecha de registro de revisión de contenidos" value="{{=doc.fecha_rev_contenido}}" /> 
               </div> 
 
               <!-- Campo de responsable de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Revisión de especificaciones</h5>
-                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" value="{{=doc.rev_especficaciones_doc_realizado_por}}" required /> 
+                <input disabled='' type="text" class="input" name="revision_especificaciones" id="revision_especificaciones" placeholder="Revisión de especificaciones del documento realizado por:" value="{{=doc.rev_especficaciones_doc_realizado_por}}"  /> 
               </div> 
 
               <!-- Campo de fecha de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Fecha de revisión de especificaciones</h5>
-                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" value="{{=doc.fecha_rev_especificaciones_doc}}" required/> 
+                <input disabled='' type="date" class="input" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" placeholder="Fecha de revisión de especificaciones del documento" value="{{=doc.fecha_rev_especificaciones_doc}}" /> 
               </div> 
 
 
@@ -633,7 +633,21 @@
   }
 
 </script>
+<script type="text/javascript">
+  $('#tipo').change(function(){
+    if( $(this).val() == 'Otro'){
+      $('#otros').append('<h5 id="titulo_otro_tipo"><br>Especifique el tipo de Documento</h5><input type="text" class="input" name="otro_tipo" id="otro_tipo" placeholder="Nombre del Tipo" required>');
+    }else{
+      $('#otro_tipo').remove();
+      $('#titulo_otro_tipo').remove();
+    }
+  });
 
+
+
+                  
+
+</script>
 <script type="text/javascript">
   $(function() {
     $('.datepicker').datepicker({
@@ -645,9 +659,10 @@
     
     var scntDiv = $('#p_scents');
     var i = $('#p_scents p').length + 1;
-
+    console.log(i, "inicial de elaborador")
     
     $('.form-group').on('click', '#addScnt', function() {
+      console.log(i)
       $('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
       i++;
       return false;
@@ -677,9 +692,11 @@
     var i = $('#p_anexo p').length + 1;
     
     var c = codigoDoc();
+    console.log(c);
+    console.log("asda");
 
     $('.form-group').on('click', '#addAnexo', function() {
-      $('<p><input type="text" id="anexoCode' + i +'"  name="anexoCode' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input id="anexoName' + i +'" type="text"  name="anexoName' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
+      $('<p><input disabled='' type="text"  name="anexo_code' + i +'" value=" '+ c +' "  /><a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p><p><input type="text"  name="anexo_name' + i +'" placeholder="Nombre del anexo"  /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>' ).appendTo(scntDiv);
       i++;
       return false;
     });
@@ -744,32 +761,6 @@ function estatus(){
         jQuery('#periodo').removeAttr('disabled');
         jQuery('#fecha_prox_rev').removeAttr('disabled');
 
-
-      jQuery('#anexo_code1', 'string',  label=T('Codigo del anexo')),
-
-      jQuery('#anexo_name1', 'string', label=T('Nombre del anexo del Documento')),
-
-
-      jQuery('#anexo_code2', 'string',  label=T('Codigo del anexo')),
-
-      jQuery('#anexo_name2', 'string', label=T('Nombre del anexo del Documento')),
-
-
-      jQuery('#anexo_code3', 'string',  label=T('Codigo del anexo')),
-
-      jQuery('#anexo_name3', 'string', label=T('Nombre del anexo del Documento')),
-
-
-      jQuery('#anexo_code4', 'string',  label=T('Codigo del anexo')),
-
-      jQuery('#anexo_name4', 'string', label=T('Nombre del anexo del Documento')),
-
-
-      jQuery('#anexo_code5', 'string',  label=T('Codigo del anexo')),
-
-      jQuery('#anexo_name5', 'string', label=T('Nombre del anexo del Documento')),
-
-        jQuery('#elaborado').removeAttr('disabled');
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
         jQuery('#revision_especificaciones').removeAttr('disabled');
@@ -846,6 +837,18 @@ function estatus(){
   </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 <script src="{{=URL('static','js/agregarDoc.js')}}"></script>
+
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
 
 
 {{end}}
