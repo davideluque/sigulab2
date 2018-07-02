@@ -239,7 +239,7 @@ function validaCondicion(){
 
 function validaFechaIngreso(){
     const $this = $('[name="fecha_ingreso_add"]');
-    if ($this.val() === ''){
+    if ($this.val() === ""){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -273,7 +273,7 @@ function validaFechaSalida(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
 
-    if (fecha_inicio !== "" && !moment(fecha_inicio).isBefore(fecha_final)){
+    if (fecha_inicio !== "" && fecha_final !== ""    && !moment(fecha_inicio).isBefore(fecha_final)){
         $this.attr("data-content", "La fecha de egreso es antes que la de ingreso");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -292,7 +292,7 @@ function validaFechaIngresoUSB(){
     const fecha_ingreso_ulab = voltearFecha($('[name="fecha_ingreso_ulab_add"]').val());
     const fecha_ingreso_usb = voltearFecha($this.val());
 
-    if ($this.val() === ""){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -317,7 +317,7 @@ function validaFechaIngresoUlab(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_ingreso_ulab = voltearFecha($this.val());
 
-    if ($this.val() === ""){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -342,7 +342,7 @@ function validaFechaIngresoAdminPubl(){
     const fecha_ingreso_usb = voltearFecha($('[name="fecha_ingreso_usb_add"]').val());
     const fecha_ingreso_admin_pub = voltearFecha($this.val());
 
-    if ($this.val() === ""){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -366,9 +366,8 @@ const validadoresSegundoPasoFijo = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngresoUSB,
-    validaFechaIngresoUlab,
-    validaFechaIngresoAdminPubl
+    validaFechaIngreso,
+    validaFechaSalida
 ]
 const validadoresSegundoPaso = [
     validaEstatus,
@@ -507,6 +506,7 @@ $(document).ready(function () {
     $('#sel2').change(function (){
         if ($("#sel2 option:selected").val()=="Fijo") {
             $("#fingreso").hide();
+
         }
         else {
             $("#fingreso").show();
@@ -528,8 +528,9 @@ $(document).ready(function () {
             if ($('[name="categoria_add"]').val() === 'Fijo'){
                 // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
                 // base de datos 
-                $('[name="fecha_ingreso_add"]').attr('value', "");
-                $('[name="fecha_salida_add"]').attr('value', "");
+                $('[name="fecha_ingreso_usb_add"]').val('')
+                $('[name="fecha_ingreso_ulab_add"]').val('');
+                $('[name="fecha_ingreso_admin_publica_add"]').val('')
 
                 next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
             }
