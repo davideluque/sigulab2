@@ -218,11 +218,11 @@ class Usuario(object):
         self.f_estatus = usuario.f_estatus
         self.f_categoria = usuario.f_categoria
         self.f_condicion = usuario.f_condicion
-        self.f_fecha_ingreso = (usuario.f_fecha_ingreso) 
-        self.f_fecha_salida = (usuario.f_fecha_salida) 
-        self.f_fecha_ingreso_usb = (usuario.f_fecha_ingreso_usb) 
-        self.f_fecha_ingreso_ulab = (usuario.f_fecha_ingreso_ulab) 
-        self.f_fecha_ingreso_admin_publica = (usuario.f_fecha_ingreso_admin_publica) 
+        self.f_fecha_ingreso = (usuario.f_fecha_ingreso)
+        self.f_fecha_salida = (usuario.f_fecha_salida)
+        self.f_fecha_ingreso_usb = (usuario.f_fecha_ingreso_usb)
+        self.f_fecha_ingreso_ulab = (usuario.f_fecha_ingreso_ulab)
+        self.f_fecha_ingreso_admin_publica = (usuario.f_fecha_ingreso_admin_publica)
 
         # pagina 3
         self.f_cargo = usuario.f_cargo
@@ -318,7 +318,7 @@ def ficha():
 
     ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
     if(ubicacion): ubicacion = ubicacion.codigo
-    
+
     personal ={
         "nombre" : elm.f_nombre,
         "apellido" : elm.f_apellido,
@@ -357,15 +357,14 @@ def ficha():
     if(validacion == "true" or validacion == "false"):
         cambiar_validacion(validacion, personal)
 
-    
+
 
     #Dropdown ubicaciones
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
-    
-    print(personal['fecha_ingreso'])
+
     return dict(
         personal=personal,
         categorias=categorias,

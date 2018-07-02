@@ -11,10 +11,10 @@ if db(db.auth_user).isempty():
     El resto de los usuarios son necesarios para la creación de dependencias y
     asignación de roles.
 
-    La inserción de los usuarios registrados en auth_user en la tabla de 
+    La inserción de los usuarios registrados en auth_user en la tabla de
     t_Personal es estrictamente necesaria pues los objetos del modulo de Servicios
     buscan  las dependencias de los usuarios buscando una coincidencia del
-    usuario con la tabla de Personal ya que esta tabla es la que guarda el 
+    usuario con la tabla de Personal ya que esta tabla es la que guarda el
     registro y no auth_user"""
 
     """ Super Usuario """
@@ -25,20 +25,20 @@ if db(db.auth_user).isempty():
     db.auth_user.insert(first_name="Funindes", last_name="", email='funindes@usb.ve',
         password=db.auth_user.password.validate('0000')[0])
 
-    """ Asistente del Director """	
-    db.auth_user.insert(first_name="Asistente Dirección", last_name="", 
+    """ Asistente del Director """
+    db.auth_user.insert(first_name="Asistente Dirección", last_name="",
         email='asis-ulab@usb.ve', password=db.auth_user.password.validate('0000')[0])
 
-    """ Gestor de Sustancias """	
+    """ Gestor de Sustancias """
     db.auth_user.insert(first_name="Gestor de Sustancias", last_name="", email='ulab-smdp@usb.ve',
         password=db.auth_user.password.validate('0000')[0])
 
-    """Usuarios representantes de dependencias. Es necesario añadir estos 
-    usuarios mediante este servicio automatizado hasta que se tenga la gestión 
-    de dependencias. En ese caso solo hará falta añadir la dirección y 
-    posteriormente todas las dependencias se podrán registrar desde la 
-    dirección hacia abajo y de igual forma los usuarios. Por favor, al 
-    realizar el módulo de gestión de dependencias eliminar todos los registros 
+    """Usuarios representantes de dependencias. Es necesario añadir estos
+    usuarios mediante este servicio automatizado hasta que se tenga la gestión
+    de dependencias. En ese caso solo hará falta añadir la dirección y
+    posteriormente todas las dependencias se podrán registrar desde la
+    dirección hacia abajo y de igual forma los usuarios. Por favor, al
+    realizar el módulo de gestión de dependencias eliminar todos los registros
     innecesarios aquí encontrados para aumentar los niveles de seguridad de
     este sistema."""
 
@@ -49,19 +49,19 @@ if db(db.auth_user).isempty():
     # ---- Coordinaciones
 
     # Coordinación de Adquisiciones
-    db.auth_user.insert(first_name="Coordinación de Adquisiciones", last_name="", 
+    db.auth_user.insert(first_name="Coordinación de Adquisiciones", last_name="",
         email='ulab-adquisicion@usb.ve',password=db.auth_user.password.validate('0000')[0])
     # Coordinación de la Calidad
-    db.auth_user.insert(first_name="Coordinación de la Calidad", last_name="", 
+    db.auth_user.insert(first_name="Coordinación de la Calidad", last_name="",
         email='ulab-calidad@usb.ve', password=db.auth_user.password.validate('0000')[0])
     # Coordinación de Importaciones
-    db.auth_user.insert(first_name="Coordinación de Importaciones", last_name="", 
+    db.auth_user.insert(first_name="Coordinación de Importaciones", last_name="",
         email='ulab-importaciones@usb.ve', password=db.auth_user.password.validate('0000')[0])
     # Unidad de Administración
-    db.auth_user.insert(first_name="Unidad de Administración", last_name="", 
+    db.auth_user.insert(first_name="Unidad de Administración", last_name="",
         email='ulab-administracion@usb.ve', password=db.auth_user.password.validate('0000')[0])
     # Oficina de Proteccion Radiologica
-    db.auth_user.insert(first_name="Oficina de Proteccion Radiológica", last_name="", 
+    db.auth_user.insert(first_name="Oficina de Proteccion Radiológica", last_name="",
         email='ulab-pradiologica@usb.ve', password=db.auth_user.password.validate('0000')[0])
 
     # ---- Laboratorios
@@ -91,19 +91,18 @@ if db(db.auth_user).isempty():
 # Sedes
 
 if db(db.sedes).isempty():
-	print("coño de la madre web2py")
 	db.sedes.insert(nombre="Sartenejas")
 	db.sedes.insert(nombre="Litoral")
 
 # Dependencias
 
 if db(db.dependencias).isempty():
-	
+
 	sartenejas = db(db.sedes.nombre=="Sartenejas").select(db.sedes.ALL).first().id
 	litoral = db(db.sedes.nombre=="Litoral").select(db.sedes.ALL).first().id
 	# Direccion
 	user = db(db.auth_user.email == 'ulab@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=sartenejas, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='DIRECCIÓN', id_sede=sartenejas, id_jefe_dependencia=user,
 		codigo_registro="UL")
 
 	direccionid = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
@@ -112,76 +111,76 @@ if db(db.dependencias).isempty():
 
 	# Laboratorio A
 	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO A', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO A', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLA")
 
 	# Laboratorio B
 	user = db(db.auth_user.email == 'usb-labb@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO B', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO B', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLB")
 
 	# Laboratorio C
-	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='LABORATORIO C', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	user = db(db.auth_user.email == 'usb-labc@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='LABORATORIO C', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLC")
 
-	# Laboratorio D	
+	# Laboratorio D
 	user = db(db.auth_user.email == 'usb-labd@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO D', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO D', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLD")
-	
+
 	# Laboratorio E
 	user = db(db.auth_user.email == 'usb-labe@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO E', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO E', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLE")
 
 	# Laboratorio F
 	user = db(db.auth_user.email == 'usb-labf@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO F', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO F', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLF")
 
 	# Laboratorio G
 	user = db(db.auth_user.email == 'usb-labg@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='LABORATORIO G', id_sede=litoral, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='LABORATORIO G', id_sede=litoral,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLG")
 
 	# Coordinaciones
 
 	# Unidad de Administración
 	user = db(db.auth_user.email == 'ulab-administracion@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='UNIDAD DE ADMINISTRACIÓN', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL03")
 
 	# Coordinación de Adquisiciones
-	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id	
-	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	user = db(db.auth_user.email == 'ulab-adquisicion@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='COORDINACIÓN DE ADQUISICIONES', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL01")
 
 	# Coordinación de Importaciones
 	user = db(db.auth_user.email == 'ulab-importaciones@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE IMPORTACIONES', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL02")
 
 	# Coordinación de la Calidad
 	user = db(db.auth_user.email == 'ulab-calidad@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='COORDINACIÓN DE LA CALIDAD', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL04")
 
 	# Protección Radiológica
 	user = db(db.auth_user.email == 'ulab-pradiologica@usb.ve').select()[0].id
-	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=sartenejas, 
-		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user, 
+	db.dependencias.insert(nombre='OFICINA DE PROTECCIÓN RADIOLÓGICA', id_sede=sartenejas,
+		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL05")
 
 # Cargos
@@ -202,18 +201,17 @@ if db(db.auth_group).isempty():
 
 # Fichas de personal
 if db(db.t_Personal).isempty():
-    """La inserción de los usuarios registrados en auth_user en la tabla de 
+    """La inserción de los usuarios registrados en auth_user en la tabla de
     Personal es estrictamente necesaria pues los objetos del modulo de Servicios
     buscan las dependencias de los usuarios a través de una coincidencia del
-    usuario con la tabla de Personal ya que esta tabla es la que guarda el 
+    usuario con la tabla de Personal ya que esta tabla es la que guarda el
     la dependencia de cada usuario y no auth_user"""
 
     dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
 
     """ Super Usuario """
     user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
-    rol = db(db.auth_group.role=='WEBMASTER').select()[0].id 
-    print(rol)
+    rol = db(db.auth_group.role=='WEBMASTER').select()[0].id
 
     db.t_Personal.insert(
         f_nombre="Super", f_apellido="", f_gremio="Administrativo", f_cargo="Super Usuario",
@@ -444,7 +442,7 @@ if db(db.propositos).isempty():
 if db(db.tipos_servicios).isempty():
 	db.tipos_servicios.insert(nombre='Ensayo')
 	db.tipos_servicios.insert(nombre='Inspección')
-	db.tipos_servicios.insert(nombre='Calibración')	
+	db.tipos_servicios.insert(nombre='Calibración')
 	db.tipos_servicios.insert(nombre='Desarrollo de prototipos y piezas')
 	db.tipos_servicios.insert(nombre='Consultoría / Asesoría Técnica y Proyectos')
 	db.tipos_servicios.insert(nombre='Formación / Capacitación / Transferencia Tecnológica')
@@ -464,7 +462,7 @@ if db(db.categorias_servicios).isempty():
 	db.categorias_servicios.insert(nombre='Matemáticas y Estadísticas')
 	db.categorias_servicios.insert(nombre='Mecánica y Materiales')
 	db.categorias_servicios.insert(nombre='Química')
-	db.categorias_servicios.insert(nombre='Física')	
+	db.categorias_servicios.insert(nombre='Física')
 	db.categorias_servicios.insert(nombre='Informática, Computación, Comunicación e Información')
 	db.categorias_servicios.insert(nombre='Música')
 	db.categorias_servicios.insert(nombre='Salud')
@@ -589,7 +587,7 @@ if db(db.auth_membership).isempty():
     db.auth_membership.insert(user_id=user, group_id=role, dependencia_asociada=dep)
 
 
-# Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar la funcion 
+# Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar la funcion
 # __sumar_cantidad del controlador __agregar_inventarios de smydp)
 if db(db.t_Unidad_de_medida).isempty():
 	db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
@@ -601,118 +599,118 @@ if db(db.t_Unidad_de_medida).isempty():
 # Catalogo de sustancias
 
 if db(db.t_Sustancia).isempty():
-    db.t_Sustancia.insert(f_nombre='Acetato de Etilo', f_cas='141-78-6', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Acetato de Etilo', f_cas='141-78-6', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Acetona', f_cas='67-64-1', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Acetona', f_cas='67-64-1', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Ácido Antranílico', f_cas='118-92-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Ácido Antranílico', f_cas='118-92-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Comburente'])
-    db.t_Sustancia.insert(f_nombre='Ácido Clorhídrico', f_cas='7647-01-0', f_pureza='37', 
+    db.t_Sustancia.insert(f_nombre='Ácido Clorhídrico', f_cas='7647-01-0', f_pureza='37',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico','Corrosivo'])
-    db.t_Sustancia.insert(f_nombre='Ácido Fenilacético y sus sales', f_cas='103-82-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Ácido Fenilacético y sus sales', f_cas='103-82-2', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Comburente'])
-    db.t_Sustancia.insert(f_nombre='Ácido Nítrico', f_cas='7697-37-2', f_pureza='5', 
+    db.t_Sustancia.insert(f_nombre='Ácido Nítrico', f_cas='7697-37-2', f_pureza='5',
     	f_estado='Líquido', f_control='RL7', f_peligrosidad=['Tóxico','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Ácido Pícrico (trinitrofenol)', f_cas='88-89-1', f_pureza='3', 
+    db.t_Sustancia.insert(f_nombre='Ácido Pícrico (trinitrofenol)', f_cas='88-89-1', f_pureza='3',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Ácido Sulfúrico', f_cas='7664-93-9', f_pureza='97', 
+    db.t_Sustancia.insert(f_nombre='Ácido Sulfúrico', f_cas='7664-93-9', f_pureza='97',
     	f_estado='Líquido', f_control='RL4 y RL7', f_peligrosidad=['Corrosivo','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Aluminio en polvo', f_cas='7429-90-5', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Aluminio en polvo', f_cas='7429-90-5', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Amoníaco Anhídrico', f_cas='7664-41-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Amoníaco Anhídrico', f_cas='7664-41-7', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Nocivo','Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Amoníaco en disolución acuosa', f_cas='001336-21-6', f_pureza='25', 
+    db.t_Sustancia.insert(f_nombre='Amoníaco en disolución acuosa', f_cas='001336-21-6', f_pureza='25',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico','Corrosivo'])
-    db.t_Sustancia.insert(f_nombre='Anhídrico acético', f_cas='108-24-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Anhídrico acético', f_cas='108-24-7', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Azidas (de sodio)', f_cas='26628-22-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Azidas (de sodio)', f_cas='26628-22-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Benceno', f_cas='71-43-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Benceno', f_cas='71-43-2', f_pureza='99',
     	f_estado='Líquido', f_control='RL7', f_peligrosidad=['Tóxico','Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Butanona (metilcetona)', f_cas='78-93-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Butanona (metilcetona)', f_cas='78-93-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Carbonato de Sodio', f_cas='497-19-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Carbonato de Sodio', f_cas='497-19-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL4', f_peligrosidad=['Corrosivo','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Clorato de Potasio', f_cas='3811-04-9', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Clorato de Potasio', f_cas='3811-04-9', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Clorato de Sodio', f_cas='7775-09-9', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Clorato de Sodio', f_cas='7775-09-9', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Cloroformo', f_cas='67-66-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Cloroformo', f_cas='67-66-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Nocivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Diclorometano', f_cas='75-09-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Diclorometano', f_cas='75-09-2', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Nocivo','Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Dinitrofenol', f_cas='51-28-5', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Dinitrofenol', f_cas='51-28-5', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Nocivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Dinitrotolueno', f_cas='606-20-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Dinitrotolueno', f_cas='606-20-2', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Etanol', f_cas='64-17-5', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Etanol', f_cas='64-17-5', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Eter Etílico', f_cas='60-29-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Eter Etílico', f_cas='60-29-7', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Explosivo','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Fósforo blanco', f_cas='7723-14-0', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Fósforo blanco', f_cas='7723-14-0', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Fulminato de Mercurio', f_cas='628-86-4', f_pureza='', 
+    db.t_Sustancia.insert(f_nombre='Fulminato de Mercurio', f_cas='628-86-4', f_pureza='',
     	f_estado='', f_control='RL7', f_peligrosidad=['N/A'])
-    db.t_Sustancia.insert(f_nombre='Heptano', f_cas='142-82-5', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Heptano', f_cas='142-82-5', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Hexano', f_cas='110-54-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Hexano', f_cas='110-54-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Hidrogenocarbonato (Bicarbonato) de Sodio', f_cas='144-55-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Hidrogenocarbonato (Bicarbonato) de Sodio', f_cas='144-55-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL4', f_peligrosidad=['Irritante'])
-    db.t_Sustancia.insert(f_nombre='Hipoclorito de calcio', f_cas='7778-54-3', f_pureza='68', 
+    db.t_Sustancia.insert(f_nombre='Hipoclorito de calcio', f_cas='7778-54-3', f_pureza='68',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Hipoclorito de Sodio', f_cas='7681-52-9', f_pureza='', 
+    db.t_Sustancia.insert(f_nombre='Hipoclorito de Sodio', f_cas='7681-52-9', f_pureza='',
     	f_estado='Líquido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Metanol', f_cas='67-56-1', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Metanol', f_cas='67-56-1', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Amonio (salitre de chile)', f_cas='6484-52-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Amonio (salitre de chile)', f_cas='6484-52-2', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])
     # *!* Tenia el mismo CAS que el acido nitrico
-    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='10361-46-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Bismuto', f_cas='10361-46-3', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Calcio', f_cas='13477-34-4', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Calcio', f_cas='13477-34-4', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Plata', f_cas='7761-88-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Plata', f_cas='7761-88-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Plomo', f_cas='10099-74-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Plomo', f_cas='10099-74-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Potasio', f_cas='7757-79-1', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Potasio', f_cas='7757-79-1', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrato de Sodio', f_cas='7631-99-4', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrato de Sodio', f_cas='7631-99-4', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrito de Sodio', f_cas='7632-00-0', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrito de Sodio', f_cas='7632-00-0', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrobenceno', f_cas='98-95-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Nitrobenceno', f_cas='98-95-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL7', f_peligrosidad=['Nocivo','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Nitrocelulosa', f_cas='9004-70-0', f_pureza='12', 
+    db.t_Sustancia.insert(f_nombre='Nitrocelulosa', f_cas='9004-70-0', f_pureza='12',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable'])
-    db.t_Sustancia.insert(f_nombre='Nitroglicerina', f_cas='55-63-0', f_pureza='1', 
+    db.t_Sustancia.insert(f_nombre='Nitroglicerina', f_cas='55-63-0', f_pureza='1',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo'])
-    db.t_Sustancia.insert(f_nombre='Perclorato de Potasio', f_cas='7778-74-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Perclorato de Potasio', f_cas='7778-74-7', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Perclorato de Sodio', f_cas='7601-89-0', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Perclorato de Sodio', f_cas='7601-89-0', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Comburente','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Permanganato de Potasio', f_cas='7722-64-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Permanganato de Potasio', f_cas='7722-64-7', f_pureza='99',
     	f_estado='Sólido', f_control='RL4 y RL7', f_peligrosidad=['Comburente','Corrosivo'])
-    db.t_Sustancia.insert(f_nombre='Sesquicarbonato de Sodio', f_cas='6106-20-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Sesquicarbonato de Sodio', f_cas='6106-20-3', f_pureza='99',
     	f_estado='Sólido', f_control='RL4', f_peligrosidad=['Corrosivo','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Sulfato de Amonio', f_cas='7783-20-2', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Sulfato de Amonio', f_cas='7783-20-2', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Corrosivo','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Sulfato de Magnesio', f_cas='7487-88-9', f_pureza='65', 
+    db.t_Sustancia.insert(f_nombre='Sulfato de Magnesio', f_cas='7487-88-9', f_pureza='65',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Irritante'])
-    db.t_Sustancia.insert(f_nombre='Sulfuro de Potasio', f_cas='1312-73-8', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Sulfuro de Potasio', f_cas='1312-73-8', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Inflamable','Corrosivo'])
-    db.t_Sustancia.insert(f_nombre='Tetrahidrofurano', f_cas='109-99-9', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Tetrahidrofurano', f_cas='109-99-9', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Irritante'])
-    db.t_Sustancia.insert(f_nombre='Tolueno', f_cas='108-88-3', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Tolueno', f_cas='108-88-3', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Inflamable','Tóxico'])
-    db.t_Sustancia.insert(f_nombre='Trinitrotolueno (TNT)', f_cas='118-96-7', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='Trinitrotolueno (TNT)', f_cas='118-96-7', f_pureza='99',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Explosivo','Nocivo'])
-    db.t_Sustancia.insert(f_nombre='Urea', f_cas='57-13-6 ', f_pureza='', 
+    db.t_Sustancia.insert(f_nombre='Urea', f_cas='57-13-6 ', f_pureza='',
     	f_estado='Sólido', f_control='RL7', f_peligrosidad=['Irritante','Comburente'])
-    db.t_Sustancia.insert(f_nombre='4-metilpentan-2-ona (Metilisobutilcetona)', f_cas='108-10-1', f_pureza='99', 
+    db.t_Sustancia.insert(f_nombre='4-metilpentan-2-ona (Metilisobutilcetona)', f_cas='108-10-1', f_pureza='99',
     	f_estado='Líquido', f_control='RL4', f_peligrosidad=['Tóxico'])
     # Tiene el mismo CAS que fosforos blancos
-    #db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99', 
+    #db.t_Sustancia.insert(f_nombre='Fósforos rojos o amorfos', f_cas='7723-14-0', f_pureza='99',
     #	f_estado='Sólido', f_control='N/A', f_peligrosidad=['Inflamable','Nocivo'])
 

@@ -27,8 +27,6 @@ def contar_validaciones():
     usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
     if(len(usuario)>1): usuario = usuario[1]
     else: usuario = usuario.first()
-    print("---------------------------------------")
-    print("Nombre: "+usuario.f_nombre+" /// Correo: "+str(usuario.f_email)+" ///Dependencia: "+str(usuario.f_dependencia))
     es_supervisor = usuario.f_es_supervisor
     dependencia = None
     if es_supervisor:
