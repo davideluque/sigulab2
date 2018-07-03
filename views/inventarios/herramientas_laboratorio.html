@@ -1,0 +1,69 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
+
+
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+        <br>
+        <div class="row">
+          <div id="buttons">
+            <!-- Filtrado -->
+            <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
+            <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
+            <!-- Filtrado -->    
+          </div>
+            <br>
+        
+            <div class="table-responsive no-padding no-margin">
+              <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado">
+                      <th class="camposTabla linksNombres">Nombre</th>
+            
+                      <th class="camposTabla linksNombres">Marca</th>
+                      <th class="camposTabla linksNombres">Modelo</th>
+                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Número de piezas</th>
+                      <th class="camposTabla linksNombres">Contenido</th>
+                      <th class="camposTabla linksNombres">Unidad</th>
+                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                        <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                  {{for bm in inventario:}}
+                    <tr>
+                        <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                        <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=bm['hr_espacio'], nombreMat = bm['hr_nombre'], cat = '2'))}}">{{=bm['hr_nombre']}}</a></td>
+                        
+                        <td class="camposTabla">{{=bm['hr_marca']}}</td>
+                        <td class="camposTabla">{{=bm['hr_modelo']}}</td>
+        
+                        <td class="camposTabla">{{=bm['hr_descripcion']}}</td>
+        
+                        <td class="camposTabla">{{=bm['hr_numpiezas']}}</td>
+                        <td class="camposTabla">{{=bm['hr_contenido']}}</td>
+                        <td class="camposTabla">{{=bm['hr_unidad']}}</td>
+                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['hr_espacio']).select().first().codigo}}</td>
+                    </tr>
+                  {{pass}}           
+                </tbody>
+        
+                <tfoot id="collapseFiltros">
+                    <tr>
+                      <th class="camposTabla linksNombres">Nombre</th>
+            
+                      <th class="camposTabla linksNombres">Marca</th>
+                      <th class="camposTabla linksNombres">Modelo</th>
+                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Numero de piezas</th>
+                      <th class="camposTabla linksNombres">Contenido</th>
+                      <th class="camposTabla linksNombres">Unidad</th>
+                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                      <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>  
+        <!-- Fin Listado de inventario -->
