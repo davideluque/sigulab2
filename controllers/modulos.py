@@ -243,9 +243,14 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
+    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'GESTOR DE PERSONAL', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
     roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
-    dependencias=list(db().select(db.dependencias.ALL))
+
+    queryDireccion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL).first()
+  #Buscamos todas las dependencias cuya unidad de adscripcion sea la direccion
+    dependencias=list(db(db.dependencias.unidad_de_adscripcion == queryDireccion.id).select(db.dependencias.ALL))
+
+
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
 
     prefijos_cedula = ['V-','E-', 'P-']
