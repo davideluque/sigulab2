@@ -114,6 +114,19 @@ def dropdowns():
 
     return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
 
+# Esta funcion toma la fecha desde el front que tiene
+# el formato dd-mm-yyyy y la transforma en el formato
+# yyyy-mm-dd
+def transformar_fecha_formato_original(fecha):
+    if fecha != '':
+        dia = fecha[:2]
+        mes = fecha[3:5]
+        anio = fecha[6:]
+        print(anio + "-" + mes + "-" + dia)
+        return anio + "-" + mes + "-" + dia
+    else:
+        return fecha
+
 #Funcion que toma las variables de la vista
 def add_form():
     ubicacion = request.post_vars.ubicacion_add
@@ -126,17 +139,17 @@ def add_form():
             "pagina_web" : request.post_vars.pagina_web_add,
             "categoria" : request.post_vars.categoria_add,
             "cargo" : request.post_vars.cargo_add,
-            "fecha_ingreso" : request.post_vars.fecha_ingreso_add,
-            "fecha_salida" : request.post_vars.fecha_salida_add,
+            "fecha_ingreso" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_add),
+            "fecha_salida" : transformar_fecha_formato_original(request.post_vars.fecha_salida_add),
             "estatus" : request.post_vars.estatus_add,
              "celular" : request.post_vars.operador_add+""+request.post_vars.celular_add,
              "persona_contacto": request.post_vars.persona_contacto,
              "contacto_emergencia" : request.post_vars.contacto_emergencia_add,
              "direccion" : request.post_vars.direccion_add,
              "gremio" : request.post_vars.gremio_add,
-             "fecha_ingreso_usb" : request.post_vars.fecha_ingreso_usb_add,
-             "fecha_ingreso_ulab" : request.post_vars.fecha_ingreso_ulab_add,
-             "fecha_ingreso_admin_publica" : request.post_vars.fecha_ingreso_admin_publica_add,
+             "fecha_ingreso_usb" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_usb_add),
+             "fecha_ingreso_ulab" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_ulab_add),
+             "fecha_ingreso_admin_publica" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_admin_publica_add),
              "condicion" : request.post_vars.condicion_add,
              "ubicacion" : request.post_vars.ubicacion_add,
              "dependencia" : request.post_vars.dependencia_add,
@@ -145,8 +158,8 @@ def add_form():
              "extension_interna" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_interna).first()
             }
 
-    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
 
+    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
     #Si el diccionario no esta vacio
     if (not(None in dic.values())):
         #Insertamos en la base de datos
@@ -218,11 +231,11 @@ class Usuario(object):
         self.f_estatus = usuario.f_estatus
         self.f_categoria = usuario.f_categoria
         self.f_condicion = usuario.f_condicion
-        self.f_fecha_ingreso = (usuario.f_fecha_ingreso)
-        self.f_fecha_salida = (usuario.f_fecha_salida)
-        self.f_fecha_ingreso_usb = (usuario.f_fecha_ingreso_usb)
-        self.f_fecha_ingreso_ulab = (usuario.f_fecha_ingreso_ulab)
-        self.f_fecha_ingreso_admin_publica = (usuario.f_fecha_ingreso_admin_publica)
+        self.f_fecha_ingreso = transformar_fecha(usuario.f_fecha_ingreso)
+        self.f_fecha_salida = transformar_fecha(usuario.f_fecha_salida)
+        self.f_fecha_ingreso_usb = transformar_fecha(usuario.f_fecha_ingreso_usb)
+        self.f_fecha_ingreso_ulab = transformar_fecha(usuario.f_fecha_ingreso_ulab)
+        self.f_fecha_ingreso_admin_publica = transformar_fecha(usuario.f_fecha_ingreso_admin_publica)
 
         # pagina 3
         self.f_cargo = usuario.f_cargo
