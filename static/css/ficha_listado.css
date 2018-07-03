@@ -141,9 +141,9 @@ th {
 
 }
 
-#datatable_info1, #datatable_info2{
+.dataTables_info{
 	border-collapse: collapse;
-	float: right;
+	float: right !important;
 	text-align: right;
 }
 
