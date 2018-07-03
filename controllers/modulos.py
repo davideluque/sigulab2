@@ -197,18 +197,11 @@ def register():
     if request.post_vars.rol and es_supervisor :
         rolid = request.post_vars.rol
         roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+        depid = request.post_vars.dephidden
     else:
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
-        depid= request.post_vars.dependencia
-
-
-    if request.post_vars.laboratorio:
-        depid = request.post_vars.laboratorio
-    if request.post_vars.seccion:
-      # El registrado pertenece directamente a una sección de un laboratorio.
-      depid = request.post_vars.seccion
-
+        depid= request.post_vars.dephidden
     # Asocia el usuario al grupo indicado
     membership_register = db.auth_membership.insert(user_id=user.id,
                                                     group_id=rolid,

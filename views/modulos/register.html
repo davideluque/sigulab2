@@ -35,7 +35,7 @@
             <div class="text-center">
                 <h4 id="titulo" class="text-uppercase font-bold m-b-0">Nuevo Usuario</h4>
             </div>
-            
+
             <!-- Inicio panel -->
             <div class="panel-body">
 
@@ -61,13 +61,13 @@
                 <!-- Cedula de Identidad -->
                 <div class="form-group">
                     <div class="col-xs-2" id="cedula-select">
-                        <select class="form-control" type="select" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
+                        <select class="form-control" id="tipo_cedula" name="tipo_cedula" placeholder="Tipo Cedula">
                             {{for prefijo_cedula in prefijos_cedula:}}
                                 <option value='{{=prefijo_cedula}}'>{{=prefijo_cedula}}</option>
                             {{pass}}
                         </select>
                     </div>
-                
+
                     <div class="col-xs-9" id="auth_cedula__row">
                         <input autocomplete="new-password" class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
                     </div>
@@ -93,12 +93,12 @@
                         <div class="input-group">
                             <input autocomplete="new-password" class="form-control password" id="auth_user_password" name="password" type="password" placeholder="Contraseña" value="" onfocusout="v_c()" required>
                             <div class="input-group-addon" onclick="mostrarContrasena('auth_user_password')"><i class="fa fa-eye"></i></div>
-                        </div>    
+                        </div>
                         <span class="help-block"></span>
                     </div>
                 </div>
 
-                <!-- Confirmar contraseña --> 
+                <!-- Confirmar contraseña -->
                 <div class="form-group" id="auth_user_password_two__row">
                     <div class="col-xs-12">
                         <div class="input-group">
@@ -110,16 +110,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Radio input para el tipo de usuario -->
                 <div class="form-group"  style=" margin-bottom:6px">
                   <input hidden id="tipo_supervisor" name="tipo_supervisor">Indique tipo de usuario:<br>
                   <input type="radio"  name="tipo_usuario" value="True" onclick="setSupervisor()" required> Dependencia<br>
                   <input type="radio"  name="tipo_usuario" value="False" onclick="setPersonal()"> Personal Interno<br>
                 </div>
 
+                <!-- Dependencias -->
                 <div hidden id="dependenciadiv">
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <select class="form-control" type="select" id="dependencia" name="dependencia" placeholder="Dependencia" onclick="  getSeccionPersonal();">
+                            <select class="form-control dependencia" name="dependencia" placeholder="Dependencia" onchange="getSeccionPersonal(this);">
                                 <option value="" selected hidden disabled>Dependencia</option>
                                 {{for dependencia in dependencias:}}
                                     {{if dependencia.unidad_de_adscripcion <= 1:}}
@@ -130,14 +133,12 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Tipos de Rol -->
                 <div  hidden id="roldiv1">
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <select class="form-control" type="select" id="rol" name="rol" placeholder="Rol" onclick="  getUnidad();
-                                                                                                                                    getSeccion();
-                                                                                                                                    getEspacio();
-                                                                                                                                    showEspacio();">
+                            <select class="form-control" id="rol" name="rol" placeholder="Rol" onclick="getUnidad();">
                                 <option value="" selected hidden disabled>Rol</option>
                                 {{for rol in roles:}}
                                     <option value='{{=rol.id}}'>{{=rol.role.decode('utf-8').upper()}}</option>
@@ -145,17 +146,11 @@
                             </select>
                         </div>
                     </div>
-                 
-                    <div id="unidaddiv" class="form-group"></div>
-                 </div> 
-                    <div id="secciondiv" class="form-group"></div>
-                <div id="roldiv2">
-                    <!-- Para mostrar los espacios fisicos de la dependencia (seccion o laboratorio) seleccionada anteriormente -->
-                    <div id="espaciodiv" class="form-group"></div> 
-                    <!-- Para mostrar la lista de espacios fisicos seleccionados por el espacio fisico -->
-                    <div id="tagsdiv" class="form-group"></div> 
-                  </div>
-               
+                </div>
+
+                <div id="dropdownssinfin">
+                    
+                </div>
                 <div class="form-group text-center" id="submit_record__row">
 
                     <div class="col-sm-3">
@@ -169,7 +164,17 @@
                         <button class="btn btn-primary" type="submit" name="registrar" value="do_register">Registrar</button>
                     </div>
                 </div>
-                
+<!-- rolhidden contiene el id del rol seleccionado por el usuario -->
+<input type="hidden" id="rolhidden" name="rolhidden" value={{=idJefeSec}}>
+<!-- dephidden contiene el id de la dependencia seleccionada por el usuario -->
+<input type="hidden" id="dephidden" name="dephidden" value="">
+<!-- sechidden contiene el id de la seccion seleccionada por el usuario -->
+<input type="hidden" id="seccionhidden" name="seccionhidden" value="">
+<!-- esphidden contiene el id del espacio seleccionado por el usuario -->
+<input type="hidden" id="esphidden" name="esphidden" value="">
+<!--  contiene el rastro o secuencia de dependencias hasta el espacio fisico -->
+<input type="hidden" id="borrarhidden" name="borrarhidden" value="">
+
 
             </form>
             <!-- Fin form de registro -->
@@ -203,47 +208,56 @@
                 </div><!-- /.modal -->
 
 
-<!-- rolhidden contiene el id del rol seleccionado por el usuario -->
-<input type="hidden" id="rolhidden" name="rolhidden" value={{=idJefeSec}}>
-<!-- dephidden contiene el id de la dependencia seleccionada por el usuario -->
-<input type="hidden" id="dephidden" name="dephidden" value="">
-<!-- sechidden contiene el id de la seccion seleccionada por el usuario -->
-<input type="hidden" id="seccionhidden" name="seccionhidden" value="">
-<!-- esphidden contiene el id del espacio seleccionado por el usuario -->
-<input type="hidden" id="esphidden" name="esphidden" value="">
-<!--  contiene el rastro o secuencia de dependencias hasta el espacio fisico -->
-<input type="hidden" id="borrarhidden" name="borrarhidden" value="">
 
 <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 <script language="javascript">
 
-    function getSeccionPersonal(){
-        var opcioneslab = document.getElementById("dependencia");
-        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
+    function getSeccionPersonal(select){
+        var opcioneslab = $(select);
+        // Borro los dropdowns que estan abajo
+        $(select).closest('.form-group').nextAll().remove()
+        var labelegido = opcioneslab.val();
         if (labelegido != 1){
             var x = document.getElementById("dephidden");
             x.value = labelegido;
-            ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
+            $.ajax({
+                url: 'ajax_registro_seccion',
+                data: {
+                    rolhidden: $('[name=rolhidden]').val(),
+                    dephidden: $('[name=dephidden]').val()
+                },
+                method: 'POST',
+                success: function (data) {
+                    $('#dropdownssinfin').append(data)
+                    console.log(data)
+                }
+            })
         }
     }
-    
+
     function setSupervisor(){
+        $('#dropdownssinfin').html('')
         $("#secciondiv").hide();
         $("#roldiv1").show();
         $("#roldiv2").show();
+        $('[name=dephidden]').val('')
         $("#dependenciadiv").hide();
+        $('#rolhidden').val('{{=idJefeSec}}')
+
         document.getElementById("tipo_supervisor").value = true;
-        
     }
+
     function setPersonal(){
+        $('#dropdownssinfin').html('')
         $("#roldiv1").hide();
+        $('[name=dephidden]').val('')
         $("#roldiv2").hide();
         $("#dependenciadiv").show();
-         $("#secciondiv").show();
+        $("#secciondiv").show();
         $('#rolhidden').val('{{=idJefeSec}}')
         document.getElementById("tipo_supervisor").value = false;
     }
-    
+
     function limpiar_cedula(){
         jQuery('#auth_cedula__row').removeClass('has-error');
         jQuery('#cedula_error_group').removeClass('has-error');
@@ -292,7 +306,7 @@
             $('#password_error').addClass('has-error');
             $('#password_error').html('La contraseña no puede ser un espacio.');
             $('#password_error_group').show();
-            $('form').submit(false);;            
+            $('form').submit(false);;
         }
         else if (c2 != "" && c1 == c2){
             $('#password_error_group').hide();
@@ -305,103 +319,27 @@
     }
 
     function getUnidad(){
-        /* Esto le asigna a los inputs escondidos (rolhidden, en este caso) 
+        /* Esto le asigna a los inputs escondidos (rolhidden, en este caso)
         el valor que selecciono el usuario de los dropdowns de entre las opciones
         disponibles. */
         var opcionesrol = document.getElementById("rol");
         var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
         var x = document.getElementById("rolhidden");
+        $('#dropdownssinfin .form-group').html('')
+        document.getElementById("dephidden").value = ''
         x.value = rolelegida;
-
-        ajax('ajax_unidad_rol', ['rolhidden'], 'unidaddiv');
-    }
-
-    function getSeccion(){
-        var opcionesrol = document.getElementById("rol");
-        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-        var opcioneslab = document.getElementById("laboratorio");
-        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var x = document.getElementById("rolhidden");
-        x.value = rolelegida;
-        var x = document.getElementById("dephidden");
-        x.value = labelegido;
-        ajax('ajax_registro_seccion', ['rolhidden', 'dephidden'], 'secciondiv');
-    }
-
-    function getEspacio(){
-        var opcionesrol = document.getElementById("rol");
-        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-        var opcioneslab = document.getElementById("laboratorio");
-        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var opcionessec = document.getElementById("seccion");
-        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
-        // Se le asigna a los elementos escondidos los valores seleccionados por el usuario
-        // en los archivos ajax_*
-        var x = document.getElementById("rolhidden");
-        x.value = rolelegida;
-        var x = document.getElementById("dephidden");
-        x.value = labelegido;
-        var x = document.getElementById("seccionhidden");
-        x.value = seccionelegida;
-
-        ajax('ajax_registro_espacio', ['rolhidden', 
-                                       'dephidden', 
-                                       'seccionhidden'], 'espaciodiv');
-    }
-
-    function setEspacios(){
-        /* 
-        Esta funcion es llamada para actualizar la lista de tags (lista de espacios 
-        fisicos) de los cuales esta a cargo el tecnico que se registra en el sistema. 
-        */
-        var opcionesrol = document.getElementById("rol");
-        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-        var opcioneslab = document.getElementById("laboratorio");
-        var labelegido = opcioneslab.options[opcioneslab.selectedIndex].value;
-        var opcionessec = document.getElementById("seccion");
-        var seccionelegida = opcionessec.options[opcionessec.selectedIndex].value;
-        var opcionesespacios = document.getElementById("espacio");
-        var espacioelegido = opcionesespacios.options[opcionesespacios.selectedIndex].value;
-
-        var x = document.getElementById("rolhidden");
-        x.value = rolelegida;
-        var x = document.getElementById("dephidden");
-        x.value = labelegido;
-        var x = document.getElementById("seccionhidden");
-        x.value = seccionelegida;
-        var x = document.getElementById("esphidden");
-        x.value = espacioelegido;
-
-        ajax('ajax_seleccionar_espacio', ['rolhidden', 
-                                          'dephidden', 
-                                          'seccionhidden', 
-                                          'esphidden'], 'tagsdiv');   
-    }
-
-    function deleteEspacio(espacio_id){
-
-        var x = document.getElementById("borrarhidden");
-        x.value = espacio_id;
-
-        ajax('ajax_eliminar_espacio', ["borrarhidden"], 'tagsdiv');
-    }
-
-    function showEspacio(){
-        var opcionesrol = document.getElementById("rol");
-        var rolelegida = opcionesrol.options[opcionesrol.selectedIndex].value;
-
-        ajax('ajax_mostrar_espacios', ['rolhidden'], 'tagsdiv');
+        ajax('ajax_unidad_rol', ['rolhidden'], 'dropdownssinfin');
     }
 
     function mostrarContrasena(idContrasena) {
-    var idContrasena = idContrasena
-    var x = document.getElementById(idContrasena);
-    if (x.type === "password") {
-        x.type = "text";
-    } else {
-        x.type = "password";
+        var idContrasena = idContrasena
+        var x = document.getElementById(idContrasena);
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
     }
-}
 
 </script>
 {{end}}
