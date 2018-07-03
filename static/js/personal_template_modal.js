@@ -239,7 +239,7 @@ function validaCondicion(){
 
 function validaFechaIngreso(){
     const $this = $('[name="fecha_ingreso_add"]');
-    if ($this.val() === ''){
+    if ($this.val() === ""){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
@@ -252,8 +252,20 @@ function validaFechaIngreso(){
     }
 }
 
+// Funcion que se encarga de voltear la fecha y se muestre en el formato pedido
 function voltearFecha(fecha){
-    return fecha
+    if (fecha !== ""){
+        var dia = fecha.substr(0,2);
+        var mes = fecha.substr(3,2);
+        var anio = fecha.substr(6,10);
+    
+        var fecha = anio + "-" + mes + "-" + dia;
+        
+        return fecha;
+    }
+    else {
+        return "";
+    }
 }
 
 function validaFechaSalida(){
@@ -261,15 +273,8 @@ function validaFechaSalida(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
 
-    if ($this.val() === ''){
-        $this.attr("data-content", requiredFieldMessage);
-        $this.addClass('input-error');
-        $this.attr("data-valido", 'false');
-        $this.popover('show');
-        return false;
-    }
-    else if (!moment(fecha_inicio).isBefore(fecha_final) && fecha_inicio !== '--'){
-        $this.attr("data-content", "La fecha de egreso es antes que la de inicio");
+    if (fecha_inicio !== "" && fecha_final !== ""    && !moment(fecha_inicio).isBefore(fecha_final)){
+        $this.attr("data-content", "La fecha de egreso es antes que la de ingreso");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -287,14 +292,14 @@ function validaFechaIngresoUSB(){
     const fecha_ingreso_ulab = voltearFecha($('[name="fecha_ingreso_ulab_add"]').val());
     const fecha_ingreso_usb = voltearFecha($this.val());
 
-    if ($this.val() === ''){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
         return false
     }
-    else if (fecha_ingreso_ulab !== '--' && !(moment(fecha_ingreso_usb).isBefore(fecha_ingreso_ulab) || moment(fecha_ingreso_usb).isSame(fecha_ingreso_ulab))){
+    else if (fecha_ingreso_ulab !== "" && !(moment(fecha_ingreso_usb).isBefore(fecha_ingreso_ulab) || moment(fecha_ingreso_usb).isSame(fecha_ingreso_ulab))){
         $this.attr("data-content", "La fecha de ingreso al USB tiene que ser antes de la fecha de ingreso al ULAB");
         $this.addClass('input-error');
         $this.popover('show');
@@ -312,14 +317,14 @@ function validaFechaIngresoUlab(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_ingreso_ulab = voltearFecha($this.val());
 
-    if ($this.val() === ''){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
         return false;
     }
-    else if (fecha_inicio !== '--' && !(moment(fecha_ingreso_ulab).isBefore(fecha_inicio) || moment(fecha_ingreso_ulab).isSame(fecha_inicio))) {
+    else if (fecha_inicio !== "" && !(moment(fecha_ingreso_ulab).isBefore(fecha_inicio) || moment(fecha_ingreso_ulab).isSame(fecha_inicio))) {
         $this.attr("data-content", "La fecha de ingreso al ULAB tiene que ser antes que la fecha de inicio");
         $this.addClass('input-error');
         $this.popover('show');
@@ -337,14 +342,14 @@ function validaFechaIngresoAdminPubl(){
     const fecha_ingreso_usb = voltearFecha($('[name="fecha_ingreso_usb_add"]').val());
     const fecha_ingreso_admin_pub = voltearFecha($this.val());
 
-    if ($this.val() === ''){
+    if ($this.val() === "" && $('[name="categoria_add"]').val() !== 'Fijo'){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
         return false;
     }
-    else if (fecha_ingreso_usb !== "--" && !(moment(fecha_ingreso_admin_pub).isBefore(fecha_ingreso_usb) || moment(fecha_ingreso_admin_pub).isSame(fecha_ingreso_usb))){
+    else if (fecha_ingreso_usb !== "" && !(moment(fecha_ingreso_admin_pub).isBefore(fecha_ingreso_usb) || moment(fecha_ingreso_admin_pub).isSame(fecha_ingreso_usb))){
         $this.attr("data-content", "La fecha de ingreso a la administración pública debe ser antes de la fecha de ingreso a la USB");
         $this.addClass('input-error');
         $this.popover('show');
@@ -361,9 +366,8 @@ const validadoresSegundoPasoFijo = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngresoUSB,
-    validaFechaIngresoUlab,
-    validaFechaIngresoAdminPubl
+    validaFechaIngreso,
+    validaFechaSalida
 ]
 const validadoresSegundoPaso = [
     validaEstatus,
@@ -501,10 +505,11 @@ $(document).ready(function () {
 
     $('#sel2').change(function (){
         if ($("#sel2 option:selected").val()=="Fijo") {
-            $("#fsalida").hide();
+            $("#fingreso").hide();
+
         }
         else {
-            $("#fsalida").show();
+            $("#fingreso").show();
         };
     });
 
@@ -523,8 +528,9 @@ $(document).ready(function () {
             if ($('[name="categoria_add"]').val() === 'Fijo'){
                 // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
                 // base de datos 
-                $('[name="fecha_ingreso_add"]').attr('value', '');
-                $('[name="fecha_salida_add"]').attr('value', '');
+                $('[name="fecha_ingreso_usb_add"]').val('')
+                $('[name="fecha_ingreso_ulab_add"]').val('');
+                $('[name="fecha_ingreso_admin_publica_add"]').val('')
 
                 next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
             }
