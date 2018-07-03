@@ -193,9 +193,17 @@ db.define_table(
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
     
-    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
+    Field('ext_USB', 'string', label=T('Extension Telefonica USB')),
 
-    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
+    Field('ext_USB_1', 'string', default = "", label=T('Extension USB 1')),
+
+    Field('ext_USB_2', 'string', default = "", label=T('Extension USB 2')),
+
+    Field('ext_USB_3', 'string', default = "", label=T('Extension USB 3')),
+
+    Field('ext_USB_4', 'string', default = "", label=T('Extension USB 4')),
+
+    Field('ext_interna', 'string', label=T('Extension Interna')),
     
     Field('dependencia', 'reference dependencias',
         requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
