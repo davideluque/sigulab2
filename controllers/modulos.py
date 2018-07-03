@@ -218,7 +218,7 @@ def register():
                            f_usuario = user.id,
                            f_dependencia = depid,
                            f_es_supervisor = es_supervisor,
-                           f_comentario='Recuerde validar su ficha')
+                           f_comentario='Agregue sus datos personales')
 
 
     # Mapea el usuario al espacio fisico que tiene a cargo

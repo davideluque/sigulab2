@@ -100,7 +100,7 @@ button.btn.botonForm{
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
-    background: #0300d7;
+    background: #337ab7;
     border: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -181,7 +181,7 @@ h3 {
 
 .boton-sigulab, .buttons-print{
     border-radius: 50%;
-    background-color:#0300d7;
+    background-color:#337ab7;
     color:#fff;
 }
 
