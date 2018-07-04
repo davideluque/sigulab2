@@ -572,7 +572,7 @@ $(document).ready(function () {
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
         var enviar = validadoresCorrectos(validadoresTercerPaso);
-        
+        console.log(enviar)
         if (enviar){
             $(this).attr("type", "submit");
         }

@@ -25,7 +25,7 @@
           <div class="row addRow">
             <div class="col-md-12 form-box">
                 <form id="formularioCarga" class="registration-form" method="post"
-                  action="{{=URL('personal', 'add_form')}}">
+                  action="{{=URL('personal', 'add_form')}}" novalidate>
 
                     <!-- Primer Paso -->
                     <fieldset id="p1" class="formField">
@@ -384,7 +384,7 @@
                       
                       <div class="botones-form">
                           <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                        <button type="submit" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-plus-circle" title="Anterior"/></button>
+                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-plus-circle" title="Anterior"/></button>
                       </div>
                       </div>
                     </fieldset>
