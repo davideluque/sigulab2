@@ -132,6 +132,13 @@
                     </div>
                 </div>
 
+                <!-- Indica si el personal es de tipo tecnico-->
+                <div id="radio_tecnico" class="form-group "  style=" margin-bottom:6px" hidden>
+                    <input hidden id="tipo_personal" name="tipo_personal">Indique si el usuario es un técnico:<br>
+                    <input type="radio"  name="tipo_personal" value="True" onclick="setTenico(1)" required > Si
+                    <input type="radio"  name="tipo_personal" value="False" onclick="setPersonal(0)" checked> No<br>
+                  </div>
+
                 <!-- Tipos de Rol -->
                 <div  hidden id="roldiv1">
                     <div class="form-group">
@@ -240,6 +247,7 @@
         $("#roldiv2").show();
         $('[name=dephidden]').val('')
         $("#dependenciadiv").hide();
+        $("#radio_tecnico").hide();
         $('#rolhidden').val('{{=idJefeSec}}')
 
         document.getElementById("tipo_supervisor").value = true;
@@ -253,8 +261,20 @@
         $("#dependenciadiv").show();
         $("#secciondiv").show();
         $('#rolhidden').val('{{=idJefeSec}}')
+        $("#radio_tecnico").show();
         document.getElementById("tipo_supervisor").value = false;
     }
+
+    function setTecnico(val){
+        if (val == 1 ){
+            document.getElementById("tipo_personal").value = true;
+        }
+        else{
+            document.getElementById("tipo_personal").value = false;
+        }
+       
+    }
+
 
     function limpiar_cedula(){
         jQuery('#auth_cedula__row').removeClass('has-error');
