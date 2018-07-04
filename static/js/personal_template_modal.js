@@ -486,6 +486,14 @@ function validadoresCorrectos(validatorsList) {
 }
 
 $(document).ready(function () {
+    $('.fselect').fSelect({
+        placeholder: 'Escoja sus ubicaciones',
+        numDisplayed: 3,
+        overflowText: '{n} ubicaciones',
+        searchText: 'Buscar',
+        showSearch: true
+    })
+
     new Cleave('[name="telefono_add"]', {
         // delimiter: '-',
         delimiters: ['(', ')', '-'],
