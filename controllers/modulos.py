@@ -192,12 +192,18 @@ def register():
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
     es_supervisor = request.post_vars.tipo_supervisor
+    es_tecnico = request.post_vars.tipo_personal
 
 
     if request.post_vars.rol and es_supervisor :
         rolid = request.post_vars.rol
         roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
         depid = request.post_vars.dephidden
+    elif (es_tecnico):
+        rolid = db(db.auth_group.role == "TÉCNICO").select(db.auth_group.ALL)[0].id
+        roltype = "TÉCNICO"
+        depid= request.post_vars.dephidden
+        
     else:
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
