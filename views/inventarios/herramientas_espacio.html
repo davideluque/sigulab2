@@ -122,46 +122,49 @@
                 
                 <!-- Primer paso-->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                  <div class="form-bottom" data-step="1" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
-                      <span class="step">1</span>
-                      <span class="step activePass">2</span>
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
                       <span class="step">3</span>
                       <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Características del Material</h4>                
+                      <h4 class="titulosForm">Características de la Herramienta</h4>                
                       <label>Campos marcados con * son obligatorios.</label>
 
                       <div class="form-group" hidden>
-                        <label>Seleccione la clasificación del Material*</label>
+                        <label>Seleccione la clasificación de la Herramienta*</label>
                         <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
                           <option value="">Seleccione una opción</option>
-                          <option value="Material de Laboratorio" selected >Material de Laboratorio</option>
+                          <option value="Material de Laboratorio" selected >Herramienta</option>
                           <option value="Herramienta">Herramienta</option>
                         </select>
                         <div class="field-error"> <p id="error-clasificacion"></p></div>
                       </div>
 
                         <div class="form-group" tag="Formato:">
+                            <label>Nombre de la herramienta*</label>
                             <input type="text" class="form-control" id="nombre_her" name="nombre_her" title="Nombre de la herramienta" placeholder="Nombre de la herramienta*" required>
                             <div class="field-error"> <p id="err_nombre_her"> </p> </div>
                         </div>
 
                         <div class="form-group">
                             <label>Número de Bien Nacional</label>
-                            <input type="text" class="form-control" id="num_her" name="num_her" placeholder="Número de Bien Nacional" title="Formato: ###### (6 dígitos)"   required>
+                            <input type="text" class="form-control" id="num_her" name="num_her" placeholder="Número de Bien Nacional" title="Formato: ###### (6 dígitos)">
                             <font color="red"><div id="err_num_her" hidden></div></font>
                         </div>
 
                         <div class="form-group">
+                            <label>Marca</label>
                             <input type="text" class="form-control"  id="marca_her" name="marca_her" placeholder="Marca">
                             <div class="field-error"> <p id="error-marca_her"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Modelo/Código</label>
                             <input type="text" class="form-control" id="modelo_her" name="modelo_her" value="" placeholder="Modelo/Código">
                             <div class="field-error"> <p id="error_modelo_her"> </p> </div>
                         </div>
@@ -176,46 +179,20 @@
 
                 <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <div class="form-bottom" data-step="2" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
                         <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del material</h4>                
+                        <h4 class="titulosForm">Características de la herramienta</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
   
                         
-                        <div class="form-group">
-                                <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración">
-                                  <!-- Insertar un for-->
-                                  <option type="text" value="">¿Requiere calibración?*</option>
-                                  <option value="Si">Si</option>
-                                  <option value="No">No</option>                                
-                                </select>
-                                <div class="field-error"> <p id="err_aforado"> </p> </div>
-                        </div>  
-
-                        <div class="form-group" id="grupo-capacidad">
-                                <label>Capacidad</label>
-                                <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)">
-                                <font color="red"><div id="err_capacidad" hidden></div></font>
-                        </div>
-
-                        <div class="form-group" id="grupo-cap">
-                                <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
-                                  <option value="">Seleccione una unidad</option>
-                                  {{ for med in unidad_cap:}}
-                                  <option value="{{=med}}">{{=med}}</option>
-                                  {{pass}}
-                                </select>
-                                <div class="field-error"> <p id="error-unidad" > </p> </div>
-                        </div>
-
                         <div class="form-group" id="grupo-presentacion">
                                 <label>Presentación</label>
                                 <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" >
@@ -228,17 +205,19 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="numpiezas" name="numpiezas" placeholder="Número de piezas*" >
-                            <font color="red"><div id="err_numpiezas" hidden></div></font>
+                            <label>Número de piezas*</label>
+                            <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*">
+                            <div class="field-error"> <p id="error-numpiezas_her"> </p> </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="contenido" name="contenido" placeholder="Contenid*" >
-                            <font color="red"><div id="err_contenido" hidden></div></font>
+                            <label>Contenido</label>
+                            <input type="text" class="form-control"  id="contenido_her" name="contenido_her" placeholder="Contenido">
+                            <div class="field-error"> <p id="error-contenido_her"> </p> </div>
                         </div>
 
-
                         <div class="form-group">
+                            <label>Descripción*</label>
                             <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción*" required>
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
