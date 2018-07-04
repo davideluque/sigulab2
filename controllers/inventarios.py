@@ -2437,14 +2437,14 @@ def herramientas():
                 # Evaluando la correctitud de los parametros del GET 
                 if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                         __is_bool(request.vars.es_espacio)):
-                    redirect(URL('material_lab'))
+                    redirect(URL('herramientas'))
 
                 # Determinando si el usuario tiene privilegios suficientes para
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user, 
                                     int(request.vars.dependencia), 
                                         request.vars.es_espacio):
-                    redirect(URL('material_lab'))
+                    redirect(URL('herramientas'))
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -2540,12 +2540,12 @@ def herramientas():
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('bienes_muebles'))
+                redirect(URL('herramientas'))
 
             # Evaluando la correctitud de los parametros del GET 
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                redirect(URL('bienes_muebles'))
+                redirect(URL('herramientas'))
 
 
                 espacio_id = request.vars.dependencia
@@ -2599,13 +2599,13 @@ def herramientas():
         elif request.vars.es_espacio == 'False':
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                    redirect(URL('material_lab'))
+                    redirect(URL('herramientas'))
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('material_lab'))
+                redirect(URL('herramientas'))
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
@@ -2638,14 +2638,14 @@ def herramientas():
             # Evaluando la correctitud de los parametros del GET 
             if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
                     __is_bool(request.vars.es_espacio)):
-                redirect(URL('material_lab'))
+                redirect(URL('herramientas'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('material_lab'))
+                redirect(URL('herramientas'))
 
             if request.vars.es_espacio == "True":
         

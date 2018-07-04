@@ -46,7 +46,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <span class="breadcrumb-item active">Materiales de laboratorio</span>
+  <span class="breadcrumb-item active">Herramientas</span>
   </div>
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
@@ -68,7 +68,7 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<a class="boton" href="{{=URL('herramientas', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -95,11 +95,11 @@
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('material_lab')}}">
+	    		<a class="boton" href="{{=URL('herramientas')}}">
 					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
 	    		</a>
 	    		{{else:}}
-    			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+    			<a class="boton" href="{{=URL('herramientas', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
 						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
 				</a>
 	    		{{pass}}
