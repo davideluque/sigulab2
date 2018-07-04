@@ -128,7 +128,6 @@
                       <span class="step activePass">1</span>
                       <span class="step">2</span>
                       <span class="step">3</span>
-                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -185,7 +184,6 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
-                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -195,7 +193,7 @@
                         
                         <div class="form-group" id="grupo-presentacion">
                                 <label>Presentación</label>
-                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" >
+                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" required >
                                   <option value="">Seleccione una presentación*</option>
                                   {{ for med in presentacion:}}
                                   <option value="{{=med}}">{{=med}}</option>
@@ -204,9 +202,10 @@
                                 <div class="field-error"> <p id="error-unidad" > </p> </div>
                         </div>
 
+                        <!-- verificar que solo si selecciona conjunto se muestre num de piezas-->
                         <div class="form-group">
                             <label>Número de piezas*</label>
-                            <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*">
+                            <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*" required >
                             <div class="field-error"> <p id="error-numpiezas_her"> </p> </div>
                         </div>
 
@@ -217,8 +216,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Descripción*</label>
-                            <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción*" required>
+                            <label>Descripción</label>
+                            <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción" >
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
                         
@@ -240,23 +239,6 @@
                             <div class="field-error"> <p id="error-material"> </p> </div>
                         </div>
 
-                        <div class="form-group" id="grupo-material2">
-                            <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario"
-                            onchange="agregar_otro('material_sec', 'material_sec', 'otro_material2')">
-                              <!-- Insertar un for-->
-                              <option type="text" value="">Seleccione un material secundario</option>
-                              {{ for material in material_pred: }}
-                              <option value="{{=material}}">{{=material}}</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-material"> </p> </div>
-                      </div>
-
-                      <div class="form-group">
-                          <input type="hidden" class="form-control"  id="otro_material2" placeholder="Material*">
-                          <div class="field-error"> <p id="error-material"> </p> </div>
-                      </div>
-
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -272,18 +254,18 @@
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step">3</span>
-                        <span class="step activePass">4</span>
+                        <span class="step activePass">3</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características de la herramienta</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
-                        <div class="form-group" id="grupo-unidad">
-                          <label>Dimensiones</label>
-                          <select class="form-control" value="" type="select" id="unidad_her" name="unidad_her" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                            <option value="">Seleccione una unidad</option>
+                        <label>Dimensiones</label>
+
+                        <div class="form-group">
+                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                            <option value="">Selecione una unidad</option>
                             {{ for med in unidad_med:}}
                             <option value="{{=med}}">{{=med}}</option>
                             {{pass}}
@@ -291,24 +273,28 @@
                           <div class="field-error"> <p id="error-unidad" > </p> </div>
                         </div>
 
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
+                        <div class="form-group" id="grupo-ancho" hidden>
+                            <label>Ancho</label>
+                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                           <font color="red"><div id="err_ancho" hidden></div></font>
                         </div>
 
 
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" id="largo_her" name="largo_her" title="Formato ##.##" placeholder="Largo" >
+                        <div class="form-group" id="grupo-largo" hidden>
+                          <label>Largo</label>
+                          <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                           <font color="red"><div id="err_largo" hidden></div></font>
                         </div>
 
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" id="alto_her" name="alto_her" title="Formato ##.##" placeholder="Altura" >
+                        <div class="form-group" id="grupo-altura" hidden>
+                          <label>Altura</label>
+                          <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                           <font color="red"><div id="err_alto" hidden></div></font>
                         </div>
 
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" id="diametro_her" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
+                        <div class="form-group" id="grupo-diametro" hidden>
+                          <label>Diámetro</label>
+                          <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                           <font color="red"><div id="err_diametro" hidden></div></font>
                         </div>
 
@@ -318,6 +304,11 @@
                                 <font color="red"><div id="err_ubicacion_int" hidden></div></font>
                         </div>
 
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Observaciones">
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                        </div>
 
                         </div>
                       </div>
@@ -414,20 +405,29 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("calibracion_mat").removeAttribute("required", "");
     }
   }
-  // Mostrar unidades
-  function display_units(value){
+
+    // Mostrar unidades
+    function display_units(value){
     if ( value == '' ){
-      document.getElementById("unidad_mat").type = 'hidden';
-      document.getElementById("ancho_mat").type = 'hidden';
-      document.getElementById("largo_mat").type = 'hidden';
-      document.getElementById("alto_mat").type = 'hidden';
-      document.getElementById("diametro_mat").type = 'hidden';
+      document.getElementById("unidad").type = 'hidden';
+      document.getElementById("ancho").type = 'hidden';
+      document.getElementById("largo").type = 'hidden';
+      document.getElementById("alto").type = 'hidden';
+      document.getElementById("diametro").type = 'hidden';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
     }else{
-      document.getElementById("unidad_mat").type = 'text';
-      document.getElementById("ancho_mat").type = 'text';
-      document.getElementById("largo_mat").type = 'text';
-      document.getElementById("alto_mat").type = 'text';
-      document.getElementById("diametro_mat").type = 'text';
+      document.getElementById("unidad").type = 'text';
+      document.getElementById("ancho").type = 'text';
+      document.getElementById("largo").type = 'text';
+      document.getElementById("alto").type = 'text';
+      document.getElementById("diametro").type = 'text';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
     }
   }
   // Valida los campos de la forma en el modal "addbm"
