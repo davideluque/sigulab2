@@ -9,7 +9,7 @@ db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
-    Field('bm_placa','string', default="00000", label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
+    Field('bm_placa','string', default="00000", label=T('Número de Placa del Bien'),requires = [IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$')),IS_EMPTY_OR(IS_NOT_IN_DB(db,'bm_placa'))]),
     #No son obligatorios para mobiliario
     Field('bm_marca','string',label=T('Marca')),
     Field('bm_modelo','string',label=T('Modelo')),
@@ -235,7 +235,7 @@ db.modificacion_sin_bn.msb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, 
 db.define_table(
     'herramienta',
     Field('hr_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
-    Field('hr_num','string',unique=True,requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
+    Field('hr_num','string',requires=[IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), IS_EMPTY_OR(IS_NOT_IN_DB(db,'hr_num'))], label = T('Número Bien Nacional')),
     #
     Field('hr_marca','string',label=T('Marca')),
     Field('hr_modelo','string',label=T('Modelo')),
