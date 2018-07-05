@@ -1156,6 +1156,8 @@ def inventarios_desechos():
     dep_padre_id = ""
     dep_padre_nombre = ""
     envases = []
+    envases_totales = []
+    inventario_total = []
     # Este valor indica si se muestra el campo "Dependencia" en la tabla del inventario 
     # si se esta visitando el menu principal del inventario, o si se está visitando una sección
     mostrar_campo_dependencia = False 
@@ -1210,7 +1212,6 @@ def inventarios_desechos():
                 redirect(URL('inventarios_desechos'))
 
             if request.vars.es_espacio == "True":
-        
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1237,6 +1238,7 @@ def inventarios_desechos():
                     db.t_inventario_desechos.composicion, 
                     db.t_inventario_desechos.cantidad.sum(),
                     db.t_inventario_desechos.responsable,
+                    db.t_inventario_desechos.envase,
                     db.t_inventario_desechos.unidad_medida,
                     db.t_inventario_desechos.peligrosidad,
                     db.t_inventario_desechos.tratamiento,
@@ -1247,8 +1249,15 @@ def inventarios_desechos():
                      db.t_inventario_desechos.responsable |
                      db.t_inventario_desechos.unidad_medida |
                      db.t_inventario_desechos.peligrosidad |
-                     db.t_inventario_desechos.tratamiento 
+                     db.t_inventario_desechos.tratamiento |
+                     db.t_inventario_desechos.envase
                 ))
+
+                inventario_total = list(db(
+                    (db.espacios_fisicos.id == espacio_id) &
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select())
 
                 ####################
                 # A T E N C I Ó N  #
@@ -1258,18 +1267,33 @@ def inventarios_desechos():
                 envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
                 #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                # Si se esta agregando un nuevo desecho, se registra en la DB
-                if request.vars.envase:
+                ####################
+                # A T E N C I Ó N  #
+                ####################
+                # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
+                # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
+                envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
+                #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
+                
+                # Se esta editando el detalle de un desecho
+                if request.vars.view and request.vars.envase:
+                    envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
+                    
+                    __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                    
+                else:
+                    # Si se esta agregando un nuevo desecho, se registra en la DB
+                    if request.vars.envase:
 
-                    #Se busca la información del envase en la DB
-                    envase = list(db(db.t_envases.id == request.vars.envase).select())
+                        #Se busca la información del envase en la DB
+                        envase = list(db(db.t_envases.id == request.vars.envase).select())
 
-                    __agregar_desecho(envase[0],
-                                        request.vars.peligrosidad,
-                                        request.vars.tratamiento,
-                                        request.vars.cantidad,
-                                        request.vars.concentracion
-                    )
+                        __agregar_desecho(envase[0],
+                                            request.vars.peligrosidad,
+                                            request.vars.tratamiento,
+                                            request.vars.cantidad,
+                                            request.vars.concentracion
+                        )
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -1398,67 +1422,70 @@ def inventarios_desechos():
                 redirect(URL('inventarios'))
 
             if request.vars.es_espacio == "True":
-        
-                # Se muestra el inventario del espacio
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+                # Si se está editando un desecho, se actualiza la informacion
+                if request.vars.view:
+                    pass
+                else:
+                    # Se muestra el inventario del espacio
+                    espacio_id = request.vars.dependencia
+                    espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                    dep_nombre = espacio.codigo
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
-                                    ).select().first().dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
+                    # Guardando el ID y nombre de la dependencia padre para el link 
+                    # de navegacion de retorno
+                    dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                                        ).select().first().dependencia
+                    dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                        ).select().first().nombre
 
-                espacio_visitado = True
+                    espacio_visitado = True
 
-                # Se muestra la lista de sustancias que tiene en inventario
+                    # Se muestra la lista de sustancias que tiene en inventario
 
-                inventario = list(db(
-                    (db.espacios_fisicos.id == espacio_id) &
-                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
-                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
-                    ).select(
-                        db.t_inventario_desechos.id,                    
-                        db.t_inventario_desechos.categoria,
-                        db.t_inventario_desechos.composicion, 
-                        db.t_inventario_desechos.cantidad.sum(),
-                        db.t_inventario_desechos.responsable,
-                        db.t_inventario_desechos.unidad_medida,
-                    db.t_inventario_desechos.espacio_fisico,
-                        db.t_inventario_desechos.peligrosidad,
-                        db.t_inventario_desechos.tratamiento,
-                        groupby = 
-                        db.t_inventario_desechos.id | 
-                        db.t_inventario_desechos.categoria |                 
-                        db.t_inventario_desechos.composicion | 
-                        db.t_inventario_desechos.responsable |
-                        db.t_inventario_desechos.espacio_fisico |
-                        db.t_inventario_desechos.unidad_medida |
-                        db.t_inventario_desechos.peligrosidad |
-                        db.t_inventario_desechos.tratamiento 
-                ))
+                    inventario = list(db(
+                        (db.espacios_fisicos.id == espacio_id) &
+                        (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                        (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                        ).select(
+                            db.t_inventario_desechos.id,                    
+                            db.t_inventario_desechos.categoria,
+                            db.t_inventario_desechos.composicion, 
+                            db.t_inventario_desechos.cantidad.sum(),
+                            db.t_inventario_desechos.responsable,
+                            db.t_inventario_desechos.unidad_medida,
+                        db.t_inventario_desechos.espacio_fisico,
+                            db.t_inventario_desechos.peligrosidad,
+                            db.t_inventario_desechos.tratamiento,
+                            groupby = 
+                            db.t_inventario_desechos.id | 
+                            db.t_inventario_desechos.categoria |                 
+                            db.t_inventario_desechos.composicion | 
+                            db.t_inventario_desechos.responsable |
+                            db.t_inventario_desechos.espacio_fisico |
+                            db.t_inventario_desechos.unidad_medida |
+                            db.t_inventario_desechos.peligrosidad |
+                            db.t_inventario_desechos.tratamiento 
+                    ))
 
-                envases_en_bitacora = list(db(db.t_Bitacora_desechos).select(db.t_Bitacora_desechos.envase))
-                envases = list(db(
-                    (db.t_envases.espacio_fisico == espacio_id) 
-                ).select())
+                    envases_en_bitacora = list(db(db.t_Bitacora_desechos).select(db.t_Bitacora_desechos.envase))
+                    envases = list(db(
+                        (db.t_envases.espacio_fisico == espacio_id) 
+                    ).select())
 
-                
+                    
 
-                # Si se esta agregando un nuevo desecho, se registra en la DB
-                if request.vars.envase:
+                    # Si se esta agregando un nuevo desecho, se registra en la DB
+                    if request.vars.envase:
 
-                    #Se busca la información del envase en la DB
-                    envase = list(db(db.t_envases.id == request.vars.envase).select())
+                        #Se busca la información del envase en la DB
+                        envase = list(db(db.t_envases.id == request.vars.envase).select())
 
-                    __agregar_desecho(envase[0],
-                                        request.vars.peligrosidad,
-                                        request.vars.tratamiento,
-                                        request.vars.cantidad,
-                                        request.vars.concentracion
-                    )
+                        __agregar_desecho(envase[0],
+                                            request.vars.peligrosidad,
+                                            request.vars.tratamiento,
+                                            request.vars.cantidad,
+                                            request.vars.concentracion
+                        )
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -1597,6 +1624,8 @@ def inventarios_desechos():
                 inventario=inventario,
                 desechos=desechos,
                 envases=envases,
+                envases_totales=envases_totales,
+                inventario_total=inventario_total,
                 unidades_de_medida=unidades_de_medida,
                 retroceder=retroceder,
                 mostrar_campo_dependencia = mostrar_campo_dependencia)
@@ -1606,6 +1635,39 @@ def inventarios_desechos():
 #          BITÁCORA DESECHOS           #
 # FUNCIONES AUXILIARES Y CONTROLADORES #
 ########################################
+def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
+    # Verifica que no existe en el inventario una entrada repetida 
+    # se considera que una entrada es una única cuando una determinada composición
+    # con una determinada unidad de medida ya se encuentra en un determinado especifico
+    busqueda = 0
+
+    busqueda = len(list(db(
+        (db.t_inventario_desechos.composicion == envase.composicion) &
+        (db.t_inventario_desechos.espacio_fisico == envase.espacio_fisico) &
+        (db.t_inventario_desechos.unidad_medida == envase.unidad_medida) &
+        (db.t_inventario_desechos.envase != envase.id) 
+    ).select()))
+
+    if busqueda == 0:
+        row = db(db.t_inventario_desechos.id == int(id)).select().first()
+
+        row.update_record(
+            categoria = envase.categoria,
+            composicion = envase.composicion,
+            envase = envase.id,
+            concentracion = concentracion,
+            espacio_fisico = envase.espacio_fisico,
+            seccion = envase.espacio_fisico.dependencia,
+            tratamiento = tratamiento,
+            peligrosidad = peligrosidad
+        )
+
+        response.flash = T("Desecho actualizado correctamente.")
+
+    else:
+        response.flash = T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
+
+
 
 # Agrega un nuevo desecho peligroso al inventario de un espacio físico
 def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion):
