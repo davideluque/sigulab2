@@ -387,12 +387,12 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
 # Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
-def __agregar_herramienta(nombre, num, marca, modelo,serial, presentacion, numpiezas,
+def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, numpiezas,
                 contenido, descripcion, material, unidad, ancho, largo, alto, diametro, 
                 ubicacion, observacion, espacio,unidad_adscripcion, dependencia, user):
 
     # Si ya existe el BM en el inventario
-    if (db( (db.herramienta.hr_nombre == nombre) & (db.herramienta.hr_espacio_fisico==espacio) ).select()):
+    if (db( (db.herramienta.hr_nombre == nombre) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
@@ -2525,8 +2525,8 @@ def herramientas():
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
                         request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
+                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int,
+                        request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -2623,8 +2623,8 @@ def herramientas():
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
                         request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
+                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
+                        request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -2721,8 +2721,8 @@ def herramientas():
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
                         request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
-                         request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
+                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
+                        request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
