@@ -193,7 +193,7 @@
                         
                         <div class="form-group" id="grupo-presentacion">
                                 <label>Presentación</label>
-                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" required >
+                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" onchange="display_piezas(this.value)" required >
                                   <option value="">Seleccione una presentación*</option>
                                   {{ for med in presentacion:}}
                                   <option value="{{=med}}">{{=med}}</option>
@@ -202,8 +202,7 @@
                                 <div class="field-error"> <p id="error-unidad" > </p> </div>
                         </div>
 
-                        <!-- verificar que solo si selecciona conjunto se muestre num de piezas-->
-                        <div class="form-group">
+                        <div class="form-group" id="grupo-piezas" hidden>
                             <label>Número de piezas*</label>
                             <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*" required >
                             <div class="field-error"> <p id="error-numpiezas_her"> </p> </div>
@@ -362,8 +361,8 @@ del concepto y tipo de ingreso o egreso -->
 
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
-    var selecion = document.getElementById("clasificacion");
-    if (selecion.value == "Material de Laboratorio"){
+    var selecion = document.getElementById("presentacion");
+    if (selecion.value == "Unidad"){
       document.getElementById("unidades").type = 'hidden';
       document.getElementById("unidades").removeAttribute("required", "");
       document.getElementById("total_mat").type = 'hidden';
@@ -403,6 +402,16 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("material_mat").removeAttribute("required", "");
       document.getElementById("calibracion_mat").style.display = 'none';
       document.getElementById("calibracion_mat").removeAttribute("required", "");
+    }
+  }
+
+  // Mostrar fecha de calibracion
+  function display_piezas(value){
+    if ( value == "Conjunto" ){
+      document.getElementById("grupo-piezas").style.display = 'block';
+      document.getElementById("grupo-piezas").setAttribute("required", "");
+    }else{
+      document.getElementById("grupo-piezas").style.display = 'none';
     }
   }
 
