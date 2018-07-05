@@ -68,7 +68,7 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 		</div>
-		<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+		<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 			<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 		</a>
 		<div class="col-xs-8">
@@ -95,12 +95,12 @@
 		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 		en el controlador-->
 		{{if dep_padre_id == direccion_id:}}
-			<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab')}}">
-				<i class="fas fa-arrow-left" style="color: black"></i>	
+			<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab')}}">
+				<i class="fas fa-arrow-left"></i>	
 			</a>
 		{{else:}}
-			<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-				<i class="fas fa-arrow-left" style="color: black"></i>	
+			<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+				<i class="fas fa-arrow-left" ></i>	
 			</a>
 		{{pass}}
 		<div class="col-xs-8">
