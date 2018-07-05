@@ -2476,7 +2476,7 @@ def herramientas():
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
-                presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+                presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
@@ -2578,7 +2578,7 @@ def herramientas():
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
-                presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+                presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
@@ -2680,7 +2680,7 @@ def herramientas():
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
                 unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
-                presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+                presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
