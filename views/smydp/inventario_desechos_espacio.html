@@ -201,7 +201,6 @@
                         {{for desecho in inventario_total:}} 
                             {{if desecho['t_inventario_desechos']['id'] == int(request.vars.view):}}
                                 {{desecho_seleccionado = desecho}} 
-                                {{break}}
                             {{pass}} 
                         {{pass}}
 

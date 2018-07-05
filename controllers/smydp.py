@@ -1511,25 +1511,22 @@ def inventarios_desechos():
                     (db.espacios_fisicos.dependencia == db.dependencias.id) & 
                     (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
                     ).select(
-                        db.t_inventario_desechos.id,                    
-                        db.t_inventario_desechos.categoria,
-                        db.t_inventario_desechos.composicion, 
-                        db.t_inventario_desechos.cantidad.sum(),
-                        db.t_inventario_desechos.espacio_fisico, 
-                        db.t_inventario_desechos.responsable,
-                        db.t_inventario_desechos.unidad_medida,
-                        db.t_inventario_desechos.peligrosidad,
-                        db.t_inventario_desechos.tratamiento,
-                        groupby = 
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.id,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
+                     db.t_inventario_desechos.espacio_fisico |
                         db.t_inventario_desechos.id | 
-                        db.t_inventario_desechos.categoria |                 
-                        db.t_inventario_desechos.composicion | 
-                        db.t_inventario_desechos.responsable |
-                        db.t_inventario_desechos.espacio_fisico | 
-                        db.t_inventario_desechos.unidad_medida |
-                        db.t_inventario_desechos.peligrosidad |
-                        db.t_inventario_desechos.tratamiento 
+                    db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
                     ))
+
 
                     es_espacio = True
                 
@@ -1539,24 +1536,20 @@ def inventarios_desechos():
                         (db.espacios_fisicos.dependencia == db.dependencias.id) & 
                         (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)
                     ).select(
-                        db.t_inventario_desechos.id,                    
-                        db.t_inventario_desechos.categoria,
-                        db.t_inventario_desechos.composicion, 
-                        db.t_inventario_desechos.cantidad.sum(),
-                        db.t_inventario_desechos.responsable,
-                        db.t_inventario_desechos.unidad_medida,
-                        db.t_inventario_desechos.espacio_fisico,
-                        db.t_inventario_desechos.peligrosidad,
-                        db.t_inventario_desechos.tratamiento,
-                        groupby = 
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.id,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
                         db.t_inventario_desechos.id | 
-                        db.t_inventario_desechos.categoria |                 
-                        db.t_inventario_desechos.composicion | 
-                        db.t_inventario_desechos.responsable |
-                        db.t_inventario_desechos.unidad_medida |
-                        db.t_inventario_desechos.espacio_fisico |
-                        db.t_inventario_desechos.peligrosidad |
-                        db.t_inventario_desechos.tratamiento 
+                     db.t_inventario_desechos.espacio_fisico |
+                     db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
                     ))
 
                     mostrar_campo_dependencia = True
