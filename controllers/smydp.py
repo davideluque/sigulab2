@@ -1405,7 +1405,7 @@ def inventarios_desechos():
 
             mostrar_campo_dependencia = True
 
-    elif auth.has_membership("TÉCNICO"):
+    elif auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE LABORATORIO") or auth.has_membership("JEFE DE SECCIÓN"):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
 
@@ -1573,6 +1573,7 @@ def inventarios_desechos():
 
 
         else:
+            print "Entro aca"
             # Dependencia a la que pertenece el usuario o que tiene a cargo
             dep_id = user.f_dependencia
             dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
@@ -1586,31 +1587,29 @@ def inventarios_desechos():
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
+
             inventario = list(db(
                 (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
                 (db.espacios_fisicos.dependencia == db.dependencias.id)
                 ).select(
-                    db.t_inventario_desechos.id,                    
-                    db.t_inventario_desechos.categoria,
-                    db.t_inventario_desechos.composicion, 
-                    db.t_inventario_desechos.cantidad.sum(),
-                    db.t_inventario_desechos.responsable,
-                    db.t_inventario_desechos.unidad_medida,
-                        db.t_inventario_desechos.espacio_fisico,
-                    db.t_inventario_desechos.peligrosidad,
-                    db.t_inventario_desechos.tratamiento,
-                    groupby = 
+                db.t_inventario_desechos.categoria,
+                db.t_inventario_desechos.espacio_fisico,
+                db.t_inventario_desechos.id,
+                db.t_inventario_desechos.seccion,
+                db.t_inventario_desechos.cantidad.sum(),
+                db.t_inventario_desechos.unidad_medida,
+                db.t_inventario_desechos.responsable,
+                groupby = 
+                    db.t_inventario_desechos.categoria |
+                    db.t_inventario_desechos.espacio_fisico |
                     db.t_inventario_desechos.id | 
-                    db.t_inventario_desechos.categoria |                 
-                    db.t_inventario_desechos.composicion | 
-                    db.t_inventario_desechos.responsable |
-                    db.t_inventario_desechos.unidad_medida |
-                        db.t_inventario_desechos.espacio_fisico |
-                    db.t_inventario_desechos.peligrosidad |
-                    db.t_inventario_desechos.tratamiento 
+                    db.t_inventario_desechos.seccion |
+                db.t_inventario_desechos.unidad_medida | 
+                db.t_inventario_desechos.responsable
                 ))
 
             mostrar_campo_dependencia = True
+            espacio_visitado = False
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
