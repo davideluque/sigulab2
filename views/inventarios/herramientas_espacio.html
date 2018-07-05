@@ -51,7 +51,7 @@
         <tbody>
           {{for bm in inventario:}}
             <tr>
-                <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=bm['hr_espacio'], nombreMat = bm['hr_nombre'], cat = '2'))}}">{{=bm['hr_nombre']}}</a></td>
+                <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=bm['hr_espacio_fisico'], nombreMat = bm['hr_nombre'], cat = '2'))}}">{{=bm['hr_nombre']}}</a></td>
                 <td class="camposTabla">{{=bm['hr_marca']}}</td>
                 <td class="camposTabla">{{=bm['hr_modelo']}}</td>
 
