@@ -210,9 +210,12 @@
 <!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
 
 	<!-- Se lista el inventario del espacio fisico visitado -->
-	{{if espacio_visitado:}} {{include 'smydp/inventario_desechos_espacio.html'}}
-	<!-- Se lista el inventario agregado de la dependencia visitada-->
-	{{else:}} {{include 'smydp/inventario_desechos_dependencia.html'}} {{pass}}
+	{{if espacio_visitado:}} 
+		{{include 'smydp/inventario_desechos_espacio.html'}}
+	{{pass}}
+	{{if (not espacio_visitado):}} 
+		{{include 'smydp/inventario_desechos_dependencia.html'}} 
+	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 

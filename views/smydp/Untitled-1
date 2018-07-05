@@ -1,0 +1,18 @@
+{{if espacio_visitado:}}
+		{{include 'smydp/inventario_desechos_espacio.html'}}
+	<!-- Se lista el inventario agregado de la dependencia visitada-->
+	{{else:}}
+		{{include 'smydp/inventario_desechos_dependencia.html'}}
+	{{pass}}
+
+                <tbody>
+                     {{for desecho in inventario:}}
+                    <tr>
+                        <td class="camposTabla">{{=desecho['categoria']['categoria']}}</td>
+                        <td class="camposTabla">{{=desecho['espacio_fisico']['nombre']}}</td>
+                        <td class="camposTabla">{{=desecho['cantidad']}}</td>
+                        <td class="camposTabla">{{=desecho['seccion']['nombre']}}</td>
+                        <td class="camposTabla">{{=desecho['responsable']['f_nombre']}}</td>
+                    </tr>
+                    {{pass}} 
+                </tbody>
