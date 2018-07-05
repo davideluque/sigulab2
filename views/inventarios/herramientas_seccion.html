@@ -15,13 +15,10 @@
                 <thead>
                     <tr id="titulosListado">
                       <th class="camposTabla linksNombres">Nombre</th>
-            
-                      <th class="camposTabla linksNombres">Marca</th>
-                      <th class="camposTabla linksNombres">Modelo</th>
-                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Nro de BM</th>
+                      <th class="camposTabla linksNombres">Presentación</th>
                       <th class="camposTabla linksNombres">Número de piezas</th>
-                      <th class="camposTabla linksNombres">Contenido</th>
-                      <th class="camposTabla linksNombres">Unidad</th>
+                      <th class="camposTabla linksNombres">Ubicación interna</th>
                         <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                         <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
@@ -30,15 +27,10 @@
                   {{for bm in inventario:}}
                     <tr>
                       <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=bm['hr_espacio_fisico'], nombreMat = bm['hr_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
-
-                      <td class="camposTabla">{{=bm['hr_marca']}}</td>
-                      <td class="camposTabla">{{=bm['hr_modelo']}}</td>
-      
-                      <td class="camposTabla">{{=bm['hr_descripcion']}}</td>
-      
+                      <td class="camposTabla">{{=bm['hr_num']}}</td>
+                      <td class="camposTabla">{{=bm['hr_presentacion']}}</td>
                       <td class="camposTabla">{{=bm['hr_numpiezas']}}</td>
-                      <td class="camposTabla">{{=bm['hr_contenido']}}</td>
-                      <td class="camposTabla">{{=bm['hr_unidad']}}</td>
+                      <td class="camposTabla">{{=bm['hr_ubicacion']}}</td>
                         <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['hr_espacio_fisico']).select().first().codigo}}</td>
                     </tr>
                   {{pass}}           
@@ -46,13 +38,11 @@
         
                 <tfoot id="collapseFiltros">
                     <tr>
-                      <th class="camposTabla linksNombres">Nombre</th>            
-                      <th class="camposTabla linksNombres">Marca</th>
-                      <th class="camposTabla linksNombres">Modelo</th>
-                      <th class="camposTabla linksNombres">Descripción</th>
+                      <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Nro de BM</th>
+                      <th class="camposTabla linksNombres">Presentación</th>
                       <th class="camposTabla linksNombres">Número de piezas</th>
-                      <th class="camposTabla linksNombres">Contenido</th>
-                      <th class="camposTabla linksNombres">Unidad</th>
+                      <th class="camposTabla linksNombres">Ubicación interna</th>
                         <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                       <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
