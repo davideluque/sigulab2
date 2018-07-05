@@ -399,7 +399,7 @@ def ficha():
 			anexo_name4= request.post_vars.anexo_name5,
 			anexo_code5= request.post_vars.anexo_code6,
 			anexo_name5= request.post_vars.anexo_name6,
-			elaborador0= request.post_vars.elaborador1,
+			elaborador0= request.post_vars.elaborador0,
 			elaborador1= request.post_vars.elaborador2,
 			elaborador2= request.post_vars.elaborador3,
 			elaborador3= request.post_vars.elaborador4,

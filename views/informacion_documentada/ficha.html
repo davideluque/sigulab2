@@ -460,10 +460,11 @@
 
                 <!-- Campo de Tipo del Documento -->
                 <div class="form-group"> 
-                  <h5>Tipo del Documento</h5>
+                  <h5 class="tipo_doc" data-atributo="{{=doc.tipo_doc}}">Tipo del Documento</h5>
                   <select disabled="" name="tipo" id="tipo" class="input" >
                     <option value="{{=doc.tipo_doc}}">{{=doc.tipo_doc}}</option>
-                  </select>
+                  </select><br>
+                   <input type="text" class="input"  id="otro_tipo" value="{{=doc.otro_tipo}}" >
                 </div>
 
                 <!-- Campo de Responsable del Documento -->
@@ -492,7 +493,7 @@
               <div class="form-group">
                 <h5>Período de Revisión</h5>
                 <select disabled="" name="periodo" id="periodo" class="input" >
-                  <option value="{{=doc.periodo_rev}}"></option>
+                  <option value="{{=doc.periodo_rev}}">{{=doc.periodo_rev}}</option>
                   <option value="Semestral">Semestral</option>
                   <option value="Anual">Anual</option>
                   <option value="Bienal">Bienal</option>
@@ -541,8 +542,15 @@
 
                   </p>
                 </div>
-
-
+                <div class="anexos">
+                 <input type="text" class="input" disabled="" id="anexo1" data-atributo="{{=doc.anexo_code1}}" value="{{=doc.anexo_code1}}: {{=doc.anexo_name1}}"><br>
+                  <input type="text" class="input" disabled="" id="anexo2"  data-atributo="{{=doc.anexo_code2}}" value="{{=doc.anexo_code2}}: {{=doc.anexo_name2}}"><br>
+                  <input type="text" class="input" disabled="" id="anexo3"  data-atributo="{{=doc.anexo_code3}}" value="{{=doc.anexo_code3}}: {{=doc.anexo_name3}}"><br>
+                  <input type="text" class="input" disabled="" id="anexo4"  data-atributo="{{=doc.anexo_code4}}" value="{{=doc.anexo_code4}}: {{=doc.anexo_name4}}"><br>
+                  <input type="text" class="input" disabled="" id="anexo5"  data-atributo="{{=doc.anexo_code5}}" value="{{=doc.anexo_code5}}: {{=doc.anexo_name5}}">
+                   <br>
+                </div>
+               
                 <a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
               </div>
 
@@ -586,10 +594,23 @@
                     <input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
                   </p>
                 </div>
-
-                <a href="#" id="addScnt"><span class="fa fa-plus">Agregar Elaborador</span></a>
+              
+                  <a href="#" id="addScnt"><p><span  class="fa fa-plus">Agregar Elaborador</span></p></a>
+                                   
+           
                                       
               </div>
+              <div  id="elaboradores">
+          
+                  <input type="text" class="input" disabled="" id="elaborador0" data-atributo="{{=doc.elaborador0}}" value="{{=doc.elaborador0}}"><br>
+               
+                  <input type="text" class="input" disabled="" id="elaborador1" data-atributo="{{=doc.elaborador1}}" value="{{=doc.elaborador1}}"><br>
+                  <input type="text" class="input" disabled="" id="elaborador2" data-atributo="{{=doc.elaborador2}}" value="{{=doc.elaborador2}}"><br>
+                  <input type="text" class="input" disabled="" id="elaborador3" data-atributo="{{=doc.elaborador3}}" value="{{=doc.elaborador3}}"><br>
+                  <input type="text" class="input" disabled="" id="elaborador4" data-atributo="{{=doc.elaborador4}}" value="{{=doc.elaborador4}}">
+                  <br>
+                </div>
+              
 
                <!-- Campo de Fecha de entrega para revisión del Documento -->
 
@@ -604,7 +625,7 @@
             
               <div style="position: fixed; bottom: 0; right: 0;">
                 <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
+                <button type="submit" class="btn btn-submit botonForm" id="elaborado" form="formularioCarga" name="elaborado" value="elaborado" ><i class="fa fa-floppy-o"></i></button>  
                 <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
               </div>
             </div>
@@ -660,15 +681,21 @@
               <div class="form-group">
                 <label>Revisión del Consejo Asesor - ULAB</label>
                 <br>
-                <input disabled='' type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
-                <br>
-                <input disabled='' type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
+                <div class="consejo_asesor" >
+                  <input  type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
+                  <br>
+                  <input  type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
+                </div>
+                <div class="consejo_asesor_info">
+                  <p>{{=doc.fecha_rev_por_consejo_asesor}}</p>  
+                </div>
+               
                 <div id="containerRevision"/>
-              </div> 
+                </div> 
 
               <div style="position: fixed; bottom: 0; right: 0;">
                 <button type="button" class="btn btn-previous botonForm"><i class="fa fa-arrow-left"></i></button>
-                <button type="submit" class="btn btn-submit botonForm" id="submit" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
+                <button type="submit" class="btn btn-submit botonForm" id="revisado" form="formularioCarga" name="revisado" value="revisado" ><i class="fa fa-floppy-o"></i></button>  
                 <button type="button" class="btn btn-next botonForm"><i class="fa fa-arrow-right"></i></button>
               </div>
             </div>
@@ -900,10 +927,9 @@
     
     var scntDiv = $('#p_scents');
     var i = $('#p_scents p').length + 1;
-    console.log("elaborador inicial");
 
     $('.form-group').on('click', '#addScnt', function() {
-      console.log(i)
+
       $('<p><input type="text" id="p_scnt" size="20" name="elaborador' + i +'" value="" placeholder="Ingrese un elaborador" /> <a href="#" id="remScnt"><span class="fa fa-trash-o"></span></a></p>').appendTo(scntDiv);
       i++;
       return false;
@@ -950,6 +976,7 @@
 
   function codigoDoc(){
      var codigoDocumento = document.getElementById("codigo").value;
+     console.log(codigoDocumento);
      return codigoDocumento;
   }
 
@@ -1002,11 +1029,44 @@
       })  
   });
 function estatus(){
+   if($('.tipo_doc').data('atributo')!='Otro'){
+     jQuery('#otro_tipo').hide();
+   }
+   if($('#elaborador0').data('atributo')=='None'){
+     jQuery('#elaborador0').hide();
+   }if($('#elaborador1').data('atributo')=='None'){
+     jQuery('#elaborador1').hide();
+   }if($('#elaborador2').data('atributo')=='None'){
+     jQuery('#elaborador2').hide();
+   }
+   if($('#elaborador3').data('atributo')=='None'){
+     jQuery('#elaborador3').hide();
+   }
+   if($('#elaborador4').data('atributo')=='None'){
+     jQuery('#elaborador4').hide();
+   }
+
+   if($('#anexo1').data('atributo')=='None'){
+     jQuery('#anexo1').hide();
+   }if($('#anexo2').data('atributo')=='None'){
+     jQuery('#anexo2').hide();
+   }if($('#anexo3').data('atributo')=='None'){
+     jQuery('#anexo3').hide();
+   }if($('#anexo4').data('atributo')=='None'){
+     jQuery('#anexo4').hide();
+   }if($('#anexo5').data('atributo')=='None'){
+     jQuery('#anexo5').hide();
+   }
+  console.log("estatus");
       if($('.form-group').data('atributo')=='Planificado'){
      
         jQuery('#objetivos').removeAttr('disabled');
         jQuery('#periodo').removeAttr('disabled');
         jQuery('#fecha_prox_rev').removeAttr('disabled');
+
+        //jQuery('#addAnexo').removeAttr('disabled');
+        jQuery('#elaboradores').hide();
+
 
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
@@ -1023,6 +1083,8 @@ function estatus(){
         jQuery('#archivo_el').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
+        jQuery('.consejo_asesor_info').hide();
+        jQuery('.anexos').hide();
       }else if($('.form-group').data('atributo')=='Elaborado'){
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
@@ -1035,23 +1097,45 @@ function estatus(){
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
-         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('.consejo_asesor_info').hide();
+        jQuery('#p_scents').hide();
         jQuery('#archivo_el').removeAttr('disabled');
+        jQuery('#addAnexo').hide();
+        jQuery('#addScnt').hide(); 
+        jQuery('#elaborado').hide(); 
+        document.getElementById("p_scnt").value = "definido";
+
       }else if($('.form-group').data('atributo')=='Revisado'){
         jQuery('#aprobado_por').removeAttr('disabled');
         jQuery('#fechaAprobacion').removeAttr('disabled');
         jQuery('#cod_registro').removeAttr('disabled');
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
-         jQuery('#ubicacion_fisica').removeAttr('disabled');
+        jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
+        jQuery('.consejo_asesor').hide();
+        jQuery('#addScnt').hide(); 
+        jQuery('#p_scents').hide()
+        jQuery('#p_anexo').hide(); 
+        jQuery('#elaborado').hide(); 
+        jQuery('#revisado').hide();
+        document.getElementById("p_scnt").value = "definido";
+        
         
       }else if($('.form-group').data('atributo')=='Aprobado'){
         jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
+        jQuery('.consejo_asesor').hide();
+        jQuery('#addScnt').hide(); 
+        jQuery('#p_scents').hide();
+        jQuery('#p_anexo').hide(); 
+        jQuery('#elaborado').hide(); 
+        document.getElementById("p_scnt").value = "definido";
         
       }
     }
+
 
   </script>
   <script type="text/javascript">
