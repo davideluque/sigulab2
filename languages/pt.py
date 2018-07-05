@@ -176,6 +176,7 @@
 'Groups': 'Groups',
 'Hello World': 'Olá Mundo',
 'Helping web2py': 'Helping web2py',
+'Herramientas': 'Herramientas',
 'Hit Ratio: **%(ratio)s%%** (**%(hits)s** %%{hit(hits)} and **%(misses)s** %%{miss(misses)})': 'Hit Ratio: **%(ratio)s%%** (**%(hits)s** %%{hit(hits)} and **%(misses)s** %%{miss(misses)})',
 'Hoja de seguridad': 'Hoja de seguridad',
 'Home': 'Home',

@@ -15,19 +15,19 @@
 		  float: right;
 		  padding-right: 10ex;
 		}
-		
 	</style>
  	
 	 <!-- Estilos de modales y listados -->
-	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
-	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+	 <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+		<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+		<link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -58,16 +58,19 @@
 <div class="container titulo">
 	<h3 class="dep-titulo">VALIDACIONES PENDIENTES</h3>
 </div>
+<div class="tab-wrapper">
+		<ul class="tabs">
+			<li class="tab-link active" data-tab="1">MODIFICACIÓN</li>
+			<li class="tab-link" data-tab="2">ELIMINACIÓN</li>
+		</ul>
+</div>
 <!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
-
-<div class="container">
+<div id="tab-1" class="container tab-content active">
 	<div class="row">
 			<br>
 			<div id="buttons">
 				<!-- Filtrado -->
-				<button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
-				<button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
-				<span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
+				<button class="dt-button btn boton-sigulab" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-filter"></i></button>
 				<!-- Filtrado -->    
 			</div>
 			<br>
@@ -76,19 +79,33 @@
 		  <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
 			<thead>
 				<tr id="titulosListado">
-					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres" style="display:none;">NOMBRE</th>
 					<th class="camposTabla linksNombres">TIPO</th>
 				</tr>
 			</thead>
 	
 			<tbody>
-			  {{for bm in inventario:}}
+			  {{for bm in inventario[0]:}}
 				<tr>
-					<td class="camposTabla">{{=bm['mbn_nombre']}}</td>
+					<td class="camposTabla"><a href="{{=URL('detalles_mod', vars=dict(bm=bm['mbn_num']))}}">{{=bm['mbn_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion}}</td>
+					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion.upper()}}</td>
 				</tr>
-			  {{pass}}           
+				{{pass}}
+				{{for material in inventario[1]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario[2]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">CONSUMIBLES</td>
+				</tr>
+			  {{pass}}               
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
@@ -101,6 +118,7 @@
 		</div>
 	</div>
 </div> 
+
 
 <!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
 
@@ -197,6 +215,7 @@
 			  {
 				  extend: 'collection',
 				  text: '<i class="fas fa-floppy-o"></i>',
+				  className: 'boton-sigulab',
 				  buttons: [
 					  { extend:'copy', text: 'Copiar' } ,
 					  'excel',
@@ -204,7 +223,7 @@
 					  'pdf'
 				  ]
 			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
 		  ]
 		});
 		$('#botonModal').addClass('pull-left')
@@ -215,14 +234,23 @@
 		$('.dataTables_filter').appendTo('#buttons');
   
 		api.buttons().container().appendTo('#buttons');
-		$('.dt-buttons').append($('#boton-retorno'));
+		$('.dt-buttons').append($('#botonModal'));
+		$('.dt-buttons').append($('#filtrar'));
 		$('#buttons').append('<br><br>');
 		$('.dataTables_info').addClass('pull-right');
-		
-		$('.dataTables_filter').addClass('pull-left');
-  
-		
+		$('.dataTables_filter').addClass('pull-left');		
 	 }
 	});
+	</script>
+	<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
   </script>
 {{end}}
