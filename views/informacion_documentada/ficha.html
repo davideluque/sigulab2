@@ -679,15 +679,19 @@
 
               <!-- Campo de confirmación si fué o no revisado por el consejo -->
               <div class="form-group">
+                <div class="labelCA">
                 <label>Revisión del Consejo Asesor - ULAB</label>
                 <br>
-                <div class="consejo_asesor" >
+                </div>
+                 <div class="consejo_asesor" >
                   <input  type="radio" name="revision_consejo" value="1" onclick="agregarFecha()">Si
                   <br>
                   <input  type="radio" name="revision_consejo" value="2" onclick="eliminarFecha()">No
                 </div>
-                <div class="consejo_asesor_info">
-                  <p>{{=doc.fecha_rev_por_consejo_asesor}}</p>  
+                <div class="consejo_asesor_info" data-atributo="{{=doc.fecha_rev_por_consejo_asesor}}">
+                  
+                 <input type="text" class="input" disabled="" id="info_consejo_asesor" 
+                 value="{{=doc.fecha_rev_por_consejo_asesor}}"> 
                 </div>
                
                 <div id="containerRevision"/>
@@ -992,7 +996,7 @@
     var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
 
 
-    input.type = "text";
+    input.type = "date";
     input.class = "datepicker"
     input.name = "fecha_revision_consejo";
     input.id = "fecha_revision_consejo";
@@ -1057,6 +1061,10 @@ function estatus(){
    }if($('#anexo5').data('atributo')=='None'){
      jQuery('#anexo5').hide();
    }
+   if($('#consejo_asesor_info').data('atributo')=='None'){
+     jQuery('#labelCA').hide();
+     jQuery('#consejo_asesor_info').hide();
+   }
   console.log("estatus");
       if($('.form-group').data('atributo')=='Planificado'){
      
@@ -1116,17 +1124,19 @@ function estatus(){
         jQuery('#archivo_el').removeAttr('disabled');
         jQuery('.consejo_asesor').hide();
         jQuery('#addScnt').hide(); 
+        
         jQuery('#p_scents').hide()
         jQuery('#p_anexo').hide(); 
         jQuery('#elaborado').hide(); 
         jQuery('#revisado').hide();
-        document.getElementById("p_scnt").value = "definido";
+        document.getElementById("p_scnt").value = "definidoR";
         
         
       }else if($('.form-group').data('atributo')=='Aprobado'){
         jQuery('#ubicacion_fisica').removeAttr('disabled');
         jQuery('#archivo_el').removeAttr('disabled');
         jQuery('.consejo_asesor').hide();
+        jQuery('#addAnexo').hide();
         jQuery('#addScnt').hide(); 
         jQuery('#p_scents').hide();
         jQuery('#p_anexo').hide(); 
