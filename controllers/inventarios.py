@@ -384,6 +384,47 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
+# Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo 
+# el bm. 
+def __agregar_herramienta(nombre, num, marca, modelo,serial, presentacion, numpiezas,
+                contenido, descripcion, material, unidad, ancho, largo, alto, diametro, 
+                ubicacion, observacion, espacio,unidad_adscripcion, dependencia, user):
+
+    # Si ya existe el BM en el inventario
+    if (db( (db.herramienta.hr_nombre == nombre) & (db.herramienta.hr_espacio_fisico==espacio) ).select()):
+        #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
+
+        response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
+                          en este espacio.".format(nombre)
+        return False
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    inv_id = db.herramienta.insert(
+        hr_nombre = nombre,
+        hr_num=num,   
+        hr_marca = marca, 
+        hr_modelo = modelo, 
+        hr_serial = serial, 
+        hr_presentacion = presentacion,
+        hr_numpiezas= numpiezas,
+        hr_contenido =contenido,
+        hr_descripcion = descripcion, 
+        hr_material = material, 
+        hr_unidad = unidad, 
+        hr_ancho = ancho, 
+        hr_largo = largo,
+        hr_alto = alto, 
+        hr_diametro = diametro, 
+        hr_espacio_fisico = espacio,
+        hr_ubicacion = ubicacion,
+        hr_observacion= observacion,
+        hr_unidad_de_adscripcion = unidad_adscripcion,
+        hr_depedencia = dependencia,
+        hr_crea_ficha = user,
+    )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
@@ -2479,17 +2520,13 @@ def herramientas():
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_material(
-                        request.vars.nombre_mat,
-                        request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
-                        request.vars.capacidad, request.vars.unidad_cap, 
-                         request.vars.unidad_mat,  
-                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
+                if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_herramienta(
+                        request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
+                        request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
+                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
+                        request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -2581,17 +2618,13 @@ def herramientas():
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_material(
-                        request.vars.nombre_mat,
-                        request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
-                        request.vars.capacidad, request.vars.unidad_cap, 
-                         request.vars.unidad_mat,  
-                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
+                if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_herramienta(
+                        request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
+                        request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
+                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
+                        request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -2683,18 +2716,13 @@ def herramientas():
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_material(
-                        request.vars.nombre_mat,
-                        request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
-                        request.vars.capacidad, request.vars.unidad_cap, 
-                         request.vars.unidad_mat,  
-                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
-
+                if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
+                    __agregar_herramienta(
+                        request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
+                        request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
+                        request.vars.largo, request.vars.alto, request.vars.diametro, espacio, request.vars.ubicacion_int ,
+                         request.vars.descripcion_herramientas, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
