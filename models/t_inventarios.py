@@ -268,7 +268,7 @@ db.define_table(
     Field('hr_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
     )
 
-db.herramienta.hr_nombre.requires=IS_NOT_IN_DB(db(db.herramienta.hr_ubicacion==request.vars.hr_ubicacion),'herramienta.hr_nombre')
+db.herramienta.hr_nombre.requires=IS_NOT_IN_DB(db(db.herramienta.hr_ubicacion==request.vars.hr_ubicacion and db.herramienta.hr_espacio_fisico==request.vars.hr_espacio_fisico),'herramienta.hr_nombre')
 db.herramienta.hr_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.herramienta.hr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.herramienta.hr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
