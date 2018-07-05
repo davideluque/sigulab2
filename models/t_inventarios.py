@@ -92,6 +92,7 @@ db.define_table(
     Field('mbn_codigo_localizacion','string',label=T('Código de Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['150301','240107']))),
     Field('mbn_localizacion','string',label=T('Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto']))),
     Field('mbn_modifica_ficha', 'reference auth_user', label = T('Usuario que modifica la ficha')),
+    Field('mbn_motivo', 'string', length = 140, label = T('Motivo de la modificacion')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
     # Estado = 1  :Aceptado
@@ -212,6 +213,7 @@ db.define_table(
     Field('msb_unidades', 'string', label = T('Unidades por presentación'), requires = IS_EMPTY_OR(IS_MATCH('^[0-9]{5}$'))),
     Field('msb_total', 'integer', label = T('Total de unidades')),
     Field('msb_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
+    Field('msb_motivo', 'string', length = 140, label = T('Motivo de la modificacion')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
     # Estado = 1  :Aceptado
@@ -273,6 +275,47 @@ db.herramienta.hr_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name
 db.herramienta.hr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.herramienta.hr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
 db.herramienta.hr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+
+db.define_table(
+	'modificacion_herramienta',
+    Field('mhr_nombre','string',label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
+    Field('mhr_num','string',unique=True,requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
+    #
+    Field('mhr_marca','string',label=T('Marca')),
+    Field('mhr_modelo','string',label=T('Modelo')),
+    Field('mhr_serial','string',label=T('Serial')),
+    #
+    Field('mhr_presentacion','string',label=T('Presentación'),requires=IS_IN_SET(['Unidad','Conjunto'])),
+    Field('mhr_numpiezas','string',label=T('Nro de piezas'),default='1',length=3),
+    Field('mhr_contenido','text',label=T('Contenido')),
+    Field('mhr_descripcion','text',label=T('Descripción de Presentación')),
+    Field('mhr_material','string',label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro'])),
+    #
+    Field('mhr_unidad','string',label=T('Unidad de Medida'),requires=IS_EMPTY_OR(IS_IN_SET(['cm','m']))),
+    Field('mhr_ancho','double',label=T('Ancho'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mhr_largo','double',label=T('Largo'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mhr_alto','double',label=T('Alto'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+    Field('mhr_diametro','double',label=T('Diametro'),requires=IS_EMPTY_OR(IS_FLOAT_IN_RANGE(0.1,999.99))),
+
+    Field('mhr_ubicacion','string',label=T('Ubicacion interna'),requires=IS_NOT_EMPTY()),
+    Field('mhr_observacion','text',label=T('Observaciones')),
+   
+    Field('mhr_espacio_fisico', 'reference espacios_fisicos', label=T('Nombre del espacio fisico')),
+    Field('mhr_unidad_de_adscripcion', 'reference dependencias', label = T('Unidad de Adscripción')),
+    Field('mhr_depedencia', 'reference dependencias', label = T('Nombre de la dependencia')),
+    Field('mhr_crea_ficha', 'reference auth_user', label = T('Usuario que crea la ficha')),
+    Field('mhr_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
+    Field('mhr_motivo', 'string', length = 140, label = T('Motivo de la modificacion')),
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    Field('mhr_estado','integer', default=0, label=T('Estado de Solicitud de Modificacion'), requires=IS_EMPTY_OR(IS_INT_IN_RANGE(-1,2)))
+	)
+db.modificacion_herramienta.mhr_ubicacion.requires = IS_NOT_IN_DB(db(db.herramienta.hr_nombre==request.vars.mhr_nombre and db.herramienta.hr_espacio_fisico==request.vars.mhr_espacio_fisico),'modificacion_herramienta.mhr_ubicacion')
+db.modificacion_herramienta.mhr_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.modificacion_herramienta.mhr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
+db.modificacion_herramienta.mhr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
+db.modificacion_herramienta.mhr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
 db.define_table(
     'historial_mantenimiento_bm',
