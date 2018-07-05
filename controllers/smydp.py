@@ -1773,7 +1773,7 @@ def bitacora_desechos():
                 espacio_nombre=espacio_nombre,
                 espacio_id=espacio_id,
                 conceptos=conceptos,
-                unidades_de_medida=unidades_de_medida)
+                unidades_de_medida=unidades_de_medida),
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def desechos():

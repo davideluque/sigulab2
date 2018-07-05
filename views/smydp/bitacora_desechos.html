@@ -40,7 +40,13 @@
 <!-- Fin del Breadcrumb de navegación --> 
 
 <!-- Inicio Listado -->
-<div id="inventario-dependencia" class="container">
+<div id="inventario-dependencia" class="container titulo">
+		<div class="col-xs-2 boton-retorno">
+        <p class="padre dep-titulo"> {{=espacio_nombre}} </p>
+        <a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=espacio_id, retroceder=retroceder))}}">
+		    		<i class="fa fa-arrow-left"></i>
+        </a>
+      </div>
 <div class="row">
   <div>
     <div class="row text-center">
@@ -48,7 +54,7 @@
     </div>
     <div class="row">
       <h3 id="titulo" class="titulos">{{=espacio_nombre}} - Bitácora</h3>
-      <!-- <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3> -->
+       <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3>
       </div>
     </div>
 
