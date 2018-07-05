@@ -1048,7 +1048,6 @@ def envases():
 def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, tipo_boca, descripcion, composicion, espacio_fisico, categoria, id_envase):
     # Si el id_envase es distinto de -1, es porque ya existe el envase y se va a actualizar su informacion
     if id_envase != -1:
-        print len(list(db(db.t_envases.identificacion == identificacion).select()))
         db(db.t_envases.id == id_envase).update(
             identificacion = identificacion,
             capacidad = capacidad, 
@@ -1566,7 +1565,6 @@ def inventarios_desechos():
 
 
         else:
-            print "Entro aca"
             # Dependencia a la que pertenece el usuario o que tiene a cargo
             dep_id = user.f_dependencia
             dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
@@ -1583,7 +1581,8 @@ def inventarios_desechos():
 
             inventario = list(db(
                 (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
-                (db.espacios_fisicos.dependencia == db.dependencias.id)
+                (db.espacios_fisicos.dependencia == db.dependencias.id) &
+                (db.dependencias.unidad_de_adscripcion == dep_id)
                 ).select(
                 db.t_inventario_desechos.categoria,
                 db.t_inventario_desechos.espacio_fisico,
@@ -1741,8 +1740,6 @@ def bitacora_desechos():
                     (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id)
                    ).select()[0]
     
-    # print inventario['t_inventario_desechos']['composicion']
-
     # Espacio al que pertenece la bitacora consultada
     espacio_id = inventario['t_inventario_desechos']['espacio_fisico']['id']
 
