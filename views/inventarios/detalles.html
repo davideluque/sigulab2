@@ -131,7 +131,7 @@
 {{end}}
 
 {{block center}}
-    <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
+    <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
     {{ if bien['bm_placa'] != None: }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
@@ -151,8 +151,6 @@
                 <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
-                <!--Boton para ocultar el bien mueble-->
-                <button type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye-slash fa-1x"></i></button>
             </div>
         </div>
     </div>
@@ -423,16 +421,19 @@
 
 
                         <div class="form-group" tag="Formato:">
+                                <label>Nombre*</label>
                             <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Número de Bien Nacional*</label>
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value="{{=bien['bm_num']}}" readonly required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
+                            <label>N° de placa</label>
                             {{if bien['bm_placa']==None:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             {{else:}}
@@ -443,6 +444,7 @@
 
                         {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
+                            <label>Marca*</label>
                             <input type="text" class="form-control" style="text-transform:uppercase" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
@@ -450,6 +452,7 @@
 
                         {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
+                                <label>Modelo*</label>
                                 <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
                                 <div class="field-error"> <p id="error-modelo"> </p> </div>
                             
@@ -458,6 +461,7 @@
 
                         {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
+                            <label>Serial*</label>
                             <input type="text" class="form-control" id="serial" style="text-transform:uppercase" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
                             <div class="field-error"> <p id="error-serial"> </p> </div>
                           </div>
@@ -484,6 +488,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
+                                <label>Material*</label>
                               <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
@@ -508,6 +513,7 @@
                         </div>
 
                           <div class="form-group">
+                                <label>Color*</label>
                               <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
@@ -548,22 +554,26 @@
 
                           <!-- FALTA ARREGLAR ESTO  -->
                            {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-ancho1" hidden>
+                                    <label>Ancho</label>
                                     <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                                 <font color="red"><div id="err_ancho" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-largo1" hidden>
+                                    <label>Largo</label>
                                     <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                                 <font color="red"><div id="err_largo" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-alto1" hidden>
+                                    <label>Altura</label>
                                     <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                                 <font color="red"><div id="err_alto" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-diametro1" hidden>
+                                    <label>Diámetro</label>
                                     <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                                 <font color="red"><div id="err_diametro" hidden></div></font>
                               </div>
@@ -723,6 +733,7 @@
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
                         <div class="form-group">
+                                <label>Observacion</label>
                                 {{if bien['bm_descripcion']!="":}}
                                     <input type="text" class="form-control" style="text-transform:uppercase" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
                                 {{else:}}
@@ -929,12 +940,20 @@
         document.getElementById("largo").type = 'hidden';
         document.getElementById("alto").type = 'hidden';
         document.getElementById("diametro").type = 'hidden';
+        $('#grupo-ancho1').hide()
+        $('#grupo-largo1').hide()
+        $('#grupo-alto1').hide()
+        $('#grupo-diametro1').hide()
       }else{
         document.getElementById("unidad").type = 'text';
         document.getElementById("ancho").type = 'text';
         document.getElementById("largo").type = 'text';
         document.getElementById("alto").type = 'text';
         document.getElementById("diametro").type = 'text';
+        $('#grupo-ancho1').show()
+        $('#grupo-largo1').show()
+        $('#grupo-alto1').show()
+        $('#grupo-diametro1').show()
       }
     }
   

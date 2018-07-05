@@ -491,7 +491,7 @@ db.define_table(
     
     # Referencia hacia el inventario al cual pertenece el registro de la bitacora
     Field('inventario', 'reference t_inventario_desechos',
-          requires=IS_IN_DB(db, db.t_Inventario.id, zero=None), 
+          requires=IS_IN_DB(db, db.t_inventario_desechos.id, zero=None), 
           label=T('Inventario'), notnull=True,
           represent=lambda id, r: db.t_inventario_desechos[id].nombre),
 

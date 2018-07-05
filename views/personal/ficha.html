@@ -28,15 +28,15 @@
         <div class="modal-header">
           <div class="media">
 
-              <div class="media-body fichaMedia">
-                <h4 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h4>
+              <div class="media-body fichaMedia text-center">
+                <h2 class="modal-title media-heading fichaHeading" id = "field_nombre_completo">{{=personal['nombre']}} {{=personal['apellido']}}</h2>
               </div>
-              <div id="editar" class="media-body">
+              <div id="editar" class="text-right">
                   <button type="button" class="btn btn-primary boton-sigulab" data-toggle="modal" data-target="#addservice"><i class="fa fa-pencil"></i></button>
                   {{if auth.user.email == 'sigulabusb@gmail.com':}}
-                  <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-trash-o" data-toggle="modal" data-ta></i></button>
+                  <button id="eliminar" type="button" class="btn buttons-html5 btn-danger" data-toggle="modal" data-target="#ocultar-usuario-modal" value={{=personal['ci']}}><i class="fa fa-eye-slash" data-toggle="modal" data-ta></i></button>
                   {{pass}}
-                  <button type="button" class="btn boton-sigulab btn-secondary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
+                  <button type="button" class="btn boton-sigulab btn-primary" onclick="html2pdf(document.getElementById('ficha_print'))"><i class="fa fa-file"></i></button>
               </div>
               
           </div>
@@ -45,13 +45,13 @@
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
             <li role="presentation" class="nav-item active">
-              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos">Datos Básicos</a>
+              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Datos Básicos</b></a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales">Datos Laborales</a>
+              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Datos Laborales</b></a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales">Datos Personales</a>
+              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Datos Personales</b></a>
             </li>
           </ul>
 
@@ -128,11 +128,6 @@
                       <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
                     </tr>
                     {{pass}}
-                    {{if bool(personal['categoria']) :}}
-                    <tr>
-                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
-                    </tr>
-                    {{pass}}
                     {{if bool(personal['estatus']) :}}
                     <tr>
                       <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
@@ -143,6 +138,12 @@
                       <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
                     {{pass}}
+                    {{if bool(personal['categoria']) :}}
+                    <tr>
+                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
+                    </tr>
+                    {{pass}}
+
                     {{if bool(personal['fecha_ingreso']) :}}
                     <tr>
                       <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
@@ -207,10 +208,10 @@
                  <table class="table contenidoFicha">
                      <tbody>
                     <tr>
-                      <td class = "text-right" >Nombre:</td><td id="field_persona_contacto" class = "text-left">{{=personal['persona_contacto']}}</td>
+                      <td >Contacto:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
                     </tr>
                     <tr >
-                      <td class = "text-right">N° de contacto:</td><td id="field_contacto_emergencia" class = "text-left">{{=personal['contacto_emergencia']}}</td>
+                      <td>Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
                     </tr>
                 </tbody>
               </table>

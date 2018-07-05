@@ -230,12 +230,12 @@ h3 {
 
 .boton-sigulab, .buttons-print{
     border-radius: 50%;
-    background-color:#0300d7;
+    background-color:#337ab7;
     color:#fff;
 }
 
 #iconoFicha{
-    color:#0300d7;
+    color:#337ab7;
 }
 
 #eliminar, #rechazar{
@@ -244,7 +244,7 @@ h3 {
 }
 
 .nav-link.active{
-    background-color: #0300d7 !important;
+    background-color: #337ab7 !important;
     text-decoration: underline !important;
     color:#fff !important;
 }

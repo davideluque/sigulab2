@@ -70,8 +70,7 @@
 		<button button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button">
 			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
 				<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
-		</button>
+		</a>
 		<div class="col-xs-8">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -231,7 +230,7 @@
 	 
 		// DataTable
 		var table = $('#datatable').DataTable();
-	 
+		
 		// Apply the search
 		table.columns().every( function () {
 			var that = this;
@@ -270,6 +269,10 @@
 	  language: {
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 	  },
+	  "columnDefs": [
+		{ "width": "30%", "targets": 0 },
+		{ "width": "10%", "targets": [1,2,3] }
+	  ],
 	 initComplete: function(){
 		var api = this.api();
   

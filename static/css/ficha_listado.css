@@ -31,7 +31,7 @@ th {
 	height: 30px;
 }
 
-#collapseFiltros {
+#collapseFiltros, #collapseFiltros2 {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -124,4 +124,43 @@ th {
 
 .datepicker th {
 	background: transparent;
+}
+
+#datatable1_filter, #datatable2_filter{
+	text-align: left !important;
+	float: left !important;
+	margin: 15px;
+	border-collapse: collapse;
+}
+
+.dt-buttons {
+	float: right !important;
+	padding-right: 0 !important;
+	bottom: 0 !important;
+	margin-top: 1.8%;
+
+}
+
+#datatable_info1, #datatable_info2{
+	border-collapse: collapse;
+	float: right;
+	text-align: right;
+}
+
+.paginate_button{
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+
+#icono_mensaje_notificacion{
+	background-color: transparent !important;
+}
+
+#mensaje_notificacion{
+	border: red;
+	border-width: 3px;
+	border-style: solid;
+	padding: 1%;
+	margin: 1%;
 }

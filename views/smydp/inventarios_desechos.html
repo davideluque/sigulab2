@@ -10,14 +10,12 @@
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
- 	
+
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+		<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
  	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -43,8 +41,12 @@
 <!-- Fin del Breadcrumb de navegación -->
 
 <!-- Flash message -->
-<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
-
+{{if response.flash:}}
+<div class="alert alert-info alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{=response.flash}}
+</div>
+{{pass}}
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
 	
@@ -81,27 +83,33 @@
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			{{if dep_padre_id == direccion_id:}}
+			<p class="padre dep-titulo"> Inventario de DP</p>
+			{{else:}}
+				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			{{pass}}
 				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
 	    		<a class="boton" href="{{=URL('inventarios_desechos')}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		    		<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{else:}}
     			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		    		<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
 			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
-			{{if dep_nombre == "Alta Tensión":}}
+			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
-			{{else:}}
+			{{elif  "LABORATORIO" in dep_nombre.upper():}} 
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
+			{{else:}}
+				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
 			{{pass}}
 		</div>
 		<div class="col-xs-2"> </div>
@@ -124,59 +132,76 @@
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
 		-->
+
 		{{ if espacios: }}
-			{{dependencias = espacios}}
-			{{ n = len(dependencias) }}
-			{{ filas = n//4 if n%4 == 0 else n//4+1 }}
-			{{ k = 0 }}
-			{{ while k < filas:}}
-				<div id="fila2" class="row">
-					<div class="col-xs-3 col-sm-1"></div>
-					<div class="col-xs-6 col-sm-10">
-						<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-						<div class="col-sm-3 columnas">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].codigo}}</a>
-						</div>
-						{{ for i in range(1,4): }}
-							{{ if 4*k+i < n: }}
-								<div class="col-sm-3 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[4*k+i].codigo}}
-									</a>
-								</div>
-							{{ pass }}
-						{{ pass }}
-					</div>
-					<div class="col-xs-3 col-sm-1"></div>
+			{{if request.vars.dependencia and request.vars.es_espacio == "False":}}
+				<div class="row">
+					<button onclick="show_seccion()">
+						Espacios físicos
+						<span class="caret"></span>
+					</button>
 				</div>
-				{{k=k+1}}
+				<div id="contenedor-filas" style="display: none">
+					{{dependencias = espacios}}
+					<div class="grid-container">
+						{{dependencias = espacios}} 
+						 {{for dependencia in dependencias:}}
+							<div class="grid-item">
+								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white; padding-bottom: 20px">
+									{{=dependencia.codigo}}
+								</a>
+							</div>
+						{{pass}}
+					</div>
+				</div>
+			{{else:}}
+				<div id="contenedor-filas" style="display: none">
+					{{dependencias = espacios}}
+					<div class="grid-container">
+						{{dependencias = espacios}} {{for dependencia in dependencias:}}
+						<div class="grid-item">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white;">
+								{{=dependencia.codigo}}
+							</a>
+						</div>
+						{{pass}}
+					</div>
+				</div>
 			{{pass}}
+			
 		{{else:}}
-			{{ n = len(dependencias) }} 
-			{{ filas = n//4 if n%4 == 0 else n//4+1 }} 
-			{{ k = 0 }} 
-			{{ while k < filas:}} 
-				<div id="fila2" class="row">
-					<div class="col-xs-3 col-sm-1"></div>
-					<div class="col-xs-6 col-sm-10">
-					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-						<div class="col-sm-3 columnas">
-							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">{{=dependencias[4*k].nombre}}</a>
-						</div>
-						{{ for i in range(1,4): }} 
-							{{ if 4*k+i < n: }} 
-								<div class="col-sm-3 columnas">
-									<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-										{{=dependencias[4*k+i].nombre}}
-									</a>
-								</div>
-							{{ pass }} 
-						{{ pass }}
-					</div>
-		  			<div class="col-xs-3 col-sm-1"></div>
+			{{if request.vars.dependencia and request.vars.es_espacio == "False":}}
+				<div class="row">
+					<button onclick="show_seccion()">
+						Dependencias
+						<span class="caret"></span>
+					</button>
 				</div>
-				{{k=k+1}} 
+				<div id="contenedor-filas" style="display: none">
+					<div class="grid-container">
+						{{for dependencia in dependencias:}}
+							<div class="grid-item">
+								<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}" style="color: white;">
+									{{=dependencia.nombre}}
+								</a>
+							</div>
+						{{pass}}
+					</div>
+				</div>
+			{{else:}}
+				<div id="contenedor-filas">
+					<div class="grid-container">
+						{{for dependencia in dependencias:}}
+						<div class="grid-item">
+							<a href="{{=URL('inventarios_desechos',vars=dict(dependencia=dependencia.id, es_espacio=es_espacio))}}"  style="color: white;">
+								 {{=dependencia.nombre}}
+							</a>
+						</div>
+						{{pass}}
+					</div>
+				</div>
 			{{pass}}
+			
 		{{pass}}
 	</div>
 
@@ -287,5 +312,22 @@
 	var w2p_ajax_confirm_message =
 		"{{=T('')}}";
 
+</script>
+
+
+<script>
+	function show_seccion() {
+		var x = document.getElementById("contenedor-filas");
+		if (x.style.display === "none") {
+			x.style.display = "grid";
+			x.style.webkitAnimation = "fadein 2s";
+			x.style.marginTop = "20px";
+		} else {
+			x.style.webkitAnimation = "fadeOut 1s";
+			setTimeout(function () {
+				x.style.display = "none";
+			}, 500);
+		}
+	}
 </script>
 {{end}}

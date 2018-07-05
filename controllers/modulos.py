@@ -1,11 +1,11 @@
 #!/usr/bin/ python
-# encoding=utf8  
+# encoding=utf8
 
 # Caracteres especiales dentro de campos secretos (agregados por web2py)
 # no son aceptados por ciertos navegadores/terminales
-#import sys  
+#import sys
 #sys.setdefaultencoding('utf8')
-import re  
+import re
 
 #-------------------------------------
 #
@@ -34,7 +34,7 @@ def authenticate():
     return "$('#authdiv').html('Correo inválido. Formato: algo@ejemplo.com')"
 
   user = auth.login_bare(request.post_vars.email_send, request.post_vars.pass_send)
-  
+
   if not user:
     return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
@@ -54,10 +54,10 @@ def login():
 
   auth.settings.login_next = URL('default','index')
   form=auth.login()
-  
+
   if request.vars['error'] == 'invalid_data':
     return dict(form=form, error="Datos de inicio de sesión incorrectos")
-  
+
   return dict(form=form, error=None)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -97,7 +97,7 @@ def check_role():
 
 def validar_cedula():
   """Valida que la cédula introducida tenga un formato válido.
-  Este método se ejecuta cada vez que se abandona el campo "cedula" del 
+  Este método se ejecuta cada vez que se abandona el campo "cedula" del
   registro de usuarios.
   """
   ci_format = re.compile("^[0-9]{6,8}$")
@@ -109,7 +109,7 @@ def validar_cedula():
     jQuery('form').submit(false);"
 
   personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
-  
+
   if len(personal_register) != 0:
     return "jQuery('#auth_cedula__row').addClass('has-error');\
     jQuery('#cedula_error_group').addClass('has-error');\
@@ -146,7 +146,7 @@ def validar_email():
     jQuery('#email_error_group').addClass('has-error');\
     jQuery('#email_error').html('Ya existe un usuario con este correo electrónico.');\
     jQuery('#email_error_group').show();\
-    jQuery('form').submit(false);"    
+    jQuery('form').submit(false);"
   elif request.post_vars.email != "":
     return "jQuery('#auth_user_email__row').addClass('has-success');\
     jQuery('#email_error_group').hide();\
@@ -158,31 +158,30 @@ def validar_email():
 
 @auth.requires(lambda: check_role())
 def register():
-  """ El registro de usuarios está habilitado únicamente para los 
+  """ El registro de usuarios está habilitado únicamente para los
   administradores del sitio que son aquellos que pertecen a uno de los
-  siguientes grupos: Grupo Webmaster, grupo DIRECTOR, grupo Asistente del 
+  siguientes grupos: Grupo Webmaster, grupo DIRECTOR, grupo Asistente del
   DIRECTOR o Coordinadora de la Calidad.
   """
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
-    auth_register = auth.register_bare(username=request.post_vars.first_name, 
+    auth_register = auth.register_bare(username=request.post_vars.first_name,
                                        last_name=request.post_vars.last_name,
-                                       email=request.post_vars.email, 
+                                       email=request.post_vars.email,
                                        password=request.post_vars.password)
 
     # Si el servidor se cayera en este punto sería un error fatal.
-    # Debe haber un mensaje de error cuando un usuario que ingresa no tiene 
-    # un registro asociado en las tabla personal y membership. Esto puede 
-    # pasar porquese registró manualmente en appadmin o el caso anteriormente 
+    # Debe haber un mensaje de error cuando un usuario que ingresa no tiene
+    # un registro asociado en las tabla personal y membership. Esto puede
+    # pasar porquese registró manualmente en appadmin o el caso anteriormente
     # mencionado.
 
     if auth_register is False:
       """La verificación de usuario ya registrado se hace mediante ajax
       en el método validar email. Ese método deshabilita el registro
-      mediante jquery. Se podría hacer una segunda verificación de seguridad 
+      mediante jquery. Se podría hacer una segunda verificación de seguridad
       acá.
       """
-      print("Usuario ya registrado.")
       response.flash=T("Usuario ya registrado")
 
     """Después de haber hecho la verificación de correo electrónico no tomado
@@ -194,29 +193,22 @@ def register():
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
     es_supervisor = request.post_vars.tipo_supervisor
 
-    
+
     if request.post_vars.rol and es_supervisor :
         rolid = request.post_vars.rol
         roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
+        depid = request.post_vars.dephidden
     else:
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
-        depid= request.post_vars.dependencia
-        
-        
-    if request.post_vars.laboratorio:
-        depid = request.post_vars.laboratorio
-    if request.post_vars.seccion:
-      # El registrado pertenece directamente a una sección de un laboratorio.
-      depid = request.post_vars.seccion
-
+        depid= request.post_vars.dephidden
     # Asocia el usuario al grupo indicado
-    membership_register = db.auth_membership.insert(user_id=user.id, 
+    membership_register = db.auth_membership.insert(user_id=user.id,
                                                     group_id=rolid,
                                                     dependencia_asociada=depid,
                                                     f_personal_membership=request.post_vars.cedula)
 
-    
+
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
     nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
@@ -226,28 +218,28 @@ def register():
                            f_usuario = user.id,
                            f_dependencia = depid,
                            f_es_supervisor = es_supervisor,
-                           f_comentario='Recuerde validar su ficha')
+                           f_comentario='Agregue sus datos personales')
 
-    
-    # Mapea el usuario al espacio fisico que tiene a cargo    
-    
+
+    # Mapea el usuario al espacio fisico que tiene a cargo
+
     if roltype == "TÉCNICO":
       # Se agregan los espacios fisicos seleccionados por el usuario (tags) a la tabla
       # 'es_encargado'
       for trace, espacio in session.tags.iteritems():
         espacio_id = trace.split('-')[2]
-        db.es_encargado.insert(espacio_fisico = espacio_id, 
+        db.es_encargado.insert(espacio_fisico = espacio_id,
                                tecnico = nuevo_personal_id)
-      
+
     # Registro exitoso. Retornar redirección a la misma página para evitar el
-    # problema de doble POST con mensaje de exito y recordatorio de 
+    # problema de doble POST con mensaje de exito y recordatorio de
     # actualización de datos personales.
     session.flash=T("Registro exitoso")
     return redirect('register')
 
-  # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de 
+  # Si aun no se ha llenado la forma o el usuario ha vuelto a cargar la pagina de
   # registro, se inicializa (o reestablece) la variable tags con los espacios
-  # fisicos seleccionados por el usuario. 
+  # fisicos seleccionados por el usuario.
   if session.tags is None or not request.vars:
     session.tags = {}
 
@@ -255,10 +247,9 @@ def register():
     roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
     dependencias=list(db().select(db.dependencias.ALL))
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
-    
+
     prefijos_cedula = ['V-','E-', 'P-']
-    print(dependencias)
-  
+
   return dict(roles=roles, dependencias=dependencias, idJefeSec = idJefeSec, prefijos_cedula=prefijos_cedula )
 
 # Ajax Helper para la dependencia de acuerdo a su unidad de adscripcion
@@ -290,7 +281,6 @@ def ajax_membership():
   session.depid = None
   session.rolid = int(request.post_vars.rol)
   session.ci = int(request.post_vars.cedula)
-  print(request.post_vars.cedula)
   if request.post_vars.laboratorio:
     session.depid = int(request.post_vars.laboratorio)
   if request.post_vars.seccion:
@@ -317,17 +307,17 @@ def ajax_registro_espacio():
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
   labid = request.post_vars.dephidden
   secid = request.post_vars.seccionhidden
-  
+
   # Si usuario selecciona otro laboratorio, el id de este cambia, por lo que este laboratorio
   # deja de ser la dependencia de la seccion y no es necesario mostrar los espacios fisicos
   # que ya se habian desplegado. Quiza sea mejor reiniciar los elementos usando JS
-  unidadid = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion) 
+  unidadid = int(db(db.dependencias.id == secid).select()[0].unidad_de_adscripcion)
   esta_adscrito = unidadid == int(labid)
   espacios = False
-  
+
   if roltype == "TÉCNICO" and esta_adscrito:
     espacios = list(db(db.espacios_fisicos.dependencia == int(secid)).select())
-  
+
   return dict(lista=espacios)
 
 
@@ -354,7 +344,7 @@ def ajax_seleccionar_espacio():
 
   return dict(tags=session.tags)
 
-# Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el 
+# Elimina de session.tags (la lista de espacios fisicos seleccionados por el usuario) el
 # espacio que se desea eliminar
 def ajax_eliminar_espacio():
 
@@ -366,7 +356,7 @@ def ajax_mostrar_espacios():
 
   rolid = request.post_vars.rolhidden
   roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
-  
+
   # Los tags se mostraran solo si el usuario es un tecnico
   if roltype != "TÉCNICO":
     session.tags = {}
@@ -374,12 +364,12 @@ def ajax_mostrar_espacios():
   return dict(tags=session.tags)
 
 
-# Recuperacion de Contraseña (pedido) 
+# Recuperacion de Contraseña (pedido)
 def resetpassword():
   site_url = URL('default', 'recoverpassword', host=True)
 
   user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)
-  
+
   try:
     user = user[0]
 
@@ -474,7 +464,7 @@ def resetpassword():
 def logout():
   """Despega un cohete espacial SPACE X a Marte.
 
-  @returns Redirección al login. 
+  @returns Redirección al login.
   """
   auth.logout()
   return redirect(URL('login'))

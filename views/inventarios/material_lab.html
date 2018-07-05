@@ -67,11 +67,10 @@
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
-				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
 		</div>
+		<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		</a>
 		<div class="col-xs-8">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -90,20 +89,20 @@
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
-				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-				en el controlador-->
-				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('material_lab')}}">
-					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
-	    		</a>
-	    		{{else:}}
-    			<a class="boton" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
-				</a>
-	    		{{pass}}
 		</div>
+		<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
+		los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
+		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
+		en el controlador-->
+		{{if dep_padre_id == direccion_id:}}
+			<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab')}}">
+				<i class="fas fa-arrow-left" style="color: black"></i>	
+			</a>
+		{{else:}}
+			<a button id="boton-retorno" class="dt-button btn" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+				<i class="fas fa-arrow-left" style="color: black"></i>	
+			</a>
+		{{pass}}
 		<div class="col-xs-8">
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -288,9 +287,9 @@
 	  $('.dataTables_filter').appendTo('#buttons');
 
 	  api.buttons().container().appendTo('#buttons');
+	  $('.dt-buttons').append($('#boton-retorno'));
 	  $('#buttons').append('<br><br>');
 	  $('.dataTables_info').addClass('pull-right');
-	  
 	  $('.dataTables_filter').addClass('pull-left');
 
 	  

@@ -20,7 +20,7 @@
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Dependencia</th>
-                <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                <th class="camposTabla linksNombres">Estatus</th>
                 <!-- <th class="camposTabla linksNombres">Estatus</th> -->
             </tr>
         </thead>
@@ -33,7 +33,7 @@
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
                 <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=db(db.dependencias.id == bm['bm_depedencia']).select().first().nombre}}</td>
-                <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['bm_espacio_fisico']).select().first().codigo}}</td>
+                <td class="camposTabla">{{=bm['bm_estatus']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -45,7 +45,7 @@
               <th class="camposTabla linksNombres">Placa</th>
               <th class="camposTabla linksNombres">Tipo</th>
               <th class="camposTabla linksNombres">Dependencia</th>
-              <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+              <th class="camposTabla linksNombres">Estatus</th>
               <!-- <th class="camposTabla linksNombres">Estatus</th> -->
             </tr>
         </tfoot>

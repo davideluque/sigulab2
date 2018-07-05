@@ -73,7 +73,7 @@
                  {{for categoria in categorias:}} 
                     <tr>
                         {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
-                            <td class="camposTabla" style="text-align: left">
+                            <td class="camposTabla" style="text-align: center">
                                 <a onclick="editarCategoria('{{=categoria.categoria}}', '{{=categoria.descripcion}}', {{=categoria.id}})">
                                     {{=categoria.categoria.upper()}}
                                 </a>
@@ -139,29 +139,32 @@
                                     <div class="col-sm-1 col1Body"> </div>
                                     <!-- Aqui va la informacion -->
                                     <div class="col-sm-11 col11Body">
-                                        <h4 class="titulosForm">Datos de ingreso</h4>
-                                        <label>Campos marcados con * son obligatorios.</label>
-
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="categoria" id="nombre-categoria" placeholder="Nombre de la categoría*">
-                                            <input type="hidden" class="form-control" name="id_categoria" id="id_categoria">
-                                            <input type="hidden" class="form-control" name="borrar_categoria" id="borrar_categoria" value="False">
-                                            <div class="field-error">
-                                                <p id="error-nombre-categoria"> </p>
+                                        <div>
+                                            <h4 class="titulosForm">Datos de ingreso</h4>
+                                            <label>Campos marcados con * son obligatorios.</label>
+                                            
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="categoria" id="nombre-categoria" placeholder="Nombre de la categoría*">
+                                                <input type="hidden" class="form-control" name="id_categoria" id="id_categoria">
+                                                <input type="hidden" class="form-control" name="borrar_categoria" id="borrar_categoria" value="False">
+                                                <div class="field-error">
+                                                    <p id="error-nombre-categoria"> </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                        <div class="pull-right">
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary">
+                                                <i class="fa fa-plus-circle"></i>
+                                            </button>
+                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row opciones-modal-footer">
-                                    <div class="col-sm-4 text-center">
-                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit">Agregar categoría</button>
-                                    </div>
-                                    <div class="col-sm-4 text-center">
-                                        <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">Eliminar categoría</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -169,6 +172,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Fin Modal Body-->
         </div>
     </div>

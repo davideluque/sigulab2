@@ -9,7 +9,7 @@ db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
-    Field('bm_placa','string',label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
+    Field('bm_placa','string', default="00000", label=T('Número de Placa del Bien'),requires = IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$'))),
     #No son obligatorios para mobiliario
     Field('bm_marca','string',label=T('Marca')),
     Field('bm_modelo','string',label=T('Modelo')),
@@ -267,7 +267,49 @@ db.define_table(
     # Estado = 1 : Oculto
     Field('hr_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
     )
+
+db.herramienta.hr_nombre.requires=IS_NOT_IN_DB(db(db.herramienta.hr_ubicacion==request.vars.hr_ubicacion),'herramienta.hr_nombre')
 db.herramienta.hr_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.herramienta.hr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.herramienta.hr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
 db.herramienta.hr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+
+db.define_table(
+    'historial_mantenimiento_bm',
+    Field('hmbm_nro', 'references bien_mueble', label = T('Numero de bien nacional')),
+    Field('hmbm_fecha_sol', 'date', notnull = True, label = T('Fecha de solicitud')),
+    Field('hmbm_codigo', 'string', label = T('Codigo de Solicitud')),
+    Field('hmbm_tipo', 'string', notnull = True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
+    Field('hmbm_servicio', 'string', notnull = True, label = T('Servicio Ejecutado'),requires = IS_IN_SET(['Ajuste', 'Calibración', 'Inspección','Limpieza','Reparación','Sustitución de Partes','Verificación','Otro'])),
+    Field('hmbm_accion', 'string', notnull = True, label = T('Acción'),requires = IS_IN_SET(['Periódica', 'Extraordinaria', 'Urgente'])),
+    Field('hmbm_descripcion', 'string', notnull = True, label = T('Motivo de ejecución, desperfecto o falla.')),
+    Field('hmbm_proveedor', 'string', notnull = True, label = T('Proveedor del servicio')),
+    Field('hmbm_fecha_inicio', 'date', notnull = True, label = T('Fecha de inicio')),
+    Field('hmbm_fecha_fin', 'date', notnull = True, label = T('Fecha de culminación')),
+    Field('hmbm_tiempo_ejec', 'integer', notnull = True, label = T('Tiempo de ejecución')),
+    Field('hmbm_fecha_cert', 'date', notnull = True, label = T('Fecha de certificación')),
+    Field('hmbm_observacion', 'text', label = T('Observaciones'))
+    )
+
+db.historial_mantenimiento_bm.hmbm_nro.requires = IS_IN_DB(db, db.bien_mueble.id, '%(bm_num)s')
+
+db.define_table(
+    'historial_mantenimiento_sin_bn',
+    Field('hmsb_espacio_fisico', 'references espacios_fisicos', label = T('Espacio fisico')),
+    Field('hmsb_nombre', 'references sin_bn', label = T('Nombre del consumible o material de laboratorio')),
+    Field('hmsb_fecha_sol', 'date', notnull = True, label = T('Fecha de solicitud')),
+    Field('hmsb_codigo', 'string', label = T('Codigo de Solicitud')),
+    Field('hmsb_tipo', 'string', notnull = True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
+    Field('hmsb_servicio', 'string', notnull = True, label = T('Servicio Ejecutado')),
+    Field('hmsb_accion', 'string', notnull = True, label = T('Acción'),requires = IS_IN_SET(['Periódica', 'Extraordinaria', 'Urgente'])),
+    Field('hmsb_descripcion', 'string', notnull = True, label = T('Motivo de ejecución, desperfecto o falla.')),
+    Field('hmsb_proveedor', 'string', notnull = True, label = T('Proveedor del servicio')),
+    Field('hmsb_fecha_inicio', 'date', notnull = True, label = T('Fecha de inicio')),
+    Field('hmsb_fecha_fin', 'date', notnull = True, label = T('Fecha de culminación')),
+    Field('hmsb_tiempo_ejec', 'integer', notnull = True, label = T('Tiempo de ejecución')),
+    Field('hmsb_fecha_cert', 'date', notnull = True, label = T('Fecha de certificación')),
+    Field('hmsb_observacion', 'text', label = T('Observaciones'))
+    )
+
+db.historial_mantenimiento_sin_bn.hmsb_espacio_fisico.requires = IS_IN_DB(db, db.sin_bn.id, '%(sb_espacio)s')
+db.historial_mantenimiento_sin_bn.hmsb_nombre.requires = IS_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
