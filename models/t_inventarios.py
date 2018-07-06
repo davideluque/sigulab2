@@ -235,7 +235,7 @@ db.modificacion_sin_bn.msb_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, 
 db.define_table(
     'herramienta',
     Field('hr_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
-    Field('hr_num','string',requires=[IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), IS_EMPTY_OR(IS_NOT_IN_DB(db,'hr_num'))], label = T('Número Bien Nacional')),
+    Field('hr_num','string',requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
     #
     Field('hr_marca','string',label=T('Marca')),
     Field('hr_modelo','string',label=T('Modelo')),
@@ -270,6 +270,7 @@ db.define_table(
     Field('hr_oculto','integer', default=0, label=T('Visibilidad del BM'), requires=IS_INT_IN_RANGE(0,2)),
     )
 
+db.herramienta.hr_num.requires = IS_EMPTY_OR(IS_NOT_IN_DB(db(db.herramienta.hr_num==request.vars.hr_num), 'herramienta.hr_num'))
 db.herramienta.hr_nombre.requires=IS_NOT_IN_DB(db(db.herramienta.hr_ubicacion==request.vars.hr_ubicacion and db.herramienta.hr_espacio_fisico==request.vars.hr_espacio_fisico),'herramienta.hr_nombre')
 db.herramienta.hr_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.herramienta.hr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
