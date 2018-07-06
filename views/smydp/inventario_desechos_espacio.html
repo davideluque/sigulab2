@@ -151,17 +151,7 @@
                                 {{desecho_seleccionado = desecho}} 
                             {{pass}} 
                         {{pass}}
-
-                        <div class="form-group">
-                          <label for="categoria_desecho">Categoría de desecho:</label>
-                          <br>
-                          <input class="form-control" type="text" name="categoria_desecho" value="{{=desecho_seleccionado['t_inventario_desechos']['categoria']['categoria']}}">
-                        </div>
-                        <div class="form-group">
-                          <label for="composicion">Composición:</label>
-                          <br>
-                          <input class="form-control" type="text" name="composicion" value="{{=desecho_seleccionado['t_inventario_desechos']['composicion']}}">
-                        </div>
+                        
                         <div class="form-group">
                           <label for="envase">Identificación del envase donde se depositó el desecho:</label>
                           <select class="form-control" type="select" id="envase" name="envase" required>

@@ -87,8 +87,8 @@
 
         <tbody>
           {{for registro in bitacora:}}
-          
-            {{fecha = registro.t_Bitacora_desechos.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
+            {{fecha = registro['t_Bitacora_desechos']['fecha'].split(" ")}}
+            {{hora = fecha[1].split(".")}}
             <tr>
               <td class="camposTabla">{{=fecha[0]}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion']}}</td>
@@ -147,7 +147,7 @@
                 <div class="modal-body addBody">
                     <div class="row addRow">
                         <div class="col-lg-12 form-box">
-                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                            <form id="formularioCarga" class="registration-form" method="post">
                                 <fieldset class="formField">
                                     <div class="form-bottom">
                                         <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -179,23 +179,18 @@
                                               <br>
                                               <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" />
                                             </div>
-
-                                            <div class="form-group">
-                                              <label for="cantidad_retirada">Cantidad retirada:</label>
-                                              <br>
-                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" />
-                                            </div>
                                         </div>
                                     </div>
                                     </div>
-                                    
+                                    <div class="row modal-envases-footer">
+                                      <div class="col-sm-offset-10 col-sm-2 text-center">
+                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary">
+                                          <li class="fa fa-plus-circle" />
+                                        </button>
+                                      </div>
+                                    </div>
                                 </fieldset>
                             </form>
-                            <div class="col-lg-12 pull-right">
-                              <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary pull-right">
-                                <li class="fa fa-plus-circle" />
-                              </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -226,14 +221,19 @@
   var filtros = false;
 
   $(document).ready(function() {
+      // DataTable
+      var table = $('#datatable').DataTable();
+
+      table
+      .order([0, 'desc'])
+      .draw();
+
       // Setup - add a text input to each footer cell
       $('#datatable tfoot th').each( function () {
           var title = $(this).text();
           $(this).html( '<input type="text" placeholder="Filtro" />' );
       } );
    
-      // DataTable
-      var table = $('#datatable').DataTable();
    
       // Apply the search
       table.columns().every( function () {

@@ -1626,6 +1626,30 @@ def inventarios_desechos():
 #          BITÁCORA DESECHOS           #
 # FUNCIONES AUXILIARES Y CONTROLADORES #
 ########################################
+def __agregar_entrada_bitacora_desechos(fecha, descripcion, cantidad_generada, cantidad_retirada, saldo_anterior, envase, inventario):
+    fecha_parseada = datetime.datetime.strptime(fecha, "%Y-%m-%d")
+
+    saldo_actual = float(cantidad_generada) + float(saldo_anterior) - float(cantidad_retirada)
+    
+    # Se actualiza la cantidad del desecho peligroso en la entrada del inventario
+    row = db(db.t_inventario_desechos.id == int(inventario)).select().first()
+
+    row.update_record(
+        cantidad = saldo_actual
+    )
+    
+    # Se agrega la entrada en la bitácora
+    id = db.t_Bitacora_desechos.insert(
+                fecha = fecha_parseada,
+                descripcion = descripcion,
+                cantidad_generada = cantidad_generada,
+                cantidad_retirada = cantidad_retirada,
+                saldo = saldo_actual,
+                unidad_medida_bitacora = envase.unidad_medida,
+                envase = envase.id,
+                inventario = inventario
+    )
+
 def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
     # Verifica que no existe en el inventario una entrada repetida 
     # se considera que una entrada es una única cuando una determinada composición
@@ -1714,7 +1738,6 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora_desechos():
-    print "aca"
     # INICIO Datos del modal de agregar un registro
     # Conceptos
     conceptos = ['Generación','Retiro']
@@ -1751,20 +1774,33 @@ def bitacora_desechos():
     bitacora = list(db(
         (db.t_Bitacora_desechos.inventario == inventario_id) &
         (db.t_Bitacora_desechos.created_by == db.auth_user.id)
-    ).select())
+    ).select(orderby=~db.t_Bitacora_desechos.id))
 
-    # *!* Hacer esto cuando se cree el registro y ponerlo en reg['f_descripcion']
-    # Obteniendo la descripcion de cada fila y guardandola como un atributo
-    # for reg in bitacora:
-    #     descripcion = __get_descripcion(reg['t_Bitacora_desechos'])
-    #     reg['t_Bitacora_desechos']['descripcion'] = descripcion
+    ultima_entrada = db(
+        (db.t_Bitacora_desechos.inventario == inventario_id) &
+        (db.t_Bitacora_desechos.created_by == db.auth_user.id)
+    ).select(orderby=~db.t_Bitacora_desechos.id).first()
 
-    # Si se han enviado datos para agregar un nuevo registro
-    # concepto = request.vars.concepto
-    # if concepto:
-    #     __agregar_registro(concepto)
+    #Se está agregando una nueva entrada a la bitácora
+    if request.vars.fecha_entrada:
+        cantidad_retirada = 0
+        cantidad_generada = 0
 
+        if(request.vars.cantidad_retirada != ''):
+            cantidad_retirada = request.vars.cantidad_retirada
 
+        if(request.vars.cantidad_generada != ''):
+            cantidad_generada = request.vars.cantidad_generada
+        
+        __agregar_entrada_bitacora_desechos(
+            request.vars.fecha_entrada,
+            request.vars.descripcion,
+            cantidad_generada,
+            cantidad_retirada,
+            ultima_entrada['t_Bitacora_desechos']['saldo'],
+            bitacora[0]['t_Bitacora_desechos']['envase'],
+            bitacora[0]['t_Bitacora_desechos']['inventario'].id
+        )
 
     return dict(bitacora=bitacora,
                 unidad_medida=unidad_medida,
