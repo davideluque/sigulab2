@@ -1714,7 +1714,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora_desechos():
-
+    print "aca"
     # INICIO Datos del modal de agregar un registro
     # Conceptos
     conceptos = ['Generación','Retiro']
@@ -1773,7 +1773,7 @@ def bitacora_desechos():
                 espacio_nombre=espacio_nombre,
                 espacio_id=espacio_id,
                 conceptos=conceptos,
-                unidades_de_medida=unidades_de_medida),
+                unidades_de_medida=unidades_de_medida)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def desechos():

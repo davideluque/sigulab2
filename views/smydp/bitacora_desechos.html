@@ -43,7 +43,7 @@
 <div id="inventario-dependencia" class="container titulo">
 		<div class="col-xs-2 boton-retorno">
         <p class="padre dep-titulo"> {{=espacio_nombre}} </p>
-        <a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=espacio_id, retroceder=retroceder))}}">
+        <a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=espacio_id))}}">
 		    		<i class="fa fa-arrow-left"></i>
         </a>
       </div>
@@ -60,7 +60,7 @@
 
     <div class="row">
       <div id="buttons" class="pull-right">
-        <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addregister">
+        <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#agregarEntrada">
           <i class="fa fa-plus-circle"></i>
         </button>
         <!-- Filtrado -->
@@ -118,6 +118,91 @@
 <!-- Fin Listado --> 
 
 <!-- Modal para agregar un registro a la bitacora --> 
+
+<!-- Modal editar envase -->
+    <div class="modal fade" id="agregarEntrada" role="dialog">
+        <div class="modal-dialog modal-md">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+    
+                <!-- Modal Header -->
+                <div class="modal-header addHeader">
+                    <div class="row addRow" id="rowHeader">
+                        <div class="col-sm-1" id="col1Header">
+                            <div class="container" id="plus">
+                                <h1 id="agregar">+</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-10" id="col11Header">
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Añadir registro a la bitácora
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Header -->
+    
+                <!-- Modal Body -->
+                <div class="modal-body addBody">
+                    <div class="row addRow">
+                        <div class="col-lg-12 form-box">
+                            <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                                <fieldset class="formField">
+                                    <div class="form-bottom">
+                                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                        <div class="col-sm-1 col1Body"> </div>
+                                        <!-- Aqui va la informacion -->
+                                        <div class="col-sm-11 col11Body">
+                                            <h4 class="titulosForm">Datos de ingreso</h4>
+                                            <label>Campos marcados con * son obligatorios.</label>
+                                            <div class="form-group">
+                                                <label for="fecha_entrada">Fecha de creación del desecho:</label>
+                                                <br>
+                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="descripcion">Descripción del proceso:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="descripcion" name="descripcion" />
+                                            </div>  
+                                            
+                                            <div class="form-group">
+                                              <label for="cantidad_generada">Cantidad generada:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="cantidad_generada" name="cantidad_generada" />
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="cantidad_retirada">Cantidad retirada:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" />
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="cantidad_retirada">Cantidad retirada:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    
+                                </fieldset>
+                            </form>
+                            <div class="col-lg-12 pull-right">
+                              <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary pull-right">
+                                <li class="fa fa-plus-circle" />
+                              </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Body-->
+            </div>
+        </div>
+    </div>
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
