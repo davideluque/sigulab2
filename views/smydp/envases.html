@@ -260,7 +260,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción" value='{{=cont.descripcion}}'>
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Especifique descripción si marcó otro en algún campo." value='{{=cont.descripcion}}'>
                                                 <div class="field-error">
                                                     <p id="error-descripcion"> </p>
                                                 </div>
@@ -377,9 +377,9 @@
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
+                                <td class="camposTabla" style="text-align: center">{{=contenedor.composicion}}</td>
+                                <td class="camposTabla" style="text-align: center">{{=contenedor.categoria.categoria}}</td>
+                                <td class="camposTabla" style="text-align: center">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
@@ -502,7 +502,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción">
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Especifique descripción si marcó otro en algún campo.">
                                                 <div class="field-error">
                                                     <p id="error-descripcion"> </p>
                                                 </div>
