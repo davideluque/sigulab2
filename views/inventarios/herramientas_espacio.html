@@ -406,9 +406,10 @@ del concepto y tipo de ingreso o egreso -->
   function display_piezas(value){
     if ( value == "Conjunto" ){
       document.getElementById("grupo-piezas").style.display = 'block';
-      document.getElementById("grupo-piezas").setAttribute("required", "");
+      document.getElementById("numpiezas_her").setAttribute("required", "");
     }else{
       document.getElementById("grupo-piezas").style.display = 'none';
+      document.getElementById("numpiezas_her").removeAttribute("required", "");
     }
   }
 
