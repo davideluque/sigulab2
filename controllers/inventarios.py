@@ -1170,6 +1170,133 @@ def detalles_mat():
                 presentacion = presentacion
                 )
 
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_herramientas():
+    #Recuperamos el espacio
+    espacio = request.vars['espacio']
+    #El nombre del material/consumible
+    name = request.vars['nombreMat']
+
+    # El usuario que está editando
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+
+    # Busco el material/consumible
+    bien = db( (db.herramienta.hr_espacio_fisico == espacio) & (db.herramienta.hr_nombre == name) ).select()[0]
+    
+    #Inicializo variables
+    material_pred = []
+    color = []
+    unidad_med = []
+    movilidad = []
+    uso = []
+    nombre_cat = []
+    cod_localizacion = []
+    localizacion = []
+    nombre_espaciof = []
+    unidad_adscripcion = []
+    unidad_cap = []
+    presentacion=[]
+
+    #Si se edita
+    if request.vars.nombre_mat:
+        __agregar_material_modificar(
+            request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
+            request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
+            request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
+            request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
+            request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
+
+    if request.vars.eliminacion:
+        if bien['sb_eliminar'] == 2: 
+            db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 0)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['hr_nombre'])
+        request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['hr_oculto'] == 0:
+            db(db.herramienta.id == bien['id']).select().first().update_record(hr_oculto = 1)
+            response.flash = "Ahora " + str(bien['hr_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['hr_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
+
+    aforado_options = ['Si', 'No', 'N/A']
+    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+    unidad_med = ['cm','m']
+    movilidad = ['Fijo','Portátil']
+    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
+    cod_localizacion = ['150301','240107']
+    localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+    'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+    presentacion=["Unidad", "Conjunto"]
+    if bien['hr_presentacion'] == "Unidad":
+        caracteristicas_list = ['NumBien:', 'Marca:', 'Modelo:', 'Serial:', 'Presentacion:', 
+        'Contenido:', 'Descripcion:', 'Material predominante:', 'Unidad:', 'Ancho:', 'Largo:',
+        'Alto:', 'Diametro:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'NumBien:': bien['hr_num'],
+            'Marca:': bien['hr_marca'],
+            'Modelo:': bien['hr_modelo'],
+            'Serial:': bien['hr_serial'],
+            'Presentacion:': bien['hr_presentacion'],
+            'Contenido:': bien['hr_contenido'],
+            'Descripción:': bien['hr_descripcion'],
+            'Material predominante:': bien['hr_material'],
+            'Unidad de medida:': bien['hr_unidad'],
+            'Ancho:': bien['hr_ancho'],
+            'Largo:': bien['hr_largo'],
+            'Alto:': bien['hr_alto'],
+            'Diametro:': bien['hr_diametro'],
+            'Ubicación interna:' : bien['hr_ubicacion']
+        }
+    else:
+        caracteristicas_list = ['NumBien:', 'Marca:', 'Modelo:', 'Serial:', 'Presentacion:', 
+        'Número de Piezas:', 'Contenido:', 'Descripcion:', 'Material predominante:', 'Unidad:', 
+        'Ancho:', 'Largo:', 'Alto:', 'Diametro:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'NumBien:': bien['hr_num'],
+            'Marca:': bien['hr_marca'],
+            'Modelo:': bien['hr_modelo'],
+            'Serial:': bien['hr_serial'],
+            'Presentacion:': bien['hr_presentacion'],
+            'Numero de Piezas:': bien['hr_numpiezas'],
+            'Contenido:': bien['hr_contenido'],
+            'Descripción:': bien['hr_descripcion'],
+            'Material predominante:': bien['hr_material'],
+            'Unidad de medida:': bien['hr_unidad'],
+            'Ancho:': bien['hr_ancho'],
+            'Largo:': bien['hr_largo'],
+            'Alto:': bien['hr_alto'],
+            'Diametro:': bien['hr_diametro'],
+            'Ubicación interna:' : bien['hr_ubicacion']
+        }
+    return dict(bien = bien,
+                material_pred = material_pred,
+                color_list = color,
+                unidad_med = unidad_med,
+                movilidad_list = movilidad,
+                uso_list = uso,
+                nombre_cat = nombre_cat,
+                cod_localizacion = cod_localizacion,
+                localizacion = localizacion,
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict,
+                aforado_options = aforado_options,
+                unidad_cap = unidad_cap,
+                presentacion = presentacion
+                )
+
+
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
 @auth.requires(lambda: __check_role())
