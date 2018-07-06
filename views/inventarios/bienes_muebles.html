@@ -13,7 +13,6 @@
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
-		  padding-right: 10ex;
 		}
 		
 	</style>
@@ -25,11 +24,15 @@
   	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
   	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
   	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+	 <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/font-awesome.min.css')}}">
+
  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
   	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+	 
  	<style>
    	.row{
      	margin-right:0px!important;
@@ -264,7 +267,7 @@
   <script language="javascript">
   
 	var table = $('#datatable').DataTable({
-	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
 	  //dom: 'Bfrtip',
 	  language: {
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
@@ -278,10 +281,18 @@
   
 		new $.fn.dataTable.Buttons(api, {
 		  buttons: [
+
+			{
+			text:'<i class="fa fa-filter"></i>',
+			action: function(){
+				mostrarFiltro()
+			},
+			className: 'boton-sigulabIzq'
+			},
   
 			  {
 				  extend: 'collection',
-				  text: '<i class="fas fa-floppy-o"></i>',
+				  text: '<i class="fas fa-save"></i>',
 				  className: 'boton-sigulab',
 				  buttons: [
 					  { extend:'copy', text: 'Copiar' } ,
@@ -290,10 +301,10 @@
 					  'pdf'
 				  ]
 			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
+			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
 		  ]
 		});
-		$('#botonModal').addClass('pull-left')
+		//$('#botonModal').addClass('pull-left')
 		$('#filtrar').addClass('pull-left');
 		$('#espacioBuscar').addClass('pull-left');
   
@@ -301,14 +312,32 @@
 		$('.dataTables_filter').appendTo('#buttons');
   
 		api.buttons().container().appendTo('#buttons');
-		$('.dt-buttons').append($('#botonModal'));
+		//$('.dt-buttons').append($('#botonModal'));
 		$('.dt-buttons').append($('#filtrar'));
 		$('#buttons').append('<br><br>');
 		$('.dataTables_info').addClass('pull-right');
 		$('.dataTables_filter').addClass('pull-left');
+
+		$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+		$('#datatable_next').html('<span class="fa fa-arrow-right" />');
   
 		
 	 }
 	});
+
+
+
+  </script>
+
+  <script language='javascript'>
+window.onclick = function(event) {
+  if (!event.target.matches('.dropDown')) {
+    $(".dt-button-collection").hide();
+  }
+  $('#datatable1_previous').html('<span class="fa fa-arrow-left"/>');
+  $('#datatable1_next').html('<span class="fa fa-arrow-right" />');
+  $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
+  $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+}
   </script>
 {{end}}
