@@ -16,11 +16,12 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">N° BM</th>
-                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
                 <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Estatus</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -31,11 +32,12 @@
                 <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_marca']}}</td>
                 <td class="camposTabla">{{=bm['bm_modelo']}}</td>
                 <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla">{{=bm['bm_estatus']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -48,6 +50,7 @@
           <th class="camposTabla linksNombres">Marca</th>
           <th class="camposTabla linksNombres">Modelo</th>
           <th class="camposTabla linksNombres">Serial</th>
+          <th class="camposTabla linksNombres">Estatus</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -102,7 +105,6 @@
                     <span class="step">2</span>
                     <span class="step">3</span>
                     <span class="step">4</span>
-                    <span class="step">5</span>
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
@@ -120,7 +122,7 @@
                       </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()"><i class="fas fa-arrow-right"></i></button>    
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos(this);"><i class="fas fa-arrow-right"></i></button>    
             </fieldset>
           
                 
@@ -133,7 +135,6 @@
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
                       <span class="step">4</span>
-                      <span class="step">5</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -162,21 +163,20 @@
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
                                 
-                <!-- Tercer paso-->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                <!-- Segundo paso 2-->
+                <fieldset class="formField" id='segundo-paso' >
+                    <div class="form-bottom" id='segundoPaso' data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step">5</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -206,19 +206,18 @@
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                   </fieldset>
-                  <!-- Fin Tercer Paso -->
+                  <!-- Fin Segundo Paso -->
   
   
-                <!-- Cuarto paso Parte 3-->
+                <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step">3</span>
-                        <span class="step activePass">4</span>
-                        <span class="step">5</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -270,26 +269,26 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                           </div>
 
-                          <div class="form-group" id="grupo-ancho">
+                          <div class="form-group" id="grupo-ancho" hidden>
                               <label>Ancho</label>
                             <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
                             <font color="red"><div id="err_ancho" hidden></div></font>
                           </div>
 
 
-                          <div class="form-group" id="grupo-largo">
+                          <div class="form-group" id="grupo-largo" hidden>
                             <label>Largo</label>
                             <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
                             <font color="red"><div id="err_largo" hidden></div></font>
                           </div>
 
-                          <div class="form-group" id="grupo-altura">
+                          <div class="form-group" id="grupo-altura" hidden>
                             <label>Altura</label>
                             <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
                             <font color="red"><div id="err_alto" hidden></div></font>
                           </div>
 
-                          <div class="form-group" id="grupo-diametro">
+                          <div class="form-group" id="grupo-diametro" hidden>
                             <label>Diámetro</label>
                             <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
                             <font color="red"><div id="err_diametro" hidden></div></font>
@@ -300,19 +299,18 @@
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin cuarto Paso -->
+                  <!-- Fin Tercer Paso -->
 
 
-                <!--Cuarto Paso parte 2-->
+                <!--Tercer Paso parte 2-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step">3</span>
-                        <span class="step activePass">4</span>
-                        <span class="step">5</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
                         
                       </div>
                       <!-- Aqui va la informacion -->
@@ -381,9 +379,9 @@
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin Cuarto paso-->
+                  <!-- Fin Tercer paso-->
 
-                <!-- Comienzo Quinto Paso Parte 1-->
+                <!-- Comienzo Cuarto Paso Parte 1-->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
@@ -391,8 +389,7 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
-                        <span class="step">4</span>
-                        <span class="step activePass">5</span>
+                        <span class="step activePass">4</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -452,7 +449,7 @@
                     </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>
-                <!-- Fin Quinto Paso -->
+                <!-- Fin Cuarto Paso -->
               </form>
           </div>
         </div>               
@@ -503,6 +500,8 @@ del concepto y tipo de ingreso o egreso -->
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
     if (selecion.value == "Mobiliario"){
+      //$('#segundo-paso').hide();
+      //$('#segundoPaso').hide();
       document.getElementById("marca").type = 'hidden';
       document.getElementById("modelo").type = 'hidden';
       document.getElementById("serial").type = 'hidden';
@@ -538,22 +537,23 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("largo").type = 'hidden';
       document.getElementById("alto").type = 'hidden';
       document.getElementById("diametro").type = 'hidden';
-      document.getElementById("grupo-ancho").style.display = 'none';
-      document.getElementById("grupo-largo").style.display = 'none';
-      document.getElementById("grupo-alto").style.display = 'none';
-      document.getElementById("grupo-diametro").style.display = 'none';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
     }else{
       document.getElementById("unidad").type = 'text';
       document.getElementById("ancho").type = 'text';
       document.getElementById("largo").type = 'text';
       document.getElementById("alto").type = 'text';
       document.getElementById("diametro").type = 'text';
-      document.getElementById("grupo-ancho").style.display='block';
-      document.getElementById("grupo-largo").style.display='block';
-      document.getElementById("grupo-alto").style.display='block';
-      document.getElementById("grupo-diametro").style.display='block';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
     }
   }
+
 
   // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){

@@ -144,11 +144,13 @@
                           </div>
     
                             <div class="form-group" tag="Formato:">
+                                <label>Nombre del consumible*</label>
                                 <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del consumible" placeholder="Nombre del consumible*" required>
                                 <div class="field-error"> <p id="err_nombre_mat"> </p> </div>
                             </div>
     
                             <div class="form-group">
+                                <label>Cantidad de ese consumible*</label>
                                 <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese consumible*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
                                 <font color="red"><div id="err_cantidad" hidden></div></font>
                             </div>
@@ -157,11 +159,13 @@
                                 
     
                             <div class="form-group">
+                                <label>Marca</label>
                                 <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca">
                                 <div class="field-error"> <p id="error-marca"> </p> </div>
                             </div>
     
                             <div class="form-group">
+                                <label>Modelo/Código</label>
                                 <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código">
                                 <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                             </div>
@@ -238,6 +242,7 @@
                             </div>
     
                             <div class="form-group">
+                                <label>Unidades por presentación</label>
                                 <input type="hidden" class="form-control" id="unidades" 
                                 name="unidades" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
                                 <font color="red"><div id="err_unidades" hidden></div></font>
@@ -270,6 +275,7 @@
                             </div>
     
                             <div class="form-group" id="grupo-material2">
+                                <label>Material secundario</label>
                                 <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario"
                                 onchange="agregar_otro('material_sec', 'material_sec', 'otro_material2')">
                                   <!-- Insertar un for-->
