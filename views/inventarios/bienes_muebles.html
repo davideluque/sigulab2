@@ -3,6 +3,7 @@
 {{block head}}
 	<meta charset="UTF-8">
 
+
 	<!-- Para los mensajes con flash -->
 	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
@@ -24,9 +25,7 @@
   	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
   	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
   	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	 <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/font-awesome.min.css')}}">
-
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
   	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
@@ -329,15 +328,4 @@
 
   </script>
 
-  <script language='javascript'>
-window.onclick = function(event) {
-  if (!event.target.matches('.dropDown')) {
-    $(".dt-button-collection").hide();
-  }
-  $('#datatable1_previous').html('<span class="fa fa-arrow-left"/>');
-  $('#datatable1_next').html('<span class="fa fa-arrow-right" />');
-  $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
-  $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
-}
-  </script>
 {{end}}
