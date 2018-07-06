@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora_desechos.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}">
   
@@ -41,23 +42,25 @@
 
 <!-- Inicio Listado -->
 <div id="inventario-dependencia" class="container titulo">
-		<div class="col-xs-2 boton-retorno">
+  <div class="row">
+    <div class="col-lg-2 boton-retorno">
         <p class="padre dep-titulo"> {{=espacio_nombre}} </p>
-        <a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=espacio_id))}}">
+      <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">
 		    		<i class="fa fa-arrow-left"></i>
         </a>
       </div>
-<div class="row">
-  <div>
+  </div>  
+
+   
+  <div class="row text-center">
+      <h3 id="titulo" class="titulos">BITÁCORA - {{=composicion}}</h3>
+      <h3 id="subtitulo" class="titulos"> ({{=espacio_nombre}})</h3>
+  </div>
     <div class="row text-center">
               <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
     </div>
+  
     <div class="row">
-      <h3 id="titulo" class="titulos">{{=espacio_nombre}} - Bitácora</h3>
-       <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3>
-      </div>
-    </div>
-
     <div class="row">
       <div id="buttons" class="pull-right">
         <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#agregarEntrada">
@@ -72,11 +75,11 @@
     </div>
     <br>
 
-    <div class="table-responsive no-padding no-margin">
+    <div class="table-responsive">
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Fecha</th>
+                <th style="width: none !important" class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
                 <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
