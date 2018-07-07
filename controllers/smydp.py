@@ -1153,7 +1153,7 @@ def __eliminar_categoria(categoria_id):
     return T("Categoría de desecho eliminada exitosamente.")
 
 
-@auth.requires(lambda: __check_role())
+# @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def inventarios_desechos():
     # Inicializando listas de espacios fisicos y dependencias
@@ -1203,23 +1203,9 @@ def inventarios_desechos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
-
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios_desechos'))
-
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user, 
-                                int(request.vars.dependencia), 
-                                    request.vars.es_espacio):
-                redirect(URL('inventarios_desechos'))
-
             if request.vars.es_espacio == "True":
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
@@ -1417,19 +1403,6 @@ def inventarios_desechos():
     elif auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE LABORATORIO") or auth.has_membership("JEFE DE SECCIÓN"):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
-
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('inventarios'))
-
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user, 
-                                int(request.vars.dependencia), 
-                                    request.vars.es_espacio):
-                redirect(URL('inventarios'))
-
             if request.vars.es_espacio == "True":
                 # Si se está editando un desecho, se actualiza la informacion
                 if request.vars.view:
@@ -1612,6 +1585,204 @@ def inventarios_desechos():
 
             mostrar_campo_dependencia = True
             espacio_visitado = False
+
+    else:
+        # Si el usuario ha seleccionado una dependencia o un espacio fisico
+        if request.vars.dependencia:
+            if request.vars.es_espacio == "True":
+                # Se muestra el inventario del espacio
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.codigo
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                                    ).select().first().dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+
+                espacio_visitado = True
+
+                # Se muestra la lista de sustancias que tiene en inventario
+
+                inventario = list(db(
+                    (db.espacios_fisicos.id == espacio_id) &
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.id,
+                    db.t_inventario_desechos.composicion, 
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.responsable,
+                    db.t_inventario_desechos.envase,
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.peligrosidad,
+                    db.t_inventario_desechos.tratamiento,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |  
+                    db.t_inventario_desechos.id | 
+                     db.t_inventario_desechos.composicion | 
+                     db.t_inventario_desechos.responsable |
+                     db.t_inventario_desechos.unidad_medida |
+                     db.t_inventario_desechos.peligrosidad |
+                     db.t_inventario_desechos.tratamiento |
+                     db.t_inventario_desechos.envase
+                ))
+
+                inventario_total = list(db(
+                    (db.espacios_fisicos.id == espacio_id) &
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select())
+
+                ####################
+                # A T E N C I Ó N  #
+                ####################
+                # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
+                # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
+                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+
+                ####################
+                # A T E N C I Ó N  #
+                ####################
+                # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
+                # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
+                envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
+                #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
+                
+                # Se esta editando el detalle de un desecho
+                if request.vars.view and request.vars.envase:
+                    envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
+                    
+                    __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                    
+                else:
+                    # Si se esta agregando un nuevo desecho, se registra en la DB
+                    if request.vars.envase:
+
+                        #Se busca la información del envase en la DB
+                        envase = list(db(db.t_envases.id == request.vars.envase).select())
+
+                        __agregar_desecho(envase[0],
+                                            request.vars.peligrosidad,
+                                            request.vars.tratamiento,
+                                            request.vars.cantidad,
+                                            request.vars.concentracion
+                        )
+
+            else:
+                # Se muestran las dependencias que componen a esta dependencia padre
+                # y se lista el inventario agregado
+                dep_id = request.vars.dependencia
+                dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+                dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
+                                      ).select(db.dependencias.ALL))
+                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # tiene otras dependencias por debajo (podria tener espacios fisicos
+                # o estar vacia)
+                
+                if len(dependencias) == 0:
+                    # Buscando espacios fisicos que apunten a la dependencia escogida
+                    espacios = list(db(db.espacios_fisicos.dependencia == dep_id
+                                      ).select(db.espacios_fisicos.ALL))
+                    
+                    inventario = list(db(
+                        (db.t_inventario_desechos.seccion == request.vars.dependencia)).select())
+
+                    inventario = list(db(
+                    (db.dependencias.id == dep_id) & 
+                    (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                    (db.espacios_fisicos.id == db.t_inventario_desechos.espacio_fisico)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.id,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
+                     db.t_inventario_desechos.espacio_fisico |
+                        db.t_inventario_desechos.id | 
+                    db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
+                    ))
+
+                    es_espacio = True
+                
+                else:
+                    inventario = list(db(
+                    (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                        (db.espacios_fisicos.dependencia == db.dependencias.id) & 
+                        (db.dependencias.unidad_de_adscripcion == request.vars.dependencia)
+                    ).select(
+                    db.t_inventario_desechos.categoria,
+                    db.t_inventario_desechos.id,
+                    db.t_inventario_desechos.espacio_fisico,
+                    db.t_inventario_desechos.seccion,
+                    db.t_inventario_desechos.cantidad.sum(),
+                    db.t_inventario_desechos.unidad_medida,
+                    db.t_inventario_desechos.responsable,
+                    groupby = 
+                     db.t_inventario_desechos.categoria |
+                        db.t_inventario_desechos.id | 
+                     db.t_inventario_desechos.espacio_fisico |
+                     db.t_inventario_desechos.seccion |
+                    db.t_inventario_desechos.unidad_medida | 
+                    db.t_inventario_desechos.responsable
+                    ))
+
+                    mostrar_campo_dependencia = True
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.dependencias.id == request.vars.dependencia
+                                 ).select().first().unidad_de_adscripcion
+                # Si dep_padre_id es None, se ha llegado al tope de la jerarquia
+                # y no hay un padre de este nodo
+                if dep_padre_id:
+                    dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                         ).select().first().nombre
+
+
+        else:
+            # Dependencia a la que pertenece el usuario o que tiene a cargo
+            dep_id = user.f_dependencia
+            dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+
+            # Se muestran las dependencias que componen a la dependencia que
+            # tiene a cargo el usuario y el inventario agregado de esta
+            dependencias = list(db(db.dependencias.nombre.startswith('LAB')).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la dependencia del usuario
+            inventario = list(db(
+                (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
+                (db.espacios_fisicos.dependencia == db.dependencias.id)
+                ).select(
+                db.t_inventario_desechos.categoria,
+                db.t_inventario_desechos.espacio_fisico,
+                db.t_inventario_desechos.id,
+                db.t_inventario_desechos.seccion,
+                db.t_inventario_desechos.cantidad.sum(),
+                db.t_inventario_desechos.unidad_medida,
+                db.t_inventario_desechos.responsable,
+                groupby = 
+                    db.t_inventario_desechos.categoria |
+                    db.t_inventario_desechos.espacio_fisico |
+                    db.t_inventario_desechos.id | 
+                    db.t_inventario_desechos.seccion |
+                db.t_inventario_desechos.unidad_medida | 
+                db.t_inventario_desechos.responsable
+                ))
+
+            mostrar_campo_dependencia = True
+
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
