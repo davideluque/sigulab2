@@ -978,6 +978,11 @@ def inventarios():
 def envases():
     user_id = auth.user_id
 
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+    print user_dep_id
+
+
     categorias_de_desecho = []
     contenedores = []
     espacios_fisicos_adscritos = []
@@ -996,12 +1001,20 @@ def envases():
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos)
         ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
-    else:
+
+    elif(auth.has_membership('TÉCNICO') or  auth.has_membership('JEFE DE LABORATORIO')):
         #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
         #jurisdicción
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos.dependencia == db.dependencias.id) &
-            (db.dependencias.id_jefe_dependencia == user_id)
+            (db.dependencias.unidad_de_adscripcion == user_dep_id) 
+        ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
+
+    elif auth.has_membership('JEFE DE SECCIÓN'):
+        #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
+        #jurisdicción
+        espacios_fisicos_adscritos = list(db(
+            (db.espacios_fisicos.dependencia == user_dep_id)
         ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
 
 
