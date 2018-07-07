@@ -12,6 +12,10 @@
     body{font-size: 14px;}
 }
 
+#datatable_length{
+	text-align: left;
+}
+
 .buttons-html5, .buttons-print{
     border-radius: 50%;
 	background-color: #337ab7;
