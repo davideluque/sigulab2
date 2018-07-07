@@ -1298,7 +1298,9 @@ def inventarios_desechos():
                 if request.vars.view and request.vars.envase:
                     envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
                     
-                    __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                    response.flash = __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                    session.flash = response.flash
+                    return redirect(URL(host=True)) 
                     
                 else:
                     # Si se esta agregando un nuevo desecho, se registra en la DB
@@ -1307,12 +1309,15 @@ def inventarios_desechos():
                         #Se busca la información del envase en la DB
                         envase = list(db(db.t_envases.id == request.vars.envase).select())
 
-                        __agregar_desecho(envase[0],
+                        response.flash =__agregar_desecho(envase[0],
                                             request.vars.peligrosidad,
                                             request.vars.tratamiento,
                                             request.vars.cantidad,
                                             request.vars.concentracion
                         )
+
+                        session.flash = response.flash
+                        return redirect(URL(host=True)) 
 
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
@@ -1497,8 +1502,9 @@ def inventarios_desechos():
                     if request.vars.view and request.vars.envase:
                         envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
                         
-                        __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
-                        
+                        response.flash = __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                        session.flash = response.flash
+                        return redirect(URL(host=True)) 
                     else:
                         # Si se esta agregando un nuevo desecho, se registra en la DB
                         if request.vars.envase:
@@ -1506,12 +1512,15 @@ def inventarios_desechos():
                             #Se busca la información del envase en la DB
                             envase = list(db(db.t_envases.id == request.vars.envase).select())
 
-                            __agregar_desecho(envase[0],
+                            response.flash = __agregar_desecho(envase[0],
                                                 request.vars.peligrosidad,
                                                 request.vars.tratamiento,
                                                 request.vars.cantidad,
                                                 request.vars.concentracion
                             )
+
+                            session.flash = response.flash
+                            return redirect(URL(host=True)) 
 
                 else:
                     # Se muestran las dependencias que componen a esta dependencia padre
@@ -1779,8 +1788,9 @@ def inventarios_desechos():
                     if request.vars.view and request.vars.envase:
                         envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
                         
-                        __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
-                        
+                        response.flash = __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
+                        session.flash = response.flash
+                        return redirect(URL(host=True)) 
                     else:
                         # Si se esta agregando un nuevo desecho, se registra en la DB
                         if request.vars.envase:
@@ -1788,12 +1798,15 @@ def inventarios_desechos():
                             #Se busca la información del envase en la DB
                             envase = list(db(db.t_envases.id == request.vars.envase).select())
 
-                            __agregar_desecho(envase[0],
+                            response.flash = __agregar_desecho(envase[0],
                                                 request.vars.peligrosidad,
                                                 request.vars.tratamiento,
                                                 request.vars.cantidad,
                                                 request.vars.concentracion
                             )
+
+                            session.flash = response.flash
+                            return redirect(URL(host=True)) 
 
                 else:
                     # Se muestran las dependencias que componen a esta dependencia padre
@@ -2035,6 +2048,9 @@ def __agregar_entrada_bitacora_desechos(fecha, descripcion, cantidad_generada, c
                 inventario = inventario
     )
 
+    return T("Entrada agregada exitósamente.")
+
+# Actualiza la información de un desecho peligroso
 def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
     # Verifica que no existe en el inventario una entrada repetida 
     # se considera que una entrada es una única cuando una determinada composición
@@ -2062,11 +2078,10 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
             peligrosidad = peligrosidad
         )
 
-        response.flash = T("Desecho actualizado correctamente.")
+        return T("Desecho actualizado correctamente.")
 
     else:
-        response.flash = T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
-
+        return T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
 
 
 # Agrega un nuevo desecho peligroso al inventario de un espacio físico
@@ -2099,6 +2114,8 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             envase = envase.id,
                                             tratamiento = tratamiento,
                                             peligrosidad = peligrosidad)
+            
+            return T("Desecho creado exitósamente.")
 
             # Crea la entrada inicial en la bitácora de desechos
             db.t_Bitacora_desechos.insert(
@@ -2113,9 +2130,9 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
             )
 
         else:
-            response.flash = T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
+            return T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
     else:
-        response.flash = T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
+        return T("El desecho que usted está intentando ingresar ya se encuentra registrado. Por favor edite su entrada en la bitácora.")
 
 
 
@@ -2177,7 +2194,7 @@ def bitacora_desechos():
         if(request.vars.cantidad_generada != ''):
             cantidad_generada = request.vars.cantidad_generada
         
-        __agregar_entrada_bitacora_desechos(
+        response.flash = __agregar_entrada_bitacora_desechos(
             request.vars.fecha_entrada,
             request.vars.descripcion,
             cantidad_generada,
@@ -2186,6 +2203,10 @@ def bitacora_desechos():
             bitacora[0]['t_Bitacora_desechos']['envase'],
             bitacora[0]['t_Bitacora_desechos']['inventario'].id
         )
+        print "epaaaa"
+        session.flash = response.flash
+        
+        return redirect(URL('..', 'sigulab2', 'smydp/bitacora_desechos', vars=dict(inv=inventario_id))) 
 
     return dict(bitacora=bitacora,
                 unidad_medida=unidad_medida,

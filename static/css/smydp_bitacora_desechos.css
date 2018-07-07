@@ -16,6 +16,10 @@ th.camposTabla.linksNombres.sorting_asc{
 	width: 100% !important;
 }
 
+button.close.btn{
+	margin-top: 0px !important;
+}
+
 @media only screen and (min-width: 768px){ 
 	#inventario-dependencia{
 		padding-bottom: 270px;
