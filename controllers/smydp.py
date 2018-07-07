@@ -1066,10 +1066,8 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
             categoria = categoria
         )
 
-        return T("Información del contenedor actualizada correctamente.")
+        return T("La información del contenedor se ha modificado exitosamente.")
         
-
-
     else:
         # Se verifica si la identificación del envase que se quiere crear fue previamente utilizada
         if len(list(db(db.t_envases.identificacion == identificacion).select())) > 0:
