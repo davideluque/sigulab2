@@ -1032,7 +1032,7 @@ def envases():
             
             response.flash = __agregar_envase(
                 request.vars.identificacion,
-                float(request.vars.capacidad),
+                float(str(request.vars.capacidad).replace(",", ".")),
                 int(request.vars.unidad_medida),
                 request.vars.forma,
                 request.vars.material,
