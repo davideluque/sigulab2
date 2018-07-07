@@ -398,6 +398,23 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
                           en este espacio.".format(nombre)
         return False
+    if num:
+        if (db((db.herramienta.hr_num == num)).select()):
+            response.flash = "El BM con Nro de Bien Nacional \"{0}\" ya ha \
+                            sido ingresado anteriormente.".format(num)
+            return False
+
+    # Verificamos si la variable es un conjunto o una unidad
+    if presentacion=='Unidad':
+        numpiezas='1'
+        contenido=None
+        descripcion=None
+    if not unidad:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.herramienta.insert(
         hr_nombre = nombre,
