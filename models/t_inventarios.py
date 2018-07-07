@@ -91,6 +91,7 @@ db.define_table(
     Field('mbn_subcategoria', 'string', label = T('Nombre de la subcategoría')),
     Field('mbn_codigo_localizacion','string',label=T('Código de Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['150301','240107']))),
     Field('mbn_localizacion','string',label=T('Localización'), requires=IS_EMPTY_OR(IS_IN_SET(['Edo Miranda, Municipio Baruta, Parroquia Baruta','Edo Vargas, Municipio Vargas, Parroquia Macuto']))),
+    Field('mbn_desc', 'string', length = 140, label = T('Razon de modificación')),
     Field('mbn_modifica_ficha', 'reference auth_user', label = T('Usuario que modifica la ficha')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
@@ -171,6 +172,7 @@ db.define_table(
     # Estado = 1  :Aceptado
     # Estado = 2  :Sin solicitud
     Field('sb_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
+    Field('sb_desc_eliminar', 'string', length = 140, label = T('Razon de Eliminacion')),
     Field('sb_clasificacion', 'string', notnull = True, label = T('Clasificacion del consumible/material'), requires=IS_IN_SET(['Material de Laboratorio','Consumible'])),
 	# Estado = 0 : Visible
     # Estado = 1 : Oculto
@@ -211,6 +213,7 @@ db.define_table(
     Field('msb_presentacion', 'string', label = T('Presentación')),
     Field('msb_unidades', 'string', label = T('Unidades por presentación'), requires = IS_EMPTY_OR(IS_MATCH('^[0-9]{5}$'))),
     Field('msb_total', 'integer', label = T('Total de unidades')),
+    Field('msb_desc', 'string', length = 140, label = T('Razon de modificacion')),
     Field('msb_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación

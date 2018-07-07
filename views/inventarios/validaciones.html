@@ -69,9 +69,6 @@
 	<div class="row">
 			<br>
 			<div id="buttons">
-				<!-- Filtrado -->
-				<button class="dt-button btn boton-sigulab" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-filter"></i></button>
-				<!-- Filtrado -->    
 			</div>
 			<br>
 	
@@ -79,8 +76,9 @@
 		  <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
 			<thead>
 				<tr id="titulosListado">
-					<th class="camposTabla linksNombres" style="display:none;">NOMBRE</th>
+					<th class="camposTabla linksNombres">NOMBRE</th>
 					<th class="camposTabla linksNombres">TIPO</th>
+					<th class="camposTabla linksNombres">OBSERVACIONES</th>
 				</tr>
 			</thead>
 	
@@ -90,6 +88,7 @@
 					<td class="camposTabla"><a href="{{=URL('detalles_mod', vars=dict(bm=bm['mbn_num']))}}">{{=bm['mbn_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion.upper()}}</td>
+					<td class="camposTabla">{{=bm['mbn_desc'].upper()}}</td>
 				</tr>
 				{{pass}}
 				{{for material in inventario[1]:}}
@@ -97,6 +96,7 @@
 					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
+					<td class="camposTabla">{{=material['msb_desc'].upper()}}</td>
 				</tr>
 				{{pass}}
 				{{for material in inventario[2]:}}
@@ -104,13 +104,15 @@
 					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">CONSUMIBLES</td>
+					<td class="camposTabla">{{=material['msb_desc'].upper()}}</td>
 				</tr>
 			  {{pass}}               
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
 			  <th class="camposTabla linksNombres">NOMBRE</th>
-			  <th class="camposTabla linksNombres">TIPO</th>
+				<th class="camposTabla linksNombres">TIPO</th>
+				<th class="camposTabla linksNombres">OBSERVACIONES</th>
 				</tr>
 			</tfoot>
 	
@@ -119,6 +121,61 @@
 	</div>
 </div> 
 
+<!-- tabla de eliminacion -->
+<div id="tab-2" class="container tab-content">
+	<div class="row">
+		<br>
+		<div id="buttons2">
+		</div>
+		<br>
+		<div class="table-responsive no-padding no-margin">
+		  <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+			<thead>
+				<tr id="titulosListado">
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">TIPO</th>
+					<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+			  {{for bm in inventario_eliminar[0]:}}
+				<tr>
+					<td class="camposTabla"><a href="{{=URL('detalles', vars=dict(bm=bm['bm_num'],delete=True))}}">{{=bm['bm_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">{{=bm['bm_clasificacion'].upper()}}</td>
+					<td class="camposTabla">{{=bm['bm_desc_eliminar'].upper()}}</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario_eliminar[1]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
+					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario_eliminar[2]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">CONSUMIBLES</td>
+					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
+				</tr>
+			  {{pass}}               
+			</tbody>
+	
+			<tfoot id="collapseFiltros">
+			  <th class="camposTabla linksNombres">NOMBRE</th>
+				<th class="camposTabla linksNombres">TIPO</th>
+				<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</tfoot>
+	
+		  </table>
+		</div>
+	</div>
+</div> 
 
 <!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
 
@@ -201,46 +258,58 @@
 <script language="javascript">
   
 	var table = $('#datatable').DataTable({
-	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
 	  //dom: 'Bfrtip',
 	  language: {
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 	  },
-	 initComplete: function(){
-		var api = this.api();
-  
-		new $.fn.dataTable.Buttons(api, {
-		  buttons: [
-  
-			  {
-				  extend: 'collection',
-				  text: '<i class="fas fa-floppy-o"></i>',
-				  className: 'boton-sigulab',
-				  buttons: [
-					  { extend:'copy', text: 'Copiar' } ,
-					  'excel',
-					  'csv',
-					  'pdf'
-				  ]
-			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
-		  ]
+		initComplete: function(){
+			var api = this.api();
+		
+			new $.fn.dataTable.Buttons(api, {
+				buttons: [
+	
+				{
+				text:'<i class="fa fa-filter"></i>',
+				action: function(){
+					mostrarFiltro()
+				},
+				className: 'boton-sigulabIzq'
+				},
+		
+					{
+						extend: 'collection',
+						text: '<i class="fas fa-save"></i>',
+						className: 'boton-sigulab',
+						buttons: [
+							{ extend:'copy', text: 'Copiar' } ,
+							'excel',
+							'csv',
+							'pdf'
+						]
+					},
+					{ extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+				]
+			});
+			//$('#botonModal').addClass('pull-left')
+			$('#filtrar').addClass('pull-left');
+			$('#espacioBuscar').addClass('pull-left');
+		
+		
+			$('.dataTables_filter').appendTo('#buttons');
+		
+			api.buttons().container().appendTo('#buttons');
+			//$('.dt-buttons').append($('#botonModal'));
+			$('#buttons').append('<br><br>');
+			$('.dataTables_info').addClass('pull-right');
+			$('.dataTables_filter').addClass('pull-left');
+	
+			$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+			$('#datatable_next').html('<span class="fa fa-arrow-right" />');
+		
+			
+		 }
 		});
-		$('#botonModal').addClass('pull-left')
-		$('#filtrar').addClass('pull-left');
-		$('#espacioBuscar').addClass('pull-left');
-  
-  
-		$('.dataTables_filter').appendTo('#buttons');
-  
-		api.buttons().container().appendTo('#buttons');
-		$('.dt-buttons').append($('#botonModal'));
-		$('.dt-buttons').append($('#filtrar'));
-		$('#buttons').append('<br><br>');
-		$('.dataTables_info').addClass('pull-right');
-		$('.dataTables_filter').addClass('pull-left');		
-	 }
-	});
 	</script>
 	<script type="text/javascript">
     $('.tab-link').click( function() {
@@ -252,5 +321,101 @@
         $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
     });
       
-  </script>
+	</script>
+	<script>
+
+		var filtros = false;
+	
+		$(document).ready(function() {
+				// Setup - add a text input to each footer cell
+				$('#datatable2 tfoot th').each( function () {
+						var title = $(this).text();
+						$(this).html( '<input type="text" placeholder="Filtro" />' );
+				} );
+		 
+				// DataTable
+				var table = $('#datatable2').DataTable();
+		 
+				// Apply the search
+				table.columns().every( function () {
+						var that = this;
+		 
+						$( 'input', this.footer() ).on( 'keyup change', function () {
+								if ( that.search() !== this.value ) {
+										that
+												.search( this.value )
+												.draw();
+								}
+						} );
+				} );
+	
+				$('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+				$("#datatable2 thead tr").not("#titulosListado").css("display","none");
+		} );
+	
+		function mostrarFiltro2() {
+				if (filtros){
+					$("#datatable2 thead tr").not("#titulosListado").css("display","none");
+					filtros = false
+				}
+				else{
+					$("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
+					filtros = true
+				}
+	
+		}
+	</script>
+	 
+	<script language="javascript">
+		
+		var table = $('#datatable2').DataTable({
+			'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+			//dom: 'Bfrtip',
+			language: {
+			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+			},
+			initComplete: function(){
+				var api = this.api();
+			
+				new $.fn.dataTable.Buttons(api, {
+					buttons: [
+		
+					{
+					text:'<i class="fa fa-filter"></i>',
+					action: function(){
+						mostrarFiltro2()
+					},
+					className: 'boton-sigulabIzq'
+					},
+			
+						{
+							extend: 'collection',
+							text: '<i class="fas fa-save"></i>',
+							className: 'boton-sigulab',
+							buttons: [
+								{ extend:'copy', text: 'Copiar' } ,
+								'excel',
+								'csv',
+								'pdf'
+							]
+						},
+						{ extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+					]
+				});
+			
+				$('#datatable2_filter').appendTo('#buttons2');
+		
+				api.buttons().container().appendTo('#buttons2');
+				//$('.dt-buttons').append($('#botonModal'));
+				$('#buttons2').append('<br><br>');
+				$('#datatable2_info').addClass('pull-right');
+				$('#datatable2_filter').addClass('pull-left');
+		
+				$('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
+				$('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+			
+				
+			 }
+			});
+		</script>
 {{end}}
