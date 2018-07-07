@@ -23,14 +23,14 @@ button{
 .buttons-html5, .buttons-print{
     border-radius: 50%;
 	background-color: #337ab7;
-    border-color: #337ab7;
+    border-color: #2e6da4;
     color:#fff;
 }
 
 .buttons-html5, .buttons-copy{
     border-radius: 50% 50%;
     background-color: #337ab7;
-    border-color: #337ab7;
+    border-color: #2e6da4;
     color:#fff;
 }
 
@@ -39,19 +39,15 @@ div.row.pull-left.boton-retroceder{
 }
 
 div.col-lg-1.boton-retroceder{
-	display: flex;
-	flex-flow: row;
-	justify-content: center;
 	border-radius: 50%;
 	color: white;
 	background-color: #337ab7;
 }
 
-div.col-lg-1.boton-retroceder > a {
+div.col-lg-1.boton-retroceder > a, div.col-lg-1.boton-retroceder > a.boton {
 	color: white;
 	text-decoration: none;
 	padding: 5px;
-
 }
 
 th.camposTabla, td.camposTabla{
