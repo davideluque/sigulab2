@@ -1118,7 +1118,10 @@ def categorias_desechos():
 
             # Verifica si el elemento fue marcado para ser borrado
             if marcado_para_borrar:
-                __eliminar_categoria(int(request.vars.id_categoria))
+                
+                response.flash = __eliminar_categoria(int(request.vars.id_categoria))
+                session.flash = response.flash
+                return redirect(URL(host=True)) 
             else:
                 #De lo contrario debe ser creado o actualizado
                 id_categoria = -1
@@ -1126,7 +1129,10 @@ def categorias_desechos():
                 if request.vars.id_categoria != '':
                     id_categoria = int(request.vars.id_categoria)
                 
-                __agregar_categoria(request.vars.categoria, request.vars.descripcion, id_categoria)
+                response.flash = __agregar_categoria(request.vars.categoria, request.vars.descripcion, id_categoria)
+                session.flash = response.flash
+                return redirect(URL(host=True)) 
+
     else:
         categorias = list(db(db.t_categoria_desechos
                                   ).select(db.t_categoria_desechos.ALL))
@@ -1141,13 +1147,12 @@ def __agregar_categoria(nombre_categoria, descripcion_categoria, id_categoria):
         #De lo contrario, la categoría no existe y se tiene que crear
         db.t_categoria_desechos.insert(categoria = nombre_categoria, descripcion = descripcion_categoria)
 
-    response.flash = "Categoría agregada exitosamente"
-    return redirect(URL(host=True)) 
+    return T("Categoría agregada exitosamente")
 
 
 def __eliminar_categoria(categoria_id):
     db(db.t_categoria_desechos.id == categoria_id).delete()
-    return redirect(URL(host=True)) 
+    return T("Categoría de desecho eliminada exitosamente.")
 
 
 @auth.requires(lambda: __check_role())
