@@ -79,6 +79,7 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
+                <th style="display: none" class="camposTabla linksNombres">ID</th>
                 <th style="width: none !important" class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
@@ -93,6 +94,7 @@
             {{fecha = registro['t_Bitacora_desechos']['fecha'].split(" ")}}
             {{hora = fecha[1].split(".")}}
             <tr>
+              <td style="display: none" class="camposTabla">{{=registro['t_Bitacora_desechos']['id']}}</td>
               <td class="camposTabla">{{=fecha[0]}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion']}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_generada']}} {{=unidad_medida}}</td>
@@ -105,6 +107,7 @@
 
         <tfoot id="collapseFiltros">
             <tr>
+                <th style="display: none" class="camposTabla linksNombres">ID</th>
                 <th class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
