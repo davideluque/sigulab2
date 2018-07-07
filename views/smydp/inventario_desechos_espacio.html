@@ -414,12 +414,16 @@
                         <p>Campos marcados con * son obligatorios.</p>
                           <div class="form-group">
                             <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
-                            <select class="form-control" type="select" id="envase" name="envase" required>
-                              <option value="" selected hidden >Contenedor*</option>
-                              {{for envase in envases:}}
-                              <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
-                              {{pass}}
-                            </select>
+                            {{if len(envases) > 0:}}                          
+                              <select class="form-control" type="select" id="envase" name="envase" required>
+                                <option value="" selected hidden >Contenedor*</option>
+                                {{for envase in envases:}}
+                                <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
+                                {{pass}}
+                              </select>
+                            {{else:}}
+                              <p>No existen contenedores disponibles. Para crear uno nuevo, haga click <a href="{{=URL('envases')}}" target="_blank">aquí</a>.</p>
+                            {{pass}}
                             <div class="field-error"> <p id="error-envase"> </p> </div>
                           </div>
                           <div class="form-group">
