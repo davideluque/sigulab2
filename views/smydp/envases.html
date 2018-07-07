@@ -93,7 +93,8 @@
                             <label for="">Capacidad:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
+                            {{capacidad = str(contenedor.capacidad).replace(".", ",")}}
+                            <span>{{=capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -405,7 +406,8 @@
                                 </td>
                                 <td class="camposTabla">{{=contenedor.composicion}}</td>
                                 <td class="camposTabla">{{=contenedor.categoria.categoria.upper()}}</td>
-                                <td class="camposTabla">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
+                                {{capacidad = str(contenedor.capacidad).replace(".", ",")}}
+                                <td class="camposTabla">{{=capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
@@ -636,6 +638,10 @@
             var composicion = document.forms['formularioCarga']['composicion'];
             var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
             var categoria = document.forms['formularioCarga']['categoria'];
+
+            // Se verifica si la capacidad tiene comas, y se substituyen por puntos
+            capacidad = capacidad.replace(",", ".");
+
 
             // Mensajes de error
             var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";

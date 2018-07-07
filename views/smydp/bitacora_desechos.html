@@ -97,9 +97,12 @@
               <td style="display: none" class="camposTabla">{{=registro['t_Bitacora_desechos']['id']}}</td>
               <td class="camposTabla">{{=fecha[0]}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion'].upper()}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_generada']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_retirada']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['saldo']}} {{=unidad_medida}}</td>
+              {{cantidad_generada = str(registro['t_Bitacora_desechos']['cantidad_generada']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad_generada}} {{=unidad_medida}}</td>
+              {{cantidad_retirada = str(registro['t_Bitacora_desechos']['cantidad_retirada']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad_retirada}} {{=unidad_medida}}</td>
+              {{saldo = str(registro['t_Bitacora_desechos']['saldo']).replace(".", ",")}}
+              <td class="camposTabla">{{=saldo}} {{=unidad_medida}}</td>
               <td class="camposTabla">{{=registro['auth_user']['first_name'].upper()}} {{=registro['auth_user']['last_name'].upper()}}</td>
             </tr>
           {{pass}}
