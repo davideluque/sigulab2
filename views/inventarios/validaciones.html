@@ -149,7 +149,7 @@
 				{{pass}}
 				{{for material in inventario_eliminar[1]:}}
 				<tr>
-					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['sb_espacio'], nombreMat = material['sb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
 					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
@@ -157,7 +157,7 @@
 				{{pass}}
 				{{for material in inventario_eliminar[2]:}}
 				<tr>
-					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['sb_espacio'], nombreMat = material['sb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">CONSUMIBLES</td>
 					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
