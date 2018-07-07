@@ -16,6 +16,11 @@ div.row.pull-left.boton-retroceder{
 	padding: 0px 15px;
 }
 
+button.btn {
+	border-radius: 50% !important;
+	min-width: unset !important;
+}
+
 div.col-lg-1.boton-retroceder{
 	display: flex;
 	flex-flow: row;
