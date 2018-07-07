@@ -993,18 +993,24 @@ def envases():
     tipos_de_boca = ['Boca ancha', 'Boca angosta', 'Cerrados con abertura de trasvase', 'Otra']
 
     categorias_de_desecho = list(db(db.t_categoria_desechos).select(db.t_categoria_desechos.ALL))
-    contenedores = list(db(db.t_envases).select(db.t_envases.ALL))
 
     # Listas de espacios físicos de los cuáles el usuario logueado es responsable
     # Si el usuario es un gestor o webmaster, puede crear envases en cualquier espacio físico
     if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
+        contenedores = list(db(db.t_envases).select(db.t_envases.ALL))
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos)
         ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
 
-    elif(auth.has_membership('TÉCNICO') or  auth.has_membership('JEFE DE LABORATORIO')):
+    elif(auth.has_membership('TÉCNICO') or auth.has_membership('JEFE DE LABORATORIO')):
         #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
         #jurisdicción
+        contenedores = list(db(
+            (db.t_envases.espacio_fisico == db.espacios_fisicos.id) &
+            (db.espacios_fisicos.dependencia == db.dependencias.id ) &
+            (db.dependencias.unidad_de_adscripcion == user_dep_id) 
+        ).select(db.t_envases.ALL))
+
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos.dependencia == db.dependencias.id) &
             (db.dependencias.unidad_de_adscripcion == user_dep_id) 
@@ -1013,6 +1019,11 @@ def envases():
     elif auth.has_membership('JEFE DE SECCIÓN'):
         #pero si no es un gestor o webmaster, solamente puede crear contenedores en los espacios físicos en donde tiene
         #jurisdicción
+        contenedores = list(db(
+            (db.t_envases.espacio_fisico == db.espacios_fisicos.id) &
+            (db.espacios_fisicos.dependencia == user_dep_id)
+        ).select(db.t_envases.ALL))
+
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos.dependencia == user_dep_id)
         ).select(db.espacios_fisicos.id, db.espacios_fisicos.codigo)) 
