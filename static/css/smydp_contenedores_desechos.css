@@ -44,6 +44,10 @@ div.col-lg-1.boton-retroceder > a {
 	text-decoration: none;
 }
 
+th.camposTabla, td.camposTabla{
+	text-align: center;
+}
+
 h3{
     font-size: 2em;
 }       
