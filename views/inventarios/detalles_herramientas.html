@@ -369,7 +369,7 @@
                
                 <!-- Segundo paso-->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
                       <span class="step activePass">1</span>
@@ -451,7 +451,7 @@
 
                 <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
@@ -460,7 +460,7 @@
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del material</h4>                
+                        <h4 class="titulosForm">Características de la herramienta</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
                         <div class="form-group" id="grupo-presentacion">
@@ -478,28 +478,42 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                         </div>
 
-                        {{if bien['hr_presentacion']=="Conjunto":}}
-                            <div class="form-group" id="grupo-piezas" hidden>
+                        {{if bien['hr_presentacion']=="Unidad":}}
+                          <div class="form-group" id="grupo-piezas">
+                                <input type="hidden" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*" >
+                                <div class="field-error"> <p id="err_numpiezas_her" hidden> </p> </div>
+                          </div>
+
+                          <div class="form-group" id="grupo-contenido">
+                                <input type="hidden" class="form-control"  id="contenido_her" name="contenido_her" placeholder="Contenido">
+                                <div class="field-error"> <p id="error-contenido_her" hidden> </p> </div>
+                          </div>
+
+                          <div class="form-group" id="grupo-descripcion">
+                                <input type="hidden" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción" >
+                                <div class="field-error"> <p id="error_descripcion" hidden> </p> </div>
+                          </div>
+                        {{elif bien['hr_presentacion']=="Conjunto":}}
+                          <div class="form-group" id="grupo-piezas">
                                 <label>Número de piezas*</label>
                                 <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" value="{{=bien['hr_numpiezas']}}" placeholder="Número de piezas*" >
-                                <div class="field-error"> <p id="err_numpiezas_her"> </p> </div>
-                            </div>
-                        </div>
-                        
+                                <div class="field-error"> <p id="err_numpiezas_her" hidden> </p> </div>
+                          </div>
 
-                        <div class="form-group">
-                            <label>Contenido</label>
-                            <input type="text" class="form-control"  id="contenido_her" name="contenido_her" value="{{=bien['hr_contenido']}}" placeholder="Contenido">
-                            <div class="field-error"> <p id="error-contenido_her"> </p> </div>
-                        </div>
+                          <div class="form-group" id="grupo-contenido">
+                                <label>Contenido*</label>
+                                <input type="text" class="form-control"  id="contenido_her" name="contenido_her" value="{{=bien['hr_contenido']}}" placeholder="Contenido">
+                                <div class="field-error"> <p id="error-contenido_her" hidden> </p> </div>
+                          </div>
 
-                        <div class="form-group">
-                            <label>Descripción</label>
-                            <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" value="{{=bien['hr_descripcion']}}" placeholder="Descripción" >
-                            <div class="field-error"> <p id="error_descripcion"> </p> </div>
-                        </div>
-
+                          <div class="form-group" id="grupo-descripcion">
+                                <label>Descripción*</label>
+                                <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" value="{{=bien['hr_descripcion']}}" placeholder="Descripción" >
+                                <div class="field-error"> <p id="error_descripcion" hidden> </p> </div>
+                          </div>
                         {{pass}}
+
+                      {{pass}}
                         <div class="form-group" id="grupo-material">
                             <label>Material</label>
                             <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" 
@@ -539,7 +553,7 @@
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del Material</h4>                
+                        <h4 class="titulosForm">Características de la herramienta</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
                         <div class="form-group" id="grupo-unidad">
@@ -558,28 +572,28 @@
                             </div>
 
                             {{if bien['hr_unidad']=="" or bien['hr_unidad']==None:}}   
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-ancho">
                                     <input type="hidden" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
                                 <font color="red"><div id="err_ancho_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-largo">
                                     <input type="hidden" class="form-control" id="largo_her" name="largo_her" title="Formato ##.##" placeholder="Largo" >
                                 <font color="red"><div id="err_largo_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-alto">
                                     <input type="hidden" class="form-control" id="alto_her" name="alto_her" title="Formato ##.##" placeholder="Altura" >
                                 <font color="red"><div id="err_alto_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-diametro">
                                     <input type="hidden" class="form-control" id="diametro_her" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
                                 <font color="red"><div id="err_diametro_her" hidden></div></font>
                               </div>
 
                             {{elif bien['hr_unidad']!=None or bien['hr_unidad']!="":}}
-                                <div class="form-group">
+                                <div class="form-group" id="grupo-ancho">
                                     <label>Ancho</label>
                                 {{if bien['hr_ancho']==None:}}
                                     <input type="text" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
@@ -589,7 +603,7 @@
                                 <font color="red"><div id="err_ancho_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-largo">
                                 <label>Largo</label>
                                 {{if bien['hr_largo']==None:}}
                                     <input type="text" class="form-control" id="largo_her" name="largo_her" title="Formato ##.##" placeholder="Largo" >
@@ -599,7 +613,7 @@
                                 <font color="red"><div id="err_largo_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-alto">
                                 <label>Altura</label>
                                 {{if bien['hr_alto']==None:}}
                                     <input type="text" class="form-control" id="alto_her" name="alto_her" title="Formato ##.##" placeholder="Altura" >
@@ -609,7 +623,7 @@
                                 <font color="red"><div id="err_alto_her" hidden></div></font>
                               </div>
 
-                              <div class="form-group">
+                              <div class="form-group" id="grupo-diametro">
                                 <label>Diámetro</label>
                                 {{if bien['hr_diametro']==None:}}
                                     <input type="text" class="form-control" id="diametro_her" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
@@ -696,7 +710,7 @@
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Características del Bien</h4>                
+                      <h4 class="titulosForm">Características de la herramienta</h4>                
                       <label>Campos marcados con * son obligatorios.</label>
 
 
@@ -834,9 +848,17 @@
     if ( value == "Conjunto" ){
       document.getElementById("grupo-piezas").style.display = 'block';
       document.getElementById("numpiezas_her").setAttribute("required", "");
+      document.getElementById("grupo-contenido").style.display = 'block';
+      document.getElementById("contenido_her").setAttribute("required", "");
+      document.getElementById("grupo-descripcion").style.display = 'block';
+      document.getElementById("descripcion_her").setAttribute("required", "");
     }else{
       document.getElementById("grupo-piezas").style.display = 'none';
       document.getElementById("numpiezas_her").removeAttribute("required", "");
+      document.getElementById("grupo-contenido").style.display = 'none';
+      document.getElementById("contenido_her").removeAttribute("required", "");
+      document.getElementById("grupo-descripcion").style.display = 'none';
+      document.getElementById("descripcion_her").removeAttribute("required", "");
     }
   }
   // Mostrar unidades
@@ -847,12 +869,20 @@
       document.getElementById("largo_her").type = 'hidden';
       document.getElementById("alto_her").type = 'hidden';
       document.getElementById("diametro_her").type = 'hidden';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
     }else{
       //document.getElementById("unidad_mat").type = 'text';
       document.getElementById("ancho_her").type = 'text';
       document.getElementById("largo_her").type = 'text';
       document.getElementById("alto_her").type = 'text';
       document.getElementById("diametro_her").type = 'text';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
     }
   }
   // Valida los campos de la forma en el modal "addbm"

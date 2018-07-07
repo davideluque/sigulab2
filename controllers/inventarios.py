@@ -409,12 +409,13 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
         numpiezas='1'
         contenido=None
         descripcion=None
+    
     if not unidad:
         ancho=None
         largo=None
         alto=None
         diametro=None
-
+    
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.herramienta.insert(
         hr_nombre = nombre,
@@ -2673,8 +2674,8 @@ def herramientas():
                     __agregar_herramienta(
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+                        request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int,
                         request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
@@ -2771,8 +2772,8 @@ def herramientas():
                     __agregar_herramienta(
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+                        request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
                         request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
 
 
@@ -2869,8 +2870,8 @@ def herramientas():
                     __agregar_herramienta(
                         request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-                        request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
+                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+                        request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
                         request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
                 # Se muestran las dependencias que componen a esta dependencia padre
