@@ -1,10 +1,4 @@
 {{extend 'layout.html'}}
-
-  <!-- Estilo del listado de Solicitudes de Servicios -->
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-
 {{block head}}
 
 <meta charset="UTF-8">
@@ -12,18 +6,11 @@
     <!-- Para los mensajes con flash -->
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
-    <!-- DataTables -->
-    <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  
-    
     <!-- Estilos de modales y listados -->
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
-    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}"> 
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
     <!-- Web2py JS - Especialmente para AJAX -->
@@ -161,7 +148,11 @@
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-edit fa-1x"></i></button>
+                <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <!-- Boton para eliminar bien mueble-->
+                <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                <!--Boton para ocultar el bien mueble-->
+                <button type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye-slash fa-1x"></i></button>
             </div>
         </div>
     </div>
@@ -174,11 +165,8 @@
 		<ul class="tabs">
 				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
 				<li class="tab-link" data-tab="2">SUDEBID</li>
-                <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
-                <li class="tab-link" data-tab="4">UBICACIÓN</li>
-                <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
-                <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
-                <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+                <li class="tab-link" data-tab="3">UBICACIÓN</li>
+                <li class="tab-link" data-tab="4">HISTORIAL DE MANTENIMIENTO</li>
             </ul>
 	</div>
 
@@ -251,9 +239,7 @@
             {{ pass }}
             </div>
         </div>
-
-		<div id="tab-3"class="tab-content">En desarrollo</div>
-        <div id="tab-4"class="tab-content">
+        <div id="tab-3"class="tab-content">
             <div class="grid-container">
                 <div class="grid-item">
                     Espacio físico:
@@ -275,15 +261,104 @@
                 </div>
             </div>
         </div>
-		<div id="tab-5"class="tab-content">En Desarrollo</div>
-		<div id="tab-6"class="tab-content">En desarrollo</div>
-		<div id="tab-7"class="tab-content">En desarrollo</div>
-
-
-
-	</div>
+        <div id="tab-4"class="tab-content">En Desarrollo</div>
+    </div>
 	
 </div>
+
+<!--Modal para eliminar bm-->
+<div class="modal fade" id="confirmdelete" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header" style="background-color: red;">
+              <div class="container">
+                  <i class="fas fa-trash fa-2x" style="
+                  display:block;
+                  margin-left: -16px;
+                  margin-top: 8px;
+                  color: white;
+                  "></i>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header" style="background-color: red;">
+              <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+              ">Confirmar eliminación<button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <br>
+            <form method="post" style="text-align: center;">
+                <h4>¿Desea solicitar la eliminación de {{=bien['bm_nombre']}}?</h4>
+                <br>
+                <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+            </form>
+            <br>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--Modal para oculta BM-->
+<div class="modal fade" id="confirmhide" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                  <div class="container">
+                      <i class="fas fa-eye-slash fa-2x" style="
+                      display:block;
+                      margin-left: -19px;
+                      margin-top: 12px;
+                      color: white;
+                      "></i>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Confirmar ocultar<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <br>
+                <form method="post" style="text-align: center;">
+                    <h4>¿Desea ocultar {{=bien['bm_nombre']}} de las consultas?</h4>
+                    <br>
+                    <button type="submit button" class="btn btn-next botondelete" name="ocultar" value="True" style="text-align:center">Si</button>
+                    <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+                </form>
+                <br>
+            </div>
+          </div>
+        </div>
+    </div>
 
 <!-- Modal añadir un BM nuevo al inventario -->
 <div class="modal fade" id="addbm" role="dialog">
@@ -297,7 +372,7 @@
         <div class="row addRow" id="rowHeader">
           <div class="col-sm-1" id="col1Header">
             <div class="container">
-                <i class="fas fa-edit fa-2x" style="
+                <i class="fas fa-pencil-alt fa-2x" style="
                 display:block;
                 margin-left: -16px;
                 margin-top: 8px;
@@ -334,7 +409,7 @@
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">Características del Bien</h4>                
-                      <label>Campos marcados con * son obligatorios. {{=bien['bm_nombre']}} </label>
+                      <label>Campos marcados con * son obligatorios.</label>
 
 
                         <div class="form-group" tag="Formato:">
@@ -385,7 +460,7 @@
                         
                     </div>
                   </div>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Primer Paso -->
 
@@ -404,35 +479,43 @@
                         <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
-                              <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" required>
+                              <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
-                                    {{if bien['bm_material']==material:}}
-                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
-                                    {{else:}}
-                                        <option value="{{=material}}">{{=material}}</option>
-                                    {{pass}}
+                                    <option value="{{=material}}">{{=material}}</option>
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
 
-  
+                        <div class="form-group">
+                            {{ if bien['bm_material'] in material_pred: }}
+                                <input type="hidden" class="form-control" id="otro_material" placeholder="Material*" required>
+                            {{ else: }}
+                                <input type="text" class="form-control" id="otro_material" value="{{=bien['bm_material']}}" placeholder="Material*" required>
+                            {{ pass }}
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+
                           <div class="form-group">
-                              <select class="form-control" type="select" value="{{=bien['bm_color']}}" id="color" name="color" placeholder="Color" required>
+                              <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
-                                    {{if bien['bm_color']==color:}}
-                                        <option value="{{=color}}" selected="selected">{{=color}}</option>
-                                    {{else:}}
-                                        <option value="{{=color}}">{{=color}}</option>
-                                    {{pass}}
-                                
+                                    <option value="{{=color}}">{{=color}}</option>                                
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
                           </div>
+
+                        <div class="form-group">
+                            {{ if bien['bm_color'] in color_list: }}
+                                <input type="hidden" class="form-control" id="otro_color" placeholder="Color*" required>
+                            {{ else: }}
+                                <input type="text" class="form-control" value="{{=bien['bm_color']}}" id="otro_color" placeholder="Color*" required>
+                            {{ pass }}
+                            <div class="field-error"> <p id="error-color"> </p> </div>
+                        </div>
 
                           <label>Dimensiones</label>
 
@@ -514,8 +597,8 @@
                             {{pass}}
                         </div>
                       </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
                   <!-- Fin Segundo Paso -->
 
@@ -630,8 +713,8 @@
                         </div>
                       </div>
 
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);">Siguiente</button>       
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
                   <!-- Fin segundo paso-->
 
@@ -709,8 +792,8 @@
 
                       </div>
                     </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm">Modificar</button>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
                 </fieldset>
                 <!-- Fin Tercer Paso -->
               </form>
@@ -725,6 +808,65 @@
 
 
 <script type="text/javascript">
+
+    // Funcion para seleccionar valores de los select
+    function select_values(){
+        // selecciono valor del select de materiales
+        var material = document.getElementById("material");
+        var otro_material = document.getElementById("otro_material")
+        var value = "{{=bien['bm_material']}}"
+        var material_bool = "{{=bien['bm_material'] in material_pred}}"
+        if ( material_bool == "True"){
+            material.value = value;
+        }else{
+            material.removeAttribute("name");
+            otro_material.setAttribute("name","material");
+            material.value = "Otro"
+        }
+        //selecciono el valor del select de colores
+        var material = document.getElementById("color");
+        var otro_color = document.getElementById("otro_color")
+        var value = "{{=bien['bm_color']}}"
+        var color_bool = "{{=bien['bm_color'] in color_list}}"
+        if ( color_bool == "True"){
+            color.value = value;
+        }else{
+            color.removeAttribute("name");
+            otro_color.setAttribute("name","color");
+            color.value = "Otro color"
+        }
+    }
+
+    // Funcion para agregar otro material
+    function agregar_otro_mat(){
+        var material = document.getElementById("material")
+        var otro_material = document.getElementById("otro_material")
+        if ( material.value === "Otro" ){
+        material.removeAttribute("name");
+        otro_material.setAttribute("name","material");
+        otro_material.type =  "text";
+        }else{
+        otro_material.removeAttribute("name");
+        otro_material.type = "hidden";
+        material.setAttribute("name","material");
+        }
+    }
+
+    // Funcion para agregar otro color
+    function agregar_otro_color(){
+        var color = document.getElementById("color")
+        var otro_color = document.getElementById("otro_color")
+
+        if ( color.value === "Otro color" ){
+        color.removeAttribute("name");
+        otro_color.setAttribute("name","color");
+        otro_color.type =  "text";
+        }else{
+        otro_color.removeAttribute("name");
+        otro_color.type = "hidden";
+        color.setAttribute("name","color");
+        }
+    }
 
     // Funcion para mostrar campos dependendiendo de la categoria
     function elegir_campos(){
@@ -782,7 +924,7 @@
       var error_uso_interno = document.getElementById("error-uso-interno");
       var fecha_calibracion = document.getElementById("fecha_calibracion")
   
-      // Limpiando los mensajes anteriores de validadores
+      // Limpiando los mensajes <i class="fas fa-arrow-left"></i>es de validadores
       if (error_total.innerText != ''){
         error_total.innerText = '';
       }
