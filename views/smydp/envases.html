@@ -366,13 +366,13 @@
                 <br>
         
                 <div class="table-responsive no-padding no-margin">
-                    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0">
                         <thead>
-                            <tr id="titulosListado" style="text-align: left">
-                                <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Categoría</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
+                            <tr id="titulosListado">
+                                <th class="camposTabla linksNombres">IDENTIFICACIÓN</th>
+                                <th style="width: 100px !important" class="camposTabla linksNombres">COMPOSICIÓN</th>
+                                <th class="camposTabla linksNombres">CATEGORÍA</th>
+                                <th class="camposTabla linksNombres">CAPACIDAD</th>
                             </tr>
                         </thead>
         
@@ -384,19 +384,19 @@
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.composicion}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.categoria.categoria}}</td>
-                                <td class="camposTabla" style="text-align: left">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
+                                <td class="camposTabla">{{=contenedor.composicion}}</td>
+                                <td class="camposTabla">{{=contenedor.categoria.categoria.upper()}}</td>
+                                <td class="camposTabla">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
         
                         <tfoot id="collapseFiltros">
                             <tr>
-                                <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Categoría</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
+                                <th class="camposTabla linksNombres">IDENTIFICACIÓN</th>
+                                <th class="camposTabla linksNombres">COMPOSICIÓN</th>
+                                <th class="camposTabla linksNombres">CATEGORÍA</th>
+                                <th class="camposTabla linksNombres">CAPACIDAD</th>
                             </tr>
                         </tfoot>
         

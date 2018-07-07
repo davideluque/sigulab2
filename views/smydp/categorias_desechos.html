@@ -80,8 +80,8 @@
             <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                 <thead>
                     <tr id="titulosListado" style="text-align: left">
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </thead>
 
@@ -100,7 +100,7 @@
                             </td>
                         {{pass}}
                         <td class="camposTabla" style="text-align: left">
-                            {{=categoria.descripcion}}
+                            {{=categoria.descripcion.upper()}}
                         </td>
                     </tr>
                 {{pass}}
@@ -108,8 +108,8 @@
 
                 <tfoot id="collapseFiltros">
                     <tr>
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </tfoot>
 
@@ -225,7 +225,7 @@
 
     function editarCategoria(categoria, descripcion, id) {
         // Cambia el valor del botón de enviar formulario del modal de 'Agregar categoría' por 'Actualizar categoría'
-        document.getElementById('submit').innerHTML = 'Actualizar categoría';
+        document.getElementById('submit').innerHTML = '<i class="fa fa-floppy-o"></i>';
 
         // Cambiar el valor del títutlo del modal de creación de categoría a 'Editar categoría'
         document.getElementById('nuevaCategoria').innerHTML = document.getElementById('nuevaCategoria').innerHTML.replace("Nueva Categoría", "Editar categoría");

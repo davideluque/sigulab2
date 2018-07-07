@@ -80,12 +80,12 @@
         <thead>
             <tr id="titulosListado">
                 <th style="display: none" class="camposTabla linksNombres">ID</th>
-                <th style="width: none !important" class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Descripción</th>
-                <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Saldo ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Responsable</th>
+                <th style="width: none !important" class="camposTabla linksNombres">FECHA</th>
+                <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">CANTIDAD GENERADA ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">CANTIDAD RETIRADA ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">SALDO ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">RESPONSABLE</th>
             </tr>
         </thead>
 
@@ -96,11 +96,11 @@
             <tr>
               <td style="display: none" class="camposTabla">{{=registro['t_Bitacora_desechos']['id']}}</td>
               <td class="camposTabla">{{=fecha[0]}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion']}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion'].upper()}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_generada']}} {{=unidad_medida}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_retirada']}} {{=unidad_medida}}</td>
               <td class="camposTabla">{{=registro['t_Bitacora_desechos']['saldo']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['auth_user']['first_name']}} {{=registro['auth_user']['last_name']}}</td>
+              <td class="camposTabla">{{=registro['auth_user']['first_name'].upper()}} {{=registro['auth_user']['last_name'].upper()}}</td>
             </tr>
           {{pass}}
         </tbody>
