@@ -1019,8 +1019,10 @@ def envases():
 
         # Verifica si el elemento fue marcado para ser borrado
         if marcado_para_borrar:
-            __eliminar_envase(int(request.vars.id_envase))
-            pass
+            response.flash = __eliminar_envase(int(request.vars.id_envase))
+            session.flash = response.flash
+            return redirect(URL(host=True)) 
+
         else:
             #De lo contrario debe ser creado o actualizado
             id_envase = -1
@@ -1028,7 +1030,7 @@ def envases():
             if request.vars.id_envase != '':
                 id_envase = int(request.vars.id_envase)
             
-            __agregar_envase(
+            response.flash = __agregar_envase(
                 request.vars.identificacion,
                 float(request.vars.capacidad),
                 int(request.vars.unidad_medida),
@@ -1041,6 +1043,9 @@ def envases():
                 int(request.vars.categoria),
                 id_envase
             )
+
+            session.flash = response.flash
+            return redirect(URL(host=True)) 
 
     return locals()
 
@@ -1061,12 +1066,14 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
             categoria = categoria
         )
 
-        response.flash = T("Información del contenedor actualizada correctamente.")
+        return T("Información del contenedor actualizada correctamente.")
+        
+
 
     else:
         # Se verifica si la identificación del envase que se quiere crear fue previamente utilizada
         if len(list(db(db.t_envases.identificacion == identificacion).select())) > 0:
-            response.flash = T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
+            return T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
             
         else:
             #De lo contrario, el envase aún no existe y se tiene que crear
@@ -1083,13 +1090,13 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
                 categoria = categoria
             )
 
-            response.flash = T("Contenedor creado exitosamente.")
+            return T("Contenedor creado exitosamente.")
 
 
 
 def __eliminar_envase(id_envase):
     db(db.t_envases.id == id_envase).delete()
-    response.flash = T("Contenedor eliminado exitosamente.")
+    return T("Contenedor eliminado exitosamente.")
 
 ########################################
 #         CATEGORIAS DE DESECHOS       #
