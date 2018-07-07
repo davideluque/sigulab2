@@ -12,6 +12,10 @@
     body{font-size: 14px;}
 }
 
+button{
+	border-radius: 50% !important;
+}
+
 #datatable_length{
 	text-align: left;
 }

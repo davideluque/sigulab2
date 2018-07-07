@@ -45,15 +45,19 @@
     {{cont = ''}}
     <div class="container titulo">
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+            <div class="col-lg-offset-1 col-lg-10 text-center">
+                <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor">
+                    <i class="fa fa-pencil"></i>
+                </button></h3>
                 <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+            </div>
+            <div style="margin-top: 20px; margin-bottom: 10px;" class="col-lg-1 text-right">
+                
             </div>
         </div>
         <div class="row">
             <div id="columnBotonAgregar">
                 <div class="col-lg-12 text-right">
-                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor"><i class="fa fa-pencil"></i></button>
                 </div>
             </div>
         </div>
@@ -307,7 +311,7 @@
                                     </div>
                                     <div class="row modal-envases-footer">
                                         <div class="col-sm-6 text-center">
-                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-plus-circle"/></button>
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-floppy-o"/></button>
                                         </div>
                                         <div class="col-sm-6 text-center">
                                             <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();"><i class="fa fa-trash-o"></i></button>
