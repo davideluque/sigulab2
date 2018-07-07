@@ -653,7 +653,7 @@
                 identificacion.style.border = "1px solid red";
                 return false;
             }
-            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value)) {
+            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value) || capacidad.value <= 0) {
                 error_capacidad.innerText = mensaje_error_capacidad;
                 capacidad.style.border = "1px solid red";
                 return false;
