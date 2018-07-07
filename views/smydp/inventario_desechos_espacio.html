@@ -46,7 +46,7 @@
                 <label for="categoria_desecho">Categoría de desecho:</label>
               </div>
               <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['categoria']['categoria']}}</span>
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['categoria']['categoria'].upper()}}</span>
               </div>
             </div>
           
@@ -61,12 +61,16 @@
           
             <div class="row fila-detalle-envase">
               <div class="col-sm-5 ">
-                <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
               </div>
               <div class="col-sm-6">
-                {{envase_seleccionado = ''}} {{for envase in envases_totales:}} {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
-                {{envase_seleccionado = envase}} {{pass}} {{pass}}
-                <span>{{=envase_seleccionado['identificacion']}}</span>
+                {{envase_seleccionado = ''}} 
+                {{for envase in envases_totales:}} 
+                  {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
+                    {{envase_seleccionado = envase}} 
+                  {{pass}} 
+                {{pass}}
+                <span>{{=envase_seleccionado['identificacion'].upper()}}</span>
               </div>
             </div>
           
@@ -88,7 +92,7 @@
                 {{for item in desecho_seleccionado['t_inventario_desechos']['peligrosidad']:}} 
                   {{peligrosidad += item + ', '}} 
                 {{pass}}
-                <span>{{=peligrosidad}}</span>
+                <span>{{=peligrosidad.upper()}}</span>
               </div>
             </div>
           
@@ -97,7 +101,7 @@
                 <label for="tratamiento">Tipo de tratamiento del desecho generado*:</label>
               </div>
               <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento']}}</span>
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento'].upper()}}</span>
               </div>
             </div>
           </div>
@@ -153,7 +157,7 @@
                         {{pass}}
                         
                         <div class="form-group">
-                          <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                          <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
                           <select class="form-control" type="select" id="envase" name="envase" required>
                             {{for envase in envases_totales:}} 
                               {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
@@ -409,9 +413,9 @@
                         <h4 class="titulosForm">Datos de ingreso</h4>                
                         <p>Campos marcados con * son obligatorios.</p>
                           <div class="form-group">
-                            <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                            <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
                             <select class="form-control" type="select" id="envase" name="envase" required>
-                              <option value="" selected hidden >Envase*</option>
+                              <option value="" selected hidden >Contenedor*</option>
                               {{for envase in envases:}}
                               <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
                               {{pass}}
@@ -515,7 +519,7 @@
     
 
     // Mensajes de error
-    var mensaje_error_envase = "Por favor ingrese la identificación de un envase";
+    var mensaje_error_envase = "Por favor ingrese la identificación de un contenedor";
     var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
     var mensaje_error_concentracion = "Por favor ingrese un valor numérico no negativo en el rango entre 1 y 100.";
     var mensaje_error_peligrosidad = "Por favor seleccione al menos una peligrosidad de la lista. Puede seleccionar múltiples opciones haciendo click mientras mantiene presionada la tecla Crtl.";
