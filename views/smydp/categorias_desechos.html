@@ -25,6 +25,15 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
+<!-- Flash message -->
+{{if response.flash:}}
+<div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{=response.flash}}
+</div>
+{{pass}}
+
+
 <!-- Area con el título de la página-->
 <div class="container titulo">
     <div class="row pull-left">
