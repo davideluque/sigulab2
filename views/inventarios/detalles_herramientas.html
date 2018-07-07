@@ -482,10 +482,10 @@
                             <div class="form-group" id="grupo-piezas" hidden>
                                 <label>Número de piezas*</label>
                                 <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" value="{{=bien['hr_numpiezas']}}" placeholder="Número de piezas*" >
-                                <div class="field-error"> <p id="error-numpiezas_her"> </p> </div>
+                                <div class="field-error"> <p id="err_numpiezas_her"> </p> </div>
                             </div>
                         </div>
-                        {{pass}}
+                        
 
                         <div class="form-group">
                             <label>Contenido</label>
@@ -498,7 +498,8 @@
                             <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" value="{{=bien['hr_descripcion']}}" placeholder="Descripción" >
                             <div class="field-error"> <p id="error_descripcion"> </p> </div>
                         </div>
-                        
+
+                        {{pass}}
                         <div class="form-group" id="grupo-material">
                             <label>Material</label>
                             <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" 
@@ -558,64 +559,64 @@
 
                             {{if bien['hr_unidad']=="" or bien['hr_unidad']==None:}}   
                               <div class="form-group">
-                                    <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                <font color="red"><div id="err_ancho" hidden></div></font>
+                                    <input type="hidden" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
+                                <font color="red"><div id="err_ancho_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
-                                    <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                <font color="red"><div id="err_largo" hidden></div></font>
+                                    <input type="hidden" class="form-control" id="largo_her" name="largo_her" title="Formato ##.##" placeholder="Largo" >
+                                <font color="red"><div id="err_largo_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
-                                    <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                <font color="red"><div id="err_alto" hidden></div></font>
+                                    <input type="hidden" class="form-control" id="alto_her" name="alto_her" title="Formato ##.##" placeholder="Altura" >
+                                <font color="red"><div id="err_alto_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
-                                    <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                <font color="red"><div id="err_diametro" hidden></div></font>
+                                    <input type="hidden" class="form-control" id="diametro_her" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
+                                <font color="red"><div id="err_diametro_her" hidden></div></font>
                               </div>
 
                             {{elif bien['hr_unidad']!=None or bien['hr_unidad']!="":}}
                                 <div class="form-group">
                                     <label>Ancho</label>
                                 {{if bien['hr_ancho']==None:}}
-                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                    <input type="text" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
                                 {{else:}}
-                                    <input type="text" class="form-control" value="{{=bien['hr_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                                    <input type="text" class="form-control" value="{{=bien['hr_ancho']}}" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
                                 {{pass}}
-                                <font color="red"><div id="err_ancho" hidden></div></font>
+                                <font color="red"><div id="err_ancho_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
                                 <label>Largo</label>
                                 {{if bien['hr_largo']==None:}}
-                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                    <input type="text" class="form-control" id="largo_her" name="largo_her" title="Formato ##.##" placeholder="Largo" >
                                 {{else:}}
-                                    <input type="text" class="form-control" id="largo" value="{{=bien['hr_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                                    <input type="text" class="form-control" id="largo_her" value="{{=bien['hr_largo']}}" name="largo_her" title="Formato ##.##" placeholder="Largo" >
                                 {{pass}}
-                                <font color="red"><div id="err_largo" hidden></div></font>
+                                <font color="red"><div id="err_largo_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
                                 <label>Altura</label>
                                 {{if bien['hr_alto']==None:}}
-                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                    <input type="text" class="form-control" id="alto_her" name="alto_her" title="Formato ##.##" placeholder="Altura" >
                                 {{else:}}
-                                    <input type="text" class="form-control" id="alto" value="{{=bien['hr_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                                    <input type="text" class="form-control" id="alto_her" value="{{=bien['hr_alto']}}" name="alto_her" title="Formato ##.##" placeholder="Altura" >
                                 {{pass}}
-                                <font color="red"><div id="err_alto" hidden></div></font>
+                                <font color="red"><div id="err_alto_her" hidden></div></font>
                               </div>
 
                               <div class="form-group">
                                 <label>Diámetro</label>
                                 {{if bien['hr_diametro']==None:}}
-                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                    <input type="text" class="form-control" id="diametro_her" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
                                 {{else:}}
-                                    <input type="text" class="form-control" id="diametro" value="{{=bien['hr_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                                    <input type="text" class="form-control" id="diametro_her" value="{{=bien['hr_diametro']}}" name="diametro_her" title="Formato ##.##" placeholder="Diámetro" >
                                 {{pass}}
-                                <font color="red"><div id="err_diametro" hidden></div></font>
+                                <font color="red"><div id="err_diametro_her" hidden></div></font>
                               </div>
                             {{pass}}
 
@@ -841,17 +842,17 @@
   // Mostrar unidades
   function display_units(value){
     if ( value == '' ){
-      document.getElementById("unidad_mat").type = 'hidden';
-      document.getElementById("ancho_mat").type = 'hidden';
-      document.getElementById("largo_mat").type = 'hidden';
-      document.getElementById("alto_mat").type = 'hidden';
-      document.getElementById("diametro_mat").type = 'hidden';
+      //document.getElementById("unidad_mat").type = 'hidden';
+      document.getElementById("ancho_her").type = 'hidden';
+      document.getElementById("largo_her").type = 'hidden';
+      document.getElementById("alto_her").type = 'hidden';
+      document.getElementById("diametro_her").type = 'hidden';
     }else{
-      document.getElementById("unidad_mat").type = 'text';
-      document.getElementById("ancho_mat").type = 'text';
-      document.getElementById("largo_mat").type = 'text';
-      document.getElementById("alto_mat").type = 'text';
-      document.getElementById("diametro_mat").type = 'text';
+      //document.getElementById("unidad_mat").type = 'text';
+      document.getElementById("ancho_her").type = 'text';
+      document.getElementById("largo_her").type = 'text';
+      document.getElementById("alto_her").type = 'text';
+      document.getElementById("diametro_her").type = 'text';
     }
   }
   // Valida los campos de la forma en el modal "addbm"
