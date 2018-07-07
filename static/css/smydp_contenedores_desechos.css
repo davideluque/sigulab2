@@ -42,6 +42,8 @@ div.col-lg-1.boton-retroceder{
 div.col-lg-1.boton-retroceder > a {
 	color: white;
 	text-decoration: none;
+	padding: 5px;
+
 }
 
 th.camposTabla, td.camposTabla{
