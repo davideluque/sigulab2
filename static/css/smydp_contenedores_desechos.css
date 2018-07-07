@@ -20,10 +20,28 @@
 }
 
 .buttons-html5, .buttons-copy{
-    border-radius: 50%;
+    border-radius: 50% 50%;
     background-color: #337ab7;
     border-color: #337ab7;
     color:#fff;
+}
+
+div.row.pull-left.boton-retroceder{
+	padding: 0px 15px;
+}
+
+div.col-lg-1.boton-retroceder{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	border-radius: 50%;
+	color: white;
+	background-color: #337ab7;
+}
+
+div.col-lg-1.boton-retroceder > a {
+	color: white;
+	text-decoration: none;
 }
 
 h3{
