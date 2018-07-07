@@ -43,29 +43,35 @@
 <!-- Inicio Listado -->
 <div id="inventario-dependencia" class="container titulo">
   <div class="row">
-    <div class="col-lg-2 boton-retorno">
-        <p class="padre dep-titulo"> {{=espacio_nombre}} </p>
-      <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">
-		    		<i class="fa fa-arrow-left"></i>
-        </a>
-      </div>
-  </div>  
+    <div class="col-lg-1 boton-retorno">
+      <!-- <p class="padre dep-titulo"> {{=espacio_nombre}} </p> -->
+      <a class="boton boton-retroceder" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">
+        <button type="button" class="btn btn-primary buttons-html5">
+          <i class="fa fa-arrow-left"></i>
+        </button>
+      </a>
 
-   
-  <div class="row text-center">
+    </div>
+    <div class="col-lg-10 text-center">
       <h3 id="titulo" class="titulos">BITÁCORA - {{=composicion}}</h3>
       <h3 id="subtitulo" class="titulos"> ({{=espacio_nombre}})</h3>
-  </div>
-    <div class="row text-center">
-              <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
     </div>
-  
+
+    <div class="col-lg-1" style="padding-top: 20px; padding-bottom: 10px;">
+      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#agregarEntrada">
+        <i class="fa fa-plus-circle"></i>
+      </button>
+    </div>
+
+    <div class="col-lg-12">
+      <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
+    </div>
+  </div>  
+
     <div class="row">
     <div class="row">
       <div id="buttons" class="pull-right">
-        <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#agregarEntrada">
-          <i class="fa fa-plus-circle"></i>
-        </button>
+        
         <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
           <i class="fa fa-filter"></i>
