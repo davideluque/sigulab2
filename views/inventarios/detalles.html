@@ -31,6 +31,9 @@
     {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
+    {{ if request.vars.delete: }}
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['bm_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
     <!-- Flash message -->
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
@@ -42,10 +45,19 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
+                {{ if request.vars.delete: }}
+                <form method="post">
+                    <!-- Boton para aceptar mod de bien mueble-->
+                    <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                    <!--Boton para rechazar el bien mueble-->
+                    <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                </form>
+                {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                 <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                {{ pass }}
             </div>
         </div>
     </div>
@@ -206,6 +218,11 @@
         <div class="modal-body addBody">
             <br>
             <form method="post" style="text-align: center;">
+                <div class="form-group">
+                    <label>Descripción de eliminación*</label>
+                    <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                    <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                </div>
                 <h4>¿Desea solicitar la eliminación de {{=bien['bm_nombre']}}?</h4>
                 <br>
                 <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
@@ -637,8 +654,12 @@
                                 {{pass}}
                                 <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                             </div>
+                        <div class="form-group">
+                            <label>Descripción de modificación*</label>
+                            <input type="text" class="form-control" id="descripcion_modificacion" name="descripcion_modificacion" placeholder="Descripción de modificación" required>
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
-                        
+                        </div>
 
                       </div>
 

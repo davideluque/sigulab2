@@ -343,7 +343,7 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
 def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubicacion,
                 descripcion, aforado, calibrar, capacidad, unidad, unidad_dim, 
                  ancho, largo, alto, diametro, material, material_sec, presentacion,
-                 unidades,total, user , clasificacion):
+                 unidades,total, user , clasificacion, descripcion_mod):
 
     if (db( (db.modificacion_sin_bn.msb_nombre == nombre) & (db.modificacion_sin_bn.msb_espacio==espacio) ).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
@@ -378,6 +378,7 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
         msb_capacidad = capacidad,
         msb_unidad_dim = unidad_dim,
         msb_modifica_ficha = user,
+        msb_desc = descripcion_mod
     )
     response.flash = "Se ha realizado exitosamente la solicitud de modificación del material de laboratorio " + str(nombre)
     return True
@@ -789,7 +790,7 @@ def __agregar_registro(concepto):
 def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
                 descripcion, material, color, calibrar, fecha_calibracion,
                 unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
-                estatus, nombre_cat, subcategoria, cod_loc, localizacion, user, confirmacion=None):
+                estatus, nombre_cat, subcategoria, cod_loc, localizacion, descripcion_mod, user, confirmacion=None):
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0] #Se busca de la tabla de bm para tener el nombre original
@@ -821,7 +822,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             mbn_categoria = nombre_cat,
             mbn_subcategoria = subcategoria, 
             mbn_codigo_localizacion = cod_loc,
-            mbn_localizacion = localizacion, 
+            mbn_localizacion = localizacion,
+            mbn_desc =  descripcion_mod,
             mbn_modifica_ficha = user
         )
     response.flash = "Se ha realizado exitosamente la solicitud de modificación del bien mueble " + str(nombre)
@@ -832,7 +834,23 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # < -------- Final Funciones privadas de SMDYP ------------>
 
 # < ------- Vistas del modulo de inventario -------->
-def index(): return locals()
+def index(): 
+    solicitudes_pendientes = validaciones()
+    numero_solicitudes = 0
+    if(len(solicitudes_pendientes['inventario'][0]) != 0 or \
+        len(solicitudes_pendientes['inventario'][1]) != 0 or \
+        len(solicitudes_pendientes['inventario'][2]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][0]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][1]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][2]) != 0
+        ):
+        numero_solicitudes = len(solicitudes_pendientes['inventario'][0]) + \
+        len(solicitudes_pendientes['inventario'][1]) + \
+        len(solicitudes_pendientes['inventario'][2]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][0]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][1]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][2])
+    return dict(numero_solicitudes = numero_solicitudes)
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -1019,6 +1037,18 @@ def detalles():
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
 
+    # Si se elimina
+    if request.vars.si:
+        db(db.bien_mueble.bm_num == bm).delete()
+        db(db.modificacion_bien_mueble.mbn_num == bm).delete()
+        session.flash = "Solicitud de eliminación aceptada"
+        redirect(URL('validaciones'))
+    # Si no se elimina
+    if request.vars.no:
+        db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 2)
+        db(db.modificacion_bien_mueble.mbn_num == bm).delete()
+        session.flash = "Solicitud de eliminación rechazada"
+        redirect(URL('validaciones'))
 
     if request.vars.modificacion:
         __agregar_modificar_bm(
@@ -1029,12 +1059,12 @@ def detalles():
             request.vars.ancho, request.vars.largo, request.vars.alto,
             request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
             request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion,
-            user_id)
+            request.vars.descripcion_modificacion, user_id)
         request.vars.modificacion = None
     
     if request.vars.eliminacion:
         if bien['bm_eliminar'] == 2: 
-            db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0)
+            db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0, bm_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
             response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
@@ -1159,6 +1189,19 @@ def detalles_mat():
     unidad_cap = []
     presentacion=[]
 
+    # Si se elimina
+    if request.vars.si:
+        db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
+        db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
+        session.flash = "Solicitud de eliminación aceptada"
+        redirect(URL('validaciones'))
+    # Si no se elimina
+    if request.vars.no:
+        db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
+        db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
+        session.flash = "Solicitud de eliminación rechazada"
+        redirect(URL('validaciones'))
+    
     #Si se edita
     if request.vars.nombre_mat:
         __agregar_material_modificar(
@@ -1169,11 +1212,11 @@ def detalles_mat():
                 request.vars.unidad_mat,  
             request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
             request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-            request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion)
+            request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion, request.vars.descripcion_modificacion)
 
     if request.vars.eliminacion:
         if bien['sb_eliminar'] == 2: 
-            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0)
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0, sb_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
             response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
