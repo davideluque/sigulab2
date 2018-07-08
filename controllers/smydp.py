@@ -1075,20 +1075,23 @@ def envases():
 def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, tipo_boca, descripcion, composicion, espacio_fisico, categoria, id_envase):
     # Si el id_envase es distinto de -1, es porque ya existe el envase y se va a actualizar su informacion
     if id_envase != -1:
-        db(db.t_envases.id == id_envase).update(
-            identificacion = identificacion,
-            capacidad = capacidad, 
-            unidad_medida = unidad_medida, 
-            forma = forma, 
-            material = material, 
-            tipo_boca = tipo_boca, 
-            descripcion = descripcion, 
-            composicion = composicion, 
-            espacio_fisico = espacio_fisico, 
-            categoria = categoria
-        )
+        if len(list(db(db.t_envases.identificacion == identificacion).select())) > 0:
+            return T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
+        else:
+            db(db.t_envases.id == id_envase).update(
+                identificacion = identificacion,
+                capacidad = capacidad, 
+                unidad_medida = unidad_medida, 
+                forma = forma, 
+                material = material, 
+                tipo_boca = tipo_boca, 
+                descripcion = descripcion, 
+                composicion = composicion, 
+                espacio_fisico = espacio_fisico, 
+                categoria = categoria
+            )
 
-        return T("La información del contenedor se ha modificado exitosamente.")
+            return T("La información del contenedor se ha modificado exitosamente.")
         
     else:
         # Se verifica si la identificación del envase que se quiere crear fue previamente utilizada
