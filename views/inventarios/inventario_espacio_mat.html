@@ -151,6 +151,12 @@
                       </div>
                           
                       <div class="form-group">
+                          <label>Cantidad de ese material*</label>
+                          <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                          <font color="red"><div id="err_cantidad" hidden></div></font>
+                      </div>
+
+                      <div class="form-group">
                           <label>Marca</label>
                           <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca">
                           <div class="field-error"> <p id="error-marca"> </p> </div>
@@ -162,22 +168,6 @@
                           <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
                       </div>
 
-                      <div class="form-group" id="grupo-capacidad">
-                          <label>Capacidad</label>
-                          <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)">
-                          <font color="red"><div id="err_capacidad" hidden></div></font>
-                  </div>
-
-                  <div class="form-group" id="grupo-cap">
-                      <label>Unidad</label>
-                          <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
-                            <option value="">Seleccione una unidad</option>
-                            {{ for med in unidad_cap:}}
-                            <option value="{{=med}}">{{=med}}</option>
-                            {{pass}}
-                          </select>
-                          <div class="field-error"> <p id="error-unidad" > </p> </div>
-                  </div>
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -199,37 +189,34 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del material</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-   
 
-                      <div class="form-group">
-                          <label>Cantidad de ese material*</label>
-                          <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese material*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
-                          <font color="red"><div id="err_cantidad" hidden></div></font>
-                      </div>
-                      <div class="form-group" id="grupo-presentacion">
-                          <label>Presentación</label>
-                          <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" >
-                            <option value="">Seleccione una presentación*</option>
-                            {{ for med in presentacion:}}
-                            <option value="{{=med}}">{{=med}}</option>
-                            {{pass}}
-                          </select>
-                          <div class="field-error"> <p id="error-unidad" > </p> </div>
-                  </div>
+                        <div class="form-group" id="grupo-capacidad">
+                            <label>Capacidad</label>
+                            <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)" >
+                            <font color="red"><div id="err_capacidad" hidden></div></font>
+                    </div>
+  
+                    <div class="form-group" id="grupo-cap">
+                        <label>Unidad</label>
+                            <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
+                              <option value="">Seleccione una unidad</option>
+                              {{ for med in unidad_cap:}}
+                              <option value="{{=med}}">{{=med}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-unidad" > </p> </div>
+                    </div>
 
-                  <div class="form-group">
-                      <label>Unidades</label>
-                      <input class="form-control" id="unidades" 
-                      name="unidades" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
-                      <font color="red"><div id="err_unidades" hidden></div></font>
-                  </div>
-
-                  <div class="form-group" id="grupo-total">
-                      <label class="form-group" id="total" style="margin-bottom: 0px">Total</label>
-                      <input class="form-control" id="total_mat" name="total_mat" placeholder="" readonly >
-                      <div class="field-error"> <p id="error-total_mat"> </p> </div>
-                  </div>
-
+                    <label>Calibración</label>
+                    <div class="form-group">
+                            <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
+                              <!-- Insertar un for-->
+                              <option type="text" value="">¿Requiere calibración?*</option>
+                              <option value="Si">Si</option>
+                              <option value="No">No</option>                                
+                            </select>
+                            <div class="field-error"> <p id="err_aforado"> </p> </div>
+                    </div> 
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -256,7 +243,7 @@
       
                         <div class="form-group" id="grupo-aforado">
                             <label>Aforado</label>
-                            <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado">
+                            <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado" required>
                               <!-- Insertar un for-->
                               <option type="text" value="">¿Es aforado?*</option>
                               <option value="Si">Si</option>
@@ -264,17 +251,6 @@
                               <option value="N/A">N/A</option>                                
                             </select>
                             <div class="field-error"> <p id="err_aforado"> </p> </div>
-
-                      <label>Calibración</label>
-                      <div class="form-group">
-                              <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración">
-                                <!-- Insertar un for-->
-                                <option type="text" value="">¿Requiere calibración?*</option>
-                                <option value="Si">Si</option>
-                                <option value="No">No</option>                                
-                              </select>
-                              <div class="field-error"> <p id="err_aforado"> </p> </div>
-                      </div> 
                     
                         <div class="form-group" id="grupo-material">
                             <label>Material predominante*</label>
@@ -390,16 +366,14 @@
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Material</h4>                
-                        <label>Campos marcados con * son obligatorios.</label>
-
-                        <label>Ubicación interna</label>
+                        <label>Campos marcados con * son obligatorios.</br> Ubicación interna</label>
                         <div class="form-group">
                                 <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
                                 <font color="red"><div id="err_ubicacion_int" hidden></div></font>
                         </div>
                         <div class="form-group">
-                            <label>Descripción*</label>
-                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Descripción*" required>
+                            <label>Descripción</label>
+                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Descripción" >
                             <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
                         </div>
 
