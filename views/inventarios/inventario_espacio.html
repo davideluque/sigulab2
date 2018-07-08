@@ -131,7 +131,7 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-next botonForm" onclick="elegir_campos(this);"><i class="fas fa-arrow-right"></i></button>    
-            </fieldset>
+              </fieldset>
           
                 
                 <!-- Segundo paso-->
@@ -167,7 +167,13 @@
                             <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
-                        
+
+                        <div class="form-group" id ='grupo-marca' hidden>
+                          <label>Marca*</label>
+                          <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
+                          <div class="field-error"> <p id="error-marca"> </p> </div>
+                      </div>
+
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -190,49 +196,21 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
-                          <div class="form-group">
-                              <label>Marca*</label>
-                              <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
-                              <div class="field-error"> <p id="error-marca"> </p> </div>
-                          </div>
-  
-                          <div class="form-group">
-                              <label>Modelo*</label>
-                              <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
-                              <div class="field-error"> <p id="error-modelo"> </p> </div>
-                          </div>
-  
-                          <div class="form-group">
+
+                        <div class="form-group" id ='grupo-modelo' hidden>
+                          <label>Modelo*</label>
+                          <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
+                          <div class="field-error"> <p id="error-modelo"> </p> </div>
+                      </div>
+                        
+
+                          <div class="form-group" id ='grupo-serial' hidden>
                               <label>Serial*</label>
                               <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
                               <div class="field-error"> <p id="error-serial"> </p> </div>
                             </div>
-                          
-                      </div>
-                    </div>
-                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
-                  </fieldset>
-                  <!-- Fin Segundo Paso -->
-  
-  
-                <!-- Tercer paso Parte 3-->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
-                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> 
-                        <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
-                        <span class="step">4</span>
-                      </div>
-                      <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del Bien</h4>                
-                        <label>Campos marcados con * son obligatorios.</label>
-  
-                          <div class="form-group">
+        
+                            <div class="form-group">
                               <label>Material*</label>
                               <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
@@ -264,6 +242,29 @@
                             <input type="hidden" class="form-control" id="otro_color" placeholder="Color*" required>
                             <div class="field-error"> <p id="error-color"> </p> </div>
                           </div>
+
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  </fieldset>
+                  <!-- Fin Segundo Paso -->
+  
+  
+                <!-- Tercer paso Parte 3-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
 
                           <label>Dimensiones</label>
 
@@ -302,6 +303,18 @@
                             <font color="red"><div id="err_diametro" hidden></div></font>
                           </div>
                           
+
+                          <div class="form-group">
+                            <label>Seleccione un tipo de movilidad*</label>
+                            <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
+                              <option value="">Seleccione un tipo de movilidad</option>
+                              {{ for movilidad in movilidad_list: }}
+                              <option value="{{=movilidad}}">{{=movilidad}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-movilidad"> </p> </div>
+                        </div>
+
                         </div>
                       </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -326,16 +339,6 @@
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
   
-                        <div class="form-group">
-                            <label>Seleccione un tipo de movilidad*</label>
-                            <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
-                              <option value="">Seleccione un tipo de movilidad</option>
-                              {{ for movilidad in movilidad_list: }}
-                              <option value="{{=movilidad}}">{{=movilidad}}</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-movilidad"> </p> </div>
-                        </div>
 
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
@@ -515,6 +518,9 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("serial").type = 'hidden';
       document.getElementById("estatus").type = 'hidden';
       document.getElementById("calibrar").style.display = 'none';
+      $('#grupo-marca').hide()
+      $('#grupo-modelo').hide()
+      $('#grupo-serial').hide()
     }
     else{
       document.getElementById("select-calibrar").setAttribute("required", "");
@@ -523,6 +529,9 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("serial").type = 'text';
       document.getElementById("estatus").type = 'text';
       document.getElementById("calibrar").style.display = 'block';
+      $('#grupo-marca').show()
+      $('#grupo-modelo').show()
+      $('#grupo-serial').show()
     }
     document.getElementById("fecha_calibracion").style.display = 'none';
   }
