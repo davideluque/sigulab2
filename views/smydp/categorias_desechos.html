@@ -163,7 +163,7 @@
                                             <label>Campos marcados con * son obligatorios.</label>
                                             
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="categoria" id="nombre-categoria" placeholder="Nombre de la categoría*">
+                                                <input type="text" class="form-control" name="categoria" onfocusout="validar_categoria()" id="nombre-categoria" placeholder="Nombre de la categoría*">
                                                 <input type="hidden" class="form-control" name="id_categoria" id="id_categoria">
                                                 <input type="hidden" class="form-control" name="borrar_categoria" id="borrar_categoria" value="False">
                                                 <div class="field-error">
@@ -172,7 +172,7 @@
                                             </div>
                                             
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                                <input type="text" class="form-control" name="descripcion" onfocusout="validar_descripcion()" id="descripcion-categoria" placeholder="Descripción de la categoría*">
                                                 <div class="field-error">
                                                     <p id="error-descripcion-categoria"> </p>
                                                 </div>
@@ -204,6 +204,54 @@
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
 
+    function validar_categoria() {
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+
+        // Buscando divs para ingresar mensajes de error
+
+        var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_nombre_categoria.innerText != '') {
+            error_nombre_categoria.innerText = '';
+            nombre_categoria.style.border = "3px solid #ddd";
+        }
+        // Mensajes de error
+        var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+        if (nombre_categoria.value === '' || nombre_categoria.length === 0) {
+            error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
+            nombre_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
+
+    function validar_descripcion() {
+        // Buscando los valores ingresados por el usuario en cada campo
+
+        var descripcion_categoria = document.forms['formularioCarga']['descripcion'];
+
+        // Buscando divs para ingresar mensajes de error
+
+        var error_descripcion_categoria = document.getElementById("error-descripcion-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+
+        if (error_descripcion_categoria.innerText != '') {
+            error_descripcion_categoria.innerText = '';
+            descripcion_categoria.style.border = "3px solid #ddd";
+        }
+        // Mensajes de error
+
+        var mensaje_error_descripcion_categoria = "Por favor ingrese una descripción válida para la categoría.";
+
+        if (descripcion_categoria.value === '' || descripcion_categoria.length === 0) {
+            error_descripcion_categoria.innerText = mensaje_error_descripcion_categoria;
+            descripcion_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
+
     // Valida los campos de la forma en el modal "addsustancia"
     function validar_campos() {
         // Buscando los valores ingresados por el usuario en cada campo
@@ -217,12 +265,12 @@
         // Limpiando los mensajes anteriores de validadores
         if (error_nombre_categoria.innerText != '') {
             error_nombre_categoria.innerText = '';
-            nombre_categoria.style.border = "none";
+            nombre_categoria.style.border = "3px solid #ddd";
         }
 
         if (error_descripcion_categoria.innerText != '') {
             error_descripcion_categoria.innerText = '';
-            descripcion_categoria.style.border = "none";
+            descripcion_categoria.style.border = "3px solid #ddd";
         }
 
         // Mensajes de error
