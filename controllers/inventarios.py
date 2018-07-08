@@ -442,6 +442,62 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
     )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
+def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presentacion, numpiezas,
+                contenido, descripcion, material, unidad, ancho, largo, alto, diametro, 
+                ubicacion, observacion, motivo, espacio,unidad_adscripcion, dependencia, user1, user2):
+
+    if (db( (db.modificacion_herramienta.mhr_nombre == nombre) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).select()):
+        #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
+
+        response.flash = "La herramienta \"{0}\" tiene una modificación pendiente \
+                          Por los momentos no se enviarán solicitudes de modificación.".format(nombre)
+        return False
+
+    response.flash = "Se ha enviado una solicidad de modificación de la herramienta \"{0}\" \
+                        .".format(nombre)
+    
+        # Verificamos si la variable es un conjunto o una unidad
+    if presentacion=='Unidad':
+        numpiezas='1'
+        contenido=None
+        descripcion=None
+    
+    if not unidad:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+    
+    # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    inv_id = db.modificacion_herramienta.insert(
+        mhr_nombre = nombre,
+        mhr_num=num,   
+        mhr_marca = marca, 
+        mhr_modelo = modelo, 
+        mhr_serial = serial, 
+        mhr_presentacion = presentacion,
+        mhr_numpiezas= numpiezas,
+        mhr_contenido =contenido,
+        mhr_descripcion = descripcion, 
+        mhr_material = material, 
+        mhr_unidad = unidad, 
+        mhr_ancho = ancho, 
+        mhr_largo = largo,
+        mhr_alto = alto, 
+        mhr_diametro = diametro, 
+        mhr_espacio_fisico = espacio,
+        mhr_ubicacion = ubicacion,
+        mhr_observacion= observacion,
+        mhr_motivo = motivo,
+        mhr_unidad_de_adscripcion = unidad_adscripcion,
+        mhr_depedencia = dependencia,
+        mhr_crea_ficha = user1,
+        mhr_modifica_ficha = user2
+    )
+    response.flash = "Se ha realizado exitosamente la solicitud de modificación de la herramienta " + str(nombre)
+    return True
+    #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
@@ -1198,41 +1254,35 @@ def detalles_mat():
 def detalles_herramientas():
     #Recuperamos el espacio
     espacio = request.vars['espacio']
-    #El nombre del material/consumible
-    name = request.vars['nombreMat']
+    #El nombre de la herramienta
+    name = request.vars['nombreHer']
+    #La ubicacion interna
+    ubicacion = request.vars['ubicacion']
 
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
 
-    # Busco el material/consumible
-    bien = db( (db.herramienta.hr_espacio_fisico == espacio) & (db.herramienta.hr_nombre == name) ).select()[0]
+    # Busco la herramienta
+    bien = db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).select()[0]
     
     #Inicializo variables
     material_pred = []
-    color = []
     unidad_med = []
-    movilidad = []
-    uso = []
-    nombre_cat = []
-    cod_localizacion = []
-    localizacion = []
-    nombre_espaciof = []
-    unidad_adscripcion = []
-    unidad_cap = []
     presentacion=[]
 
     #Si se edita
-    if request.vars.nombre_mat:
-        __agregar_material_modificar(
+    if request.vars.nombre_her:
+        __agregar_herramienta_modificar(
             request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
             request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-            request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho,
-            request.vars.largo, request.vars.alto, request.vars.diametro, request.vars.ubicacion_int ,
-            request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
+            request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+            request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int,
+            request.vars.descripcion_herramientas, request.vars.descripcion_modificacion_her, espacio, 
+            bien['hr_unidad_de_adscripcion'], bien['hr_depedencia'], bien['hr_crea_ficha'] ,user_id)
 
     if request.vars.eliminacion:
-        if bien['sb_eliminar'] == 2: 
+        if bien['hr_eliminar'] == 2: 
             db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 0)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
@@ -1248,74 +1298,54 @@ def detalles_herramientas():
             response.flash = bien['hr_nombre'] + " ya se encuentra oculto en las consultas."
         request.vars.ocultar = None
 
-    aforado_options = ['Si', 'No', 'N/A']
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
     unidad_med = ['cm','m']
-    movilidad = ['Fijo','Portátil']
-    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
-                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-    cod_localizacion = ['150301','240107']
-    localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-    'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
     presentacion=["Unidad", "Conjunto"]
     if bien['hr_presentacion'] == "Unidad":
-        caracteristicas_list = ['NumBien:', 'Marca:', 'Modelo:', 'Serial:', 'Presentacion:', 
-        'Contenido:', 'Descripcion:', 'Material predominante:', 'Unidad:', 'Ancho:', 'Largo:',
-        'Alto:', 'Diametro:', 'Ubicación interna:']
+        caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
+        'Material predominante:', 'Ubicación interna:']
         caracteristicas_dict = {
-            'NumBien:': bien['hr_num'],
+            'Número de Bien Nacional:': bien['hr_num'],
             'Marca:': bien['hr_marca'],
             'Modelo:': bien['hr_modelo'],
             'Serial:': bien['hr_serial'],
-            'Presentacion:': bien['hr_presentacion'],
-            'Contenido:': bien['hr_contenido'],
-            'Descripción:': bien['hr_descripcion'],
+            'Presentación:': bien['hr_presentacion'],
             'Material predominante:': bien['hr_material'],
-            'Unidad de medida:': bien['hr_unidad'],
-            'Ancho:': bien['hr_ancho'],
-            'Largo:': bien['hr_largo'],
-            'Alto:': bien['hr_alto'],
-            'Diametro:': bien['hr_diametro'],
             'Ubicación interna:' : bien['hr_ubicacion']
         }
     else:
-        caracteristicas_list = ['NumBien:', 'Marca:', 'Modelo:', 'Serial:', 'Presentacion:', 
-        'Número de Piezas:', 'Contenido:', 'Descripcion:', 'Material predominante:', 'Unidad:', 
-        'Ancho:', 'Largo:', 'Alto:', 'Diametro:', 'Ubicación interna:']
+        caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
+        'Número de Piezas:', 'Contenido:', 'Descripción:', 'Material predominante:', 'Ubicación interna:']
         caracteristicas_dict = {
-            'NumBien:': bien['hr_num'],
+            'Número de Bien Nacional::': bien['hr_num'],
             'Marca:': bien['hr_marca'],
             'Modelo:': bien['hr_modelo'],
             'Serial:': bien['hr_serial'],
-            'Presentacion:': bien['hr_presentacion'],
-            'Numero de Piezas:': bien['hr_numpiezas'],
+            'Presentación:': bien['hr_presentacion'],
+            'Número de Piezas:': bien['hr_numpiezas'],
             'Contenido:': bien['hr_contenido'],
             'Descripción:': bien['hr_descripcion'],
             'Material predominante:': bien['hr_material'],
-            'Unidad de medida:': bien['hr_unidad'],
-            'Ancho:': bien['hr_ancho'],
-            'Largo:': bien['hr_largo'],
-            'Alto:': bien['hr_alto'],
-            'Diametro:': bien['hr_diametro'],
             'Ubicación interna:' : bien['hr_ubicacion']
         }
+    
+    if not caracteristicas_dict['Marca:']:
+        del caracteristicas_dict['Marca:']
+        caracteristicas_list.remove('Marca:')
+
+    if not caracteristicas_dict['Modelo:']:
+        del caracteristicas_dict['Modelo:']
+        caracteristicas_list.remove('Modelo:')
+    
+    if not caracteristicas_dict['Serial:']:
+        del caracteristicas_dict['Serial:']
+        caracteristicas_list.remove('Serial:')
+
     return dict(bien = bien,
                 material_pred = material_pred,
-                color_list = color,
-                unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
                 caracteristicas_list = caracteristicas_list,
                 caracteristicas_dict = caracteristicas_dict,
-                aforado_options = aforado_options,
-                unidad_cap = unidad_cap,
+                unidad_med = unidad_med,
                 presentacion = presentacion
                 )
 
@@ -2656,17 +2686,7 @@ def herramientas():
                 inventario = __get_inventario_herramientas_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
                 unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2754,17 +2774,7 @@ def herramientas():
                 inventario = __get_inventario_herramientas_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
                 unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2852,17 +2862,7 @@ def herramientas():
                 inventario = __get_inventario_herramientas_espacio(espacio_id)
 
                 material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
                 unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2928,13 +2928,6 @@ def herramientas():
                 inventario=inventario,
                 retroceder=retroceder,
                 material_pred = material_pred,
-                color_list = color,
                 unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
-                unidad_cap = unidad_cap,
                 presentacion = presentacion
                 ) 

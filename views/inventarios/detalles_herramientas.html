@@ -367,7 +367,7 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
                
-                <!-- Segundo paso-->
+                <!-- Primer paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="1" data-title="Primer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -447,9 +447,9 @@
                   </div>
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
-                <!-- Fin Segundo Paso -->
+                <!-- Fin Primer Paso -->
 
-                <!-- Tercer paso Parte 3-->
+                <!-- Segundo paso -->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -540,9 +540,9 @@
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin tercer Paso -->
+                  <!-- Fin segundo Paso -->
 
-                <!--Tercer Paso parte 2-->
+                <!--Tercer Paso parte 1-->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -653,9 +653,38 @@
                       </div>
 
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>                </fieldset>    
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin tercer paso-->
+                  <!-- Fin tercer paso parte 1-->
+                
+                  <!--Tercer Paso parte 2-->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Razones de la modificación</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                                <label>Motivo de la modificacion*</label>
+                                <input type="text" class="form-control" id="descripcion_modificacion_her" name="descripcion_modificacion_her" placeholder="Describa los campos modificados"> 
+                                <font color="red"><div id="error-est-motivo" hidden></div></font>
+                        </div>
+
+                        </div>
+                      </div>
+
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
+                    </fieldset>    
+                  </fieldset>
+                  <!-- Fin tercer paso parte 2-->
 
                 <!-- Fin Cuarto Paso -->
               </form>
