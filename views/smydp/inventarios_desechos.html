@@ -48,7 +48,7 @@
 </div>
 {{pass}}
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
+	<div style="padding-left: 0px" class="container titulo">
 	
 	{{if es_tecnico:}}
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
@@ -57,7 +57,7 @@
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
 			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">					<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
@@ -96,12 +96,12 @@
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('inventarios_desechos')}}">
-		    		<i class="fa fa-arrow-left"></i>
+	    		<a class="boton boton-retorno" href="{{=URL('inventarios_desechos')}}">
+						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{else:}}
-    			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-		    		<i class="fa fa-arrow-left"></i>
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{pass}}
 		</div>
@@ -150,7 +150,8 @@
 				</div>
 				<div id="contenedor-filas" style="display: none">
 					{{dependencias = espacios}}
-					<div class="grid-container">
+					<div class="grid-container">}
+
 						{{dependencias = espacios}} 
 						 {{for dependencia in dependencias:}}
 							<div class="grid-item">

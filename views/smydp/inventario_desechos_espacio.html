@@ -1,19 +1,5 @@
 <!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
 
-<!-- Inicio Boton Agregar Sustancia -->
-<div class="container" id="containerAgregar">
-    <div class="row">
-        <div class="col-sm-6"></div>
-        <div id="columnBotonAgregar" class="col-sm-6">
-	        <div class="col-sm-6"></div>
-	        <div class="col-sm-6">
-	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	        </div>
-        </div>
-    </div>
-</div>
-<!-- Fin Boton Agregar Sustancia -->
-
 <!-- Editar desecho -->
 {{if ('view' in request.vars):}} 
   {{desecho_seleccionado = ''}}
@@ -46,7 +32,40 @@
                 <label for="categoria_desecho">Categoría de desecho:</label>
               </div>
               <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['categoria']['categoria']}}</span>
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['categoria']['categoria'].upper()}}</span>
+              </div>
+            </div>
+          
+            <div class="row fila-detalle-envase">
+              <div class="col-sm-5 ">
+                <label for="composicion">Composición:</label>
+              </div>
+              <div class="col-sm-6">
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['composicion']}}</span>
+              </div>
+            </div>
+          
+            <div class="row fila-detalle-envase">
+              <div class="col-sm-5 ">
+                <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
+              </div>
+              <div class="col-sm-6">
+                {{envase_seleccionado = ''}} 
+                {{for envase in envases_totales:}} 
+                  {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
+                    {{envase_seleccionado = envase}} 
+                  {{pass}} 
+                {{pass}}
+                <span>{{=envase_seleccionado['identificacion'].upper()}}</span>
+              </div>
+            </div>
+          
+            <div class="row fila-detalle-envase">
+              <div class="col-sm-5 ">
+                <label for="concentracion">Concentración del desecho generado*:</label>
+              </div>
+              <div class="col-sm-6">
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['concentracion']}}</span>
               </div>
             </div>
           
@@ -68,7 +87,7 @@
                   {{for item in desecho_seleccionado['t_inventario_desechos']['peligrosidad']:}} 
                     {{peligrosidad += item + ', '}} 
                   {{pass}}
-                  <span>{{=peligrosidad}}</span>
+                  <span>{{=peligrosidad.upper()}}</span>
                 </div>
               </div>
 
@@ -77,7 +96,7 @@
                 <label for="tratamiento">Tipo de tratamiento del desecho generado*:</label>
               </div>
               <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento']}}</span>
+                <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento'].upper()}}</span>
               </div>
             </div>
 
@@ -122,7 +141,7 @@
             </div>
           </div>
           <div class="col-sm-10 modal-header-wrapper" id="col11Header">
-            <h4 class="modal-title titulo-modal-desecho" id="nuevoDesecho">Nuevo desecho
+            <h4 class="modal-title titulo-modal-desecho" id="nuevoDesecho">Editar desecho
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </h4>
           </div>
@@ -154,7 +173,7 @@
                         {{pass}}
                         
                         <div class="form-group">
-                          <label for="envase">Identificación del envase donde se depositó el desecho:</label>
+                          <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
                           <select class="form-control" type="select" id="envase" name="envase" required>
                             {{for envase in envases_totales:}} 
                               {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
@@ -311,32 +330,33 @@
         <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
           <thead>
             <tr id="titulosListado">
-              <th style="width: none !important" class="camposTabla linksNombres">Grupo de Desecho</th>
-              <th class="camposTabla linksNombres">Composición</th>
-              <th class="camposTabla linksNombres">Responsable</th>
-              <th class="camposTabla linksNombres">Cantidad</th>
-              <th class="camposTabla linksNombres">Peligrosidad</th>
-              <th class="camposTabla linksNombres">Tratamiento</th>
-              <th class="camposTabla linksNombres">Editar</th>
+              <th style="padding-left: 30px !important" class="camposTabla linksNombres">GRUPO DE DESECHO</th>
+              <th class="camposTabla linksNombres">COMPOSICIÓN</th>
+              <th class="camposTabla linksNombres">RESPONSABLE</th>
+              <th class="camposTabla linksNombres">CANTIDAD</th>
+              <th class="camposTabla linksNombres">PELIGROSIDAD</th>
+              <th class="camposTabla linksNombres">TRATAMIENTO</th>
+              <th class="camposTabla linksNombres">OPCIONES</th>
             </tr>
           </thead>
   
           <tbody>
             {{for desecho in inventario:}}
             <tr>
-              <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos']['categoria']['categoria']}}</td>
+              <td style="padding-left: 30px !important" class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos']['categoria']['categoria'].upper()}}</td>
               <td class="camposTabla">
                 <a href="{{=URL('bitacora_desechos',vars=dict(inv=desecho['t_inventario_desechos']['id']))}}">{{=desecho['t_inventario_desechos']['composicion']}}</a>
               </td>
-              <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre']}}</td>
-              <td class="camposTabla">{{=desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
+              <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos']['responsable']['f_apellido'].upper()}}</td>
+              {{cantidad = str(desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
               {{peligrosidades = ""}} 
               {{for peligrosidad in desecho['t_inventario_desechos']['peligrosidad']:}} 
-                {{peligrosidades += peligrosidad + ", "}} 
+                {{peligrosidades += peligrosidad.upper() + ", "}} 
               {{pass}} 
               {{peligrosidades = peligrosidades[:-2]}}
               <td class="camposTabla">{{=peligrosidades}} </td>
-              <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento']}} </td>
+              <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento'].upper()}} </td>
               <td class="camposTabla">
                 <a href={{=URL( '..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio=request.vars.es_espacio, view=desecho[ 't_inventario_desechos'][ 'id']))}}>
                   Editar
@@ -347,12 +367,13 @@
           </tbody>
           <tfoot id="collapseFiltros">
             <tr>
-              <th class="camposTabla linksNombres">Grupo de Desecho</th>
-              <th class="camposTabla linksNombres">Composición</th>
-              <th class="camposTabla linksNombres">Responsable</th>
-              <th class="camposTabla linksNombres">Cantidad</th>
-              <th class="camposTabla linksNombres">Peligrosidad</th>
-              <th class="camposTabla linksNombres">Tratamiento</th>
+              <th style="width: 100px !important" class="camposTabla linksNombres">GRUPO DE DESECHO</th>
+              <th class="camposTabla linksNombres">COMPOSICIÓN</th>
+              <th class="camposTabla linksNombres">RESPONSABLE</th>
+              <th class="camposTabla linksNombres">CANTIDAD</th>
+              <th class="camposTabla linksNombres">PELIGROSIDAD</th>
+              <th class="camposTabla linksNombres">TRATAMIENTO</th>
+              <th class="camposTabla linksNombres">OPCIONES</th>
             </tr>
           </tfoot>
   
@@ -408,13 +429,17 @@
                         <h4 class="titulosForm">Datos de ingreso</h4>                
                         <p>Campos marcados con * son obligatorios.</p>
                           <div class="form-group">
-                            <label for="envase">Identificación del envase donde se depositó el desecho:</label>
-                            <select class="form-control" type="select" id="envase" name="envase" required>
-                              <option value="" selected hidden >Envase*</option>
-                              {{for envase in envases:}}
-                              <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
-                              {{pass}}
-                            </select>
+                            <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
+                            {{if len(envases) > 0:}}                          
+                              <select class="form-control" type="select" id="envase" name="envase" required>
+                                <option value="" selected hidden >Contenedor*</option>
+                                {{for envase in envases:}}
+                                <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
+                                {{pass}}
+                              </select>
+                            {{else:}}
+                              <p>No existen contenedores disponibles. Para crear uno nuevo, haga click <a href="{{=URL('envases')}}" target="_blank">aquí</a>.</p>
+                            {{pass}}
                             <div class="field-error"> <p id="error-envase"> </p> </div>
                           </div>
                           <div class="form-group">
@@ -514,7 +539,7 @@
     
 
     // Mensajes de error
-    var mensaje_error_envase = "Por favor ingrese la identificación de un envase";
+    var mensaje_error_envase = "Por favor ingrese la identificación de un contenedor";
     var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
     var mensaje_error_concentracion = "Por favor ingrese un valor numérico no negativo en el rango entre 1 y 100.";
     var mensaje_error_peligrosidad = "Por favor seleccione al menos una peligrosidad de la lista. Puede seleccionar múltiples opciones haciendo click mientras mantiene presionada la tecla Crtl.";
