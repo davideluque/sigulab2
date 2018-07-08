@@ -20,7 +20,7 @@ def __check_role():
 
     roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'TÉCNICO', 
-                        'GESTOR DE SMyDP']
+                        'GESTOR DE SMyDP', 'PERSONAL INTERNO']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
 
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
@@ -994,7 +994,7 @@ def envases():
 
     # Listas de espacios físicos de los cuáles el usuario logueado es responsable
     # Si el usuario es un gestor o webmaster, puede crear envases en cualquier espacio físico
-    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR') or auth.has_membership("PERSONAL INTERNO")):
         contenedores = list(db(db.t_envases).select(db.t_envases.ALL))
         espacios_fisicos_adscritos = list(db(
             (db.espacios_fisicos)
@@ -1230,7 +1230,7 @@ def inventarios_desechos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER')):
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR') or auth.has_membership("PERSONAL INTERNO") ):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1432,7 +1432,7 @@ def inventarios_desechos():
 
             mostrar_campo_dependencia = True
 
-    elif auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE LABORATORIO"):
+    elif(auth.has_membership("TÉCNICO") or auth.has_membership("JEFE DE LABORATORIO")):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
