@@ -13,7 +13,6 @@
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
-		  padding-right: 10ex;
 		}
 		
 	</style>
@@ -255,52 +254,66 @@
  
  <script language="javascript">
   
-	var table = $('#datatable').DataTable({
-	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-	  //dom: 'Bfrtip',
-	  language: {
-		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-	  },
-	  "columnDefs": [
-		{ "width": "30%", "targets": 0 },
-		{ "width": "10%", "targets": [1,2,3] }
-	  ],
-	 initComplete: function(){
-		var api = this.api();
-  
-		new $.fn.dataTable.Buttons(api, {
-		  buttons: [
-  
-			  {
-				  extend: 'collection',
-				  text: '<i class="fas fa-floppy-o"></i>',
-				  className: 'boton-sigulab',
-				  buttons: [
-					  { extend:'copy', text: 'Copiar' } ,
-					  'excel',
-					  'csv',
-					  'pdf'
-				  ]
-			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulab'}
-		  ]
+		var table = $('#datatable').DataTable({
+		  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+		  //dom: 'Bfrtip',
+		  language: {
+			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+		  },
+		  "columnDefs": [
+			{ "width": "30%", "targets": 0 },
+			{ "width": "10%", "targets": [1,2,3] }
+		  ],
+		 initComplete: function(){
+			var api = this.api();
+	  
+			new $.fn.dataTable.Buttons(api, {
+			  buttons: [
+	
+				{
+				text:'<i class="fa fa-filter"></i>',
+				action: function(){
+					mostrarFiltro()
+				},
+				className: 'boton-sigulabIzq'
+				},
+	  
+				  {
+					  extend: 'collection',
+					  text: '<i class="fas fa-save"></i>',
+					  className: 'boton-sigulab',
+					  buttons: [
+						  { extend:'copy', text: 'Copiar' } ,
+						  'excel',
+						  'csv',
+						  'pdf'
+					  ]
+				  },
+				  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+			  ]
+			});
+			//$('#botonModal').addClass('pull-left')
+			$('#filtrar').addClass('pull-left');
+			$('#espacioBuscar').addClass('pull-left');
+	  
+	  
+			$('.dataTables_filter').appendTo('#buttons');
+	  
+			api.buttons().container().appendTo('#buttons');
+			//$('.dt-buttons').append($('#botonModal'));
+			$('.dt-buttons').append($('#filtrar'));
+			$('#buttons').append('<br><br>');
+			$('.dataTables_info').addClass('pull-right');
+			$('.dataTables_filter').addClass('pull-left');
+	
+			$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+			$('#datatable_next').html('<span class="fa fa-arrow-right" />');
+	  
+			
+		 }
 		});
-		$('#botonModal').addClass('pull-left')
-		$('#filtrar').addClass('pull-left');
-		$('#espacioBuscar').addClass('pull-left');
-  
-  
-		$('.dataTables_filter').appendTo('#buttons');
-  
-		api.buttons().container().appendTo('#buttons');
-		$('.dt-buttons').append($('#botonModal'));
-		$('.dt-buttons').append($('#filtrar'));
-		$('#buttons').append('<br><br>');
-		$('.dataTables_info').addClass('pull-right');
-		$('.dataTables_filter').addClass('pull-left');
-  
-		
-	 }
-	});
-  </script>
+	
+	
+	
+	  </script>
 {{end}}
