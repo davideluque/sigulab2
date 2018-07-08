@@ -69,6 +69,7 @@ $(document).ready(function () {
                 next_step = false;
             }else {
                 if (($(this).attr('name')=="num_her")) {
+                    console.log("aqui");
                     if ($(this).val()!=""){    
                         if (!($(this).val().match(/^[0-9]{6}$/))) {
                             $("#err_num_her").html("Formato Inválido. Ingrese 6 dígitos");
@@ -85,28 +86,31 @@ $(document).ready(function () {
                         $("#err_num_her").hide();
                     }
                 }
-                else if (($(this).attr('name')=="numpiezas_her")) {
+                else if (($(this).attr('name')=="numpiezasher")) {
+                    console.log("ayuda2");
                     if (!($(this).val().match(/^[0-9]{1,3}$/)) && $(this).val() != "") {
-                        $("#err_numpiezas_her").html("Formato Inválido. Ingrese de 1 a 3 dígitos");
-                        $("#err_numpiezas_her").show();
+                        $("#err_numpiezasher").html("Formato Inválido. Ingrese de 1 a 3 dígitos");
+                        $("#err_numpiezasher").show();
                         $(this).addClass('input-error');
                         next_step = false;
                     }
                     else {
                         $(this).removeClass('input-error');
-                        $("#err_numpiezas_her").hide();
+                        $("#err_numpiezasher").hide();
                     }
                 }
-                else if (($(this).attr('name')=="ancho_her")) {
+                else if (($(this).attr('name')=="ancho")) {
+                    console.log( $(this).val() );
+                    console.log("entro");
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
-                        $("#err_ancho_her").html("Ingrese solo números decimales con punto: 2.5");
-                        $("#err_ancho_her").show();
-                        $(this).addClass('input-error');
+                        $("#errAnchoHer").html("Ingrese solo números decimales con punto: 2.5");
+                        $("#errAnchoHer").show();
+                        //$(this).addClass('input-error');
                         next_step = false;
                     }
                     else {
-                        $(this).removeClass('input-error');
-                        $("#err_ancho_her").hide();
+                        //$(this).removeClass('input-error');
+                        $("#err_anchoHer").hide();
                     }
                 }
                 else if (($(this).attr('name')=="largo_her")) {
@@ -149,12 +153,6 @@ $(document).ready(function () {
                     $(this).addClass('input-error');
                      next_step = false;
                 }
-                else if( $(this).attr('name')== 'fecha_calibracion' && $(this).val()=='') {
-                    $("#err-fecha_calibracion").html("No tiene el formato adecuado");
-                    $("#err-fecha_calibracion").show();
-                    $(this).addClass('input-error');
-                     next_step = false;
-                }
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
@@ -173,6 +171,21 @@ $(document).ready(function () {
         if (testcheck()){
             $("#err_tipo_uso").hide();
         }
+
+        const $this = $('[name="ancho"]');
+        console.log( $(this).val() );
+        console.log("entro");
+        if ( !($this.val().match(/^[0-9]+$/) || ($this.val().match(/^[0-9]+\.[0-9]+$/) )) && $this.val() != "") {
+            $("#errAnchoHer").html("Ingrese solo números decimales con punto: 2.5");
+            $("#errAnchoHer").show();
+            //$(this).addClass('input-error');
+            next_step = false;
+        }
+        else {
+            //$(this).removeClass('input-error');
+            $("#err_anchoHer").hide();
+        }
+
         
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
@@ -192,6 +205,8 @@ $(document).ready(function () {
             // submit
             $('#submit').on('click', function (e) {
                 var parent_fieldset = $(this).parents('fieldset');
+                var next_step = true;
+
         
                 parent_fieldset.find('input[type="text"]').each(function () {
                     if (($(this).val() == "") && ($(this).attr('required'))) {
@@ -213,12 +228,63 @@ $(document).ready(function () {
                                 $("#err_cargo").hide();
                                 $(this).removeClass('input-error');
                             }
+                        }else if (($(this).attr('name')=="ancho")) {
+                            console.log( $(this).val() );
+                            console.log("entro");
+                            if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                                console.log("No cumple con")
+                                $("#errancho").html("Ingrese solo números decimales con punto: 2.5");
+                                $("#errancho").show();
+                                $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else {
+                                $(this).removeClass('input-error');
+                                $("#err_ancho").hide();
+                            }
+                        }
+                        else if (($(this).attr('name')=="largo_her")) {
+                            if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                                $("#err_largo_her").html("Ingrese números decimales con punto: 2.5");
+                                $("#err_largo_her").show();
+                                $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else {
+                                $(this).removeClass('input-error');
+                                $("#err_largo_her").hide();
+                            }
+                        }else if (($(this).attr('name')=="alto_her")) {
+                            if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                                $("#err_alto_her").html("Ingrese solo números decimales con punto: 2.5");
+                                $("#err_alto_her").show();
+                                $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else {
+                                $(this).removeClass('input-error');
+                                $("#err_alto_her").hide();
+                            }
+                        }else if (($(this).attr('name')=="diametro_her")) {
+                            if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
+                                $("#err_diametro_her").html("Ingrese solo números decimales con punto: 2.5");
+                                $("#err_diametro_her").show();
+                                $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else {
+                                $(this).removeClass('input-error');
+                                $("#err_diametro_her").hide();
+                            }
                         }
                         else {
                             $(this).removeClass('input-error');
                         }
                     }
                 });
+                if (!next_step){
+                    e.preventDefault();
+                }
         
             });
         
