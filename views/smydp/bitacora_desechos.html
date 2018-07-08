@@ -1,6 +1,9 @@
 {{extend "layout.html"}}
 
 {{block head}}
+
+  <!-- Para los mensajes con flash -->
+  <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}" />
   
   <!-- DataTables -->
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
@@ -10,6 +13,7 @@
   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/smydp_bitacora_desechos.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}">
   
@@ -39,30 +43,45 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación --> 
 
+{{if response.flash:}}
+  <div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{=response.flash}}
+  </div>
+{{pass}}
+
 <!-- Inicio Listado -->
 <div id="inventario-dependencia" class="container titulo">
-		<div class="col-xs-2 boton-retorno">
-        <p class="padre dep-titulo"> {{=espacio_nombre}} </p>
-        <a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=espacio_id, retroceder=retroceder))}}">
-		    		<i class="fa fa-arrow-left"></i>
-        </a>
-      </div>
-<div class="row">
-  <div>
-    <div class="row text-center">
-              <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
+  <div class="row">
+    <div class="col-lg-1 boton-retorno">
+      <!-- <p class="padre dep-titulo"> {{=espacio_nombre}} </p> -->
+      <a class="boton boton-retroceder" href="{{=URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">
+        <button type="button" class="btn btn-primary buttons-html5">
+          <i class="fa fa-arrow-left"></i>
+        </button>
+      </a>
+
     </div>
-    <div class="row">
-      <h3 id="titulo" class="titulos">{{=espacio_nombre}} - Bitácora</h3>
-       <h3 id="subtitulo" class="titulos"> {{=composicion}} ({{=espacio_nombre}})</h3>
-      </div>
+    <div class="col-lg-10 text-center">
+      <h3 id="titulo" class="titulos">BITÁCORA - {{=composicion}}</h3>
+      <h3 id="subtitulo" class="titulos"> ({{=espacio_nombre}})</h3>
     </div>
 
+    <div class="col-lg-1" style="padding-top: 20px; padding-bottom: 10px;">
+      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#agregarEntrada">
+        <i class="fa fa-plus-circle"></i>
+      </button>
+    </div>
+
+    <div class="col-lg-12">
+      <img class="iconos" src="{{=URL('static', 'images/bitacora_desechos.jpeg')}}">
+    </div>
+  </div>  
+
+    <div class="row">
     <div class="row">
       <div id="buttons" class="pull-right">
-        <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addregister">
-          <i class="fa fa-plus-circle"></i>
-        </button>
+        
         <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
           <i class="fa fa-filter"></i>
@@ -72,36 +91,42 @@
     </div>
     <br>
 
-    <div class="table-responsive no-padding no-margin">
+    <div class="table-responsive">
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Descripción</th>
-                <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Cantidad retirada ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Saldo ({{=unidad_medida}})</th>
-                <th class="camposTabla linksNombres">Responsable</th>
+                <th style="display: none" class="camposTabla linksNombres">ID</th>
+                <th style="width: none !important" class="camposTabla linksNombres">FECHA</th>
+                <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">CANTIDAD GENERADA ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">CANTIDAD RETIRADA ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">SALDO ({{=unidad_medida}})</th>
+                <th class="camposTabla linksNombres">RESPONSABLE</th>
             </tr>
         </thead>
 
         <tbody>
           {{for registro in bitacora:}}
-          
-            {{fecha = registro.t_Bitacora_desechos.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
+            {{fecha = registro['t_Bitacora_desechos']['fecha'].split(" ")}}
+            {{hora = fecha[1].split(".")}}
             <tr>
+              <td style="display: none" class="camposTabla">{{=registro['t_Bitacora_desechos']['id']}}</td>
               <td class="camposTabla">{{=fecha[0]}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion']}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_generada']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['cantidad_retirada']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['saldo']}} {{=unidad_medida}}</td>
-              <td class="camposTabla">{{=registro['auth_user']['first_name']}} {{=registro['auth_user']['last_name']}}</td>
+              <td class="camposTabla">{{=registro['t_Bitacora_desechos']['descripcion'].upper()}}</td>
+              {{cantidad_generada = str(registro['t_Bitacora_desechos']['cantidad_generada']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad_generada}} {{=unidad_medida}}</td>
+              {{cantidad_retirada = str(registro['t_Bitacora_desechos']['cantidad_retirada']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad_retirada}} {{=unidad_medida}}</td>
+              {{saldo = str(registro['t_Bitacora_desechos']['saldo']).replace(".", ",")}}
+              <td class="camposTabla">{{=saldo}} {{=unidad_medida}}</td>
+              <td class="camposTabla">{{=registro['auth_user']['first_name'].upper()}} {{=registro['auth_user']['last_name'].upper()}}</td>
             </tr>
           {{pass}}
         </tbody>
 
         <tfoot id="collapseFiltros">
             <tr>
+                <th style="display: none" class="camposTabla linksNombres">ID</th>
                 <th class="camposTabla linksNombres">Fecha</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Cantidad generada ({{=unidad_medida}})</th>
@@ -118,6 +143,86 @@
 <!-- Fin Listado --> 
 
 <!-- Modal para agregar un registro a la bitacora --> 
+
+<!-- Modal editar envase -->
+    <div class="modal fade" id="agregarEntrada" role="dialog">
+        <div class="modal-dialog modal-md">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+    
+                <!-- Modal Header -->
+                <div class="modal-header addHeader">
+                    <div class="row addRow" id="rowHeader">
+                        <div class="col-sm-1" id="col1Header">
+                            <div class="container" id="plus">
+                                <h1 id="agregar">+</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-10" id="col11Header">
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Añadir registro a la bitácora
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Header -->
+    
+                <!-- Modal Body -->
+                <div class="modal-body addBody">
+                    <div class="row addRow">
+                        <div class="col-lg-12 form-box">
+                            <form id="formularioCarga" class="registration-form" method="post">
+                                <fieldset class="formField">
+                                    <div class="form-bottom">
+                                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                        <div class="col-sm-1 col1Body"> </div>
+                                        <!-- Aqui va la informacion -->
+                                        <div class="col-sm-11 col11Body">
+                                            <h4 class="titulosForm">Datos de ingreso</h4>
+                                            <label>Campos marcados con * son obligatorios.</label>
+                                            <div class="form-group">
+                                                <label for="fecha_entrada">Fecha de creación del desecho:</label>
+                                                <br>
+                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="descripcion">Descripción del proceso:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="descripcion" name="descripcion" />
+                                            </div>  
+                                            
+                                            <div class="form-group">
+                                              <label for="cantidad_generada">Cantidad generada:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="cantidad_generada" name="cantidad_generada" />
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="cantidad_retirada">Cantidad retirada:</label>
+                                              <br>
+                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="row modal-envases-footer">
+                                      <div class="col-sm-offset-10 col-sm-2 text-center">
+                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary">
+                                          <li class="fa fa-plus-circle" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal Body-->
+            </div>
+        </div>
+    </div>
 
 <!-- Datatables-->
 <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -141,14 +246,19 @@
   var filtros = false;
 
   $(document).ready(function() {
+      // DataTable
+      var table = $('#datatable').DataTable();
+
+      table
+      .order([0, 'desc'])
+      .draw();
+
       // Setup - add a text input to each footer cell
       $('#datatable tfoot th').each( function () {
           var title = $(this).text();
           $(this).html( '<input type="text" placeholder="Filtro" />' );
       } );
    
-      // DataTable
-      var table = $('#datatable').DataTable();
    
       // Apply the search
       table.columns().every( function () {

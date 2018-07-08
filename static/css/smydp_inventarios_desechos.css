@@ -12,6 +12,22 @@
     body{font-size: 14px;}
 }
 
+div.col-xs-2.boton-retorno {
+	padding: 0px;
+}
+
+a.boton-retorno {
+	text-align: center;
+	border-radius: 50%;
+	color: white;
+	background-color: #337ab7;
+	padding: 5px;
+}
+
+th.camposTabla.linksNombres.sorting_asc{
+	width: 100px !important;
+}
+
 .buttons-html5, .buttons-print{
     border-radius: 50%;
 	background-color: #337ab7;
@@ -55,6 +71,12 @@ h3{
 	text-align: center;
 	color: #464646;
 	font-size: 22px;
+}
+
+.subtitulo {
+	text-align: center; 
+	font-weight: bold; 
+	font-size: 20px;
 }
 
 .dep-titulo{

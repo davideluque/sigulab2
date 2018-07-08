@@ -25,8 +25,24 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
+<!-- Flash message -->
+{{if response.flash:}}
+<div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{=response.flash}}
+</div>
+{{pass}}
+
+
 <!-- Area con el título de la página-->
 <div class="container titulo">
+    <div class="row pull-left boton-retroceder">
+        <div class="col-lg-1 boton-retroceder">
+            <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12 text-center">
             <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
@@ -64,8 +80,8 @@
             <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                 <thead>
                     <tr id="titulosListado" style="text-align: left">
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th style="padding-left: 30px !important" class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </thead>
 
@@ -92,8 +108,8 @@
 
                 <tfoot id="collapseFiltros">
                     <tr>
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </tfoot>
 
@@ -119,7 +135,7 @@
                             <h1 id="agregar">+</h1>
                         </div>
                     </div>
-                    <div class="col-sm-10" id="col11Header">
+                    <div class="col-sm-10" id="col11Header" style="background-color: #337ab7">
                         <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Nueva Categoría
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </h4>
@@ -154,6 +170,9 @@
                                             
                                             <div class="form-group">
                                                 <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                                <div class="field-error">
+                                                    <p id="error-descripcion-categoria"> </p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -161,7 +180,7 @@
                                             <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary">
                                                 <i class="fa fa-plus-circle"></i>
                                             </button>
-                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">
+                                            <button class="btn btn-danger" type="submit" id="boton_borrar_categoria" form="formularioCarga" onclick="return dialogoAdvertencia();" style="display: none">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </div>
@@ -184,9 +203,13 @@
 
     // Valida los campos de la forma en el modal "addsustancia"
     function validar_campos() {
-        
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+        var descripcion_categoria = document.forms['formularioCarga']['descripcion'];
+
         // Buscando divs para ingresar mensajes de error
         var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+        var error_descripcion_categoria = document.getElementById("error-descripcion-categoria");
 
         // Limpiando los mensajes anteriores de validadores
         if (error_nombre_categoria.innerText != '') {
@@ -194,22 +217,31 @@
             nombre_categoria.style.border = "none";
         }
 
-        // Buscando los valores ingresados por el usuario en cada campo
-        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+        if (error_descripcion_categoria.innerText != '') {
+            error_descripcion_categoria.innerText = '';
+            descripcion_categoria.style.border = "none";
+        }
 
         // Mensajes de error
         var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+        var mensaje_error_descripcion_categoria = "Por favor ingrese una descripción válida para la categoría.";
 
         if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
             error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
             nombre_categoria.style.border = "1px solid red";
             return false;
         }
+
+        if (descripcion_categoria.value === '' || descripcion_categoria.length === 0) {
+            error_descripcion_categoria.innerText = mensaje_error_descripcion_categoria;
+            descripcion_categoria.style.border = "1px solid red";
+            return false;
+        }
     }
 
     function editarCategoria(categoria, descripcion, id) {
         // Cambia el valor del botón de enviar formulario del modal de 'Agregar categoría' por 'Actualizar categoría'
-        document.getElementById('submit').innerHTML = 'Actualizar categoría';
+        document.getElementById('submit').innerHTML = '<i class="fa fa-floppy-o"></i>';
 
         // Cambiar el valor del títutlo del modal de creación de categoría a 'Editar categoría'
         document.getElementById('nuevaCategoria').innerHTML = document.getElementById('nuevaCategoria').innerHTML.replace("Nueva Categoría", "Editar categoría");
@@ -219,6 +251,8 @@
         document.getElementById('descripcion-categoria').value = descripcion;
         document.getElementById('id_categoria').value = id;
 
+        //Muestra el botón de borrar categoría, pues se está editando, por lo tanto existe y se puede eliminar
+        document.getElementById("boton_borrar_categoria").style.display = "inline-block"
         //Muestra el modal
         $("#addCategoria").modal('show');
     }

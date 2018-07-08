@@ -62,10 +62,12 @@
 			</a>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
-			{{if dep_nombre == "Alta Tensión":}}
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>			
+			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
+				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 			{{else:}}
+				<h3 class="subtitulo"> {{=dep_nombre}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
 			{{pass}}
 		</div>
@@ -73,7 +75,8 @@
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>						
+			<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 			<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 		</div>
 		{{pass}}
@@ -103,12 +106,15 @@
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>						
 			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
+				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 			{{elif  "LABORATORIO" in dep_nombre.upper():}} 
+				<h3 class="subtitulo"> {{=dep_nombre}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
 			{{else:}}
+				<h3 class="subtitulo"> {{=dep_padre_nombre.upper()}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
 			{{pass}}
 		</div>
@@ -117,7 +123,8 @@
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="inicio-titulo"> Inventario de DP - ULAB </h3>
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>
+			<h4 class="subtitulo"> ULAB </h4>			
 			<img class="iconos" src="{{=URL('static', 'images/ulab.png')}}">
 
 		</div>

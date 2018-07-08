@@ -38,7 +38,6 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">Tipo</th>
-
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
                 <th class="camposTabla linksNombres">Descripción</th>
@@ -149,7 +148,7 @@
                       </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()">Siguiente</button>    
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()"><i class="fas fa-arrow-right"></i></button>    
             </fieldset>
                 
                 <!-- Segundo paso-->
@@ -207,8 +206,8 @@
                         </div>      
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
@@ -238,13 +237,11 @@
                                 <div class="field-error"> <p id="err_aforado"> </p> </div>
                         </div>  
 
-                        <!-- #####AGREGAR QUE SI SE LLENA, UNIDAD ES OBLIGATORIO Y COLOCAR EN LA DE MOD##### -->
                         <div class="form-group" id="grupo-capacidad">
                                 <label>Capacidad</label>
-                                <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
+                                <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)">
                                 <font color="red"><div id="err_capacidad" hidden></div></font>
                         </div>
-
 
                         <div class="form-group" id="grupo-cap">
                                 <select class="form-control" value="" type="select" id="unidad_cap" name="unidad_cap" placeholder="Unidad de medida" >
@@ -281,7 +278,8 @@
                         
                         <div class="form-group" id="grupo-material">
                               <label>Material</label>
-                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" 
+                              onchange="agregar_otro('material_mat', 'material_mat', 'otro_material1')" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Seleccione un material*</option>
                                 {{ for material in material_pred: }}
@@ -291,8 +289,14 @@
                               <div class="field-error"> <p id="error-material"> </p> </div>
                         </div>
 
+                        <div class="form-group">
+                            <input type="hidden" class="form-control"  id="otro_material1" placeholder="Material*">
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+
                         <div class="form-group" id="grupo-material2">
-                            <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario">
+                            <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario"
+                            onchange="agregar_otro('material_sec', 'material_sec', 'otro_material2')">
                               <!-- Insertar un for-->
                               <option type="text" value="">Seleccione un material secundario</option>
                               {{ for material in material_pred: }}
@@ -302,10 +306,15 @@
                             <div class="field-error"> <p id="error-material"> </p> </div>
                       </div>
 
+                      <div class="form-group">
+                          <input type="hidden" class="form-control"  id="otro_material2" placeholder="Material*">
+                          <div class="field-error"> <p id="error-material"> </p> </div>
+                      </div>
+
                         </div>
                       </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
                   <!-- Fin tercer Paso -->
 
@@ -367,8 +376,8 @@
                         </div>
                       </div>
 
-                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Agregar</button>                </fieldset>    
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
                   </fieldset>
                   <!-- Fin tercer paso-->
 
@@ -387,6 +396,33 @@
 del concepto y tipo de ingreso o egreso -->
 
 <script type="text/javascript">
+
+  // dada una cantidad selecciona la unidad
+  function seleccionar_unidad(value){
+    var unidad = document.getElementById("unidad_cap");
+    if (value){
+      unidad.required = true;
+    }else{
+      unidad.required = false;
+    }
+  }
+
+  // Agregar campo de otro material
+  function agregar_otro(id, name, otro_id){
+    var id = document.getElementById(id)
+    var otro_id = document.getElementById(otro_id)
+    if ( id.value === "Otro" ){
+      id.removeAttribute("name");
+      otro_id.setAttribute("name", name);
+      otro_id.type =  "text";
+      otro_id.required = true;
+    }else{
+      otro_id.removeAttribute("name");
+      otro_id.type = "hidden";
+      id.setAttribute("name",name);
+    }
+  }
+
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");

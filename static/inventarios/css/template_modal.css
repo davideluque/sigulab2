@@ -68,7 +68,7 @@ textarea:focus,
 textarea.form-control:focus {
     outline: 0;
     background: #fff;
-    border: 3px solid #ccc;
+    border: 1px solid #ccc;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -100,8 +100,7 @@ button.btn.botonForm{
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
-    background: #505050;
-    ;
+    background: #337ab7;
     border: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -155,7 +154,9 @@ button.btn.botonForm.active:focus {
 
 
 /*style.css**/
-
+.close{
+    margin-top:30px;
+}
 
 strong {
     font-weight: 500;
@@ -176,6 +177,12 @@ h3 {
     font-weight: 300;
     color: #555;
     line-height: 30px;
+}
+
+.buttons-html5, .buttons-print{
+    border-radius: 50%;
+    background-color:#0300d7;
+    color:#fff;
 }
 
 
@@ -228,32 +235,6 @@ h3 {
     color: #fff;
 }
 
-.boton-sigulab, .buttons-print{
-    border-radius: 50%;
-    background-color:#337ab7;
-    color:#fff;
-}
-
-#iconoFicha{
-    color:#337ab7;
-}
-
-#eliminar, #rechazar{
-    background-color: 	#d9534f !important;
-    border-radius: 50%;
-}
-
-.nav-link.active{
-    background-color: #337ab7 !important;
-    text-decoration: underline !important;
-    color:#fff !important;
-}
-
-.nav-link{
-    color:#000 !important;
-}
-
-
 
 /***** Top content *****/
 
@@ -295,4 +276,35 @@ form .form-bottom .input-error {
 
 form.registration-form fieldset {
     display: none;
+}
+
+button.btn.botondelete{
+    height: 30px;
+    margin: 0;
+    padding: 0 20px;
+    vertical-align: middle;
+    background: red;
+    border: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 0px;
+    color: #fff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    text-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -o-transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+    transition: all .3s;
+}
+
+button.btn.botondelete:hover {
+    opacity: 0.6;
+    color: #fff;
 }

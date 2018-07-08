@@ -51,7 +51,8 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">NOMBRE</th>
                 <th class="camposTabla linksNombres">CORREO</th>
-                <th class="camposTabla linksNombres">UNIDA DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">EXTENSIÓN</th>
                 <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
             </tr>
         </thead>
@@ -92,16 +93,18 @@
                                     value="{{=item['ci']}}">{{=item['nombre'].upper()}} {{=item['apellido'].upper()}}</a></td>
                 <td class="camposTabla">{{=item['email'].upper()}}</td>
                 <td class="camposTabla">{{=item['dependencia'].upper()}}</td>
-                <td class="camposTabla">{{=item['cargo'].upper()}}</td>
+                <td class="camposTabla">{{=item['extension_USB']}}</td>
+                <td class="camposTabla">{{=item['extension_interna']}}</td>
             </tr>
           {{pass}}           
         </tbody>
           <tfoot id="collapseFiltros">
             <tr>
-                <th class="camposTabla linksNombres">Nombre</th>
-                <th class="camposTabla linksNombres">Correo</th>
-                <th class="camposTabla linksNombres">Unidad de Adscripcion</th>
-                <th class="camposTabla linksNombres">Cargo</th>
+              <th class="camposTabla linksNombres">NOMBRE</th>
+              <th class="camposTabla linksNombres">CORREO</th>
+              <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+              <th class="camposTabla linksNombres">EXTENSIÓN</th>
+              <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
             </tr>
         </tfoot>
 

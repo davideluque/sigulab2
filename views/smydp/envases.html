@@ -43,17 +43,36 @@
 
 {{if ('edit' in request.args) or ('view' in request.args):}}
     {{cont = ''}}
-    <div class="container">
+    <div class="container titulo">
+        <div  class="row pull-left boton-retroceder">
+            
+        </div>
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+            <div style="display: flex; flex-flow: row; justify-content: space-around; align-items: center;" class="col-lg-12 text-center">
+                <div style="padding-top: 20px; padding-bottom: 10px; margin: auto 0px;" class="col-lg-1">
+                    <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">
+                        <button type="button"class="btn btn-primary">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                    </a>
+                </div>
+                <div class="col-lg-10">
+                    <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+                </div>
+                <div style="padding-top: 20px; padding-bottom: 10px; margin: auto 0px;" class="col-lg-1">
+                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-12">
                 <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
             </div>
+
         </div>
         <div class="row">
             <div id="columnBotonAgregar">
                 <div class="col-lg-12 text-right">
-                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor"><i class="fa fa-pencil"></i></button>
                 </div>
             </div>
         </div>
@@ -74,7 +93,8 @@
                             <label for="">Capacidad:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
+                            {{capacidad = str(contenedor.capacidad).replace(".", ",")}}
+                            <span>{{=capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -82,7 +102,7 @@
                             <label for="">Forma:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.forma}}</span>
+                            <span>{{=contenedor.forma.upper()}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -90,7 +110,7 @@
                             <label for="">Material:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.material}}</span>
+                            <span>{{=contenedor.material.upper()}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -98,7 +118,7 @@
                             <label for="">Tipo de boca:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.tipo_boca}}</span>
+                            <span>{{=contenedor.tipo_boca.upper()}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -106,7 +126,7 @@
                             <label for="">Descripción:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.descripcion}}</span>
+                            <span>{{=contenedor.descripcion.upper()}}</span>
                         </div>
                     </div>
                     <div class="row fila-detalle-envase">
@@ -130,7 +150,7 @@
                             <label for="">Categoría de desecho:</label>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{=contenedor.categoria.categoria}}</span>
+                            <span>{{=contenedor.categoria.categoria.upper()}}</span>
                         </div>
                         
                     </div>
@@ -307,7 +327,7 @@
                                     </div>
                                     <div class="row modal-envases-footer">
                                         <div class="col-sm-6 text-center">
-                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-plus-circle"/></button>
+                                            <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-floppy-o"/></button>
                                         </div>
                                         <div class="col-sm-6 text-center">
                                             <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();"><i class="fa fa-trash-o"></i></button>
@@ -325,7 +345,7 @@
 
 
 {{elif ('new' in request.args):}}
-    <div class="container">
+    <div class="container titulo">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h3 class="inicio-titulo">NUEVO CONTENEDOR</h3>
@@ -334,7 +354,14 @@
         </div>
     </div>
 {{else:}}
-    <div class="container">
+    <div class="container titulo">
+        <div class="row pull-left boton-retroceder">
+            <div class="col-lg-1 boton-retroceder">
+                <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h3 class="inicio-titulo">GESTIÓN DE CONTENEDORES - ULAB</h3>
@@ -359,13 +386,13 @@
                 <br>
         
                 <div class="table-responsive no-padding no-margin">
-                    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0">
                         <thead>
-                            <tr id="titulosListado" style="text-align: left">
-                                <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Categoría</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
+                            <tr id="titulosListado">
+                                <th style="padding-left: 30px !important" class="camposTabla linksNombres">IDENTIFICACIÓN</th>
+                                <th style="width: 100px !important" class="camposTabla linksNombres">COMPOSICIÓN</th>
+                                <th class="camposTabla linksNombres">CATEGORÍA</th>
+                                <th class="camposTabla linksNombres">CAPACIDAD</th>
                             </tr>
                         </thead>
         
@@ -377,19 +404,20 @@
                                         {{=contenedor.identificacion}}
                                     </a>
                                 </td>
-                                <td class="camposTabla" style="text-align: center">{{=contenedor.composicion}}</td>
-                                <td class="camposTabla" style="text-align: center">{{=contenedor.categoria.categoria}}</td>
-                                <td class="camposTabla" style="text-align: center">{{=contenedor.capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
+                                <td class="camposTabla">{{=contenedor.composicion}}</td>
+                                <td class="camposTabla">{{=contenedor.categoria.categoria.upper()}}</td>
+                                {{capacidad = str(contenedor.capacidad).replace(".", ",")}}
+                                <td class="camposTabla">{{=capacidad}} {{=contenedor.unidad_medida.f_abreviatura}}</td>
                             </tr>
                             {{pass}}
                         </tbody>
         
                         <tfoot id="collapseFiltros">
                             <tr>
-                                <th class="camposTabla linksNombres">Identificación</th>
-                                <th class="camposTabla linksNombres">Composición</th>
-                                <th class="camposTabla linksNombres">Categoría</th>
-                                <th class="camposTabla linksNombres">Capacidad</th>
+                                <th class="camposTabla linksNombres">IDENTIFICACIÓN</th>
+                                <th class="camposTabla linksNombres">COMPOSICIÓN</th>
+                                <th class="camposTabla linksNombres">CATEGORÍA</th>
+                                <th class="camposTabla linksNombres">CAPACIDAD</th>
                             </tr>
                         </tfoot>
         
@@ -611,6 +639,10 @@
             var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
             var categoria = document.forms['formularioCarga']['categoria'];
 
+            // Se verifica si la capacidad tiene comas, y se substituyen por puntos
+            capacidad = capacidad.replace(",", ".");
+
+
             // Mensajes de error
             var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
             var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
@@ -627,11 +659,16 @@
                 identificacion.style.border = "1px solid red";
                 return false;
             }
-            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value)) {
+            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value) || capacidad.value <= 0) {
                 error_capacidad.innerText = mensaje_error_capacidad;
                 capacidad.style.border = "1px solid red";
                 return false;
             }
+
+            if (!isNaN(parseFloat(capacidad.value))) {
+                document.getElementById("capacidad").value = parseFloat(capacidad.value).toFixed(2);
+            }
+
             if(composicion.value === '' || composicion.value.length === 0){
                 error_composicion.innerText = mensaje_error_composicion;
                 composicion.style.border = "1px solid red";

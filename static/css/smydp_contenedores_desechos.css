@@ -12,18 +12,46 @@
     body{font-size: 14px;}
 }
 
+button{
+	border-radius: 50% !important;
+}
+
+#datatable_length{
+	text-align: left;
+}
+
 .buttons-html5, .buttons-print{
     border-radius: 50%;
 	background-color: #337ab7;
-    border-color: #337ab7;
+    border-color: #2e6da4;
     color:#fff;
 }
 
 .buttons-html5, .buttons-copy{
-    border-radius: 50%;
+    border-radius: 50% 50%;
     background-color: #337ab7;
-    border-color: #337ab7;
+    border-color: #2e6da4;
     color:#fff;
+}
+
+div.row.pull-left.boton-retroceder{
+	padding: 0px 15px;
+}
+
+div.col-lg-1.boton-retroceder{
+	border-radius: 50%;
+	color: white;
+	background-color: #337ab7;
+}
+
+div.col-lg-1.boton-retroceder > a, div.col-lg-1.boton-retroceder > a.boton {
+	color: white;
+	text-decoration: none;
+	padding: 5px;
+}
+
+th.camposTabla, td.camposTabla{
+	text-align: center;
 }
 
 h3{

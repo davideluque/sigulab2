@@ -1,33 +1,19 @@
 {{extend 'layout.html'}}
-
-  <!-- Estilo del listado de Solicitudes de Servicios -->
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
-  	<!-- Para los mensajes con flash -->
-	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
-
 {{block head}}
 
 <meta charset="UTF-8">
 
     <!-- Para los mensajes con flash -->
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
-    <!-- DataTables -->
-    <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />  
     
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
     <!-- Estilos de modales y listados -->
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
-    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}"> 
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -147,8 +133,7 @@
 {{end}}
 
 {{block center}}
-    <h2 class="dep-titulo text-center">Detalles de {{=bien['sb_nombre']}}</h2>
-    <h4 class="dep-titulo text-center">Descripcion: {{=bien['sb_descripcion']}}</h4>
+    <h3 class="dep-titulo text-center">Detalles de {{=bien['sb_nombre']}}</h3>
 {{pass}}
 
 <!-- Flash message -->
@@ -163,9 +148,11 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6">
                     <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button type="button" data-toggle="modal" data-target="#addbm"><i class="fa fa-edit fa-1x"></i></button>
-                    <!-- Boton que solicita eliminar --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button type="button" data-toggle="modal" data-target="#" onclick=""><i class="fa fa-trash fa-1x"></i></button>
+                    <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                    <!-- Boton para eliminar el sb-->
+                    <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                     <!--Boton para ocultar el sb-->
+                    <button type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye-slash fa-1x"></i></button>
                 </div>
             </div>
         </div>
@@ -177,12 +164,8 @@
 	<div class="tab-wrapper">
 		<ul class="tabs">
 				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
-				<li class="tab-link" data-tab="2">SUDEBID</li>
-                <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
-                <li class="tab-link" data-tab="4">UBICACIÓN</li>
-                <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
-                <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
-                <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+                <li class="tab-link" data-tab="2">UBICACIÓN</li>
+                <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
             </ul>
 	</div>
 
@@ -190,53 +173,164 @@
 		<div id="tab-1" class="tab-content active">
             <div class="grid-container">
                 {{ for title in caracteristicas_list: }}
-                    <div class="grid-item">
-                        {{=title}}
-                    </div>
-                    <div class="grid-item">
-                        {{= caracteristicas_dict.get(title)}}
-                    </div>
+                    {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{= caracteristicas_dict.get(title)}}
+                        </div>
+                    {{pass}}
                 {{ pass }}
+                {{if bien['sb_ancho'] != None or bien['sb_largo'] != None or bien['sb_alto'] != None or bien['sb_diametro'] != None:}}
+                    <div class="grid-item">
+                        {{ if bien['sb_unidad'] == 'm':}}
+                            Dimensiones (metros):
+                        {{else:}}
+                            Dimensiones (centímetros):
+                        {{pass}}
+                    </div>
+                    <div class="grid-item">                        
+                        {{if bien['sb_ancho'] != None:}}
+                            Ancho: {{=bien['sb_ancho']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_largo'] != None:}}
+                            Largo: {{=bien['sb_largo']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_alto'] != None:}}
+                            Alto: {{=bien['sb_alto']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['sb_diametro'] != None:}}
+                            Diámetro: {{=bien['sb_diametro']}}
+                            <br>
+                        {{pass}}
+                    </div>
+                {{pass}}
             </div>
-            <!-- Pensar como Mostrar esto en el grid-->
-            {{if bien['sb_unidad_dim'] != '':}}
-                {{if bien['sb_unidad_dim'] == 'm':}}
-                    <h4>Dimensiones: metros</h4>
-                {{else:}}
-                    <h4>Dimensiones: centímetros</h4>
-                {{pass}}
-                {{if bien['sb_ancho'] != '':}}
-                    <h4> &emsp;   Ancho: {{=bien['sb_ancho']}} </h4>
-                {{pass}}
-                {{if bien['sb_largo'] != '':}}
-                    <h4>  &emsp;   Largo: {{=bien['sb_largo']}} </h4>
-                {{pass}}
-                {{if bien['sb_alto'] != '':}}
-                    <h4>  &emsp;   Alto: {{=bien['sb_alto']}} </h4>
-                {{pass}}
-                {{if bien['sb_diametro'] != '':}}
-                    <h4>  &emsp;   Diámetro: {{=bien['sb_diametro']}} </h4>
-                {{pass}}
-            {{pass}}
         </div>
-
-
-
-		<div id="tab-3"class="tab-content">En desarrollo</div>
-        <div id="tab-4"class="tab-content">
-            <h4> Espacio físico : {{=bien['sb_espacio']}} </h4>
-            <h4> Unidad de Adscripción : {{=bien['sb_unidad_de_adscripcion']}} </h4>
-            <h4> Dependencia : {{=bien['sb_depedencia']}} </h4>
+        <div id="tab-2"class="tab-content">
+            <div class="grid-container">
+                <div class="grid-item">
+                    Espacio físico:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.espacios_fisicos.id == bien['sb_espacio']).select().first().codigo}}
+                </div>
+                <div class="grid-item">
+                    Unidad de Adscripción:
+                </div>
+                <div class="grid-item">
+                    {{=bien['sb_unidad_de_adscripcion']}}
+                </div>
+                <div class="grid-item">
+                    Dependencia:
+                </div>
+                <div class=grid-item>
+                    {{=db(db.dependencias.id == bien['sb_depedencia']).select().first().nombre}}
+                </div>
+            </div>
         </div>
-		<div id="tab-5"class="tab-content">En Desarrollo</div>
-		<div id="tab-6"class="tab-content">En desarrollo</div>
-		<div id="tab-7"class="tab-content">En desarrollo</div>
-
-
-
+        <div id="tab-3"class="tab-content">En desarrollo</div>
 	</div>
-	
 </div>
+
+
+<!--Modal para oculta BM-->
+<div class="modal fade" id="confirmhide" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                  <div class="container">
+                      <i class="fas fa-eye-slash fa-2x" style="
+                      display:block;
+                      margin-left: -19px;
+                      margin-top: 12px;
+                      color: white;
+                      "></i>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Confirmar ocultar<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <br>
+                <form method="post" style="text-align: center;">
+                    <h4>¿Desea ocultar {{=bien['sb_nombre']}} de las consultas?</h4>
+                    <br>
+                    <button type="submit button" class="btn btn-next botondelete" name="ocultar" value="True" style="text-align:center">Si</button>
+                    <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+                </form>
+                <br>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<!--Modal de eliminar material-->
+<div class="modal fade" id="confirmdelete" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header" style="background-color: red;">
+                  <div class="container">
+                      <i class="fas fa-trash fa-2x" style="
+                      display:block;
+                      margin-left: -16px;
+                      margin-top: 8px;
+                      color: white;
+                      "></i>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header" style="background-color: red;">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Confirmar eliminación<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <br>
+                <form method="post" style="text-align: center;">
+                    <h4>¿Desea solicitar la eliminación de {{=bien['sb_nombre']}}?</h4>
+                    <br>
+                    <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                    <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+                </form>
+                <br>
+            </div>
+          </div>
+        </div>
+    </div>
 
 <!-- Modal modificar un material -->
 <div class="modal fade" id="addbm" role="dialog">
@@ -249,8 +343,12 @@
       <div class="modal-header addHeader">
         <div class="row addRow" id="rowHeader">
           <div class="col-sm-1" id="col1Header">
-            <div class="container" id="plus">
-              <h1 id="agregar">+</h1>
+            <div class="container">
+                <i class="fas fa-pencil-alt fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
             </div>
           </div>
           <div class="col-sm-11" id="col11Header">
@@ -258,7 +356,7 @@
               text-align: left;
               padding-top: 12px;
               color: white;
-            ">Material<button type="button" class="close" data-dismiss="modal">&times;</button>
+            ">Modificar Material de laboratorio<button type="button" class="close" data-dismiss="modal">&times;</button>
             </h4>
           </div>
         </div>
@@ -357,7 +455,7 @@
                         {{pass}}  
                     </div>
                   </div>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
@@ -400,10 +498,10 @@
                         <div class="form-group" id="grupo-capacidad">
                                 <label>Capacidad</label>
                                 {{if bien['sb_capacidad']!="":}}
-                                    <input type="text" class="form-control" value="{{=bien['sb_capacidad']}}" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
+                                    <input type="text" class="form-control" value="{{=bien['sb_capacidad']}}" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)">
                                     <font color="red"><div id="err_capacidad" hidden></div></font>
                                 {{else:}}
-                                    <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##">
+                                    <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de ese material" title="#####.##" onchange="seleccionar_unidad(this.value)">
                                     <font color="red"><div id="err_capacidad" hidden></div></font>
                                 {{pass}}
                         </div>
@@ -457,37 +555,50 @@
                         {{if bien['sb_clasificacion']=="Material de Laboratorio":}}
                             <div class="form-group" id="grupo-material">
                               <label>Material</label>
-                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" required>
+                              <select class="form-control" type="select" id="material_mat" name="material_mat" placeholder="Material predominante" 
+                              onchange="agregar_otro('material_mat', 'material_mat', 'otro_material1')" required>
                                 <option type="text" value="">Seleccione un material*</option>
                                 {{ for material in material_pred: }}
-                                    {{if bien['sb_material']==material:}}
-                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
-                                    {{else:}}
                                         <option value="{{=material}}">{{=material}}</option>
-                                    {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
                             </div>
 
+                            <div class="form-group">
+                                {{ if bien['sb_material'] in material_pred: }}
+                                    <input type="hidden" class="form-control"  id="otro_material1" placeholder="Material*">
+                                {{ else: }}
+                                    <input type="text" class="form-control" value="{{=bien['sb_material']}}"  id="otro_material1" placeholder="Material*">
+                                {{ pass }}
+                                <div class="field-error"> <p id="error-material"> </p> </div>
+                            </div>
+
                             <div class="form-group" id="grupo-material2">
-                                <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario">
+                                <select class="form-control" type="select" id="material_sec" name="material_sec" placeholder="Material Secundario"
+                                onchange="agregar_otro('material_sec', 'material_sec', 'otro_material2')">
                                   <option type="text" value="">Seleccione un material secundario</option>
                                   {{ for material in material_pred: }}
-                                    {{if bien['sb_material_sec']==material:}}
-                                        <option value="{{=material}}" selected="selected">{{=material}}</option>
-                                    {{else:}}
-                                        <option value="{{=material}}">{{=material}}</option>
-                                    {{pass}}
+                                    <option value="{{=material}}">{{=material}}</option>
                                   {{pass}}
                                 </select>
                                 <div class="field-error"> <p id="error-material"> </p> </div>
                           </div>
+
+                          <div class="form-group">
+                            {{ if bien['sb_material_sec'] in material_pred: }}
+                                <input type="hidden" class="form-control"  id="otro_material2" placeholder="Material*">
+                            {{ else: }}
+                                <input type="text" class="form-control" value="{{=bien['sb_material_sec']}}" id="otro_material2" placeholder="Material*">
+                            {{ pass }}
+                            <div class="field-error"> <p id="error-material"> </p> </div>
+                        </div>
+                            
                         {{pass}}
                         </div>
                       </div>
-                    <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                    <button type="button" class="btn btn-next botonForm">Siguiente</button>       
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
                   <!-- Fin tercer Paso -->
 
@@ -594,8 +705,8 @@
                         </div>
                       </div>
 
-                      <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm">Modificar</button>                </fieldset>    
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>                </fieldset>    
                   </fieldset>
                   <!-- Fin tercer paso-->
 
@@ -696,8 +807,8 @@
                         
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
-                  <button type="button" class="btn btn-next botonForm">Siguiente</button>         
+                  <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Primer Paso -->
               </form>
@@ -712,6 +823,61 @@
 
 
 <script type="text/javascript">
+
+        // Funcion para seleccionar valores de los select
+        function select_values(){
+            // selecciono valor del select de material 1
+            var material = document.getElementById("material_mat");
+            var otro_material = document.getElementById("otro_material1")
+            var value = "{{=bien['sb_material']}}"
+            var material_bool = "{{=bien['sb_material'] in material_pred}}"
+            if ( material_bool == "True"){
+                material.value = value;
+            }else{
+                material.removeAttribute("name");
+                otro_material.setAttribute("name","material_mat");
+                material.value = "Otro"
+            }
+            //selecciono el valor del select de material 2
+            var material = document.getElementById("material_sec");
+            var otro_material = document.getElementById("otro_material2")
+            var value = "{{=bien['sb_material_sec']}}"
+            var material_bool = "{{=bien['sb_material_sec'] in material_pred}}"
+            if ( material_bool == "True"){
+                material.value = value;
+            }else{
+                material.removeAttribute("name");
+                otro_material.setAttribute("name","material_sec");
+                material.value = "Otro"
+            }
+        }
+
+    // dada una cantidad selecciona la unidad
+    function seleccionar_unidad(value){
+        var unidad = document.getElementById("unidad_cap");
+        if (value){
+        unidad.required = true;
+        }else{
+        unidad.required = false;
+        }
+    }
+
+    // Agregar campo de otro material
+    function agregar_otro(id, name, otro_id){
+        var id = document.getElementById(id)
+        var otro_id = document.getElementById(otro_id)
+        if ( id.value === "Otro" ){
+        id.removeAttribute("name");
+        otro_id.setAttribute("name", name);
+        otro_id.type =  "text";
+        otro_id.required = true;
+        }else{
+        otro_id.removeAttribute("name");
+        otro_id.type = "hidden";
+        id.setAttribute("name",name);
+        }
+    }
+
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
@@ -911,4 +1077,15 @@
     
   }
 }
+</script>
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
 </script>
