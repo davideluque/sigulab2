@@ -121,11 +121,11 @@
                 
                 <!-- Primer paso-->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body"> 
-                      <span class="step">1</span>
-                      <span class="step activePass">2</span>
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
                       <span class="step">3</span>
                       <span class="step">4</span>
                     </div>
@@ -181,8 +181,8 @@
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step activePass">2</span>
+                        <span class="step ">3</span>
                         <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
@@ -207,7 +207,7 @@
                             <div class="field-error"> <p id="error-unidad" > </p> </div>
                     </div>
 
-                    <label>Calibración</label>
+                    <label>Calibración*</label>
                     <div class="form-group">
                             <select class="form-control" type="select" id="calibracion_mat" name="calibracion_mat" placeholder="Calibración" required>
                               <!-- Insertar un for-->
@@ -242,7 +242,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
       
                         <div class="form-group" id="grupo-aforado">
-                            <label>Aforado</label>
+                            <label>Aforado*</label>
                             <select class="form-control" type="select" id="aforado" name="aforado" placeholder="Aforado" required>
                               <!-- Insertar un for-->
                               <option type="text" value="">¿Es aforado?*</option>
@@ -366,7 +366,7 @@
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Material</h4>                
-                        <label>Campos marcados con * son obligatorios.</br> Ubicación interna</label>
+                        <label>Campos marcados con * son obligatorios.</br> Ubicación interna*</label>
                         <div class="form-group">
                                 <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
                                 <font color="red"><div id="err_ubicacion_int" hidden></div></font>
