@@ -2166,18 +2166,15 @@ def __get_inventario_dep_validaciones(dep_id, tipo_validacion=None):
     inventario_bm = __sumar_inventarios_bn_validacion(espacios, "_", tipo_validacion)
     inventario_materiales = __sumar_inventarios_bn_validacion(espacios, "_materiales_", tipo_validacion)
     inventario_consumibles = __sumar_inventarios_bn_validacion(espacios, "_consumibles_", tipo_validacion)
-
     return [inventario_bm, inventario_materiales, inventario_consumibles]
 
 def __sumar_inventarios_bn_validacion(espacios, tipo_material, tipo_validacion):
 
         inventario_temp = []
-
         for esp_id in espacios:
             inventario_temp += eval('__get_inventario%sespacio(esp_id)' % tipo_material)
 
         inventario_total = []
-
         if ( tipo_validacion == "eliminar" ):
             for element in inventario_temp:
                 if ( tipo_material == "_"):
@@ -2212,8 +2209,10 @@ def __get_inventario_espacio_bn_eliminar(num=None):
 """ Dado el id de un espacio fisico retorna los materiales a eliminar que componen
 el inventario de ese espacio. """
 def __get_inventario_espacio_materialesandconsumibles_eliminar(nombre, espacio):
-    return db((db.sin_bn.sb_espacio == espacio) and (db.sin_bn.sb_nombre == nombre) \
-        and (db.sin_bn.sb_eliminar == 0)).select()
+    element = db(db.sin_bn.sb_espacio == espacio and db.sin_bn.sb_nombre == nombre).select()[0]
+    if element['sb_eliminar'] == 0:
+        return db(db.sin_bn.sb_espacio == espacio and db.sin_bn.sb_nombre == nombre).select()
+    return []
 
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del

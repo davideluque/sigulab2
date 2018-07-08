@@ -63,7 +63,7 @@
         </div>
     </div>
 <!-- Fin Boton Agregar Sustancia -->
-
+<br>
 <div class="wrapper">
 		
 	<div class="tab-wrapper">
@@ -80,7 +80,7 @@
                 {{ for title in caracteristicas_list: }}
                     {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
                         <div class="grid-item">
-                            {{=title}}
+                            {{=title.upper()}}
                         </div>
                         <div class="grid-item">
                             {{= caracteristicas_dict.get(title)}}
