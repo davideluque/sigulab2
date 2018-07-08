@@ -980,8 +980,6 @@ def envases():
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
-    print user_dep_id
-
 
     categorias_de_desecho = []
     contenedores = []
