@@ -601,100 +601,102 @@
     var edit_contenedor_modal = document.getElementById("editContenedor");
 
     function validar_campos() {
-            
-            // Buscando divs para ingresar mensajes de error
-            var error_identificacion = document.getElementById("error-identificacion");
-            var error_capacidad = document.getElementById("error-capacidad");
-            var error_unidad_medida = document.getElementById("error-unidad-medida");
-            var error_forma = document.getElementById("error-forma");
-            var error_material = document.getElementById("error-material");
-            var error_tipo_boca = document.getElementById("error-tipo-boca");
-            var error_composicion = document.getElementById("error-composicion");
-            var error_espacio_fisico = document.getElementById("error-espacio-fisico");
-            var error_categoria = document.getElementById("error-categoria");
 
-            // Limpiando los mensajes anteriores de validadores
-            if (error_identificacion.innerText != '') {
-                error_identificacion.innerText = '';
-                document.getElementById("identificacion").style.border = "3px solid #ddd";
-            }
-            if(error_capacidad.innerText != '') {
-                error_capacidad.innerText = '';
-                document.getElementById("capacidad").style.border = "3px solid #ddd";
-            }
-            if(error_composicion.innerText != '') {
-                error_composicion.innerText = '';
-                document.getElementById("composicion").style.border = "3px solid #ddd";
-            }
-            if (error_espacio_fisico.innerText != '') {
-                error_espacio_fisico.innerText = '';
-                document.getElementById("espacio_fisico").style.border = "3px solid #ddd";
-            }
-            
-            // Buscando los valores ingresados por el usuario en cada campo
-            var identificacion = document.forms['formularioCarga']['identificacion'];
-            var capacidad = document.forms['formularioCarga']['capacidad'];
-            var unidad_medida = document.forms['formularioCarga']['unidad_medida'];
-            var forma = document.forms['formularioCarga']['forma'];
-            var material = document.forms['formularioCarga']['material'];
-            var tipo_boca = document.forms['formularioCarga']['tipo_boca'];
-            var descripcion = document.forms['formularioCarga']['descripcion'];
-            var composicion = document.forms['formularioCarga']['composicion'];
-            var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
-            var categoria = document.forms['formularioCarga']['categoria'];
+        var regex_identificacion = /^[A-Z]{0,4}-[A-Z]{3}[0-9]{3,4}-[0-9]{2}-R[0-9]{3}$/;
 
-            // Se verifica si la capacidad tiene comas, y se substituyen por puntos
-            capacidad = capacidad.replace(",", ".");
+        // Buscando divs para ingresar mensajes de error
+        var error_identificacion = document.getElementById("error-identificacion");
+        var error_capacidad = document.getElementById("error-capacidad");
+        var error_unidad_medida = document.getElementById("error-unidad-medida");
+        var error_forma = document.getElementById("error-forma");
+        var error_material = document.getElementById("error-material");
+        var error_tipo_boca = document.getElementById("error-tipo-boca");
+        var error_composicion = document.getElementById("error-composicion");
+        var error_espacio_fisico = document.getElementById("error-espacio-fisico");
+        var error_categoria = document.getElementById("error-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_identificacion.innerText != '') {
+            error_identificacion.innerText = '';
+            document.getElementById("identificacion").style.border = "3px solid #ddd";
+        }
+        if(error_capacidad.innerText != '') {
+            error_capacidad.innerText = '';
+            document.getElementById("capacidad").style.border = "3px solid #ddd";
+        }
+        if(error_composicion.innerText != '') {
+            error_composicion.innerText = '';
+            document.getElementById("composicion").style.border = "3px solid #ddd";
+        }
+        if (error_espacio_fisico.innerText != '') {
+            error_espacio_fisico.innerText = '';
+            document.getElementById("espacio_fisico").style.border = "3px solid #ddd";
+        }
+        
+        // Buscando los valores ingresados por el usuario en cada campo
+        var identificacion = document.forms['formularioCarga']['identificacion'];
+        var capacidad = document.forms['formularioCarga']['capacidad'];
+        var unidad_medida = document.forms['formularioCarga']['unidad_medida'];
+        var forma = document.forms['formularioCarga']['forma'];
+        var material = document.forms['formularioCarga']['material'];
+        var tipo_boca = document.forms['formularioCarga']['tipo_boca'];
+        var descripcion = document.forms['formularioCarga']['descripcion'];
+        var composicion = document.forms['formularioCarga']['composicion'];
+        var espacio_fisico = document.forms['formularioCarga']['espacio_fisico'];
+        var categoria = document.forms['formularioCarga']['categoria'];
+
+        // Se verifica si la capacidad tiene comas, y se substituyen por puntos
+        let capacidad_value = capacidad.value.replace(",", ".");
 
 
-            // Mensajes de error
-            var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
-            var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
-            var mensaje_error_unidad_medida = "Por favor, ingrese una unidad de medida válida.";
-            var mensaje_error_forma = "Por favor, ingrese una forma de recipiente válida.";
-            var mensaje_error_material = "Por favor, ingrese un material válido.";
-            var mensaje_error_tipo_boca = "Por favor, ingrese un tipo de boca válido.";
-            var mensaje_error_composicion = "Por favor, ingrese una composición válida.";
-            var mensaje_error_espacio_fisico = "Por favor, ingrese un espacio físico válido.";
-            var mensaje_error_categoria = "Por favor, ingrese una categoría de desecho válida.";
+        // Mensajes de error
+        var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
+        var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
+        var mensaje_error_unidad_medida = "Por favor, ingrese una unidad de medida válida.";
+        var mensaje_error_forma = "Por favor, ingrese una forma de recipiente válida.";
+        var mensaje_error_material = "Por favor, ingrese un material válido.";
+        var mensaje_error_tipo_boca = "Por favor, ingrese un tipo de boca válido.";
+        var mensaje_error_composicion = "Por favor, ingrese una composición válida.";
+        var mensaje_error_espacio_fisico = "Por favor, ingrese un espacio físico válido.";
+        var mensaje_error_categoria = "Por favor, ingrese una categoría de desecho válida.";
 
-            if (identificacion.value === '' || identificacion.value.length === 0) {
-                error_identificacion.innerText = mensaje_error_identificacion;
-                identificacion.style.border = "1px solid red";
-                return false;
-            }
-            if (capacidad.value === '' || capacidad.value.length === 0 || isNaN(capacidad.value) || capacidad.value <= 0) {
-                error_capacidad.innerText = mensaje_error_capacidad;
-                capacidad.style.border = "1px solid red";
-                return false;
-            }
+        if (identificacion.value === '' || identificacion.value.length === 0 || !regex_identificacion.test(identificacion.value) ) {
+            error_identificacion.innerText = mensaje_error_identificacion;
+            identificacion.style.border = "1px solid red";
+            return false;
+        }
+        if (capacidad_value === '' || capacidad_value.length === 0 || isNaN(capacidad_value) || capacidad_value <= 0) {
+            error_capacidad.innerText = mensaje_error_capacidad;
+            capacidad.style.border = "1px solid red";
+            return false;
+        }
 
-            if (!isNaN(parseFloat(capacidad.value))) {
-                document.getElementById("capacidad").value = parseFloat(capacidad.value).toFixed(2);
-            }
+        if (!isNaN(parseFloat(capacidad_value))) {
+            document.getElementById("capacidad").value = parseFloat(capacidad_value).toFixed(2);
+        }
 
-            if(composicion.value === '' || composicion.value.length === 0){
-                error_composicion.innerText = mensaje_error_composicion;
-                composicion.style.border = "1px solid red";
-                return false;
-            }
+        if(composicion.value === '' || composicion.value.length === 0){
+            error_composicion.innerText = mensaje_error_composicion;
+            composicion.style.border = "1px solid red";
+            return false;
+        }
 
-            if (espacio_fisico.value === '' || espacio_fisico.value == undefined) {
-                error_espacio_fisico.innerText = mensaje_error_espacio_fisico;
-                espacio_fisico.style.border = "1px solid red";
+        if (espacio_fisico.value === '' || espacio_fisico.value == undefined) {
+            error_espacio_fisico.innerText = mensaje_error_espacio_fisico;
+            espacio_fisico.style.border = "1px solid red";
+            return false;
+        }
+    }
+
+    function dialogoAdvertencia() {
+            if (confirm('Está seguro de que desea eliminar el contenedor?')) {
+                document.getElementById("borrar_envase").value = "True";
+                return true;
+
+            } else {
                 return false;
             }
         }
-
-        function dialogoAdvertencia() {
-                if (confirm('Está seguro de que desea eliminar el contenedor?')) {
-                    document.getElementById("borrar_envase").value = "True";
-                    return true;
-
-                } else {
-                    return false;
-                }
-            }
 
 </script> 
 
