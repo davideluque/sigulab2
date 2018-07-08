@@ -1164,10 +1164,15 @@ def __agregar_categoria(nombre_categoria, descripcion_categoria, id_categoria):
     if id_categoria != -1:
         db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria, descripcion = descripcion_categoria)
     else:
-        #De lo contrario, la categoría no existe y se tiene que crear
-        db.t_categoria_desechos.insert(categoria = nombre_categoria, descripcion = descripcion_categoria)
+        # Se verifica que la categoría no exista previamente
+        if(len(list(db(db.t_categoria_desechos.categoria == nombre_categoria).select())) > 0):
+            return T("La categoría que intenta agregar ya existe")
+        else:
+            #De lo contrario, la categoría no existe y se tiene que crear
+            db.t_categoria_desechos.insert(categoria = nombre_categoria.upper(), descripcion = descripcion_categoria.upper())
+            return T("Categoría agregada exitosamente")
+            
 
-    return T("Categoría agregada exitosamente")
 
 
 def __eliminar_categoria(categoria_id):
