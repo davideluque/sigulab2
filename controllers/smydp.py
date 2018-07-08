@@ -980,8 +980,6 @@ def envases():
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
-    print user_dep_id
-
 
     categorias_de_desecho = []
     contenedores = []
@@ -2173,6 +2171,8 @@ def bitacora_desechos():
 
     espacio_nombre = inventario['t_inventario_desechos']['espacio_fisico']['codigo']
 
+    envases = list(db((db.t_envases.espacio_fisico == espacio_id)).select())
+
     bitacora = list(db(
         (db.t_Bitacora_desechos.inventario == inventario_id) &
         (db.t_Bitacora_desechos.created_by == db.auth_user.id)
@@ -2188,6 +2188,8 @@ def bitacora_desechos():
         cantidad_retirada = 0
         cantidad_generada = 0
 
+        envase = db((db.t_envases.id == request.vars.envase)).select().first()
+
         if(request.vars.cantidad_retirada != ''):
             cantidad_retirada = request.vars.cantidad_retirada
 
@@ -2200,10 +2202,9 @@ def bitacora_desechos():
             cantidad_generada,
             cantidad_retirada,
             ultima_entrada['t_Bitacora_desechos']['saldo'],
-            bitacora[0]['t_Bitacora_desechos']['envase'],
+            envase,
             bitacora[0]['t_Bitacora_desechos']['inventario'].id
         )
-        print "epaaaa"
         session.flash = response.flash
         
         return redirect(URL('..', 'sigulab2', 'smydp/bitacora_desechos', vars=dict(inv=inventario_id))) 
@@ -2215,7 +2216,9 @@ def bitacora_desechos():
                 espacio_nombre=espacio_nombre,
                 espacio_id=espacio_id,
                 conceptos=conceptos,
-                unidades_de_medida=unidades_de_medida)
+                unidades_de_medida=unidades_de_medida,
+                envases = envases
+                )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def desechos():
