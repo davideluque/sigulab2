@@ -27,7 +27,8 @@
 	}
 
 	#col11Header{
-		background-color: #0300d7;
+		background-color: #337ab7;
+		;
 		height: 50px;
 		width: 91.67% !important;
 		border-top-right-radius: 5px;
@@ -170,7 +171,7 @@
 	}
 
 	#col11Header{
-		background-color: blue;
+		background-color: #337ab7;
 		height: 50px;
 		width: 100% !important;
 		border-top-right-radius: 5px;
