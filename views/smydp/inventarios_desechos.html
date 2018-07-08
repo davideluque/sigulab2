@@ -56,7 +56,7 @@
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
+			<p class="padre dep-titulo" > {{=dep_padre_nombre}} </p>
 			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">					<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
@@ -100,13 +100,13 @@
 						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{else:}}
-    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}" style="align-self: left;">
 						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>						
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>	
 			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
 				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
@@ -118,7 +118,11 @@
 				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
 			{{pass}}
 		</div>
-		<div class="col-xs-2"> </div>
+		<div class="col-xs-2"> 
+			<button type="button" id="botonAgregar" class="btn botonesListado buttons-html5 agregar" data-toggle="modal" data-target="#adddesecho">
+				<li class="fa fa-plus"></li>
+			  </button>
+		</div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
@@ -150,8 +154,7 @@
 				</div>
 				<div id="contenedor-filas" style="display: none">
 					{{dependencias = espacios}}
-					<div class="grid-container">}
-
+					<div class="grid-container">
 						{{dependencias = espacios}} 
 						 {{for dependencia in dependencias:}}
 							<div class="grid-item">

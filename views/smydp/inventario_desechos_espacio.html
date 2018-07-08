@@ -313,12 +313,7 @@
   <!-- Inicio Listado de sustancias -->
   <div class="container">
     <div class="row">
-      <h3> Inventario </h3>
       <div id="buttons" class="text-right">
-        <!-- Agregar contenedor -->
-        <button type="button" id="botonAgregar" class="btn botonesListado buttons-html5" data-toggle="modal" data-target="#adddesecho">
-          <li class="fa fa-plus"></li>
-        </button>
         <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
           <i class="fa fa-filter"></i>
@@ -332,10 +327,10 @@
             <tr id="titulosListado">
               <th style="padding-left: 30px !important" class="camposTabla linksNombres">GRUPO DE DESECHO</th>
               <th class="camposTabla linksNombres">COMPOSICIÓN</th>
-              <th class="camposTabla linksNombres">RESPONSABLE</th>
-              <th class="camposTabla linksNombres">CANTIDAD</th>
               <th class="camposTabla linksNombres">PELIGROSIDAD</th>
               <th class="camposTabla linksNombres">TRATAMIENTO</th>
+              <th class="camposTabla linksNombres">RESPONSABLE</th>
+              <th class="camposTabla linksNombres">CANTIDAD</th>
               <th class="camposTabla linksNombres">OPCIONES</th>
             </tr>
           </thead>
@@ -347,16 +342,16 @@
               <td class="camposTabla">
                 <a href="{{=URL('bitacora_desechos',vars=dict(inv=desecho['t_inventario_desechos']['id']))}}">{{=desecho['t_inventario_desechos']['composicion']}}</a>
               </td>
-              <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos']['responsable']['f_apellido'].upper()}}</td>
-              {{cantidad = str(desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']).replace(".", ",")}}
-              <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
               {{peligrosidades = ""}} 
               {{for peligrosidad in desecho['t_inventario_desechos']['peligrosidad']:}} 
                 {{peligrosidades += peligrosidad.upper() + ", "}} 
               {{pass}} 
               {{peligrosidades = peligrosidades[:-2]}}
-              <td class="camposTabla">{{=peligrosidades}} </td>
-              <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento'].upper()}} </td>
+              <td class="camposTabla">{{=peligrosidades}} </td>  
+              <td class="camposTabla">{{=desecho['t_inventario_desechos']['tratamiento'].upper()}} </td>           
+              <td class="camposTabla">{{=desecho['t_inventario_desechos']['responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos']['responsable']['f_apellido'].upper()}}</td>
+              {{cantidad = str(desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']).replace(".", ",")}}
+              <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
               <td class="camposTabla">
                 <a href={{=URL( '..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio=request.vars.es_espacio, view=desecho[ 't_inventario_desechos'][ 'id']))}}>
                   Editar
@@ -369,10 +364,10 @@
             <tr>
               <th style="width: 100px !important" class="camposTabla linksNombres">GRUPO DE DESECHO</th>
               <th class="camposTabla linksNombres">COMPOSICIÓN</th>
-              <th class="camposTabla linksNombres">RESPONSABLE</th>
-              <th class="camposTabla linksNombres">CANTIDAD</th>
               <th class="camposTabla linksNombres">PELIGROSIDAD</th>
               <th class="camposTabla linksNombres">TRATAMIENTO</th>
+              <th class="camposTabla linksNombres">RESPONSABLE</th>
+              <th class="camposTabla linksNombres">CANTIDAD</th>
               <th class="camposTabla linksNombres">OPCIONES</th>
             </tr>
           </tfoot>
