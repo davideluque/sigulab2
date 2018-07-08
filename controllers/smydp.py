@@ -1079,16 +1079,16 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
             return T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
         else:
             db(db.t_envases.id == id_envase).update(
-                identificacion = identificacion,
+                identificacion = identificacion.upper(),
                 capacidad = capacidad, 
                 unidad_medida = unidad_medida, 
-                forma = forma, 
-                material = material, 
-                tipo_boca = tipo_boca, 
-                descripcion = descripcion, 
+                forma = forma.upper(), 
+                material = material.upper(), 
+                tipo_boca = tipo_boca.upper(), 
+                descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria
+                categoria = categoria.upper()
             )
 
             return T("La información del contenedor se ha modificado exitosamente.")
@@ -1101,16 +1101,16 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
         else:
             #De lo contrario, el envase aún no existe y se tiene que crear
             db.t_envases.insert(
-                identificacion = identificacion,
+                identificacion = identificacion.upper(),
                 capacidad = capacidad, 
                 unidad_medida = unidad_medida, 
-                forma = forma, 
-                material = material, 
-                tipo_boca = tipo_boca, 
-                descripcion = descripcion, 
+                forma = forma.upper(), 
+                material = material.upper(), 
+                tipo_boca = tipo_boca.upper(), 
+                descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria
+                categoria = categoria.upper()
             )
 
             return T("Contenedor creado exitosamente.")
@@ -1165,7 +1165,7 @@ def categorias_desechos():
 def __agregar_categoria(nombre_categoria, descripcion_categoria, id_categoria):
     # Si el id_categoria es distinto de -1, es porque ya exista la categoría y se va a actualizar
     if id_categoria != -1:
-        db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria, descripcion = descripcion_categoria)
+        db(db.t_categoria_desechos.id == id_categoria).update(categoria = nombre_categoria.upper(), descripcion = descripcion_categoria.upper())
     else:
         # Se verifica que la categoría no exista previamente
         if(len(list(db(db.t_categoria_desechos.categoria == nombre_categoria).select())) > 0):
@@ -2045,7 +2045,7 @@ def __agregar_entrada_bitacora_desechos(fecha, descripcion, cantidad_generada, c
     # Se agrega la entrada en la bitácora
     id = db.t_Bitacora_desechos.insert(
                 fecha = fecha_parseada,
-                descripcion = descripcion,
+                descripcion = descripcion.upper(),
                 cantidad_generada = cantidad_generada,
                 cantidad_retirada = cantidad_retirada,
                 saldo = saldo_actual,
@@ -2074,14 +2074,14 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
 
         row.update_record(
-            categoria = envase.categoria,
+            categoria = envase.categoria.upper(),
             composicion = envase.composicion,
             envase = envase.id,
             concentracion = concentracion,
             espacio_fisico = envase.espacio_fisico,
             seccion = envase.espacio_fisico.dependencia,
-            tratamiento = tratamiento,
-            peligrosidad = peligrosidad
+            tratamiento = tratamiento.upper(),
+            peligrosidad = peligrosidad.upper()
         )
 
         return T("Desecho actualizado correctamente.")
@@ -2109,7 +2109,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         if int(cantidad) <= int(envase.capacidad): 
 
             #Agrega el desecho al inventario
-            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
+            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria.upper(),
                                             cantidad = cantidad,
                                             unidad_medida = envase.unidad_medida,
                                             composicion = envase.composicion,
@@ -2118,8 +2118,8 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             seccion = envase.espacio_fisico.dependencia,
                                             responsable = auth.user_id,
                                             envase = envase.id,
-                                            tratamiento = tratamiento,
-                                            peligrosidad = peligrosidad)
+                                            tratamiento = tratamiento.upper(),
+                                            peligrosidad = peligrosidad.upper())
             
             return T("Desecho creado exitósamente.")
 
