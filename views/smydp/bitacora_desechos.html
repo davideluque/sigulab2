@@ -185,7 +185,7 @@
                                             <div class="form-group">
                                                 <label for="fecha_entrada">Fecha de creación del desecho:</label>
                                                 <br>
-                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada"/>
+                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada" required/>
                                                 <div class="field-error">
                                                   <p id="error-fecha"> </p>
                                                 </div>
@@ -194,7 +194,7 @@
                                             <div class="form-group">
                                               <label for="descripcion">Descripción del proceso:</label>
                                               <br>
-                                              <input class="form-control" type="text" id="descripcion" name="descripcion" />
+                                              <input class="form-control" type="text" id="descripcion" name="descripcion" onfocusout="validar_descripcion()"/>
                                               <div class="field-error">
                                                 <p id="error-descripcion"> </p>
                                               </div>
@@ -203,7 +203,8 @@
                                             <div class="form-group">
                                               <label for="envase">Envase utilizado:</label>
                                               <br>
-                                              <select class="form-control" name="envase" id="envase">
+                                              <select class="form-control" name="envase" id="envase" required>
+                                                <option value="" selected hidden disabled>Seleccione un contenedor*</option>
                                                 {{for envase in envases:}}
                                                   <option value="{{=envase.id}}">{{=envase.identificacion}}</option>
                                                 {{pass}}
@@ -216,7 +217,7 @@
                                             <div class="form-group">
                                               <label for="cantidad_generada">Cantidad generada:</label>
                                               <br>
-                                              <input class="form-control" type="text" id="cantidad_generada" name="cantidad_generada" value="0"/>
+                                              <input class="form-control" type="text" id="cantidad_generada" name="cantidad_generada" value="0" onfocusout="validar_cantidad_generada()"/>
                                               <div class="field-error">
                                                 <p id="error-cantidad-generada"> </p>
                                               </div>
@@ -225,7 +226,7 @@
                                             <div class="form-group">
                                               <label for="cantidad_retirada">Cantidad retirada:</label>
                                               <br>
-                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" value="0"/>
+                                              <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" value="0" onfocusout="validar_cantidad_retirada()"/>
                                               <div class="field-error">
                                                 <p id="error-cantidad-retirada"> </p>
                                               </div>
@@ -312,6 +313,96 @@
       }
 
   }
+
+  function validar_fecha_entrada(){
+    // Se seleccionan los campos con los valores del formulario
+    fecha_entrada = document.getElementById("fecha_entrada");
+    // Se seleccionan los campos de los errores
+    error_fecha_entrada = document.getElementById("error-fecha");
+    // Se limpian los errores pasados, si es que habían
+
+    error_fecha_entrada.innerHTML = "";
+    error_fecha_entrada.style.color = "none";
+    fecha_entrada.style.border = "3px solid #ddd";
+    if (fecha_entrada.value == undefined || fecha_entrada.value == '') {
+      error_fecha_entrada.innerHTML = "Ingrese una fecha válida";
+      error_fecha_entrada.style.color = "red";
+      fecha_entrada.style.border = "1px solid red";
+      return false;
+    }
+  }
+
+  function validar_descripcion(){
+    // Se seleccionan los campos con los valores del formulario
+
+    descripcion = document.getElementById("descripcion");
+
+    // Se seleccionan los campos de los errores
+
+    error_descripcion = document.getElementById("error-descripcion");
+
+    // Se limpian los errores pasados, si es que habían
+
+    error_descripcion.innerHTML = "";
+    error_descripcion.style.color = "";
+    descripcion.style.border = "3px solid #ddd";
+    if (descripcion.value == '' || descripcion.value == undefined) {
+      error_descripcion.innerHTML = "Ingrese una descripción válida";
+      error_descripcion.style.color = "red";
+      descripcion.style.border = "1px solid red";
+      return false;
+    }
+  }
+
+  function validar_cantidad_generada(){
+    // Se seleccionan los campos con los valores del formulario
+
+    cantidad_generada = document.getElementById("cantidad_generada");
+
+    // Se seleccionan los campos de los errores
+
+    error_cantidad_generada = document.getElementById("error-cantidad-generada");
+
+    // Se limpian los errores pasados, si es que habían
+
+    error_cantidad_generada.innerHTML = "";
+    error_cantidad_generada.style.color = "";
+    cantidad_generada.style.border = "3px solid #ddd";
+
+    cantidad_generada_value = parseFloat(cantidad_generada.value.replace(",", "."));
+
+    if (isNaN(cantidad_generada_value) || cantidad_generada_value < 0) {
+      error_cantidad_generada.innerHTML = "Ingrese una cantidad válida y no negativa";
+      error_cantidad_generada.style.color = "red";
+      cantidad_generada.style.border = "1px solid red";
+      return false;
+    }
+  }
+
+  function validar_cantidad_retirada(){
+    // Se seleccionan los campos con los valores del formulario
+
+    cantidad_retirada = document.getElementById("cantidad_retirada");
+
+    // Se seleccionan los campos de los errores
+
+    error_cantidad_retirada = document.getElementById("error-cantidad-retirada");
+
+    // Se limpian los errores pasados, si es que habían
+
+    error_cantidad_retirada.innerHTML = "";
+    error_cantidad_retirada.style.color = "";
+    cantidad_retirada.style.border = "3px solid #ddd";
+    cantidad_retirada_value = parseFloat(cantidad_retirada.value.replace(",", "."));
+
+    if (isNaN(cantidad_retirada_value) || cantidad_retirada_value < 0) {
+      error_cantidad_retirada.innerHTML = "Ingrese una cantidad válida y no negativa";
+      error_cantidad_retirada.style.color = "red";
+      cantidad_retirada.style.border = "1px solid red";
+      return false;
+    }
+  }
+
 
   function validar_campos() {
     // Se seleccionan los campos con los valores del formulario
