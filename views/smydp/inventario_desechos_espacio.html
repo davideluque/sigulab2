@@ -189,7 +189,7 @@
                         </div>
                         <div class="form-group">
                           <label for="concentracion">Concentración del desecho generado*:</label>
-                          <input class="form-control" type="text" name="concentracion" id="concentracion" required placeholder="Ej.: 90" value="{{=desecho_seleccionado['t_inventario_desechos']['concentracion']}}"
+                          <input class="form-control" type="text" name="concentracion" id="concentracion" onfocusout="validar_concentracion()" required placeholder="Ej.: 90" value="{{=desecho_seleccionado['t_inventario_desechos']['concentracion']}}"
                           />
                           <div class="field-error">
                             <p id="error-concentracion"> </p>
@@ -426,10 +426,10 @@
                         <h4 class="titulosForm">Datos de ingreso</h4>                
                         <p>Campos marcados con * son obligatorios.</p>
                           <div class="form-group">
-                            <label for="envase">Identificación del contenedor donde se depositó el desecho:</label>
+                            <label for="envase">Identificación del contenedor donde se depositó el desecho*:</label>
                             {{if len(envases) > 0:}}                          
                               <select class="form-control" type="select" id="envase" name="envase" required>
-                                <option value="" selected hidden >Contenedor*</option>
+                                <option value="" selected hidden disabled>Seleccione un contenedor*</option>
                                 {{for envase in envases:}}
                                 <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
                                 {{pass}}
@@ -441,14 +441,14 @@
                           </div>
                           <div class="form-group">
                             <label for="cantidad">Cantidad de desecho generado*:</label>
-                            <input class="form-control" type="text" name="cantidad" id="cantidad" required placeholder="Ej.: 150"/>
+                            <input class="form-control" type="text" name="cantidad" id="cantidad" onfocusout="validar_cantidad()" required placeholder="Ej.: 150"/>
                             <div class="field-error">
                               <p id="error-cantidad"> </p>
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="concentracion">Concentración del desecho generado*:</label>
-                            <input class="form-control" type="text" name="concentracion" id="concentracion" required placeholder="Ej.: 90" />
+                            <input class="form-control" type="text" name="concentracion" id="concentracion" onfocusout="validar_concentracion()" required placeholder="Ej.: 90" />
                             <div class="field-error">
                               <p id="error-concentracion"> </p>
                             </div>
@@ -503,6 +503,49 @@
 
 <script type="text/javascript">
 
+  function validar_cantidad() {
+    // Buscando divs para ingresar mensajes de error
+    var error_cantidad = document.getElementById("error-cantidad");
+
+    // Limpiando los mensajes anteriores de validadores
+    if (error_cantidad.innerText != ''){
+      error_cantidad.innerText = '';
+    }
+
+    // Buscando los valores ingresados por el usuario en cada campo
+    var cantidad = document.forms['formularioCarga']['cantidad'].value;
+
+    // Mensajes de error
+    var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
+
+    if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
+      error_cantidad.innerText = mensaje_error_cantidad;
+      return false;
+    }
+  }
+
+  function validar_concentracion() {
+    // Buscando divs para ingresar mensajes de error
+    var error_concentracion = document.getElementById("error-concentracion");
+
+    // Limpiando los mensajes anteriores de validadores
+    if (error_concentracion.innerText != '') {
+      error_concentracion.innerText = '';
+    }
+
+    // Buscando los valores ingresados por el usuario en cada campo
+    var concentracion = document.forms['formularioCarga']['concentracion'].value;
+
+    // Mensajes de error
+    var mensaje_error_concentracion = "Por favor ingrese un valor numérico no negativo en el rango entre 1 y 100.";
+
+    if (!is_number(concentracion) || is_negative(concentracion) || is_zero(concentracion)) {
+      error_concentracion.innerText = mensaje_error_concentracion;
+      return false;
+    }
+  }
+
+
   // Valida los campos de la forma en el modal "addsustancia"
   function validar_campos(){
 
@@ -556,7 +599,6 @@
       error_concentracion.innerText = mensaje_error_concentracion;
       return false;
     }
-
   }
 
   // True si "n" es un numero
