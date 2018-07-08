@@ -28,7 +28,7 @@
 {{block center}}
     <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa'] != None: }}
+    {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
     <!-- Flash message -->
@@ -90,6 +90,7 @@
                             {{ else: }}
                                 {{= caracteristicas_dict.get(title)}}
                             {{pass}}
+                            
                         </div>
                     {{ pass }}
                     {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}

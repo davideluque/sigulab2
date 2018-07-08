@@ -9,7 +9,7 @@ db.define_table(
     'bien_mueble',
     Field('bm_nombre','string',notnull=True,label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
     Field('bm_num','string',notnull=True,unique=True,requires = IS_MATCH('^[0-9]{6}'), label = T('Número Bien Nacional')),
-    Field('bm_placa','string', label=T('Número de Placa del Bien'),requires = [IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$')),IS_EMPTY_OR(IS_NOT_IN_DB(db,'bm_placa'))]),
+    Field('bm_placa','string', default="00000", label=T('Número de Placa del Bien'),requires = [IS_EMPTY_OR(IS_MATCH('^s/n$|^[0-9]{4,6}$')),IS_EMPTY_OR(IS_NOT_IN_DB(db,'bm_placa'))]),
     #No son obligatorios para mobiliario
     Field('bm_marca','string',label=T('Marca')),
     Field('bm_modelo','string',label=T('Modelo')),
@@ -17,7 +17,7 @@ db.define_table(
     #
     Field('bm_descripcion','text', label=T('Descripción')),
     Field('bm_material','string',notnull=True,label=T('Material Predominante'), requires=IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro'])),
-    Field('bm_color','string',notnull=True,label=T('Color'),requires=IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color'])),
+    Field('bm_color','string',notnull=True,label=T('Color')),
     #Solo lo poseen los equipos
     Field('bm_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
     Field('bm_fecha_calibracion','date',label=T('Fecha de Calibracion')),
@@ -74,7 +74,7 @@ db.define_table(
     #
     Field('mbn_descripcion','text',label=T('Descripción')),
     Field('mbn_material','string',label=T('Material Predominante'), requires=IS_EMPTY_OR(IS_IN_SET(['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio']))),
-    Field('mbn_color','string',label=T('Color'),requires=IS_EMPTY_OR(IS_IN_SET(['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja','Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']))),
+    Field('mbn_color','string',label=T('Color')),
     #Solo lo poseen los equipos
     Field('mbn_calibrar', 'string', label = T('Requiere calibración'), requires = IS_EMPTY_OR(IS_IN_SET(['Si', 'No']))),
     Field('mbn_fecha_calibracion','date',label=T('Fecha de Calibracion'), requires = IS_EMPTY_OR(IS_DATE(format=('%d-%m-%Y')))),
