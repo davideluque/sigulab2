@@ -202,14 +202,14 @@
                                             </div>
                                             
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="identificacion" id="identificacion" placeholder="Identificación del contenedor*. Use el formato: CCCC-EEEFFFL-AA-R###" value='{{=cont.identificacion}}'>
+                                                <input type="text" class="form-control" name="identificacion" id="identificacion" onfocusout="validar_identificacion()" placeholder="Identificación del contenedor*. Use el formato: CCCC-EEEFFFL-AA-R###" value='{{=cont.identificacion}}'>
                                                 <span>Use el formato: CCCC-EEEFFFL-AA-R###</span>                                                
                                                 <div class="field-error">
                                                     <p id="error-identificacion"> </p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase*" value='{{=cont.capacidad}}'>
+                                                <input type="text" class="form-control" name="capacidad" id="capacidad" onfocusout="validad_capacidad()" placeholder="Capacidad del envase*" value='{{=cont.capacidad}}'>
                                                 <div class="field-error">
                                                     <p id="error-capacidad"> </p>
                                                 </div>
@@ -287,7 +287,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="composicion" id="composicion" placeholder="Composición del desecho peligroso*: mezcla de X + Y" value='{{=cont.composicion}}'>
+                                                <input type="text" class="form-control" name="composicion" id="composicion" onfocusout="validar_composicion()" placeholder="Composición del desecho peligroso*: mezcla de X + Y" value='{{=cont.composicion}}'>
                                                 <div class="field-error">
                                                     <p id="error-composicion"> </p>
                                                 </div>
@@ -469,14 +469,14 @@
                                             <h4 class="titulosForm">Datos de ingreso</h4>
                                             <label>Campos marcados con * son obligatorios.</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="identificacion" id="identificacion" placeholder="Identificación del contenedor*.">
+                                                <input type="text" class="form-control" name="identificacion" id="identificacion" onfocusout="validar_identificacion()" placeholder="Identificación del contenedor*.">
                                                 <span>Use el formato: CCCC-EEEFFFL-AA-R###</span>
                                                 <div class="field-error">
                                                     <p id="error-identificacion"> </p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="capacidad" id="capacidad" placeholder="Capacidad del envase* (Ej: 2000)">
+                                                <input type="text" class="form-control" name="capacidad" id="capacidad" onfocusout="validad_capacidad()" placeholder="Capacidad del envase* (Ej: 2000)">
                                                 <input type="hidden" class="form-control" name="id_envase" id="id_envase">
                                                 <input type="hidden" class="form-control" name="borrar_envase" id="borrar_envase" value="False">
                                                 <div class="field-error">
@@ -540,7 +540,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="composicion" id="composicion" placeholder="Composición del desecho peligroso*: mezcla de X + Y">
+                                                <input type="text" class="form-control" name="composicion" id="composicion" onfocusout="validar_composicion()" placeholder="Composición del desecho peligroso*: mezcla de X + Y">
                                                 <div class="field-error">
                                                     <p id="error-composicion"> </p>
                                                 </div>
@@ -599,6 +599,78 @@
     document.getElementById("smydp").className += " active";
 
     var edit_contenedor_modal = document.getElementById("editContenedor");
+
+    function validar_composicion() {
+        // Buscando divs para ingresar mensajes de error
+
+        var error_composicion = document.getElementById("error-composicion");
+
+        // Limpiando los mensajes anteriores de validadores
+
+        if (error_composicion.innerText != '') {
+            error_composicion.innerText = '';
+            document.getElementById("composicion").style.border = "3px solid #ddd";
+        }
+        // Buscando los valores ingresados por el usuario en cada campo
+
+        var composicion = document.forms['formularioCarga']['composicion'];
+
+        var mensaje_error_composicion = "Por favor, ingrese una composición válida.";
+
+        if (composicion.value === '' || composicion.value.length === 0) {
+            error_composicion.innerText = mensaje_error_composicion;
+            composicion.style.border = "1px solid red";
+            return false;
+        }
+    }
+
+    function validad_capacidad() {
+        // Buscando divs para ingresar mensajes de error
+        var error_capacidad = document.getElementById("error-capacidad");
+
+        if (error_capacidad.innerText != '') {
+            error_capacidad.innerText = '';
+            document.getElementById("capacidad").style.border = "3px solid #ddd";
+        }
+        var capacidad = document.forms['formularioCarga']['capacidad'];
+
+        // Se verifica si la capacidad tiene comas, y se substituyen por puntos
+        let capacidad_value = capacidad.value.replace(",", ".");
+        var mensaje_error_capacidad = "Por favor, ingrese una capacidad válida.";
+
+        if (capacidad_value === '' || capacidad_value.length === 0 || isNaN(capacidad_value) || capacidad_value <= 0) {
+            error_capacidad.innerText = mensaje_error_capacidad;
+            capacidad.style.border = "1px solid red";
+            return false;
+        }
+
+        if (!isNaN(parseFloat(capacidad_value))) {
+            document.getElementById("capacidad").value = parseFloat(capacidad_value).toFixed(2);
+        }
+    }
+
+    function validar_identificacion() {
+        var regex_identificacion = /^[A-Z]{0,4}-[A-Z]{3}[0-9]{3,4}-[0-9]{2}-R[0-9]{3}$/;
+
+        // Buscando divs para ingresar mensajes de error
+        var error_identificacion = document.getElementById("error-identificacion");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_identificacion.innerText != '') {
+            error_identificacion.innerText = '';
+            document.getElementById("identificacion").style.border = "3px solid #ddd";
+        }
+
+        var identificacion = document.forms['formularioCarga']['identificacion'];
+
+        var mensaje_error_identificacion = "Por favor, ingrese una identificación del contenedor válida.";
+
+        if (identificacion.value === '' || identificacion.value.length === 0 || !regex_identificacion.test(identificacion.value)) {
+            error_identificacion.innerText = mensaje_error_identificacion;
+            identificacion.style.border = "1px solid red";
+            return false;
+        }
+    }
 
     function validar_campos() {
 
@@ -689,14 +761,14 @@
     }
 
     function dialogoAdvertencia() {
-            if (confirm('Está seguro de que desea eliminar el contenedor?')) {
-                document.getElementById("borrar_envase").value = "True";
-                return true;
+        if (confirm('Está seguro de que desea eliminar el contenedor?')) {
+            document.getElementById("borrar_envase").value = "True";
+            return true;
 
-            } else {
-                return false;
-            }
+        } else {
+            return false;
         }
+    }
 
 </script> 
 
