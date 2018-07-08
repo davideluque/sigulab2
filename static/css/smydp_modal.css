@@ -13,6 +13,23 @@
 		border-bottom: 0px !important;
 	}
 
+	.boton-modal{
+		position: absolute;
+		right:10px;
+		bottom: 0;
+	}
+
+	div.col-sm-11.col11Body2{
+		height:560px;
+		overflow-y: scroll;
+		position: relative;		
+	}
+
+	div.col-sm-11.col11Body{
+		height:560px;
+		position: relative;		
+	}
+
 	.modal-body.addBody{
 		padding-right: 0px !important;
 		padding-top: 0px !important;
@@ -182,6 +199,7 @@
 		height: 40px;
 		width: 100%;
 	}
+
 
 	#nuevaSustancia{
 		text-align: left;

@@ -87,7 +87,9 @@
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
 			{{if dep_padre_id == direccion_id:}}
-			<p class="padre dep-titulo"> Inventario de DP</p>
+				<p class="padre dep-titulo"> Inventario de DP</p>
+			{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
+				<p class="padre dep-titulo"> {{=dep_nombre}}</p>
 			{{else:}}
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
 			{{pass}}
@@ -98,7 +100,11 @@
 				{{if dep_padre_id == direccion_id:}}
 	    		<a class="boton boton-retorno" href="{{=URL('inventarios_desechos')}}">
 						<i class="fa fa-arrow-left"></i>
-	    		</a>
+				</a>
+				{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=1, es_espacio='True'))}}" style="align-self: left;">
+						<i class="fa fa-arrow-left"></i>
+	    		</a>				
 	    		{{else:}}
     			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}" style="align-self: left;">
 						<i class="fa fa-arrow-left"></i>
@@ -106,22 +112,28 @@
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>	
 			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>				
 				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 			{{elif  "LABORATORIO" in dep_nombre.upper():}} 
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>				
 				<h3 class="subtitulo"> {{=dep_nombre}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
 			{{else:}}
+				{{if (not ('view' in request.vars)):}}
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>					
 				<h3 class="subtitulo"> {{=dep_padre_nombre.upper()}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
+				{{pass}}
 			{{pass}}
 		</div>
 		<div class="col-xs-2"> 
+			{{if (request.vars.es_espacio == "True") & (not ('view' in request.vars)):}}
 			<button type="button" id="botonAgregar" class="btn botonesListado buttons-html5 agregar" data-toggle="modal" data-target="#adddesecho">
 				<li class="fa fa-plus"></li>
 			  </button>
+			{{pass}}
 		</div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->

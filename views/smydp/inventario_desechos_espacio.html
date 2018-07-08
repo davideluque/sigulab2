@@ -13,7 +13,7 @@
         <div class="col-lg-offset-3 col-lg-6">
           <div class="row">
             <div class="col-lg-12 text-center">
-              <h3 class="inicio-titulo">DETALLE DEL DESECHO</h3>
+              <h3 class="inicio-titulo" style="margin-top:-90px">DETALLE DEL DESECHO</h3>
               <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
             </div>
           </div>
@@ -288,14 +288,16 @@
                           <div class="field-error">
                             <p id="error-tratamiento"> </p>
                           </div>
-                  
-                        </div>
-                          
-                      </div>
-                    </div>
-                    <button type="submit" form="formularioEdicionContenedor" id="submit" class="btn btn-primary">
+                          </div>
+                    <div class="boton-modal">      
+                      <button type="submit" form="formularioEdicionContenedor" id="submit" class="btn btn-primary">
                         <i class="fa fa-floppy-o"></i>
-                    </button>
+                      </button>
+                    </div>
+                    </div>
+                          
+                </div>
+              </div>
                   </fieldset>
                   <!-- Fin Primer Paso -->
                   <div class="pull-right">
@@ -479,9 +481,14 @@
                               <p id="error-tratamiento"> </p>
                             </div>
                           </div>
-                      </div>
-                    </div>
-                    <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>         
+
+                          <div class="boton-modal">
+                              <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary">
+                                  <i class="fa fa-plus-circle"></i>
+                              </button>
+                          </div>
+                        </div>
+                </div>
                   </fieldset>
                   <!-- Fin Primer Paso -->
                 </form>
