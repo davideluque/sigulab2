@@ -690,7 +690,23 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # < -------- Final Funciones privadas de SMDYP ------------>
 
 # < ------- Vistas del modulo de inventario -------->
-def index(): return locals()
+def index(): 
+    solicitudes_pendientes = validaciones()
+    numero_solicitudes = 0
+    if(len(solicitudes_pendientes['inventario'][0]) != 0 or \
+        len(solicitudes_pendientes['inventario'][1]) != 0 or \
+        len(solicitudes_pendientes['inventario'][2]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][0]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][1]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar'][2]) != 0
+        ):
+        numero_solicitudes = len(solicitudes_pendientes['inventario'][0]) + \
+        len(solicitudes_pendientes['inventario'][1]) + \
+        len(solicitudes_pendientes['inventario'][2]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][0]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][1]) + \
+        len(solicitudes_pendientes['inventario_eliminar'][2])
+    return dict(numero_solicitudes = numero_solicitudes)
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
