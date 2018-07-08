@@ -626,6 +626,10 @@
                 error_composicion.innerText = '';
                 document.getElementById("composicion").style.border = "3px solid #ddd";
             }
+            if (error_espacio_fisico.innerText != '') {
+                error_espacio_fisico.innerText = '';
+                document.getElementById("espacio_fisico").style.border = "3px solid #ddd";
+            }
             
             // Buscando los valores ingresados por el usuario en cada campo
             var identificacion = document.forms['formularioCarga']['identificacion'];
@@ -672,6 +676,12 @@
             if(composicion.value === '' || composicion.value.length === 0){
                 error_composicion.innerText = mensaje_error_composicion;
                 composicion.style.border = "1px solid red";
+                return false;
+            }
+
+            if (espacio_fisico.value === '' || espacio_fisico.value == undefined) {
+                error_espacio_fisico.innerText = mensaje_error_espacio_fisico;
+                espacio_fisico.style.border = "1px solid red";
                 return false;
             }
         }
