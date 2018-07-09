@@ -168,7 +168,6 @@
                            
                     </div>
                   </div>
-                  <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
@@ -201,8 +200,8 @@
 
                         <div class="form-group" id="grupo-piezas" hidden>
                             <label>Número de piezas*</label>
-                            <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*" >
-                            <div class="field-error"> <p id="err_numpiezas_her"> </p> </div>
+                            <input type="text" class="form-control"  id="numpiezasher" name="numpiezasher" placeholder="Número de piezas*" >
+                            <div class="field-error"> <p id="err_numpiezasher"> </p> </div>
                         </div>
 
                         <div class="form-group" id="grupo-contenido" hidden>
@@ -261,7 +260,7 @@
 
                         <div class="form-group">
                             <label>Dimensiones</label>
-                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                          <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value);">
                             <option value="">Selecione una unidad</option>
                             {{ for med in unidad_med:}}
                             <option value="{{=med}}">{{=med}}</option>
@@ -272,8 +271,8 @@
 
                         <div class="form-group" id="grupo-ancho" hidden>
                             <label>Ancho</label>
-                          <input type="hidden" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="Ancho">
-                          <font color="red"><div id="err_ancho_her" hidden></div></font>
+                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                          <font color="red"><div id="errancho" hidden></div></font>
                         </div>
 
 
@@ -359,62 +358,20 @@ del concepto y tipo de ingreso o egreso -->
 
   // Funcion para mostrar campos dependendiendo de la categoria
   function elegir_campos(){
-    var selecion = document.getElementById("presentacion");
-    if (selecion.value == "Unidad"){
-      document.getElementById("unidades").type = 'hidden';
-      document.getElementById("unidades").removeAttribute("required", "");
-      document.getElementById("total_mat").type = 'hidden';
-      document.getElementById("total_mat").removeAttribute("required", "");
-      document.getElementById("grupo-presentacion").style.display = 'none';
-      document.getElementById("presentacion").removeAttribute("required", "");
-      document.getElementById("grupo-aforado").style.display = 'block';
-      document.getElementById("grupo-material").style.display = 'block';
-      document.getElementById("grupo-material2").style.display = 'block';
-      document.getElementById("grupo-unidad").style.display = 'block';
-      document.getElementById("calibracion_mat").style.display = 'block';
-      document.getElementById("grupo-cap").style.display = 'block';
-      document.getElementById("aforado").setAttribute("required", "");
-      document.getElementById("calibracion_mat").setAttribute("required", "");
-      document.getElementById("material_mat").setAttribute("required", "");
-      document.getElementById("grupo-capacidad").style.display = 'block';
-      document.getElementById("capacidad").type = 'text';
-      document.getElementById("grupo-total").style.display = 'none';
-
-    }
-    else{
-      document.getElementById("grupo-total").style.display = 'block';
-      document.getElementById("grupo-cap").style.display = 'none';
-      document.getElementById("grupo-capacidad").style.display = 'none';
-      document.getElementById("capacidad").type = 'hidden';
-      document.getElementById("grupo-presentacion").style.display = 'block';
-      document.getElementById("presentacion").setAttribute("required", "");
-      document.getElementById("unidades").type = 'text';
-      document.getElementById("unidades").setAttribute("required", "");
-      document.getElementById("total_mat").type = 'text';
-      document.getElementById("total_mat").setAttribute("required", "");
-      document.getElementById("grupo-aforado").style.display = 'none';
-      document.getElementById("aforado").removeAttribute("required", "");
-      document.getElementById("grupo-material").style.display = 'none';
-      document.getElementById("grupo-material2").style.display = 'none';
-      document.getElementById("grupo-unidad").style.display = 'none';
-      document.getElementById("material_mat").removeAttribute("required", "");
-      document.getElementById("calibracion_mat").style.display = 'none';
-      document.getElementById("calibracion_mat").removeAttribute("required", "");
-    }
   }
 
   // Mostrar fecha de calibracion
   function display_piezas(value){
     if ( value == "Conjunto" ){
       document.getElementById("grupo-piezas").style.display = 'block';
-      document.getElementById("numpiezas_her").setAttribute("required", "");
+      document.getElementById("numpiezasher").setAttribute("required", "");
       document.getElementById("grupo-contenido").style.display = 'block';
       document.getElementById("contenido_her").setAttribute("required", "");
       document.getElementById("grupo-descripcion").style.display = 'block';
       document.getElementById("descripcion_her").setAttribute("required", "");
     }else{
       document.getElementById("grupo-piezas").style.display = 'none';
-      document.getElementById("numpiezas_her").removeAttribute("required", "");
+      document.getElementById("numpiezasher").removeAttribute("required", "");
       document.getElementById("grupo-contenido").style.display = 'none';
       document.getElementById("contenido_her").removeAttribute("required", "");
       document.getElementById("grupo-descripcion").style.display = 'none';
@@ -426,7 +383,7 @@ del concepto y tipo de ingreso o egreso -->
     function display_units(value){
     if ( value == '' ){
       document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho_her").type = 'hidden';
+      document.getElementById("ancho").type = 'hidden';
       document.getElementById("largo_her").type = 'hidden';
       document.getElementById("alto_her").type = 'hidden';
       document.getElementById("diametro_her").type = 'hidden';
@@ -436,7 +393,7 @@ del concepto y tipo de ingreso o egreso -->
       $('#grupo-diametro').hide()
     }else{
       document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho_her").type = 'text';
+      document.getElementById("ancho").type = 'text';
       document.getElementById("largo_her").type = 'text';
       document.getElementById("alto_her").type = 'text';
       document.getElementById("diametro_her").type = 'text';
