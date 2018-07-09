@@ -16,6 +16,13 @@
 		}
 		
 	</style>
+
+	<style type="text/css">
+	div.dt-body-left {
+		padding-left: 5ex !important;
+		}
+	</style>
+
  	
  	<!-- Estilos de modales y listados -->
  	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
@@ -261,7 +268,7 @@
 			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 		  },
 		  "columnDefs": [
-			{ "width": "30%", "targets": 0 },
+			{ "width": "30%", "targets": 0, 'className': 'dt-body-left' },
 			{ "width": "10%", "targets": [1,2,3] }
 		  ],
 		 initComplete: function(){
