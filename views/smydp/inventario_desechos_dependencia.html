@@ -42,33 +42,34 @@
                 <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                     <thead>
                         <tr id="titulosListado">
-                            <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                            <th class="camposTabla linksNombres">Dependencia</th>
-                            <th class="camposTabla linksNombres">Espacio físico</th>
-                            <th class="camposTabla linksNombres">Responsable</th>
-                            <th class="camposTabla linksNombres">Cantidad</th>
+                            <th style="padding-left: 30px !important" class="camposTabla linksNombres">CATEGORÍA DE DESECHO</th>
+                            <th class="camposTabla linksNombres">DEPENDENCIA</th>
+                            <th class="camposTabla linksNombres">ESPACIO FÍSICO</th>
+                            <th class="camposTabla linksNombres">RESPONSABLE</th>
+                            <th class="camposTabla linksNombres">CANTIDAD</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {{for desecho in inventario:}} 
                         <tr>
-                            <td class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre']}}</td>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo']}}</td>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre']}}</td>
-                            <td class="camposTabla">{{=desecho['_extra']['SUM(t_inventario_desechos.cantidad)']}} {{=desecho['t_inventario_desechos.unidad_medida']['f_abreviatura']}}</td>
+                            <td style="padding-left: 30px !important" class="camposTabla" style="text-align: center">{{=desecho['t_inventario_desechos.categoria']['categoria'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos.responsable']['f_apellido'].upper()}}</td>
+                            {{cantidad = str(desecho['_extra']['SUM(t_inventario_desechos.cantidad)']).replace(".", ",")}}
+                            <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos.unidad_medida']['f_abreviatura']}}</td>
                         </tr>
                         {{pass}}
                     </tbody>
 
                     <tfoot id="collapseFiltros">
                         <tr>
-                            <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                            <th class="camposTabla linksNombres">Dependencia</th>
-                            <th class="camposTabla linksNombres">Espacio físico</th>
-                            <th class="camposTabla linksNombres">Responsable</th>
-                            <th class="camposTabla linksNombres">Cantidad</th>
+                            <th style="padding-left: 30px !important" class="camposTabla linksNombres">CATEGORÍA DE DESECHO</th>
+                            <th class="camposTabla linksNombres">DEPENDENCIA</th>
+                            <th class="camposTabla linksNombres">ESPACIO FÍSICO</th>
+                            <th class="camposTabla linksNombres">RESPONSABLE</th>
+                            <th class="camposTabla linksNombres">CANTIDAD</th>
                         </tr>
                     </tfoot>
 
@@ -81,30 +82,30 @@
                 <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                     <thead>
                         <tr id="titulosListado">
-                            <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                            <th class="camposTabla linksNombres">Espacio físico</th>
-                            <th class="camposTabla linksNombres">Responsable</th>
-                            <th class="camposTabla linksNombres">Cantidad</th>
+                            <th style="padding-left: 30px !important" class="camposTabla linksNombres">CATEGORÍA DE DESECHO</th>
+                            <th class="camposTabla linksNombres">ESPACIO FÍSICO</th>
+                            <th class="camposTabla linksNombres">RESPONSABLE</th>
+                            <th class="camposTabla linksNombres">CANTIDAD</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {{for desecho in inventario:}}
                         <tr>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos.categoria']['categoria']}}</td>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo']}}</td>
-                            <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre']}}</td>
-                            <td class="camposTabla">{{=desecho['_extra']['SUM(t_inventario_desechos.cantidad)']}} {{=desecho['t_inventario_desechos.unidad_medida']['f_abreviatura']}}</td>
+                            <td style="padding-left: 30px !important" class="camposTabla">{{=desecho['t_inventario_desechos.categoria']['categoria'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos.responsable']['f_apellido'].upper()}}</td>
+                            <td class="camposTabla">{{=desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']}} {{=desecho['t_inventario_desechos.unidad_medida']['f_abreviatura']}}</td>
                         </tr>
                         {{pass}}
                     </tbody>
 
                     <tfoot id="collapseFiltros">
                         <tr>
-                            <th class="camposTabla linksNombres">Grupo de Desecho</th>
-                            <th class="camposTabla linksNombres">Espacio físico</th>
-                            <th class="camposTabla linksNombres">Responsable</th>
-                            <th class="camposTabla linksNombres">Cantidad</th>
+                            <th style="padding-left: 30px !important"  class="camposTabla linksNombres">CATEGORÍA DE DESECHO</th>
+                            <th class="camposTabla linksNombres">ESPACIO FÍSICO</th>
+                            <th class="camposTabla linksNombres">RESPONSABLE</th>
+                            <th class="camposTabla linksNombres">CANTIDAD</th>
                         </tr>
                     </tfoot>
 

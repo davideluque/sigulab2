@@ -12,6 +12,30 @@
     body{font-size: 14px;}
 }
 
+div.row.pull-left.boton-retroceder{
+	padding: 0px 15px;
+}
+
+button.btn {
+	border-radius: 50% !important;
+	min-width: unset !important;
+}
+
+div.col-lg-1.boton-retroceder{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	border-radius: 50%;
+	color: white;
+	background-color: #337ab7;
+}
+
+div.col-lg-1.boton-retroceder > a {
+	color: white;
+	text-decoration: none;
+	padding: 5px;
+}
+
 .buttons-html5, .buttons-print{
     border-radius: 50%;
 	background-color: #337ab7;
