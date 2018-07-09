@@ -304,7 +304,7 @@
         
                                 <div class="form-group" tag="Formato:">
                                     <label>Nombre del consumible*</label>
-                                    <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" value="{{=bien['sb_nombre']}}" title="Nombre del consumible"  placeholder="Nombre del consumible*" required>
+                                    <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" value="{{=bien['sb_nombre']}}" title="Nombre del consumible"  placeholder="Nombre del consumible*" readonly>
                                     <div class="field-error"> <p id="err_nombre_mat"> </p> </div>
                                 </div>
 
@@ -423,6 +423,12 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" id="descripcion_mat" value="{{=bien['sb_descripcion']}}" name="descripcion_mat" placeholder="Observaciones">
                                 <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
+                            </div>
+
+                            <div class="form-group">
+                                    <label>Descripción de modificación*</label>
+                                    <input type="text" class="form-control" id="descripcion_modificacion" name="descripcion_modificacion" placeholder="Descripción de modificación" required>
+                                    <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                             </div>
     
                             </div>
