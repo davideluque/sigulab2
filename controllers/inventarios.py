@@ -248,8 +248,7 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         diametro=None
     
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
-    else:
-        inv_id = db.bien_mueble.insert(
+    inv_id = db.bien_mueble.insert(
             bm_nombre = nombre, 
             bm_num = no_bien, 
             bm_placa = no_placa, 
@@ -826,8 +825,7 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         alto=None
         diametro=None
     
-    else:
-        inv_id = db.modificacion_bien_mueble.insert(
+    inv_id = db.modificacion_bien_mueble.insert(
             mbn_nombre = nombre, 
             mbn_num = no_bien, 
             mbn_placa = no_placa, 
@@ -2495,7 +2493,10 @@ def __get_inventario_espacio_materialesandconsumibles_validacion(nombre, espacio
 # Dado el id de un espacio fisico, retorna las sustancias a eliminar que componen el inventario
 # de ese espacio.
 def __get_inventario_espacio_bn_eliminar(num=None):
-    return db(db.bien_mueble.bm_num == num and db.bien_mueble.bm_eliminar == 0).select()
+    bien = db(db.bien_mueble.bm_num == num).select()[0]
+    if ( bien['bm_eliminar'] == 0 ):
+        return db(db.bien_mueble.bm_num == num).select()
+    return []
 
 """ Dado el id de un espacio fisico retorna los materiales a eliminar que componen
 el inventario de ese espacio. """
