@@ -104,9 +104,15 @@
                       <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
                     {{pass}}
-                    {{if bool(personal['ubicacion']) :}}
+                    {{if bool(personal['ubicaciones']) :}}
                     <tr>
-                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
+                        <td>Ubicación(es):</td><td id="field_ubicacion">
+                          <ul>
+                            {{for ubicacion in personal['ubicaciones']:}}
+                            <li>{{=ubicacion.codigo}}</li>
+                            {{pass}}
+                          </ul>
+                        </td>
                     </tr>
                     {{pass}}
                  
@@ -304,9 +310,17 @@
                   <tr>
                     <td>Dependencia:</td><td>{{=personal['dependencia']}}</td>
                   </tr>
+                    {{if bool(personal['ubicaciones']) :}}
                     <tr>
-                        <td>Ubicación:</td><td>{{=personal['ubicacion']}}</td>
+                        <td>Ubicación(es):</td><td id="field_ubicacion">
+                          <ul>
+                            {{for ubicacion in personal['ubicaciones']:}}
+                            <li>{{=ubicacion.codigo}}</li>
+                            {{pass}}
+                          </ul>
+                        </td>
                     </tr>
+                    {{pass}}
                   <tr>
                       <td>Unidad de Adscripción: </td><td>{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>

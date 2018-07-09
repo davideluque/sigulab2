@@ -331,13 +331,17 @@ def ficha():
     else: idUSuperior=None
     if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
     else: Usuperior=None
-    ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
-    ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+    ext_USB = ''
+    ext_int = ''
     if ext_USB: ext_USB=ext_USB.ext_USB[0]
     if ext_int: ext_int=ext_int.ext_interna
 
-    ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-    if(ubicacion): ubicacion = ubicacion.codigo
+    # db(db.es_encargado.tecnico == usuario.id).select()
+    ubicaciones = list(map(
+        lambda x: x.espacio_fisico,
+        db(db.es_encargado.tecnico == infoUsuario.id).select()
+    ))
+    ubicaciones = db(db.espacios_fisicos.id.belongs(ubicaciones)).select()
 
     personal ={
         "nombre" : elm.f_nombre,
@@ -366,7 +370,7 @@ def ficha():
         "rol" : elm.f_rol,
         "extension_USB" : ext_USB,
         "extension_interna" : ext_int,
-        "ubicacion" : ubicacion,
+        "ubicaciones" : ubicaciones,
         "es_supervisor": elm.f_es_supervisor,
         "validado": elm.f_validado,
         "por_validar": elm.f_por_validar,

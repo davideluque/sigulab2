@@ -344,7 +344,7 @@
                               >Ubicación</option>
                               {{for ubicacion in ubicaciones:}}
                               <option
-                              {{ if str(ubicacion.id) == usuario.f_ubicacion: }}
+                              {{ if str(ubicacion.id) in usuario.f_ubicacion: }}
                               selected
                               {{pass}}
                               value="{{=ubicacion.id}}">{{=ubicacion.codigo}}</option>
