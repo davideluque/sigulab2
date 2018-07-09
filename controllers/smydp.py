@@ -1088,7 +1088,7 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
                 descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria.upper()
+                categoria = categoria
             )
 
             return T("La información del contenedor se ha modificado exitosamente.")
@@ -1110,7 +1110,7 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
                 descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria.upper()
+                categoria = categoria
             )
 
             return T("Contenedor creado exitosamente.")
@@ -1233,7 +1233,7 @@ def inventarios_desechos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR') or auth.has_membership("PERSONAL INTERNO") ):
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR')):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1290,15 +1290,9 @@ def inventarios_desechos():
                 # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                 # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                 envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                ####################
-                # A T E N C I Ó N  #
-                ####################
-                # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
                 
                 # Se esta editando el detalle de un desecho
                 if request.vars.view and request.vars.envase:
@@ -1494,15 +1488,9 @@ def inventarios_desechos():
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                     envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                    ####################
-                    # A T E N C I Ó N  #
-                    ####################
-                    # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                    # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                    #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
                     
                     # Se esta editando el detalle de un desecho
                     if request.vars.view and request.vars.envase:
@@ -1721,7 +1709,7 @@ def inventarios_desechos():
             mostrar_campo_dependencia = True
             espacio_visitado = False
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("PERSONAL INTERNO") :
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1780,15 +1768,9 @@ def inventarios_desechos():
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                     envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                    ####################
-                    # A T E N C I Ó N  #
-                    ####################
-                    # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                    # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                    #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
                     
                     # Se esta editando el detalle de un desecho
                     if request.vars.view and request.vars.envase:
@@ -1985,7 +1967,7 @@ def inventarios_desechos():
             inventario = list(db(
                 (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
                 (db.espacios_fisicos.dependencia == db.dependencias.id) &
-                (db.dependencias.unidad_de_adscripcion == dep_id)
+                (db.dependencias.id == dep_id)
                 ).select(
                 db.t_inventario_desechos.categoria,
                 db.t_inventario_desechos.espacio_fisico,
@@ -2074,7 +2056,7 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
 
         row.update_record(
-            categoria = envase.categoria.upper(),
+            categoria = envase.categoria,
             composicion = envase.composicion,
             envase = envase.id,
             concentracion = concentracion,
@@ -2109,7 +2091,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         if int(cantidad) <= int(envase.capacidad): 
 
             #Agrega el desecho al inventario
-            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria.upper(),
+            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
                                             unidad_medida = envase.unidad_medida,
                                             composicion = envase.composicion,

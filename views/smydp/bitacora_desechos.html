@@ -501,6 +501,11 @@
     }
 
   });
+
+  $(document).ready(function () {
+    $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+    $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+  });
   var w2p_ajax_confirm_message =
     "{{=T('')}}";
 
