@@ -1292,13 +1292,7 @@ def inventarios_desechos():
                 # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
                 envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                ####################
-                # A T E N C I Ó N  #
-                ####################
-                # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                # envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
+                envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
                 # Se esta editando el detalle de un desecho
                 if request.vars.view and request.vars.envase:
@@ -1496,13 +1490,7 @@ def inventarios_desechos():
                     # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
                     envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                    ####################
-                    # A T E N C I Ó N  #
-                    ####################
-                    # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                    # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                    # envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                    envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
+                    envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                     
                     # Se esta editando el detalle de un desecho
                     if request.vars.view and request.vars.envase:
@@ -1782,13 +1770,7 @@ def inventarios_desechos():
                     # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
                     envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
-                    ####################
-                    # A T E N C I Ó N  #
-                    ####################
-                    # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
-                    # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
-                    #envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id;', as_dict = True))
                     
                     # Se esta editando el detalle de un desecho
                     if request.vars.view and request.vars.envase:
