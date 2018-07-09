@@ -139,8 +139,6 @@ db.define_table(
            label=T('Correo Electrónico Alternativo')),
     Field('f_direccion',          'string',
           requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'), label=T('Direccion')),
-    Field('f_ubicacion',          'string',
-          requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'),  label=T('Ubicacion')),
     Field('f_pagina_web',     'string', requires=IS_URL(error_message='Ingrese un formato válido de url'), label=T('Página web')),
 
     Field('f_estatus',        'string', requires=IS_IN_SET(

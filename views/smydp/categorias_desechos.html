@@ -25,20 +25,39 @@
 </nav>
 <!-- Fin del Breadcrumb de navegación -->
 
+<!-- Flash message -->
+{{if response.flash:}}
+<div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{=response.flash}}
+</div>
+{{pass}}
+
+
 <!-- Area con el título de la página-->
 <div class="container titulo">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
-            <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
+        <div class="row boton-retorno2">
+            <div class="col-xs-2 boton-retorno2">
+                <a class="boton boton-retorno2" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
+            <div class="col-xs-8 text-center">
+                <h3 class="inicio-titulo">CATEGORÍAS DE DESECHOS - ULAB</h3>
+                <img class="iconos" src="{{=URL('static', 'images/categorias.png')}}">
+            </div>
+            <div class="col-xs-2">
+            <!-- Agregar categoría -->
+            {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
+                <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5 agregar" title="Agregar una nueva categoría" data-toggle="modal" data-target="#addCategoria">
+                    <li class="fa fa-plus" />
+                </button>
+            {{pass}}
+            </div>
         </div>
-    </div>
+
     {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
         <div id="buttons" class="text-right">
-            <!-- Agregar categoría -->
-            <button type="button" id="botonAgregar" class="btn btn-primary buttons-html5" data-toggle="modal" data-target="#addCategoria">
-                <li class="fa fa-plus-circle" />
-            </button>
             <!-- Filtrado -->
             <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
                 <i class="fa fa-filter"></i>
@@ -64,8 +83,8 @@
             <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
                 <thead>
                     <tr id="titulosListado" style="text-align: left">
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th style="padding-left: 30px !important" class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </thead>
 
@@ -79,12 +98,12 @@
                                 </a>
                             </td>
                         {{else:}}
-                            <td class="camposTabla" style="text-align: left">
+                            <td class="camposTabla" style="text-align: center">
                                 {{=categoria.categoria.upper()}}
                             </td>
                         {{pass}}
-                        <td class="camposTabla" style="text-align: left">
-                            {{=categoria.descripcion}}
+                        <td class="camposTabla" style="text-align: center">
+                            {{=categoria.descripcion.upper()}}
                         </td>
                     </tr>
                 {{pass}}
@@ -92,8 +111,8 @@
 
                 <tfoot id="collapseFiltros">
                     <tr>
-                        <th class="camposTabla linksNombres">Categoría</th>
-                        <th class="camposTabla linksNombres">Descripción</th>
+                        <th class="camposTabla linksNombres">CATEGORÍA</th>
+                        <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
                     </tr>
                 </tfoot>
 
@@ -119,7 +138,7 @@
                             <h1 id="agregar">+</h1>
                         </div>
                     </div>
-                    <div class="col-sm-10" id="col11Header">
+                    <div class="col-sm-10" id="col11Header" style="background-color: #337ab7">
                         <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Nueva Categoría
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </h4>
@@ -144,7 +163,7 @@
                                             <label>Campos marcados con * son obligatorios.</label>
                                             
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="categoria" id="nombre-categoria" placeholder="Nombre de la categoría*">
+                                                <input type="text" class="form-control" name="categoria" onfocusout="validar_categoria()" id="nombre-categoria" placeholder="Nombre de la categoría*">
                                                 <input type="hidden" class="form-control" name="id_categoria" id="id_categoria">
                                                 <input type="hidden" class="form-control" name="borrar_categoria" id="borrar_categoria" value="False">
                                                 <div class="field-error">
@@ -153,15 +172,18 @@
                                             </div>
                                             
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="descripcion" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                                <input type="text" class="form-control" name="descripcion" onfocusout="validar_descripcion()" id="descripcion-categoria" placeholder="Descripción de la categoría*">
+                                                <div class="field-error">
+                                                    <p id="error-descripcion-categoria"> </p>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="pull-right">
+                                        <div class="boton-modal">
                                             <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary">
                                                 <i class="fa fa-plus-circle"></i>
                                             </button>
-                                            <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();">
+                                            <button class="btn btn-danger" type="submit" id="boton_borrar_categoria" form="formularioCarga" onclick="return dialogoAdvertencia();" style="display: none">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </div>
@@ -182,34 +204,95 @@
     // Set blue bar below INICIO text.
     document.getElementById("smydp").className += " active";
 
-    // Valida los campos de la forma en el modal "addsustancia"
-    function validar_campos() {
-        
+    function validar_categoria() {
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+
         // Buscando divs para ingresar mensajes de error
+
         var error_nombre_categoria = document.getElementById("error-nombre-categoria");
 
         // Limpiando los mensajes anteriores de validadores
         if (error_nombre_categoria.innerText != '') {
             error_nombre_categoria.innerText = '';
-            nombre_categoria.style.border = "none";
+            nombre_categoria.style.border = "3px solid #ddd";
         }
-
-        // Buscando los valores ingresados por el usuario en cada campo
-        var nombre_categoria = document.forms['formularioCarga']['categoria'];
-
         // Mensajes de error
         var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
-
-        if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
+        if (nombre_categoria.value === '' || nombre_categoria.length === 0) {
             error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
             nombre_categoria.style.border = "1px solid red";
             return false;
         }
     }
 
+    function validar_descripcion() {
+        // Buscando los valores ingresados por el usuario en cada campo
+
+        var descripcion_categoria = document.forms['formularioCarga']['descripcion'];
+
+        // Buscando divs para ingresar mensajes de error
+
+        var error_descripcion_categoria = document.getElementById("error-descripcion-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+
+        if (error_descripcion_categoria.innerText != '') {
+            error_descripcion_categoria.innerText = '';
+            descripcion_categoria.style.border = "3px solid #ddd";
+        }
+        // Mensajes de error
+
+        var mensaje_error_descripcion_categoria = "Por favor ingrese una descripción válida para la categoría.";
+
+        if (descripcion_categoria.value === '' || descripcion_categoria.length === 0) {
+            error_descripcion_categoria.innerText = mensaje_error_descripcion_categoria;
+            descripcion_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
+
+    // Valida los campos de la forma en el modal "addsustancia"
+    function validar_campos() {
+        // Buscando los valores ingresados por el usuario en cada campo
+        var nombre_categoria = document.forms['formularioCarga']['categoria'];
+        var descripcion_categoria = document.forms['formularioCarga']['descripcion'];
+
+        // Buscando divs para ingresar mensajes de error
+        var error_nombre_categoria = document.getElementById("error-nombre-categoria");
+        var error_descripcion_categoria = document.getElementById("error-descripcion-categoria");
+
+        // Limpiando los mensajes anteriores de validadores
+        if (error_nombre_categoria.innerText != '') {
+            error_nombre_categoria.innerText = '';
+            nombre_categoria.style.border = "3px solid #ddd";
+        }
+
+        if (error_descripcion_categoria.innerText != '') {
+            error_descripcion_categoria.innerText = '';
+            descripcion_categoria.style.border = "3px solid #ddd";
+        }
+
+        // Mensajes de error
+        var mensaje_error_nombre_categoria = "Por favor ingrese un nombre válido para la categoría.";
+        var mensaje_error_descripcion_categoria = "Por favor ingrese una descripción válida para la categoría.";
+
+        if(nombre_categoria.value === '' || nombre_categoria.length === 0) {
+            error_nombre_categoria.innerText = mensaje_error_nombre_categoria;
+            nombre_categoria.style.border = "1px solid red";
+            return false;
+        }
+
+        if (descripcion_categoria.value === '' || descripcion_categoria.length === 0) {
+            error_descripcion_categoria.innerText = mensaje_error_descripcion_categoria;
+            descripcion_categoria.style.border = "1px solid red";
+            return false;
+        }
+    }
+
     function editarCategoria(categoria, descripcion, id) {
         // Cambia el valor del botón de enviar formulario del modal de 'Agregar categoría' por 'Actualizar categoría'
-        document.getElementById('submit').innerHTML = 'Actualizar categoría';
+        document.getElementById('submit').innerHTML = '<i class="fa fa-floppy-o"></i>';
 
         // Cambiar el valor del títutlo del modal de creación de categoría a 'Editar categoría'
         document.getElementById('nuevaCategoria').innerHTML = document.getElementById('nuevaCategoria').innerHTML.replace("Nueva Categoría", "Editar categoría");
@@ -219,6 +302,8 @@
         document.getElementById('descripcion-categoria').value = descripcion;
         document.getElementById('id_categoria').value = id;
 
+        //Muestra el botón de borrar categoría, pues se está editando, por lo tanto existe y se puede eliminar
+        document.getElementById("boton_borrar_categoria").style.display = "inline-block"
         //Muestra el modal
         $("#addCategoria").modal('show');
     }
@@ -299,7 +384,10 @@
     var table = $('#datatable').DataTable({
         "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
         language: {
-            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            paginate: {
+                "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+                "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+            }
         },
         initComplete: function () {
             var api = this.api();
@@ -314,8 +402,8 @@
             $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
             $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
             $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-            $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-            $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+            // $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+            // $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
             $('#buttons').style.textAlign = "right";
         }
 

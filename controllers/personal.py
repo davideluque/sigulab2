@@ -49,13 +49,9 @@ def tabla_categoria(tipo):
         else: idUSuperior=None
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
-        ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
-        ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
-        if ext_USB: ext_USB=ext_USB.ext_USB[0]
-        if ext_int: ext_int=ext_int.ext_interna
 
-        ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-        if(ubicacion): ubicacion = ubicacion.codigo
+        # ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
+        # if(ubicacion): ubicacion = ubicacion.codigo
 
         jefe = buscarJefe(dep)
 
@@ -84,9 +80,9 @@ def tabla_categoria(tipo):
              "condicion" : elm.f_condicion,
              "unidad_jerarquica_superior" : Usuperior,
              "rol" : elm.f_rol,
-             "extension_USB" : ext_USB,
-             "extension_interna" : ext_int,
-             "ubicacion" : ubicacion,
+             "extension_USB" : '',
+             "extension_interna" : '',
+             "ubicacion" : '',
              "es_supervisor": elm.f_es_supervisor,
              "validado": elm.f_validado,
              "jefe": jefe
@@ -122,14 +118,12 @@ def transformar_fecha_formato_original(fecha):
         dia = fecha[:2]
         mes = fecha[3:5]
         anio = fecha[6:]
-        print(anio + "-" + mes + "-" + dia)
         return anio + "-" + mes + "-" + dia
     else:
         return fecha
 
 #Funcion que toma las variables de la vista
 def add_form():
-    ubicacion = request.post_vars.ubicacion_add
     dic = {"nombre" : request.post_vars.nombre_add,
             "apellido" : request.post_vars.apellido_add,
             "ci" : request.post_vars.ci_add,
@@ -151,19 +145,19 @@ def add_form():
              "fecha_ingreso_ulab" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_ulab_add),
              "fecha_ingreso_admin_publica" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_admin_publica_add),
              "condicion" : request.post_vars.condicion_add,
-             "ubicacion" : request.post_vars.ubicacion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
-             "extension_USB" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_USB).first(),
-             "extension_interna" : db(db.espacios_fisicos.id == ubicacion).select(db.espacios_fisicos.ext_interna).first()
             }
 
+    ubicaciones = request.post_vars.ubicacion_add
+    if type(ubicaciones) == str:
+        ubicaciones = [ubicaciones]
 
-    #if str(dic) != "{'categoria': None, 'ci': None, 'estatus': None, 'pagina_web': None, 'cargo': None, 'dependencia': None, 'fecha_ingreso': None, 'fecha_salida': None, 'nombre': None, 'telefono': None, 'email': None}":
     #Si el diccionario no esta vacio
     if (not(None in dic.values())):
         #Insertamos en la base de datos
-        db(db.t_Personal.f_email == dic['email'] ).update(f_nombre = dic["nombre"],
+        personal = db(db.t_Personal.f_email == dic['email'] )
+        personal.update(f_nombre = dic["nombre"],
                                 f_apellido = dic["apellido"],
                                 f_ci = dic["ci"],
                                 f_email = dic["email"],
@@ -184,12 +178,18 @@ def add_form():
             f_fecha_ingreso_ulab= dic["fecha_ingreso_ulab"],
             f_fecha_ingreso_admin_publica= dic["fecha_ingreso_admin_publica"],
             f_condicion= dic["condicion"],
-            f_ubicacion= dic["ubicacion"],
             f_por_validar=True,
             f_validado=False,
             f_comentario="",
             f_rol= dic["rol"])
         session.ficha_negada=""
+        _id = personal.select().first().id
+        db(db.es_encargado.tecnico == _id).delete()
+        ubicaciones_a_insertar = list(map(
+            lambda x: {'tecnico': _id, 'espacio_fisico': x},
+            ubicaciones
+        ))
+        db.es_encargado.bulk_insert(ubicaciones_a_insertar)
         redirect(URL('listado_estilo'))
 
 
@@ -240,7 +240,10 @@ class Usuario(object):
         # pagina 3
         self.f_cargo = usuario.f_cargo
         self.f_gremio = usuario.f_gremio
-        self.f_ubicacion = usuario.f_ubicacion
+        self.f_ubicacion = list(map(
+            lambda x: str(x.espacio_fisico),
+            db(db.es_encargado.tecnico == usuario.id).select()
+        ))
         self.f_rol = usuario.f_rol
         # dependencia ya dada arriba
         self.f_es_supervisor = usuario.f_es_supervisor
@@ -328,13 +331,17 @@ def ficha():
     else: idUSuperior=None
     if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
     else: Usuperior=None
-    ext_USB = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_USB).first()
-    ext_int = db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ext_interna).first()
+    ext_USB = ''
+    ext_int = ''
     if ext_USB: ext_USB=ext_USB.ext_USB[0]
     if ext_int: ext_int=ext_int.ext_interna
 
-    ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-    if(ubicacion): ubicacion = ubicacion.codigo
+    # db(db.es_encargado.tecnico == usuario.id).select()
+    ubicaciones = list(map(
+        lambda x: x.espacio_fisico,
+        db(db.es_encargado.tecnico == infoUsuario.id).select()
+    ))
+    ubicaciones = db(db.espacios_fisicos.id.belongs(ubicaciones)).select()
 
     personal ={
         "nombre" : elm.f_nombre,
@@ -363,7 +370,7 @@ def ficha():
         "rol" : elm.f_rol,
         "extension_USB" : ext_USB,
         "extension_interna" : ext_int,
-        "ubicacion" : ubicacion,
+        "ubicaciones" : ubicaciones,
         "es_supervisor": elm.f_es_supervisor,
         "validado": elm.f_validado,
         "por_validar": elm.f_por_validar,

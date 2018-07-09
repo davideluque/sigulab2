@@ -2,6 +2,8 @@
   
 {{block head}}
 	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_modulos.css')}}"> 
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+
 {{end}}
 
 {{block center}}
@@ -17,14 +19,19 @@
 <!-- Fin del Breadcrumb de navegación --> 
 
 
-	<div class="container">
+	<div class="container titulo">
 		<div id="fila1" class="row">
+			<div class="col-lg-12 text-center">
+				<h3 class="inicio-titulo">GESTIÓN DE SUSTANCIAS, MATERIALES Y DESECHOS PELIGROSOS</h3>
+			</div>			
+		</div>
+			
 		</div>
 		<div id="fila2" class="row">
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 			</div>
 
-			<div class="col-sm-8">
+			<div class="col-sm-6">
 				<!-- Link a sym (Sustancias y materiales) -->
 				<div class="col-sm-6 columnas">
 					<a href="{{=URL('sigulab2', 'smydp', 'sustancias')}}">
@@ -39,7 +46,7 @@
 					  <h3 class="opciones">Desechos peligrosos</h3>
 					</a>
 				</div>
-			  <div class="col-sm-2">
+			  <div class="col-sm-3">
 			  </div>
 
 			</div>

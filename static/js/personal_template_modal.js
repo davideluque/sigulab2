@@ -486,6 +486,14 @@ function validadoresCorrectos(validatorsList) {
 }
 
 $(document).ready(function () {
+    $('.fselect').fSelect({
+        placeholder: 'Escoja sus ubicaciones',
+        numDisplayed: 3,
+        overflowText: '{n} ubicaciones',
+        searchText: 'Buscar',
+        showSearch: true
+    })
+
     new Cleave('[name="telefono_add"]', {
         // delimiter: '-',
         delimiters: ['(', ')', '-'],
@@ -572,7 +580,7 @@ $(document).ready(function () {
     $('#submit').on('click', function (e) {
         var parent_fieldset = $(this).parents('fieldset');
         var enviar = validadoresCorrectos(validadoresTercerPaso);
-        
+        console.log(enviar)
         if (enviar){
             $(this).attr("type", "submit");
         }
