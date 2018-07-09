@@ -376,7 +376,7 @@
 
                         <div class="form-group" id="grupo-presentacion">
                             <label>Presentación</label>
-                            <select class="form-control" value="" type="select" id="presentacion" name="presentacion" onchange="display_piezas(this.value)" placeholder="Presentación" >
+                            <select class="form-control" value="" type="select" id="presentacion" name="presentacion" onchange="display_piezas(this.value)" placeholder="Presentación" required>
                               <option value="">Seleccione una presentación*</option>
                               {{ for med in presentacion:}}
                                 {{if bien['hr_presentacion']==med:}}
@@ -390,37 +390,40 @@
                         </div>
 
                         {{if bien['hr_presentacion']=="Unidad":}}
-                          <div class="form-group" id="grupo-piezas">
-                                <input type="hidden" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas*" >
-                                <div class="field-error"> <p id="err_numpiezas_her" hidden> </p> </div>
+                          <div class="form-group" id="grupo-piezas" hidden>
+                                <label>Número de piezas*</label>
+                                <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" placeholder="Número de piezas" >
+                                <div class="field-error"> <p id="err_numpiezas_her"> </p> </div>
                           </div>
 
-                          <div class="form-group" id="grupo-contenido">
-                                <input type="hidden" class="form-control"  id="contenido_her" name="contenido_her" placeholder="Contenido">
-                                <div class="field-error"> <p id="error-contenido_her" hidden> </p> </div>
+                          <div class="form-group" id="grupo-contenido" hidden>
+                                <label>Contenido*</label>
+                                <input type="text" class="form-control"  id="contenido_her" name="contenido_her" placeholder="Contenido">
+                                <div class="field-error"> <p id="error-contenido_her"> </p> </div>
                           </div>
 
-                          <div class="form-group" id="grupo-descripcion">
-                                <input type="hidden" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción" >
-                                <div class="field-error"> <p id="error_descripcion" hidden> </p> </div>
+                          <div class="form-group" id="grupo-descripcion" hidden>
+                                <label>Descripción*</label>
+                                <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" placeholder="Descripción" >
+                                <div class="field-error"> <p id="error_descripcion"> </p> </div>
                           </div>
                         {{elif bien['hr_presentacion']=="Conjunto":}}
                           <div class="form-group" id="grupo-piezas">
                                 <label>Número de piezas*</label>
-                                <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" value="{{=bien['hr_numpiezas']}}" placeholder="Número de piezas*" >
-                                <div class="field-error"> <p id="err_numpiezas_her" hidden> </p> </div>
+                                <input type="text" class="form-control"  id="numpiezas_her" name="numpiezas_her" value="{{=bien['hr_numpiezas']}}" placeholder="Número de piezas" >
+                                <div class="field-error"> <p id="err_numpiezas_her"> </p> </div>
                           </div>
 
                           <div class="form-group" id="grupo-contenido">
                                 <label>Contenido*</label>
                                 <input type="text" class="form-control"  id="contenido_her" name="contenido_her" value="{{=bien['hr_contenido']}}" placeholder="Contenido">
-                                <div class="field-error"> <p id="error-contenido_her" hidden> </p> </div>
+                                <div class="field-error"> <p id="error-contenido_her"> </p> </div>
                           </div>
 
                           <div class="form-group" id="grupo-descripcion">
                                 <label>Descripción*</label>
                                 <input type="text" class="form-control" id="descripcion_her" name="descripcion_her" value="{{=bien['hr_descripcion']}}" placeholder="Descripción" >
-                                <div class="field-error"> <p id="error_descripcion" hidden> </p> </div>
+                                <div class="field-error"> <p id="error_descripcion"> </p> </div>
                           </div>
                         {{pass}}
 
@@ -786,19 +789,19 @@
     // Mostrar fecha de calibracion
     function display_piezas(value){
     if ( value == "Conjunto" ){
-      document.getElementById("grupo-piezas").style.display = 'block';
       document.getElementById("numpiezas_her").setAttribute("required", "");
-      document.getElementById("grupo-contenido").style.display = 'block';
       document.getElementById("contenido_her").setAttribute("required", "");
-      document.getElementById("grupo-descripcion").style.display = 'block';
       document.getElementById("descripcion_her").setAttribute("required", "");
+      $('#grupo-piezas').show()
+      $('#grupo-contenido').show()
+      $('#grupo-descripcion').show()
     }else{
-      document.getElementById("grupo-piezas").style.display = 'none';
       document.getElementById("numpiezas_her").removeAttribute("required", "");
-      document.getElementById("grupo-contenido").style.display = 'none';
       document.getElementById("contenido_her").removeAttribute("required", "");
-      document.getElementById("grupo-descripcion").style.display = 'none';
       document.getElementById("descripcion_her").removeAttribute("required", "");
+      $('#grupo-piezas').hide()
+      $('#grupo-contenido').hide()
+      $('#grupo-descripcion').hide()
     }
   }
   // Mostrar unidades

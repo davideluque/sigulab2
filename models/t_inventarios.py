@@ -286,7 +286,7 @@ db.herramienta.hr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombr
 db.define_table(
 	'modificacion_herramienta',
     Field('mhr_nombre','string',label=T('Nombre del Bien Mueble'),requires=IS_NOT_EMPTY()),
-    Field('mhr_num','string',unique=True,requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
+    Field('mhr_num','string',requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{6}')), label = T('Número Bien Nacional')),
     #
     Field('mhr_marca','string',label=T('Marca')),
     Field('mhr_modelo','string',label=T('Modelo')),
@@ -323,6 +323,7 @@ db.modificacion_herramienta.mhr_modifica_ficha.requires = IS_IN_DB(db, db.auth_u
 db.modificacion_herramienta.mhr_espacio_fisico.requires = IS_IN_DB(db, db.espacios_fisicos.id,'%(codigo)s')
 db.modificacion_herramienta.mhr_unidad_de_adscripcion.requires = IS_IN_DB(db, db.dependencias.id,'%(unidad_de_adscripcion)s')
 db.modificacion_herramienta.mhr_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+db.modificacion_herramienta.mhr_num.requires = IS_EMPTY_OR(IS_NOT_IN_DB(db(db.herramienta.hr_num==request.vars.hr_num), 'herramienta.hr_num'))
 
 db.define_table(
     'historial_mantenimiento_bm',
