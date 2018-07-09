@@ -1967,7 +1967,7 @@ def inventarios_desechos():
             inventario = list(db(
                 (db.t_inventario_desechos.espacio_fisico == db.espacios_fisicos.id) &
                 (db.espacios_fisicos.dependencia == db.dependencias.id) &
-                (db.dependencias.unidad_de_adscripcion == dep_id)
+                (db.dependencias.id == dep_id)
                 ).select(
                 db.t_inventario_desechos.categoria,
                 db.t_inventario_desechos.espacio_fisico,
