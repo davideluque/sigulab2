@@ -27,13 +27,13 @@
 {{end}}
 
 {{block center}}
-    <h3 class="text-center">DETALLES DE MODIFICACIÓN</h3>
-    <h3 class="dep-titulo text-center">{{=bien['msb_nombre'].upper()}}</h3>
-    <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['msb_desc'].upper()}}</h4>
+    <h3 class="dep-titulo text-center">{{=bien['mhr_nombre']}}</h3>
+    <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['mhr_motivo'].upper()}}</h4>
 {{pass}}
 
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
 
 <!-- Inicio Boton Modificar BM -->
 <div class="container" id="containerAgregar">
@@ -48,20 +48,20 @@
                         <!--Boton para rechazar el bien mueble-->
                         <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
                     </form>
-                </div>
+                  </div>
             </div>
         </div>
     </div>
 <!-- Fin Boton Agregar Sustancia -->
-
+<br>
 <div class="wrapper">
 		
 	<div class="tab-wrapper">
 		<ul class="tabs">
-            <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
-            <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
-            <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
-        </ul>
+				<li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
+                <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
+            </ul>
 	</div>
 
 	<div class="content-wrapper">
@@ -70,36 +70,36 @@
                 {{ for title in caracteristicas_list: }}
                     {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
                         <div class="grid-item">
-                            {{=title}}
+                            {{=title.upper()}}
                         </div>
                         <div class="grid-item">
                             {{= caracteristicas_dict.get(title)}}
                         </div>
                     {{pass}}
                 {{ pass }}
-                {{if bien['msb_ancho'] != None or bien['msb_largo'] != None or bien['msb_alto'] != None or bien['msb_diametro'] != None:}}
+                {{if bien['mhr_ancho'] != None or bien['mhr_largo'] != None or bien['mhr_alto'] != None or bien['mhr_diametro'] != None:}}
                     <div class="grid-item">
-                        {{ if bien['msb_unidad'] == 'm':}}
+                        {{ if bien['mhr_unidad'] == 'm':}}
                             Dimensiones (metros):
                         {{else:}}
                             Dimensiones (centímetros):
                         {{pass}}
                     </div>
                     <div class="grid-item">                        
-                        {{if bien['msb_ancho'] != None:}}
-                            Ancho: {{=bien['msb_ancho']}}
+                        {{if bien['mhr_ancho'] != None:}}
+                            Ancho: {{=bien['mhr_ancho']}}
                             <br>
                         {{pass}}
-                        {{if bien['msb_largo'] != None:}}
-                            Largo: {{=bien['msb_largo']}}
+                        {{if bien['mhr_largo'] != None:}}
+                            Largo: {{=bien['mhr_largo']}}
                             <br>
                         {{pass}}
-                        {{if bien['msb_alto'] != None:}}
-                            Alto: {{=bien['msb_alto']}}
+                        {{if bien['mhr_alto'] != None:}}
+                            Alto: {{=bien['mhr_alto']}}
                             <br>
                         {{pass}}
-                        {{if bien['msb_diametro'] != None:}}
-                            Diámetro: {{=bien['msb_diametro']}}
+                        {{if bien['mhr_diametro'] != None:}}
+                            Diámetro: {{=bien['mhr_diametro']}}
                             <br>
                         {{pass}}
                     </div>
@@ -112,26 +112,25 @@
                     Espacio físico:
                 </div>
                 <div class="grid-item">
-                    {{=db(db.espacios_fisicos.id == bien['msb_espacio']).select().first().codigo}}
+                    {{=db(db.espacios_fisicos.id == bien['mhr_espacio_fisico']).select().first().codigo}}
                 </div>
                 <div class="grid-item">
                     Unidad de Adscripción:
                 </div>
                 <div class="grid-item">
-                    {{=bien_original['sb_unidad_de_adscripcion']}}
+                    {{=bien['mhr_unidad_de_adscripcion']}}
                 </div>
                 <div class="grid-item">
                     Dependencia:
                 </div>
                 <div class=grid-item>
-                    {{=db(db.dependencias.id == bien_original['sb_depedencia']).select().first().nombre}}
+                    {{=db(db.dependencias.id == bien['mhr_depedencia']).select().first().nombre}}
                 </div>
             </div>
         </div>
         <div id="tab-3"class="tab-content">En desarrollo</div>
 	</div>
 </div>
-
 <script type="text/javascript">
     $('.tab-link').click( function() {
         
@@ -141,4 +140,5 @@
         
         $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
     });
+      
 </script>

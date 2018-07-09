@@ -7,8 +7,6 @@
         <div class="row">
           <div id="buttons">
             <!-- Filtrado -->
-            <button class="dt-button btn boton-sigulab" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-filter"></i></button>
-            <!-- Filtrado -->    
           </div>
             <br>
         
@@ -24,7 +22,6 @@
                       <th class="camposTabla linksNombres">Capacidad</th>
                       <th class="camposTabla linksNombres">Unidad</th>
                       <th class="camposTabla linksNombres">Cantidad</th>
-                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                         <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
                 </thead>
@@ -42,7 +39,7 @@
                         <td class="camposTabla">{{=bm['sb_capacidad']}}</td>
                         <td class="camposTabla">{{=bm['sb_unidad']}}</td>
                         <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
-                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>
+                        <!--<td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>-->
                     </tr>
                   {{pass}}           
                 </tbody>
@@ -57,7 +54,6 @@
                       <th class="camposTabla linksNombres">Capacidad</th>
                       <th class="camposTabla linksNombres">Unidad</th>
                       <th class="camposTabla linksNombres">Cantidad</th>
-                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                       <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
                 </tfoot>

@@ -21,121 +21,19 @@
     }
      </style>
 
-<style type="text/css">
-
-    .wrapper {
-    max-width: 1000px;
-    margin: auto;
-    margin-top: 0;
-    }
-
-    .tab-wrapper {
-    text-align: center;
-    display: block;
-    margin: auto;
-    max-width: 400px;
-    }
-
-    .tabs {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    }
-
-    .tab-link {
-    margin: 0 1%;
-    list-style: none;
-    padding: 10px 20px;
-    color: #aaa;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all ease 0.5s;
-    border-bottom: solid 3px rgba(255, 255, 255, 0);
-    letter-spacing: 1px;
-    }
-
-    .tab-link:hover {
-    color: #999;
-    border-color: #999;
-    }
-
-    .tab-link.active {
-    color: #333;
-    border-color: #333;
-    }
-
-    .tab-link:nth-of-type(1).active {
-    color: #1790D2;
-    border-color: #1790D2
-    }
-
-    .tab-link:nth-of-type(2).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(4).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(5).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(6).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(7).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(3).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .content-wrapper {
-    padding: 20px 80px;
-    }
-
-    .tab-content {
-    display: none;
-    text-align: left;
-    color:  #464646;
-    font-weight: 200;
-    font-size: 20px;
-    opacity: 0;
-    transform: translateY(15px);
-    animation: fadeIn 0.5s ease 1 forwards;
-    }
-
-    .tab-content.active {
-    display: block;
-    }
-
-    @keyframes fadeIn {
-    100% {
-        opacity: 1;
-        transform: none;
-    }
-}
-</style>
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
-<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
 {{end}}
 
 {{block center}}
     <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa'] != None: }}
+    {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
+    {{ if request.vars.delete: }}
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['bm_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
     <!-- Flash message -->
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
@@ -147,27 +45,37 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
+                {{ if request.vars.delete: }}
+                <form method="post">
+                    <!-- Boton para aceptar mod de bien mueble-->
+                    <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                    <!--Boton para rechazar el bien mueble-->
+                    <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                </form>
+                {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                 <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                {{ pass }}
             </div>
         </div>
     </div>
 </div>
+<br>
 <!-- Fin Boton Agregar Sustancia -->
 
 <div class="wrapper">
 		
         <div class="tab-wrapper">
             <ul class="tabs">
-                    <li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
-                    <li class="tab-link" data-tab="2">SUDEBID</li>
+                    <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                    <li class="tab-link" data-tab="2"><br>SUDEBID</li>
                     <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
-                    <li class="tab-link" data-tab="4">UBICACIÓN</li>
+                    <li class="tab-link" data-tab="4"><br>UBICACIÓN</li>
                     <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
                     <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
-                    <li class="tab-link" data-tab="7">PRÉSTAMOS</li>
+                    <li class="tab-link" data-tab="7"><br>PRÉSTAMOS</li>
                 </ul>
         </div>
     
@@ -195,6 +103,7 @@
                             {{ else: }}
                                 {{= caracteristicas_dict.get(title)}}
                             {{pass}}
+                            
                         </div>
                     {{ pass }}
                     {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
@@ -310,6 +219,11 @@
         <div class="modal-body addBody">
             <br>
             <form method="post" style="text-align: center;">
+                <div class="form-group">
+                    <label>Descripción de eliminación*</label>
+                    <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                    <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                </div>
                 <h4>¿Desea solicitar la eliminación de {{=bien['bm_nombre']}}?</h4>
                 <br>
                 <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
@@ -413,6 +327,7 @@
                       <span class="step activePass">1</span>
                       <span class="step">2</span>
                       <span class="step">3</span>
+                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -450,6 +365,28 @@
                         </div>
                         {{pass}}
 
+                    
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+                <!-- Segundo paso Parte 3-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
                         {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
                                 <label>Modelo*</label>
@@ -467,25 +404,6 @@
                           </div>
                         {{pass}}
  
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
-                </fieldset>
-                <!-- Fin Primer Paso -->
-
-                <!-- Segundo paso Parte 3-->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
-                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> 
-                        <span class="step">1</span>
-                        <span class="step activePass">2</span>
-                        <span class="step">3</span>
-                      </div>
-                      <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Características del Bien</h4>                
-                        <label>Campos marcados con * son obligatorios.</label>
                           
                           <div class="form-group">
                                 <label>Material*</label>
@@ -536,89 +454,7 @@
                             <div class="field-error"> <p id="error-color"> </p> </div>
                         </div>
 
-                          <label>Dimensiones</label>
-
-                          <div class="form-group">
-                                <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                                <option value="">Selecione una unidad</option>
-                                {{ for med in unidad_med:}}
-                                    {{if bien['bm_unidad']==med:}}
-                                        <option value="{{=med}}" selected="selected" >{{=med}}</option>
-                                    {{else:}}
-                                        <option value="{{=med}}">{{=med}}</option>
-                                    {{pass}}
-                                {{pass}}
-                                </select>
-                            <div class="field-error"> <p id="error-unidad" > </p> </div>
-                          </div>
-
-                          <!-- FALTA ARREGLAR ESTO  -->
-                           {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
-                              <div class="form-group" id="grupo-ancho1" hidden>
-                                    <label>Ancho</label>
-                                    <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                <font color="red"><div id="err_ancho" hidden></div></font>
-                              </div>
-
-                              <div class="form-group" id="grupo-largo1" hidden>
-                                    <label>Largo</label>
-                                    <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                <font color="red"><div id="err_largo" hidden></div></font>
-                              </div>
-
-                              <div class="form-group" id="grupo-alto1" hidden>
-                                    <label>Altura</label>
-                                    <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                <font color="red"><div id="err_alto" hidden></div></font>
-                              </div>
-
-                              <div class="form-group" id="grupo-diametro1" hidden>
-                                    <label>Diámetro</label>
-                                    <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                <font color="red"><div id="err_diametro" hidden></div></font>
-                              </div>
-
-                            {{elif bien['bm_unidad']!=None or bien['bm_unidad']!="":}}
-                                <div class="form-group">
-                                {{if bien['bm_ancho']==None:}}
-                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                {{else:}}
-                                    <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                {{pass}}
-                                <font color="red"><div id="err_ancho" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_largo']==None:}}
-                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                {{pass}}
-                                <font color="red"><div id="err_largo" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_alto']==None:}}
-                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                {{pass}}
-                                <font color="red"><div id="err_alto" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_diametro']==None:}}
-                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                {{pass}}
-                                <font color="red"><div id="err_diametro" hidden></div></font>
-                              </div>
-                            {{pass}}
-                        </div>
+                    </div> 
                       </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
@@ -634,12 +470,96 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-                        
+                            <label>Dimensiones</label>
+
+                        <div class="form-group">
+                              <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                              <option value="">Selecione una unidad</option>
+                              {{ for med in unidad_med:}}
+                                  {{if bien['bm_unidad']==med:}}
+                                      <option value="{{=med}}" selected="selected" >{{=med}}</option>
+                                  {{else:}}
+                                      <option value="{{=med}}">{{=med}}</option>
+                                  {{pass}}
+                              {{pass}}
+                              </select>
+                          <div class="field-error"> <p id="error-unidad" > </p> </div>
+                        </div>
+
+                        <!-- FALTA ARREGLAR ESTO  -->
+                         {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
+                            <div class="form-group" id="grupo-ancho1" hidden>
+                                  <label>Ancho</label>
+                                  <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              <font color="red"><div id="err_ancho" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-largo1" hidden>
+                                  <label>Largo</label>
+                                  <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              <font color="red"><div id="err_largo" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-alto1" hidden>
+                                  <label>Altura</label>
+                                  <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              <font color="red"><div id="err_alto" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-diametro1" hidden>
+                                  <label>Diámetro</label>
+                                  <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              <font color="red"><div id="err_diametro" hidden></div></font>
+                            </div>
+
+                          {{elif bien['bm_unidad']!=None or bien['bm_unidad']!="":}}
+                              <div class="form-group">
+                              {{if bien['bm_ancho']==None:}}
+                                  <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              {{else:}}
+                                  <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              {{pass}}
+                              <font color="red"><div id="err_ancho" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_largo']==None:}}
+                                  <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              {{pass}}
+                              <font color="red"><div id="err_largo" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_alto']==None:}}
+                                  <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              {{pass}}
+                              <font color="red"><div id="err_alto" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_diametro']==None:}}
+                                  <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              {{pass}}
+                              <font color="red"><div id="err_diametro" hidden></div></font>
+                            </div>
+                          {{pass}}
+                    
+
                         <div class="form-group">
                             <label>Seleccione un tipo de movilidad*</label>
                             <select class="form-control" type="select" id="movilidad" value="{{=bien['bm_movilidad']}}" name="movilidad" placeholder="Movilidad" required>
@@ -655,7 +575,27 @@
                             <div class="field-error"> <p id="error-movilidad"> </p> </div>
                         </div>
 
-                        <label>Tipo de Uso</label>
+                    </div>
+                </div> 
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
+                  </fieldset>
+                  <!-- Fin segundo paso-->
+
+                  <!--Segundo Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.<br/>Tipo de Uso</label>
                         <font color="red"><div id="err_tipo_uso" hidden></div></font>
                         <div class="checkbox-group">
                         {{i=1}}
@@ -733,7 +673,7 @@
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
                         <div class="form-group">
-                                <label>Observacion</label>
+                                <label>Observaciones</label>
                                 {{if bien['bm_descripcion']!="":}}
                                     <input type="text" class="form-control" style="text-transform:uppercase" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
                                 {{else:}}
@@ -758,7 +698,8 @@
                       <div class="col-sm-1 col1Body">
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
                       </div>
   
                       <!-- Aqui va la informacion -->

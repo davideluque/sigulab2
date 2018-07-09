@@ -251,6 +251,8 @@ table.dataTable tfoot td.dt-head-nowrap {
 table.dataTable tbody th.dt-body-left,
 table.dataTable tbody td.dt-body-left {
   text-align: left;
+  padding-left: 5ex !important;
+
 }
 table.dataTable tbody th.dt-body-center,
 table.dataTable tbody td.dt-body-center {
