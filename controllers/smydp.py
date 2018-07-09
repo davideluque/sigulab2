@@ -1233,7 +1233,7 @@ def inventarios_desechos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR') or auth.has_membership("PERSONAL INTERNO") ):
+    if(auth.has_membership('GESTOR DE SMyDP') or  auth.has_membership('WEBMASTER') or auth.has_membership('DIRECTOR') or auth.has_membership('ASISTENTE DEL DIRECTOR')):
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1709,7 +1709,7 @@ def inventarios_desechos():
             mostrar_campo_dependencia = True
             espacio_visitado = False
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("PERSONAL INTERNO") :
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
