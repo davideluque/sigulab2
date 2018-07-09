@@ -106,7 +106,15 @@
 					<td class="camposTabla">CONSUMIBLES</td>
 					<td class="camposTabla">{{=material['msb_desc'].upper()}}</td>
 				</tr>
-			  {{pass}}               
+			  {{pass}}       
+			  {{for herramienta in inventario[3]:}}
+			  <tr>
+				  <td class="camposTabla"> <a href="{{=URL('detalles_mod_herramientas', vars=dict(espacio=herramienta['mhr_espacio_fisico'], nombreHer = herramienta['mhr_nombre'], ubicacion = herramienta['mhr_ubicacion']))}}">{{=herramienta['mhr_nombre'].upper()}}</a></td>
+				  <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+				  <td class="camposTabla">HERRAMIENTA</td>
+				  <td class="camposTabla">{{=herramienta['mhr_motivo'].upper()}}</td>
+			  </tr>
+			{{pass}}           
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
@@ -162,7 +170,15 @@
 					<td class="camposTabla">CONSUMIBLES</td>
 					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
 				</tr>
-			  {{pass}}               
+			  {{pass}}  
+			  {{for herramienta in inventario_eliminar[3]:}}
+			  <tr>
+				  <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=herramienta['hr_espacio_fisico'], nombreHer = herramienta['hr_nombre'], ubicacion = herramienta['hr_ubicacion'],delete=True))}}">{{=herramienta['hr_nombre'].upper()}}</a></td>
+				  <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+				  <td class="camposTabla">HERRAMIENTA</td>
+				  <td class="camposTabla">{{=herramienta['hr_desc_eliminar'].upper()}}</td>
+			  </tr>
+			{{pass}}              
 			</tbody>
 	
 			<tfoot id="collapseFiltros">

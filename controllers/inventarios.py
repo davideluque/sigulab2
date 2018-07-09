@@ -854,6 +854,112 @@ def index():
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_mod_herramientas():
+    #Recuperamos el espacio
+    espacio = request.vars['espacio']
+    #El nombre de la herramienta
+    name = request.vars['nombreHer']
+    #La ubicacion interna
+    ubicacion = request.vars['ubicacion']
+
+    # El usuario que está editando
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+
+    # Busco la herramienta
+    bien = db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).select()[0]
+
+    #Inicializo variables
+    material_pred = []
+    unidad_med = []
+    presentacion=[]
+
+    # Si se elimina
+    if request.vars.si:
+        db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).update(
+            hr_nombre = bien['mhr_nombre'],
+            hr_num= bien['mhr_num'],   
+            hr_marca = bien['mhr_marca'], 
+            hr_modelo = bien['mhr_modelo'], 
+            hr_serial = bien['mhr_serial'], 
+            hr_presentacion = bien['mhr_presentacion'],
+            hr_numpiezas= bien['mhr_numpiezas'],
+            hr_contenido = bien['mhr_contenido'],
+            hr_descripcion = bien['mhr_descripcion'], 
+            hr_material = bien['mhr_material'], 
+            hr_unidad = bien['mhr_unidad'], 
+            hr_ancho = bien['mhr_ancho'], 
+            hr_largo = bien['mhr_largo'],
+            hr_alto = bien['mhr_alto'], 
+            hr_diametro = bien['mhr_diametro'], 
+            hr_espacio_fisico = bien['mhr_espacio_fisico'],
+            hr_ubicacion = bien['mhr_ubicacion'],
+            hr_observacion= bien['mhr_observacion'],
+            hr_unidad_de_adscripcion = bien['mhr_unidad_de_adscripcion'],
+            hr_depedencia = bien['mhr_depedencia']
+        )
+        db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
+        session.flash = "Solicitud de modificación aceptada"
+        redirect(URL('validaciones'))
+    # Si no se modifica
+    if request.vars.no:
+        db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
+        session.flash = "Solicitud de modificación rechazada"
+        redirect(URL('validaciones'))
+
+    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+    unidad_med = ['cm','m']
+    presentacion=["Unidad", "Conjunto"]
+    if bien['mhr_presentacion'] == "Unidad":
+        caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
+        'Material predominante:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'Número de Bien Nacional:': bien['mhr_num'],
+            'Marca:': bien['mhr_marca'],
+            'Modelo:': bien['mhr_modelo'],
+            'Serial:': bien['mhr_serial'],
+            'Presentación:': bien['mhr_presentacion'],
+            'Material predominante:': bien['mhr_material'],
+            'Ubicación interna:' : bien['mhr_ubicacion']
+        }
+    else:
+        caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
+        'Número de Piezas:', 'Contenido:', 'Descripción:', 'Material predominante:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'Número de Bien Nacional::': bien['mhr_num'],
+            'Marca:': bien['mhr_marca'],
+            'Modelo:': bien['mhr_modelo'],
+            'Serial:': bien['mhr_serial'],
+            'Presentación:': bien['mhr_presentacion'],
+            'Número de Piezas:': bien['mhr_numpiezas'],
+            'Contenido:': bien['mhr_contenido'],
+            'Descripción:': bien['mhr_descripcion'],
+            'Material predominante:': bien['mhr_material'],
+            'Ubicación interna:' : bien['mhr_ubicacion']
+        }
+    
+    if not caracteristicas_dict['Marca:']:
+        del caracteristicas_dict['Marca:']
+        caracteristicas_list.remove('Marca:')
+
+    if not caracteristicas_dict['Modelo:']:
+        del caracteristicas_dict['Modelo:']
+        caracteristicas_list.remove('Modelo:')
+    
+    if not caracteristicas_dict['Serial:']:
+        del caracteristicas_dict['Serial:']
+        caracteristicas_list.remove('Serial:')
+
+    return dict(bien = bien,
+                material_pred = material_pred,
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict,
+                unidad_med = unidad_med,
+                presentacion = presentacion
+                )
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_mod_mat():
     #Recuperamos el espacio
     espacio = request.vars['espacio']
@@ -1046,7 +1152,6 @@ def detalles():
     # Si no se elimina
     if request.vars.no:
         db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 2)
-        db(db.modificacion_bien_mueble.mbn_num == bm).delete()
         session.flash = "Solicitud de eliminación rechazada"
         redirect(URL('validaciones'))
 
@@ -1198,7 +1303,6 @@ def detalles_mat():
     # Si no se elimina
     if request.vars.no:
         db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
-        db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
         session.flash = "Solicitud de eliminación rechazada"
         redirect(URL('validaciones'))
     
@@ -1446,6 +1550,19 @@ def detalles_herramientas():
     unidad_med = []
     presentacion=[]
 
+    # Si se elimina
+    if request.vars.si:
+        db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).delete()
+        db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
+        session.flash = "Solicitud de eliminación aceptada"
+        redirect(URL('validaciones'))
+    # Si no se elimina
+    if request.vars.no:
+        db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 2)
+        db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
+        session.flash = "Solicitud de eliminación rechazada"
+        redirect(URL('validaciones'))
+
     #Si se edita
     if request.vars.nombre_her:
         __agregar_herramienta_modificar(
@@ -1458,7 +1575,7 @@ def detalles_herramientas():
 
     if request.vars.eliminacion:
         if bien['hr_eliminar'] == 2: 
-            db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 0)
+            db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 0, hr_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
             response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
@@ -1523,7 +1640,6 @@ def detalles_herramientas():
                 unidad_med = unidad_med,
                 presentacion = presentacion
                 )
-
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
@@ -2298,7 +2414,8 @@ def __get_inventario_dep_validaciones(dep_id, tipo_validacion=None):
     inventario_bm = __sumar_inventarios_bn_validacion(espacios, "_", tipo_validacion)
     inventario_materiales = __sumar_inventarios_bn_validacion(espacios, "_materiales_", tipo_validacion)
     inventario_consumibles = __sumar_inventarios_bn_validacion(espacios, "_consumibles_", tipo_validacion)
-    return [inventario_bm, inventario_materiales, inventario_consumibles]
+    inventario_herramientas = __sumar_inventarios_bn_validacion(espacios, "_herramientas_", tipo_validacion)
+    return [inventario_bm, inventario_materiales, inventario_consumibles, inventario_herramientas]
 
 def __sumar_inventarios_bn_validacion(espacios, tipo_material, tipo_validacion):
 
@@ -2313,15 +2430,29 @@ def __sumar_inventarios_bn_validacion(espacios, tipo_material, tipo_validacion):
                     inventario_total += __get_inventario_espacio_bn_eliminar(element.bm_num)
                 elif ( tipo_material == "_materiales_" or tipo_material == "_consumibles_"):
                     inventario_total += __get_inventario_espacio_materialesandconsumibles_eliminar(element.sb_nombre, element.sb_espacio)
+                elif ( tipo_material == "_herramientas_" ):
+                    inventario_total += __get_inventario_espacio_herramientas_eliminar(element.hr_nombre, element.hr_espacio_fisico, element.hr_ubicacion)
+
         else:
             for element in inventario_temp:
                 if ( tipo_material == "_"):
                     inventario_total += __get_inventario_espacio_bn_validacion(element.bm_num)
                 elif ( tipo_material == "_materiales_" or tipo_material == "_consumibles_"):
                     inventario_total += __get_inventario_espacio_materialesandconsumibles_validacion(element.sb_nombre, element.sb_espacio)
+                elif ( tipo_material == "_herramientas_" ):
+                    inventario_total += __get_inventario_espacio_herramientas_validacion(element.hr_nombre, element.hr_espacio_fisico, element.hr_ubicacion)
 
         return inventario_total
 
+## Dada una herramienta la ubica en la tabla de modificaciones
+def __get_inventario_espacio_herramientas_validacion(name, espacio, ubicacion):
+    return db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).select()
+## Dada una herramienta revisa si se solicito su eliminacion
+def __get_inventario_espacio_herramientas_eliminar(name, espacio, ubicacion):
+    herramienta = db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).select()[0]
+    if ( herramienta['hr_eliminar'] == 0 ):
+        return db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).select()
+    return []
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
