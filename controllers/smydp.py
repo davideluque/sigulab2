@@ -1088,7 +1088,7 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
                 descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria.upper()
+                categoria = categoria
             )
 
             return T("La información del contenedor se ha modificado exitosamente.")
@@ -1110,7 +1110,7 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
                 descripcion = descripcion.upper(), 
                 composicion = composicion, 
                 espacio_fisico = espacio_fisico, 
-                categoria = categoria.upper()
+                categoria = categoria
             )
 
             return T("Contenedor creado exitosamente.")
@@ -2056,7 +2056,7 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
 
         row.update_record(
-            categoria = envase.categoria.upper(),
+            categoria = envase.categoria,
             composicion = envase.composicion,
             envase = envase.id,
             concentracion = concentracion,
@@ -2091,7 +2091,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         if int(cantidad) <= int(envase.capacidad): 
 
             #Agrega el desecho al inventario
-            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria.upper(),
+            nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
                                             unidad_medida = envase.unidad_medida,
                                             composicion = envase.composicion,
