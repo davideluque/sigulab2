@@ -10,22 +10,30 @@
   {{pass}}
 
   <div class="container">
-        <div class="col-lg-offset-3 col-lg-6">
-          <div class="row">
-            <div class="col-lg-12 text-center">
-              <h3 class="inicio-titulo" style="margin-top:-90px">DETALLE DEL DESECHO</h3>
-              <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
-            </div>
+      <div  class="row pull-left boton-retroceder"></div>
+          <div class="row">   
+              <div style="display: flex; flex-flow: row; justify-content: space-around; align-items: center;" class="col-lg-12 text-center">            
+              <div class="col-xs-2"></div>                               
+                <div class="col-xs-8">
+                  <h3 class="inicio-titulo" style="margin-top:-80px">DETALLE DEL DESECHO</h3>
+                  <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+                  
+                </div>                  
+                <div class="col-xs-2">
+                    {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}                  
+                    <button type="button" id="botonEditar" class="btn btn-primary agregar" title="Editar el desecho peligroso" style="margin-top:-140px" data-toggle="modal" data-target="#editarDesecho">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    {{pass}}
+                </div>
           </div>
-          <div class="row">
+          </div>
+        <div class="row">
             <div id="columnBotonAgregar">
-              <div class="col-lg-12 text-right">
-                <button type="button" id="botonEditarDesecho" class="btn btn-primary" data-toggle="modal" data-target="#editarDesecho">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </div>
+                <div class="col-lg-12 text-right">
+                </div>
             </div>
-          </div>
+        </div>
           <div class="row contenedor-filas-detalle-envase">
             <div class="row fila-detalle-envase">
               <div class="col-sm-5 ">
@@ -99,29 +107,6 @@
                 <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento'].upper()}}</span>
               </div>
             </div>
-
-            <div class="row fila-detalle-envase">
-              <div class="col-sm-5 ">
-                <label for="envase">Identificación del envase donde se depositó el desecho:</label>
-              </div>
-              <div class="col-sm-6">
-                {{envase_seleccionado = ''}} {{for envase in envases_totales:}} {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
-                {{envase_seleccionado = envase}} {{pass}} {{pass}}
-                <span>{{=envase_seleccionado['identificacion']}}</span>
-              </div>
-            </div>
-          
-            <div class="row fila-detalle-envase">
-              <div class="col-sm-5 ">
-                <label for="concentracion">Concentración del desecho generado*:</label>
-              </div>
-              <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['concentracion']}}</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
     </div>
 
 
@@ -290,7 +275,7 @@
                           </div>
                           </div>
                     <div class="boton-modal">      
-                      <button type="submit" form="formularioEdicionContenedor" id="submit" class="btn btn-primary">
+                      <button type="submit" form="formularioEdicionContenedor" id="submit" class="btn btn-primary" style="border-radius: 100% !important; min-width: 0px;">
                         <i class="fa fa-floppy-o"></i>
                       </button>
                     </div>
@@ -356,7 +341,7 @@
               <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos']['unidad_medida']['f_abreviatura']}}</td>
               <td class="camposTabla">
                 <a href={{=URL( '..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio=request.vars.es_espacio, view=desecho[ 't_inventario_desechos'][ 'id']))}}>
-                  <button style="border-radius: 50%;" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+                  <button style="border-radius: 50%;" title="Detalle del desecho peligroso" class="btn btn-primary"><i class="fa fa-eye"></i></button>
                 </a>
               </td>
             </tr>
@@ -483,7 +468,7 @@
                           </div>
 
                           <div class="boton-modal">
-                              <button type="submit" form="formularioCarga" id="submit" class="btn btn-primary">
+                              <button type="submit" form="formularioCarga" style="border-radius: 100% !important;" id="submit" class="btn btn-primary">
                                   <i class="fa fa-plus-circle"></i>
                               </button>
                           </div>

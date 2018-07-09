@@ -129,8 +129,8 @@
 			{{pass}}
 		</div>
 		<div class="col-xs-2"> 
-			{{if (request.vars.es_espacio == "True") & (not ('view' in request.vars)):}}
-			<button type="button" id="botonAgregar" class="btn botonesListado buttons-html5 agregar" data-toggle="modal" data-target="#adddesecho">
+			{{if (request.vars.es_espacio == "True") & (not ('view' in request.vars)) & (not(auth.has_membership('PERSONAL INTERNO'))) & (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}
+			<button type="button" id="botonAgregar" class="btn botonesListado buttons-html5 agregar" title="Agregar un nuevo desecho peligroso" data-toggle="modal" data-target="#adddesecho">
 				<li class="fa fa-plus"></li>
 			  </button>
 			{{pass}}
@@ -314,7 +314,10 @@
 	var table = $('#datatable').DataTable({
 		"dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
 		language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+			paginate: {
+				"previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+				"next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+			}
 		},
 		initComplete: function () {
 			var api = this.api();

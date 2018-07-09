@@ -66,9 +66,11 @@
     </div>
 
     <div class="col-xs-2">
-      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5 agregar" data-toggle="modal" data-target="#agregarEntrada">
-        <i class="fa fa-plus-circle"></i>
+      {{if (not(auth.has_membership('PERSONAL INTERNO'))) & (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}
+      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5 agregar" title="Agregar un nuevo registro a la bitácora"data-toggle="modal" data-target="#agregarEntrada">
+        <i class="fa fa-plus"></i>
       </button>
+      {{pass}}
     </div>
 
     <div class="col-lg-12">
@@ -161,7 +163,7 @@
                             </div>
                         </div>
                         <div class="col-sm-10" id="col11Header">
-                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Añadir registro a la bitácora
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white; padding-top: 10px;">Añadir registro a la bitácora
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </h4>
                         </div>
@@ -231,7 +233,7 @@
                                                 <p id="error-cantidad-retirada"> </p>
                                               </div>
                                             </div>
-                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary boton-modal pull-right">
+                                        <button type="submit" form="formularioCarga" style="border-radius: 100% !important; min-width: 0px;" id="submit" class="btn btn-submit btn-primary boton-modal pull-right">
                                           <li class="fa fa-plus-circle"/>
                                         </button>
                                       </div>
@@ -480,7 +482,10 @@
   var table = $('#datatable').DataTable({
     "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
     language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+      paginate: {
+        "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+        "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+      }
     },
     initComplete: function () {
       var api = this.api();
@@ -495,11 +500,16 @@
       $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
       $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
       $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-      $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-      $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+      // $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+      // $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
       $('#buttons').style.textAlign = "right";
     }
 
+  });
+
+  $(document).ready(function () {
+    $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+    $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
   });
   var w2p_ajax_confirm_message =
     "{{=T('')}}";

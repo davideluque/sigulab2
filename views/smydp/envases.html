@@ -49,20 +49,20 @@
         </div>
         <div class="row">
             <div style="display: flex; flex-flow: row; justify-content: space-around; align-items: center;" class="col-lg-12 text-center">
-                <div style="padding-top: 20px; padding-bottom: 10px; margin: auto 0px;" class="col-lg-1">
-                    <a class="boton" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">
-                        <button type="button"class="btn btn-primary">
+                <div class="col-xs-2 boton-retorno2">
+                    <a class="boton boton-retorno2" href="{{=URL('..', 'sigulab2', 'smydp/envases')}}">
                             <i class="fa fa-arrow-left"></i>
-                        </button>
                     </a>
                 </div>
-                <div class="col-lg-10">
+                <div class="col-xs-8">
                     <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
                 </div>
-                <div style="padding-top: 20px; padding-bottom: 10px; margin: auto 0px;" class="col-lg-1">
-                    <button type="button" id="botonEditar" class="btn btn-primary" data-toggle="modal" data-target="#editContenedor">
+                <div class="col-xs-2">
+                    {{if (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}                    
+                    <button type="button" id="botonEditar" class="btn btn-primary agregar" data-toggle="modal" data-target="#editContenedor">
                         <i class="fa fa-pencil"></i>
                     </button>
+                    {{pass}}
                 </div>
             </div>
             <div class="col-lg-12">
@@ -192,7 +192,7 @@
                                         <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                                         <div class="col-sm-1 col1Body"> </div>
                                         <!-- Aqui va la informacion -->
-                                        <div class="col-sm-11 col11Body">
+                                        <div class="col-sm-11 col11Body2">
                                             <h4 class="titulosForm">Datos de ingreso</h4>
                                             <label>Campos marcados con * son obligatorios.</label>
                                             
@@ -323,17 +323,14 @@
                                                 <div class="field-error">
                                                     <p id="error-categoria"> </p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row modal-envases-footer">
-                                        <div class="col-sm-6 text-center">
+                                                </div>
+                                    <div class="row modal-envases-footer pull-right">
                                             <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary"><li class="fa fa-floppy-o"/></button>
-                                        </div>
-                                        <div class="col-sm-6 text-center">
                                             <button class="btn btn-danger" type="submit" form="formularioCarga" onclick="return dialogoAdvertencia();"><i class="fa fa-trash-o"></i></button>
-                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>                                    
                                 </fieldset>
                             </form>
                         </div>
@@ -367,10 +364,12 @@
                 <img class="iconos" src="{{=URL('static', 'images/listadocontenedores.png')}}">
             </div>
             <div class="col-lg-2 text-center">
+                {{if (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}                
                  <!-- Agregar contenedor -->
-                <button type="button" id="botonAgregar" class="btn btn-default buttons-html5 agregar" data-toggle="modal" data-target="#addContenedor">
-                    <li class="fa fa-plus-circle" />
+                <button type="button" id="botonAgregar" title="Agregar un nuevo contenedor" class="btn btn-default buttons-html5 agregar" data-toggle="modal" data-target="#addContenedor">
+                    <li class="fa fa-plus" />
                 </button>
+                {{pass}}
             </div>                
         </div>
         
@@ -447,7 +446,7 @@
                             </div>
                         </div>
                         <div class="col-sm-10" id="col11Header">
-                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white">Nuevo contenedor
+                            <h4 class="modal-title titulo-modal-categoria" id="nuevaCategoria" style="color: white; margin-top:10px;">Nuevo contenedor
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </h4>
                         </div>
@@ -834,10 +833,14 @@
 </script>
 
 <script language="javascript">
+
     var table = $('#datatable').DataTable({
             "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
             language: {
-                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+                paginate: {
+                    "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+                    "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+                }
             },
             initComplete: function () {
                 var api = this.api();
@@ -852,8 +855,8 @@
                 $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
                 $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
                 $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-                $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-                $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+                // $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+                // $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
                 $('#buttons').style.textAlign = "right";
             }
 
