@@ -298,25 +298,46 @@
                           <font color="red"><div id="err_diametro_her" hidden></div></font>
                         </div>
 
-                        <label>Ubicación interna</label>
-                        <div class="form-group">
-                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
-                                <font color="red"><div id="err_ubicacion_int" hidden></div></font>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Observaciones</label>
-                            <input type="text" class="form-control" id="descripcion_herramientas" name="descripcion_herramientas" placeholder="Observaciones">
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
-
                         </div>
                       </div>
 
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </fieldset>
                   <!-- Fin tercer paso-->
+
+                  <!--Tercer Paso parte 2-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step">1</span>
+                      <span class="step">2</span>
+                      <span class="step activePass">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características de la herramienta</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+                      <label>Ubicación interna*</label>
+                      <div class="form-group">
+                              <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
+                              <font color="red"><div id="err_ubicacion_int" hidden></div></font>
+                      </div>
+
+                      <div class="form-group">
+                          <label>Observaciones</label>
+                          <input type="text" class="form-control" id="descripcion_herramientas" name="descripcion_herramientas" placeholder="Observaciones">
+                          <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                      </div>
+
+                      </div>
+                    </div>
+
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                </fieldset>
 
                 <!-- Fin Cuarto Paso -->
               </form>
