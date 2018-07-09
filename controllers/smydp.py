@@ -1075,7 +1075,7 @@ def envases():
 def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, tipo_boca, descripcion, composicion, espacio_fisico, categoria, id_envase):
     # Si el id_envase es distinto de -1, es porque ya existe el envase y se va a actualizar su informacion
     if id_envase != -1:
-        if len(list(db(db.t_envases.identificacion == identificacion).select())) > 0:
+        if len(list(db((db.t_envases.identificacion == identificacion) & (db.t_envases.id != id_envase)).select())) > 0:
             return T("La identificación que proporcionó para el contenedor ya se encuentra en uso.")
         else:
             db(db.t_envases.id == id_envase).update(
