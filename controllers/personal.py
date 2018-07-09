@@ -412,7 +412,7 @@ def cambiar_validacion(validacion, personal):
         mensaje = request.post_vars.razon_add
         db(db.t_Personal.f_email == personal['email']).update(
             f_por_validar=False, f_validado=False, f_comentario='Motivo de Rechazo: {}'.format(mensaje))
-    redirect(URL('validacion_estilo'))
+    redirect(URL('listado_estilo'))
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
