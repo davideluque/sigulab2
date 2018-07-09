@@ -480,7 +480,10 @@
   var table = $('#datatable').DataTable({
     "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
     language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+      paginate: {
+        "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+        "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+      }
     },
     initComplete: function () {
       var api = this.api();
@@ -495,8 +498,8 @@
       $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
       $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
       $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-      $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-      $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
+      // $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
+      // $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
       $('#buttons').style.textAlign = "right";
     }
 
