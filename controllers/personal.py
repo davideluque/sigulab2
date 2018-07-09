@@ -389,6 +389,8 @@ def ficha():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
+    print(usuario)
+
     return dict(
         personal=personal,
         categorias=categorias,
@@ -401,7 +403,6 @@ def ficha():
         ubicaciones=ubicaciones,
         usuario_logged=usuario_logged,
         usuario = usuario
-
     )
 
 def cambiar_validacion(validacion, personal):
