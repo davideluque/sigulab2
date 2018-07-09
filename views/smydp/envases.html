@@ -58,9 +58,11 @@
                     <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
                 </div>
                 <div class="col-xs-2">
+                    {{if (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}                    
                     <button type="button" id="botonEditar" class="btn btn-primary agregar" data-toggle="modal" data-target="#editContenedor">
                         <i class="fa fa-pencil"></i>
                     </button>
+                    {{pass}}
                 </div>
             </div>
             <div class="col-lg-12">
@@ -362,10 +364,12 @@
                 <img class="iconos" src="{{=URL('static', 'images/listadocontenedores.png')}}">
             </div>
             <div class="col-lg-2 text-center">
+                {{if (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}                
                  <!-- Agregar contenedor -->
-                <button type="button" id="botonAgregar" class="btn btn-default buttons-html5 agregar" data-toggle="modal" data-target="#addContenedor">
-                    <li class="fa fa-plus-circle" />
+                <button type="button" id="botonAgregar" title="Agregar un nuevo contenedor" class="btn btn-default buttons-html5 agregar" data-toggle="modal" data-target="#addContenedor">
+                    <li class="fa fa-plus" />
                 </button>
+                {{pass}}
             </div>                
         </div>
         

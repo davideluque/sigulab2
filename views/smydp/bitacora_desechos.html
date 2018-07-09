@@ -66,9 +66,11 @@
     </div>
 
     <div class="col-xs-2">
-      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5 agregar" data-toggle="modal" data-target="#agregarEntrada">
-        <i class="fa fa-plus-circle"></i>
+      {{if (not(auth.has_membership('PERSONAL INTERNO'))) & (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}
+      <button  type="button" id="botonAgregar" class="btn btn-primary buttons-html5 agregar" title="Agregar un nuevo registro a la bitácora"data-toggle="modal" data-target="#agregarEntrada">
+        <i class="fa fa-plus"></i>
       </button>
+      {{pass}}
     </div>
 
     <div class="col-lg-12">
@@ -231,7 +233,7 @@
                                                 <p id="error-cantidad-retirada"> </p>
                                               </div>
                                             </div>
-                                        <button type="submit" form="formularioCarga" id="submit" class="btn btn-submit btn-primary boton-modal pull-right">
+                                        <button type="submit" form="formularioCarga" style="border-radius: 100% !important;" id="submit" class="btn btn-submit btn-primary boton-modal pull-right">
                                           <li class="fa fa-plus-circle"/>
                                         </button>
                                       </div>
