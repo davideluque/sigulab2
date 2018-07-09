@@ -1294,6 +1294,138 @@ def detalles_mat():
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_consumibles():
+    #Recuperamos el espacio
+    espacio = request.vars['espacio']
+    #El nombre del material/consumible
+    name = request.vars['nombreMat']
+
+    # El usuario que está editando
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+
+    # Busco el material/consumible
+    bien = db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).select()[0]
+    
+    #Inicializo variables
+    material_pred = []
+    color = []
+    unidad_med = []
+    movilidad = []
+    uso = []
+    nombre_cat = []
+    cod_localizacion = []
+    localizacion = []
+    nombre_espaciof = []
+    unidad_adscripcion = []
+    unidad_cap = []
+    presentacion=[]
+
+    # Si se elimina
+    if request.vars.si:
+        db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
+        db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
+        session.flash = "Solicitud de eliminación aceptada"
+        redirect(URL('validaciones'))
+    # Si no se elimina
+    if request.vars.no:
+        db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
+        db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
+        session.flash = "Solicitud de eliminación rechazada"
+        redirect(URL('validaciones'))
+    
+    #Si se edita
+    if request.vars.nombre_mat:
+        __agregar_material_modificar(
+            request.vars.nombre_mat,
+            request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
+            request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
+            request.vars.capacidad, request.vars.unidad_cap, 
+                request.vars.unidad_mat,  
+            request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+            request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
+            request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion, request.vars.descripcion_modificacion)
+
+    if request.vars.eliminacion:
+        if bien['sb_eliminar'] == 2: 
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0, sb_desc_eliminar = request.vars.descripcion_eliminacion)
+            response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
+        else:
+            response.flash = "El  \"{0}\" tiene una eliminación pendiente. \
+                                Por los momentos no se enviarán solicitudes de eliminación.".format(bien['sb_nombre'])
+        request.vars.eliminacion = None
+    
+    if request.vars.ocultar:
+        if bien['sb_oculto'] == 0:
+            db(db.sin_bn.id == bien['id']).select().first().update_record(sb_oculto = 1)
+            response.flash = "Ahora " + str(bien['sb_nombre']) + " se encuentra oculto en las consultas."
+        else:
+            response.flash = bien['sb_nombre'] + " ya se encuentra oculto en las consultas."
+        request.vars.ocultar = None
+
+    aforado_options = ['Si', 'No', 'N/A']
+    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+    unidad_med = ['cm','m']
+    movilidad = ['Fijo','Portátil']
+    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
+    cod_localizacion = ['150301','240107']
+    localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+    'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+    presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+    if bien['sb_clasificacion'] == "Material de Laboratorio":
+        caracteristicas_list = ['Cantidad:', 'Descripción:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
+        'Capacidad:', 'Unidad de medida:', 'Material predominante:', 'Material secundario:', 'Tipo:', 'Ubicación interna:']
+        caracteristicas_dict = {
+            'Cantidad:': bien['sb_cantidad'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Material predominante:': bien['sb_material'],
+            'Material secundario:': bien['sb_material_sec'],
+            'Aforado:': bien['sb_aforado'],
+            'Tipo:': bien['sb_clasificacion'],
+            'Requiere calibración:': bien['sb_calibrar'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Capacidad:': bien['sb_capacidad'],
+            'Unidad de medida:' : bien['sb_unidad'],
+        }
+    else:
+        caracteristicas_list = ["Marca:", "Modelo:", "Presentación:", "Unidades por presentación:", "Cantidad:", 
+        "Total(U.):", "Descripción:", "Ubicación interna:"]
+        caracteristicas_dict = {
+            'Presentación:': bien['sb_presentacion'],
+            'Unidades por presentación:': bien['sb_unidades'],
+            'Cantidad:': bien['sb_cantidad'],
+            'Total(U.):': bien['sb_total'],
+            'Marca:': bien['sb_marca'],
+            'Modelo:': bien['sb_modelo'],
+            'Descripción:': bien['sb_descripcion'],
+            'Ubicación interna:' : bien['sb_ubicacion'],
+            'Tipo:': bien['sb_clasificacion']
+        }
+    return dict(bien = bien,
+                material_pred = material_pred,
+                color_list = color,
+                unidad_med = unidad_med,
+                movilidad_list = movilidad,
+                uso_list = uso,
+                nombre_cat = nombre_cat,
+                cod_localizacion = cod_localizacion,
+                localizacion = localizacion,
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict,
+                aforado_options = aforado_options,
+                unidad_cap = unidad_cap,
+                presentacion = presentacion
+                )
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_herramientas():
     #Recuperamos el espacio
     espacio = request.vars['espacio']

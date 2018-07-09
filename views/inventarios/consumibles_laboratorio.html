@@ -30,7 +30,7 @@
               {{for bm in inventario:}}
                 <tr>
                     <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-                    <td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                    <td class="camposTabla"> <a href="{{=URL('detalles_consumibles', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
                     
                     <td class="camposTabla">{{=bm['sb_marca']}}</td>
                     <td class="camposTabla">{{=bm['sb_modelo']}}</td>
