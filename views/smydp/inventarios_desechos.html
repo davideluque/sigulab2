@@ -102,7 +102,7 @@
 						<i class="fa fa-arrow-left"></i>
 				</a>
 				{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
-    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=1, es_espacio='True'))}}" style="align-self: left;">
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio='True'))}}" style="align-self: left;">
 						<i class="fa fa-arrow-left"></i>
 	    		</a>				
 	    		{{else:}}
