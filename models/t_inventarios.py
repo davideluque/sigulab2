@@ -265,6 +265,7 @@ db.define_table(
     Field('hr_unidad_de_adscripcion', 'reference dependencias', notnull=True, label = T('Unidad de Adscripción')),
     Field('hr_depedencia', 'reference dependencias',notnull=True, label = T('Nombre de la dependencia')),
     Field('hr_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
+    Field('hr_desc_eliminar', 'string', length = 140, label = T('Razon de Eliminacion')),
     # Estado = -1 :Denegado
     # Estado = 0  :Por validación
     # Estado = 1  :Aceptado

@@ -22,118 +22,15 @@
         margin-right:0px!important;
     }
      </style>
-
-<style type="text/css">
-
-    .wrapper {
-    max-width: 1000px;
-    margin: auto;
-    margin-top: 0;
-    }
-
-    .tab-wrapper {
-    text-align: center;
-    display: block;
-    margin: auto;
-    max-width: 400px;
-    }
-
-    .tabs {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    }
-
-    .tab-link {
-    margin: 0 1%;
-    list-style: none;
-    padding: 10px 20px;
-    color: #aaa;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all ease 0.5s;
-    border-bottom: solid 3px rgba(255, 255, 255, 0);
-    letter-spacing: 1px;
-    }
-
-    .tab-link:hover {
-    color: #999;
-    border-color: #999;
-    }
-
-    .tab-link.active {
-    color: #333;
-    border-color: #333;
-    }
-
-    .tab-link:nth-of-type(1).active {
-    color: #1790D2;
-    border-color: #1790D2
-    }
-
-    .tab-link:nth-of-type(2).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(4).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(5).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(6).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(7).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(3).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .content-wrapper {
-    padding: 20px 80px;
-    }
-
-    .tab-content {
-    display: none;
-    text-align: left;
-    color:  #464646;
-    font-weight: 200;
-    font-size: 20px;
-    opacity: 0;
-    transform: translateY(15px);
-    animation: fadeIn 0.5s ease 1 forwards;
-    }
-
-    .tab-content.active {
-    display: block;
-    }
-
-    @keyframes fadeIn {
-    100% {
-        opacity: 1;
-        transform: none;
-    }
-}
-</style>
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
 <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
 {{end}}
 
 {{block center}}
     <h3 class="dep-titulo text-center">{{=bien['hr_nombre']}}</h3>
+    {{ if request.vars.delete: }}
+    <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['hr_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
 {{pass}}
 
 <!-- Flash message -->
@@ -147,16 +44,25 @@
             <div id="columnBotonAgregar" class="col-sm-6">
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6">
+                    {{ if request.vars.delete: }}
+                    <form method="post">
+                        <!-- Boton para aceptar mod de bien mueble-->
+                        <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                        <!--Boton para rechazar el bien mueble-->
+                        <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                    </form>
+                    {{ else: }}
                     <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                     <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                     <!-- Boton para eliminar el sb-->
                     <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
-                </div>
+                    {{ pass }}
+                  </div>
             </div>
         </div>
     </div>
 <!-- Fin Boton Agregar Sustancia -->
-
+<br>
 <div class="wrapper">
 		
 	<div class="tab-wrapper">
@@ -173,7 +79,7 @@
                 {{ for title in caracteristicas_list: }}
                     {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
                         <div class="grid-item">
-                            {{=title}}
+                            {{=title.upper()}}
                         </div>
                         <div class="grid-item">
                             {{= caracteristicas_dict.get(title)}}
@@ -319,6 +225,11 @@
             <div class="modal-body addBody">
                 <br>
                 <form method="post" style="text-align: center;">
+                    <div class="form-group">
+                        <label>Descripción de eliminación*</label>
+                        <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                        <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                    </div>
                     <h4>¿Desea solicitar la eliminación de {{=bien['hr_nombre']}}?</h4>
                     <br>
                     <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
