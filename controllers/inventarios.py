@@ -240,6 +240,13 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
                           al espacio \"{1}\".".format(bm.bm_nombre, bm.bm_espacio_fisico)
         return False
+    
+    if not unidad_med:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+    
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
         inv_id = db.bien_mueble.insert(
@@ -293,6 +300,13 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
                           en este espacio.".format(nombre)
         return False
+    
+    if not unidad_dim:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+    
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.sin_bn.insert(
         sb_cantidad = cantidad,
@@ -354,6 +368,13 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
 
     response.flash = "Se ha enviado una solicidad de modificación del \"{0}\"  \"{1}\" \
                         .".format(clasificacion,nombre)
+
+    if not unidad_dim:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.modificacion_sin_bn.insert(
         msb_cantidad = cantidad,
@@ -798,6 +819,13 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
                         Por los momentos no se enviarán solicitudes de modificación.".format(nombre)
         return False
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
+    
+    if not unidad_med:
+        ancho=None
+        largo=None
+        alto=None
+        diametro=None
+    
     else:
         inv_id = db.modificacion_bien_mueble.insert(
             mbn_nombre = nombre, 
