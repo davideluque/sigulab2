@@ -107,28 +107,6 @@
                 <span>{{=desecho_seleccionado['t_inventario_desechos']['tratamiento'].upper()}}</span>
               </div>
             </div>
-
-            <div class="row fila-detalle-envase">
-              <div class="col-sm-5 ">
-                <label for="envase">Identificación del envase donde se depositó el desecho:</label>
-              </div>
-              <div class="col-sm-6">
-                {{envase_seleccionado = ''}} {{for envase in envases_totales:}} {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
-                {{envase_seleccionado = envase}} {{pass}} {{pass}}
-                <span>{{=envase_seleccionado['identificacion']}}</span>
-              </div>
-            </div>
-          
-            <div class="row fila-detalle-envase">
-              <div class="col-sm-5 ">
-                <label for="concentracion">Concentración del desecho generado*:</label>
-              </div>
-              <div class="col-sm-6">
-                <span>{{=desecho_seleccionado['t_inventario_desechos']['concentracion']}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
     </div>
 
 
