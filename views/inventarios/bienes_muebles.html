@@ -141,12 +141,10 @@
 			{{ title = "Secciones" }}
 		{{ pass }}
 		{{ if len(dependencias) > 0: }}
-			<h4>Seleccionar: 
 				<button onclick="show_seccion()">
-					{{=title}}
+					Seleccionar: {{=title}}
 					<span class="caret"></span>
 				</button>
-			</h4>
 		{{ pass }}
 		{{ if espacios: }}
 			<div class="grid-container-ef" id="secciones" style="display: none">
