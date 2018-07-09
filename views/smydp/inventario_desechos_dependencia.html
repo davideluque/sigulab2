@@ -57,7 +57,7 @@
                             <td class="camposTabla">{{=desecho['t_inventario_desechos']['seccion']['nombre'].upper()}}</td>
                             <td class="camposTabla">{{=desecho['t_inventario_desechos']['espacio_fisico']['codigo'].upper()}}</td>
                             <td class="camposTabla">{{=desecho['t_inventario_desechos.responsable']['f_nombre'].upper()}} {{=desecho['t_inventario_desechos.responsable']['f_apellido'].upper()}}</td>
-                            {{cantidad = str(desecho['_extra']['SUM(t_inventario_desechos.cantidad)']).replace(".", ",")}}
+                            {{cantidad = str(desecho['_extra']['SUM("t_inventario_desechos"."cantidad")']).replace(".", ",")}}
                             <td class="camposTabla">{{=cantidad}} {{=desecho['t_inventario_desechos.unidad_medida']['f_abreviatura']}}</td>
                         </tr>
                         {{pass}}
