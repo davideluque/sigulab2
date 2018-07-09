@@ -71,7 +71,7 @@ $(document).ready(function () {
                 if (($(this).attr('name')=="num_her")) {
                     console.log("aqui");
                     if ($(this).val()!=""){    
-                        if (!($(this).val().match(/^[0-9]{6}$/))) {
+                        if (!($(this).val().match(/^[0-9]{6}$/) ) || $(this).val() === "000000" ) {
                             $("#err_num_her").html("Formato Inválido. Ingrese 6 dígitos");
                             $("#err_num_her").show();
                             $(this).addClass('input-error');

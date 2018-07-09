@@ -69,7 +69,7 @@ $(document).ready(function () {
                 next_step = false;
             }else {
                 if (($(this).attr('name')=="no_bien")) {
-                    if (!($(this).val().match(/^[0-9]{6}$/))) {
+                    if (!($(this).val().match(/^[0-9]{6}$/) ) || $(this).val() === "000000" ) {
                         $("#err_no_bien").html("Formato Inválido. Ingrese 6 dígitos");
                         $("#err_no_bien").show();
                         $(this).addClass('input-error');
