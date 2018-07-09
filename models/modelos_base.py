@@ -219,3 +219,10 @@ db.define_table(
     Field('tecnico', 'reference t_Personal', 
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))
     )
+
+#Tabla bitacora_general lleva el registro de los eventos llamados en los modulos
+db.define_table(
+    'bitacora_general',
+    Field('f_accion', label=T('Acción')),
+    auth.signature
+)
