@@ -2211,6 +2211,7 @@ def bitacora_desechos():
         
         return redirect(URL('..', 'sigulab2', 'smydp/bitacora_desechos', vars=dict(inv=inventario_id))) 
 
+
     return dict(bitacora=bitacora,
                 unidad_medida=unidad_medida,
                 inventario=inventario,
@@ -2219,7 +2220,8 @@ def bitacora_desechos():
                 espacio_id=espacio_id,
                 conceptos=conceptos,
                 unidades_de_medida=unidades_de_medida,
-                envases = envases
+                envases = envases,
+                fecha_actual = str(datetime.datetime.now()).split(" ")[0]
                 )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
