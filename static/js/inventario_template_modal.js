@@ -55,7 +55,7 @@ $(document).ready(function () {
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
 
-        parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"]').each(function () {
+        parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"],input[type="date"]',).each(function () {
                         
             if (($(this).val() == "") && ($(this).attr('required'))) {
                 if (($(this).attr('name')=="nombre") || ($(this).attr('name')=="nombre_edit")) {
@@ -150,6 +150,37 @@ $(document).ready(function () {
                     $(this).addClass('input-error');
                      next_step = false;
                 }
+                else if( $(this).attr('name')== 'fecha_sol' && $(this).val()=='') {
+                    $("#err_fecha_sol").html("No tiene el formato adecuado");
+                    $("#err_fecha_sol").show();
+                    $(this).addClass('input-error');
+                     next_step = false;
+                }
+                else if( $(this).attr('name')== 'fecha_inicio' && $(this).val()=='') {
+                    $("#err_fecha_inicio").html("No tiene el formato adecuado");
+                    $("#err_fecha_inicio").show();
+                    $(this).addClass('input-error');
+                     next_step = false;
+                }
+                else if( $(this).attr('name')== 'fecha_fin' && $(this).val()=='') {
+                    $("#err_fecha_fin").html("No tiene el formato adecuado");
+                    $("#err_fecha_fin").show();
+                    $(this).addClass('input-error');
+                     next_step = false;
+                }
+                else if (($(this).attr('name')=="tiempo_ejec")) {
+                    console.log("alo2")
+                    if (!($(this).val().match(/^[0-9]+$/) )) {
+                        $("#err_tiempo_ejec").html("Formato Inválido. Ingrese un número");
+                        $("#err_tiempo_ejec").show();
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                        $("#err_tiempo_ejec").hide();
+                    }
+                }
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
@@ -188,7 +219,7 @@ $(document).ready(function () {
             $('#submit').on('click', function (e) {
                 var parent_fieldset = $(this).parents('fieldset');
         
-                parent_fieldset.find('input[type="text"]').each(function () {
+                parent_fieldset.find('input[type="text"],input[type="date"]').each(function () {
                     if (($(this).val() == "") && ($(this).attr('required'))) {
                         if (($(this).attr('name')=="cargo_add") || ($(this).attr('name')=="cargo_edit")) {
                             $("#err_cargo").html("Este campo es obligatorio");
@@ -209,6 +240,25 @@ $(document).ready(function () {
                                 $(this).removeClass('input-error');
                             }
                         }
+                        else if (($(this).attr('name')=="tiempo_ejec")) {
+                            console.log("alo")
+                            if (!($(this).val().match(/^[0-9]+$/) )) {
+                                $("#err_tiempo_ejec").html("Formato Inválido. Ingrese un número");
+                                $("#err_tiempo_ejec").show();
+                                $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else {
+                                $(this).removeClass('input-error');
+                                $("#err_tiempo_ejec").hide();
+                            }
+                        }
+                        else if( $(this).attr('name')== 'fecha_cert' && $(this).val()=='') {
+                            $("#err_fecha_cert").html("No tiene el formato adecuado");
+                            $("#err_fecha_cert").show();
+                            $(this).addClass('input-error');
+                             next_step = false;
+                        }
                         else {
                             $(this).removeClass('input-error');
                         }
@@ -218,7 +268,7 @@ $(document).ready(function () {
             });
         
            
-           parent_fieldset.find('input[type="text"],input[type="checkbox"],select[type="select"], textarea[name="propositoDescripcion"], input[name="itemServicio"], input[type="date"]').each(function () {         
+           parent_fieldset.find('input[type="text"],input[type="checkbox"],input[type="date"],select[type="select"], textarea[name="propositoDescripcion"], input[name="itemServicio"], input[type="date"]').each(function () {         
 
             if ($(this).val() == "") {
                 $(this).addClass('input-error');
