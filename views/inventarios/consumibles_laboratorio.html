@@ -1,0 +1,64 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
+
+
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+    <br>
+    <div class="row">
+
+      <div id="buttons">
+        <!-- Filtrado -->
+      </div>
+        <br>
+    
+        <div class="table-responsive no-padding no-margin">
+          <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">Nombre</th>
+                    <th class="camposTabla linksNombres">Marca</th>
+                    <th class="camposTabla linksNombres">Modelo</th>
+                    <th class="camposTabla linksNombres">Presentación</th>
+                    <th class="camposTabla linksNombres">Unidades por Presentación</th>
+                    <th class="camposTabla linksNombres">Cantidad</th>
+                    <th class="camposTabla linksNombres">Total</th>
+                      <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                    <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                </tr>
+            </thead>
+            <tbody>
+              {{for bm in inventario:}}
+                <tr>
+                    <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+                    <td class="camposTabla"> <a href="{{=URL('detalles_consumibles', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                    
+                    <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                    <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+    
+                    <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
+                    <td class="camposTabla">{{=bm['sb_unidades']}}</td>
+                    <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+                    <td class="camposTabla">{{=bm['sb_total']}}</td>
+                    <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>
+                </tr>
+              {{pass}}           
+            </tbody>
+    
+            <tfoot id="collapseFiltros">
+                <tr>
+                    <th class="camposTabla linksNombres">Nombre</th>
+                    <th class="camposTabla linksNombres">Marca</th>
+                    <th class="camposTabla linksNombres">Modelo</th>
+                    <th class="camposTabla linksNombres">Presentación</th>
+                    <th class="camposTabla linksNombres">Unidades por Presentación</th>
+                    <th class="camposTabla linksNombres">Cantidad</th>
+                    <th class="camposTabla linksNombres">Total</th>
+                      <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                  <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>  
+    <!-- Fin Listado de inventario -->

@@ -1,0 +1,502 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita un espacio fisico especifico -->
+
+  <!-- Estilo del listado de Solicitudes de Servicios -->
+
+
+
+<!-- Inicio Boton Agregar BM -->
+<!--
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+	        <div class="col-sm-6"></div>
+	        <div class="col-sm-6">
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addbm">Agregar Material</button>
+	        </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- Fin Boton Agregar Sustancia -->
+<!-- Inicio Listado de sustancias -->
+<div class="container">
+    <div class="row">
+
+        <div>
+            <button class="dt-button btn boton-sigulabPlus" title="Agregar Nuevo Consumible" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
+        </div>
+    
+        <br><br>
+
+        <br><br>
+        <div id="buttons">
+          <!-- Filtrado -->  
+        </div>
+        <br>
+    
+        <div class="table-responsive no-padding no-margin">
+          <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">Nombre</th>
+                    <th class="camposTabla linksNombres">Marca</th>
+                    <th class="camposTabla linksNombres">Modelo</th>
+                    <th class="camposTabla linksNombres">Presentación</th>
+                    <th class="camposTabla linksNombres">Unidades por Presentación</th>
+                    <th class="camposTabla linksNombres">Cantidad</th>
+                    <th class="camposTabla linksNombres">Total</th>
+    
+                    <!--<th class="camposTabla linksNombres">Estatus</th>-->
+                </tr>
+            </thead>
+    
+            <tbody>
+              {{for bm in inventario:}}
+                <tr>
+                    <td class="camposTabla"> <a href="{{=URL('detalles_consumibles', vars=dict(espacio=bm['sb_espacio'], nombreMat = bm['sb_nombre'], cat = '2'))}}">{{=bm['sb_nombre']}}</a></td>
+                    <td class="camposTabla">{{=bm['sb_marca']}}</td>
+                    <td class="camposTabla">{{=bm['sb_modelo']}}</td>
+    
+                    <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
+                    <td class="camposTabla">{{=bm['sb_unidades']}}</td>
+                    <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
+                    <td class="camposTabla">{{=bm['sb_total']}}</td>
+    
+                </tr>
+              {{pass}}           
+            </tbody>
+    
+            <tfoot id="collapseFiltros">
+                <th class="camposTabla linksNombres">Nombre</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Presentación</th>
+                <th class="camposTabla linksNombres">Unidades por Presentación</th>
+                <th class="camposTabla linksNombres">Cantidad</th>
+                <th class="camposTabla linksNombres">Total</th>
+              <!--<th class="camposTabla linksNombres">Estatus</th>-->
+                </tr>
+            </tfoot>
+    
+          </table>
+        </div>
+      </div>
+    </div>  
+    <!-- Fin Listado de sustancias --> 
+    
+    <!-- Ajax abrirFicha para mostrar la informacion de la sustancia seleccionada con un modal -->
+    
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Material<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+
+
+                
+                <!-- pRIMER paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Consumible</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                      <div class="form-group"hidden>
+                        <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
+                          <option value="">Seleccione una opción</option>
+                          <option value="Material de Laboratorio">Material de Laboratorio</option>
+                          <option value="Consumible" selected>Consumible</option>
+                        </select>
+                        <div class="field-error"> <p id="error-clasificacion"></p></div>
+                      </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Nombre del consumible*</label>
+                            <input type="text" class="form-control" id="nombre_mat" name="nombre_mat" title="Nombre del consumible" placeholder="Nombre del consumible*" required>
+                            <div class="field-error"> <p id="err_nombre_mat"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" class="form-control"  id="marca_mat" name="marca_mat" placeholder="Marca">
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Modelo/Código</label>
+                            <input type="text" class="form-control" id="modelo_mat" name="modelo_mat" value="" placeholder="Modelo/Código">
+                            <div class="field-error"> <p id="error_modelo_mat"> </p> </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Tercer paso Parte 3-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Consumible</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                            <label>Cantidad de ese consumible*</label>
+                            <input type="text" class="form-control" id="cantidad_mat" name="cantidad_mat" placeholder="Cantidad de ese consumible*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                            <font color="red"><div id="err_cantidad" hidden></div></font>
+                        </div>
+
+                        <div class="form-group" id="grupo-presentacion">
+                                <label>Presentación*</label>
+                                <select class="form-control" value="" type="select" id="presentacion" name="presentacion" placeholder="Presentación" required >
+                                  <option value="">Seleccione una presentación*</option>
+                                  {{ for med in presentacion:}}
+                                  <option value="{{=med}}">{{=med}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="error-unidad" > </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Unidades por presentación*</label>
+                            <input class="form-control" id="unidades" name="unidades" placeholder="Unidades por presentación*" title="Ingrese un digito numérico" onchange="placeholder_total(this.value);" required>
+                            <div  class="field-error"><p id="err_unidades"></p> </div>
+                        </div>
+
+                        <div class="form-group" id="grupo-total">
+                            <label class="form-group" id="total" style="margin-bottom: 0px">Total del Material</label>
+                            <input  class="form-control" id="total_mat" name="total_mat" placeholder="" readonly >
+                            <div class="field-error"> <p id="error-total_mat"> </p> </div>
+                        </div>
+                            </div>
+                      </div>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                  </fieldset>
+                  <!-- Fin tercer Paso -->
+
+
+                <!--Tercer Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Consumible</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <label>Ubicación interna</label>
+                        <div class="form-group">
+                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##"   required>
+                                <font color="red"><div id="err_ubicacion_int" hidden></div></font>
+                        </div>
+
+                        <label>Observaciones</label>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="descripcion_mat" name="descripcion_mat" placeholder="Observaciones">
+                            <div class="field-error"> <p id="error_est_descripcion"> </p> </div>
+                        </div>
+
+
+                        </div>
+                      </div>
+
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                  </fieldset>
+                  <!-- Fin tercer paso-->
+
+                <!-- Fin Cuarto Paso -->
+              </form>
+          </div>
+        </div>               
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <!-- Fin Modal Agregar BM -->
+    
+    <!-- *!* Falta verificar que se esten llenando todos los campos dependiendo 
+    del concepto y tipo de ingreso o egreso -->
+    
+    <script type="text/javascript">
+    
+      // dada una cantidad selecciona la unidad
+      function seleccionar_unidad(value){
+        var unidad = document.getElementById("unidad_cap");
+        if (value){
+          unidad.required = true;
+        }else{
+          unidad.required = false;
+        }
+      }
+    
+      // Agregar campo de otro material
+      function agregar_otro(id, name, otro_id){
+        var id = document.getElementById(id)
+        var otro_id = document.getElementById(otro_id)
+        if ( id.value === "Otro" ){
+          id.removeAttribute("name");
+          otro_id.setAttribute("name", name);
+          otro_id.type =  "text";
+          otro_id.required = true;
+        }else{
+          otro_id.removeAttribute("name");
+          otro_id.type = "hidden";
+          id.setAttribute("name",name);
+        }
+      }
+    
+      // Funcion para mostrar campos dependendiendo de la categoria
+      function elegir_campos(){
+        var selecion = document.getElementById("clasificacion");
+        if (selecion.value == "Material de Laboratorio"){
+          document.getElementById("unidades").type = 'hidden';
+          document.getElementById("unidades").removeAttribute("required", "");
+          document.getElementById("total_mat").type = 'hidden';
+          document.getElementById("total_mat").removeAttribute("required", "");
+          document.getElementById("grupo-presentacion").style.display = 'none';
+          document.getElementById("presentacion").removeAttribute("required", "");
+          document.getElementById("grupo-aforado").style.display = 'block';
+          document.getElementById("grupo-material").style.display = 'block';
+          document.getElementById("grupo-material2").style.display = 'block';
+          document.getElementById("grupo-unidad").style.display = 'block';
+          document.getElementById("calibracion_mat").style.display = 'block';
+          document.getElementById("grupo-cap").style.display = 'block';
+          document.getElementById("aforado").setAttribute("required", "");
+          document.getElementById("calibracion_mat").setAttribute("required", "");
+          document.getElementById("material_mat").setAttribute("required", "");
+          document.getElementById("grupo-capacidad").style.display = 'block';
+          document.getElementById("capacidad").type = 'text';
+          document.getElementById("grupo-total").style.display = 'none';
+    
+        }
+        else{
+          document.getElementById("grupo-total").style.display = 'block';
+          document.getElementById("grupo-cap").style.display = 'none';
+          document.getElementById("grupo-capacidad").style.display = 'none';
+          document.getElementById("capacidad").type = 'hidden';
+          document.getElementById("grupo-presentacion").style.display = 'block';
+          document.getElementById("presentacion").setAttribute("required", "");
+          document.getElementById("unidades").type = 'text';
+          document.getElementById("unidades").setAttribute("required", "");
+          document.getElementById("total_mat").type = 'text';
+          document.getElementById("total_mat").setAttribute("required", "");
+          document.getElementById("grupo-aforado").style.display = 'none';
+          document.getElementById("aforado").removeAttribute("required", "");
+          document.getElementById("grupo-material").style.display = 'none';
+          document.getElementById("grupo-material2").style.display = 'none';
+          document.getElementById("grupo-unidad").style.display = 'none';
+          document.getElementById("material_mat").removeAttribute("required", "");
+          document.getElementById("calibracion_mat").style.display = 'none';
+          document.getElementById("calibracion_mat").removeAttribute("required", "");
+        }
+      }
+      // Mostrar unidades
+      function display_units(value){
+        if ( value == '' ){
+          document.getElementById("unidad_mat").type = 'hidden';
+          document.getElementById("ancho_mat").type = 'hidden';
+          document.getElementById("largo_mat").type = 'hidden';
+          document.getElementById("alto_mat").type = 'hidden';
+          document.getElementById("diametro_mat").type = 'hidden';
+        }else{
+          document.getElementById("unidad_mat").type = 'text';
+          document.getElementById("ancho_mat").type = 'text';
+          document.getElementById("largo_mat").type = 'text';
+          document.getElementById("alto_mat").type = 'text';
+          document.getElementById("diametro_mat").type = 'text';
+        }
+      }
+      // Valida los campos de la forma en el modal "addbm"
+      function validar_campos(){
+        // Buscando divs para ingresar mensajes de error
+        var error_total = document.getElementById("error-total");
+        var error_uso_interno = document.getElementById("error-uso-interno");
+        // Limpiando los mensajes anteriores de validadores
+        if (error_total.innerText != ''){
+          error_total.innerText = '';
+        }
+        if (error_uso_interno.innerText != ''){
+          error_uso_interno.innerText = '';
+        }
+         
+        // Buscando los valores ingresados por el usuario en cada campo
+        var total = document.forms['formularioCarga']['total'].value;
+        var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+        // Mensajes de error
+        var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+        var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+        var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+        var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+        /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+        if (!is_number(total)) {
+          error_total.innerText = mensaje_error_tipo;
+          return false;
+        }
+        
+        if (is_negative(total)) {
+          error_total.innerText = mensaje_error_negativo;
+          return false;
+        }
+        if (is_zero(total)) {
+          error_total.innerText = mensaje_error_nulo;
+          return false;
+        }
+        /* Validando el campo uso_interno */
+        if (!is_number(uso_interno)) {
+          error_uso_interno.innerText = mensaje_error_tipo;
+          return false;
+        }
+        
+        if (is_negative(uso_interno)) {
+          error_uso_interno.innerText = mensaje_error_negativo;
+          return false;
+        }
+        // La cantidad de sustancia para uso interno no puede ser mayor al total
+        if (uso_interno > total) {
+          error_uso_interno.innerText = mensaje_error_uso_interno;
+          return false;
+        }
+      }
+      // True si "n" es un numero
+      function is_number(n){
+        return !isNaN(n);
+      }
+      // True si "n" es negativo
+      function is_negative(n){
+        return (n < 0)
+      }
+      // True si "n" es cero
+      function is_zero(n){
+        return (n == 0)
+      }
+      function placeholder_total(value){
+        var x = document.getElementById("unidades");
+        var y = document.getElementById("cantidad_mat");
+        var z = document.getElementById("total_mat");
+        z.placeholder=y.value*x.value
+        z.value=y.value*x.value
+      }
+      function colocar_subcategoria(value){
+        var dict = {
+            'Maquinaria Construcción':
+                ["Maquinaria y equipos de construcción y mantenimiento",
+                "Maquinarias y equipos para mantenimiento de automotores",
+                "Maquinarias y equipos agrícolas y pecuarios",
+                "Maquinarias y equipos de artes gráficas y reproducción",
+                "Maquinarias y equipos industriales y de taller",
+                "Maquinarias y equipos de energía",
+                "Maquinarias y equipos de riego y acueductos",
+                "Equipos de almacen",
+                "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+            "Equipo Transporte":
+                ["Vehículos automotores terrestres",
+                "Equipos ferroviarios y de cables aéreos",
+                "Equipos marítimos de transporte",
+                "Equipos aéreos de transporte",
+                "Vehículos de tracción no motorizados",
+                "Equipos auxiliares de transporte",
+                "Otros equipos de transporte, tracción y elevación"],
+            "Equipo Comunicaciones":
+                ["Equipos de telecomunicaciones",
+                "Equipos de señalamiento",
+                "Equipos de control de tráfico aéreo",
+                "Equipos de correo",
+                "Otros equipos de comunicaciones y de señalamiento"],
+            "Equipo Médico":
+                ["Equipos médicos - quirúrgicos, dentales y veterinarios",
+                "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+            "Equipo Científico Religioso":
+                ["Equipos científicos y de laboratorio",
+                "Equipos de enseñanza, deporte y recreación",
+                "Obras de arte",
+                "Libros y revistas",
+                "Equipos religiosos",
+                "Instrumentos musicales",
+                "Otros equipos científicos, religiosos, de enseñanza y recreación"],
+            "Equipo Oficina" : 
+                ["Mobiliario y equipos de oficina",
+                "Equipos de procesamiento de datos",
+                "Mobiliario y equipos de alojamiento",
+                "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+      var n = 1;
+      var x;
+      var y = document.getElementById("numRegistro2");
+      if (value != ""){
+        for (var i in dict[value]){
+          x = document.getElementById("Opcion".concat(n.toString()));
+          x.innerText = dict[value][i];
+          x.style.display= "block";
+          $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+          $('#Opcion'.concat(n.toString())).show();
+          x.value = dict[value][i];
+          n = n + 1;  
+        }
+        while (n <= 9){
+          x = document.getElementById("Opcion".concat(n.toString()));
+          //x.innerText = "";
+          //x.style.display = "none";
+          $('#Opcion'.concat(n.toString())).hide();
+          $('#Opcion'.concat(n.toString())).html("");
+          x.value = "";
+          n = n +1;
+          
+        }
+        
+      }
+    }
+    </script>

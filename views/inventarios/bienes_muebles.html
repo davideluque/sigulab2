@@ -3,6 +3,7 @@
 {{block head}}
 	<meta charset="UTF-8">
 
+
 	<!-- Para los mensajes con flash -->
 	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
@@ -13,7 +14,6 @@
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
-		  padding-right: 10ex;
 		}
 		
 	</style>
@@ -30,6 +30,8 @@
   	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+	 
  	<style>
    	.row{
      	margin-right:0px!important;
@@ -65,12 +67,12 @@
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
-				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
+		<div class="col-xs-2">
 		</div>
+		<button button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button">
+			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+				<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		</a>
 		<div class="col-xs-8">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -88,21 +90,21 @@
 		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
-				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-				en el controlador-->
-				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('bienes_muebles')}}">
-					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
-	    		</a>
-	    		{{else:}}
-    			<a class="boton" href="{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
-				</a>
-	    		{{pass}}
+		<div class="col-xs-2">
 		</div>
+		<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
+		los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
+		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
+		en el controlador-->
+		{{if dep_padre_id == direccion_id:}}
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('bienes_muebles')}}')">
+			<i class="fas fa-arrow-left"></i>	
+		</button>
+		{{else:}}
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('bienes_muebles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}')">
+			<i class="fas fa-arrow-left"></i>	    		
+		</button>
+		{{pass}}
 		<div class="col-xs-8">
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
 			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
@@ -131,20 +133,18 @@
 		<div id="fila1" class="row">
 		</div>
 		{{ if espacios: }}
-			{{ title = "Espacios Físicos" }}
+			{{ title = "Espacio Físico" }}
 			{{dependencias = espacios}}
 		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
-			{{ title = "Dependencias" }}
+			{{ title = "Dependencia" }}
 		{{else: }}
 			{{ title = "Secciones" }}
 		{{ pass }}
 		{{ if len(dependencias) > 0: }}
-			<h4>Navegar por: 
 				<button onclick="show_seccion()">
-					{{=title}}
+					Seleccionar: {{=title}}
 					<span class="caret"></span>
 				</button>
-			</h4>
 		{{ pass }}
 		{{ if espacios: }}
 			<div class="grid-container-ef" id="secciones" style="display: none">
@@ -230,7 +230,7 @@
 	 
 		// DataTable
 		var table = $('#datatable').DataTable();
-	 
+		
 		// Apply the search
 		table.columns().every( function () {
 			var that = this;
@@ -264,20 +264,33 @@
   <script language="javascript">
   
 	var table = $('#datatable').DataTable({
-	  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
+	  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
 	  //dom: 'Bfrtip',
 	  language: {
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 	  },
+	  "columnDefs": [
+		{ "width": "30%", "targets": 0 , className: 'dt-body-left'},
+		{ "width": "10%", "targets": [1,2,3] }
+	  ],
 	 initComplete: function(){
 		var api = this.api();
   
 		new $.fn.dataTable.Buttons(api, {
 		  buttons: [
+
+			{
+			text:'<i class="fa fa-filter"></i>',
+			action: function(){
+				mostrarFiltro()
+			},
+			className: 'boton-sigulabIzq'
+			},
   
 			  {
 				  extend: 'collection',
-				  text: '<i class="fas fa-floppy-o"></i>',
+				  text: '<i class="fas fa-save"></i>',
+				  className: 'boton-sigulab',
 				  buttons: [
 					  { extend:'copy', text: 'Copiar' } ,
 					  'excel',
@@ -285,10 +298,10 @@
 					  'pdf'
 				  ]
 			  },
-			  { extend:'print', text: '<i class="fas fa-print"></i>'}
+			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
 		  ]
 		});
-		$('#botonModal').addClass('pull-left')
+		//$('#botonModal').addClass('pull-left')
 		$('#filtrar').addClass('pull-left');
 		$('#espacioBuscar').addClass('pull-left');
   
@@ -296,14 +309,21 @@
 		$('.dataTables_filter').appendTo('#buttons');
   
 		api.buttons().container().appendTo('#buttons');
+		//$('.dt-buttons').append($('#botonModal'));
+		$('.dt-buttons').append($('#filtrar'));
 		$('#buttons').append('<br><br>');
 		$('.dataTables_info').addClass('pull-right');
-		
 		$('.dataTables_filter').addClass('pull-left');
+
+		$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+		$('#datatable_next').html('<span class="fa fa-arrow-right" />');
   
 		
 	 }
 	});
-  
+
+
+
   </script>
+
 {{end}}

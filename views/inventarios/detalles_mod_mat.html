@@ -1,0 +1,144 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    <!-- Estilos de modales y listados -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
+{{end}}
+
+{{block center}}
+    <h3 class="text-center">DETALLES DE MODIFICACIÓN</h3>
+    <h3 class="dep-titulo text-center">{{=bien['msb_nombre'].upper()}}</h3>
+    <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['msb_desc'].upper()}}</h4>
+{{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<!-- Inicio Boton Modificar BM -->
+<div class="container" id="containerAgregar">
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div id="columnBotonAgregar" class="col-sm-6">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <form method="post">
+                        <!-- Boton para aceptar mod de bien mueble-->
+                        <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                        <!--Boton para rechazar el bien mueble-->
+                        <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Fin Boton Agregar Sustancia -->
+
+<div class="wrapper">
+		
+	<div class="tab-wrapper">
+		<ul class="tabs">
+            <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+            <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
+            <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
+        </ul>
+	</div>
+
+	<div class="content-wrapper">
+		<div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+                {{ for title in caracteristicas_list: }}
+                    {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{= caracteristicas_dict.get(title)}}
+                        </div>
+                    {{pass}}
+                {{ pass }}
+                {{if bien['msb_ancho'] != None or bien['msb_largo'] != None or bien['msb_alto'] != None or bien['msb_diametro'] != None:}}
+                    <div class="grid-item">
+                        {{ if bien['msb_unidad'] == 'm':}}
+                            Dimensiones (metros):
+                        {{else:}}
+                            Dimensiones (centímetros):
+                        {{pass}}
+                    </div>
+                    <div class="grid-item">                        
+                        {{if bien['msb_ancho'] != None:}}
+                            Ancho: {{=bien['msb_ancho']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['msb_largo'] != None:}}
+                            Largo: {{=bien['msb_largo']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['msb_alto'] != None:}}
+                            Alto: {{=bien['msb_alto']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['msb_diametro'] != None:}}
+                            Diámetro: {{=bien['msb_diametro']}}
+                            <br>
+                        {{pass}}
+                    </div>
+                {{pass}}
+            </div>
+        </div>
+        <div id="tab-2"class="tab-content">
+            <div class="grid-container">
+                <div class="grid-item">
+                    Espacio físico:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.espacios_fisicos.id == bien['msb_espacio']).select().first().codigo}}
+                </div>
+                <div class="grid-item">
+                    Unidad de Adscripción:
+                </div>
+                <div class="grid-item">
+                    {{=bien_original['sb_unidad_de_adscripcion']}}
+                </div>
+                <div class="grid-item">
+                    Dependencia:
+                </div>
+                <div class=grid-item>
+                    {{=db(db.dependencias.id == bien_original['sb_depedencia']).select().first().nombre}}
+                </div>
+            </div>
+        </div>
+        <div id="tab-3"class="tab-content">En desarrollo</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+</script>

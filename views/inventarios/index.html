@@ -19,75 +19,117 @@
 <div id="main" class="container">
     <div id="fila1" class="row">
 
-      <h2 id="tituloBienvenida">Gestión de Bienes Muebles</h2>
+      <h2 id="tituloBienvenida">GESTIÓN DE INVENTARIOS</h2>
 
     </div>
 
     <div id="fila2" class="row">
 
-      <div class="col-sm-3">
+      <div class="col-sm-2">
       </div>
 
-      <div class="col-sm-6">
+      <div class="col-sm-8">
 
         <!-- Boton Bienes Muebles -->
-        <div class="col-sm-6 columnas">
+        <div class="col-sm-3 columnas">
           <a href="{{=URL('bienes_muebles')}}">
             <img class="iconos" src="{{=URL('static','inventarios/images/3d-buildings.png')}}">
-            <h4 class="opciones">Bienes Muebles</h4>
+            <h4 class="opciones">BIENES MUEBLES</h4>
           </a>
         </div>
 
         <!-- Boton Material de laboratorio -->
-        <div class="col-sm-6 columnas">
+        <div class="col-sm-3 columnas">
           <a href="{{=URL('material_lab')}}">
             <img class="iconos" src="{{=URL('static','inventarios/images/research.png')}}">
             <div>
-              <h4 class="opciones" style="">Material de laboratorio<tag style="font-size: 20px; color: red;"></tag></h4>
+              <h4 class="opciones" style="">MATERIAL DE LABORATORIO<tag style="font-size: 20px; color: red;"></tag></h4>
             </div>
           </a>
         </div>
 
-      </div>
-
-      <div class="col-sm-3">
-      </div>
-
-    </div>
-
-    <div id="fila3" class="row">  
-
-      <div class="col-sm-3">
-      </div>
-
-      <div class="col-sm-6">
-
-        <!-- Boton Solicitud de préstamos-->
-        <div class="col-sm-6 columnas">
-          <a href="{{=URL('prestamos')}}">
-            <img class="iconos" src="{{=URL('static','inventarios/images/file(1).png')}}">
+        <!-- Boton Consumible -->
+        <div class="col-sm-3 columnas">
+          <a href="{{=URL('consumibles')}}">
+            <img class="iconos" src="{{=URL('static','inventarios/images/rollo-papel.png')}}">
             <div>
-              <h4 class="opciones" style="display:;">Solicitudes<tag style="font-size: 20px; color: red"></tag></h4>
+              <h4 class="opciones" style="">CONSUMIBLES<tag style="font-size: 20px; color: red;"></tag></h4>
             </div>
           </a>
         </div>
 
-        <!-- Boton Mantenimiento -->
-        <div class="col-sm-6 columnas">
-          <a href="{{=URL('mantenimiento')}}">
+        <!-- Boton Herramienta -->
+        <div class="col-sm-3 columnas">
+          <a href="{{=URL('herramientas')}}">
             <img class="iconos" src="{{=URL('static','inventarios/images/maintenance.png')}}">
-            <h4 class="opciones">Mantenimiento</h4>
+            <h4 class="opciones">HERRAMIENTAS</h4>
           </a>
         </div>
+
       </div>
 
       <div class="col-sm-3">
       </div>
 
     </div>
-    </div>
-    <div class="col-sm-3">
+
+    <div id="fila3" class="row">
+
+        <div class="col-sm-2">
+        </div>
+  
+        <div class="col-sm-8">
+  
+
+          <!-- Boton Bienes Muebles -->
+          <div class="col-sm-3 columnas">
+            <a href="{{=URL('vehiculos')}}">
+                <img class="iconos" src="{{=URL('static','inventarios/images/car.png')}}">
+                <div>
+                  <h4 class="opciones" style="display:;">VEHÍCULOS<tag style="font-size: 20px; color: red"></tag></h4>
+                </div>
+            </a>
+          </div>
+
+          <!-- Boton Bienes Muebles -->
+          <div class="col-sm-3 columnas">
+            <a href="{{=URL('otros')}}">
+                <img class="iconos" src="{{=URL('static','inventarios/images/packing.png')}}">
+                <div>
+                  <h4 class="opciones" style="display:;">OTROS BIENES<tag style="font-size: 20px; color: red"></tag></h4>
+                </div>
+            </a>
+          </div>
+
+          <!-- Boton Bienes Muebles -->
+          <div class="col-sm-3 columnas">
+            <a href="{{=URL('prestamos')}}">
+                <img class="iconos" src="{{=URL('static','inventarios/images/file(1).png')}}">
+                <div>
+                  <h4 class="opciones" style="display:;">SOLICITUDES<tag style="font-size: 20px; color: red"></tag></h4>
+                </div>
+            </a>
+          </div>
+
+          {{ if auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("JEFE DE LABORATORIO") \
+          or auth.has_membership("COORDINADOR") or auth.has_membership("DIRECTOR") or \
+          auth.has_membership("WEBMASTER"): }}
+            <div class="col-sm-3 columnas">
+              <span class="badge-notificacion" data-count-notificacion="{{=numero_solicitudes}}">
+                </span>
+                <a href="{{=URL('validaciones')}}">
+                    <img class="iconos" src="{{=URL('static','inventarios/images/workplace.png')}}">
+                    <h4 class="opciones">VALIDACIONES</h4>
+                </a>
+            </div>
+          {{pass}}
+  
+  
+        </div>
+  
+        <div class="col-sm-3">
+        </div>
+  
       </div>
-    </div>
 </div>
 <!-- Fin del contenido principal de la página de gestión de servicios -->

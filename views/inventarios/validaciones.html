@@ -13,21 +13,20 @@
 	<style type="text/css">
 		div.dt-buttons {
 		  float: right;
-		  padding-right: 10ex;
 		}
-		
 	</style>
  	
- 	<!-- Estilos de modales y listados -->
- 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
- 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	
-	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
- 	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>	
+	 <!-- Estilos de modales y listados -->
+	 <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+		<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+		<link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
  	<style>
@@ -46,7 +45,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <span class="breadcrumb-item active">Validaciones</span>
+  <span class="breadcrumb-item active">Validaciones Pendientes</span>
   </div>
 </nav>
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
@@ -55,134 +54,147 @@
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
-<!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
-	<h3 class="dep-titulo">SOLICITUDES DE MODIFICACIÓN</h3>
-	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
-		{{ dep_padre_nombre = 'ULAB'}}
-	{{ pass }}
-	{{if es_tecnico:}}
-		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
-		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
-		debe poder regresar al nivel superior de la jerarquia -->
-		{{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
-				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
-		</div>
-		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		<div class="col-xs-2"> </div>
-		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
-		{{else:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		{{pass}}
-
-	{{else:}}
-		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
-		siguiente nivel superior de jerarquia -->
-		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
-				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-				en el controlador-->
-				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('validaciones')}}">
-					<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	
-	    		</a>
-	    		{{else:}}
-    			<a class="boton" href="{{=URL('validaciones', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-						<i class="fas fa-arrow-circle-left fa-2x" style="color: #606060"></i>	    		
-				</a>
-	    		{{pass}}
-		</div>
-		<div class="col-xs-8">
-			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-		</div>
-		<div class="col-xs-2"> </div>
-		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
-		el nombre de la dependecia a la que pertenece el usuario -->
-		{{else:}}
-		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			{{ if dep_nombre == 'DIRECCIÓN': }}
-				<h3 class="dep-titulo"> ULAB</h3>
-			{{ else: }}
-				<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
-			{{ pass }}
-		</div>
-		{{pass}}
-	{{pass}}
-	</div>
-
-	<!-- 
-		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
-		sera utilizada en lugar de la variable dependencias 
-	-->
-	<div class="container">
-		<div id="fila1" class="row">
-		</div>
-		{{ if espacios: }}
-			{{ title = "Espacios Físicos" }}
-			{{dependencias = espacios}}
-		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
-			{{ title = "Dependencias" }}
-		{{else: }}
-			{{ title = "Secciones" }}
-		{{ pass }}
-		{{ if len(dependencias) > 0: }}
-			<button onclick="show_seccion()">
-				{{=title}}
-				<span class="caret"></span>
-			</button>
-		{{ pass }}
-		{{ if espacios: }}
-			<div class="grid-container-ef" id="secciones" style="display: none">
-		{{ else: }}
-			<div class="grid-container" id="secciones" style="display: none">
-		{{ pass }}	
-			{{ for espacio in dependencias: }}
-			<div class="grid-item" onclick="redirect('{{=URL('validaciones',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{ if espacios: }}
-					{{ =espacio.codigo }}
-				{{ else: }}
-					{{=espacio.nombre}}
-				{{ pass }}
+<div class="container titulo">
+	<h3 class="dep-titulo">VALIDACIONES PENDIENTES</h3>
+</div>
+<div class="tab-wrapper">
+		<ul class="tabs">
+			<li class="tab-link active" data-tab="1">MODIFICACIÓN</li>
+			<li class="tab-link" data-tab="2">ELIMINACIÓN</li>
+		</ul>
+</div>
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
+<div id="tab-1" class="container tab-content active">
+	<div class="row">
+			<br>
+			<div id="buttons">
 			</div>
-			{{ pass }}
+			<br>
+	
+		<div class="table-responsive no-padding no-margin">
+		  <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+			<thead>
+				<tr id="titulosListado">
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">TIPO</th>
+					<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+			  {{for bm in inventario[0]:}}
+				<tr>
+					<td class="camposTabla"><a href="{{=URL('detalles_mod', vars=dict(bm=bm['mbn_num']))}}">{{=bm['mbn_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion.upper()}}</td>
+					{{ if bm['mbn_desc']: }}
+					<td class="camposTabla">{{=bm['mbn_desc'].upper()}}</td>
+					{{pass}}
+				</tr>
+				{{pass}}
+				{{for material in inventario[1]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
+					<td class="camposTabla">{{=material['msb_desc'].upper()}}</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario[2]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mod_mat', vars=dict(espacio=material['msb_espacio'], nombreMat = material['msb_nombre']))}}">{{=material['msb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">CONSUMIBLES</td>
+					<td class="camposTabla">{{=material['msb_desc'].upper()}}</td>
+				</tr>
+			  {{pass}}       
+			  {{for herramienta in inventario[3]:}}
+			  <tr>
+				  <td class="camposTabla"> <a href="{{=URL('detalles_mod_herramientas', vars=dict(espacio=herramienta['mhr_espacio_fisico'], nombreHer = herramienta['mhr_nombre'], ubicacion = herramienta['mhr_ubicacion']))}}">{{=herramienta['mhr_nombre'].upper()}}</a></td>
+				  <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+				  <td class="camposTabla">HERRAMIENTA</td>
+				  <td class="camposTabla">{{=herramienta['mhr_motivo'].upper()}}</td>
+			  </tr>
+			{{pass}}           
+			</tbody>
+	
+			<tfoot id="collapseFiltros">
+			  <th class="camposTabla linksNombres">NOMBRE</th>
+				<th class="camposTabla linksNombres">TIPO</th>
+				<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</tfoot>
+	
+		  </table>
 		</div>
 	</div>
+</div> 
+
+<!-- tabla de eliminacion -->
+<div id="tab-2" class="container tab-content">
+	<div class="row">
+		<br>
+		<div id="buttons2">
+		</div>
+		<br>
+		<div class="table-responsive no-padding no-margin">
+		  <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+			<thead>
+				<tr id="titulosListado">
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">TIPO</th>
+					<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</thead>
 	
+			<tbody>
+			  {{for bm in inventario_eliminar[0]:}}
+				<tr>
+					<td class="camposTabla"><a href="{{=URL('detalles', vars=dict(bm=bm['bm_num'],delete=True))}}">{{=bm['bm_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">{{=bm['bm_clasificacion'].upper()}}</td>
+					<td class="camposTabla">{{=bm['bm_desc_eliminar'].upper()}}</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario_eliminar[1]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['sb_espacio'], nombreMat = material['sb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">MATERIAL DE LABORATORIO</td>
+					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
+				</tr>
+				{{pass}}
+				{{for material in inventario_eliminar[2]:}}
+				<tr>
+					<td class="camposTabla"> <a href="{{=URL('detalles_mat', vars=dict(espacio=material['sb_espacio'], nombreMat = material['sb_nombre'],delete=True))}}">{{=material['sb_nombre'].upper()}}</a></td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">CONSUMIBLES</td>
+					<td class="camposTabla">{{=material['sb_desc_eliminar'].upper()}}</td>
+				</tr>
+			  {{pass}}  
+			  {{for herramienta in inventario_eliminar[3]:}}
+			  <tr>
+				  <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=herramienta['hr_espacio_fisico'], nombreHer = herramienta['hr_nombre'], ubicacion = herramienta['hr_ubicacion'],delete=True))}}">{{=herramienta['hr_nombre'].upper()}}</a></td>
+				  <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+				  <td class="camposTabla">HERRAMIENTA</td>
+				  <td class="camposTabla">{{=herramienta['hr_desc_eliminar'].upper()}}</td>
+			  </tr>
+			{{pass}}              
+			</tbody>
+	
+			<tfoot id="collapseFiltros">
+			  <th class="camposTabla linksNombres">NOMBRE</th>
+				<th class="camposTabla linksNombres">TIPO</th>
+				<th class="camposTabla linksNombres">OBSERVACIONES</th>
+				</tr>
+			</tfoot>
+	
+		  </table>
+		</div>
+	</div>
+</div> 
 
-<!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
-
-<!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
-
-	<!-- Se lista el inventario del espacio fisico visitado -->
-	{{if espacio_visitado:}}
-		{{include 'inventarios/inventario_espacio.html'}}
-	<!-- Se lista el inventario de una dependencia de apoyo -->
-	{{elif (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_seccion.html'}}
-	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
-	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
-		{{include 'inventarios/inventario_laboratorio.html'}}
-	<!-- Se lista el inventario de una seccion -->
-	{{else:}}
-		{{include 'inventarios/inventario_seccion.html'}}
-	{{pass}}
-
-<!-- Fin de la seccion con la lista de sustancias en el inventario --> 
-
+<!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
 
 <script type="text/javascript">
 	// Funcion para que mostrar el grid de espacios fisicos
@@ -260,47 +272,167 @@
   }
 </script>
  
- <script language="javascript">
-
-		var table = $('#datatable').DataTable({
-		  'sDom' : '<"top"fil>rt<"bottom"p><"clear">',
-		  //dom: 'Bfrtip',
-		  language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-		  },
-		 initComplete: function(){
+<script language="javascript">
+  
+	var table = $('#datatable').DataTable({
+	  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+	  //dom: 'Bfrtip',
+	  language: {
+		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  },
+		initComplete: function(){
 			var api = this.api();
-	  
+		
 			new $.fn.dataTable.Buttons(api, {
-			  buttons: [
-	  
-				  {
-					  extend: 'collection',
-					  text: '<i class="fa fa-save"></i>',
-					  buttons: [
-						  { extend:'copy', text: 'Copiar' } ,
-						  'excel',
-						  'csv',
-						  'pdf'
-					  ]
-				  },
-				  { extend:'print', text: '<i class="fa fa-print"></i>'}
-			  ]
+				buttons: [
+	
+				{
+				text:'<i class="fa fa-filter"></i>',
+				action: function(){
+					mostrarFiltro()
+				},
+				className: 'boton-sigulabIzq'
+				},
+		
+					{
+						extend: 'collection',
+						text: '<i class="fas fa-save"></i>',
+						className: 'boton-sigulab',
+						buttons: [
+							{ extend:'copy', text: 'Copiar' } ,
+							'excel',
+							'csv',
+							'pdf'
+						]
+					},
+					{ extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+				]
 			});
-			$('#botonModal').addClass('pull-left')
+			//$('#botonModal').addClass('pull-left')
 			$('#filtrar').addClass('pull-left');
-			
+			$('#espacioBuscar').addClass('pull-left');
+		
+		
 			$('.dataTables_filter').appendTo('#buttons');
-	  
+		
 			api.buttons().container().appendTo('#buttons');
+			//$('.dt-buttons').append($('#botonModal'));
 			$('#buttons').append('<br><br>');
 			$('.dataTables_info').addClass('pull-right');
-			
 			$('.dataTables_filter').addClass('pull-left');
-	  
+	
+			$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+			$('#datatable_next').html('<span class="fa fa-arrow-right" />');
+		
 			
 		 }
 		});
-	  
-	  </script>
+	</script>
+	<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+	</script>
+	<script>
+
+		var filtros = false;
+	
+		$(document).ready(function() {
+				// Setup - add a text input to each footer cell
+				$('#datatable2 tfoot th').each( function () {
+						var title = $(this).text();
+						$(this).html( '<input type="text" placeholder="Filtro" />' );
+				} );
+		 
+				// DataTable
+				var table = $('#datatable2').DataTable();
+		 
+				// Apply the search
+				table.columns().every( function () {
+						var that = this;
+		 
+						$( 'input', this.footer() ).on( 'keyup change', function () {
+								if ( that.search() !== this.value ) {
+										that
+												.search( this.value )
+												.draw();
+								}
+						} );
+				} );
+	
+				$('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+				$("#datatable2 thead tr").not("#titulosListado").css("display","none");
+		} );
+	
+		function mostrarFiltro2() {
+				if (filtros){
+					$("#datatable2 thead tr").not("#titulosListado").css("display","none");
+					filtros = false
+				}
+				else{
+					$("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
+					filtros = true
+				}
+	
+		}
+	</script>
+	 
+	<script language="javascript">
+		
+		var table = $('#datatable2').DataTable({
+			'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+			//dom: 'Bfrtip',
+			language: {
+			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+			},
+			initComplete: function(){
+				var api = this.api();
+			
+				new $.fn.dataTable.Buttons(api, {
+					buttons: [
+		
+					{
+					text:'<i class="fa fa-filter"></i>',
+					action: function(){
+						mostrarFiltro2()
+					},
+					className: 'boton-sigulabIzq'
+					},
+			
+						{
+							extend: 'collection',
+							text: '<i class="fas fa-save"></i>',
+							className: 'boton-sigulab',
+							buttons: [
+								{ extend:'copy', text: 'Copiar' } ,
+								'excel',
+								'csv',
+								'pdf'
+							]
+						},
+						{ extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+					]
+				});
+			
+				$('#datatable2_filter').appendTo('#buttons2');
+		
+				api.buttons().container().appendTo('#buttons2');
+				//$('.dt-buttons').append($('#botonModal'));
+				$('#buttons2').append('<br><br>');
+				$('#datatable2_info').addClass('pull-right');
+				$('#datatable2_filter').addClass('pull-left');
+		
+				$('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
+				$('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+			
+				
+			 }
+			});
+		</script>
 {{end}}

@@ -55,8 +55,8 @@
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
-	<h3 class="dep-titulo">INVENTARIO DE MATERIALES DE LABORATORIO</h3>
+<div class="container titulo">
+	<h3 class="dep-titulo">INVENTARIO DE CONSUMIBLES</h3>
 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
 		{{ dep_padre_nombre = 'ULAB'}}
 	{{ pass }}
@@ -65,10 +65,11 @@
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
+		<div class="col-xs-2">
 		</div>
-		<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-			<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
+		<button button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button">
+			<a class="boton" href="{{=URL('consumibles', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+				<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 		</a>
 		<div class="col-xs-8">
 			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
@@ -87,20 +88,20 @@
 		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
+		<div class="col-xs-2">
 		</div>
 		<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 		los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 		request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 		en el controlador-->
 		{{if dep_padre_id == direccion_id:}}
-			<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab')}}">
-				<i class="fas fa-arrow-left"></i>	
-			</a>
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('consumibles')}}')">
+			<i class="fas fa-arrow-left"></i>	
+		</button>
 		{{else:}}
-			<a button id="boton-retorno" class="dt-button btn boton-sigulab" tabindex="0" aria-controls="datatable" type="button" href="{{=URL('material_lab', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-				<i class="fas fa-arrow-left" ></i>	
-			</a>
+		<button id="boton-retorno" class="dt-button btn boton-sigulab" onclick="redirect('{{=URL('consumibles', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}')">
+			<i class="fas fa-arrow-left"></i>	    		
+		</button>
 		{{pass}}
 		<div class="col-xs-8">
 			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
@@ -149,7 +150,7 @@
 			<div class="grid-container" id="secciones" style="display: none">
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
-			<div class="grid-item" onclick="redirect('{{=URL('material_lab',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+			<div class="grid-item" onclick="redirect('{{=URL('consumibles',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{if espacios:}}
 					{{ =espacio.codigo }}
 				{{else:}}
@@ -167,16 +168,16 @@
 
 	<!-- Se lista el inventario del espacio fisico visitado -->
 	{{if espacio_visitado:}}
-		{{include 'inventarios/inventario_espacio_mat.html'}}
+		{{include 'inventarios/consumibles_espacio.html'}}
 	<!-- Se lista el inventario de una dependencia de apoyo -->
 	{{elif (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_seccion_mat.html'}}
+		{{include 'inventarios/consumibles_seccion.html'}}
 	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
 	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
-		{{include 'inventarios/inventario_laboratorio_mat.html'}}
+		{{include 'inventarios/consumibles_laboratorio.html'}}
 	<!-- Se lista el inventario de una seccion -->
 	{{else:}}
-		{{include 'inventarios/inventario_seccion_mat.html'}}
+		{{include 'inventarios/consumibles_seccion.html'}}
 	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
@@ -258,7 +259,7 @@
 			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 		  },
 		  "columnDefs": [
-			{ "width": "30%", "targets": 0 , className: 'dt-body-left'},
+			{ "width": "30%", "targets": 0, className: 'dt-body-left' },
 			{ "width": "10%", "targets": [1,2,3] }
 		  ],
 		 initComplete: function(){

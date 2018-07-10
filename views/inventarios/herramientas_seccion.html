@@ -1,0 +1,51 @@
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+        <br>
+        <div class="row">
+          <div id="buttons">
+            <!-- Filtrado -->
+          </div>
+            <br>
+        
+            <div class="table-responsive no-padding no-margin">
+              <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+                <thead>
+                    <tr id="titulosListado">
+                      <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Nro de BM</th>
+                      <th class="camposTabla linksNombres">Presentación</th>
+                      <th class="camposTabla linksNombres">Número de piezas</th>
+                      <th class="camposTabla linksNombres">Ubicación interna</th>
+                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                        <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                  {{for bm in inventario:}}
+                    <tr>
+                      <td class="camposTabla"> <a href="{{=URL('detalles_herramientas', vars=dict(espacio=bm['hr_espacio_fisico'], nombreHer = bm['hr_nombre'], ubicacion = bm['hr_ubicacion'], cat = '2'))}}">{{=bm['hr_nombre']}}</a></td>
+                      <td class="camposTabla">{{=bm['hr_num']}}</td>
+                      <td class="camposTabla">{{=bm['hr_presentacion']}}</td>
+                      <td class="camposTabla">{{=bm['hr_numpiezas']}}</td>
+                      <td class="camposTabla">{{=bm['hr_ubicacion']}}</td>
+                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['hr_espacio_fisico']).select().first().codigo}}</td>
+                    </tr>
+                  {{pass}}           
+                </tbody>
+        
+                <tfoot id="collapseFiltros">
+                    <tr>
+                      <th class="camposTabla linksNombres">Nombre</th>
+                      <th class="camposTabla linksNombres">Nro de BM</th>
+                      <th class="camposTabla linksNombres">Presentación</th>
+                      <th class="camposTabla linksNombres">Número de piezas</th>
+                      <th class="camposTabla linksNombres">Ubicación interna</th>
+                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
+                      <!-- <th class="camposTabla linksNombres">Estatus</th> -->
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>  
+        <!-- Fin Listado de inventario -->

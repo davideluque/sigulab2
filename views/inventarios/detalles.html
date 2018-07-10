@@ -5,7 +5,14 @@
 
     <!-- Para los mensajes con flash -->
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
     <!-- Estilos de modales y listados -->
       <!-- Estilo del listado de Solicitudes de Servicios -->
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
@@ -21,121 +28,19 @@
     }
      </style>
 
-<style type="text/css">
-
-    .wrapper {
-    max-width: 1000px;
-    margin: auto;
-    margin-top: 0;
-    }
-
-    .tab-wrapper {
-    text-align: center;
-    display: block;
-    margin: auto;
-    max-width: 400px;
-    }
-
-    .tabs {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    }
-
-    .tab-link {
-    margin: 0 1%;
-    list-style: none;
-    padding: 10px 20px;
-    color: #aaa;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all ease 0.5s;
-    border-bottom: solid 3px rgba(255, 255, 255, 0);
-    letter-spacing: 1px;
-    }
-
-    .tab-link:hover {
-    color: #999;
-    border-color: #999;
-    }
-
-    .tab-link.active {
-    color: #333;
-    border-color: #333;
-    }
-
-    .tab-link:nth-of-type(1).active {
-    color: #1790D2;
-    border-color: #1790D2
-    }
-
-    .tab-link:nth-of-type(2).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(4).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(5).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(6).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(7).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .tab-link:nth-of-type(3).active {
-    color: #1790D2;
-    border-color: #1790D2;
-    }
-
-    .content-wrapper {
-    padding: 20px 80px;
-    }
-
-    .tab-content {
-    display: none;
-    text-align: left;
-    color:  #464646;
-    font-weight: 200;
-    font-size: 20px;
-    opacity: 0;
-    transform: translateY(15px);
-    animation: fadeIn 0.5s ease 1 forwards;
-    }
-
-    .tab-content.active {
-    display: block;
-    }
-
-    @keyframes fadeIn {
-    100% {
-        opacity: 1;
-        transform: none;
-    }
-}
-</style>
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
-<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
 {{end}}
 
 {{block center}}
-    <h3 class="dep-titulo text-center">Detalles de {{=bien['bm_nombre']}}</h3>
+    <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa'] != '': }}
+    {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
     {{pass}}
+    {{ if request.vars.delete: }}
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['bm_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
     <!-- Flash message -->
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
@@ -147,124 +52,145 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
+                {{ if request.vars.delete: }}
+                <form method="post">
+                    <!-- Boton para aceptar mod de bien mueble-->
+                    <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                    <!--Boton para rechazar el bien mueble-->
+                    <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                </form>
+                {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                 <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
-                <!--Boton para ocultar el bien mueble-->
-                <button type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye-slash fa-1x"></i></button>
+                {{ pass }}
             </div>
         </div>
     </div>
 </div>
+<br>
 <!-- Fin Boton Agregar Sustancia -->
 
 <div class="wrapper">
 		
-	<div class="tab-wrapper">
-		<ul class="tabs">
-				<li class="tab-link active" data-tab="1">CARACTERÍSTICAS</li>
-				<li class="tab-link" data-tab="2">SUDEBID</li>
-                <li class="tab-link" data-tab="3">UBICACIÓN</li>
-                <li class="tab-link" data-tab="4">HISTORIAL DE MANTENIMIENTO</li>
-            </ul>
-	</div>
-
-	<div class="content-wrapper">
-		<div id="tab-1" class="tab-content active">
-            <div class="grid-container">
-                {{ for title in caracteristicas_list: }}
+        <div class="tab-wrapper">
+            <ul class="tabs">
+                    <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                    <li class="tab-link" data-tab="2"><br>SUDEBID</li>
+                    <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                    <li class="tab-link" data-tab="4"><br>UBICACIÓN</li>
+                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    <li class="tab-link" data-tab="6">HISTORIAL DE USO</li>
+                    <li class="tab-link" data-tab="7"><br>PRÉSTAMOS</li>
+                </ul>
+        </div>
+    
+        <div class="content-wrapper">
+            <div id="tab-1" class="tab-content active">
+                <div class="grid-container">
+                    {{ for title in caracteristicas_list: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{ if title == "Uso:": }}
+                                {{ if (caracteristicas_dict.get(title).find("Docencia")) != -1:}}
+                                    Docencia<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Investigaci")) != -1:}}
+                                    Investigación<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Extensi")) != -1:}}
+                                    Extensión<br>
+                                {{pass}}
+                                {{if (caracteristicas_dict.get(title).find("Apoyo administrativo")) != -1:}}
+                                    Apoyo administrativo<br>
+                                {{pass}}
+                            {{ else: }}
+                                {{= caracteristicas_dict.get(title)}}
+                            {{pass}}
+                            
+                        </div>
+                    {{ pass }}
+                    {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
+                        <div class="grid-item">
+                            {{ if bien['bm_unidad'] == 'm':}}
+                                Dimensiones (metros):
+                            {{else:}}
+                                Dimensiones (centímetros):
+                            {{pass}}
+                        </div>
+                        <div class="grid-item">                        
+                            {{if bien['bm_ancho'] != None:}}
+                                Ancho: {{=bien['bm_ancho']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_largo'] != None:}}
+                                Largo: {{=bien['bm_largo']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_alto'] != None:}}
+                                Alto: {{=bien['bm_alto']}}
+                                <br>
+                            {{pass}}
+                            {{if bien['bm_diametro'] != None:}}
+                                Diámetro: {{=bien['bm_diametro']}}
+                                <br>
+                            {{pass}}
+                        </div>
+                    {{pass}}
+                </div>
+            </div>
+    
+            <!-- Pensar utilizar grid-->
+            <div id="tab-2" class="tab-content">
+                <div class="grid-container">
+                {{ for title in sudebid_list: }}
                     <div class="grid-item">
                         {{=title}}
                     </div>
                     <div class="grid-item">
-                        {{ if title == "Uso:": }}
-                            {{ if (caracteristicas_dict.get(title).find("Docencia")) != -1:}}
-                                Docencia<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Investigaci")) != -1:}}
-                                Investigación<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Extensi")) != -1:}}
-                                Extensión<br>
-                            {{pass}}
-                            {{if (caracteristicas_dict.get(title).find("Apoyo administrativo")) != -1:}}
-                                Apoyo administrativo<br>
-                            {{pass}}
-                        {{ else: }}
-                            {{= caracteristicas_dict.get(title)}}
-                        {{pass}}
+                        {{= sudebid_dict.get(title)}}
                     </div>
                 {{ pass }}
-                {{if bien['bm_ancho'] != None or bien['bm_largo'] != None or bien['bm_alto'] != None or bien['bm_diametro'] != None:}}
+                </div>
+            </div>
+    
+            <div id="tab-3"class="tab-content">En desarrollo</div>
+            <div id="tab-4"class="tab-content">
+                <div class="grid-container">
                     <div class="grid-item">
-                        {{ if bien['bm_unidad'] == 'm':}}
-                            Dimensiones (metros):
-                        {{else:}}
-                            Dimensiones (centímetros):
-                        {{pass}}
+                        Espacio físico:
                     </div>
-                    <div class="grid-item">                        
-                        {{if bien['bm_ancho'] != None:}}
-                            Ancho: {{=bien['bm_ancho']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_largo'] != None:}}
-                            Largo: {{=bien['bm_largo']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_alto'] != None:}}
-                            Alto: {{=bien['bm_alto']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['bm_diametro'] != None:}}
-                            Diámetro: {{=bien['bm_diametro']}}
-                            <br>
-                        {{pass}}
+                    <div class="grid-item">
+                        {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
                     </div>
-                {{pass}}
-            </div>
-        </div>
-
-        <!-- Pensar utilizar grid-->
-		<div id="tab-2" class="tab-content">
-            <div class="grid-container">
-            {{ for title in sudebid_list: }}
-                <div class="grid-item">
-                    {{=title}}
-                </div>
-                <div class="grid-item">
-                    {{= sudebid_dict.get(title)}}
-                </div>
-            {{ pass }}
-            </div>
-        </div>
-        <div id="tab-3"class="tab-content">
-            <div class="grid-container">
-                <div class="grid-item">
-                    Espacio físico:
-                </div>
-                <div class="grid-item">
-                    {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
-                </div>
-                <div class="grid-item">
-                    Unidad de Adscripción:
-                </div>
-                <div class="grid-item">
-                    {{=bien['bm_unidad_de_adscripcion']}}
-                </div>
-                <div class="grid-item">
-                    Dependencia:
-                </div>
-                <div class=grid-item>
-                    {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                    <div class="grid-item">
+                        Unidad de Adscripción:
+                    </div>
+                    <div class="grid-item">
+                        {{=bien['bm_unidad_de_adscripcion']}}
+                    </div>
+                    <div class="grid-item">
+                        Dependencia:
+                    </div>
+                    <div class=grid-item>
+                        {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                    </div>
                 </div>
             </div>
+            <div id="tab-5"class="tab-content">
+                {{include 'inventarios/mantenimiento.html'}}
+            </div>
+            <div id="tab-6"class="tab-content">En desarrollo</div>
+            <div id="tab-7"class="tab-content">En desarrollo</div>
+    
+    
+    
         </div>
-        <div id="tab-4"class="tab-content">En Desarrollo</div>
+        
     </div>
-	
-</div>
 
 <!--Modal para eliminar bm-->
 <div class="modal fade" id="confirmdelete" role="dialog">
@@ -302,6 +228,11 @@
         <div class="modal-body addBody">
             <br>
             <form method="post" style="text-align: center;">
+                <div class="form-group">
+                    <label>Descripción de eliminación*</label>
+                    <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                    <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                </div>
                 <h4>¿Desea solicitar la eliminación de {{=bien['bm_nombre']}}?</h4>
                 <br>
                 <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
@@ -405,6 +336,7 @@
                       <span class="step activePass">1</span>
                       <span class="step">2</span>
                       <span class="step">3</span>
+                      <span class="step">4</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -413,17 +345,20 @@
 
 
                         <div class="form-group" tag="Formato:">
-                            <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
+                                <label>Nombre*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Número de Bien Nacional*</label>
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" value="{{=bien['bm_num']}}" readonly required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
-                            {{if bien['bm_placa']=="":}}
+                            <label>N° de placa</label>
+                            {{if bien['bm_placa']==None:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             {{else:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" value="{{=bien['bm_placa']}}" placeholder="N° de placa">
@@ -431,33 +366,15 @@
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
-                        {{if bien['bm_marca']!="":}}
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group">
-                            <input type="text" class="form-control" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
+                            <label>Marca*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=bien['bm_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
                         {{pass}}
 
-                        {{if bien['bm_modelo']!="":}}
-                        <div class="form-group">
-                                <input type="text" class="form-control" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
-                                <div class="field-error"> <p id="error-modelo"> </p> </div>
-                            
-                        </div>
-                        {{pass}}
-
-                        {{if bien['bm_serial']!="":}}
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="serial" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
-                            <div class="field-error"> <p id="error-serial"> </p> </div>
-                          </div>
-                        {{pass}}
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
-                        
+                    
                     </div>
                   </div>
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
@@ -472,18 +389,42 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
+
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
+                        <div class="form-group">
+                                <label>Modelo*</label>
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=bien['bm_modelo']}}" name="modelo" value="" placeholder="Modelo*" required>
+                                <div class="field-error"> <p id="error-modelo"> </p> </div>
+                            
+                        </div>
+                        {{pass}}
+
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
+                        <div class="form-group">
+                            <label>Serial*</label>
+                            <input type="text" class="form-control" id="serial" style="text-transform:uppercase" value="{{=bien['bm_serial']}}" name="serial" placeholder="Serial*" required>
+                            <div class="field-error"> <p id="error-serial"> </p> </div>
+                          </div>
+                        {{pass}}
+ 
                           
                           <div class="form-group">
+                                <label>Material*</label>
                               <select class="form-control" value="{{=bien['bm_material']}}" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
                                 {{ for material in material_pred: }}
+                                {{if bien['bm_material']==material:}}
+                                    <option value="{{=material}}" selected="selected">{{=material}}</option>
+                                {{else:}}
                                     <option value="{{=material}}">{{=material}}</option>
+                                {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-material"> </p> </div>
@@ -499,10 +440,15 @@
                         </div>
 
                           <div class="form-group">
+                                <label>Color*</label>
                               <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
-                                    <option value="{{=color}}">{{=color}}</option>                                
+                                {{if bien['bm_color']==color:}}
+                                    <option value="{{=color}}" selected="selected">{{=color}}</option>
+                                {{else:}}
+                                    <option value="{{=color}}">{{=color}}</option>
+                                {{pass}}
                                 {{pass}}
                               </select>
                               <div class="field-error"> <p id="error-color"> </p> </div>
@@ -517,85 +463,7 @@
                             <div class="field-error"> <p id="error-color"> </p> </div>
                         </div>
 
-                          <label>Dimensiones</label>
-
-                          <div class="form-group">
-                                <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                                <option value="">Selecione una unidad</option>
-                                {{ for med in unidad_med:}}
-                                    {{if bien['bm_unidad']==med:}}
-                                        <option value="{{=med}}" selected="selected" >{{=med}}</option>
-                                    {{else:}}
-                                        <option value="{{=med}}">{{=med}}</option>
-                                    {{pass}}
-                                {{pass}}
-                                </select>
-                            <div class="field-error"> <p id="error-unidad" > </p> </div>
-                          </div>
-
-                          <!-- FALTA ARREGLAR ESTO  -->
-                           {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
-                              <div class="form-group">
-                                    <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                <font color="red"><div id="err_ancho" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                    <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                <font color="red"><div id="err_largo" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                    <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                <font color="red"><div id="err_alto" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                    <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                <font color="red"><div id="err_diametro" hidden></div></font>
-                              </div>
-
-                            {{elif bien['bm_unidad']!=None or bien['bm_unidad']!="":}}
-                                <div class="form-group">
-                                {{if bien['bm_ancho']==None:}}
-                                    <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                {{else:}}
-                                    <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                                {{pass}}
-                                <font color="red"><div id="err_ancho" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_largo']==None:}}
-                                    <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
-                                {{pass}}
-                                <font color="red"><div id="err_largo" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_alto']==None:}}
-                                    <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
-                                {{pass}}
-                                <font color="red"><div id="err_alto" hidden></div></font>
-                              </div>
-
-                              <div class="form-group">
-                                
-                                {{if bien['bm_diametro']==None:}}
-                                    <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                {{else:}}
-                                    <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                                {{pass}}
-                                <font color="red"><div id="err_diametro" hidden></div></font>
-                              </div>
-                            {{pass}}
-                        </div>
+                    </div> 
                       </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
@@ -611,12 +479,96 @@
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
+                        <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-                        
+                            <label>Dimensiones</label>
+
+                        <div class="form-group">
+                              <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                              <option value="">Selecione una unidad</option>
+                              {{ for med in unidad_med:}}
+                                  {{if bien['bm_unidad']==med:}}
+                                      <option value="{{=med}}" selected="selected" >{{=med}}</option>
+                                  {{else:}}
+                                      <option value="{{=med}}">{{=med}}</option>
+                                  {{pass}}
+                              {{pass}}
+                              </select>
+                          <div class="field-error"> <p id="error-unidad" > </p> </div>
+                        </div>
+
+                        <!-- FALTA ARREGLAR ESTO  -->
+                         {{if bien['bm_unidad']=="" or bien['bm_unidad']==None:}}   
+                            <div class="form-group" id="grupo-ancho1" hidden>
+                                  <label>Ancho</label>
+                                  <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              <font color="red"><div id="err_ancho" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-largo1" hidden>
+                                  <label>Largo</label>
+                                  <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              <font color="red"><div id="err_largo" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-alto1" hidden>
+                                  <label>Altura</label>
+                                  <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              <font color="red"><div id="err_alto" hidden></div></font>
+                            </div>
+
+                            <div class="form-group" id="grupo-diametro1" hidden>
+                                  <label>Diámetro</label>
+                                  <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              <font color="red"><div id="err_diametro" hidden></div></font>
+                            </div>
+
+                          {{elif bien['bm_unidad']!=None or bien['bm_unidad']!="":}}
+                              <div class="form-group">
+                              {{if bien['bm_ancho']==None:}}
+                                  <input type="text" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              {{else:}}
+                                  <input type="text" class="form-control" value="{{=bien['bm_ancho']}}" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                              {{pass}}
+                              <font color="red"><div id="err_ancho" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_largo']==None:}}
+                                  <input type="text" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="largo" value="{{=bien['bm_largo']}}" name="largo" title="Formato ##.##" placeholder="Largo" >
+                              {{pass}}
+                              <font color="red"><div id="err_largo" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_alto']==None:}}
+                                  <input type="text" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="alto" value="{{=bien['bm_alto']}}" name="alto" title="Formato ##.##" placeholder="Altura" >
+                              {{pass}}
+                              <font color="red"><div id="err_alto" hidden></div></font>
+                            </div>
+
+                            <div class="form-group">
+                              
+                              {{if bien['bm_diametro']==None:}}
+                                  <input type="text" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              {{else:}}
+                                  <input type="text" class="form-control" id="diametro" value="{{=bien['bm_diametro']}}" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                              {{pass}}
+                              <font color="red"><div id="err_diametro" hidden></div></font>
+                            </div>
+                          {{pass}}
+                    
+
                         <div class="form-group">
                             <label>Seleccione un tipo de movilidad*</label>
                             <select class="form-control" type="select" id="movilidad" value="{{=bien['bm_movilidad']}}" name="movilidad" placeholder="Movilidad" required>
@@ -632,7 +584,27 @@
                             <div class="field-error"> <p id="error-movilidad"> </p> </div>
                         </div>
 
-                        <label>Tipo de Uso</label>
+                    </div>
+                </div> 
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
+                  </fieldset>
+                  <!-- Fin segundo paso-->
+
+                  <!--Segundo Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.<br/>Tipo de Uso</label>
                         <font color="red"><div id="err_tipo_uso" hidden></div></font>
                         <div class="checkbox-group">
                         {{i=1}}
@@ -647,8 +619,8 @@
                         {{pass}}
 
                         </div>
-
-                        {{if bien['bm_calibrar']!="":}}
+                        
+                        {{if bien['bm_clasificacion']!="Mobiliario":}}
                         <div class="form-group" id="calibrar">
                           <label>Seleccione si el equipo ha sido calibrado*</label>
                           <select class="form-control" id="select-calibrar" type="select" name="calibrar" placeholder="Calibración" onchange="display_date(this.value)">
@@ -709,8 +681,18 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                                <label>Observaciones</label>
+                                {{if bien['bm_descripcion']!="":}}
+                                    <input type="text" class="form-control" style="text-transform:uppercase" id="Descripcion" value="{{=bien['bm_descripcion']}}" name="descripcion" placeholder="Observaciones">
+                                {{else:}}
+                                <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Observaciones">
+                                {{pass}}
+                                <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
+                            </div>
                         </div>
+                        
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
@@ -725,11 +707,12 @@
                       <div class="col-sm-1 col1Body">
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">SUDEBID</h4>
                       <label>Importante: llene según requerimientos de SUDEBID</label>
                         
@@ -806,6 +789,206 @@
 
 <!-- Fin Modal Agregar BM -->
 
+<!-- Modal añadir un nuevo mantenimiento -->
+<div class="modal fade" id="addman" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                  <div class="container" id="plus">
+                    <h1 id="agregar">+</h1>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Mantenimiento<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+              <div class="row addRow">
+                <div class="col-md-12 form-box">
+                    <form id="formularioMantenimiento" class="registration-form" method="post">
+
+                      <!-- Primer paso-->
+                      <fieldset class="formField">
+                        <div class="form-bottom" data-step="1" data-title="Segundo Paso">
+                          <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                          <div class="col-sm-1 col1Body"> 
+                            <span class="step activePass">1</span>
+                            <span class="step">2</span>
+                            <span class="step">3</span>
+                          </div>
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                            <h4 class="titulosForm">Características del Mantenimiento</h4>                
+                            <label>Campos marcados con * son obligatorios.</label>
+
+                              <div class="form-group">
+                                <label>Fecha de Solicitud (O/S)*</label>
+                                <input type="date" class="form-control" name="fecha_sol" id="fecha_sol" required>
+                                <div class="field-error"> <p id="err_fecha_sol"></p></div>
+                              </div>
+      
+                              <div class="form-group">
+                                  <label>Código de Solicitud (O/S)</label>
+                                  <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código de Solicitud">
+                                  <font color="red"><div id="err_codigo" hidden></div></font>
+                              </div>
+      
+                              <div class="form-group">
+                                <label>Tipo de Mantenimiento*</label>
+                                <select class="form-control" type="select" id="tipo" name="tipo" placeholder="Tipo de Mantenimiento" required>
+                                  <option value="">Seleccione una opción</option>
+                                  {{ form_tipo = ['Correctivo','Predictivo','Preventivo'] }}
+                                  {{ for tipo in form_tipo: }}
+                                  <option value="{{=tipo}}">{{=tipo}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="err_tipo"> </p> </div>
+                              </div>
+      
+                              <div class="form-group">
+                                <label>Servicio Ejecutado*</label>
+                                <select class="form-control" type="select" id="servicio" name="servicio" placeholder="Servicio Ejecutado" onchange="agregar_otro_servicio()" required>
+                                  <option value="">Selecione un servicio*</option>
+                                  {{ form_servicio = ['Ajuste','Calibración','Inspección','Limpieza','Reparación','Sustitución de Partes','Verificación','Otro'] }}
+                                  {{ for servicio in form_servicio:}}
+                                  <option value="{{=servicio}}">{{=servicio}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="err_servicio"> </p> </div>
+                            </div>
+  
+                            <div class="form-group">
+                              <input type="hidden" class="form-control" id="otro_servicio" placeholder="Servicio*" required>
+                              <div class="field-error"> <p id="err_servicio"> </p> </div>
+                            </div>
+      
+                            <div class="form-group">
+                                <label>Acción*</label>
+                                <select class="form-control" type="select" id="accion" name="accion" placeholder="Acción" required>
+                                  <option value="">Seleccione una opción</option>
+                                  {{ form_accion = ['Periódica','Extraordinaria','Urgente'] }}
+                                  {{ for accion in form_accion: }}
+                                  <option value="{{=accion}}">{{=accion}}</option>
+                                  {{pass}}
+                                </select>
+                                <div class="field-error"> <p id="err_accion"> </p> </div>
+                              </div>
+                                 
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                      </fieldset>
+                      <!-- Fin Primer Paso -->
+      
+                      <!-- Segundo Paso-->
+                      <fieldset class="formField">
+                          <div class="form-bottom" data-step="2" data-title="Tercer Paso">
+                            <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                            <div class="col-sm-1 col1Body"> 
+                              <span class="step">1</span>
+                              <span class="step activePass">2</span>
+                              <span class="step">3</span>
+                            </div>
+                            <!-- Aqui va la informacion -->
+                            <div class="col-sm-11 col11Body">
+                              <h4 class="titulosForm">Características del Mantenimiento</h4>                
+                              <label>Campos marcados con * son obligatorios.</label>
+        
+                              <div class="form-group" id="grupo-descripcion-man">
+                                <label>Descripción*</label>
+                                <input type="text" class="form-control" id="descripcion_man" name="descripcion_man" placeholder="Indique el motivo de ejecución del servicio" required>
+                                <div class="field-error"> <p id="err_descripcion_man"> </p> </div>
+                            </div>
+      
+                            <div class="form-group" id="grupo-proveedor">
+                                <label>Proveedor del Servicio*</label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor del Servicio" required>
+                                <div class="field-error"> <p id="err_proveedor"> </p> </div>
+                            </div>
+      
+                            <div class="form-group">
+                                <label>Fecha de Inicio*</label>
+                                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" onchange="colocar_tiempo_ejec()" required>
+                                <div class="field-error"> <p id="err_fecha_inicio"></p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Fecha de Culminación*</label>
+                                <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" onchange="colocar_tiempo_ejec()" required>
+                                <div class="field-error"> <p id="err_fecha_fin"></p></div>
+                            </div>
+                                    
+                              </div>
+                            </div>
+                          <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                          <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                        </fieldset>
+                        <!-- Fin Segundo Paso -->
+      
+                        <!--Tercer Paso-->
+                      <fieldset class="formField">
+                        <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                          <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                          <div class="col-sm-1 col1Body"> 
+                            <span class="step">1</span>
+                            <span class="step">2</span>
+                            <span class="step activePass">3</span>
+                          </div>
+                          <!-- Aqui va la informacion -->
+                          <div class="col-sm-11 col11Body">
+                            <h4 class="titulosForm">Características de la herramienta</h4>                
+                            <label>Campos marcados con * son obligatorios.</label>
+      
+                            <div class="form-group" id="grupo-ejecucion">
+                                <label>Tiempo de Ejecución en Horas*</label>
+                                <input type="text" class="form-control" id="tiempo_ejec" name="tiempo_ejec" placeholder="Especificar tiempo de ejecución en horas" onchange="colocar_tiempo_ejec()" required>
+                                <div class="field-error"> <p id="err_tiempo_ejec"> </p> </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Fecha de Certificación*</label>
+                                <input type="date" class="form-control" name="fecha_cert" id="fecha_cert" required>
+                                <div class="field-error"> <p id="err_fecha_cert"></p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Observaciones</label>
+                                <input type="text" class="form-control" id="observacion_man" name="observacion_man" placeholder="Observaciones">
+                                <div class="field-error"> <p id="err_observacion_man"> </p> </div>
+                            </div>
+      
+                            </div>
+                          </div>
+      
+                          <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                          <button type="submit button" form="formularioMantenimiento" name="mantenimiento_nuevo" value="True" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                      </fieldset>
+      
+                      <!-- Fin Tercer Paso -->
+                    </form>
+                </div>
+              </div>               
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Fin Modal Agregar Mantenimiento -->
 
 <script type="text/javascript">
 
@@ -853,19 +1036,63 @@
     }
 
     // Funcion para agregar otro color
-    function agregar_otro_color(){
-        var color = document.getElementById("color")
-        var otro_color = document.getElementById("otro_color")
+  function agregar_otro_color(){
+    var color = document.getElementById("color")
+    var otro_color = document.getElementById("otro_color")
 
-        if ( color.value === "Otro color" ){
-        color.removeAttribute("name");
-        otro_color.setAttribute("name","color");
-        otro_color.type =  "text";
+    if ( color.value === "Otro color" ){
+      color.removeAttribute("name");
+      otro_color.setAttribute("name","color");
+      otro_color.type =  "text";
+    }else{
+      otro_color.removeAttribute("name");
+      otro_color.type = "hidden";
+      color.setAttribute("name","color");
+    }
+  }
+
+    // Funcion para agregar otro servicio
+    function agregar_otro_servicio(){
+        var servicio = document.getElementById("servicio")
+        var otro_servicio = document.getElementById("otro_servicio")
+
+        if ( servicio.value === "Otro" ){
+        servicio.removeAttribute("name");
+        otro_servicio.setAttribute("name","servicio");
+        otro_servicio.type =  "text";
         }else{
-        otro_color.removeAttribute("name");
-        otro_color.type = "hidden";
-        color.setAttribute("name","color");
+        otro_servicio.removeAttribute("name");
+        otro_servicio.type = "hidden";
+        servicio.setAttribute("name","servicio");
         }
+    }
+
+    // Funcion para colocar tiempo por default de ejecucion
+    function colocar_tiempo_ejec(){
+        var inicio = document.getElementById("fecha_inicio")
+        var fin = document.getElementById("fecha_fin")
+        var target = document.getElementById("tiempo_ejec")
+
+        //target.value= Math.abs(fin - inicio) / 36e5        
+        function split(time)
+        {
+            var t = time.split("-");
+            return new Date(t[0],t[1],t[2],0,0,0,0)
+        }
+
+        //value start
+        var start = split(inicio.value);
+        
+        //value end
+        var end = split(fin.value);
+
+        totalHours = NaN;
+        if (start.getTime() < end.getTime())
+        {
+            totalHours = Math.abs(end - start) / 36e5;
+        }
+        
+        target.value = totalHours;
     }
 
     // Funcion para mostrar campos dependendiendo de la categoria
@@ -907,18 +1134,26 @@
         document.getElementById("largo").type = 'hidden';
         document.getElementById("alto").type = 'hidden';
         document.getElementById("diametro").type = 'hidden';
+        $('#grupo-ancho1').hide()
+        $('#grupo-largo1').hide()
+        $('#grupo-alto1').hide()
+        $('#grupo-diametro1').hide()
       }else{
         document.getElementById("unidad").type = 'text';
         document.getElementById("ancho").type = 'text';
         document.getElementById("largo").type = 'text';
         document.getElementById("alto").type = 'text';
         document.getElementById("diametro").type = 'text';
+        $('#grupo-ancho1').show()
+        $('#grupo-largo1').show()
+        $('#grupo-alto1').show()
+        $('#grupo-diametro1').show()
       }
     }
   
     // Valida los campos de la forma en el modal "addbm"
     function validar_campos(){
-  
+    console.log("alo")
       // Buscando divs para ingresar mensajes de error
       var error_total = document.getElementById("error-total");
       var error_uso_interno = document.getElementById("error-uso-interno");
@@ -1009,46 +1244,46 @@
     function colocar_subcategoria2(indicador){
     value = document.getElementById('categoria').value;
       var dict = {
-          'Maquinaria Construcción':
-              ["Maquinaria y equipos de construcción y mantenimiento",
-              "Maquinarias y equipos para mantenimiento de automotores",
-              "Maquinarias y equipos agrícolas y pecuarios",
-              "Maquinarias y equipos de artes gráficas y reproducción",
-              "Maquinarias y equipos industriales y de taller",
-              "Maquinarias y equipos de energía",
-              "Maquinarias y equipos de riego y acueductos",
-              "Equipos de almacen",
-              "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-          "Equipo Transporte":
-              ["Vehículos automotores terrestres",
-              "Equipos ferroviarios y de cables aéreos",
-              "Equipos marítimos de transporte",
-              "Equipos aéreos de transporte",
-              "Vehículos de tracción no motorizados",
-              "Equipos auxiliares de transporte",
-              "Otros equipos de transporte, tracción y elevación"],
-          "Equipo Comunicaciones":
-              ["Equipos de telecomunicaciones",
-              "Equipos de señalamiento",
-              "Equipos de control de tráfico aéreo",
-              "Equipos de correo",
-              "Otros equipos de comunicaciones y de señalamiento"],
-          "Equipo Médico":
-              ["Equipos médicos - quirúrgicos, dentales y veterinarios",
-              "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-          "Equipo Científico Religioso":
-              ["Equipos científicos y de laboratorio",
-              "Equipos de enseñanza, deporte y recreación",
-              "Obras de arte",
-              "Libros y revistas",
-              "Equipos religiosos",
-              "Instrumentos musicales",
-              "Otros equipos científicos, religiosos, de enseñanza y recreación"],
-          "Equipo Oficina" : 
-              ["Mobiliario y equipos de oficina",
-              "Equipos de procesamiento de datos",
-              "Mobiliario y equipos de alojamiento",
-              "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+        'Maquinaria y demás equipos de construcción, campo, industria y taller':
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipos de transporte, tracción y elevación":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipos de comunicaciones y de señalamiento":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipos científicos, religiosos, de enseñanza y recreación":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
     var n = 1;
     var x;
     var y = document.getElementById("numRegistro2");
@@ -1097,4 +1332,111 @@
     });
       
       </script>
+
+<script>
+
+        var filtros = false;
+      
+        $(document).ready(function() {
+            // Setup - add a text input to each footer cell
+            $('#datatable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Filtro" />' );
+            } );
+         
+            // DataTable
+            var table = $('#datatable').DataTable();
+         
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+         
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+      
+            $('#datatable tfoot tr').appendTo('#datatable thead');
+            $("#datatable thead tr").not("#titulosListado").css("display","none");
+        } );
+      
+        function mostrarFiltro() {
+            if (filtros){
+              $("#datatable thead tr").not("#titulosListado").css("display","none");
+              filtros = false
+            }
+            else{
+              $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+              filtros = true
+            }
+      
+        }
+      </script>
+       
+       <script language="javascript">
+    
+            var table = $('#datatable').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            "columnDefs": [
+                { "width": "30%", "targets": 0, className: 'dt-body-left' },
+                { "width": "10%", "targets": [1,2,3] }
+            ],
+            initComplete: function(){
+                var api = this.api();
+        
+                new $.fn.dataTable.Buttons(api, {
+                buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+        
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-save"></i>',
+                        className: 'boton-sigulab',
+                        buttons: [
+                            { extend:'copy', text: 'Copiar' } ,
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]
+                    },
+                    { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                ]
+                });
+                //$('#botonModal').addClass('pull-left')
+                $('#filtrar').addClass('pull-left');
+                $('#espacioBuscar').addClass('pull-left');
+        
+        
+                $('.dataTables_filter').appendTo('#buttons');
+        
+                api.buttons().container().appendTo('#buttons');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('.dt-buttons').append($('#filtrar'));
+                $('#buttons').append('<br><br>');
+                $('.dataTables_info').addClass('pull-right');
+                $('.dataTables_filter').addClass('pull-left');
+        
+                $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable_next').html('<span class="fa fa-arrow-right" />');
+                
+            }
+            });
+    
+        </script>
+
   {{end}}

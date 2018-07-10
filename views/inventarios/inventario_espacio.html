@@ -1,13 +1,20 @@
+
+
 <!-- Inicio Listado de BM -->
 <div class="container">
 <div class="row">
-    <br>
-    <div id="buttons">
+
+
+    <div>
+        <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo BM" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
+    </div>
+
+    <br><br>
+
+    <br><br>
+    <div id="buttons" >
       <!-- Filtrado -->
-      <button class="btn" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>
-      <button class="btn" id="filtrar" onclick="mostrarFiltro()"><i class="fa fa-search"></i> Filtrar resultados</button>
-      <span style="display:inline-block; width:1em;" id ='espacioBuscar' >&nbsp;   </span>
-      <!-- Filtrado -->    
+
     </div>
     <br>
 
@@ -17,11 +24,12 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">N° BM</th>
-                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
                 <th class="camposTabla linksNombres">Serial</th>
+                <th class="camposTabla linksNombres">Estatus</th>
                 <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </thead>
@@ -32,11 +40,12 @@
                 <td class="camposTabla"> <a href="{{=URL('detalles', vars=dict(bm=bm['bm_num']))}}">{{=bm['bm_nombre']}}</a></td>
                 <!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
                 <td class="camposTabla">{{=bm['bm_num']}}</td>
-                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_placa']}}</td>
+                <td class="camposTabla">{{=bm['bm_clasificacion']}}</td>
                 <td class="camposTabla">{{=bm['bm_marca']}}</td>
                 <td class="camposTabla">{{=bm['bm_modelo']}}</td>
                 <td class="camposTabla">{{=bm['bm_serial']}}</td>
+                <td class="camposTabla">{{=bm['bm_estatus']}}</td>
             </tr>
           {{pass}}           
         </tbody>
@@ -49,6 +58,7 @@
           <th class="camposTabla linksNombres">Marca</th>
           <th class="camposTabla linksNombres">Modelo</th>
           <th class="camposTabla linksNombres">Serial</th>
+          <th class="camposTabla linksNombres">Estatus</th>
           <!--<th class="camposTabla linksNombres">Estatus</th>-->
             </tr>
         </tfoot>
@@ -113,15 +123,15 @@
                         <label>Seleccione la clasificación del Bien Mueble*</label>
                         <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación" required>
                           <option value="">Seleccione una opción</option>
-                          <option value="Equipo">Equipo</option>
-                          <option value="Mobiliario">Mobiliario</option>
+                          <option value="Equipo">Equipos o Instrumentos de Medición</option>
+                          <option value="Mobiliario">Mobiliarios</option>
                         </select>
                         <div class="field-error"> <p id="error-clasificacion"></p></div>
                       </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos()"><i class="fas fa-arrow-right"></i></button>    
-            </fieldset>
+                <button type="button" class="btn btn-next botonForm" onclick="elegir_campos(this);"><i class="fas fa-arrow-right"></i></button>    
+              </fieldset>
           
                 
                 <!-- Segundo paso-->
@@ -141,63 +151,67 @@
 
 
                         <div class="form-group" tag="Formato:">
+                            <label>Nombre*</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" title="Ingrese el nombre del Bien Mueble" placeholder="Nombre*"  required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
                         <div class="form-group">
+                            <label>Número de Bien Nacional*</label>
                             <input type="text" class="form-control" id="no_bien" name="no_bien" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)"   required>
                             <font color="red"><div id="err_no_bien" hidden></div></font>
                         </div>
 
                         <div class="form-group">
+                            <label>N° de placa</label>
                             <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ##### (5 dígitos)" placeholder="N° de placa">
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
-                        <div class="form-group">
-                            <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
-                            <div class="field-error"> <p id="error-marca"> </p> </div>
-                        </div>
+                        <div class="form-group" id ='grupo-marca' hidden>
+                          <label>Marca*</label>
+                          <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca*" required >
+                          <div class="field-error"> <p id="error-marca"> </p> </div>
+                      </div>
 
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
-                            <div class="field-error"> <p id="error-modelo"> </p> </div>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
-                            <div class="field-error"> <p id="error-serial"> </p> </div>
-                          </div>
-                        
-                          <div class="form-group">
-                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Descripción*" required>
-                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
-                        </div>
-                        
                     </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                 </fieldset>
                 <!-- Fin Segundo Paso -->
 
-                <!-- Tercer paso Parte 3-->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                                
+                <!-- Segundo paso 2-->
+                <fieldset class="formField" id='segundo-paso' >
+                    <div class="form-bottom" id='segundoPaso' data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
                         <span class="step">4</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
-                          <div class="form-group">
+
+                        <div class="form-group" id ='grupo-modelo' hidden>
+                          <label>Modelo*</label>
+                          <input type="text" class="form-control" id="modelo" name="modelo" value="" placeholder="Modelo*" required>
+                          <div class="field-error"> <p id="error-modelo"> </p> </div>
+                      </div>
+                        
+
+                          <div class="form-group" id ='grupo-serial' hidden>
+                              <label>Serial*</label>
+                              <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial*" required>
+                              <div class="field-error"> <p id="error-serial"> </p> </div>
+                            </div>
+        
+                            <div class="form-group">
+                              <label>Material*</label>
                               <select class="form-control" type="select" id="material" name="material" placeholder="Material predominante" onchange="agregar_otro_mat()" required>
                                 <!-- Insertar un for-->
                                 <option type="text" value="">Selecione un material*</option>
@@ -214,6 +228,7 @@
                           </div>
   
                           <div class="form-group">
+                              <label>Color*</label>
                               <select class="form-control" type="select" id="color" name="color" placeholder="Color" onchange="agregar_otro_color()" required>
                                 <option value="">Selecione un color*</option>
                                 {{ for color in color_list:}}
@@ -228,48 +243,15 @@
                             <div class="field-error"> <p id="error-color"> </p> </div>
                           </div>
 
-                          <label>Dimensiones</label>
-
-                          <div class="form-group">
-                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
-                              <option value="">Selecione una unidad</option>
-                              {{ for med in unidad_med:}}
-                              <option value="{{=med}}">{{=med}}</option>
-                              {{pass}}
-                            </select>
-                            <div class="field-error"> <p id="error-unidad" > </p> </div>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                            <font color="red"><div id="err_ancho" hidden></div></font>
-                          </div>
-
-
-                          <div class="form-group">
-                            <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
-                            <font color="red"><div id="err_largo" hidden></div></font>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
-                            <font color="red"><div id="err_alto" hidden></div></font>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
-                            <font color="red"><div id="err_diametro" hidden></div></font>
-                          </div>
-                          
-                        </div>
                       </div>
+                    </div>
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
                   </fieldset>
-                  <!-- Fin tercer Paso -->
-
-
-                <!--Tercer Paso parte 2-->
+                  <!-- Fin Segundo Paso -->
+  
+  
+                <!-- Tercer paso Parte 3-->
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
@@ -283,8 +265,46 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Bien</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
-  
-                        <div class="form-group">
+
+                          <label>Dimensiones</label>
+
+                          <div class="form-group">
+                            <select class="form-control" value="" type="select" id="unidad" name="unidad" placeholder="Unidad de medida" onchange="display_units(this.value)">
+                              <option value="">Selecione una unidad</option>
+                              {{ for med in unidad_med:}}
+                              <option value="{{=med}}">{{=med}}</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-unidad" > </p> </div>
+                          </div>
+
+                          <div class="form-group" id="grupo-ancho" hidden>
+                              <label>Ancho</label>
+                            <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
+                            <font color="red"><div id="err_ancho" hidden></div></font>
+                          </div>
+
+
+                          <div class="form-group" id="grupo-largo" hidden>
+                            <label>Largo</label>
+                            <input type="hidden" class="form-control" id="largo" name="largo" title="Formato ##.##" placeholder="Largo" >
+                            <font color="red"><div id="err_largo" hidden></div></font>
+                          </div>
+
+                          <div class="form-group" id="grupo-altura" hidden>
+                            <label>Altura</label>
+                            <input type="hidden" class="form-control" id="alto" name="alto" title="Formato ##.##" placeholder="Altura" >
+                            <font color="red"><div id="err_alto" hidden></div></font>
+                          </div>
+
+                          <div class="form-group" id="grupo-diametro" hidden>
+                            <label>Diámetro</label>
+                            <input type="hidden" class="form-control" id="diametro" name="diametro" title="Formato ##.##" placeholder="Diámetro" >
+                            <font color="red"><div id="err_diametro" hidden></div></font>
+                          </div>
+                          
+
+                          <div class="form-group">
                             <label>Seleccione un tipo de movilidad*</label>
                             <select class="form-control" type="select" id="movilidad" name="movilidad" placeholder="Movilidad" required>
                               <option value="">Seleccione un tipo de movilidad</option>
@@ -294,6 +314,31 @@
                             </select>
                             <div class="field-error"> <p id="error-movilidad"> </p> </div>
                         </div>
+
+                        </div>
+                      </div>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                  </fieldset>
+                  <!-- Fin Tercer Paso -->
+
+
+                <!--Tercer Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                        
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+  
 
                         <label>Tipo de Uso</label>
                         <div class="checkbox-group">
@@ -333,14 +378,19 @@
                           </select>
                           <div class="field-error"> <p id="error-estatus"> </p> </div>
                         </div>
-
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <input type="text" class="form-control" id="Descripcion" name="descripcion" placeholder="Cualquier información adicional que considere pertinente">
+                            <div class="field-error"> <p id="error-est-descripcion"> </p> </div>
                         </div>
+                        </div>
+
                       </div>
 
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </fieldset>
-                  <!-- Fin tercer paso-->
+                  <!-- Fin Tercer paso-->
 
                 <!-- Comienzo Cuarto Paso Parte 1-->
                 <fieldset class="formField">
@@ -354,7 +404,7 @@
                       </div>
   
                       <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body" style="padding-top: 50px">
+                      <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">SUDEBID</h4>
                       <label>Importante: llene según requerimientos de SUDEBID</label>
                         
@@ -461,11 +511,16 @@ del concepto y tipo de ingreso o egreso -->
   function elegir_campos(){
     var selecion = document.getElementById("clasificacion");
     if (selecion.value == "Mobiliario"){
+      //$('#segundo-paso').hide();
+      //$('#segundoPaso').hide();
       document.getElementById("marca").type = 'hidden';
       document.getElementById("modelo").type = 'hidden';
       document.getElementById("serial").type = 'hidden';
       document.getElementById("estatus").type = 'hidden';
       document.getElementById("calibrar").style.display = 'none';
+      $('#grupo-marca').hide()
+      $('#grupo-modelo').hide()
+      $('#grupo-serial').hide()
     }
     else{
       document.getElementById("select-calibrar").setAttribute("required", "");
@@ -474,6 +529,9 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("serial").type = 'text';
       document.getElementById("estatus").type = 'text';
       document.getElementById("calibrar").style.display = 'block';
+      $('#grupo-marca').show()
+      $('#grupo-modelo').show()
+      $('#grupo-serial').show()
     }
     document.getElementById("fecha_calibracion").style.display = 'none';
   }
@@ -496,14 +554,23 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("largo").type = 'hidden';
       document.getElementById("alto").type = 'hidden';
       document.getElementById("diametro").type = 'hidden';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
     }else{
       document.getElementById("unidad").type = 'text';
       document.getElementById("ancho").type = 'text';
       document.getElementById("largo").type = 'text';
       document.getElementById("alto").type = 'text';
       document.getElementById("diametro").type = 'text';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
     }
   }
+
 
   // Valida los campos de la forma en el modal "addbm"
   function validar_campos(){
@@ -597,7 +664,7 @@ del concepto y tipo de ingreso o egreso -->
 
   function colocar_subcategoria(value){
     var dict = {
-		'Maquinaria Construcción':
+		'Maquinaria y demás equipos de construcción, campo, industria y taller':
 			["Maquinaria y equipos de construcción y mantenimiento",
 			"Maquinarias y equipos para mantenimiento de automotores",
 			"Maquinarias y equipos agrícolas y pecuarios",
@@ -607,7 +674,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Maquinarias y equipos de riego y acueductos",
 			"Equipos de almacen",
 			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
-		"Equipo Transporte":
+		"Equipos de transporte, tracción y elevación":
 			["Vehículos automotores terrestres",
 			"Equipos ferroviarios y de cables aéreos",
 			"Equipos marítimos de transporte",
@@ -615,16 +682,16 @@ del concepto y tipo de ingreso o egreso -->
 			"Vehículos de tracción no motorizados",
 			"Equipos auxiliares de transporte",
 			"Otros equipos de transporte, tracción y elevación"],
-		"Equipo Comunicaciones":
+		"Equipos de comunicaciones y de señalamiento":
 			["Equipos de telecomunicaciones",
 			"Equipos de señalamiento",
 			"Equipos de control de tráfico aéreo",
 			"Equipos de correo",
 			"Otros equipos de comunicaciones y de señalamiento"],
-		"Equipo Médico":
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
 			["Equipos médicos - quirúrgicos, dentales y veterinarios",
 			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
-		"Equipo Científico Religioso":
+		"Equipos científicos, religiosos, de enseñanza y recreación":
 			["Equipos científicos y de laboratorio",
 			"Equipos de enseñanza, deporte y recreación",
 			"Obras de arte",
@@ -632,7 +699,7 @@ del concepto y tipo de ingreso o egreso -->
 			"Equipos religiosos",
 			"Instrumentos musicales",
 			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
-		"Equipo Oficina" : 
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
 			["Mobiliario y equipos de oficina",
 			"Equipos de procesamiento de datos",
 			"Mobiliario y equipos de alojamiento",
