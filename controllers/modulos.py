@@ -104,11 +104,12 @@ def validar_cedula():
   if not re.match(ci_format, request.post_vars.cedula):
     return "jQuery('#auth_cedula__row').addClass('has-error');\
     jQuery('#cedula_error_group').addClass('has-error');\
-    jQuery('#cedula_error').html('La cédula debe contener únicamente números. Ej: 12345678');\
+    jQuery('#cedula_error').html('La cédula debe contener únicamente números. Ej:  12345678');\
     jQuery('#cedula_error_group').show();\
     jQuery('form').submit(false);"
 
-  personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
+  cedula = request.post_vars.tipo_cedula+request.post_vars.cedula
+  personal_register = db(db.t_Personal.f_ci == cedula).select(db.t_Personal.ALL)
 
   if len(personal_register) != 0:
     return "jQuery('#auth_cedula__row').addClass('has-error');\
@@ -139,7 +140,7 @@ def validar_email():
     jQuery('form').submit(false);"
 
   auth_register = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)
-
+  
   # Verificar que no existe un registro en la base de datos con el email dado.
   if len(auth_register) != 0:
     return "jQuery('#auth_user_email__row').addClass('has-error');\
@@ -192,12 +193,18 @@ def register():
     """
     user = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)[0]
     es_supervisor = request.post_vars.tipo_supervisor
+    es_tecnico = request.post_vars.tipo_personal
 
 
     if request.post_vars.rol and es_supervisor :
         rolid = request.post_vars.rol
         roltype = db(db.auth_group.id == int(rolid)).select(db.auth_group.ALL)[0].role
         depid = request.post_vars.dephidden
+    elif (es_tecnico):
+        rolid = db(db.auth_group.role == "TÉCNICO").select(db.auth_group.ALL)[0].id
+        roltype = "TÉCNICO"
+        depid= request.post_vars.dephidden
+        
     else:
         rolid = db(db.auth_group.role == "PERSONAL INTERNO").select(db.auth_group.ALL)[0].id
         roltype = "PERSONAL INTERNO"
@@ -243,9 +250,14 @@ def register():
   if session.tags is None or not request.vars:
     session.tags = {}
 
-    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
+    rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'GESTOR DE PERSONAL', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
     roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
-    dependencias=list(db().select(db.dependencias.ALL))
+
+    queryDireccion = db(db.dependencias.nombre == "DIRECCIÓN").select(db.dependencias.ALL).first()
+  #Buscamos todas las dependencias cuya unidad de adscripcion sea la direccion
+    dependencias=list(db(db.dependencias.unidad_de_adscripcion == queryDireccion.id).select(db.dependencias.ALL))
+
+
     idJefeSec = (db(db.auth_group.role == 'JEFE DE SECCIÓN').select(db.auth_group.ALL)).first().id
 
     prefijos_cedula = ['V-','E-', 'P-']

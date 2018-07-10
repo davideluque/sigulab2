@@ -1,0 +1,151 @@
+{{extend 'layout.html'}}
+{{block head}}
+  <!--DATATABLES-->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', ' css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+  
+  <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+
+  <script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+{{end block}}
+
+{{block center}}
+<body>
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('default', 'index')}}">Inicio</a>
+  <a class="breadcrumb-item" href="#">Gestión</a>
+  <span class="breadcrumb-item active">Bitacora</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+  <style>
+    .row {
+      margin-right: 0 !important;
+    }
+
+    .boton-sigulab, .buttons-print {
+    background-color: #337ab7;
+    }
+  </style>
+<div class="container">
+    <div class="row">
+    <h3 class=" text-center" id="titulo_modulo"> BITÁCORA</h3>
+    </div>
+    <div class="row" id="lista-validados">
+      <div class="table-responsive no-padding no-margin">
+        <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+          <thead>
+              <tr id="titulosListado1">
+                <th class="camposTabla linksNombres">ID</th>
+                <th class="camposTabla linksNombres">ACCIÓN</th>
+                <th class="camposTabla linksNombres">FECHA</th>
+                <th class="camposTabla linksNombres">RESPONSABLE</th>
+              </tr>
+          </thead>
+
+          <tbody>
+            {{for entrada in entradas:}}
+              <tr>
+                  <td class="camposTabla"> {{=entrada['id']}}</td>
+                  <td class="camposTabla"> {{=entrada['accion']}}</td>
+                  <td class="camposTabla"> {{=entrada['fecha']}}</td>
+                  <td class="camposTabla"> {{=entrada['responsable']}}</td>
+              </tr>
+            {{pass}}           
+          </tbody>
+            <tfoot id="collapseFiltros">
+              <tr>
+                  <th class="camposTabla linksNombres">ID</th>
+                  <th class="camposTabla linksNombres">ACCIÓN</th>
+                  <th class="camposTabla linksNombres">FECHA</th>
+                  <th class="camposTabla linksNombres">RESPONSABLE</th>
+              </tr>
+          </tfoot>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+<!-- Datatables-->
+
+
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+<!-- Datatable1 init - Listado Personal -->
+<script>
+
+  var filtros = false;
+  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable1 tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable1').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
+      $("#datatable1 thead tr").not("#titulosListado1").css("display","none");
+  } );
+
+  function mostrarFiltro1() {
+      if (filtros){
+        $("#datatable1 thead tr").not("#titulosListado1").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable1 thead tr").not("#titulosListado1").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+<!-- Datatable1 init - Fichas Por Validar -->
+<script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>
+{{end block}}

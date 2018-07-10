@@ -139,8 +139,6 @@ db.define_table(
            label=T('Correo Electrónico Alternativo')),
     Field('f_direccion',          'string',
           requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'), label=T('Direccion')),
-    Field('f_ubicacion',          'string',
-          requires=IS_NOT_EMPTY(error_message='Por favor introduzca un valor'),  label=T('Ubicacion')),
     Field('f_pagina_web',     'string', requires=IS_URL(error_message='Ingrese un formato válido de url'), label=T('Página web')),
 
     Field('f_estatus',        'string', requires=IS_IN_SET(
@@ -193,9 +191,17 @@ db.define_table(
 
     Field('uso', 'string', notnull=True, label=T('Uso del espacio físico')),
     
-    Field('ext_USB', 'list:integer', label=T('Extension Telefonica USB')),
+    Field('ext_USB', 'string', label=T('Extension Telefonica USB')),
 
-    Field('ext_interna', 'string', label=T('Extension Telefonica Interna')),
+    Field('ext_USB_1', 'string', default = "", label=T('Extension USB 1')),
+
+    Field('ext_USB_2', 'string', default = "", label=T('Extension USB 2')),
+
+    Field('ext_USB_3', 'string', default = "", label=T('Extension USB 3')),
+
+    Field('ext_USB_4', 'string', default = "", label=T('Extension USB 4')),
+
+    Field('ext_interna', 'string', label=T('Extension Interna')),
     
     Field('dependencia', 'reference dependencias',
         requires=IS_IN_DB(db, db.dependencias.id, '%(nombre)s', zero=None), label=T('Dependencia')))
@@ -213,3 +219,10 @@ db.define_table(
     Field('tecnico', 'reference t_Personal', 
             requires=IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))
     )
+
+#Tabla bitacora_general lleva el registro de los eventos llamados en los modulos
+db.define_table(
+    'bitacora_general',
+    Field('f_accion', label=T('Acción')),
+    auth.signature
+)

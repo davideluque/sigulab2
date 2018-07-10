@@ -141,9 +141,9 @@ th {
 
 }
 
-#datatable_info1, #datatable_info2{
+.dataTables_info{
 	border-collapse: collapse;
-	float: right;
+	float: right !important;
 	text-align: right;
 }
 
@@ -163,4 +163,25 @@ th {
 	border-style: solid;
 	padding: 1%;
 	margin: 1%;
+}
+
+.fs-wrap {
+	display: block;
+	font-size: 16px;
+}
+
+.fs-label-wrap, .fs-wrap {
+	height: 50px;
+	position: relative;
+	width: 100%;
+	border: none;
+	border-bottom: 3px solid #ddd;
+}
+
+.fs-label {
+	position: absolute;
+	color: #888;
+	margin: auto;
+	top: 50%;
+    transform: translateY(-50%);
 }
