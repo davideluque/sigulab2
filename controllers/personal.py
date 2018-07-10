@@ -50,11 +50,23 @@ def tabla_categoria(tipo):
         if (idUSuperior) : Usuperior=(db(db.dependencias.id==idUSuperior).select(db.dependencias.ALL)).first().nombre
         else: Usuperior=None
 
-        # ubicacion = (db(db.espacios_fisicos.id == elm.f_ubicacion).select(db.espacios_fisicos.ALL)).first()
-        # if(ubicacion): ubicacion = ubicacion.codigo
-
         jefe = buscarJefe(dep)
-
+        ubicaciones = list(map(
+            lambda x: str(x.espacio_fisico),
+            db(db.es_encargado.tecnico == elm.id).select(db.es_encargado.ALL)
+        ))
+        ubicaciones = db(db.espacios_fisicos.id.belongs(ubicaciones)).select()
+        extensiones_usb = '/'.join(list(filter(bool,
+            list(map(lambda x: x.ext_USB, ubicaciones)) +
+            list(map(lambda x: x.ext_USB_1, ubicaciones)) +
+            list(map(lambda x: x.ext_USB_2, ubicaciones)) +
+            list(map(lambda x: x.ext_USB_3, ubicaciones)) +
+            list(map(lambda x: x.ext_USB_4, ubicaciones))
+        )))
+        extensiones_int = '/'.join(list(filter(bool,
+            list(map(lambda x: x.ext_interna, ubicaciones))
+        )))
+        print(ubicaciones)
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -80,8 +92,8 @@ def tabla_categoria(tipo):
              "condicion" : elm.f_condicion,
              "unidad_jerarquica_superior" : Usuperior,
              "rol" : elm.f_rol,
-             "extension_USB" : '',
-             "extension_interna" : '',
+             "extensiones_usb" : extensiones_usb,
+             "extensiones_int" : extensiones_int,
              "ubicacion" : '',
              "es_supervisor": elm.f_es_supervisor,
              "validado": elm.f_validado,

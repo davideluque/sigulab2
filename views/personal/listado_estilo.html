@@ -108,15 +108,11 @@
                                             data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
                                             data-condicion="{{=item['condicion']}}"
                                             data-rol="{{=item['rol']}}"
-                                            data-extension_usb="{{= item['extension_USB']}}"
-                                            data-extension_interna="{{=item['extension_interna']}}
-        
-                                            "
                                             data-jefe = "{{=item['jefe']}}"
                                             value="{{=item['ci']}}">{{=item['nombre'].upper()}} {{=item['apellido'].upper()}}</a></td>
                         <td class="camposTabla">{{=item['email'].upper()}}</td>
                         <td class="camposTabla">{{=item['dependencia'].upper()}}</td>
-                        <td class="camposTabla">{{=item['extension_USB']}}</td>
+                        <td class="camposTabla">{{=item['extensiones_usb']}}</td>
                         <td class="camposTabla">{{=item['extension_interna']}}</td>
                     </tr>
                   {{pass}}           
@@ -184,14 +180,12 @@
                                       data-fecha_ingreso_admin_publica="{{=item['fecha_ingreso_admin_publica']}}"
                                       data-condicion="{{=item['condicion']}}"
                                       data-rol="{{=item['rol']}}"
-                                      data-extension_usb="{{= item['extension_USB']}}"
-                                      data-extension_interna="{{=item['extension_interna']}}"
                                       data-jefe = "{{=item['jefe']}}"
                                       value="{{=item['ci']}}">{{=item["nombre"].upper()}} {{=item["apellido"].upper()}}</a></td>
                   <td class="camposTabla">{{=item['email'].upper()}}</td>
                   <td class="camposTabla">{{=item['dependencia']}}</td>
-                  <td class="camposTabla">{{=item['extension_USB']}}</td>
-                  <td class="camposTabla">{{=item['extension_interna']}}</td>
+                  <td class="camposTabla">{{=item['extensiones_usb']}}</td>
+                  <td class="camposTabla">{{=item['extensiones_int']}}</td>
               </tr>
             {{pass}}           
           </tbody>
