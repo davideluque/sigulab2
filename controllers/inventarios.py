@@ -49,6 +49,9 @@ def __find_dep_id(nombre):
 def __get_inventario_espacio(espacio_id=None):
     return db(db.bien_mueble.bm_espacio_fisico == espacio_id).select()
 
+# Dado el id de un bien mueble, retorna las fichas de mantenimiento del bien.
+def __get_mantenimiento_bm(id=None):
+    return db(db.historial_mantenimiento_bm.hmbm_nro == id).select()
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -281,7 +284,27 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
+# Registra un nuevo mantenimiento a un bm indicado.
+def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accion,
+                descripcion, proveedor, fecha_inicio, fecha_fin, tiempo_ejec,
+                fecha_cert, observacion):
 
+    inv_id = db.historial_mantenimiento_bm.insert(
+            hmbm_nro = no_bien, 
+            hmbm_fecha_sol = fecha_sol, 
+            hmbm_codigo = codigo, 
+            hmbm_tipo = tipo, 
+            hmbm_servicio = servicio, 
+            hmbm_accion = accion,
+            bm_descripcion = descripcion, 
+            hmbm_proveedor = proveedor, 
+            hmbm_fecha_inicio = fecha_inicio,
+            hmbm_fecha_fin =  fecha_fin,
+            hmbm_tiempo_ejec = tiempo_ejec,
+            hmbm_fecha_cert = fecha_cert, 
+            hmbm_observacion = observacion
+        )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
 # Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
@@ -1169,8 +1192,11 @@ def detalles():
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
 
+    mantenimiento=__get_mantenimiento_bm(bm)
+
     # Si se elimina
     if request.vars.si:
+        db(db.historial_mantenimiento_bm.hmbm_nro == bm).delete()
         db(db.bien_mueble.bm_num == bm).delete()
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
         session.flash = "Solicitud de eliminación aceptada"
@@ -1193,6 +1219,15 @@ def detalles():
             request.vars.descripcion_modificacion, user_id)
         request.vars.modificacion = None
     
+    if request.vars.mantenimiento_nuevo:
+        __agregar_mantenimiento_bm(
+            bien['bm_num'],request.vars.fecha_sol, 
+            request.vars.codigo, request.vars.tipo, request.vars.servicio,
+            request.vars.accion, request.vars.descripcion_man, request.vars.proveedor,
+            request.vars.fecha_inicio, request.vars.fecha_fin, request.vars.tiempo_ejec, 
+            request.vars.fecha_cert, request.vars.observacion_man)
+        request.vars.mantenimiento_nuevo=None
+
     if request.vars.eliminacion:
         if bien['bm_eliminar'] == 2: 
             db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0, bm_desc_eliminar = request.vars.descripcion_eliminacion)
@@ -1288,7 +1323,8 @@ def detalles():
                 caracteristicas_list = caracteristicas_list,
                 caracteristicas_dict = caracteristicas_dict,
                 sudebid_list = sudebid_list,
-                sudebid_dict = sudebid_dict)
+                sudebid_dict = sudebid_dict,
+                mantenimiento = mantenimiento)
 
 
 @auth.requires(lambda: __check_role())
