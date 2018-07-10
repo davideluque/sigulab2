@@ -550,6 +550,8 @@
                   <input type="text" class="input" disabled="" id="anexo5"  data-atributo="{{=doc.anexo_code5}}" value="{{=doc.anexo_code5}}: {{=doc.anexo_name5}}">
                    <br>
                 </div>
+                <p id="sinAnexos">No posee anexos</p>
+                
                
                 <a href="#" id="addAnexo"><span class="fa fa-plus">Agregar Anexo</span></a>
               </div>
@@ -591,7 +593,9 @@
                 
                 <div id="p_scents">
                   <p>
-                    <input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
+
+                 <input type="text" id="p_scnt" size="20" name="elaborador0" value="{{=doc.elaborador0}}" placeholder="Ingrese un elaborador" />
+
                   </p>
                 </div>
               
@@ -602,15 +606,19 @@
               </div>
               <div  id="elaboradores">
           
-                  <input type="text" class="input" disabled="" id="elaborador0" data-atributo="{{=doc.elaborador0}}" value="{{=doc.elaborador0}}"><br>
-               
-                  <input type="text" class="input" disabled="" id="elaborador1" data-atributo="{{=doc.elaborador1}}" value="{{=doc.elaborador1}}"><br>
-                  <input type="text" class="input" disabled="" id="elaborador2" data-atributo="{{=doc.elaborador2}}" value="{{=doc.elaborador2}}"><br>
-                  <input type="text" class="input" disabled="" id="elaborador3" data-atributo="{{=doc.elaborador3}}" value="{{=doc.elaborador3}}"><br>
-                  <input type="text" class="input" disabled="" id="elaborador4" data-atributo="{{=doc.elaborador4}}" value="{{=doc.elaborador4}}">
-                  <br>
+
+                   <input type="text" class="input" disabled="" id="elaborador0" name="elaborador0" data-atributo="{{=doc.elaborador0}}" value="{{=doc.elaborador0}}"><br>
+                   
+                   <input type="text" class="input" disabled="" id="elaborador1" name="elaborador2" data-atributo="{{=doc.elaborador1}}" value="{{=doc.elaborador1}}"><br>
+                   
+                   <input type="text" class="input" disabled="" id="elaborador2" name="elaborador3" data-atributo="{{=doc.elaborador2}}" value="{{=doc.elaborador2}}"><br>
+
+                   <input type="text" class="input" disabled="" id="elaborador3" name="elaborador4" data-atributo="{{=doc.elaborador3}}" value="{{=doc.elaborador3}}"><br>
+
+                   <input type="text" class="input" disabled="" id="elaborador4" name="elaborador5"data-atributo="{{=doc.elaborador4}}" value="{{=doc.elaborador4}}"><br>
+
                 </div>
-              
+              <p id="sinElaboradores">No posee elaboradores</p>
 
                <!-- Campo de Fecha de entrega para revisión del Documento -->
 
@@ -1036,10 +1044,16 @@ function estatus(){
    if($('.tipo_doc').data('atributo')!='Otro'){
      jQuery('#otro_tipo').hide();
    }
-   if($('#elaborador0').data('atributo')=='None'){
+   if($('#elaborador0').data('atributo')=='None' ){
+
      jQuery('#elaborador0').hide();
-   }if($('#elaborador1').data('atributo')=='None'){
+   }else{
+     jQuery('#sinElaboradores').hide();
+   }
+
+   if($('#elaborador1').data('atributo')=='None'){
      jQuery('#elaborador1').hide();
+     jQuery('#elaborador0').hide();
    }if($('#elaborador2').data('atributo')=='None'){
      jQuery('#elaborador2').hide();
    }
@@ -1052,6 +1066,9 @@ function estatus(){
 
    if($('#anexo1').data('atributo')=='None'){
      jQuery('#anexo1').hide();
+   }else{
+       jQuery('#sinAnexos').hide();
+
    }if($('#anexo2').data('atributo')=='None'){
      jQuery('#anexo2').hide();
    }if($('#anexo3').data('atributo')=='None'){
@@ -1072,8 +1089,9 @@ function estatus(){
         jQuery('#periodo').removeAttr('disabled');
         jQuery('#fecha_prox_rev').removeAttr('disabled');
 
-        //jQuery('#addAnexo').removeAttr('disabled');
-        jQuery('#elaboradores').hide();
+        jQuery('#addAnexo').removeAttr('disabled');
+        //jQuery('#elaboradores').hide();
+
 
 
         jQuery('#revision_contenido').removeAttr('disabled');
@@ -1092,7 +1110,7 @@ function estatus(){
         jQuery('#cod_controlCambios').removeAttr('disabled');
         jQuery('#fechaControlCambios').removeAttr('disabled');
         jQuery('.consejo_asesor_info').hide();
-        jQuery('.anexos').hide();
+        //jQuery('.anexos').hide();
       }else if($('.form-group').data('atributo')=='Elaborado'){
         jQuery('#revision_contenido').removeAttr('disabled');
         jQuery('#fecha_revision_contenidos').removeAttr('disabled');
@@ -1129,7 +1147,7 @@ function estatus(){
         jQuery('#p_anexo').hide(); 
         jQuery('#elaborado').hide(); 
         jQuery('#revisado').hide();
-        document.getElementById("p_scnt").value = "definidoR";
+        //document.getElementById("p_scnt").value = "definidoR";
         
         
       }else if($('.form-group').data('atributo')=='Aprobado'){
