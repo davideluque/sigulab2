@@ -2054,11 +2054,11 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
 
     if busqueda == 0:
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
-
+        
         peligrosidad_mayusculas = []
         
         if type(peligrosidad) is list:
-        peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+            peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
         else:
             peligrosidad_mayusculas = peligrosidad.upper()
             
@@ -2099,7 +2099,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
             peligrosidad_mayusculas = []
 
             if type(peligrosidad) is list:
-            peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+                peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
             else:
                 peligrosidad_mayusculas = peligrosidad.upper()
 

@@ -184,10 +184,10 @@
                                         <div class="col-sm-11 col11Body">
                                             <h4 class="titulosForm">Datos de ingreso</h4>
                                             <label>Campos marcados con * son obligatorios.</label>
-                                            <div class="form-group">
+                                            <div class="form-group">                                                
                                                 <label for="fecha_entrada">Fecha de creación del desecho:</label>
                                                 <br>
-                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada" required/>
+                                                <input class="form-control" type="date" id="fecha_entrada" name="fecha_entrada" required onchange="validar_fecha_entrada()" max="{{=fecha_actual}}"/>
                                                 <div class="field-error">
                                                   <p id="error-fecha"> </p>
                                                 </div>
@@ -326,8 +326,14 @@
     error_fecha_entrada.innerHTML = "";
     error_fecha_entrada.style.color = "none";
     fecha_entrada.style.border = "3px solid #ddd";
-    if (fecha_entrada.value == undefined || fecha_entrada.value == '') {
-      error_fecha_entrada.innerHTML = "Ingrese una fecha válida";
+
+    fecha_ingresada = new Date(fecha_entrada.value);
+    fecha_actual = new Date();
+
+
+
+    if (fecha_entrada.value == undefined || fecha_entrada.value == '' || fecha_ingresada > fecha_actual) {
+      error_fecha_entrada.innerHTML = "Ingrese una fecha válida, no mayor a la fecha actual";
       error_fecha_entrada.style.color = "red";
       fecha_entrada.style.border = "1px solid red";
       return false;
@@ -438,8 +444,13 @@
     error_cantidad_retirada.style.color = "";
     cantidad_retirada.style.border = "3px solid #ddd";
 
-    if(fecha_entrada.value == undefined || fecha_entrada.value == ''){
-      error_fecha_entrada.innerHTML = "Ingrese una fecha válida";
+    fecha_ingresada = new Date(fecha_entrada.value);
+    fecha_actual = new Date();
+
+    console.log(fecha_ingresada);
+
+    if(fecha_entrada.value == undefined || fecha_entrada.value == ''|| fecha_ingresada > fecha_actual){
+      error_fecha_entrada.innerHTML = "Ingrese una fecha válida, no mayor a la fecha actual";
       error_fecha_entrada.style.color = "red";
       fecha_entrada.style.border = "1px solid red";
       return false;
@@ -475,6 +486,8 @@
       cantidad_retirada.style.border = "1px solid red";
       return false;
     }
+
+    return false
   }
 </script>
  
