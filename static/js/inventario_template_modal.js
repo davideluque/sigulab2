@@ -170,10 +170,19 @@ $(document).ready(function () {
                 }
                 else if (($(this).attr('name')=="tiempo_ejec")) {
                     console.log("alo2")
-                    if (!($(this).val().match(/^[0-9]+$/) )) {
+                    if (!($(this).val().match(/^[0-9]+$/))) {
                         $("#err_tiempo_ejec").html("Formato Inválido. Ingrese un número");
                         $("#err_tiempo_ejec").show();
-                        $(this).addClass('input-error');
+                        next_step = false;
+                    }
+                    else if($(this).val()==NaN){
+                        $("#err_fecha_inicio").html("No tiene el formato adecuado");
+                        $("#err_fecha_inicio").show();
+                        $("#err_fecha_fin").html("No tiene el formato adecuado");
+                        $("#err_fecha_fin").show();
+                        $("#fecha_inicio").addClass('input-error');
+                        $("#fecha_fin").addClass('input-error');
+
                         next_step = false;
                     }
                     else {
@@ -246,6 +255,15 @@ $(document).ready(function () {
                                 $("#err_tiempo_ejec").html("Formato Inválido. Ingrese un número");
                                 $("#err_tiempo_ejec").show();
                                 $(this).addClass('input-error');
+                                next_step = false;
+                            }
+                            else if($(this).val()==NaN){
+                                $("#err_fecha_inicio").html("No tiene el formato adecuado");
+                                $("#err_fecha_inicio").show();
+                                $("#err_fecha_fin").html("No tiene el formato adecuado");
+                                $("#err_fecha_fin").show();
+                                $("#fecha_inicio").addClass('input-error');
+                                $("#fecha_fin").addClass('input-error');
                                 next_step = false;
                             }
                             else {
