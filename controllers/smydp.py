@@ -2164,13 +2164,11 @@ def bitacora_desechos():
     envases = list(db((db.t_envases.espacio_fisico == espacio_id)).select())
 
     bitacora = list(db(
-        (db.t_Bitacora_desechos.inventario == inventario_id) &
-        (db.t_Bitacora_desechos.created_by == db.auth_user.id)
+        (db.t_Bitacora_desechos.inventario == inventario_id)
     ).select(orderby=~db.t_Bitacora_desechos.id))
 
     ultima_entrada = db(
-        (db.t_Bitacora_desechos.inventario == inventario_id) &
-        (db.t_Bitacora_desechos.created_by == db.auth_user.id)
+        (db.t_Bitacora_desechos.inventario == inventario_id) 
     ).select(orderby=~db.t_Bitacora_desechos.id).first()
 
     #Se está agregando una nueva entrada a la bitácora
