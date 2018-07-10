@@ -447,8 +447,6 @@
     fecha_ingresada = new Date(fecha_entrada.value);
     fecha_actual = new Date();
 
-    console.log(fecha_ingresada);
-
     if(fecha_entrada.value == undefined || fecha_entrada.value == ''|| fecha_ingresada > fecha_actual){
       error_fecha_entrada.innerHTML = "Ingrese una fecha válida, no mayor a la fecha actual";
       error_fecha_entrada.style.color = "red";
