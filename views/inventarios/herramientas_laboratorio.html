@@ -19,7 +19,6 @@
                       <th class="camposTabla linksNombres">Presentación</th>
                       <th class="camposTabla linksNombres">Número de piezas</th>
                       <th class="camposTabla linksNombres">Ubicación interna</th>
-                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                         <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
                 </thead>
@@ -33,7 +32,6 @@
                         <td class="camposTabla">{{=bm['hr_presentacion']}}</td>
                         <td class="camposTabla">{{=bm['hr_numpiezas']}}</td>
                         <td class="camposTabla">{{=bm['hr_ubicacion']}}</td>
-                        <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['hr_espacio_fisico']).select().first().codigo}}</td>
                     </tr>
                   {{pass}}           
                 </tbody>
@@ -45,7 +43,6 @@
                       <th class="camposTabla linksNombres">Presentación</th>
                       <th class="camposTabla linksNombres">Número de piezas</th>
                       <th class="camposTabla linksNombres">Ubicación interna</th>
-                        <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                       <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                     </tr>
                 </tfoot>
