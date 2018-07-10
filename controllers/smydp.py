@@ -2089,7 +2089,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
-
+            peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
             #Agrega el desecho al inventario
             nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
@@ -2101,7 +2101,7 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             responsable = auth.user_id,
                                             envase = envase.id,
                                             tratamiento = tratamiento.upper(),
-                                            peligrosidad = peligrosidad.upper())
+                                            peligrosidad = peligrosidad_mayusculas)
             
             return T("Desecho creado exitósamente.")
 
