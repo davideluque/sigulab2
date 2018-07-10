@@ -13,6 +13,23 @@
 		border-bottom: 0px !important;
 	}
 
+	.boton-modal{
+		position: absolute;
+		right:10px;
+		bottom: 0;
+	}
+
+	div.col-sm-11.col11Body2{
+		height:560px;
+		overflow-y: scroll;
+		position: relative;		
+	}
+
+	div.col-sm-11.col11Body{
+		height:560px;
+		position: relative;		
+	}
+
 	.modal-body.addBody{
 		padding-right: 0px !important;
 		padding-top: 0px !important;
@@ -27,7 +44,8 @@
 	}
 
 	#col11Header{
-		background-color: #0300d7;
+		background-color: #337ab7;
+		;
 		height: 50px;
 		width: 91.67% !important;
 		border-top-right-radius: 5px;
@@ -170,7 +188,7 @@
 	}
 
 	#col11Header{
-		background-color: blue;
+		background-color: #337ab7;
 		height: 50px;
 		width: 100% !important;
 		border-top-right-radius: 5px;
@@ -181,6 +199,7 @@
 		height: 40px;
 		width: 100%;
 	}
+
 
 	#nuevaSustancia{
 		text-align: left;

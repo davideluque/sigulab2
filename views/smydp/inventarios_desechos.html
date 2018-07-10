@@ -48,7 +48,7 @@
 </div>
 {{pass}}
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
+	<div style="padding-left: 0px" class="container titulo">
 	
 	{{if es_tecnico:}}
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
@@ -56,16 +56,18 @@
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
+			<p class="padre dep-titulo" > {{=dep_padre_nombre}} </p>
+			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">					<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
 			</a>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
-			{{if dep_nombre == "Alta Tensión":}}
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>			
+			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
+				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 			{{else:}}
+				<h3 class="subtitulo"> {{=dep_nombre}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
 			{{pass}}
 		</div>
@@ -73,7 +75,8 @@
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>						
+			<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 			<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 		</div>
 		{{pass}}
@@ -84,7 +87,9 @@
 		{{if dep_padre_id:}}
 		<div class="col-xs-2 boton-retorno">
 			{{if dep_padre_id == direccion_id:}}
-			<p class="padre dep-titulo"> Inventario de DP</p>
+				<p class="padre dep-titulo"> Inventario de DP</p>
+			{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
+				<p class="padre dep-titulo"> {{=dep_nombre}}</p>
 			{{else:}}
 				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
 			{{pass}}
@@ -93,31 +98,49 @@
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('inventarios_desechos')}}">
-		    		<i class="fa fa-arrow-left"></i>
-	    		</a>
+	    		<a class="boton boton-retorno" href="{{=URL('inventarios_desechos')}}">
+						<i class="fa fa-arrow-left"></i>
+				</a>
+				{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio='True'))}}" style="align-self: left;">
+						<i class="fa fa-arrow-left"></i>
+	    		</a>				
 	    		{{else:}}
-    			<a class="boton" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-		    		<i class="fa fa-arrow-left"></i>
+    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}" style="align-self: left;">
+						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="inicio-titulo"> {{=dep_nombre}} </h3>
 			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>				
+				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/seccion.png')}}">
 			{{elif  "LABORATORIO" in dep_nombre.upper():}} 
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>				
+				<h3 class="subtitulo"> {{=dep_nombre}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/laboratorio.png')}}">
 			{{else:}}
+				{{if (not ('view' in request.vars)):}}
+				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>					
+				<h3 class="subtitulo"> {{=dep_padre_nombre.upper()}} - {{=dep_nombre.upper()}} </h3>
 				<img class="iconos" src="{{=URL('static', 'images/espacio.png')}}">
+				{{pass}}
 			{{pass}}
 		</div>
-		<div class="col-xs-2"> </div>
+		<div class="col-xs-2"> 
+			{{if (request.vars.es_espacio == "True") & (not ('view' in request.vars)) & (not(auth.has_membership('PERSONAL INTERNO'))) & (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}
+			<button type="button" id="botonAgregar" class="btn botonesListado buttons-html5 agregar" title="Agregar un nuevo desecho peligroso" data-toggle="modal" data-target="#adddesecho">
+				<li class="fa fa-plus"></li>
+			  </button>
+			{{pass}}
+		</div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="inicio-titulo"> Inventario de DP - ULAB </h3>
+			<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>
+			<h4 class="subtitulo"> ULAB </h4>			
 			<img class="iconos" src="{{=URL('static', 'images/ulab.png')}}">
 
 		</div>
@@ -210,9 +233,12 @@
 <!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
 
 	<!-- Se lista el inventario del espacio fisico visitado -->
-	{{if espacio_visitado:}} {{include 'smydp/inventario_desechos_espacio.html'}}
-	<!-- Se lista el inventario agregado de la dependencia visitada-->
-	{{else:}} {{include 'smydp/inventario_desechos_dependencia.html'}} {{pass}}
+	{{if espacio_visitado:}} 
+		{{include 'smydp/inventario_desechos_espacio.html'}}
+	{{pass}}
+	{{if (not espacio_visitado):}} 
+		{{include 'smydp/inventario_desechos_dependencia.html'}} 
+	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
@@ -288,7 +314,10 @@
 	var table = $('#datatable').DataTable({
 		"dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
 		language: {
-			url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+			paginate: {
+				"previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
+				"next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+			}
 		},
 		initComplete: function () {
 			var api = this.api();
