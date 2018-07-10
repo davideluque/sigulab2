@@ -49,3 +49,30 @@ def espacios_fisicos():
     else:
         table = SQLFORM.smartgrid(db.espacios_fisicos,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
     return locals()
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+
+def bitacora_general():
+    '''if(auth.has_membership('ADMINISTRADOR PERSONAL') or auth.has_membership('WEBMASTER')\
+       or auth.has_membership('DIRECTOR') or (auth.user.email == "ulab-calidad@usb.ve")):
+        table = SQLFORM.smartgrid(db.bitacora_general,onupdate=auth.archive, links_in_grid=False,editable=False,create=False,deletable=False,user_signature=True,paginate=10)
+    else:
+        table = SQLFORM.smartgrid(db.bitacora_general,editable=False,deletable=False,csv=False,links_in_grid=False,create=False,paginate=10)
+    #print(db.bitacora_general.fields())
+    '''
+    entradas_query= db().select(db.bitacora_general.ALL)
+    entradas = []
+
+    for elm in entradas_query:
+        responsable = db(db.auth_user.id == elm.created_by).select(db.auth_user.ALL).first()
+
+        entradas.append({
+            'id': elm.id,
+            'accion': elm.f_accion,
+            'fecha': elm.created_on,
+            'responsable': responsable.first_name + " " + responsable.last_name
+        })
+        
+    return locals()
+
