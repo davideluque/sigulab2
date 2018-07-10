@@ -246,7 +246,7 @@ function validaFechaIngreso(){
         $this.popover('show');
     }
     else if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
-        $this.attr("data-content", 'La fecha de ingreso tiene que ser antes de la fecha actual');
+        $this.attr("data-content", 'La fecha de ingreso tiene que ser antes de la fecha de hoy');
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -279,7 +279,7 @@ function validaFechaSalida(){
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
     if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isBefore(fecha_final)){
-        $this.attr("data-content", "La fecha de egreso es antes que la de ingreso");
+        $this.attr("data-content", "La fecha de egreso tiene que ser antes que la fecha de ingreso");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -330,7 +330,7 @@ function validaFechaIngresoUlab(){
         return false;
     }
     else if (fecha_inicio !== "" && !(moment(fecha_ingreso_ulab).isBefore(fecha_inicio) || moment(fecha_ingreso_ulab).isSame(fecha_inicio))) {
-        $this.attr("data-content", "La fecha de ingreso al ULAB tiene que ser antes que la fecha de inicio");
+        $this.attr("data-content", "La fecha de ingreso al ULAB tiene que ser antes que la fecha de ingreso");
         $this.addClass('input-error');
         $this.popover('show');
         return false;
