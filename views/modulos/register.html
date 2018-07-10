@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="col-xs-9" id="auth_cedula__row">
-                        <input autocomplete="new-password" class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula'], ':eval')" onfocus="limpiar_cedula()" required>
+                        <input autocomplete="new-password" class="form-control number" id="cedula" name="cedula" type="text" placeholder="Cédula" onfocusout="ajax('validar_cedula', ['cedula',['tipo_cedula']], ':eval')" onfocus="limpiar_cedula()" required>
                     </div>
                     <div id="cedula_error_group" style="display:none;">
                         <label class="control-label" id="cedula_error"></label>

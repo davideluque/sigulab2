@@ -104,11 +104,12 @@ def validar_cedula():
   if not re.match(ci_format, request.post_vars.cedula):
     return "jQuery('#auth_cedula__row').addClass('has-error');\
     jQuery('#cedula_error_group').addClass('has-error');\
-    jQuery('#cedula_error').html('La cédula debe contener únicamente números. Ej: 12345678');\
+    jQuery('#cedula_error').html('La cédula debe contener únicamente números. Ej:  12345678');\
     jQuery('#cedula_error_group').show();\
     jQuery('form').submit(false);"
 
-  personal_register = db(db.t_Personal.f_ci == request.post_vars.cedula).select(db.t_Personal.ALL)
+  cedula = request.post_vars.tipo_cedula+request.post_vars.cedula
+  personal_register = db(db.t_Personal.f_ci == cedula).select(db.t_Personal.ALL)
 
   if len(personal_register) != 0:
     return "jQuery('#auth_cedula__row').addClass('has-error');\
@@ -139,7 +140,7 @@ def validar_email():
     jQuery('form').submit(false);"
 
   auth_register = db(db.auth_user.email == request.post_vars.email).select(db.auth_user.ALL)
-
+  
   # Verificar que no existe un registro en la base de datos con el email dado.
   if len(auth_register) != 0:
     return "jQuery('#auth_user_email__row').addClass('has-error');\
