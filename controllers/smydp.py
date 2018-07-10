@@ -2055,7 +2055,13 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
     if busqueda == 0:
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
 
+        peligrosidad_mayusculas = []
+        
+        if type(peligrosidad) is list:
         peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+        else:
+            peligrosidad_mayusculas = peligrosidad.upper()
+            
         row.update_record(
             categoria = envase.categoria,
             composicion = envase.composicion,
@@ -2090,7 +2096,13 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
+            peligrosidad_mayusculas = []
+
+            if type(peligrosidad) is list:
             peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+            else:
+                peligrosidad_mayusculas = peligrosidad.upper()
+
             #Agrega el desecho al inventario
             nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
                                             cantidad = cantidad,
@@ -2104,8 +2116,6 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             tratamiento = tratamiento.upper(),
                                             peligrosidad = peligrosidad_mayusculas)
             
-            return T("Desecho creado exitósamente.")
-
             # Crea la entrada inicial en la bitácora de desechos
             db.t_Bitacora_desechos.insert(
                 fecha = str(datetime.datetime.now()),
@@ -2117,6 +2127,9 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                 envase = envase.id,
                 inventario = nueva_entrada_id
             )
+
+            return T("Desecho creado exitósamente.")
+
 
         else:
             return T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
