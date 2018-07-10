@@ -162,9 +162,9 @@
                           <select class="form-control" type="select" id="envase" name="envase" required>
                             {{for envase in envases_totales:}} 
                               {{if envase['id'] == desecho_seleccionado['t_inventario_desechos']['envase']:}}
-                                <option value="{{=envase['id']}}" selected>{{=envase['identificacion']}}</option>
+                                <option value="{{=envase['id']}}" selected data-capacidad="{{=envase['capacidad']}}">{{=envase['identificacion']}}</option>
                               {{else:}}
-                                <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
+                                <option value="{{=envase['id']}}" data-capacidad="{{=envase['capacidad']}}">{{=envase['identificacion']}}</option>
                               {{pass}} 
                             {{pass}}
                           </select>
@@ -414,9 +414,9 @@
                             <label for="envase">Identificación del contenedor donde se depositó el desecho*:</label>
                             {{if len(envases) > 0:}}                          
                               <select class="form-control" type="select" id="envase" name="envase" required>
-                                <option value="" selected hidden disabled>Seleccione un contenedor*</option>
+                                <option value="" selected hidden disabled data-capacidad="0">Seleccione un contenedor*</option>
                                 {{for envase in envases:}}
-                                <option value="{{=envase['id']}}">{{=envase['identificacion']}}</option>
+                                <option value="{{=envase['id']}}" data-capacidad="{{=envase['capacidad']}}">{{=envase['identificacion']}}</option>
                                 {{pass}}
                               </select>
                             {{else:}}
@@ -487,27 +487,34 @@
 <!-- Fin Modal Agregar Servicio -->
 
 <script type="text/javascript">
-
   function validar_cantidad() {
-    // Buscando divs para ingresar mensajes de error
-    var error_cantidad = document.getElementById("error-cantidad");
+      var indice = document.getElementById("envase").selectedIndex;
+      var capacidad = parseFloat(document.getElementById("envase").options[indice].dataset.capacidad);
 
-    // Limpiando los mensajes anteriores de validadores
-    if (error_cantidad.innerText != ''){
-      error_cantidad.innerText = '';
+      // Buscando divs para ingresar mensajes de error
+      var error_cantidad = document.getElementById("error-cantidad");
+
+      // Limpiando los mensajes anteriores de validadores
+      if (error_cantidad.innerText != '') {
+        error_cantidad.innerText = '';
+      }
+
+      // Buscando los valores ingresados por el usuario en cada campo
+      var cantidad = document.forms['formularioCarga']['cantidad'].value;
+
+      // Mensajes de error
+      var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
+
+      if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
+        error_cantidad.innerText = mensaje_error_cantidad;
+        return false;
+      }
+      
+      if(parseFloat(cantidad) > capacidad){
+        error_cantidad.innerText = "La cantidad ingresada supera a la capacidad del contenedor seleccionado.";
+        return false;
+      }
     }
-
-    // Buscando los valores ingresados por el usuario en cada campo
-    var cantidad = document.forms['formularioCarga']['cantidad'].value;
-
-    // Mensajes de error
-    var mensaje_error_cantidad = "Por favor ingrese un valor numérico no negativo. Por ej.: 250";
-
-    if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
-      error_cantidad.innerText = mensaje_error_cantidad;
-      return false;
-    }
-  }
 
   function validar_concentracion() {
     // Buscando divs para ingresar mensajes de error
@@ -533,6 +540,8 @@
 
   // Valida los campos de la forma en el modal "addsustancia"
   function validar_campos(){
+    var indice = document.getElementById("envase").selectedIndex;
+    var capacidad = parseFloat(document.getElementById("envase").options[indice].dataset.capacidad);
 
     // Buscando divs para ingresar mensajes de error
     var error_envase = document.getElementById("error-envase");
@@ -577,6 +586,11 @@
 
     if (!is_number(cantidad) || is_negative(cantidad) || is_zero(cantidad)) {
       error_cantidad.innerText = mensaje_error_cantidad;
+      return false;
+    }
+
+    if (parseFloat(cantidad) > capacidad) {
+      error_cantidad.innerText = "La cantidad ingresada supera a la capacidad del contenedor seleccionado.";
       return false;
     }
     
