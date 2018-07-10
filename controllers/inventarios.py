@@ -296,7 +296,7 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
             hmbm_tipo = tipo, 
             hmbm_servicio = servicio, 
             hmbm_accion = accion,
-            bm_descripcion = descripcion, 
+            hmbm_descripcion = descripcion, 
             hmbm_proveedor = proveedor, 
             hmbm_fecha_inicio = fecha_inicio,
             hmbm_fecha_fin =  fecha_fin,

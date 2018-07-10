@@ -5,7 +5,14 @@
 
     <!-- Para los mensajes con flash -->
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
-
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
     <!-- Estilos de modales y listados -->
       <!-- Estilo del listado de Solicitudes de Servicios -->
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
@@ -174,66 +181,7 @@
                 </div>
             </div>
             <div id="tab-5"class="tab-content">
-                <!-- Inicio Listado de sustancias -->
-                <div class="container">
-                        <div class="row">
-                        
-                            <div>
-                                <button class="dt-button btn boton-sigulabPlus" title="Agregar Mantenimiento" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addman"><i class="fa fa-plus"></i></button>  
-                            </div>
-                        
-                            <br><br>
-                        
-                            <br><br>
-                            <div id="buttons">
-                            <!-- Filtrado -->
-                            <!-- Filtrado -->    
-                            </div>
-                            <br>
-                        
-                            <div class="table-responsive no-padding no-margin">
-                            <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr id="titulosListado">
-                                        <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-                                        <th class="camposTabla linksNombres">Servicio Ejecutado</th>
-                                        <th class="camposTabla linksNombres">Acción</th>
-                                        <th class="camposTabla linksNombres">Descripción</th>
-                                        <th class="camposTabla linksNombres">Fecha de Certificación</th>
-
-                                        <!--<th class="camposTabla linksNombres">Estatus</th>-->
-                                    </tr>
-                                </thead>
-                        
-                                <tbody>
-                                {{for bm in mantenimiento:}}
-                                    <tr>
-                                        <td class="camposTabla">{{=bm['hmbm_fecha_sol']}}</td>
-                                        <td class="camposTabla">{{=bm['hmbm_servicio']}}</td>
-                                        <td class="camposTabla">{{=bm['hmbm_accion']}}</td>
-                                        <td class="camposTabla">{{=bm['hmbm_descripcion']}}</td>
-                                        <td class="camposTabla">{{=bm['hmbm_fecha_cert']}}</td>
-                        
-                                    </tr>
-                                {{pass}}           
-                                </tbody>
-                        
-                                <tfoot id="collapseFiltros">
-                                <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-                                <th class="camposTabla linksNombres">Servicio Ejecutado</th>
-                                <th class="camposTabla linksNombres">Acción</th>
-                                <th class="camposTabla linksNombres">Descripción</th>
-                                <th class="camposTabla linksNombres">Fecha de Certificación</th>
-                                <!--<th class="camposTabla linksNombres">Estatus</th>-->
-                                    </tr>
-                                </tfoot>
-                        
-                            </table>
-                            </div>
-                        </div>
-                        </div>  
-                        <!-- Fin Listado de sustancias --> 
-
+                {{include 'inventarios/mantenimiento.html'}}
             </div>
             <div id="tab-6"class="tab-content">En desarrollo</div>
             <div id="tab-7"class="tab-content">En desarrollo</div>
@@ -872,7 +820,7 @@
             <div class="modal-body addBody">
               <div class="row addRow">
                 <div class="col-md-12 form-box">
-                    <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+                    <form id="formularioMantenimiento" class="registration-form" method="post">
 
                       <!-- Primer paso-->
                       <fieldset class="formField">
@@ -1028,7 +976,7 @@
                           </div>
       
                           <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                          <button type="submit button" form="formularioCarga" name="mantenimiento_nuevo" value="True" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                          <button type="submit button" form="formularioMantenimiento" name="mantenimiento_nuevo" value="True" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
                       </fieldset>
       
                       <!-- Fin Tercer Paso -->
@@ -1205,7 +1153,7 @@
   
     // Valida los campos de la forma en el modal "addbm"
     function validar_campos(){
-  
+    console.log("alo")
       // Buscando divs para ingresar mensajes de error
       var error_total = document.getElementById("error-total");
       var error_uso_interno = document.getElementById("error-uso-interno");
