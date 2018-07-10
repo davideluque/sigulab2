@@ -245,6 +245,12 @@ function validaFechaIngreso(){
         $this.attr("data-valido", 'false');
         $this.popover('show');
     }
+    else if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+        $this.attr("data-content", 'La fecha de ingreso tiene que ser antes de la fecha actual');
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+    }
     else{
         $this.removeClass('input-error');
         $this.popover('hide');
@@ -272,8 +278,7 @@ function validaFechaSalida(){
     const $this = $('[name="fecha_salida_add"]');
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
-
-    if (fecha_inicio !== "" && fecha_final !== ""    && !moment(fecha_inicio).isBefore(fecha_final)){
+    if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isBefore(fecha_final)){
         $this.attr("data-content", "La fecha de egreso es antes que la de ingreso");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
