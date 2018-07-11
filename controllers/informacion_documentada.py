@@ -489,7 +489,7 @@ def reporteRegistros():
 	return dict(registros=row)
 
 
-def formatopdf():
+def reporteDocumentos():
 
 
 	uname = request.args[0]
