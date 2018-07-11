@@ -625,7 +625,7 @@
             
                 <div class="form-group">
                 <h5>Fecha de elaboración</h5>
-                <input disabled="" class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_prox_rev}}">
+                <input disabled="" class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_prox_rev}}" data-date-end-date="0d">
               </div>
 
 
@@ -667,7 +667,8 @@
               <!-- Campo de fecha de la revisión de contenidos -->
               <div class="form-group">
                 <h5>Fecha de revisión de contenidos</h5>
-                <input disabled="" class="datepicker" name="fecha_revision_contenidos" id="fecha_revision_contenidos" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_contenido}}">
+                <input disabled="" class="datepicker" name="fecha_revision_contenidos" id="fecha_revision_contenidos" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_contenido}}"  data-date-end-date="0d">
+                <h6 style="color:red" id="error_rev_cont">La fecha de revisión de contenido debe ser menor a la fecha de elaboración</h6>
                
               </div>
  
@@ -680,7 +681,9 @@
               <!-- Campo de fecha de la revisión de especificaciones -->
               <div class="form-group">
                 <h5>Fecha de revisión de especificaciones</h5>
-                <input disabled="" class="datepicker" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_especificaciones_doc}}">
+                <input disabled="" class="datepicker" name="fecha_revision_especificaciones" id="fecha_revision_especificaciones" type="text"  data-trigger="manual" data-content="Seleccione una fecha" value="{{=doc.fecha_rev_especificaciones_doc}}"  data-date-end-date="0d">
+
+                <h6 style="color:red" id="error_rev_esp">La fecha de revisión de especificaciones debe ser menor a la fecha de elaboración</h6>
 
               </div> 
 
@@ -701,6 +704,7 @@
                  <input type="text" class="input" disabled="" id="info_consejo_asesor" 
                  value="{{=doc.fecha_rev_por_consejo_asesor}}"> 
                 </div>
+                <div id="relleno"></div>
                
                 <div id="containerRevision"/>
                 </div> 
@@ -737,13 +741,16 @@
                 <!-- Campo de responsable de aprobación-->
                 <div class="form-group">
                   <h5>Responsable de aprobación</h5>
-                  <input disabled='' type="text" class="input" name="aprobado_por" id="aprobado_por" placeholder="Aprobado Por:" /> 
+                  <input type="text" class="input" name="aprobado_por" id="aprobado_por" placeholder="Aprobado Por:" /> 
                 </div>
 
                 <!-- Campo de fecha de aprobación -->
                 <div class="form-group">
                   <h5>Fecha de aprobación</h5>
-                  <input disabled="" class="datepicker" name="fechaAprobacion" id="fechaAprobacion" type="text" data-trigger="manual" data-content="Seleccione una fecha" > 
+                  <input disabled="" class="datepicker" name="fechaAprobacion" id="fechaAprobacion" type="text" data-trigger="manual" data-content="Seleccione una fecha" data-date-end-date="0d" >
+
+                  <h6 style="color:red" id="error_apro_1">La fecha de aprobación debe ser superior a la fecha de revisión de contenido</h6>
+                          <h6 style="color:red" id="error_apro_2">La fecha de aprobación debe ser superior a la fecha de revisión de especificaciones</h6>  
                 </div>  
                 
                 <!-- Campo de código de registro de aprobación -->
@@ -840,14 +847,15 @@
                 <div class="form-group">
                   <h5>Fecha de control de cambios</h5>
                 
-                   <input disabled="" class="datepicker" name="fechaControlCambios" id="fechaControlCambios" type="text" data-trigger="manual" data-content="Seleccione una fecha">
+                   <input disabled="" class="datepicker" name="fechaControlCambios" id="fechaControlCambios" type="text" data-trigger="manual" data-content="Seleccione una fecha"  data-date-end-date="0d">
+                   <h6 style="color:red" id="error_cambios">La fecha de control de cambios debe ser superior a la fecha de elaboración</h6>
 
                 </div>
 
                 <!-- Campo de Elaborado por -->
                 <div class="form-group">
                   <h5>Elaborador del control de cambios</h5>
-                  <input disabled='' type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
+                  <input type="text" class="input" name="ccelaborado" id="ccelaborado" placeholder="Elaborado por" /> 
                 </div>
 
                 <!-- Campo de Ubicación del registro en formato físico -->
@@ -995,43 +1003,6 @@
 
 </script>
 
-<script type="text/javascript">
-  function agregarFecha(){
-
-
-    var container = document.getElementById("containerRevision");
-    var input = document.createElement("input");
-    var fecha_revision = document.getElementById("fecha_revision_especificaciones").value;
-
-
-    input.type = "date";
-    input.class = "datepicker"
-    input.name = "fecha_revision_consejo";
-    input.id = "fecha_revision_consejo";
-
-
-
-    var etiqueta = document.createElement("label");
-    etiqueta.innerHTML = "Inserte la fecha de revisión por el consejo asesor";
-
-    container.appendChild(document.createElement("br"));
-    container.appendChild(etiqueta);
-    container.appendChild(input);
-
-    
-  }
-
-  function eliminarFecha(){
-    var container = document.getElementById("containerRevision");
-    while (container.hasChildNodes()) {
-      container.removeChild(container.lastChild);
-    }
-
-  }
-
-
-
-</script>
 
 
   <script>
@@ -1206,5 +1177,213 @@ function estatus(){
 <script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
 
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+
+<script>
+
+  var filtros = false;
+  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+  $(document).ready(function() {
+    // Setup - add a text input to each footer cell
+    $('#datatable tfoot th').each( function () {
+      var title = $(this).text();
+      $(this).html( '<input type="text" placeholder="Filtro" />' );
+    } );
+   
+    // DataTable
+    var table = $('#datatable').DataTable();
+   
+    // Apply the search
+    table.columns().every( function () {
+      var that = this;
+   
+      $( 'input', this.footer() ).on( 'keyup change', function () {
+        if ( that.search() !== this.value ) {
+          that
+            .search( this.value )
+            .draw();
+        }
+      } );
+    } );
+
+    $('#datatable tfoot tr').appendTo('#datatable thead');
+    $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+    if (filtros){
+    $("#datatable thead tr").not("#titulosListado").css("display","none");
+    filtros = false
+    }
+    else{
+    $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+    filtros = true
+    }
+  }
+    $("#error_rev_cont").hide();
+  $("#error_rev_esp").hide();
+  $("#con_as_div").hide();
+  $("#error_con_1").hide();
+  $("#error_con_2").hide();
+  $("#error_apro_1").hide();
+  $("#error_apro_2").hide();
+  $("#error_cambios").hide();
+  var fecha_prox_rev = $("#fecha_prox_rev").val();
+  var fecha_revision_contenidos = $("#fecha_revision_contenidos").val();
+  var fecha_revision_especificaciones = $("#fecha_revision_especificaciones").val();
+  var fecha_revision_consejo = $("#fecha_revision_consejo").val();
+  var fechaAprobacion = $("#fechaAprobacion").val();
+  var fechaControlCambios = $("#fechaControlCambios").val();
+  $("#fecha_prox_rev").change(function () {
+    fecha_prox_rev = $("#fecha_prox_rev").val();
+    let fecha = fecha_prox_rev.split("-");
+    let fecha_end = new Date(fecha[0],(fecha[1]-1),fecha[2]);
+    $('#fecha_revision_contenidos').attr('data-date-start-date',fecha_end)  
+    $('#fecha_revision_especificaciones').attr('data-date-start-date',fecha_end)  
+  });
+
+  $("#fecha_revision_contenidos").change(function () {
+    fecha_revision_contenidos = $("#fecha_revision_contenidos").val();
+    if(validate_fechaMayorQue(fecha_prox_rev,fecha_revision_contenidos)){
+      $("#error_rev_cont").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_rev_cont").show()
+      $(".enviar").attr('disabled','disabled')
+
+    }
+  });
+
+  $("#fecha_revision_especificaciones").change(function () {
+    fecha_revision_especificaciones = $("#fecha_revision_especificaciones").val();
+    if(validate_fechaMayorQue(fecha_prox_rev,fecha_revision_especificaciones)){
+      $("#error_rev_esp").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_rev_esp").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+  });
+
+  $("#fecha_revision_consejo").change(function () {
+    fecha_revision_consejo = $("#fecha_revision_consejo").val();
+    if(validate_fechaMayorQue(fecha_revision_contenidos,fecha_revision_consejo)){
+      $("#error_con_1").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_con_1").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+
+    if(validate_fechaMayorQue(fecha_revision_especificaciones,fecha_revision_consejo)){
+      $("#error_con_2").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_con_2").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+
+  });
+  $("#fechaControlCambios").change(function () {
+    fechaControlCambios = $("#fechaControlCambios").val();
+    if(validate_fechaMayorQue(fecha_prox_rev,fechaControlCambios)){
+      $("#error_cambios").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_cambios").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+  });
+
+  $("#fechaAprobacion").change(function () {
+    fechaAprobacion = $("#fechaAprobacion").val();
+    if(validate_fechaMayorQue(fecha_revision_contenidos,fechaAprobacion)){
+      $("#error_apro_1").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_apro_1").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+
+    if(validate_fechaMayorQue(fecha_revision_especificaciones,fechaAprobacion)){
+      $("#error_apro_2").hide()
+      $(".enviar").removeAttr("disabled")
+    }else{
+      $("#error_apro_2").show()
+      $(".enviar").attr('disabled','disabled')
+    }
+  });
+  function validate_fechaMayorQue(fechaInicial,fechaFinal)
+  {
+
+    valuesStart=fechaInicial.split("-");
+
+    valuesEnd=fechaFinal.split("-");
+
+    // Verificamos que la fecha no sea posterior a la actual
+
+    var dateStart=new Date(valuesStart[0],(valuesStart[1]-1),valuesStart[2]);
+
+    var dateEnd=new Date(valuesEnd[0],(valuesEnd[1]-1),valuesEnd[2]);
+
+    if(dateStart>=dateEnd)
+    {
+        return false;
+    }
+
+    return true;
+
+  }
+  function agregarFecha(){
+
+    $("#relleno").html('<div class="form-group" id="con_as_div"><h5>Fecha de revisión por Consejo Asesor</h5><input class="datepicker" name="fecha_revision_consejo" id="fecha_revision_consejo" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" data-date-end-date="0d" readonly=""><h6 style="color:red" id="error_con_1">La fecha de revisión por el concejo asesor debe ser posterior a la fecha de revisión de contenido</h6><h6 style="color:red" id="error_con_2">La fecha de revisión por el concejo asesor debe ser posterior a la fecha de revisión de especificaciones</h6></div>');
+    $("#error_con_1").hide();
+    $("#error_con_2").hide();
+    $(function() {
+    $('.datepicker').datepicker({
+          format: 'yyyy-mm-dd'
+        })  
+
+    });
+    $("#fecha_revision_consejo").change(function () {
+      fecha_revision_consejo = $("#fecha_revision_consejo").val();
+      if(validate_fechaMayorQue(fecha_revision_contenidos,fecha_revision_consejo)){
+        $("#error_con_1").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_1").show()
+        $(".enviar").attr('disabled','disabled')
+      }
+
+      if(validate_fechaMayorQue(fecha_revision_especificaciones,fecha_revision_consejo)){
+        $("#error_con_2").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_2").show()
+        $(".enviar").attr('disabled','disabled')
+      }
+
+    });
+
+    
+  }
+
+  function eliminarFecha(){
+
+    $("#relleno").empty();
+    $(".enviar").removeAttr("disabled");
+    /*var container = document.getElementById("containerRevision");
+    while (container.hasChildNodes()) {
+      container.removeChild(container.lastChild);
+    }*/
+
+  }
+</script>
+ <script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>
 
 {{end}}
