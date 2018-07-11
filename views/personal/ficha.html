@@ -6,9 +6,12 @@
 	<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/ficha_personal.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/fselect.css')}}">
+
 	<script src="{{=URL('static', 'js/personal_template_modal.js')}}"></script>
 	<script src="{{=URL('static', 'js/moment.min.js')}}"></script>
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+  <script src="{{=URL('static', 'js/fselect.js')}}"></script>
   <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
   <script src="{{=URL('static', 'js/cleave.js')}}"></script>
 
@@ -104,9 +107,15 @@
                       <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
                     {{pass}}
-                    {{if bool(personal['ubicacion']) :}}
+                    {{if bool(personal['ubicaciones']) :}}
                     <tr>
-                        <td>Ubicación:</td><td id="field_ubicacion">{{=personal['ubicacion']}}</td>
+                        <td>Ubicación(es):</td><td id="field_ubicacion">
+                          <ul>
+                            {{for ubicacion in personal['ubicaciones']:}}
+                            <li>{{=ubicacion.codigo}}</li>
+                            {{pass}}
+                          </ul>
+                        </td>
                     </tr>
                     {{pass}}
                  
@@ -304,9 +313,17 @@
                   <tr>
                     <td>Dependencia:</td><td>{{=personal['dependencia']}}</td>
                   </tr>
+                    {{if bool(personal['ubicaciones']) :}}
                     <tr>
-                        <td>Ubicación:</td><td>{{=personal['ubicacion']}}</td>
+                        <td>Ubicación(es):</td><td id="field_ubicacion">
+                          <ul>
+                            {{for ubicacion in personal['ubicaciones']:}}
+                            <li>{{=ubicacion.codigo}}</li>
+                            {{pass}}
+                          </ul>
+                        </td>
                     </tr>
+                    {{pass}}
                   <tr>
                       <td>Unidad de Adscripción: </td><td>{{=personal['unidad_jerarquica_superior']}}</td>
                   </tr>
