@@ -260,6 +260,9 @@
                               hidden
                               {{pass}}
                               >
+                                <div class="col-sm-12">
+                                  <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                </div>
                                 <div class="col-sm-12" >
                                   <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
                                   <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
@@ -268,9 +271,7 @@
                                   <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
                                 </div>
 
-                                <div class="col-sm-12">
-                                  <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                </div>
+                                
                               </div>
 
                             <!--<div class="form-group">

@@ -371,8 +371,9 @@ const validadoresSegundoPasoFijo = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngreso,
-    validaFechaSalida
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
 ]
 const validadoresSegundoPaso = [
     validaEstatus,
@@ -518,11 +519,12 @@ $(document).ready(function () {
 
     $('#sel2').change(function (){
         if ($("#sel2 option:selected").val()=="Fijo") {
-            $("#fingreso").hide();
-
+            $("#fsalida").hide();
+            $('[name="fecha_ingreso_add"]').val('');
+            $('[name="fecha_salida_add"]').val('');
         }
         else {
-            $("#fingreso").show();
+            $("#fsalida").show();
         };
     });
 
@@ -541,9 +543,8 @@ $(document).ready(function () {
             if ($('[name="categoria_add"]').val() === 'Fijo'){
                 // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
                 // base de datos 
-                $('[name="fecha_ingreso_usb_add"]').val('')
-                $('[name="fecha_ingreso_ulab_add"]').val('');
-                $('[name="fecha_ingreso_admin_publica_add"]').val('')
+                $('[name="fecha_ingreso_add"]').val('');
+                $('[name="fecha_salida_add"]').val('');
 
                 next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
             }
