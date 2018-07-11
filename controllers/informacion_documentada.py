@@ -476,23 +476,18 @@ def ficha():
 	) 
 
 def reporteRegistros():
+	
+
+	dependencia = dependenciaAsociadaUsuario()
+	registros_mostrar = db(db.registros.dependencia_asociada == dependencia).select(db.registros.ALL)
 
 
-	uname = request.args[0]
-	#row = db(db.registros.codigo==uname).select()
-	row=db().select(db.registros.ALL)
-
-	#documento =  db(db.registros.codigo==uname)
-
-	#return dict(registros=row,
-	#			dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row
-	return dict(registros=row)
+	return dict(registros=registros_mostrar)
 
 
 def reporteDocumentos():
 
 
-	uname = request.args[0]
 	#row = db(db.documentos.codigo==uname).select()
 	row=db().select(db.documentos.ALL)
 

@@ -39,12 +39,18 @@
 <div class="container-fluid" id="container-body" style="">
 
   <div class="row">
-    <div class="col-md-10">
-      <h3 style="text-align: center; margin-left: 18%"> CONTROL DE REGISTROS </h3>
+    <div class="col-md-2">
+      <a href="{{=URL('..', 'sigulab2','informacion_documentada','')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px; margin-left: 50%;"></i></h2></a>
+    </div>  
+    <div class="col-md-8">
+      <h3 style="text-align: center; %"> CONTROL DE REGISTROS </h3>
     </div>
     <div class="col-md-2">
+      <a class="btn btn-default buttons-print" tabindex="0" aria-controls="datatable" href="{{=URL('informacion_documentada','reporteRegistros')}}" style="margin-right: 4%;">
+        <span><i class="fa fa-download fa-2x" ></i></span>
+      </a>
       <a href="#">
-        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; border-color: #337ab7;"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
+        <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#adddoc" style="border-radius: 50%; text-align: center; background-color: #337ab7; border-color: #337ab7;"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
       </a>
      
     </div>
@@ -226,13 +232,13 @@
 
                           <div class="input-group">
                               <h4 class="">Ubicación del archivo electrónico</h4>
-                              <input type="text" name="ubicacion_doc_electronico" id="ubicacion_doc_electronico" placeholder="Ubicación del registro electrónico" required/>
+                              <input type="text" name="ubicacion_doc_electronico" id="ubicacion_doc_electronico" required/>
                               <h6 style="color: gray;">Indique el nombre del archivo electrónico, carpeta o ruta para acceder al el mismo</h6>
                           </div>
                           
                           <div class="input-group">
                               <h4 class="">Ubicación del registro en formato físico</h4>
-                              <input type="text" name="archivo_fisico" id="archivo_fisico" placeholder="Archivo físico" required/>
+                              <input type="text" name="archivo_fisico" id="archivo_fisico" required/>
                               <h6 style="color: gray;">Indique la carpeta, archivo, estante u otro se puede acceder al documento</h6>
                           </div>
 
@@ -260,20 +266,6 @@
     </div>
   </div>
 
-
-  <div class="container">
-      <div class="row">
-          <div class="col-sm-12">
-          <!-- Boton que lleva al modal -->
-          <a class="btn btn-default buttons-print" tabindex="0" aria-controls="datatable" href="{{=URL('informacion_documentada','reporteRegistros',args=[doc.codigo])}}" >
-          <span><i class="fa fa-print"></i> Generar Reporte</span></a>
-        
-        
-            <!-- <button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Impresión</button> -->
-        </a>
-      </div>
-      </div>
-  </div>
 
 
 

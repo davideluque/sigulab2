@@ -212,20 +212,19 @@
   {{for doc in documentos:}}
 
   <div class="row" style="margin-bottom: 50px;">
-    <div class="col-md-1">
+
+    <div class="col-md-3">
+      <a  href="{{=URL('informacion_documentada', 'lista_documentos')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px; margin-left: 25%;"></i></h2></a>
     </div>
-    <div class="col-md-1">
-      <a  href="{{=URL('informacion_documentada', 'lista_documentos')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px;"></i></h2></a>
-    </div>
-    <div class="col-md-7">
-      <h3 style="text-align: center; margin-left: 18%;"> {{=doc.nombre_doc.upper()}} </h3>
-      <h4 style="text-align: center; margin-left: 18%;">{{=doc.codigo}}</h4>
+    <div class="col-md-6">
+      <h3 style="text-align: center;"> {{=doc.nombre_doc.upper()}} </h3>
+      <h4 style="text-align: center;">{{=doc.codigo}}</h4>
     </div>
     <div class="col-md-3">
       <form method="POST" style="display: inline-block;">
         {{if doc.estatus!="Aprobado":}}
           <p onclick="estatus()" style="display: inline-block;">
-            <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
+            <button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc"  class="btn btn-primary btn-md" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-pencil fa-2x" aria-hidden="true"></i></button>
           </p>
         {{pass}}  
       </form>
@@ -233,13 +232,13 @@
 
         {{if doc.visibilidad == "Si":}}
           <input type="hidden" name="visibilidad" value="No">
-          <button type="submit" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
+          <button type="submit" class="btn btn-info btn-md" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye-slash fa-2x" aria-hidden="true"></i></button>
         {{else:}}
           <input type="hidden" name="visibilidad" value="Si">
-          <button type="submit" class="btn btn-info btn-lg" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye fa-2x" aria-hidden="true"></i></button>
+          <button type="submit" class="btn btn-info btn-md" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px; display: inline-block;"><i class="fa fa-eye fa-2x" aria-hidden="true"></i></button>
         {{pass}}  
       </form>  
-      <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#modalEliminar" value="eliminar" style="border-radius: 50%; text-align: center; background-color: red; margin-right: 20px; display: inline-block;"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></button>
       
           
     </div>
@@ -256,8 +255,8 @@
     <div class="tab-wrapper">
       <ul class="tabs">
         <li class="tab-link active" data-tab="1">Información General</li>
-        <li class="tab-link" data-tab="2">Ubicación</li>
-        <li class="tab-link" data-tab="3">Historial de Revisión</li>    
+        <li class="tab-link" data-tab="2">Historial de Revisión</li>
+        <li class="tab-link" data-tab="3">Ubicación</li>    
       </ul>
     </div>
 
