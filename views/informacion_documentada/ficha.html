@@ -1239,6 +1239,7 @@ function estatus(){
   var fecha_revision_consejo = $("#fecha_revision_consejo").val();
   var fechaAprobacion = $("#fechaAprobacion").val();
   var fechaControlCambios = $("#fechaControlCambios").val();
+  var flag_validation;
   $("#fecha_prox_rev").change(function () {
     fecha_prox_rev = $("#fecha_prox_rev").val();
     let fecha = fecha_prox_rev.split("-");
@@ -1257,6 +1258,24 @@ function estatus(){
       $(".enviar").attr('disabled','disabled')
 
     }
+    if(flag_validation == 1){
+      fecha_revision_consejo = $("#fecha_revision_consejo").val();
+      if(validate_fechaMayorQue(fecha_revision_contenidos,fecha_revision_consejo)){
+        $("#error_con_1").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_1").show()
+        $(".enviar").attr('disabled','disabled')
+      }
+
+      if(validate_fechaMayorQue(fecha_revision_especificaciones,fecha_revision_consejo)){
+        $("#error_con_2").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_2").show()
+        $(".enviar").attr('disabled','disabled')
+      }
+    }
   });
 
   $("#fecha_revision_especificaciones").change(function () {
@@ -1267,6 +1286,24 @@ function estatus(){
     }else{
       $("#error_rev_esp").show()
       $(".enviar").attr('disabled','disabled')
+    }
+    if(flag_validation == 1){
+      fecha_revision_consejo = $("#fecha_revision_consejo").val();
+      if(validate_fechaMayorQue(fecha_revision_contenidos,fecha_revision_consejo)){
+        $("#error_con_1").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_1").show()
+        $(".enviar").attr('disabled','disabled')
+      }
+
+      if(validate_fechaMayorQue(fecha_revision_especificaciones,fecha_revision_consejo)){
+        $("#error_con_2").hide()
+        $(".enviar").removeAttr("disabled")
+      }else{
+        $("#error_con_2").show()
+        $(".enviar").attr('disabled','disabled')
+      }
     }
   });
 
@@ -1340,7 +1377,7 @@ function estatus(){
 
   }
   function agregarFecha(){
-
+    flag_validation = 1;
     $("#relleno").html('<div class="form-group" id="con_as_div"><h5>Fecha de revisión por Consejo Asesor</h5><input class="datepicker" name="fecha_revision_consejo" id="fecha_revision_consejo" type="text" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" data-date-end-date="0d" readonly=""><h6 style="color:red" id="error_con_1">La fecha de revisión por el concejo asesor debe ser posterior a la fecha de revisión de contenido</h6><h6 style="color:red" id="error_con_2">La fecha de revisión por el concejo asesor debe ser posterior a la fecha de revisión de especificaciones</h6></div>');
     $("#error_con_1").hide();
     $("#error_con_2").hide();
@@ -1374,7 +1411,7 @@ function estatus(){
   }
 
   function eliminarFecha(){
-
+    flag_validation = 0;
     $("#relleno").empty();
     $(".enviar").removeAttr("disabled");
     /*var container = document.getElementById("containerRevision");
