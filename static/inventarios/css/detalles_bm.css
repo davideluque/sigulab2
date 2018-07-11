@@ -170,3 +170,6 @@
       transform: none;
   }
   }
+  div.dt-buttons {
+    float: right;
+  }

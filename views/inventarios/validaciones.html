@@ -87,7 +87,9 @@
 					<td class="camposTabla"><a href="{{=URL('detalles_mod', vars=dict(bm=bm['mbn_num']))}}">{{=bm['mbn_nombre'].upper()}}</a></td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
 					<td class="camposTabla">{{=db(db.bien_mueble.bm_num == bm['mbn_num']).select().first().bm_clasificacion.upper()}}</td>
+					{{ if bm['mbn_desc']: }}
 					<td class="camposTabla">{{=bm['mbn_desc'].upper()}}</td>
+					{{pass}}
 				</tr>
 				{{pass}}
 				{{for material in inventario[1]:}}

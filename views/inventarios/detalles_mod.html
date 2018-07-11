@@ -30,7 +30,11 @@
     {{ if bien['mbn_placa'] != None: }}
         <h4 class="dep-titulo text-center">Placa: {{=bien['mbn_placa']}}</h4>
     {{pass}}
+    {{if bien['mbn_desc']:}}
     <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['mbn_desc'].upper()}}</h4>
+    {{else:}}
+    <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: </h4>
+    {{pass}}
     <!-- Flash message -->
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}

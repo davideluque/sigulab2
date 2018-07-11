@@ -550,19 +550,6 @@
 
                         {{pass}}
 
-                        <label>Ubicación interna</label>
-                        <div class="form-group">
-                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##" value="{{=bien['hr_ubicacion']}}" required>
-                                <font color="red"><div id="err_ubicacion_int" hidden></div></font>
-                        </div>
-
-
-                        <div class="form-group">
-                                <label>Observaciones</label>
-                                <input type="text" class="form-control" id="descripcion_herramientas" name="descripcion_herramientas" value="{{=bien['hr_observacion']}}" placeholder="Observaciones"> 
-                                <font color="red"><div id="error-est-descripcion" hidden></div></font>
-                        </div>
-
                         </div>
                       </div>
 
@@ -586,8 +573,21 @@
                         <label>Campos marcados con * son obligatorios.</label>
 
                         <div class="form-group">
+                                <label>Ubicación interna*</label>
+                                <input type="text" class="form-control" id="ubicacion_int" name="ubicacion_int" placeholder="Indique estante, anaquel, gaveta, mesón, archivo u otro.*" title="#####.##" value="{{=bien['hr_ubicacion']}}" required>
+                                <font color="red"><div id="err_ubicacion_int" hidden></div></font>
+                        </div>
+
+
+                        <div class="form-group">
+                                <label>Observaciones</label>
+                                <input type="text" class="form-control" id="descripcion_herramientas" name="descripcion_herramientas" value="{{=bien['hr_observacion']}}" placeholder="Observaciones"> 
+                                <font color="red"><div id="error-est-descripcion" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
                                 <label>Motivo de la modificacion*</label>
-                                <input type="text" class="form-control" id="descripcion_modificacion_her" name="descripcion_modificacion_her" placeholder="Describa los campos modificados"> 
+                                <input type="text" class="form-control" id="descripcion_modificacion_her" name="descripcion_modificacion_her" placeholder="Describa los campos modificados" required> 
                                 <font color="red"><div id="error-est-motivo" hidden></div></font>
                         </div>
 
