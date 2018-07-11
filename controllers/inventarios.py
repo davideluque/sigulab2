@@ -24,7 +24,7 @@ def __is_valid_id(id_, tabla):
     except:
         return False
     # Si el id recibido tiene el tipo correcto pero no existe en la base de datos
-    if not db(tabla.id == int(id_)).select():
+    if not db(tabla.id == int(id_)).select() :
         return False
 
     return True
@@ -1647,6 +1647,7 @@ def detalles_herramientas():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bienes_muebles():
 # Inicializando listas de espacios fisicos y dependencias
+    print('Entro en bienes')
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
     espacios = []
@@ -1695,6 +1696,7 @@ def bienes_muebles():
     user_dep_id = user.f_dependencia
 
     if auth.has_membership("PERSONAL INTERNO"):
+        print("Entro en personal")
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -1810,47 +1812,47 @@ def bienes_muebles():
                 redirect(URL('bienes_muebles'))
 
 
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = espacio.codigo
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
-                # Guardando la unidad de adscripcion
-                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
+            # Guardando el ID y nombre de la dependencia padre para el link 
+            # de navegacion de retorno
+            dep_padre_id = espacio.dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                ).select().first().nombre
+            # Guardando la unidad de adscripcion
+            dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                ).select().first().unidad_de_adscripcion
 
-                espacio_visitado = True
+            espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+            # Busca el inventario del espacio
+            inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
-                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+            unidad_med = ['cm','m']
+            movilidad = ['Fijo','Portátil']
+            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+            'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
+            cod_localizacion = ['150301','240107']
+            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
+            # Si se esta agregando un nuevo BM, se registra en la DB
+            if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
+                __agregar_bm(
+                    request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                    request.vars.marca, request.vars.modelo, request.vars.serial,
+                    request.vars.descripcion, request.vars.material, request.vars.color,
+                    request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
+                    request.vars.ancho, request.vars.largo, request.vars.alto,
+                    request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
+                    request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
+                    dep_padre_id, user_id, request.vars.clasificacion)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -1895,9 +1897,6 @@ def bienes_muebles():
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('bienes_muebles'))
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
@@ -1907,7 +1906,11 @@ def bienes_muebles():
                 redirect(URL('bienes_muebles'))
 
             if request.vars.es_espacio == "True":
-        
+
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos)  and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('bienes_muebles'))
+
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1952,6 +1955,11 @@ def bienes_muebles():
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
+
+                if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('bienes_muebles'))
+
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
                 dep_id = request.vars.dependencia
@@ -2187,50 +2195,50 @@ def material_lab():
                 redirect(URL('bienes_muebles'))
 
 
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = espacio.codigo
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
-                # Guardando la unidad de adscripcion
-                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
+            # Guardando el ID y nombre de la dependencia padre para el link 
+            # de navegacion de retorno
+            dep_padre_id = espacio.dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                ).select().first().nombre
+            # Guardando la unidad de adscripcion
+            dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                ).select().first().unidad_de_adscripcion
 
-                espacio_visitado = True
+            espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_inventario_materiales_espacio(espacio_id)
+            # Busca el inventario del espacio
+            inventario = __get_inventario_materiales_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
-                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
-                presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+            unidad_med = ['cm','m']
+            movilidad = ['Fijo','Portátil']
+            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
+            'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
+            cod_localizacion = ['150301','240107']
+            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+            unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+            presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_material(
-                        request.vars.nombre_mat,
-                        request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
-                        request.vars.capacidad, request.vars.unidad_cap, 
-                         request.vars.unidad_mat,  
-                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
+            # Si se esta agregando un nuevo BM, se registra en la DB
+            if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
+                __agregar_material(
+                    request.vars.nombre_mat,
+                    request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
+                    request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
+                    request.vars.capacidad, request.vars.unidad_cap, 
+                        request.vars.unidad_mat,  
+                    request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+                    request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
+                    request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
+                    dep_padre_id, user_id, request.vars.clasificacion)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -2275,9 +2283,7 @@ def material_lab():
         if request.vars.dependencia:
 
             # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('material_lab'))
+
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
@@ -2287,6 +2293,9 @@ def material_lab():
                 redirect(URL('material_lab'))
 
             if request.vars.es_espacio == "True":
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('material_lab'))
         
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
@@ -2335,6 +2344,10 @@ def material_lab():
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
+
+                if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('material_lab'))
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
                 dep_id = request.vars.dependencia
@@ -2578,14 +2591,14 @@ def consumibles():
                 # Evaluando la correctitud de los parametros del GET 
                 if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                         __is_bool(request.vars.es_espacio)):
-                    redirect(URL('material_lab'))
+                    redirect(URL('consumibles'))
 
                 # Determinando si el usuario tiene privilegios suficientes para
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user, 
                                     int(request.vars.dependencia), 
                                         request.vars.es_espacio):
-                    redirect(URL('material_lab'))
+                    redirect(URL('consumibles'))
 
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -2689,50 +2702,50 @@ def consumibles():
                 redirect(URL('bienes_muebles'))
 
 
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = espacio.codigo
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
-                # Guardando la unidad de adscripcion
-                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
+            # Guardando el ID y nombre de la dependencia padre para el link 
+            # de navegacion de retorno
+            dep_padre_id = espacio.dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                ).select().first().nombre
+            # Guardando la unidad de adscripcion
+            dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                ).select().first().unidad_de_adscripcion
 
-                espacio_visitado = True
+            espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_inventario_consumibles_espacio(espacio_id)
+            # Busca el inventario del espacio
+            inventario = __get_inventario_consumibles_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
-                nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
-                'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
-                presentacion=["Caja", "Paquete", "Unidad", "Otro"]
+            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
+            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
+            unidad_med = ['cm','m']
+            movilidad = ['Fijo','Portátil']
+            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
+            'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
+            cod_localizacion = ['150301','240107']
+            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
+            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
+            unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+            presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_material(
-                        request.vars.nombre_mat,
-                        request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
-                        request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
-                        request.vars.capacidad, request.vars.unidad_cap, 
-                         request.vars.unidad_mat,  
-                        request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
-                        request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
-                        request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
+            # Si se esta agregando un nuevo BM, se registra en la DB
+            if request.vars.nombre_mat: # Verifico si me pasan como argumento el nombre del BM.
+                __agregar_material(
+                    request.vars.nombre_mat,
+                    request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
+                    request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
+                    request.vars.capacidad, request.vars.unidad_cap, 
+                        request.vars.unidad_mat,  
+                    request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
+                    request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion, 
+                    request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads, 
+                    dep_padre_id, user_id, request.vars.clasificacion)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -2740,13 +2753,13 @@ def consumibles():
         elif request.vars.es_espacio == 'False':
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                    redirect(URL('material_lab'))
+                    redirect(URL('consumibles'))
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('material_lab'))
+                redirect(URL('consumibles'))
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
@@ -2776,19 +2789,21 @@ def consumibles():
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
 
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('material_lab'))
+
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user, 
                                 int(request.vars.dependencia), 
                                     request.vars.es_espacio):
-                redirect(URL('material_lab'))
+                redirect(URL('consumibles'))
 
             if request.vars.es_espacio == "True":
+
+                # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('consumibles'))
         
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
@@ -2837,6 +2852,11 @@ def consumibles():
                         dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
+
+                # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('consumibles'))
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
                 dep_id = request.vars.dependencia
@@ -3060,36 +3080,36 @@ def herramientas():
                 redirect(URL('herramientas'))
 
 
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = espacio.codigo
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
-                # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
-                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().nombre
-                # Guardando la unidad de adscripcion
-                dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
-                                    ).select().first().unidad_de_adscripcion
+            # Guardando el ID y nombre de la dependencia padre para el link 
+            # de navegacion de retorno
+            dep_padre_id = espacio.dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                ).select().first().nombre
+            # Guardando la unidad de adscripcion
+            dep_padre_unid_ads = db(db.dependencias.id == dep_padre_id
+                                ).select().first().unidad_de_adscripcion
 
-                espacio_visitado = True
+            espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_inventario_herramientas_espacio(espacio_id)
+            # Busca el inventario del espacio
+            inventario = __get_inventario_herramientas_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                unidad_med = ['cm','m']
-                presentacion=["Unidad", "Conjunto"]
+            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
+            unidad_med = ['cm','m']
+            presentacion=["Unidad", "Conjunto"]
 
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_herramienta(
-                        request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
-                        request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
-                        request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
-                        request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
+            # Si se esta agregando un nuevo BM, se registra en la DB
+            if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
+                __agregar_herramienta(
+                    request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her, 
+                    request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
+                    request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+                    request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
+                    request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -3133,10 +3153,7 @@ def herramientas():
         # Si el usuario ha seleccionado una dependencia o un espacio fisico
         if request.vars.dependencia:
 
-            # Evaluando la correctitud de los parametros del GET 
-            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('herramientas'))
+
 
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
@@ -3147,6 +3164,11 @@ def herramientas():
 
             if request.vars.es_espacio == "True":
         
+
+            # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('herramientas'))
                 # Se muestra el inventario del espacio
                 espacio_id = request.vars.dependencia
                 espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -3179,6 +3201,11 @@ def herramientas():
                         request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
                         request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
+
+            # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('herramientas'))
                 # Se muestran las dependencias que componen a esta dependencia padre
                 # y se lista el inventario agregado
                 dep_id = request.vars.dependencia
