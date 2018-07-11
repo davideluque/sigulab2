@@ -165,44 +165,42 @@
 
 <div class="container" style="padding: 0px;">
 	<div class="row">
+		<br>
+		<div class="table-responsive no-padding no-margin">
+	    <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+	    	<div id="buttons" style="text-align: right; " >
+		  
 
-	
-	   
-	    <br>
+		</div>
+		<br>
 
-	    <div class="table-responsive no-padding no-margin">
-	    
-	      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
-	       <div id="buttons" style="text-align: right; " >
+		
+			<thead>
+				<tr id="titulosListado">
+					<th class="camposTabla linksNombres">Documento</th>
+					<th class="camposTabla linksNombres">Código</th>
+					<th class="camposTabla linksNombres">Tipo</th>
+					<th class="camposTabla linksNombres">Responsable</th>
+					<th class="camposTabla linksNombres">Vínculo</th>
+					<th class="camposTabla linksNombres">Estatus</th>
+				</tr>
+			</thead>
 
-	      <!-- Filtrado 
-	        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5"><i class="fa fa-filter fa-2x"></i></button>-->
-	      <!-- Filtrado -->   
+			<tbody>
+				{{for doc in documentos:}}
+					{{if doc.visibilidad == "No":}}
+						{{if doc.dependencia_asociada == depAsoc:}}
+							<tr>
+									<td class="camposTabla" style="text-align: left; padding-left: 34px" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}">{{=doc.nombre_doc.upper()}}</a>
+									</td>
+									<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
+									<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
+									<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
+									<td class="camposTabla" ><button type="button">Descargar</button></td>
+									<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 
-	    </div>
-	        <thead>
-	            <tr id="titulosListado">
-	                <th class="camposTabla linksNombres">Documento</th>
-	                <th class="camposTabla linksNombres">Código</th>
-	                <th class="camposTabla linksNombres">Tipo</th>
-	                <th class="camposTabla linksNombres">Responsable</th>
-	                <th class="camposTabla linksNombres">Vínculo</th>
-	                <th class="camposTabla linksNombres">Estatus</th>
-	            </tr>
-	        </thead>
-
-	        <tbody>
-	  			{{for doc in documentos:}}
-				<tr>
-						<td class="camposTabla" style="text-align: left; padding-left: 34px" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}" >
-							{{=doc.nombre_doc.upper()}}
-						</a>
-						</td>
-						<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
-						<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
-						<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
-						<td class="camposTabla" ><button type="button">Descargar</button></td>
-						<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
+							</tr>
+						{{else:}}
 
 
 						{{pass}}
@@ -240,9 +238,6 @@
 	  </div>
 	</div> 
 </div>
-
-
-
 
 
 
@@ -749,7 +744,19 @@
 
 
 
-
+	<div class="container">
+	    <div class="row">
+	        <div class="col-sm-12">
+	        <!-- Boton que lleva al modal -->
+	        <a class="btn btn-default buttons-print" tabindex="0" aria-controls="datatable" href="{{=URL('informacion_documentada','formatopdf',args=[doc.codigo])}}" >
+	        <span><i class="fa fa-print"></i> Generar Reporte</span></a>
+	    	
+	    	
+	      		<!-- <button type="button" class="btn btn-info" style="background-color:#0300d7; border-color:#0300d7; margin-top:20px;">Impresión</button> -->
+	  		</a>
+	    </div>
+	    </div>
+	</div>
 
 
 

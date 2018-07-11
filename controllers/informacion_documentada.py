@@ -474,3 +474,29 @@ def ficha():
 		dependencias=db().select(db.dependencias.nombre, db.dependencias.codigo_registro),
 		
 	) 
+
+def reporteRegistros():
+
+
+	uname = request.args[0]
+	#row = db(db.registros.codigo==uname).select()
+	row=db().select(db.registros.ALL)
+
+	#documento =  db(db.registros.codigo==uname)
+
+	#return dict(registros=row,
+	#			dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row
+	return dict(registros=row)
+
+
+def formatopdf():
+
+
+	uname = request.args[0]
+	#row = db(db.documentos.codigo==uname).select()
+	row=db().select(db.documentos.ALL)
+
+	#documento =  db(db.documentos.codigo==uname)
+
+	return dict(documentos=row,
+				dependencias = db().select(db.dependencias.nombre, db.dependencias.codigo_registro)) #row
