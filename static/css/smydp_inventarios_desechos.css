@@ -12,17 +12,18 @@
     body{font-size: 14px;}
 }
 
-div.col-xs-2.boton-retorno {
+div.col-xs-1.boton-retorno {
 	padding: 0px;
 }
 
 a.boton-retorno {
 	text-align: center;
 	color: white;
+	margin-top: 20px;
 	padding: 9.5px 12px;
 	background-color: #337ab7;
 	border-radius: 100%;	
-	float: center;
+	float: left;
 	font-size: 20px;
 }
 
