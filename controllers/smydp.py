@@ -1115,7 +1115,9 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
 
             return T("Contenedor creado exitosamente.")
 
-
+def __eliminar_desecho(id_desecho):
+    db(db.t_inventario_desechos.id == id_desecho).delete()
+    return T("Desecho eliminado exitosamente.")
 
 def __eliminar_envase(id_envase):
     db(db.t_envases.id == id_envase).delete()
@@ -1294,14 +1296,32 @@ def inventarios_desechos():
 
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
+                # Se quiere eliminar un desecho
+                print request.vars
+                if request.vars.view and request.vars.borrar_desecho:
+                    marcado_para_borrar = False
+                    print request.vars
+                    if request.vars.borrar_desecho == 'True':
+                        print "marcado para borrar = true"
+                        marcado_para_borrar = True
+
+                    # Verifica si el elemento fue marcado para ser borrado
+                    if marcado_para_borrar:
+                        print "se va a borrar"
+                        response.flash = __eliminar_desecho(int(request.vars.view))
+                        print "ya se tuvo que haber borrado"
+                        session.flash = response.flash
+                        return redirect(URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio="True"))) 
+
+
                 # Se esta editando el detalle de un desecho
                 if request.vars.view and request.vars.envase:
                     envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
                     
                     response.flash = __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
                     session.flash = response.flash
-                    return redirect(URL(host=True)) 
-                    
+                    return redirect(URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.var.dependencia, es_espacio="True", view=request.vars.view))) 
+                
                 else:
                     # Si se esta agregando un nuevo desecho, se registra en la DB
                     if request.vars.envase:
