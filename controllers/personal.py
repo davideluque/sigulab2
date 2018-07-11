@@ -445,7 +445,7 @@ def validacion():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
-    val = contar_notificaciones();
+    val = contar_notificaciones(auth.user.email)
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
     usuario = Usuario(infoUsuario.t_Personal.select().first())
 
@@ -454,8 +454,10 @@ def validacion_estilo():
     dic = { 'empleados' : tabla_categoria("validacion")}
     return dic
 
-def contar_notificaciones():
-    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+def contar_notificaciones(correo):
+    #usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    usuario =db(db.t_Personal.f_email == correo).select(db.t_Personal.ALL)
+    
     if(len(usuario)>1): usuario = usuario[1]
     else: usuario = usuario.first()
     es_supervisor = usuario.f_es_supervisor
