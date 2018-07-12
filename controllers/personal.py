@@ -561,3 +561,8 @@ def reporte():
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
+def reporte_listado():
+    if request.post_vars:
+        accion = '[Personal] Reporte de Personal Generado'
+        db.bitacora_general.insert(f_accion = accion)
+    return redirect(URL('listado_estilo'))

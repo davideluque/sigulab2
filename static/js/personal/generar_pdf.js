@@ -19,4 +19,11 @@ function generarPDF(){
             $('#datatabla tbody').append(a)
         })
     html2pdf(document.getElementById('imprimir_listado'));
+    $.ajax({
+        method: 'POST',
+        url: url,
+        data: {'a': 'a'},
+        success: function() {},
+        fail: function() {}
+    })
 }
