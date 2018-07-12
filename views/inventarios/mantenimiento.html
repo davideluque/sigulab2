@@ -19,11 +19,12 @@
         <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
                 <tr id="titulosListado">
-                    <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-                    <th class="camposTabla linksNombres">Servicio Ejecutado</th>
-                    <th class="camposTabla linksNombres">Acción</th>
-                    <th class="camposTabla linksNombres">Descripción</th>
-                    <th class="camposTabla linksNombres">Fecha de Certificación</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">SOLICITUD(O/S)</th>
+                    <th class="camposTabla linksNombres">SERVICIO EJECUTADO</th>
+                    <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
+                    <th class="camposTabla linksNombres">PROVEEDOR DEL SERVICIO</th>
+                    <th class="camposTabla linksNombres">TIEMPO DE EJECUCIÓN</th>
 
                     <!--<th class="camposTabla linksNombres">Estatus</th>-->
                 </tr>
@@ -33,21 +34,22 @@
             {{for bm in mantenimiento:}}
                 <tr>
                     <td class="camposTabla">{{=bm['hmbm_fecha_sol']}}</td>
+                    <td class="camposTabla">{{=bm['hmbm_codigo']}}</td>
                     <td class="camposTabla">{{=bm['hmbm_servicio']}}</td>
-                    <td class="camposTabla">{{=bm['hmbm_accion']}}</td>
                     <td class="camposTabla">{{=bm['hmbm_descripcion']}}</td>
-                    <td class="camposTabla">{{=bm['hmbm_fecha_cert']}}</td>
-    
+                    <td class="camposTabla">{{=bm['hmbm_proveedor']}}</td>
+                    <td class="camposTabla">{{=bm['hmbm_tiempo_ejec']}}</td>
                 </tr>
             {{pass}}           
             </tbody>
     
             <tfoot id="collapseFiltros">
-            <th class="camposTabla linksNombres">Fecha de Solicitud</th>
-            <th class="camposTabla linksNombres">Servicio Ejecutado</th>
-            <th class="camposTabla linksNombres">Acción</th>
-            <th class="camposTabla linksNombres">Descripción</th>
-            <th class="camposTabla linksNombres">Fecha de Certificación</th>
+                <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                <th class="camposTabla linksNombres">SOLICITUD(O/S)</th>
+                <th class="camposTabla linksNombres">SERVICIO EJECUTADO</th>
+                <th class="camposTabla linksNombres">DESCRIPCIÓN</th>
+                <th class="camposTabla linksNombres">PROVEEDOR DEL SERVICIO</th>
+                <th class="camposTabla linksNombres">TIEMPO DE EJECUCIÓN</th>
             <!--<th class="camposTabla linksNombres">Estatus</th>-->
                 </tr>
             </tfoot>

@@ -27,7 +27,7 @@
 {{end}}
 
 {{block center}}
-    <h3 class="text-center">DETALLES DE MODIFICACIÓN</h3>
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
     <h3 class="dep-titulo text-center">{{=bien['msb_nombre'].upper()}}</h3>
     <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['msb_desc'].upper()}}</h4>
 {{pass}}
@@ -118,7 +118,7 @@
                     Unidad de Adscripción:
                 </div>
                 <div class="grid-item">
-                    {{=bien_original['sb_unidad_de_adscripcion']}}
+                    {{=db(db.dependencias.id == bien_original['sb_unidad_de_adscripcion']).select().first().nombre}}
                 </div>
                 <div class="grid-item">
                     Dependencia:

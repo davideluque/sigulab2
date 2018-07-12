@@ -27,6 +27,9 @@
 {{end}}
 
 {{block center}}
+  {{ if request.vars.delete: }}
+  <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+  {{pass}}
     <h3 class="dep-titulo text-center">{{=bien['hr_nombre']}}</h3>
     {{ if request.vars.delete: }}
     <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['hr_desc_eliminar'].upper()}}</h4>
@@ -127,7 +130,7 @@
                     Unidad de Adscripción:
                 </div>
                 <div class="grid-item">
-                    {{=bien['hr_unidad_de_adscripcion']}}
+                    {{=db(db.dependencias.id == bien['hr_unidad_de_adscripcion']).select().first().nombre}}
                 </div>
                 <div class="grid-item">
                     Dependencia:

@@ -8,7 +8,7 @@
 # Pagina principal 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
-    val = contar_validaciones();
+    val = contar_validaciones()
     session.validaciones_pendientes = val
     session.ficha_negada = db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_comentario).first().f_comentario
     return dict()

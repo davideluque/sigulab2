@@ -11,7 +11,7 @@ import datetime
 def __check_role():
 
     roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR',
-                        'COORDINADOR', 'PERSONAL DE DEPENDENCIA', 
+                        'COORDINADOR', 'PERSONAL DE DEPENDENCIA', 'TÉCNICO', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL INTERNO', 
                         'GESTOR DE SMyDP']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
@@ -565,7 +565,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
 
     # Si el usuario es tecnico se busca en la tabla de es_encargado si el usuario 
     # es encargado del espacio con id dep_id
-    if auth.has_membership("PERSONAL INTERNO"):
+    if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         encargado = db(db.es_encargado.espacio_fisico == dep_id).select().first()
         if encargado:
             permitido = encargado.tecnico == user.id
@@ -948,12 +948,12 @@ def detalles_mod_herramientas():
             hr_depedencia = bien['mhr_depedencia']
         )
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
-        session.flash = "Solicitud de modificación aceptada"
+        session.flash = "La información de la herramienta ha sido actualizada"
         redirect(URL('validaciones'))
     # Si no se modifica
     if request.vars.no:
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
-        session.flash = "Solicitud de modificación rechazada"
+        session.flash = "La información de la herramienta no ha sido modificada"
         redirect(URL('validaciones'))
 
     material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
@@ -1049,11 +1049,11 @@ def detalles_mod_mat():
             sb_unidad_dim = bien['msb_unidad_dim']
         )
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "Solicitud de modificación aceptada"
+        session.flash = "La información del material de laboratorio o consumible ha sido modificada"
         redirect(URL('validaciones'))
     if request.vars.no:
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "Solicitud de modificación rechazada"
+        session.flash = "La información del material de laboratorio o consumible no ha sido modificada"
         redirect(URL('validaciones'))
 
     if bien_original['sb_clasificacion'] == "Material de Laboratorio":
@@ -1061,31 +1061,31 @@ def detalles_mod_mat():
         'Capacidad:', 'Unidad de medida:', 'Material predominante:', 'Material secundario:', 'Descripción:', 'Tipo:', 'Ubicación interna:']
         caracteristicas_dict = {
             'Cantidad:': bien['msb_cantidad'],
-            'Marca:': bien['msb_marca'].upper(),
-            'Modelo:': bien['msb_modelo'].upper(),
-            'Descripción:': bien['msb_descripcion'].upper(),
-            'Material predominante:': bien['msb_material'].upper(),
-            'Material secundario:': bien['msb_material_sec'].upper(),
-            'Aforado:': bien['msb_aforado'].upper(),
-            'Tipo:': bien_original['sb_clasificacion'].upper(),
-            'Requiere calibración:': bien['msb_calibrar'].upper(),
-            'Ubicación interna:' : bien['msb_ubicacion'].upper(),
+            'Marca:': bien['msb_marca'],
+            'Modelo:': bien['msb_modelo'],
+            'Descripción:': bien['msb_descripcion'],
+            'Material predominante:': bien['msb_material'],
+            'Material secundario:': bien['msb_material_sec'],
+            'Aforado:': bien['msb_aforado'],
+            'Tipo:': bien_original['sb_clasificacion'],
+            'Requiere calibración:': bien['msb_calibrar'],
+            'Ubicación interna:' : bien['msb_ubicacion'],
             'Capacidad:': bien['msb_capacidad'],
-            'Unidad de medida:' : bien['msb_unidad'].upper(),
+            'Unidad de medida:' : bien['msb_unidad'],
         }
     else:
         caracteristicas_list = ["Marca:", "Modelo:", "Presentación:", "Unidades por presentación:", "Cantidad:", 
         "Total(U.):", "Descripción:", "Ubicación interna:"]
         caracteristicas_dict = {
-            'Presentación:': bien['msb_presentacion'].upper(),
-            'Unidades por presentación:': bien['msb_unidades'].upper(),
+            'Presentación:': bien['msb_presentacion'],
+            'Unidades por presentación:': bien['msb_unidades'],
             'Cantidad:': bien['msb_cantidad'],
             'Total(U.):': bien['msb_total'],
-            'Marca:': bien['msb_marca'].upper(),
-            'Modelo:': bien['msb_modelo'].upper(),
-            'Descripción:': bien['msb_descripcion'].upper(),
-            'Ubicación interna:' : bien['msb_ubicacion'].upper(),
-            'Tipo:': bien_original['sb_clasificacion'].upper()
+            'Marca:': bien['msb_marca'],
+            'Modelo:': bien['msb_modelo'],
+            'Descripción:': bien['msb_descripcion'],
+            'Ubicación interna:' : bien['msb_ubicacion'],
+            'Tipo:': bien_original['sb_clasificacion']
         }
     return dict(bien = bien,
                 bien_original = bien_original,
@@ -1130,12 +1130,12 @@ def detalles_mod():
             bm_localizacion = bien['mbn_localizacion']
         )
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
-        session.flash = "Solicitud de modificación aceptada"
+        session.flash = "La información sobre el bien mueble ha sido modificada"
         redirect(URL('validaciones'))
 
     if request.vars.no:
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
-        session.flash = "Solicitud de modificación rechazada"
+        session.flash = "la información sobre el bien mueble no ha sido modificada"
         redirect(URL('validaciones'))
     
     if bien_original['bm_clasificacion']=="Equipo":
@@ -1199,12 +1199,12 @@ def detalles():
         db(db.historial_mantenimiento_bm.hmbm_nro == bm).delete()
         db(db.bien_mueble.bm_num == bm).delete()
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
-        session.flash = "Solicitud de eliminación aceptada"
+        session.flash = "El bien mueble ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
         db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 2)
-        session.flash = "Solicitud de eliminación rechazada"
+        session.flash = "El bien mueble no ha sido eliminado"
         redirect(URL('validaciones'))
 
     if request.vars.modificacion:
@@ -1360,12 +1360,12 @@ def detalles_mat():
     if request.vars.si:
         db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "Solicitud de eliminación aceptada"
+        session.flash = "El material de laboratorio ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
         db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
-        session.flash = "Solicitud de eliminación rechazada"
+        session.flash = "El material de laboratorio no ha sido eliminado"
         redirect(URL('validaciones'))
     
     #Si se edita
@@ -1491,13 +1491,13 @@ def detalles_consumibles():
     if request.vars.si:
         db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "Solicitud de eliminación aceptada"
+        session.flash = "El consumible ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
         db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "Solicitud de eliminación rechazada"
+        session.flash = "El consumible no ha sido eliminado"
         redirect(URL('validaciones'))
     
     #Si se edita
@@ -1616,13 +1616,13 @@ def detalles_herramientas():
     if request.vars.si:
         db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).delete()
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
-        session.flash = "Solicitud de eliminación aceptada"
+        session.flash = "La herramienta ha sido eliminada"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
         db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 2)
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
-        session.flash = "Solicitud de eliminación rechazada"
+        session.flash = "La herramienta no ha sido eliminada"
         redirect(URL('validaciones'))
 
     #Si se edita
@@ -1709,7 +1709,6 @@ def detalles_herramientas():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bienes_muebles():
 # Inicializando listas de espacios fisicos y dependencias
-    print('Entro en bienes')
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
     espacios = []
@@ -1749,7 +1748,7 @@ def bienes_muebles():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("PERSONAL INTERNO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -1757,8 +1756,7 @@ def bienes_muebles():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("PERSONAL INTERNO"):
-        print("Entro en personal")
+    if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -2131,7 +2129,7 @@ def material_lab():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("PERSONAL INTERNO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -2139,7 +2137,7 @@ def material_lab():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("PERSONAL INTERNO"):
+    if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -2567,6 +2565,8 @@ def validaciones():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     user_dep_id = user.f_dependencia
+    inventario = [[], [], []]
+    inventario_eliminar = [[], [], []]
 
     if auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("JEFE DE LABORATORIO") \
         or auth.has_membership("COORDINADOR") or auth.has_membership("DIRECTOR") or \
@@ -2641,7 +2641,7 @@ def consumibles():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("TÉCNICO")
+    es_tecnico = auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -2649,7 +2649,7 @@ def consumibles():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -2751,7 +2751,7 @@ def consumibles():
 
             inventario = __sumar_inventarios_consumibles(espacios_ids)
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("COORDINADOR"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
@@ -3033,7 +3033,7 @@ def herramientas():
     # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
     retroceder = True
 
-    es_tecnico = auth.has_membership("TÉCNICO")
+    es_tecnico = auth.has_membership("TÉCNICO") or auth.has_membership("PERSONAL INTERNO")
     direccion_id = __find_dep_id('DIRECCIÓN')
 
     # Obteniendo la entrada en t_Personal del usuario conectado
@@ -3041,7 +3041,7 @@ def herramientas():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
-    if auth.has_membership("TÉCNICO"):
+    if auth.has_membership("TÉCNICO") or auth.has_membership("PERSONAL INTERNO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
             if request.vars.es_espacio == "True":
@@ -3129,7 +3129,7 @@ def herramientas():
 
             inventario = __sumar_inventarios_herramientas(espacios_ids)
 
-    elif auth.has_membership("JEFE DE SECCIÓN"):
+    elif auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("TÉCNICO") or auth.has_membership("COORDINADOR"):
         # Si el jefe de seccion ha seleccionado un espacio fisico
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
