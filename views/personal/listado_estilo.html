@@ -5,6 +5,7 @@
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'css/pdf_personal.css')}}" rel="stylesheet" type="text/css" />
 
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
@@ -45,14 +46,16 @@
 	  <a class="breadcrumb-item" >Personal</a>
 	  </div>
   </nav>
-<div class="row">
-  {{ if not usuario.f_es_supervisor :}}  
-  <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7"><i class="fa fa-pencil"></i></button>
-  {{pass}}
-  <h3 class=" text-center" id="titulo_modulo"> GESTIÓN DE PERSONAL</h3>
-  {{if session.ficha_negada :}}
-  <br>
-</div>
+  <div class="row">
+    <div class="text-center">
+      {{ if not usuario.f_es_supervisor :}}  
+      <button type="button" class="btn btn-default boton-sigulab" data-toggle="modal" data-target="#addservice" style="background-color:#337ab7; display:inline; float:left"><i class="fa fa-pencil"></i></button>
+      {{pass}}
+      <h3 class=" text-center" id="titulo_modulo" style="display:inline"> GESTIÓN DE PERSONAL</h3>
+      {{if session.ficha_negada :}}
+      <br>
+    </div>
+  </div>
   <div id="mensaje_notificacion" class="row text-center">
     <h4><i id="icono_mensaje_notificacion" class="fa fa-bell-o"></i>  {{=session.ficha_negada}}</h4>
   </div>
@@ -62,7 +65,7 @@
     {{if session.validaciones_pendientes>0:}}
     <div class = "container">
       <div class="row">
-        <h3 onclick="change_status_list('#lista-por-validar')" title="Ocultar/Mostrar"> Fichas por Validar <i class="fa fa-caret-up" id="lista-por-validar-caret"></i></h3>
+        <h3 onclick="change_status_list('#lista-por-validar')" title="Ocultar/Mostrar" class="text-left"> Fichas por Validar <i class="fa fa-caret-up" id="lista-por-validar-caret"></i></h3>
         <div id="lista-por-validar">
       
             <div class="table-responsive no-padding no-margin">
@@ -135,7 +138,7 @@
     <div class="container">
 
     <div class="row" >
-    <h3 onclick="change_status_list('#lista-validados')" title="Ocultar/Mostrar"> Lista de Personal <i class="fa fa-caret-up" id="lista-validados-caret"></i></h3>
+    <h3 onclick="change_status_list('#lista-validados')" title="Ocultar/Mostrar" class="text-left"> Lista de Personal <i class="fa fa-caret-up" id="lista-validados-caret"></i></h3>
     <div class="row" id="lista-validados">
       <div class="table-responsive no-padding no-margin">
         <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
@@ -212,6 +215,7 @@
 <!-- Fin Listado --> 
 {{include 'personal/ficha_edicion.html'}}
 {{include 'personal/form_agregar.html'}}
+{{include 'personal/pdf_tabla.html'}}
 
 <!-- Datatables-->
 
@@ -227,6 +231,10 @@
 <script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jspdf.min.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+<script>const url = '{{=URL("reporte_listado")}}'</script>
+<script src="{{=URL('static', 'js/personal/generar_pdf.js')}}"></script>
 
 
 

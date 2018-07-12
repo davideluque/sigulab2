@@ -56,17 +56,17 @@ def tabla_categoria(tipo):
             db(db.es_encargado.tecnico == elm.id).select(db.es_encargado.ALL)
         ))
         ubicaciones = db(db.espacios_fisicos.id.belongs(ubicaciones)).select()
-        extensiones_usb = '/'.join(list(filter(bool,
+        separador = ' / '
+        extensiones_usb = separador.join(list(filter(bool,
             list(map(lambda x: x.ext_USB, ubicaciones)) +
             list(map(lambda x: x.ext_USB_1, ubicaciones)) +
             list(map(lambda x: x.ext_USB_2, ubicaciones)) +
             list(map(lambda x: x.ext_USB_3, ubicaciones)) +
             list(map(lambda x: x.ext_USB_4, ubicaciones))
         )))
-        extensiones_int = '/'.join(list(filter(bool,
+        extensiones_int = separador.join(list(filter(bool,
             list(map(lambda x: x.ext_interna, ubicaciones))
         )))
-        print(ubicaciones)
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -202,6 +202,32 @@ def add_form():
             ubicaciones
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
+
+        personal = personal.select().first()
+        named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
+        if len(named) > 0:
+            dep = named.first().nombre
+            destinatario = buscarJefe(dep)
+            usuario_supervisor = db(db.auth_user.email == destinatario).select().first()
+            first_name = usuario_supervisor.first_name
+            last_name = usuario_supervisor.last_name
+            asunto = '[SIGULAB] Ficha Editada'
+            cuerpo = '''
+            <html>
+            <head>
+            <meta charset='UTF-8' />
+            </head>
+            <body>
+            <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
+            <p>
+                Le notificamos que la ficha de {f_nombre_validar} {f_apellido_validar}
+                fue editada. Le invitamos a validar dicha edición.
+            </p>
+            </body>
+            </html>
+            '''.format(f_nombre=first_name, f_apellido=last_name,
+            f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
+            mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
 
 
@@ -401,8 +427,6 @@ def ficha():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
-    print(usuario)
-
     return dict(
         personal=personal,
         categorias=categorias,
@@ -421,12 +445,41 @@ def cambiar_validacion(validacion, personal):
     if(validacion == "true"):
         mensaje = ''
         db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True, f_comentario=mensaje)
-        accion = '[Personal] Ficha Validada de Personal '+ personal['nombre']+ " "+personal['apellido'] 
+        accion = '[Personal] Ficha Validada de Personal '+ personal['nombre']+ " "+personal['apellido']
         db.bitacora_general.insert(f_accion = accion)
     elif (validacion == "false"):
         mensaje = request.post_vars.razon_add
         db(db.t_Personal.f_email == personal['email']).update(
             f_por_validar=False, f_validado=False, f_comentario='Motivo de Rechazo: {}'.format(mensaje))
+
+    usuario = db(db.t_Personal.f_email == personal['email']).select().first()
+    first_name = usuario.f_nombre
+    last_name = usuario.f_apellido
+    email = usuario.f_email
+    es_supervisor = usuario.f_es_supervisor
+    motivo = usuario.f_comentario if validacion == 'false' else ''
+    destinatario = email
+    _reason = 'validada' if validacion == 'true' else 'rechazada'
+    asunto = '[SIGULAB] Ficha {}'.format(_reason)
+    cuerpo = '''
+    <html>
+    <head>
+      <meta charset='UTF-8' />
+    </head>
+    <body>
+      <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
+      <p>
+        Le notificamos que su ficha fue {action}
+      </p>
+      <p>
+        {motivo}
+      </p>
+    </body>
+    </html>
+    '''.format(f_nombre=first_name, f_apellido=last_name, f_email=email, action=_reason,
+        motivo=motivo
+      )
+    mail.send(destinatario, asunto, cuerpo)
     redirect(URL('listado_estilo'))
 
 
@@ -445,7 +498,7 @@ def validacion():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validacion_estilo():
-    val = contar_notificaciones();
+    val = contar_notificaciones(auth.user.email)
     infoUsuario=(db(db.auth_user.id==auth.user.id).select(db.auth_user.ALL)).first()
     usuario = Usuario(infoUsuario.t_Personal.select().first())
 
@@ -454,14 +507,16 @@ def validacion_estilo():
     dic = { 'empleados' : tabla_categoria("validacion")}
     return dic
 
-def contar_notificaciones():
-    usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+def contar_notificaciones(correo):
+    #usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+    usuario =db(db.t_Personal.f_email == correo).select(db.t_Personal.ALL)
+    
     if(len(usuario)>1): usuario = usuario[1]
     else: usuario = usuario.first()
     es_supervisor = usuario.f_es_supervisor
     dependencia = None
     if es_supervisor:
-        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+        if(correo == "sigulabusb@gmail.com") or (correo == "asis-ulab@usb.ve"):
             notif = db(db.t_Personal.f_por_validar == True).count()
         else:
             dependencia = usuario.f_dependencia
@@ -482,7 +537,7 @@ def buscarJefe(dependencia_trabajador):
     correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
     return correo
 
-#Funcion para ocultar 
+#Funcion para ocultar
 def eliminar():
     if auth.user.email != 'sigulabusb@gmail.com':
         return redirect(URL('listado_estilo'))
@@ -492,7 +547,7 @@ def eliminar():
 
     db(db.t_Personal.f_ci == ci).update(f_oculto = True)
 
-    accion = '[Personal] Ficha Ocultada de Personal '+ personal.f_nombre+ " "+personal.f_apellido 
+    accion = '[Personal] Ficha Ocultada de Personal '+ personal.f_nombre+ " "+personal.f_apellido
     db.bitacora_general.insert(f_accion = accion)
     redirect(URL('listado_estilo'))
 
@@ -502,3 +557,12 @@ def reporte():
     for persona in tabla:
         personas.append(persona)
     return dict(personas=personas)
+
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+    mail.send(destinatario, asunto, cuerpo)
+def reporte_listado():
+    if request.post_vars:
+        accion = '[Personal] Reporte de Personal Generado'
+        db.bitacora_general.insert(f_accion = accion)
+    return redirect(URL('listado_estilo'))

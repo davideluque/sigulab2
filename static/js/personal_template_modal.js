@@ -239,17 +239,24 @@ function validaCondicion(){
 
 function validaFechaIngreso(){
     const $this = $('[name="fecha_ingreso_add"]');
+    if ($('[name="categoria_add"]').val() !== 'Fijo') {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
     if ($this.val() === ""){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false;
     }
     else if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
-        $this.attr("data-content", 'La fecha de ingreso tiene que ser antes de la fecha de hoy');
+        $this.attr("data-content", 'La fecha de ingreso tiene que ser antes de la fecha de hoy u hoy');
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
+        return false;
     }
     else{
         $this.removeClass('input-error');
@@ -278,8 +285,13 @@ function validaFechaSalida(){
     const $this = $('[name="fecha_salida_add"]');
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
-    if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isBefore(fecha_final)){
-        $this.attr("data-content", "La fecha de egreso tiene que ser antes que la fecha de ingreso");
+    if ($('[name="categoria_add"]').val() !== 'Fijo') {
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+    if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isSameOrBefore(fecha_final)){
+        $this.attr("data-content", "La fecha de egreso tiene que ser antes que la fecha de ingreso o igual a esta");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -371,15 +383,14 @@ const validadoresSegundoPasoFijo = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngreso,
-    validaFechaSalida
+    validaFechaIngresoUSB,
+    validaFechaIngresoUlab,
+    validaFechaIngresoAdminPubl
 ]
 const validadoresSegundoPaso = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngreso,
-    validaFechaSalida,
     validaFechaIngresoUSB,
     validaFechaIngresoUlab,
     validaFechaIngresoAdminPubl
@@ -519,10 +530,11 @@ $(document).ready(function () {
     $('#sel2').change(function (){
         if ($("#sel2 option:selected").val()=="Fijo") {
             $("#fingreso").hide();
-
+            $('#fsalida').show();
         }
         else {
             $("#fingreso").show();
+            $('#fsalida').hide()
         };
     });
 
@@ -541,9 +553,8 @@ $(document).ready(function () {
             if ($('[name="categoria_add"]').val() === 'Fijo'){
                 // Vacio los campos de fecha de ingreso y de salida para que no se guarden en la 
                 // base de datos 
-                $('[name="fecha_ingreso_usb_add"]').val('')
-                $('[name="fecha_ingreso_ulab_add"]').val('');
-                $('[name="fecha_ingreso_admin_publica_add"]').val('')
+                $('[name="fecha_ingreso_add"]').val('');
+                $('[name="fecha_salida_add"]').val('');
 
                 next_step = validadoresCorrectos(validadoresSegundoPasoFijo)
             }

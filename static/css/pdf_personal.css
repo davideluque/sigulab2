@@ -1,0 +1,87 @@
+/* Script que estiliza el pdf que va a generar el listado del personal */
+#logo-usb{
+    height: 116px;
+    width: 239px;
+    margin-left: 72px;
+    margin-top: 50px;
+}
+
+#logo-ulab{
+    height: 126px;
+    width: 230px;
+    margin-top: 50px;
+    float: right;
+}
+
+#encabezado-titulo{
+    margin-left:72px;
+    margin-top: 25px;
+}
+.encabezado{
+    text-align: center;
+    background-color:#bfbfbf;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    font-weight: bold;
+    height: 45px;
+    padding: 0px;
+}
+
+#fecha-generacion{
+    border-left-width: 0px;
+}
+#label-fecha{
+    height:18px;
+    border-style: solid;
+    border-color:#bfbfbf;
+    border-bottom-color: black;
+    border-width: 1px;
+}
+#fecha-creacion{
+    background-color: white;
+    height: 24px;
+}
+
+#titulo-pdf{
+    margin-top:9px;
+    font-size: 19px;
+}
+
+#tabla-personal{
+    margin-top: 15px;
+    margin-left: 72px;
+}
+p {
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+}
+
+.casillas-pdf{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+#datatabla{
+    width: 91.7%;
+}
+
+.footer-info{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#footer-pdf{
+    margin-top: 715px;
+}
+
+#info-usuario{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    font-size: 13px;
+    margin-left: 72px;
+}

@@ -38,6 +38,8 @@ def authenticate():
   if not user:
     return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
+    accion = '[Sistema] Ingreso al sistema'
+    db.bitacora_general.insert(f_accion = accion)
     url = URL('default','index')
     return '$(location).attr("href", "' + str(url) + '")'
 
@@ -53,6 +55,7 @@ def login():
     return redirect(URL('default', 'index'))
 
   auth.settings.login_next = URL('default','index')
+  
   form=auth.login()
 
   if request.vars['error'] == 'invalid_data':
@@ -167,9 +170,12 @@ def register():
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
     auth_register = auth.register_bare(username=request.post_vars.first_name,
-                                       last_name=request.post_vars.last_name,
-                                       email=request.post_vars.email,
-                                       password=request.post_vars.password)
+                                        last_name=request.post_vars.last_name,
+                                        email=request.post_vars.email,
+                                        password=request.post_vars.password)
+    registrado = request.post_vars.first_name + " "+request.post_vars.last_name+" - "+ request.post_vars.email
+    accion = '[Sistema] Registro de nuevo usuario: {}'.format(registrado) 
+    db.bitacora_general.insert(f_accion = accion)
 
     # Si el servidor se cayera en este punto sería un error fatal.
     # Debe haber un mensaje de error cuando un usuario que ingresa no tiene
@@ -218,16 +224,47 @@ def register():
 
     # Asocia el usuario a un registro genérico en la tabla de personal
     # para que posteriormente ingrese y actualice sus datos.
-    nuevo_personal_id = db.t_Personal.insert(f_nombre = request.post_vars.first_name,
-                           f_apellido = request.post_vars.last_name,
+    first_name = request.post_vars.first_name
+    last_name = request.post_vars.last_name
+    email = request.post_vars.email
+    password = request.post_vars.password
+    nuevo_personal_id = db.t_Personal.insert(f_nombre = first_name,
+                           f_apellido = last_name,
                            f_ci = request.post_vars.tipo_cedula+request.post_vars.cedula,
-                           f_email = request.post_vars.email,
+                           f_email = email,
                            f_usuario = user.id,
                            f_dependencia = depid,
                            f_es_supervisor = es_supervisor,
                            f_comentario='Agregue sus datos personales')
 
-
+    destinatario = request.post_vars.email
+    asunto = '[SIGULAB] Creación de cuenta'
+    cuerpo = '''
+    <html>
+    <head>
+      <meta charset='UTF-8' />
+    </head>
+    <body>
+      <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
+      <p>
+        Le damos la bienvenida al SIGULAB. Le invitamos a llenar su ficha de personal,
+        para ello <a href="https://159.90.171.24/modulos/login" target="_blank">inicie sesión</a>
+        y dirígase a la sección de personal.
+      </p>
+      <p>
+        Credenciales de acceso:<br/>
+        Correo electrónico: {f_email}<br/>
+        Contraseña: {password}<br/>
+      </p>
+      <p>
+        Fue registrado como {rol}<br/>
+      </p>
+    </body>
+    </html>
+    '''.format(f_nombre=first_name, f_apellido=last_name, f_email=email,
+        password=password, rol='supervisor' if es_supervisor else 'personal interno'
+      )
+    mail.send(destinatario, asunto, cuerpo)
     # Mapea el usuario al espacio fisico que tiene a cargo
 
     if roltype == "TÉCNICO":
@@ -478,5 +515,7 @@ def logout():
 
   @returns Redirección al login.
   """
+  accion = '[Sistema] Egreso del sistema'
+  db.bitacora_general.insert(f_accion = accion)
   auth.logout()
   return redirect(URL('login'))
