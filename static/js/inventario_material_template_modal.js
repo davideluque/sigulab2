@@ -156,12 +156,6 @@ $(document).ready(function () {
                     $(this).addClass('input-error');
                      next_step = false;
                 }
-                else if( $(this).attr('name')== 'fecha_calibracion' && $(this).val()=='') {
-                    $("#err-fecha_calibracion").html("No tiene el formato adecuado");
-                    $("#err-fecha_calibracion").show();
-                    $(this).addClass('input-error');
-                     next_step = false;
-                }
                 else {
                     $(this).removeClass('input-error');
                     $("#err_fecha_ingreso").hide();
