@@ -1698,8 +1698,7 @@ def inventarios_desechos():
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(
-                (db.dependencias.nombre.startswith('LAB')) &
-                (db.dependencias.id == dep_id)
+                (db.dependencias.unidad_de_adscripcion == dep_id)
             ).select(db.dependencias.ALL))
 
             # Se muestra como inventario el egregado de los inventarios que
