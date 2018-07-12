@@ -25,29 +25,50 @@
 
 <!-- Script para boton de agregar extension-->
 <script>
-  $("#espacios_fisicos_ext_USB_1__row").addClass('hidden');
-  $("#espacios_fisicos_ext_USB_2__row").addClass('hidden');
-  $("#espacios_fisicos_ext_USB_3__row").addClass('hidden');
-  $("#espacios_fisicos_ext_USB_4__row").addClass('hidden');
+  let ext=1;
+  const extencionesUsb = [
+    $("#espacios_fisicos_ext_USB_1__row"),
+    $("#espacios_fisicos_ext_USB_2__row"),
+    $("#espacios_fisicos_ext_USB_3__row"),
+    $("#espacios_fisicos_ext_USB_4__row")
+  ]
 
-  $('#espacios_fisicos_ext_USB__label').prepend('<a href="#" name="fin_extensiones" data-toggle="popover" data-trigger="manual" data-placement="bottom" data-content="No se pueden agregar extensiones"><button class="btn btn-primary"id="botonExt" type ="button" onclick=agregarExt()><i class="fa fa-plus-circle"></i>                  </button></a>');
+  extencionesUsb.map(i => {
+    console.log(i)
+    console.log(i.val())
+    if (i.find('input').val() === '') {
+      i.addClass('hidden')
+    } else {
+      i.removeClass('hidden')
+      ext++
+    }
+  })
+
+  $('#espacios_fisicos_ext_USB__label').prepend(`
+  <a href="#" name="fin_extensiones"
+  data-toggle="popover" data-trigger="manual"
+  data-placement="bottom" data-content="No se pueden agregar extensiones">
+    <button class="btn btn-primary" id="botonExt"
+    type ="button" onclick=agregarExt()>
+      <i class="fa fa-plus-circle"></i>
+    </button>
+  </a>`);
   
 
-  ext=1;
   function agregarExt(){
-    if(ext == 1){
+    if(ext === 1){
       $("#espacios_fisicos_ext_USB_1__row").removeClass("hidden");
       ext++;
     }
-    else if(ext == 2){
+    else if(ext === 2){
       $("#espacios_fisicos_ext_USB_2__row").removeClass("hidden");
       ext++;
     }
-    else if(ext == 3){
+    else if(ext === 3){
       $("#espacios_fisicos_ext_USB_3__row").removeClass("hidden");
       ext++;
     }
-    else if(ext == 4){
+    else if(ext === 4){
       $("#espacios_fisicos_ext_USB_4__row").removeClass("hidden");
       ext++;      
     }
