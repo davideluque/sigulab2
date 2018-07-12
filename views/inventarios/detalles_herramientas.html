@@ -56,9 +56,9 @@
                     </form>
                     {{ else: }}
                     <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                     <!-- Boton para eliminar el sb-->
-                    <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                     {{ pass }}
                   </div>
             </div>
@@ -359,7 +359,10 @@
 
                         </div>
                   </div>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  </div>
+                  
                 </fieldset>
                 <!-- Fin Primer Paso -->
 
@@ -454,8 +457,11 @@
                     
                         </div>
                       </div>
-                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <div style="position:fixed;bottom: 30px; right: 30px">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                      </div>
+                    
                   </fieldset>
                   <!-- Fin segundo Paso -->
 
@@ -555,9 +561,11 @@
 
                         </div>
                       </div>
-
-                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <div style="position:fixed;bottom: 30px; right: 30px">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                      </div>
+                      
                   </fieldset>
                   <!-- Fin tercer paso parte 1-->
                 
@@ -596,9 +604,11 @@
 
                         </div>
                       </div>
-
-                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <div style="position:fixed;bottom: 30px; right: 30px">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                       <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
+                      </div>
+                      
                     </fieldset>    
                   </fieldset>
                   <!-- Fin tercer paso parte 2-->

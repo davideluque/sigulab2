@@ -64,9 +64,9 @@
                 </form>
                 {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
-                <button type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
             </div>
         </div>
@@ -380,7 +380,8 @@
                     
                     </div>
                   </div>
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                  <div style="position:fixed;bottom: 30px; right: 30px"><button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         </div>
+                  
                 </fieldset>
                 <!-- Fin Primer Paso -->
 
@@ -468,8 +469,11 @@
 
                     </div> 
                       </div>
+                    <div style="position:fixed;bottom: 30px; right: 30px">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    </div>
+                    
                   </fieldset>
                   <!-- Fin Segundo Paso -->
 
@@ -589,8 +593,11 @@
 
                     </div>
                 </div> 
+                <div style="position:fixed;bottom: 30px; right: 30px">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
+                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>      
+                </div>
+                    
                   </fieldset>
                   <!-- Fin segundo paso-->
 
@@ -654,7 +661,7 @@
                                 <input type="date" class="form-control" value="{{=bien['bm_fecha_calibracion']}}" name="fecha_calibracion">
                             {{pass}}
                           
-                          <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
+                            <font color="red"><div id="err-fecha_calibracion" hidden></div></font>
                         </div>
                         {{elif bien['bm_calibrar']=="Si":}}
                         <div class="form-group" id="fecha_calibracion" >
@@ -697,9 +704,11 @@
                         
 
                       </div>
-
+                <div style="position:fixed;bottom: 30px; right: 30px">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
+                </div>
+                    
                   </fieldset>
                   <!-- Fin segundo paso-->
 
@@ -778,8 +787,11 @@
 
                       </div>
                     </div>
-                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
+                    <div style="position:fixed;bottom: 30px; right: 30px">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                        <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
+                    </div>
+                    
                 </fieldset>
                 <!-- Fin Tercer Paso -->
               </form>
@@ -894,7 +906,10 @@
                                  
                           </div>
                         </div>
-                        <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                        <div style="position:fixed;bottom: 30px; right: 30px">
+                            <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                        </div>
+                        
                       </fieldset>
                       <!-- Fin Primer Paso -->
       
@@ -938,8 +953,11 @@
                                     
                               </div>
                             </div>
-                          <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                          <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                            <div style="position:fixed;bottom: 30px; right: 30px">
+                                <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                                <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                            </div>
+                          
                         </fieldset>
                         <!-- Fin Segundo Paso -->
       
@@ -977,9 +995,11 @@
       
                             </div>
                           </div>
-      
-                          <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                          <button type="submit button" form="formularioMantenimiento" name="mantenimiento_nuevo" value="True" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                          <div style="position:fixed;bottom: 30px; right: 30px">
+                              <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                              <button type="submit button" form="formularioMantenimiento" name="mantenimiento_nuevo" value="True" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>                </fieldset>    
+                          </div>
+                          
                       </fieldset>
       
                       <!-- Fin Tercer Paso -->
