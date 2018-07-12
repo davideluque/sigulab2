@@ -25,10 +25,22 @@
     border-width: 1px;
     font-weight: bold;
     height: 45px;
+    padding: 0px;
 }
 
 #fecha-generacion{
     border-left-width: 0px;
+}
+#label-fecha{
+    height:18px;
+    border-style: solid;
+    border-color:#bfbfbf;
+    border-bottom-color: black;
+    border-width: 1px;
+}
+#fecha-creacion{
+    background-color: white;
+    height: 24px;
 }
 
 #titulo-pdf{
@@ -36,6 +48,40 @@
     font-size: 19px;
 }
 
+#tabla-personal{
+    margin-top: 15px;
+    margin-left: 72px;
+}
 p {
     font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+}
+
+.casillas-pdf{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+#datatabla{
+    width: 91.7%;
+}
+
+.footer-info{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#footer-pdf{
+    margin-top: 715px;
+}
+
+#info-usuario{
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+    font-size: 13px;
+    margin-left: 72px;
 }
