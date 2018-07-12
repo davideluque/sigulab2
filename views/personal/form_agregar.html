@@ -172,131 +172,131 @@
 
                     <!-- Segundo Paso -->
                     <fieldset class="formField" id="p2">
-                        <div class="form-bottom" data-step="2" data-title="Segundo Paso">
-                          <!-- Aqui va la barra lateral -->
-                          <div class="col-sm-1 col1Body">
-                            <span class="step">1</span>
-                            <span class="step activePass">2</span>
-                            <span class="step">3</span>
-                          </div>
-
-                          <!-- Aqui va la informacion -->
-                          <div class="col-sm-11 col11Body">
-                          <h4 class="titulosForm">Datos Laborales</h4>
-                              <div class="form-group">
-                                <div class="col-sm-12">
-                                    <label>Estatus</label>
-                                  <select class="form-control" id="sel1" name="estatus_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                                    <option disabled  value=""
-                                    {{ if not usuario.f_estatus :}}
-                                    selected
-                                    disabled
-                                    {{pass}}
-                                    >Estatus</option>
-                                    {{for estatus in estados:}}
-                                    <option
-                                    {{ if estatus == usuario.f_estatus: }}
-                                    selected
-                                    {{pass}}
-                                    value="{{=estatus}}">{{=estatus}}</option>
-
-                                    {{pass}}
-                                  </select>
-                                </div>
-                              </div>
-                              <font color="red"><div id="err_estatus" hidden></div></font>
-                              <div class="form-group">
-                                <div class="col-sm-12">
-                                    <label>Categoría</label>
-                                  <select class="form-control" id="sel2" name="categoria_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                                    <option disabled  value=""
-                                    {{ if not usuario.f_categoria :}}
-                                    selected
-                                    disabled
-                                    {{pass}}
-                                    >Categoría</option>
-                                    {{for categoria in categorias:}}
-                                    <option
-                                    {{ if categoria == usuario.f_categoria: }}
-                                    selected
-                                    {{pass}}
-                                    value="{{=categoria}}">{{=categoria}}</option>
-                                    {{pass}}
-                                  </select>
-                                </div>
-                              </div>
-
-                              <div class="form-group">
-                                <div class="col-sm-12">
-                                    <label>Condición</label>
-                                  <select class="form-control" id="sel3" name="condicion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                                    <option  disabled value=""
-                                    {{ if not usuario.f_condicion :}}
-                                    selected
-                                    disabled
-                                    {{pass}}
-                                    >Condición</option>
-                                    {{for condicion in condiciones:}}
-                                    <option
-                                    {{ if condicion == usuario.f_condicion: }}
-                                    selected
-                                    {{pass}}
-                                    value="{{=condicion}}">{{=condicion}}</option>
-                                    {{pass}}
-                                  </select>
-                                </div>
-                              </div>
-                              <div id="fsalida">
-                                <div class="col-sm-6">
-                                  <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                </div>
-                                <div class="col-sm-6">
-                                  <p ><label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                </div>
-                              </div>
-
-                              <div id="fingreso"
-                              {{if usuario.f_categoria == 'Fijo' :}}
-                              hidden
-                              {{pass}}
-                              >
-                                <div class="col-sm-12">
-                                  <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                </div>
-                                <div class="col-sm-12" >
-                                  <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                  <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
-                                </div>
-                                <div class="col-sm-12">
-                                  <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                </div>
-
-                                
-                              </div>
-
-                            <!--<div class="form-group">
-                              <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
-                            </div>-->
-                          </div>
-                        <div class="botones-form">
-                          <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                          <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
-                        </div>
-                    </fieldset>
-                    <!-- Fin Segundo Paso -->
-
-                    <!-- Tercer Paso -->
-                    <fieldset class="formField" id="p3">
-                      <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                         <!-- Aqui va la barra lateral -->
                         <div class="col-sm-1 col1Body">
                           <span class="step">1</span>
-                          <span class="step">2</span>
-                          <span class="step activePass">3</span>
+                          <span class="step activePass">2</span>
+                          <span class="step">3</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos Laborales</h4>
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                  <label>Estatus</label>
+                                <select class="form-control" id="sel1" name="estatus_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                  <option disabled  value=""
+                                  {{ if not usuario.f_estatus :}}
+                                  selected
+                                  disabled
+                                  {{pass}}
+                                  >Estatus</option>
+                                  {{for estatus in estados:}}
+                                  <option
+                                  {{ if estatus == usuario.f_estatus: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=estatus}}">{{=estatus}}</option>
+
+                                  {{pass}}
+                                </select>
+                              </div>
+                            </div>
+                            <font color="red"><div id="err_estatus" hidden></div></font>
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                  <label>Categoría</label>
+                                <select class="form-control" id="sel2" name="categoria_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                  <option disabled  value=""
+                                  {{ if not usuario.f_categoria :}}
+                                  selected
+                                  disabled
+                                  {{pass}}
+                                  >Categoría</option>
+                                  {{for categoria in categorias:}}
+                                  <option
+                                  {{ if categoria == usuario.f_categoria: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=categoria}}">{{=categoria}}</option>
+                                  {{pass}}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                  <label>Condición</label>
+                                <select class="form-control" id="sel3" name="condicion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                                  <option  disabled value=""
+                                  {{ if not usuario.f_condicion :}}
+                                  selected
+                                  disabled
+                                  {{pass}}
+                                  >Condición</option>
+                                  {{for condicion in condiciones:}}
+                                  <option
+                                  {{ if condicion == usuario.f_condicion: }}
+                                  selected
+                                  {{pass}}
+                                  value="{{=condicion}}">{{=condicion}}</option>
+                                  {{pass}}
+                                </select>
+                              </div>
+                            </div>
+                            <div id="fsalida">
+                              <div class="col-sm-6">
+                                <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+                              <div class="col-sm-6">
+                                <p ><label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+                            </div>
+
+                            <div id="fingreso"
+                            {{if usuario.f_categoria == 'Fijo' :}}
+                            hidden
+                            {{pass}}
+                            >
+                              <div class="col-sm-12" >
+                                <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                                <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
+                              </div>
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
+                            </div>
+
+                          <!--<div class="form-group">
+                            <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
+                          </div>-->
+                        </div>
+                      </div>
+                      <div class="botones-form">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                      </div>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+
+                    <!-- Tercer Paso -->
+                  <fieldset class="formField" id="p3">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos Laborales</h4>
 
                         <div class="form-group">
@@ -360,9 +360,6 @@
                           </div>
                         </div>
 
-
-
-
                         <div class="form-group">
                           <div class="col-sm-12">
                               <label>Rol</label>
@@ -382,13 +379,14 @@
                             </select>
                           </div>
                         </div>
+                      </div>
 
-                      <div class="botones-form">
-                          <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
-                      </div>
-                      </div>
-                    </fieldset>
+                    </div>
+                    <div class="botones-form">
+                      <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                      <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                    </div>
+                  </fieldset>
                     <!-- Fin Tercer Paso -->
 
                 </form>
