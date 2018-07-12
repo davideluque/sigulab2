@@ -273,10 +273,10 @@
                           <div class="field-error"> <p id="error-unidad" > </p> </div>
                         </div>
 
-                        <div class="form-group" id="grupo-ancho" hidden>
-                            <label>Ancho</label>
-                          <input type="hidden" class="form-control" id="ancho" name="ancho" title="Formato ##.##" placeholder="Ancho">
-                          <font color="red"><div id="errancho" hidden></div></font>
+                        <div class="form-group" id="grupo-ancho_her" hidden>
+                            <label>ancho_her</label>
+                          <input type="hidden" class="form-control" id="ancho_her" name="ancho_her" title="Formato ##.##" placeholder="ancho_her">
+                          <font color="red"><div id="errancho_her" hidden></div></font>
                         </div>
 
 
@@ -408,21 +408,21 @@ del concepto y tipo de ingreso o egreso -->
     function display_units(value){
     if ( value == '' ){
       document.getElementById("unidad").type = 'hidden';
-      document.getElementById("ancho").type = 'hidden';
+      document.getElementById("ancho_her").type = 'hidden';
       document.getElementById("largo_her").type = 'hidden';
       document.getElementById("alto_her").type = 'hidden';
       document.getElementById("diametro_her").type = 'hidden';
-      $('#grupo-ancho').hide()
+      $('#grupo-ancho_her').hide()
       $('#grupo-largo').hide()
       $('#grupo-alto').hide()
       $('#grupo-diametro').hide()
     }else{
       document.getElementById("unidad").type = 'text';
-      document.getElementById("ancho").type = 'text';
+      document.getElementById("ancho_her").type = 'text';
       document.getElementById("largo_her").type = 'text';
       document.getElementById("alto_her").type = 'text';
       document.getElementById("diametro_her").type = 'text';
-      $('#grupo-ancho').show()
+      $('#grupo-ancho_her').show()
       $('#grupo-largo').show()
       $('#grupo-alto').show()
       $('#grupo-diametro').show()
