@@ -55,18 +55,17 @@
                     </a>
                 </div>
                 <div class="col-xs-8">
-                    <h3 class="inicio-titulo">DETALLE DEL CONTENEDOR</h3>
+                    <h3 class="inicio-titulo" style="margin-top: 30px">DETALLE DEL CONTENEDOR</h3>
+                    <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
+                    
                 </div>
                 <div class="col-xs-2">
                     {{if (not(auth.has_membership('DIRECTOR'))) & (not(auth.has_membership('ASISTENTE DEL DIRECTOR'))):}}                    
-                    <button type="button" id="botonEditar" class="btn btn-primary agregar" data-toggle="modal" data-target="#editContenedor">
+                    <button type="button" id="botonEditar" class="btn btn-primary agregar" data-toggle="modal" data-target="#editContenedor" style="margin-top: -30px;">
                         <i class="fa fa-pencil"></i>
                     </button>
                     {{pass}}
                 </div>
-            </div>
-            <div class="col-lg-12">
-                <img class="iconos" src="{{=URL('static', 'images/detallecontenedor.png')}}">
             </div>
 
         </div>
@@ -353,7 +352,7 @@
     </div>
 {{else:}}
     <div class="container titulo">
-        <div class="row boton-retorno2">
+        <div class="row boton-retorno2" style="padding-left: 15px;">
             <div class="col-xs-2 boton-retorno2">
                 <a class="boton boton-retorno2" href="{{=URL('..', 'sigulab2', 'smydp/desechos')}}">
                     <i class="fa fa-arrow-left"></i>
