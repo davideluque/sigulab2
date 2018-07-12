@@ -80,7 +80,7 @@
 
     <div class="row">
     <div class="row">
-      <div id="buttons" class="pull-right">
+      <div id="buttons" class="pull-right" style="margin-bottom: -55px;">
         
         <!-- Filtrado -->
         <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
@@ -89,7 +89,6 @@
         <!-- Filtrado -->
       </div>
     </div>
-    <br>
 
     <div class="table-responsive">
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
@@ -535,10 +534,7 @@
   var table = $('#datatable').DataTable({
     "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
     language: {
-      paginate: {
-        "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
-        "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
-      }
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES-custom.json')}}"
     },
     initComplete: function () {
       var api = this.api();

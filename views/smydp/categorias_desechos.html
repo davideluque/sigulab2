@@ -57,7 +57,7 @@
         </div>
 
     {{if auth.has_membership('GESTOR DE SMyDP') or auth.has_membership('WEBMASTER'):}}
-        <div id="buttons" class="text-right">
+        <div id="buttons" class="text-right" style="margin-bottom: -55px;">
             <!-- Filtrado -->
             <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
                 <i class="fa fa-filter"></i>
@@ -65,7 +65,7 @@
             <!-- Filtrado -->
         </div>
     {{else:}}
-        <div id="buttons" class="text-right">
+        <div id="buttons" class="text-right" style="margin-bottom: -55px;">
             <!-- Filtrado -->
             <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
                 <i class="fa fa-filter"></i>
@@ -384,10 +384,7 @@
     var table = $('#datatable').DataTable({
         "dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
         language: {
-            paginate: {
-                "previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
-                "next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
-            }
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES-custom.json')}}"
         },
         initComplete: function () {
             var api = this.api();
