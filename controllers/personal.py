@@ -428,11 +428,35 @@ def cambiar_validacion(validacion, personal):
         mensaje = request.post_vars.razon_add
         db(db.t_Personal.f_email == personal['email']).update(
             f_por_validar=False, f_validado=False, f_comentario='Motivo de Rechazo: {}'.format(mensaje))
-        cuerpo = ' \n Estimado usuario la ficha de personal que envio para ser validada fue rechazada por su supervisor,\nMotivo de Rechazo:\n\t {}'.format(mensaje)
-        
-        print(personal['email'])
-        __enviar_correo(personal['email'],'[SIGULAB] Ficha Personal Rechazada',cuerpo)
-        #__enviar_correo('gabrieleduardogg@gmail.com','[SIGULAB] Ficha Personal Rechazada',cuerpo)
+
+    usuario = db(db.t_Personal.f_email == personal['email']).select().first()
+    first_name = usuario.f_nombre
+    last_name = usuario.f_apellido
+    email = usuario.f_email
+    es_supervisor = usuario.f_es_supervisor
+    motivo = usuario.f_comentario if validacion == 'false' else ''
+    destinatario = email
+    _reason = 'validada' if validacion == 'true' else 'rechazada'
+    asunto = '[SIGULAB] Ficha {}'.format(_reason)
+    cuerpo = '''
+    <html>
+    <head>
+      <meta charset='UTF-8' />
+    </head>
+    <body>
+      <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
+      <p>
+        Le notificamos que su ficha fue {action}
+      </p>
+      <p>
+        {motivo}
+      </p>
+    </body>
+    </html>
+    '''.format(f_nombre=first_name, f_apellido=last_name, f_email=email, action=_reason,
+        motivo=motivo
+      )
+    mail.send(destinatario, asunto, cuerpo)
     redirect(URL('listado_estilo'))
 
 
