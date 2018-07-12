@@ -196,7 +196,7 @@
                                             <div class="form-group">
                                               <label for="descripcion">Descripción del proceso:</label>
                                               <br>
-                                              <input class="form-control" type="text" id="descripcion" name="descripcion" onfocusout="validar_descripcion()"/>
+                                              <input class="form-control" type="text" id="descripcion" name="descripcion" onfocusout="return validar_descripcion()"/>
                                               <div class="field-error">
                                                 <p id="error-descripcion"> </p>
                                               </div>
@@ -215,8 +215,20 @@
                                                 <p id="error-envase"> </p>
                                               </div>
                                             </div>
-                                            
+
                                             <div class="form-group">
+                                              <label for="seleccionar_tipo_movimiento">Seleccione un tipo de movimiento*:</label>
+                                              <select class="form-control" name="seleccionar_tipo_movimiento" id="seleccionar_tipo_movimiento" onchange="mostrar_tipo_movimiento()">
+                                                <option value="" selected hidden disabled>Seleccionar</option>
+                                                <option value="Generación">Generación de desecho</option>
+                                                <option value="Retiro">Retiro de desecho</option>
+                                              </select>
+                                              <div class="field-error">
+                                                <p id="error-tipo-movimiento"> </p>
+                                              </div>
+                                            </div>
+                                            
+                                            <div class="form-group" id="div_generacion" style="display: none;">
                                               <label for="cantidad_generada">Cantidad generada:</label>
                                               <br>
                                               <input class="form-control" type="text" id="cantidad_generada" name="cantidad_generada" value="0" onfocusout="validar_cantidad_generada()"/>
@@ -225,7 +237,7 @@
                                               </div>
                                             </div>
 
-                                            <div class="form-group">
+                                            <div class="form-group" id="div_retiro" style="display: none;">
                                               <label for="cantidad_retirada">Cantidad retirada:</label>
                                               <br>
                                               <input class="form-control" type="text" id="cantidad_retirada" name="cantidad_retirada" value="0" onfocusout="validar_cantidad_retirada()"/>
@@ -233,7 +245,7 @@
                                                 <p id="error-cantidad-retirada"> </p>
                                               </div>
                                             </div>
-                                        <button type="submit" form="formularioCarga" style="border-radius: 100% !important; min-width: 0px;" id="submit" class="btn btn-submit btn-primary boton-modal pull-right">
+                                        <button type="submit" form="formularioCarga" style="border-radius: 100% !important; min-width: 0px;" class="btn btn-submit btn-primary boton-modal pull-right">
                                           <li class="fa fa-plus-circle"/>
                                         </button>
                                       </div>
@@ -314,6 +326,23 @@
         filtros = true
       }
 
+  }
+
+  function mostrar_tipo_movimiento() {
+    tipo_movimiento = document.getElementById("seleccionar_tipo_movimiento").value;
+
+    if(tipo_movimiento == "Generación"){
+      document.getElementById("div_generacion").style.display = "block";
+      document.getElementById("div_retiro").style.display = "none";
+      document.getElementById("cantidad_generada").value = 0;
+      document.getElementById("cantidad_retirada").value = 0;
+    }
+    if (tipo_movimiento == "Retiro") {
+      document.getElementById("div_generacion").style.display = "none";
+      document.getElementById("div_retiro").style.display = "block";
+      document.getElementById("cantidad_generada").value = 0;
+      document.getElementById("cantidad_retirada").value = 0;
+    }
   }
 
   function validar_fecha_entrada(){
@@ -419,6 +448,7 @@
     envase = document.getElementById("envase");
     cantidad_generada = document.getElementById("cantidad_generada");
     cantidad_retirada = document.getElementById("cantidad_retirada");
+    tipo_movimiento = document.getElementById("seleccionar_tipo_movimiento");
 
     // Se seleccionan los campos de los errores
     error_fecha_entrada = document.getElementById("error-fecha");
@@ -426,6 +456,7 @@
     error_envase = document.getElementById("error-envase");
     error_cantidad_generada = document.getElementById("error-cantidad-generada");
     error_cantidad_retirada = document.getElementById("error-cantidad-retirada");
+    error_tipo_movimiento = document.getElementById("error-tipo-movimiento");
 
     // Se limpian los errores pasados, si es que habían
     error_fecha_entrada.innerHTML = "";
@@ -443,6 +474,10 @@
     error_cantidad_retirada.innerHTML = "";
     error_cantidad_retirada.style.color = "";
     cantidad_retirada.style.border = "3px solid #ddd";
+
+    error_tipo_movimiento.innerHTML = "";
+    error_tipo_movimiento.style.color = "";
+    tipo_movimiento.style.border = "3px solid #ddd";
 
     fecha_ingresada = new Date(fecha_entrada.value);
     fecha_actual = new Date();
@@ -467,25 +502,32 @@
       envase.style.border = "1px solid red";
       return false;
     }
-    
-    cantidad_generada_value = parseFloat(cantidad_generada.value.replace(",", "."));
-    cantidad_retirada_value = parseFloat(cantidad_retirada.value.replace(",", "."));
 
-    if(isNaN(cantidad_generada_value) || cantidad_generada_value < 0){
-      error_cantidad_generada.innerHTML = "Ingrese una cantidad válida y no negativa";
-      error_cantidad_generada.style.color = "red";
-      cantidad_generada.style.border = "1px solid red";
+
+    if(tipo_movimiento.value == "Generación"){
+      cantidad_generada_value = parseFloat(cantidad_generada.value.replace(",", "."));
+      if (isNaN(cantidad_generada_value) || cantidad_generada_value <= 0) {
+        error_cantidad_generada.innerHTML = "Ingrese una cantidad válida mayor que cero.";
+        error_cantidad_generada.style.color = "red";
+        cantidad_generada.style.border = "1px solid red";
+        return false;
+      }
+    }
+    else if( tipo_movimiento.value == "Retiro"){
+      cantidad_retirada_value = parseFloat(cantidad_retirada.value.replace(",", "."));
+      if (isNaN(cantidad_retirada_value) || cantidad_retirada_value <= 0) {
+        error_cantidad_retirada.innerHTML = "Ingrese una cantidad válida mayor que cero.";
+        error_cantidad_retirada.style.color = "red";
+        cantidad_retirada.style.border = "1px solid red";
+        return false;
+      }      
+    }
+    else{
+      error_tipo_movimiento.innerHTML = "Seleccione un tipo de movimiento";
+      error_tipo_movimiento.style.color = "red";
+      tipo_movimiento.style.border = "1px solid red";
       return false;
     }
-
-    if (isNaN(cantidad_retirada_value) || cantidad_retirada_value < 0) {
-      error_cantidad_retirada.innerHTML = "Ingrese una cantidad válida y no negativa";
-      error_cantidad_retirada.style.color = "red";
-      cantidad_retirada.style.border = "1px solid red";
-      return false;
-    }
-
-    return false
   }
 </script>
  
