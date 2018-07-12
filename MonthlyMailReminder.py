@@ -47,13 +47,12 @@ while(1):
         for mail in correos:
         
             pendientes = contar_notificaciones(mail)
-            asunto = '[SIGULAB] Recordatorio de fichas pendientes por validar - {}'.format(mail)
             cuerpo = ' Estimado usuario usted tiene {} fichas por validar bajo el modulo de gestion de personal del SIGULAB, para validarlas puede acceder\
                 por el siguiente enlace:\n https://159.90.171.24/personal/listado_estilo '
 
 
             if(pendientes > 0 ):
-                __enviar_correo("gabrieleduardogg@gmail.com",asunto,cuerpo)
+                __enviar_correo(mail,asunto,cuerpo)
     else:
         #Duerme por un dia y chequea de nuevo
         time.sleep(86400)
