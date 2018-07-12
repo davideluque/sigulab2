@@ -21,6 +21,7 @@
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
 {{=table}}
+<div hidden id="empty"></div>
 </body>
 
 <!-- Script para boton de agregar extension-->
@@ -34,8 +35,14 @@
   ]
 
   extencionesUsb.map(i => {
-    console.log(i)
-    console.log(i.val())
+    const div = i.find('.col-sm-9')
+    div.html(`
+    <a href="#" name="${i.attr('id').replace(/__row/, '')}"
+    data-toggle="popover" data-trigger="manual"
+    data-placement="bottom" data-content="Debe ser 4 numeros"
+    data-original-title="" title="">
+      ${div.html()}
+    </a>`)
     if (i.find('input').val() === '') {
       i.addClass('hidden')
     } else {
@@ -43,6 +50,8 @@
       ext++
     }
   })
+
+
 
   $('#espacios_fisicos_ext_USB__label').prepend(`
   <a href="#" name="fin_extensiones"
@@ -90,15 +99,29 @@
 <script>
 
   function validarEspaciosFisicosExt(){
-    const $this = $('#espacios_fisicos_ext_USB')
-    if ($this.val() === '' || !$this.val().match(/^\d{4}$/)){
-      $('[name="espacios_fisicos_ext"]').popover('show');
-      return false; 
-    }
-    else {
-      $('[name="espacios_fisicos_ext"]').popover('hide');
-      return true;
-    }
+    return [
+      '#espacios_fisicos_ext_USB',
+      '#espacios_fisicos_ext_USB_1',
+      '#espacios_fisicos_ext_USB_2',
+      '#espacios_fisicos_ext_USB_3',
+      '#espacios_fisicos_ext_USB_4',
+    ].map(i => $(i))
+    .map($this => {
+      const id = $this.attr('id')
+      const parent = $(`#${id}__row`)
+      const val = $this.val()
+      if (parent.hasClass('hidden')) {
+        return true
+      }
+      if (val.match(/^\d{4}$/)) {
+        $(`[name="${id}"]`).popover('hide')
+        return true;
+      } else {
+        $(`[name="${id}"]`).popover('show')
+        return false;
+      }
+    })
+    .every(i => i)
   }
 
   function validarEspaciosFisicosInt(){
@@ -113,7 +136,7 @@
     }
   }
 
-  validacionCorrecta = [
+  const validacionCorrecta = [
     validarEspaciosFisicosExt,
     validarEspaciosFisicosInt
   ]
