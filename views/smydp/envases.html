@@ -378,11 +378,6 @@
             <div class="row">
                 <div class="col-xs-12 text-center">                
                 <div id="buttons" class="text-right" style="margin-bottom: -55px;">
-                    <!-- Filtrado -->
-                    <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-html5">
-                        <i class="fa fa-filter"></i>
-                    </button>
-                    <!-- Filtrado -->
                 </div>
                 <br>
         
@@ -844,7 +839,29 @@
 
                 new $.fn.dataTable.Buttons(api, {
                     buttons: [
-                        { extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
+                        {
+                            text: '<i class="fa fa-filter"></i>',
+                            action: function () {
+                                mostrarFiltro()
+                            },
+                            className: 'boton-sigulab'
+                        },
+                        {
+                            extend: 'collection',
+                            text: '<i class="fa fa-save"></i>',
+                            className: 'boton-sigulab dropDown',
+                            background: false,
+                            fade: true,
+                            buttons: [
+                                { extend: 'copy', text: "Copiar" },
+                                'pdf',
+                                'excel'
+                            ]
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i>'
+                        }
                     ]
                 });
                 api.buttons().container().appendTo('#buttons');
@@ -852,12 +869,15 @@
                 $('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
                 $('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
                 $('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-                // $('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-                // $('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
-                $('#buttons').style.textAlign = "right";
             }
-
         });
+
+        window.onclick = function (event) {
+            if (!event.target.matches('#buttons')) {
+                $(".dt-button-collection").hide();
+            }
+        }
+
         var w2p_ajax_confirm_message =
             "{{=T('')}}";
 
