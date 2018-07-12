@@ -245,7 +245,7 @@ def register():
       <meta charset='UTF-8' />
     </head>
     <body>
-      <h3>Saludos, estimado {f_nombre} {f_apellido}</h3>
+      <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
       <p>
         Le damos la bienvenida al SIGULAB. Le invitamos a llenar su ficha de personal,
         para ello <a href="https://159.90.171.24/modulos/login" target="_blank">inicie sesión</a>
