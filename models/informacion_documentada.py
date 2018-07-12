@@ -17,7 +17,7 @@ db.define_table(
 
       'registros',
 
-      Field('usuario', 'string', label=T('Usuario creador del registro')),
+      Field('dependencia_asociada', 'string', label=T('Dependencia asociada del creador del registro')),
 
       Field('codigo', 'string', label=T('Codigo del registro'), requires=IS_NOT_EMPTY()),
 
@@ -30,6 +30,8 @@ db.define_table(
       Field('remitente', 'string', label=T('Remitente del registro')),
 
       Field('doc_electronico', 'string', label=T('Doc. Electrónico')),
+
+      Field('ubicacion_doc_electronico', 'string', label=T('Ubicación del Doc. Electrónico')),
 
       Field('archivo_fisico', 'string', label=T('Archivo Fisico')),
 
@@ -55,7 +57,7 @@ db.define_table(
 
       ################ Fase de Planificación
 
-      Field('usuario', 'string', label=T('Usuario creador del documento')),
+      Field('dependencia_asociada', 'string', label=T('Dependencia asociada del creador del documento')),
     
       Field('nombre_doc', 'string', label=T('Nombre del Documento'), unique=True, notnull=True),
 
@@ -64,6 +66,10 @@ db.define_table(
             'Manual de Calidad', 'Manual de Proceso de Gestión', 'Manual de Proceso Técnico', \
             'Manual de Uso', 'Otro'])
       ),
+
+
+      Field('otro_tipo', 'string', label=T('Otro tipo de documento')),
+
 
       Field('responsable', 'string', label=T('Dependencia responsable del Documento'),
             requires=IS_IN_SET(['DIRECCIÓN','LABORATORIO A','LABORATORIO B', \
@@ -74,11 +80,8 @@ db.define_table(
             ])
       ),
 
-
-
-      ################ Fase de Elaboración
-
       Field('codigo', 'string', label=T('Codigo del registro')),
+
 
       Field('objetivo', 'string', label=T('Objetivo del documento')),
 
@@ -87,7 +90,13 @@ db.define_table(
             requires=IS_IN_SET(['Semestral', 'Anual','Bienal','Trienal','Quinqueanual'])
       ),
 
-      Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+
+
+
+      ################ Fase de Elaboración
+
+
+      Field('fecha_prox_rev', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
             label=T('Fecha de proxima revision del Documento')
       ),
 
@@ -137,7 +146,7 @@ db.define_table(
 
       Field('rev_contenido_realizado_por', 'string', label=T('Nombre de quien reviso el contenido del Documento')),
 
-      Field('fecha_rev_contenido', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_contenido', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision del contenido del Documento')
       ),
 
@@ -145,11 +154,11 @@ db.define_table(
           label=T('Nombre de quien realizo la revision de las especificaciones')
       ),
 
-      Field('fecha_rev_especificaciones_doc', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_especificaciones_doc', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision de las especificaciones del Documento')
       ),
 
-      Field('fecha_rev_por_consejo_asesor', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_rev_por_consejo_asesor', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
           label=T('Fecha de revision por el Consejo Asesor')
       ),
 
@@ -159,7 +168,7 @@ db.define_table(
 
       Field('aprobado_por', 'string', label=T('Nombre de quien aprobo el Documento')),
 
-      Field('fecha_aprob', 'date', requires=IS_DATE(format=('%d-%m-%Y')), 
+      Field('fecha_aprob', 'date', requires=IS_DATE(format=('%Y-%m-%d')), 
             label=T('Fecha de aprobacion del Documento')
       ),
 
@@ -171,7 +180,7 @@ db.define_table(
 
       Field('cod_control_cambio', 'string', label=T('Codigo de registro de control de cambios del Documento')),
 
-      Field('fecha_control_cambio', 'date', requires=IS_DATE(format=('%d-%m-%Y')),
+      Field('fecha_control_cambio', 'date', requires=IS_DATE(format=('%Y-%m-%d')),
             label=T('Fecha de registro de control de cambios en el Documento')
       ),
 
@@ -181,13 +190,24 @@ db.define_table(
 
       Field('registro_electronico', 'text', label=T("Ubicación del registro en formato electrónico")),
 
+      Field('vinculo', 'text', label=T("Vinculo electrónico")),
 
 
-      ############### ESTATUS DEL DOCUMENTO
+      ############### Estatus del Documento
 
       Field('estatus', 'string', label=T('Estatus del Documento'), widget=SQLFORM.widgets.options.widget,
           requires=IS_IN_SET(['Planificado','Elaborado','Revisado','Aprobado'])
       ),
+
+      ############### Indicador de Visibilidad
+
+      Field('visibilidad', 'string', label=T('Visibilidad')),
+      
+
+      ############### Indicador de Vencimiento
+
+      Field('vencimiento', 'string', label=T('Vencimiento')),
+
 
 
     primarykey=['codigo']

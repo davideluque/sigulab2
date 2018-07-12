@@ -99,7 +99,7 @@ $(document).ready(function () {
                         $("#err_numpiezasher").hide();
                     }
                 }
-                else if (($(this).attr('name')=="ancho")) {
+                else if (($(this).attr('name')=="ancho_her")) {
                     console.log( $(this).val() );
                     console.log("entro");
                     if ( !($(this).val().match(/^[0-9]+$/) || ($(this).val().match(/^[0-9]+\.[0-9]+$/) )) && $(this).val() != "") {
