@@ -357,12 +357,10 @@ def lista_documentos():
 
 	vencidas = db(db.documentos.vencimiento=="Si").select(db.documentos.ALL)
 	cantidad_vencidas = db(db.documentos.vencimiento=="Si").count()
-
 	dependencasOrdenadas = db().select(db.dependencias.nombre, db.dependencias.codigo_registro, orderby=db.dependencias.nombre)
-
 	rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
-    roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
-    todas_dependencias=list(db().select(db.dependencias.ALL))
+	roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
+	todas_dependencias=list(db().select(db.dependencias.ALL))
 
 	return dict(
 
