@@ -25,6 +25,34 @@
 		margin-top: -30px
 	}
 
+	.notif-wrap {
+		margin-top: 30px;
+		
+	}
+
+	.doc-notif {
+		background-color: rgba(103,147,252,0.8);
+		padding-top: 10px;
+		padding-bottom: 10px;
+		color: #FFF;
+		font-weight: 500;
+		cursor: pointer;
+	}
+	.notif-drop { width:150%; margin-left: -120px; border: 1px solid #c6c6c6; border-radius: 3px; padding-bottom: 0px; padding-top:0px; }
+	.notif-drop li div.notif-box { padding-top: 10px; padding-bottom: 10px; padding-left: 10px; background-color: #FFF; color: #11455b; border-bottom:1px solid rgba(0,0,0,0.05)}
+	.notif-drop li div.notif-box.unread { background-color: rgba(0,0,0,0.03);  }
+	.notif-drop li div.notif-box:hover { background-color: rgba(0,0,0,0.05);  }
+	.notif-drop li div.notif-box a { color: #11455b; }
+	.notif-drop li div.notif-box a:hover { text-decoration: none; }
+
+	.notif-drop li div.notif-box p { margin-bottom: 1px; }
+
+	.notif-drop p.notif-timestamp { text-align: right; font-size: 12px; color: rgba(0,0,0,0.6); padding-right: 10px; }
+
+	.notif-drop .more-notifs  { text-align: center; background-color: rgba(103,147,252,0.5); padding-bottom: 1px; padding-top: 10px;}
+	.notif-drop .more-notifs p a { color : #000; font-weight: 600; color: #FFF;  }
+	.notif-drop .more-notifs p a:hover { text-decoration: none; }
+
 </style>
 
 
@@ -47,10 +75,10 @@
 
 	</nav><-->
 	<div class="row">
-		<div class="col-md-2">
-	      <a href="{{=URL('..', 'sigulab2','informacion_documentada','')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px; margin-left: 20%;"></i></h2></a>
+		<div class="col-md-3">
+	      <a href="{{=URL('..', 'sigulab2','informacion_documentada','')}}"><i class="fa fa-arrow-left fa-2x" style="background-color: #337ab7; color: white; border-radius: 50%; padding: 10px; margin-left: 15%;"></i></h2></a>
 	    </div>  
-		<div class="col-md-7">
+		<div class="col-md-6">
 			<h3 style="text-align: center;"> CONTROL DE DOCUMENTOS </h3>
 		</div>
 		<div class="col-md-3">
@@ -62,10 +90,37 @@
 	    	
 			<a href="#">
 				<button type="button" id="botonModal" data-toggle="modal" data-target="#adddoc" class="btn btn-floating btn-info" style="border-radius: 50%; text-align: center; background-color: #337ab7; margin-right: 20px;"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
-			</a> 
-			<a href="#">
-				<button type="button" class="btn btn-floating btn-info" style="border-radius: 50%; margin-right: 20px; text-align: center; background-color: #337ab7;"><i class="fa fa-bell fa-2x" aria-hidden="true"></i></button>
-			</a>			
+			</a>
+
+
+
+			<div class=" notif-wrap text-center dropdown" style="display: inline-block;">
+
+			    <div class="doc-notif" data-toggle="dropdown" style="border-radius: 50%; background-color: #337ab7; margin-left: 2px;">
+			        <i class="fa fa-bell" style="margin-left: 5px;"></i> 
+			        
+			        <span class="badge" style="margin-right: 5px;"> {{=cant_doc_vencidos}} </span>
+			    </div>
+
+			    <ul class="dropdown-menu notif-drop">
+			    {{for venc in documentos_vencidos:}}	
+			        
+			        <li>
+			            <div class="notif-box unread">
+			                <a href="{{=URL('informacion_documentada','ficha',args=[venc.codigo])}}"" target="_blank">
+			                 <p class="notif-content"> {{=venc.nombre_doc}}  </p>
+			                 <p class="notif-timestamp">{{=venc.codigo}}</p>
+			                </a>
+			            </div>    
+			        </li>
+			        
+
+			    {{pass}}
+			    </ul>
+			</div>	
+
+
+
 		</div>
 	</div>	
 
@@ -198,7 +253,7 @@
 			<tbody>
 				{{for doc in documentos:}}
 					{{if doc.visibilidad == "No":}}
-						{{if doc.dependencia_asociada == depAsoc:}}
+						{{if (doc.dependencia_asociada.split("\n")[1])[:len(doc.dependencia_asociada.split("\n")[1]) - 1] == depAsoc:}}
 							<tr>
 									<td class="camposTabla" style="text-align: left; padding-left: 34px" ><a href="{{=URL('informacion_documentada','ficha',args=[doc.codigo])}}">{{=doc.nombre_doc.upper()}}</a>
 									</td>
@@ -222,7 +277,7 @@
 								<td class="camposTabla" >{{=doc.codigo.upper()}}</td>
 								<td class="camposTabla" >{{=doc.tipo_doc.upper()}}</td>
 								<td class="camposTabla" >{{=doc.responsable.upper()}}</td>
-								<td class="camposTabla" ><button type="button">Descargar</button></td>
+								<td class="camposTabla" ><button type="button" href="{{=doc.vinculo}}" target="_blank">Descargar</button></td>
 								<td class="camposTabla" >{{=doc.estatus.upper()}}</td>
 
 						</tr>
@@ -479,7 +534,7 @@
 								
 								<div id="p_scents">
 									<p>
-										<input type="text" id="p_scnt" size="20" name="elaborador0" value="" placeholder="Ingrese un elaborador" />
+										<input type="text" id="p_scnt" size="20" name="elaborador0" placeholder="Ingrese un elaborador" />
 									</p>
 								</div>
 
@@ -490,7 +545,7 @@
 
 							<!-- Campo de Fecha de entrega para revisión del Documento -->
 							<div class="form-group">
-								<h5>Fecha de elaboración</h5>
+								<h5 >Fecha de elaboración</h5>
 								<input class="datepicker" name="fecha_prox_rev" id="fecha_prox_rev" type="text" data-date-end-date="0d" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha" readonly="">
 							</div>
 
@@ -758,6 +813,10 @@
 
 
 
+
+
+
+
 <script type="text/javascript">
 
 	function get_code(i){
@@ -982,7 +1041,7 @@
 	$(function() {
 		console.log("datapicker");
 		$('.datepicker').datepicker({
-			format: 'yyyy-mm-dd'
+			format: 'dd-mm-yyyy'
 		})	
 	});
 

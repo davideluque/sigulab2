@@ -49,12 +49,6 @@ def generarCodigoRegistro():
 	dependencia = dependenciaAsociadaUsuario()
 	nroRegistros = db(db.registros.dependencia_asociada == dependencia).count() + 1
 
-	for x in db().select(db.registros.ALL):
-		print("::::::")
-		print(type(x.dependencia_asociada))
-		print(type(dependencia))
-		print(x.dependencia_asociada == dependencia)
-
 	if (nroRegistros < 10):
 		nroRegistros = "00" + str(nroRegistros)
 	elif (nroRegistros < 100):
@@ -65,39 +59,45 @@ def generarCodigoRegistro():
 	return codigoRegistro
 
 
+def transformar_fecha(fecha):
+    
+	if fecha != "" and fecha != None: 
+		split = fecha.split("-")
+		fecha_nueva = split[2] + "-" + split[1] + "-" + split[0]
+		return fecha_nueva
+	else:
+		return fecha
+
 def analizadorVencimiento():
-	print("holi")
-	# strings = time.strftime("%Y,%m,%d,%H,%M,%S")
-	# t = strings.split(',')
-	# fechaActual = t[0] + "-" + t[1] + "-" + t[2]
-	# anioActual = t[0]
-	# mesActual = t[1]
 
-	# for doc in db().select(db.documentos.ALL):
-	# 	anio = ""
+	strings = time.strftime("%Y,%m,%d,%H,%M,%S")
+	t = strings.split(',')
+	fechaActual = t[0] + "-" + t[1] + "-" + t[2]
+	anioActual = t[0]
+	mesActual = t[1]
 
-	# 	if (doc.fecha_prox_rev != None):
-	# 		mes = str(doc.fecha_prox_rev).split("-")[1]
-	# 		anio = str(doc.fecha_prox_rev).split("-")[0]
+	for doc in db().select(db.documentos.ALL):
+		fecha_comparacion = doc.fecha_prox_rev
+		documento =  db(db.documentos.codigo==doc.codigo)
+		if (fecha_comparacion != None):
+			anio = fecha_comparacion.year
+			if (doc.periodo_rev == "Semestral"):
+		 		if (fechaActual == str(doc.fecha_prox_rev)):
+		 			documento.update(vencimiento="Si")
+		 	elif (doc.periodo_rev == "Anual"):
+		 		if (str(anio + 1) == anioActual):
+		 			documento.update(vencimiento="Si")	
+		 	elif (doc.periodo_rev == "Bienal"):
+		 		if (str(anio + 2) == anioActual):
+		 			documento.update(vencimiento="Si")	
+		 	elif (doc.periodo_rev == "Trienal"):
+		 		if (str(anio + 3) == anioActual):
+		 			documento.update(vencimiento="Si")	
+		 	elif (doc.periodo_rev == "Quinquenal"):	
+		 		if (str(anio + 4) == anioActual):
+		 			documento.update(vencimiento="Si")			
 
-
-	# 	if (doc.periodo_rev == "Semestral"):
-
-	# 		if (fechaActual == str(doc.fecha_prox_rev)):
-	# 			doc.vencimiento = "Si"
-	# 	elif (doc.periodo_rev == "Anual"):
-	# 		if (str(int(anio) + 1) == anioActual):
-	# 			doc.vencimiento = "Si"
-	# 	elif (doc.periodo_rev == "Bienal"):
-	# 		if (str(int(anio) + 2) == anioActual):
-	# 			doc.vencimiento = "Si"
-	# 	elif (doc.periodo_rev == "Trienal"):
-	# 		if (str(int(anio) + 3) == anioActual):
-	# 			doc.vencimiento = "Si"
-	# 	elif (doc.periodo_rev == "Quinquenal"):	
-	# 		if (str(int(anio) + 4) == anioActual):
-	# 			doc.vencimiento = "Si"		
-
+			
 
 
 
@@ -112,7 +112,7 @@ def lista_registros():
 	dic = {
 		"dependencia_asociada":dependencia,
 		"codigo": cod,
-		"fecha_creacion": request.post_vars.fecha_creacion,
+		"fecha_creacion": transformar_fecha(request.post_vars.fecha_creacion),
 		"descripcion": request.post_vars.descripcion,
 		"destinatario": request.post_vars.destinatario,
 		"remitente": request.post_vars.remitente,
@@ -159,7 +159,7 @@ def ficha_registro():
 	if (request.post_vars.fecha_creacion != None):
 		rgEditable.update(
 			codigo = cod,
-			fecha_creacion = request.post_vars.fecha_creacion,
+			fecha_creacion = transformar_fecha(request.post_vars.fecha_creacion),
 			descripcion = request.post_vars.descripcion,
 			destinatario = request.post_vars.destinatario,
 			remitente = request.post_vars.remitente,
@@ -188,6 +188,8 @@ def lista_documentos():
 
 	analizadorVencimiento()
 
+
+
 	dic = {
 
 		##### Planificación
@@ -202,7 +204,7 @@ def lista_documentos():
 
 
 		##### Elaboración
-		"fecha_prox_rev": request.post_vars.fecha_prox_rev,
+		"fecha_prox_rev": transformar_fecha(request.post_vars.fecha_prox_rev),
 		"anexo_code1": request.post_vars.anexo_code1,
 		"anexo_name1": request.post_vars.anexo_name1,
 		"anexo_code2": request.post_vars.anexo_code2,
@@ -222,20 +224,20 @@ def lista_documentos():
 
 		##### Revisión
 		"rev_contenido_realizado_por": request.post_vars.revision_contenido,
-		"fecha_rev_contenido": request.post_vars.fecha_revision_contenidos,
+		"fecha_rev_contenido": transformar_fecha(request.post_vars.fecha_revision_contenidos),
 		"rev_especficaciones_doc_realizado_por": request.post_vars.revision_especificaciones,		
-		"fecha_rev_especificaciones_doc":  request.post_vars.fecha_revision_especificaciones,
-		"fecha_rev_por_consejo_asesor": request.post_vars.fecha_revision_consejo,
+		"fecha_rev_especificaciones_doc":  transformar_fecha(request.post_vars.fecha_revision_especificaciones),
+		"fecha_rev_por_consejo_asesor": transformar_fecha(request.post_vars.fecha_revision_consejo),
 
 
 		##### Aprobación
 		"aprobado_por": request.post_vars.aprobado,
-		"fecha_aprob": request.post_vars.fechaAprobacion,
+		"fecha_aprob": transformar_fecha(request.post_vars.fechaAprobacion),
 		"cod_aprob": request.post_vars.cod_registro,
 		"ubicacion_fisica": request.post_vars.ubicacion_fisica,
 		"ubicacion_electronica": request.post_vars.ubicacion_electronica,
 		"cod_control_cambio": request.post_vars.cod_control_cambio,
-		"fecha_control_cambio": request.post_vars.fecha_control_cambio,
+		"fecha_control_cambio": transformar_fecha(request.post_vars.fecha_control_cambio),
 		"ccelaborado": request.post_vars.ccelaborado,
 		"registro_fisico": request.post_vars.registro_fisico,
 		"registro_electronico": request.post_vars.registro_electronico,
@@ -246,7 +248,6 @@ def lista_documentos():
 			
 		
 	}
-
 
 
 	planificado = {
@@ -340,22 +341,28 @@ def lista_documentos():
 		
 		)
 
-		db.registros.insert(
-			dependencia_asociada=dic["dependencia_asociada"],
-			codigo= generarCodigoRegistro(),
-			fecha_creacion=dic["fecha_prox_rev"],
-			descripcion="Carga de Documento",
-			destinatario="Destinatario",
-			remitente=dic["responsable"],
-			doc_electronico=dic["registro_electronico"],
-			ubicacion_doc_electronico=dic["ubicacion_electronica"],
-			archivo_fisico=dic["ubicacion_fisica"],
-		)
+		if dic["estatus"] == "Aprobado":
+			db.registros.insert(
+				dependencia_asociada=dic["dependencia_asociada"],
+				codigo= generarCodigoRegistro(),
+				fecha_creacion=dic["fecha_aprob"],
+				descripcion="Documento aprobado",
+				destinatario="Destinatario",
+				remitente=dic["responsable"],
+				doc_electronico=dic["registro_electronico"],
+				ubicacion_doc_electronico=dic["ubicacion_electronica"],
+				archivo_fisico=dic["ubicacion_fisica"],
+			)
 
 
+	vencidas = db(db.documentos.vencimiento=="Si").select(db.documentos.ALL)
+	cantidad_vencidas = db(db.documentos.vencimiento=="Si").count()
 
 	dependencasOrdenadas = db().select(db.dependencias.nombre, db.dependencias.codigo_registro, orderby=db.dependencias.nombre)
 
+	rolesDeseados=['DIRECTOR', 'ASISTENTE DEL DIRECTOR', 'GESTOR DE SMyDP', 'COORDINADOR', 'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL DE DEPENDENCIA']
+    roles=db(db.auth_group.role.belongs(rolesDeseados)).select(db.auth_group.ALL)
+    todas_dependencias=list(db().select(db.dependencias.ALL))
 
 	return dict(
 
@@ -366,6 +373,8 @@ def lista_documentos():
 		doc_planificacion=db(db.documentos.estatus=="Planificado").count(),
 		dependencias = dependencasOrdenadas,
 		depAsoc=dependenciaAsociadaUsuario()[0].nombre,
+		documentos_vencidos=vencidas,
+		cant_doc_vencidos=cantidad_vencidas,
 
 	)
 
@@ -386,7 +395,7 @@ def ficha():
 		print("elaborado")
 		documento.update(
 			estatus="Elaborado",
-			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			fecha_prox_rev= transformar_fecha(request.post_vars.fecha_prox_rev),
 			anexo_code1= request.post_vars.anexo_code2,
 			anexo_name1= request.post_vars.anexo_name2,
 			anexo_code2= request.post_vars.anexo_code3,
@@ -407,19 +416,24 @@ def ficha():
 
 		documento.update(estatus="Revisado",
 
-			
 			rev_contenido_realizado_por = request.post_vars.revision_contenido,
-        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	fecha_rev_contenido = transformar_fecha(request.post_vars.fecha_revision_contenidos),
         	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
-       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		fecha_rev_especificaciones_doc = transformar_fecha(request.post_vars.fecha_revision_especificaciones),
        		rev_por_consejo_asesor = request.post_vars.revision_consejo,
-       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo)
+       		fecha_rev_por_consejo_asesor = 	transformar_fecha(request.post_vars.fecha_revision_consejo)
+
+       	)
+
+		redirect(URL('informacion_documentada','ficha',args=[uname]))
+
+
 	elif(request.post_vars.aprobado=="aprobado"):
 		print("aprobado")
 		documento.update(estatus="Aprobado",
 			periodo_rev=request.post_vars.periodo,
 			objetivo=request.post_vars.objetivos,
-			fecha_prox_rev= request.post_vars.fecha_prox_rev,
+			fecha_prox_rev= transformar_fecha(request.post_vars.fecha_prox_rev),
 			anexo_code1= request.post_vars.anexo_code2,
 			anexo_name1= request.post_vars.anexo_name2,
 			anexo_code2= request.post_vars.anexo_code3,
@@ -436,16 +450,16 @@ def ficha():
 			elaborador3= request.post_vars.elaborador4,
 			elaborador4= request.post_vars.elaborador5,
 			rev_contenido_realizado_por = request.post_vars.revision_contenido,
-        	fecha_rev_contenido = request.post_vars.fecha_revision_contenidos,
+        	fecha_rev_contenido = transformar_fecha(request.post_vars.fecha_revision_contenidos),
         	rev_especficaciones_doc_realizado_por = request.post_vars.revision_especificaciones,
-       		fecha_rev_especificaciones_doc = request.post_vars.fecha_revision_especificaciones,
+       		fecha_rev_especificaciones_doc = transformar_fecha(request.post_vars.fecha_revision_especificaciones),
        		rev_por_consejo_asesor = request.post_vars.revision_consejo,
-       		fecha_rev_por_consejo_asesor = 	request.post_vars.fecha_revision_consejo,
+       		fecha_rev_por_consejo_asesor = transformar_fecha(request.post_vars.fecha_revision_consejo),
        		aprobado_por = request.post_vars.aprobado_por,
-        	fecha_aprob = request.post_vars.fechaAprobacion,
+        	fecha_aprob = transformar_fecha(request.post_vars.fechaAprobacion),
         	cod_aprob = request.post_vars.cod_registro,
         	cod_control_cambio = request.post_vars.cod_controlCambios,
-        	fecha_control_cambio = request.post_vars.fechaControlCambios,
+        	fecha_control_cambio = transformar_fecha(request.post_vars.fechaControlCambios),
         	ubicacion_fisica = request.post_vars.ubicacion_fisica,
         	ubicacion_electronica = request.post_vars.ubicacion_electronica
         )
