@@ -22,7 +22,6 @@
                     <th class="camposTabla linksNombres">Unidades por Presentación</th>
                     <th class="camposTabla linksNombres">Cantidad</th>
                     <th class="camposTabla linksNombres">Total</th>
-                      <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                     <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                 </tr>
             </thead>
@@ -34,13 +33,10 @@
                     
                     <td class="camposTabla">{{=bm['sb_marca']}}</td>
                     <td class="camposTabla">{{=bm['sb_modelo']}}</td>
-    
                     <td class="camposTabla">{{=bm['sb_presentacion']}}</td>
                     <td class="camposTabla">{{=bm['sb_unidades']}}</td>
                     <td class="camposTabla">{{=bm['sb_cantidad']}}</td>
-                    <td class="camposTabla">{{=bm['sb_total']}}</td>
-                    <td class="camposTabla">{{=db(db.espacios_fisicos.id == bm['sb_espacio']).select().first().codigo}}</td>
-                </tr>
+                    <td class="camposTabla">{{=bm['sb_total']}}</td>                </tr>
               {{pass}}           
             </tbody>
     
@@ -53,7 +49,6 @@
                     <th class="camposTabla linksNombres">Unidades por Presentación</th>
                     <th class="camposTabla linksNombres">Cantidad</th>
                     <th class="camposTabla linksNombres">Total</th>
-                      <th class="camposTabla linksNombres">Ubicacion Fisica</th>
                   <!-- <th class="camposTabla linksNombres">Estatus</th> -->
                 </tr>
             </tfoot>
