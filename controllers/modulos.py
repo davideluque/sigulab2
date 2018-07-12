@@ -38,6 +38,8 @@ def authenticate():
   if not user:
     return "$('#authdiv').html('Datos de inicio de sesión incorrectos.')"
   else:
+    accion = '[Sistema] Ingreso al sistema'
+    db.bitacora_general.insert(f_accion = accion)
     url = URL('default','index')
     return '$(location).attr("href", "' + str(url) + '")'
 
@@ -53,6 +55,7 @@ def login():
     return redirect(URL('default', 'index'))
 
   auth.settings.login_next = URL('default','index')
+  
   form=auth.login()
 
   if request.vars['error'] == 'invalid_data':
@@ -167,9 +170,12 @@ def register():
   ### Realizar registro de usuario ###
   if request.vars and request.vars.registrar == "do_register":
     auth_register = auth.register_bare(username=request.post_vars.first_name,
-                                       last_name=request.post_vars.last_name,
-                                       email=request.post_vars.email,
-                                       password=request.post_vars.password)
+                                        last_name=request.post_vars.last_name,
+                                        email=request.post_vars.email,
+                                        password=request.post_vars.password)
+    registrado = request.post_vars.first_name + " "+request.post_vars.last_name+" - "+ request.post_vars.email
+    accion = '[Sistema] Registro de nuevo usuario: {}'.format(registrado) 
+    db.bitacora_general.insert(f_accion = accion)
 
     # Si el servidor se cayera en este punto sería un error fatal.
     # Debe haber un mensaje de error cuando un usuario que ingresa no tiene
@@ -478,5 +484,7 @@ def logout():
 
   @returns Redirección al login.
   """
+  accion = '[Sistema] Egreso del sistema'
+  db.bitacora_general.insert(f_accion = accion)
   auth.logout()
   return redirect(URL('login'))
