@@ -67,7 +67,6 @@ def tabla_categoria(tipo):
         extensiones_int = separador.join(list(filter(bool,
             list(map(lambda x: x.ext_interna, ubicaciones))
         )))
-        print(ubicaciones)
         jsns.append(
             {"nombre" : elm.f_nombre,
             "apellido" : elm.f_apellido,
@@ -203,6 +202,32 @@ def add_form():
             ubicaciones
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
+
+        personal = personal.select().first()
+        named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
+        if len(named) > 0:
+            dep = named.first().nombre
+            destinatario = buscarJefe(dep)
+            usuario_supervisor = db(db.auth_user.email == destinatario).select().first()
+            first_name = usuario_supervisor.first_name
+            last_name = usuario_supervisor.last_name
+            asunto = '[SIGULAB] Ficha Editada'
+            cuerpo = '''
+            <html>
+            <head>
+            <meta charset='UTF-8' />
+            </head>
+            <body>
+            <h3>Saludos, estimado(a) {f_nombre} {f_apellido}</h3>
+            <p>
+                Le notificamos que la ficha de {f_nombre_validar} {f_apellido_validar}
+                fue editada. Le invitamos a validar dicha edición.
+            </p>
+            </body>
+            </html>
+            '''.format(f_nombre=first_name, f_apellido=last_name,
+            f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
+            mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
 
 
@@ -401,8 +426,6 @@ def ficha():
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
-
-    print(usuario)
 
     return dict(
         personal=personal,
