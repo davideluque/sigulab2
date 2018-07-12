@@ -245,34 +245,39 @@
                                   {{pass}}
                                 </select>
                               </div>
-                            </div>
-                            <div id="fsalida"
-                            {{if usuario.f_categoria != 'Fijo':}}
-                            hidden
-                            {{pass}}
-                            >
-                              <div class="col-sm-6">
-                                <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              <div id="fsalida" class="form-group"
+                              {{if usuario.f_categoria == 'Fijo':}}
+                              hidden
+                              {{pass}}
+                              >
+                                <div class="col-sm-6">
+                                  <label>Fecha de Ingreso:</label>
+                                  <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}"
+                                  name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                                </div>
+                                <div class="col-sm-6">
+                                  <label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                                </div>
                               </div>
-                              <div class="col-sm-6">
-                                <p ><label>Fecha de Egreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_salida or ''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                              </div>
-                            </div>
 
-                            <div id="fingreso"
-                            {{if usuario.f_categoria == 'Fijo' :}}
-                            hidden
-                            {{pass}}
-                            >
-                              <div class="col-sm-12">
-                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                              </div>
-                              <div class="col-sm-12" >
-                                <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                                <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
-                              </div>
-                              <div class="col-sm-12">
-                                <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              <div id="fingreso" class="form-group"
+                              {{if usuario.f_categoria != 'Fijo':}}
+                              hidden
+                              {{pass}}
+
+                              >
+                                <div class="col-sm-12">
+                                  <label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                                </div>
+                                <div class="col-sm-12" >
+                                  <label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                                  <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
+                                </div>
+                                <div class="col-sm-12">
+                                  <label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                                </div>
+
+                                
                               </div>
                             </div>
                         </div>
