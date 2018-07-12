@@ -72,7 +72,7 @@
                             <div class="form-group">
                               <div class="col-sm-6">
                                 <label>Página Web</label>
-                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="Página Web" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <input value="{{=usuario.f_pagina_web or ''}}" type="text" class="form-control" name="pagina_web_add" placeholder="http://" id="input-pagina" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
                                 <font color="red"><div id="err_pagina_web" hidden></div></font>
                               </div>
                             </div>
@@ -385,7 +385,7 @@
 
                       <div class="botones-form">
                           <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-plus-circle" title="Anterior"/></button>
+                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
                       </div>
                       </div>
                     </fieldset>
