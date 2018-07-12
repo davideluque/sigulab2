@@ -364,7 +364,7 @@
                         <div class="form-group" id="fecha_calibracion">
                           <label>Seleccione la fecha de la última calibración del equipo*</label>
                           <input type="date" class="form-control" name="fecha_calibracion">
-                          <div class="field-error"> <p id="error-fecha_calibracion"></p></div>
+                          <font color="red"><div id="err-fecha_calibracion" hidden></div></font>
                         </div>
   
                         <div class="form-group">
@@ -543,6 +543,7 @@ del concepto y tipo de ingreso o egreso -->
       document.getElementById("fecha_calibracion").setAttribute("required", "");
     }else{
       document.getElementById("fecha_calibracion").style.display = 'none';
+      document.getElementById("fecha_calibracion").required = false;
     }
   }
 
