@@ -1115,7 +1115,9 @@ def __agregar_envase(identificacion, capacidad, unidad_medida, forma, material, 
 
             return T("Contenedor creado exitosamente.")
 
-
+def __eliminar_desecho(id_desecho):
+    db(db.t_inventario_desechos.id == id_desecho).delete()
+    return T("Desecho eliminado exitosamente.")
 
 def __eliminar_envase(id_envase):
     db(db.t_envases.id == id_envase).delete()
@@ -1294,14 +1296,32 @@ def inventarios_desechos():
 
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
+                # Se quiere eliminar un desecho
+                print request.vars
+                if request.vars.view and request.vars.borrar_desecho:
+                    marcado_para_borrar = False
+                    print request.vars
+                    if request.vars.borrar_desecho == 'True':
+                        print "marcado para borrar = true"
+                        marcado_para_borrar = True
+
+                    # Verifica si el elemento fue marcado para ser borrado
+                    if marcado_para_borrar:
+                        print "se va a borrar"
+                        response.flash = __eliminar_desecho(int(request.vars.view))
+                        print "ya se tuvo que haber borrado"
+                        session.flash = response.flash
+                        return redirect(URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio="True"))) 
+
+
                 # Se esta editando el detalle de un desecho
                 if request.vars.view and request.vars.envase:
                     envase = db(db.t_envases.id == int(request.vars.envase)).select().first()
                     
                     response.flash = __actualizar_desecho(request.vars.view, envase, request.vars.peligrosidad, request.vars.tratamiento, request.vars.concentracion)
                     session.flash = response.flash
-                    return redirect(URL(host=True)) 
-                    
+                    return redirect(URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.var.dependencia, es_espacio="True", view=request.vars.view))) 
+                
                 else:
                     # Si se esta agregando un nuevo desecho, se registra en la DB
                     if request.vars.envase:
@@ -1678,8 +1698,7 @@ def inventarios_desechos():
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(
-                (db.dependencias.nombre.startswith('LAB')) &
-                (db.dependencias.id == dep_id)
+                (db.dependencias.unidad_de_adscripcion == dep_id)
             ).select(db.dependencias.ALL))
 
             # Se muestra como inventario el egregado de los inventarios que
@@ -2054,7 +2073,14 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
 
     if busqueda == 0:
         row = db(db.t_inventario_desechos.id == int(id)).select().first()
-
+        
+        peligrosidad_mayusculas = []
+        
+        if type(peligrosidad) is list:
+            peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+        else:
+            peligrosidad_mayusculas = peligrosidad.upper()
+            
         row.update_record(
             categoria = envase.categoria,
             composicion = envase.composicion,
@@ -2063,7 +2089,7 @@ def __actualizar_desecho(id, envase, peligrosidad, tratamiento, concentracion):
             espacio_fisico = envase.espacio_fisico,
             seccion = envase.espacio_fisico.dependencia,
             tratamiento = tratamiento.upper(),
-            peligrosidad = peligrosidad.upper()
+            peligrosidad = peligrosidad_mayusculas
         )
 
         return T("Desecho actualizado correctamente.")
@@ -2089,6 +2115,12 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
         # Verifica que la cantidad de desecho que se quiere registrar quepa dentro de la capacidad
         # del envase seleccionado
         if int(cantidad) <= int(envase.capacidad): 
+            peligrosidad_mayusculas = []
+
+            if type(peligrosidad) is list:
+                peligrosidad_mayusculas = [x.upper() for x in peligrosidad]
+            else:
+                peligrosidad_mayusculas = peligrosidad.upper()
 
             #Agrega el desecho al inventario
             nueva_entrada_id = db.t_inventario_desechos.insert(categoria = envase.categoria,
@@ -2101,10 +2133,8 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                                             responsable = auth.user_id,
                                             envase = envase.id,
                                             tratamiento = tratamiento.upper(),
-                                            peligrosidad = peligrosidad.upper())
+                                            peligrosidad = peligrosidad_mayusculas)
             
-            return T("Desecho creado exitósamente.")
-
             # Crea la entrada inicial en la bitácora de desechos
             db.t_Bitacora_desechos.insert(
                 fecha = str(datetime.datetime.now()),
@@ -2116,6 +2146,9 @@ def __agregar_desecho(envase, peligrosidad, tratamiento, cantidad, concentracion
                 envase = envase.id,
                 inventario = nueva_entrada_id
             )
+
+            return T("Desecho creado exitósamente.")
+
 
         else:
             return T("El contenedor que usted eligió no tiene la capacidad suficiente para almacenar la cantidad de desecho indicada.")
@@ -2164,7 +2197,7 @@ def bitacora_desechos():
     envases = list(db((db.t_envases.espacio_fisico == espacio_id)).select())
 
     bitacora = list(db(
-        (db.t_Bitacora_desechos.inventario == inventario_id) &
+        (db.t_Bitacora_desechos.inventario == inventario_id) & 
         (db.t_Bitacora_desechos.created_by == db.auth_user.id)
     ).select(orderby=~db.t_Bitacora_desechos.id))
 
@@ -2199,6 +2232,7 @@ def bitacora_desechos():
         
         return redirect(URL('..', 'sigulab2', 'smydp/bitacora_desechos', vars=dict(inv=inventario_id))) 
 
+
     return dict(bitacora=bitacora,
                 unidad_medida=unidad_medida,
                 inventario=inventario,
@@ -2207,7 +2241,8 @@ def bitacora_desechos():
                 espacio_id=espacio_id,
                 conceptos=conceptos,
                 unidades_de_medida=unidades_de_medida,
-                envases = envases
+                envases = envases,
+                fecha_actual = str(datetime.datetime.now()).split(" ")[0]
                 )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))

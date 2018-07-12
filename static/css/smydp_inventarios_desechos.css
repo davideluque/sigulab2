@@ -12,17 +12,17 @@
     body{font-size: 14px;}
 }
 
-div.col-xs-2.boton-retorno {
+div.col-xs-2.boton-retorno2 {
 	padding: 0px;
 }
 
 a.boton-retorno {
 	text-align: center;
 	color: white;
+	margin-top: 20px;
 	padding: 9.5px 12px;
 	background-color: #337ab7;
 	border-radius: 100%;	
-	float: center;
 	font-size: 20px;
 }
 
@@ -32,8 +32,9 @@ a.boton-retorno2 {
 	padding: 9.5px 12px;
 	background-color: #337ab7;
 	border-radius: 100%;	
-	float: center;
 	font-size: 20px;
+	float:left;
+	margin-top:0px;
 }
 
 th.camposTabla.linksNombres.sorting_asc{
@@ -47,11 +48,21 @@ th.camposTabla.linksNombres.sorting_asc{
     color:#fff;
 }
 
-.buttons-html5, .buttons-copy{
+a.btn.btn-default.boton-sigulab{
+    border-radius: 50%;
+    background-color:#337ab7;
+    color:#fff;
+}
+
+.buttons-html5, .buttons-copy, .boton-sigulab.dropDown{
     border-radius: 50%;
 	background-color: #337ab7;
     border-color: #337ab7;
 	color:#fff;
+}
+
+ul.dt-button-collection.dropdown-menu > li {
+	background-color: white;
 }
 
 .titulo-modal-desecho{
@@ -72,6 +83,13 @@ h3{
 }
 
 .titulo{
+	padding-top: 30px;
+	padding-bottom: 30px;
+	text-align: center;
+	padding-left: 0px;
+}
+
+.titulo2{
 	padding-top: 30px;
 	padding-bottom: 30px;
 	text-align: center;
@@ -153,9 +171,9 @@ a[class="dependencia"]{
 
 .agregar {
 	border-radius: 100%;	
-	float: center;
+	float: right;
 	font-size: 20px;
-	margin: 22px auto;
+	margin: 22px 20px 0px 0px;
 	color: white;
 	text-align: center;
 }

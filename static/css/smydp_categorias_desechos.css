@@ -12,6 +12,12 @@
     body{font-size: 14px;}
 }
 
+a.btn.btn-default.boton-sigulab{
+    border-radius: 50%;
+    background-color:#337ab7;
+    color:#fff;
+}
+
 div.row.pull-left.boton-retroceder{
 	padding: 0px 15px;
 }

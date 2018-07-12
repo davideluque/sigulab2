@@ -85,33 +85,26 @@
 		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
-			{{if dep_padre_id == direccion_id:}}
-				<p class="padre dep-titulo"> Inventario de DP</p>
-			{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
-				<p class="padre dep-titulo"> {{=dep_nombre}}</p>
-			{{else:}}
-				<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			{{pass}}
+		<div class="col-xs-1 boton-retorno2 pull-left">
 				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
 				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
 				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
 				en el controlador-->
 				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton boton-retorno" href="{{=URL('inventarios_desechos')}}">
+	    		<a class="boton boton-retorno2" href="{{=URL('inventarios_desechos')}}">
 						<i class="fa fa-arrow-left"></i>
 				</a>
 				{{elif (request.vars.es_espacio == "True") & ('view' in request.vars):}}
-    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio='True'))}}" style="align-self: left;">
+    			<a class="boton boton-retorno2" href="{{=URL('inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio='True'))}}" style="align-self: left;">
 						<i class="fa fa-arrow-left"></i>
 	    		</a>				
 	    		{{else:}}
-    			<a class="boton boton-retorno" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}" style="align-self: left;">
+    			<a class="boton boton-retorno2" href="{{=URL('inventarios_desechos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}" style="align-self: left;">
 						<i class="fa fa-arrow-left"></i>
 	    		</a>
 	    		{{pass}}
 		</div>
-		<div class="col-xs-8">
+		<div class="col-xs-9">
 			{{if ("LABORATORIO" not in dep_nombre.upper()) & (es_espacio):}}
 				<h3 class="inicio-titulo"> INVENTARIO DE DESECHOS PELIGROSOS </h3>				
 				<h3 class="subtitulo"> {{=dep_padre_nombre}} - {{=dep_nombre.upper()}} </h3>
@@ -312,32 +305,53 @@
  
 <script language="javascript">
 	var table = $('#datatable').DataTable({
-		"dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
-		language: {
-			paginate: {
-				"previous": '<span class="fa fa-arrow-left" title="Anterior"/>',
-				"next": '<span class="fa fa-arrow-right" title="Siguiente"/>'
+			"dom": "<'row buscar'<'col-md-1'f>>" + "<'row'<'col-md-8'l><'col-md-4'i>>" + "<'row'rt>" + "<'row'<'col-md-12'p>>",
+			language: {
+				url: "{{=URL('static', 'plugins/datatables/l18n/es-ES-custom.json')}}"
+			},
+			initComplete: function () {
+				var api = this.api();
+
+				new $.fn.dataTable.Buttons(api, {
+					buttons: [
+						{
+							text: '<i class="fa fa-filter"></i>',
+							action: function () {
+								mostrarFiltro()
+							},
+							className: 'boton-sigulab'
+						},
+						{
+							extend: 'collection',
+							text: '<i class="fa fa-save"></i>',
+							className: 'boton-sigulab dropDown',
+							background: false,
+							fade: true,
+							buttons: [
+								{ extend: 'copy', text: "Copiar" },
+								'pdf',
+								'excel'
+							]
+						},
+						{
+							extend: 'print',
+							text: '<i class="fa fa-print"></i>'
+						}
+					]
+				});
+				api.buttons().container().appendTo('#buttons');
+				$('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
+				$('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
+				$('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
+				$('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
 			}
-		},
-		initComplete: function () {
-			var api = this.api();
+		});
 
-			new $.fn.dataTable.Buttons(api, {
-				buttons: [
-					{ extend: 'copy', text: "Copiar" }, 'pdf', 'excel', 'print'
-				]
-			});
-			api.buttons().container().appendTo('#buttons');
-			$('.buttons-pdf').html('<span class="glyphicon glyphicon-file" data-toggle="tooltip" title="Export To PDF"/>');
-			$('.buttons-print').html('<span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Print"/>');
-			$('.buttons-copy').html('<span class="glyphicon glyphicon-copy" data-toggle="tooltip" title="Copy"/>');
-			$('.buttons-excel').html('<span class="glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Copy"/>');
-			$('#datatable_previous').html('<span class="fa fa-arrow-left" title="Anterior"/>');
-			$('#datatable_next').html('<span class="fa fa-arrow-right" title="Siguiente"/>');
-			$('#buttons').style.textAlign = "right";
+		window.onclick = function (event) {
+			if (!event.target.matches('#buttons')) {
+				$(".dt-button-collection").hide();
+			}
 		}
-
-	});
 	var w2p_ajax_confirm_message =
 		"{{=T('')}}";
 
