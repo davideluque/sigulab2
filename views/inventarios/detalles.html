@@ -33,6 +33,9 @@
 {{end}}
 
 {{block center}}
+    {{ if request.vars.delete: }}
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+    {{pass}}
     <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
     {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
@@ -171,7 +174,7 @@
                         Unidad de Adscripción:
                     </div>
                     <div class="grid-item">
-                        {{=bien['bm_unidad_de_adscripcion']}}
+                        {{=db(db.dependencias.id == bien['bm_unidad_de_adscripcion']).select().first().nombre}}
                     </div>
                     <div class="grid-item">
                         Dependencia:
@@ -957,7 +960,7 @@
       
                             <div class="form-group" id="grupo-ejecucion">
                                 <label>Tiempo de Ejecución en Horas*</label>
-                                <input type="text" class="form-control" id="tiempo_ejec" name="tiempo_ejec" placeholder="Especificar tiempo de ejecución en horas" onchange="colocar_tiempo_ejec()" required>
+                                <input type="text" class="form-control" id="tiempo_ejec" name="tiempo_ejec" placeholder="Especificar tiempo de ejecución en horas" required>
                                 <div class="field-error"> <p id="err_tiempo_ejec"> </p> </div>
                             </div>
 

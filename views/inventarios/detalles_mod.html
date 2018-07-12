@@ -25,6 +25,7 @@
 {{end}}
 
 {{block center}}
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
     <h3 class="dep-titulo text-center">Detalles de {{=bien['mbn_nombre']}}</h3>
     <h4 class="dep-titulo text-center">N/B: {{=bien['mbn_num']}}</h4>
     {{ if bien['mbn_placa'] != None: }}
@@ -155,7 +156,7 @@
                         Unidad de Adscripción:
                     </div>
                     <div class="grid-item">
-                        {{=bien_original['bm_unidad_de_adscripcion']}}
+                        {{=db(db.dependencias.id == bien_original['bm_unidad_de_adscripcion']).select().first().nombre}}
                     </div>
                     <div class="grid-item">
                         Dependencia:

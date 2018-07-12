@@ -79,10 +79,13 @@
                   <li><a href="{{=URL('inventarios', 'material_lab')}}">Material de laboratorio</a></li>
                   <li><a href="{{=URL('inventarios', 'prestamos')}}">Préstamos</a></li>
                   <li><a href="{{=URL('inventarios', 'mantenimiento')}}">Mantenimiento</a></li>
+                  {{ if auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("JEFE DE LABORATORIO") \
+                  or auth.has_membership("COORDINADOR") or auth.has_membership("DIRECTOR") or \
+                  auth.has_membership("WEBMASTER"): }}
                   <li><a href="{{=URL('inventarios', 'validaciones')}}">Validaciones</a></li>
-                </ul>
-            </li> 
-
+                  {{pass}}
+                  </ul>
+              </li> 
 
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>

@@ -27,6 +27,7 @@
 {{end}}
 
 {{block center}}
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
     <h3 class="dep-titulo text-center">{{=bien['mhr_nombre']}}</h3>
     <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=bien['mhr_motivo'].upper()}}</h4>
 {{pass}}
@@ -118,8 +119,8 @@
                     Unidad de Adscripción:
                 </div>
                 <div class="grid-item">
-                    {{=bien['mhr_unidad_de_adscripcion']}}
-                </div>
+                        {{=db(db.dependencias.id == bien['mhr_unidad_de_adscripcion']).select().first().nombre}}
+                    </div>
                 <div class="grid-item">
                     Dependencia:
                 </div>

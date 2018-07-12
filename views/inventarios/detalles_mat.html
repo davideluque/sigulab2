@@ -28,6 +28,9 @@
 {{end}}
 
 {{block center}}
+    {{ if request.vars.delete: }}
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+    {{pass}}
     <h3 class="dep-titulo text-center">{{=bien['sb_nombre']}}</h3>
     {{ if request.vars.delete: }}
     <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['sb_desc_eliminar'].upper()}}</h4>
@@ -70,7 +73,6 @@
 		<ul class="tabs">
 				<li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
                 <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
-                <li class="tab-link" data-tab="3">HISTORIAL DE MANTENIMIENTO</li>
             </ul>
 	</div>
 
@@ -128,7 +130,7 @@
                     Unidad de Adscripción:
                 </div>
                 <div class="grid-item">
-                    {{=bien['sb_unidad_de_adscripcion']}}
+                    {{=db(db.dependencias.id == bien['sb_unidad_de_adscripcion']).select().first().nombre}}
                 </div>
                 <div class="grid-item">
                     Dependencia:
@@ -138,7 +140,6 @@
                 </div>
             </div>
         </div>
-        <div id="tab-3"class="tab-content">En desarrollo</div>
 	</div>
 </div>
 
