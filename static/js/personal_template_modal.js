@@ -387,13 +387,13 @@ const validadoresSegundoPasoFijo = [
     validaFechaIngresoUlab,
     validaFechaIngresoAdminPubl
 ]
+
 const validadoresSegundoPaso = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngresoUSB,
-    validaFechaIngresoUlab,
-    validaFechaIngresoAdminPubl
+    validaFechaIngreso,
+    validaFechaSalida
 ]
 
 // Funciones para validar la tercera parte del formulario
@@ -528,13 +528,15 @@ $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 
     $('#sel2').change(function (){
-        if ($("#sel2 option:selected").val()=="Fijo") {
-            $("#fingreso").hide();
-            $('#fsalida').show();
+        if ($("#sel2 option:selected").val()==="Fijo") {
+            $("#fsalida").hide();
+            $('#fingreso').show()
+            $('[name="fecha_ingreso_add"]').val('');
+            $('[name="fecha_salida_add"]').val('');
         }
         else {
-            $("#fingreso").show();
-            $('#fsalida').hide()
+            $("#fsalida").show();
+            $("#fingreso").hide();
         };
     });
 
