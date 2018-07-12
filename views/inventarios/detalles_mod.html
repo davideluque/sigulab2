@@ -156,7 +156,7 @@
                         Unidad de Adscripción:
                     </div>
                     <div class="grid-item">
-                        {{=db(db.dependencias.id == bien['bm_unidad_de_adscripcion']).select().first().nombre}}
+                        {{=db(db.dependencias.id == bien_original['bm_unidad_de_adscripcion']).select().first().nombre}}
                     </div>
                     <div class="grid-item">
                         Dependencia:
