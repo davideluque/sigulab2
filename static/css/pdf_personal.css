@@ -1,0 +1,14 @@
+/* Script que estiliza el pdf que va a generar el listado del personal */
+#logo-usb{
+    height: 116px;
+    width: 239px;
+    margin-left: 72px;
+    margin-top: 50px;
+}
+
+#logo-ulab{
+    height: 126px;
+    width: 230px;
+    margin-top: 50px;
+    float: right;
+}

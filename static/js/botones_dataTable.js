@@ -28,8 +28,8 @@ initComplete: function(){
          ]
        },
        { 
-         extend:'print',
-        text: '<i class="fa fa-print"></i>'
+         extend:'',
+        text: '<i class="fa fa-print" onclick="generarPDF() "></i>'
        }
      ]
   });

@@ -5,6 +5,7 @@
   <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'css/pdf_personal.css')}}" rel="stylesheet" type="text/css" />
 
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
@@ -214,6 +215,7 @@
 <!-- Fin Listado --> 
 {{include 'personal/ficha_edicion.html'}}
 {{include 'personal/form_agregar.html'}}
+{{include 'personal/pdf_tabla.html'}}
 
 <!-- Datatables-->
 
@@ -229,6 +231,9 @@
 <script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
 <script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jspdf.min.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+<script src="{{=URL('static', 'js/personal/generar_pdf.js')}}"></script>
 
 
 
