@@ -1,5 +1,5 @@
 <!--Este es el html para imprimir el listado de personal-->
-<div >
+<div hidden>
     <div id="imprimir_listado">
         <div id="header-pdf">
             <div class="row">
@@ -20,7 +20,9 @@
                             <p>Fecha</p>
                         </div>
                         <div id="fecha-creacion">
-                            <p>aqui va la fecha</p>
+                            <p>{{import datetime}}
+                                {{=datetime.date.today().strftime('%d-%m-%Y')}}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -28,22 +30,26 @@
         </div>
         <div id="tabla-personal">
             <table id="datatabla">
-                <tr>
-                    <th class="casillas-pdf" style="background-color:#bfbfbf;">Nombre</th>
-                    <th class="casillas-pdf" style="background-color:#bfbfbf;">Dependencia</th> 
-                    <th class="casillas-pdf" style="background-color:#bfbfbf;">Correo</th>
-                    <th class="casillas-pdf" style="background-color:#bfbfbf;">Gremio</th>
-                    <th class="casillas-pdf" style="background-color:#bfbfbf;">Años Serv.</th>
-                </tr>
-                {{for item in grid:}}
-                <tr>
-                    <td class="casillas-pdf">{{=item["nombre"]}} {{=item["apellido"]}}</td>
-                    <td class="casillas-pdf">{{=item['dependencia']}}</td> 
-                    <td class="casillas-pdf">{{=item['email']}}</td>
-                    <td class="casillas-pdf">{{=item['gremio']}}</td>
-                    <td class="casillas-pdf">10</td>
-                </tr>
-                {{pass}}
+                <thead>
+                    <tr>
+                        <th class="casillas-pdf" style="background-color:#bfbfbf;">Nombre</th>
+                        <th class="casillas-pdf" style="background-color:#bfbfbf;">Dependencia</th> 
+                        <th class="casillas-pdf" style="background-color:#bfbfbf;">Correo</th>
+                        <th class="casillas-pdf" style="background-color:#bfbfbf;">Gremio</th>
+                        <th class="casillas-pdf" style="background-color:#bfbfbf;">Años Serv.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{for item in grid:}}
+                    <tr>
+                        <td class="casillas-pdf">{{=item["nombre"]}} {{=item["apellido"]}}</td>
+                        <td class="casillas-pdf">{{=item['dependencia']}}</td> 
+                        <td class="casillas-pdf">{{=item['email']}}</td>
+                        <td class="casillas-pdf">{{=item['gremio']}}</td>
+                        <td class="casillas-pdf">10</td>
+                    </tr>
+                    {{pass}}
+                </tbody>
             </table>
         </div>
         <div id="footer-pdf">
