@@ -467,7 +467,7 @@ def contar_notificaciones(correo):
     es_supervisor = usuario.f_es_supervisor
     dependencia = None
     if es_supervisor:
-        if(auth.user.email == "sigulabusb@gmail.com") or (auth.user.email == "asis-ulab@usb.ve"):
+        if(correo == "sigulabusb@gmail.com") or (correo == "asis-ulab@usb.ve"):
             notif = db(db.t_Personal.f_por_validar == True).count()
         else:
             dependencia = usuario.f_dependencia
