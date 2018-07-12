@@ -246,7 +246,11 @@
                                 </select>
                               </div>
                             </div>
-                            <div id="fsalida">
+                            <div id="fsalida"
+                            {{if usuario.f_categoria != 'Fijo':}}
+                            hidden
+                            {{pass}}
+                            >
                               <div class="col-sm-6">
                                 <p ><label>Fecha de Ingreso:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso or ''}}" name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
                               </div>
@@ -260,6 +264,9 @@
                             hidden
                             {{pass}}
                             >
+                              <div class="col-sm-12">
+                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
+                              </div>
                               <div class="col-sm-12" >
                                 <p ><label>Ingreso a la USB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_usb or ''}}" name = "fecha_ingreso_usb_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
                                 <font color="red"><div id="err_fecha_ingreso_usb" hidden></div></font>
@@ -267,15 +274,7 @@
                               <div class="col-sm-12">
                                 <p ><label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
                               </div>
-
-                              <div class="col-sm-12">
-                                <p ><label>Ingreso a la administracion publica:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_admin_publica or ''}}" name = "fecha_ingreso_admin_publica_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"></p>
-                              </div>
                             </div>
-
-                          <!--<div class="form-group">
-                            <input type="text" class="form-control" name="fecha_salida_add" placeholder="Fecha de Salida">
-                          </div>-->
                         </div>
                       </div>
                       <div class="botones-form">
