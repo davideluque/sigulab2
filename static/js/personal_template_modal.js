@@ -239,11 +239,6 @@ function validaCondicion(){
 
 function validaFechaIngreso(){
     const $this = $('[name="fecha_ingreso_add"]');
-    if ($('[name="categoria_add"]').val() !== 'Fijo') {
-        $this.removeClass('input-error');
-        $this.popover('hide');
-        return true;
-    }
     if ($this.val() === ""){
         $this.attr("data-content", requiredFieldMessage);
         $this.addClass('input-error');
@@ -285,11 +280,7 @@ function validaFechaSalida(){
     const $this = $('[name="fecha_salida_add"]');
     const fecha_inicio = voltearFecha($('[name="fecha_ingreso_add"]').val());
     const fecha_final = voltearFecha($this.val());
-    if ($('[name="categoria_add"]').val() !== 'Fijo') {
-        $this.removeClass('input-error');
-        $this.popover('hide');
-        return true;
-    }
+
     if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isSameOrBefore(fecha_final)){
         $this.attr("data-content", "La fecha de egreso tiene que ser antes que la fecha de ingreso o igual a esta");
         $this.addClass('input-error');
@@ -387,13 +378,13 @@ const validadoresSegundoPasoFijo = [
     validaFechaIngresoUlab,
     validaFechaIngresoAdminPubl
 ]
+
 const validadoresSegundoPaso = [
     validaEstatus,
     validaCategoria,
     validaCondicion,
-    validaFechaIngresoUSB,
-    validaFechaIngresoUlab,
-    validaFechaIngresoAdminPubl
+    validaFechaIngreso,
+    validaFechaSalida
 ]
 
 // Funciones para validar la tercera parte del formulario
@@ -528,13 +519,15 @@ $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 
     $('#sel2').change(function (){
-        if ($("#sel2 option:selected").val()=="Fijo") {
-            $("#fingreso").hide();
-            $('#fsalida').show();
+        if ($("#sel2 option:selected").val()==="Fijo") {
+            $("#fsalida").hide();
+            $('#fingreso').show()
+            $('[name="fecha_ingreso_add"]').val('');
+            $('[name="fecha_salida_add"]').val('');
         }
         else {
-            $("#fingreso").show();
-            $('#fsalida').hide()
+            $("#fsalida").show();
+            $("#fingreso").hide();
         };
     });
 
