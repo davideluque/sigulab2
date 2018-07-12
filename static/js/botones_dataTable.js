@@ -29,7 +29,8 @@ initComplete: function(){
        },
        { 
          extend:'',
-        text: '<i class="fa fa-print" onclick="generarPDF() "></i>'
+        text: '<i class="fa fa-print" onclick="generarPDF() "></i>',
+        className: 'boton-sigulab'
        }
      ]
   });
