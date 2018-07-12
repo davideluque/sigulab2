@@ -12,3 +12,30 @@
     margin-top: 50px;
     float: right;
 }
+
+#encabezado-titulo{
+    margin-left:72px;
+    margin-top: 25px;
+}
+.encabezado{
+    text-align: center;
+    background-color:#bfbfbf;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    font-weight: bold;
+    height: 45px;
+}
+
+#fecha-generacion{
+    border-left-width: 0px;
+}
+
+#titulo-pdf{
+    margin-top:9px;
+    font-size: 19px;
+}
+
+p {
+    font-family: TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif;
+}
