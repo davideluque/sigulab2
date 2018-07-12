@@ -56,14 +56,15 @@ def tabla_categoria(tipo):
             db(db.es_encargado.tecnico == elm.id).select(db.es_encargado.ALL)
         ))
         ubicaciones = db(db.espacios_fisicos.id.belongs(ubicaciones)).select()
-        extensiones_usb = '/'.join(list(filter(bool,
+        separador = ' / '
+        extensiones_usb = separador.join(list(filter(bool,
             list(map(lambda x: x.ext_USB, ubicaciones)) +
             list(map(lambda x: x.ext_USB_1, ubicaciones)) +
             list(map(lambda x: x.ext_USB_2, ubicaciones)) +
             list(map(lambda x: x.ext_USB_3, ubicaciones)) +
             list(map(lambda x: x.ext_USB_4, ubicaciones))
         )))
-        extensiones_int = '/'.join(list(filter(bool,
+        extensiones_int = separador.join(list(filter(bool,
             list(map(lambda x: x.ext_interna, ubicaciones))
         )))
         print(ubicaciones)
@@ -421,7 +422,7 @@ def cambiar_validacion(validacion, personal):
     if(validacion == "true"):
         mensaje = ''
         db(db.t_Personal.f_email == personal['email']).update(f_por_validar=False, f_validado=True, f_comentario=mensaje)
-        accion = '[Personal] Ficha Validada de Personal '+ personal['nombre']+ " "+personal['apellido'] 
+        accion = '[Personal] Ficha Validada de Personal '+ personal['nombre']+ " "+personal['apellido']
         db.bitacora_general.insert(f_accion = accion)
     elif (validacion == "false"):
         mensaje = request.post_vars.razon_add
@@ -489,7 +490,7 @@ def buscarJefe(dependencia_trabajador):
     correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
     return correo
 
-#Funcion para ocultar 
+#Funcion para ocultar
 def eliminar():
     if auth.user.email != 'sigulabusb@gmail.com':
         return redirect(URL('listado_estilo'))
@@ -499,7 +500,7 @@ def eliminar():
 
     db(db.t_Personal.f_ci == ci).update(f_oculto = True)
 
-    accion = '[Personal] Ficha Ocultada de Personal '+ personal.f_nombre+ " "+personal.f_apellido 
+    accion = '[Personal] Ficha Ocultada de Personal '+ personal.f_nombre+ " "+personal.f_apellido
     db.bitacora_general.insert(f_accion = accion)
     redirect(URL('listado_estilo'))
 

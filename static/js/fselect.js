@@ -113,7 +113,7 @@
                     labelText = settings.overflowText.replace('{n}', labelText.length);
                 }
                 else {
-                    labelText = labelText.join(', ');
+                    labelText = labelText.join(' / ');
                 }
 
                 this.$wrap.find('.fs-label').html(labelText);
