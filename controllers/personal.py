@@ -429,6 +429,7 @@ def cambiar_validacion(validacion, personal):
             f_por_validar=False, f_validado=False, f_comentario='Motivo de Rechazo: {}'.format(mensaje))
         cuerpo = ' \n Estimado usuario la ficha de personal que envio para ser validada fue rechazada por su supervisor,\nMotivo de Rechazo:\n\t {}'.format(mensaje)
         
+        print(personal['email'])
         __enviar_correo(personal['email'],'[SIGULAB] Ficha Personal Rechazada',cuerpo)
         #__enviar_correo('gabrieleduardogg@gmail.com','[SIGULAB] Ficha Personal Rechazada',cuerpo)
     redirect(URL('listado_estilo'))
