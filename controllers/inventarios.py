@@ -281,6 +281,9 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             bm_crea_ficha = user,
             bm_clasificacion = clasificacion
         )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadido el bien mueble num: {}".format(no_bien)
+    )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
@@ -304,6 +307,9 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
             hmbm_fecha_cert = fecha_cert, 
             hmbm_observacion = observacion
         )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadido historial de mantenimiento del bien mueble num: {}".format(no_bien)
+    )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 
@@ -315,6 +321,7 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
                  ancho, largo, alto, diametro, material, material_sec, presentacion,
                  unidades,total, unidad_adscripcion, dependencia, user , clasificacion):
 
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     # Si ya existe el BM en el inventario
     if (db( (db.sin_bn.sb_nombre == nombre) & (db.sin_bn.sb_espacio==espacio) ).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
@@ -357,21 +364,10 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         sb_depedencia = dependencia,
         sb_crea_ficha = user,
     )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: ".format(nombre, espacio_nombre)
+    )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
-
-"""         concepto = 'Ingreso'
-        tipo_ing = 'Ingreso inicial'
-        # Agregando la primera entrada de la sustancia en la bitacora
-        db.t_Bitacora.insert(
-                                f_cantidad=cantidad,
-                                f_cantidad_total=cantidad,
-                                f_concepto=concepto,
-                                f_tipo_ingreso=tipo_ing,
-                                f_medida=unidad_id,
-                                f_inventario=inv_id,
-                                f_sustancia=sustancia_id) """
-
-
 
 # Registra un nueva material/consumible en la tabla de modiciaciones. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
@@ -381,6 +377,7 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
                  ancho, largo, alto, diametro, material, material_sec, presentacion,
                  unidades,total, user , clasificacion, descripcion_mod):
 
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     if (db( (db.modificacion_sin_bn.msb_nombre == nombre) & (db.modificacion_sin_bn.msb_espacio==espacio) ).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
@@ -423,6 +420,9 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
         msb_modifica_ficha = user,
         msb_desc = descripcion_mod
     )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadida solicitud de modificación de un material de laboratorio. Nombre: {} Espacio físico: ".format(nombre, espacio_nombre)
+    )
     response.flash = "Se ha realizado exitosamente la solicitud de modificación del material de laboratorio " + str(nombre)
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
@@ -435,6 +435,7 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
                 contenido, descripcion, material, unidad, ancho, largo, alto, diametro, 
                 ubicacion, observacion, espacio,unidad_adscripcion, dependencia, user):
 
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     # Si ya existe el BM en el inventario
     if (db( (db.herramienta.hr_nombre == nombre) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
@@ -484,12 +485,16 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
         hr_depedencia = dependencia,
         hr_crea_ficha = user,
     )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadida una herramienta. Nombre: {}. Espacio físico: {}".format(nombre, espacio_nombre)
+    )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presentacion, numpiezas,
                 contenido, descripcion, material, unidad, ancho, largo, alto, diametro, 
                 ubicacion, observacion, motivo, espacio,unidad_adscripcion, dependencia, user1, user2):
 
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     if (db( (db.modificacion_herramienta.mhr_nombre == nombre) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).select()):
         #bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
@@ -537,6 +542,9 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
         mhr_depedencia = dependencia,
         mhr_crea_ficha = user1,
         mhr_modifica_ficha = user2
+    )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadida una solicitud de modificación de herramienta. Nombre: {}. Espacio físico: {}".format(nombre, espacio_nombre)
     )
     response.flash = "Se ha realizado exitosamente la solicitud de modificación de la herramienta " + str(nombre)
     return True
@@ -710,126 +718,6 @@ def __get_descripcion(registro):
 
     return descripcion
 
-# Agrega un nuevo registro a la bitacora de una sustancia
-def __agregar_registro(concepto):
-
-    cantidad = float(request.vars.cantidad)
-
-    # Operaciones comunes a todos los casos: actualizacion del inventario
-
-    # ID de la unidad en la que el usuario registro la cantidad ingresada
-    unidad_id = request.vars.unidad
-
-    # Inventario al cual pertenece la bitacora consultada
-    inv = db(db.t_Inventario.id == request.get_vars.inv).select()[0]
-
-    # Unidad indicada por el usuario
-    unidad = db(db.t_Unidad_de_medida.id == unidad_id
-                   ).select()[0].f_nombre
-
-    # Unidad de medida en la que se encuentra el inventario de la sustancia
-    unidad_inventario = db(db.t_Unidad_de_medida.id == inv.f_medida
-                          ).select()[0].f_nombre
-
-    # Transformando las cantidades de acuerdo a la unidad utilizada en
-    # el inventario de la sustancia
-    cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
-
-    # Cantidades total y de uso interno antes del ingreso o consumo
-    total_viejo = inv.f_existencia
-    uso_interno_viejo = inv.f_uso_interno
-
-    if concepto == 'Ingreso':
-        tipo_ing = request.vars.tipo_ingreso
-
-        # Nueva cantidad total y nueva cantidad para uso interno
-        total_nuevo = total_viejo + cantidad
-        uso_interno_nuevo = uso_interno_viejo + cantidad
-
-        # Actualizando cantidad total con la nueva 
-        inv.update_record(
-            f_existencia=total_nuevo,
-            f_uso_interno=uso_interno_nuevo)
-
-        if tipo_ing == 'Almacén':
-
-            almacen = int(request.vars.almacen)
-
-            db.t_Bitacora.insert(
-                f_cantidad=cantidad,
-                f_cantidad_total=total_nuevo,
-                f_concepto=concepto,
-                f_tipo_ingreso=tipo_ing,
-                f_medida=inv.f_medida,
-                f_inventario=inv.id,
-                f_sustancia=inv.sustancia,
-                f_almacen=almacen)
-
-        # Tipo ingreso es compra
-        else:
-
-            # Datos de la nueva compra
-            nro_factura = request.vars.nro_factura
-            institucion = request.vars.institucion
-            rif = request.vars.rif
-
-            # Fecha de la compra en formato "%m/%d/%Y"
-            fecha_compra = request.vars.fecha_compra
-            
-            # Se registra la nueva compra en la tabla t_Compra
-            compra_id = db.t_Compra.insert(
-                f_cantidad=cantidad,
-                f_nro_factura=nro_factura,
-                f_institucion=institucion,
-                f_rif=rif,
-                f_fecha=fecha_compra,
-                f_sustancia=inv.sustancia,
-                f_medida=unidad_id)
-
-            db.t_Bitacora.insert(
-                f_cantidad=cantidad,
-                f_cantidad_total=total_nuevo,
-                f_concepto=concepto,
-                f_tipo_ingreso=tipo_ing,
-                f_medida=inv.f_medida,
-                f_compra=compra_id,
-                f_inventario=inv.id,
-                f_sustancia=inv.sustancia)
-
-    else:
-        tipo_eg = request.vars.tipo_egreso            
-        
-        # Nueva cantidad total luego del consumo
-        total_nuevo = total_viejo - cantidad
-        if total_nuevo < 0:
-            response.flash = "La cantidad total luego del consumo no puede ser "\
-                             "negativa"
-            redirect(URL(args=request.args, vars=request.get_vars, host=True))
-        
-        # Nueva cantidad de uso interno nueva puede ser maximo lo que era antes
-        # (si hay material suficiente) o el nuevo total
-        uso_interno_nuevo = min(uso_interno_viejo, total_nuevo)
-
-        # Actualizando cantidad total con la nueva 
-        inv.update_record(
-            f_existencia=total_nuevo,
-            f_uso_interno=uso_interno_nuevo)
-
-        servicio_id = request.vars.servicio
-
-        db.t_Bitacora.insert(
-            f_cantidad=cantidad,
-            f_cantidad_total=total_nuevo,
-            f_concepto=concepto,
-            f_tipo_egreso=tipo_eg,
-            f_medida=inv.f_medida,
-            f_servicio=servicio_id,
-            f_inventario=inv.id,
-            f_sustancia=inv.sustancia)
-
-    # Se redirije para evitar mensaje de revisita con metodo POST
-    return redirect(URL(args=request.args, vars=request.get_vars, host=True))
-
 def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
                 descripcion, material, color, calibrar, fecha_calibracion,
                 unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
@@ -875,6 +763,9 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
             mbn_desc =  descripcion_mod,
             mbn_modifica_ficha = user
         )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadida solicitud de modificación del bien mueble número {}".format(no_bien)
+    )
     response.flash = "Se ha realizado exitosamente la solicitud de modificación del bien mueble " + str(nombre)
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
     return True
@@ -914,7 +805,7 @@ def detalles_mod_herramientas():
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
-
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     # Busco la herramienta
     bien = db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).select()[0]
 
@@ -923,7 +814,7 @@ def detalles_mod_herramientas():
     unidad_med = []
     presentacion=[]
 
-    # Si se elimina
+    # Si se modifica
     if request.vars.si:
         db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).update(
             hr_nombre = bien['mhr_nombre'],
@@ -947,11 +838,17 @@ def detalles_mod_herramientas():
             hr_unidad_de_adscripcion = bien['mhr_unidad_de_adscripcion'],
             hr_depedencia = bien['mhr_depedencia']
         )
+        db.bitacora_general.insert(
+        f_accion = "[inventarios] Modificada la información de la herramienta {} del espacio físico {}".format( bien['mhr_nombre'], espacio_nombre)
+        )
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
         session.flash = "La información de la herramienta ha sido actualizada"
         redirect(URL('validaciones'))
     # Si no se modifica
     if request.vars.no:
+        db.bitacora_general.insert(
+        f_accion = "[inventarios] Rechazada modificación de la información de la herramienta {} del espacio físico {}".format( bien['mhr_nombre'], espacio_nombre)
+        )
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
         session.flash = "La información de la herramienta no ha sido modificada"
         redirect(URL('validaciones'))
@@ -1014,7 +911,7 @@ def detalles_mod_mat():
     espacio = request.vars['espacio']
     #El nombre del material/consumible
     name = request.vars['nombreMat']
-
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
@@ -1048,12 +945,18 @@ def detalles_mod_mat():
             sb_capacidad = bien['msb_capacidad'],
             sb_unidad_dim = bien['msb_unidad_dim']
         )
+        db.bitacora_general.insert(
+        f_accion = "[inventarios] Modificada la información del material de laboratorio {} del espacio físico {}".format( bien['msb_nombre'], espacio_nombre)
+        )
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "La información del material de laboratorio o consumible ha sido modificada"
+        session.flash = "La información del material de laboratorio ha sido modificada"
         redirect(URL('validaciones'))
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada modificación de la información del material de laboratorio {} del espacio físico {}".format( bien['msb_nombre'], espacio_nombre)
+        )
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
-        session.flash = "La información del material de laboratorio o consumible no ha sido modificada"
+        session.flash = "La información del material de laboratorio no ha sido modificada"
         redirect(URL('validaciones'))
 
     if bien_original['sb_clasificacion'] == "Material de Laboratorio":
@@ -1129,11 +1032,17 @@ def detalles_mod():
             bm_codigo_localizacion = bien['mbn_codigo_localizacion'],
             bm_localizacion = bien['mbn_localizacion']
         )
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Modificada la información del bien mueble num {}".format(bien['mbn_num'])
+        )        
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
         session.flash = "La información sobre el bien mueble ha sido modificada"
         redirect(URL('validaciones'))
 
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada modificación de la información del bien mueble num {}".format( bien['mbn_num'])
+        )  
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
         session.flash = "la información sobre el bien mueble no ha sido modificada"
         redirect(URL('validaciones'))
@@ -1191,7 +1100,7 @@ def detalles():
     user_id = user.id
     bm = request.vars['bm']
     bien = db(db.bien_mueble.bm_num == bm).select()[0]
-
+    espacio_nombre = db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo
     mantenimiento=__get_mantenimiento_bm(bm)
 
     # Si se elimina
@@ -1199,10 +1108,16 @@ def detalles():
         db(db.historial_mantenimiento_bm.hmbm_nro == bm).delete()
         db(db.bien_mueble.bm_num == bm).delete()
         db(db.modificacion_bien_mueble.mbn_num == bm).delete()
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado el bien mueble num {} del espacio físico {}".format(bien['bm_num'], espacio_nombre)
+        )
         session.flash = "El bien mueble ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada eliminación del bien mueble num {} del espacio físico {}".format(bien['bm_num'], espacio_nombre)
+        )
         db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 2)
         session.flash = "El bien mueble no ha sido eliminado"
         redirect(URL('validaciones'))
@@ -1229,7 +1144,10 @@ def detalles():
         request.vars.mantenimiento_nuevo=None
 
     if request.vars.eliminacion:
-        if bien['bm_eliminar'] == 2: 
+        if bien['bm_eliminar'] == 2:
+            db.bitacora_general.insert(
+                f_accion = "[inventarios] Añadida solicitud de eliminación del bien mueble num {} del espacio físico {}".format(bien['bm_num'], espacio_nombre)
+            )
             db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 0, bm_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
@@ -1334,6 +1252,7 @@ def detalles_mat():
     espacio = request.vars['espacio']
     #El nombre del material/consumible
     name = request.vars['nombreMat']
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
 
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -1358,12 +1277,18 @@ def detalles_mat():
 
     # Si se elimina
     if request.vars.si:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado el material de laboratorio {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
         session.flash = "El material de laboratorio ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada eliminación del material de laboratorio {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
         session.flash = "El material de laboratorio no ha sido eliminado"
         redirect(URL('validaciones'))
@@ -1382,6 +1307,9 @@ def detalles_mat():
 
     if request.vars.eliminacion:
         if bien['sb_eliminar'] == 2: 
+            db.bitacora_general.insert(
+                f_accion = "[inventarios] Añadida solicitud de eliminación del material de laboratorio {} del espacio físico {}".format(name, espacio_nombre)
+            )
             db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0, sb_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
@@ -1465,6 +1393,7 @@ def detalles_consumibles():
     espacio = request.vars['espacio']
     #El nombre del material/consumible
     name = request.vars['nombreMat']
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
 
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -1489,12 +1418,18 @@ def detalles_consumibles():
 
     # Si se elimina
     if request.vars.si:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado el consumible {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db( (db.sin_bn.sb_espacio == espacio) & (db.sin_bn.sb_nombre == name) ).delete()
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
         session.flash = "El consumible ha sido eliminado"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada eliminación del consumible {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 2)
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
         session.flash = "El consumible no ha sido eliminado"
@@ -1513,7 +1448,10 @@ def detalles_consumibles():
             request.vars.unidades, request.vars.total_mat, user_id, request.vars.clasificacion, request.vars.descripcion_modificacion)
 
     if request.vars.eliminacion:
-        if bien['sb_eliminar'] == 2: 
+        if bien['sb_eliminar'] == 2:
+            db.bitacora_general.insert(
+                f_accion = "[inventarios] Añadida solicitud de eliminación del consumible {} del espacio físico {}".format(name, espacio_nombre)
+            ) 
             db(db.sin_bn.id == bien['id']).select().first().update_record(sb_eliminar = 0, sb_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
@@ -1599,6 +1537,8 @@ def detalles_herramientas():
     name = request.vars['nombreHer']
     #La ubicacion interna
     ubicacion = request.vars['ubicacion']
+    espacio_nombre = db(db.espacios_fisicos.id == espacio).select().first().codigo
+
 
     # El usuario que está editando
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -1614,12 +1554,18 @@ def detalles_herramientas():
 
     # Si se elimina
     if request.vars.si:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado la herramienta {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db((db.herramienta.hr_nombre == name) & (db.herramienta.hr_espacio_fisico==espacio) & (db.herramienta.hr_ubicacion==ubicacion)).delete()
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
         session.flash = "La herramienta ha sido eliminada"
         redirect(URL('validaciones'))
     # Si no se elimina
     if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada la eliminación de la herramienta {} del espacio físico {}".format(name, espacio_nombre)
+        )
         db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 2)
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
         session.flash = "La herramienta no ha sido eliminada"
@@ -1637,6 +1583,9 @@ def detalles_herramientas():
 
     if request.vars.eliminacion:
         if bien['hr_eliminar'] == 2: 
+            db.bitacora_general.insert(
+                f_accion = "[inventarios] Añadida solicitud de eliminación de la herramienta {} del espacio físico {}".format(name, espacio_nombre)
+            )
             db(db.herramienta.id == bien['id']).select().first().update_record(hr_eliminar = 0, hr_desc_eliminar = request.vars.descripcion_eliminacion)
             response.flash = "La solicitud de eliminación ha sido realizada exitosamente"
         else:
