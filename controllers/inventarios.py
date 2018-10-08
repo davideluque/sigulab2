@@ -794,6 +794,11 @@ def index():
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def vehiculos():
+    return "Esta es la vista de vehiculos"
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_mod_herramientas():
     #Recuperamos el espacio
     espacio = request.vars['espacio']
