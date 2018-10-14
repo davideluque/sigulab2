@@ -584,31 +584,31 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
-# funcion para agregar y modificar vehiculos
+# Funcion para agregar una modificacion pendiente a un vehiculo
+def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroceria, 
+                                marca, responsable, telf_responsable, dependencia, es_particular=0, 
+                                descripcion_uso, oculto=0, user, confirmacion=None):
 
-def __agregar_modificar_vh(placa, modelo, ano, serial_motor, serial_carroceria, marca,
-                responsable, dependencia, es_particular, descripcion_uso, user, confirmacion=None):
-
-    # Si ya existe el vehiculo en el inventario
-
-    if (db(db.modificacion_vehiculos.mvh.placa == placa).select()):
+    # Si ya existe una modificacion pendiente al vehiculo
+    if (db(db.modificacion_vehiculos.mvh_placa == placa).select()):
         vh = db(db.vehiculo.placa == placa).select()[0] #Se busca de la tabla de vh
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
-
     
     inv_id = db.modificacion_vehiculos.insert(
-            placa = placa,
-            modelo = modelo,
-            ano = ano,
-            serial_motor = serial_motor,
-            serial_carroceria = serial_carroceria,
-            marca = marca,
-            responsable = responsable,
-            dependencia = dependencia,
-            es_particular = es_particular,
-            descripcion_uso = descripcion_uso,
+            mvh_placa = placa,
+            mvh_modelo = modelo,
+            mvh_ano = ano,
+            mvh_serial_motor = serial_motor,
+            mvh_serial_carroceria = serial_carroceria,
+            mvh_marca = marca,
+            mvh_responsable = responsable,
+            mvh_telf_responsable = telf_responsable,
+            mvh_dependencia = dependencia,
+            mvh_es_particular = es_particular,
+            mvh_descripcion = descripcion_uso,
+            mvh_oculto = oculto,
             mvh_modifica_ficha = user
 
         )
@@ -1733,7 +1733,7 @@ def detalles_vehiculo():
     user_id = user.id
     vh = request.vars['vh']
     vehi = db(db.vehiculo.placa == vh).select()[0]
-    mantenimiento=__get_mantenimiento_vh(vh)
+    mantenimiento = __get_mantenimiento_vh(vh)
 
     # Si se elimina
     if request.vars.si:
@@ -1757,13 +1757,17 @@ def detalles_vehiculo():
         redirect(URL('validaciones'))
 
     if request.vars.modificacion:
-        __agregar_modificar_vh(
-            vehiculo['placa'],request.vars.modelo, request.vars.ano,
+        __agregar_modificar_vehiculo(
+            vehiculo['placa'], request.vars.modelo, request.vars.ano,
             request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
-            request.vars.responsable, request.vars.dependencia, request.vars.es_particular,
-            request.vars.descripcion_uso, user_id)
+            request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, request.vars.es_particular,
+            request.vars.descripcion_uso, request.vars.oculto, user_id)
 
         request.vars.modificacion = None
+        session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
+        redirect(URL('validaciones'))
+
+    # Si solo estoy cargando la vista
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
