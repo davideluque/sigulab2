@@ -281,6 +281,42 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
+# Registra un nuevo vehiculo en la dependencia indicada. Si el vehiculo ya
+# existe en el inventario, genera un mensaje con flash y no anade de nuevo 
+# el mismo. 
+def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
+                descripcion, responsable, telf_responsable, es_particular=0, 
+                oculto=0, dependencia, user):
+
+    # Si ya existe el BM en el inventario
+    if (db(db.vehiculo.vh_placa == placa).select()):
+        vh = db(db.vehiculo.vh_placa == placa).select()[0]
+
+        response.flash = "El vehiculo de placa \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_placa, vh.vh_dependencia)
+        return False
+      
+    # Se agrega el nuevo vehiculo a la base de datos
+    inv_id = db.bien_mueble.insert(
+        vh_marca = marca,
+        vh_modelo = modelo,
+        vh_ano = ano,
+        vh_serial_motor = serial_motor,
+        vh_serial_carroceria = serial_carroceria,
+        vh_placa = placa,
+        vh_descripcion = descripcion,
+        vh_responsable = responsable,
+        vh_telf_responsable = telf_responsable,
+        vh_es_particular = es_particular,,
+        vh_oculto = oculto,
+        vh_dependencia = dependencia,
+        vh_crea_ficha = user
+        )
+
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadido el vehiculo de placa : {}".format(placa)
+    )
+    return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 # Registra un nuevo mantenimiento a un bm indicado.
 def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accion,
