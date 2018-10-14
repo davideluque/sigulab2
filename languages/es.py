@@ -435,11 +435,8 @@
 'Modelo/código del elemento': 'Modelo/código del elemento',
 'Models': 'Modelos',
 'models': 'modelos',
-<<<<<<< 38337faa47a01962a720b60ca800ae58199ec19a
 'Modificacion herramientas': 'Modificacion herramientas',
-=======
 'Modificacion bien muebles': 'Modificacion bien muebles',
->>>>>>> Cambios agregar registro
 'Modificacion sin bns': 'Modificacion sin bns',
 'Modified By': 'Modificado Por',
 'Modified On': 'Modificado En',
