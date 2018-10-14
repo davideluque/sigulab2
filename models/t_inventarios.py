@@ -364,3 +364,49 @@ db.define_table(
 
 db.historial_mantenimiento_sin_bn.hmsb_espacio_fisico.requires = IS_IN_DB(db, db.sin_bn.id, '%(sb_espacio)s')
 db.historial_mantenimiento_sin_bn.hmsb_nombre.requires = IS_IN_DB(db, db.sin_bn.id, '%(sb_nombre)s')
+
+###Vehiculo###
+db.define_table(
+    'vehiculo',
+    # Datos de identificación
+    Field('vh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('vh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('vh_ano', 'integer', notnull=True, label=T('Año del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('vh_serial_motor','string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
+    Field('vh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
+    Field('vh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
+    
+    # Descripción de uso
+    Field('vh_descripcion','text', label=T('Descripción')),
+    
+    # Datos del responsable
+    # PENDIENTE: Referenciar usuarios de la BD aquí
+    Field('vh_responsable','string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('vh_telf_responsable','string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+
+    # Estatus de préstamo o mantenimiento
+    Field('vh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
+    
+    # Estado = 0 : No es particular
+    # Estado = 1 : Es particular
+    Field('vh_es_particular','integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
+    
+    # Estado = 0 : Visible
+    # Estado = 1 : Oculto
+    Field('vh_oculto','integer', default=0, label=T('Visibilidad del vehículo'), requires=IS_INT_IN_RANGE(0,2)),
+
+    # Foráneas
+    Field('vh_depedencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
+    Field('vh_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
+    
+    # Eliminación
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    # Estado = 2  :Sin solicitud
+    Field('vh_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
+    Field('vh_desc_eliminar', 'string', length = 140, label = T('Razon de Eliminacion')),
+    )
+    
+db.vehiculo.vh_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.vehiculo.vh_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
