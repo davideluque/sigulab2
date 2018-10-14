@@ -221,6 +221,9 @@ def __get_inventario_herramientas_dep(dep_id):
 
     return inventario
 
+# Dado el id de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
+def __get_mantenimiento_vh(id=None):
+    return db(db.historial_mantenimiento_vh.hmvh_placa == id).select()
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
@@ -580,6 +583,40 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
     response.flash = "Se ha realizado exitosamente la solicitud de modificación de la herramienta " + str(nombre)
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+# funcion para agregar y modificar vehiculos
+
+def __agregar_modificar_vh(placa, modelo, ano, serial_motor, serial_carroceria, marca,
+                responsable, dependencia, es_particular, descripcion_uso, user, confirmacion=None):
+
+    # Si ya existe el vehiculo en el inventario
+
+    if (db(db.modificacion_vehiculos.mvh.placa == placa).select()):
+        vh = db(db.vehiculo.placa == placa).select()[0] #Se busca de la tabla de vh
+        response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
+                        Por los momentos no se enviarán solicitudes de modificación.".format(placa)
+        return False
+
+    
+    inv_id = db.modificacion_vehiculos.insert(
+            placa = placa,
+            modelo = modelo,
+            ano = ano,
+            serial_motor = serial_motor,
+            serial_carroceria = serial_carroceria,
+            marca = marca,
+            responsable = responsable,
+            dependencia = dependencia,
+            es_particular = es_particular,
+            descripcion_uso = descripcion_uso,
+            mvh_modifica_ficha = user
+
+        )
+    db.bitacora_general.insert(
+        f_accion = "[inventarios] Añadida solicitud de modificación del vehiculo de placa {}".format(placa)
+    )
+    response.flash = "Se ha realizado exitosamente la solicitud de modificación del vehiculo de placa" + str(placa)
+    return True
 
 
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
@@ -1687,6 +1724,46 @@ def detalles_herramientas():
                 unidad_med = unidad_med,
                 presentacion = presentacion
                 )
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_vehiculo():
+    # Obteniendo la entrada en t_Personal del usuario conectado
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+    vh = request.vars['vh']
+    vehi = db(db.vehiculo.placa == vh).select()[0]
+    mantenimiento=__get_mantenimiento_vh(vh)
+
+    # Si se elimina
+    if request.vars.si:
+        db(db.historial_mantenimiento_vh.hmvh_placa == vh).delete()
+        db(db.vehiculo.placa == vh).delete()
+        db(db.modificacion_vehiculo.mvh_placa == vh).delete()
+
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado el vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
+        )
+        session.flash = "El vehiculo ha sido eliminado"
+        redirect(URL('validaciones'))
+
+    # Si no se elimina
+    if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Rechazada eliminación del vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
+        )
+        db(db.vehiculo.placa == vehi['placa']).select().first().update_record(vh_eliminar = 2)
+        session.flash = "El vehiculo no ha sido eliminado"
+        redirect(URL('validaciones'))
+
+    if request.vars.modificacion:
+        __agregar_modificar_vh(
+            vehiculo['placa'],request.vars.modelo, request.vars.ano,
+            request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
+            request.vars.responsable, request.vars.dependencia, request.vars.es_particular,
+            request.vars.descripcion_uso, user_id)
+
+        request.vars.modificacion = None
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
