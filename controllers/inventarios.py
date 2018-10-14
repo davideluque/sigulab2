@@ -30,7 +30,7 @@ def __is_valid_id(id_, tabla):
 # Determina si una variable "booleana" pasada como parametro con GET es realmente
 # 'True' o 'False' (request.vars almacena todo como strings)
 def __is_bool(bool_var):
-    return bool_var in ['True', 'False']:
+    return bool_var in ['True', 'False']
 
 # Dado el nombre de una dependencia, retorna el id de esta si la encuentra o
 # None si no lo hace
