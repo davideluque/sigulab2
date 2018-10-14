@@ -183,6 +183,37 @@ if db(db.dependencias).isempty():
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="UL05")
 
+	######## MODIFICACION INVENTARIO PRUEBA
+	# Se agrega una seccion y un espacio para el Lab A para poder realizar pruebas
+	# Esto se debe borrar antes de pasar a produccion
+
+	labA = db(db.dependencias.codigo_registro == "ULLA").select()[0].id
+	user = db(db.auth_user.email == 'usb-laba@usb.ve').select()[0].id
+
+	db.dependencias.insert(nombre='Alta Tension', id_sede=sartenejas, 
+		unidad_de_adscripcion=labA, id_jefe_dependencia=user, 
+		codigo_registro="ALT")
+	alt = db(db.dependencias.codigo_registro == "ALT").select()[0].id
+
+	db.dependencias.insert(nombre='Mecanica de Fluidos', id_sede=sartenejas, 
+		unidad_de_adscripcion=labA, id_jefe_dependencia=user, 
+		codigo_registro="MCF")
+	mcf = db(db.dependencias.codigo_registro == "MCF").select()[0].id
+
+	db.espacios_fisicos.insert(codigo="ALT1", uso="Clases", 
+		dependencia=alt)
+	db.espacios_fisicos.insert(codigo="ALT2", uso="Clases", 
+		dependencia=alt)
+	db.espacios_fisicos.insert(codigo="ALT3", uso="Clases", 
+		dependencia=alt)
+
+	db.espacios_fisicos.insert(codigo="MCF1", uso="Clases", 
+		dependencia=mcf)
+	db.espacios_fisicos.insert(codigo="MCF2", uso="Clases", 
+		dependencia=mcf)
+	######## MODIFICACION INVENTARIO PRUEBA
+
+
 # Cargos
 if db(db.auth_group).isempty():
 
