@@ -23,19 +23,14 @@ def __is_valid_id(id_, tabla):
         int(id_)
     except:
         return False
-    # Si el id recibido tiene el tipo correcto pero no existe en la base de datos
-    if not db(tabla.id == int(id_)).select() :
-        return False
 
-    return True
+    # Retorna si el id recibido existe en la base de datos
+    return db(tabla.id == int(id_)).select() 
 
 # Determina si una variable "booleana" pasada como parametro con GET es realmente
 # 'True' o 'False' (request.vars almacena todo como strings)
 def __is_bool(bool_var):
-    if not bool_var in ['True', 'False']:
-        return False
-    else:
-        return True
+    return bool_var in ['True', 'False']:
 
 # Dado el nombre de una dependencia, retorna el id de esta si la encuentra o
 # None si no lo hace
