@@ -2110,7 +2110,7 @@ def detalles_vehiculo():
 
     if request.vars.modificacion:
         __agregar_modificar_vehiculo(
-            vehiculo['placa'], request.vars.modelo, request.vars.ano,
+            vehiculo.vh_placa, request.vars.modelo, request.vars.ano,
             request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
             request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, 
             request.vars.descripcion_uso, request.vars.es_particular, request.vars.oculto, user_id)
@@ -2118,6 +2118,15 @@ def detalles_vehiculo():
         request.vars.modificacion = None
         session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
         redirect(URL('validaciones'))
+
+    if request.vars.ocultar:
+        if vehiculo.vh_oculto == 1:
+            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto =1)
+            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
+        else:
+            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto=0)
+            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
+        request.vars.ocultar = None
 
     # Si solo estoy cargando la vista
     # PENDIENTE: Retornar el dicccionario adecuado
