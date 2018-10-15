@@ -471,7 +471,9 @@ db.define_table(
     Field('hmvh_fecha_cert', 'date', notnull = True, label = T('Fecha de certificación')),
     Field('hmvh_observacion', 'text', label = T('Observaciones')),
     Field('hmvh_responsable', 'string', label = T('Responsable de mantenimiento')),
+    Field('hmvh_crea_mantenimiento', 'reference auth_user', notnull = True, label = T('Usuario que crea la entrada de mantenimiento')),
     )
 
 # PENDIENTE: Verificar la siguiente restriccion
 db.historial_mantenimiento_vh.hmvh_nro.requires = IS_IN_DB(db, db.vehiculo.placa, '%(vh_num)s')
+db.historial_mantenimiento_vh.hmvh_crea_mantenimiento.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
