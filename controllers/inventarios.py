@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-# tente algo como
-
 
 # < -------- Funciones privadas de SMDYP ------------>
-
-import datetime
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -14,7 +10,7 @@ def __check_role():
                         'COORDINADOR', 'PERSONAL DE DEPENDENCIA', 'TÉCNICO', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL INTERNO', 
                         'GESTOR DE SMyDP']
-    return True in map(lambda x: auth.has_membership(x), roles_permitidos)
+    return True in [auth.has_membership(x) for x in roles_permitidos]
 
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
 # o es de un tipo incorrecto
@@ -45,8 +41,8 @@ def __get_inventario_espacio(espacio_id=None):
     return db(db.bien_mueble.bm_espacio_fisico == espacio_id).select()
 
 # Dado el id de un bien mueble, retorna las fichas de mantenimiento del bien.
-def __get_mantenimiento_bm(id=None):
-    return db(db.historial_mantenimiento_bm.hmbm_nro == id).select()
+def __get_mantenimiento_bm(bm_id=None):
+    return db(db.historial_mantenimiento_bm.hmbm_nro == bm_id).select()
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -78,7 +74,7 @@ def __get_inventario_herramientas_espacio(espacio_id=None):
 # Si una dependencia no tiene otras adscritas, entonces no aparece en "jerarquia"
 def __get_leaves(dep_id, jerarquia):
 
-    if not dep_id in jerarquia:
+    if dep_id not in jerarquia:
         return [dep_id]
     else:
         l = []
@@ -105,7 +101,6 @@ def __filtrar_espacios(hojas):
 def __get_espacios(dep_id):
     espacios = []
 
-    secciones = []
     dependencias = db(db.dependencias.id > 0).select()
     
     # Creando lista de adyacencias
@@ -229,13 +224,13 @@ def __get_mantenimiento_vh(placa=None):
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
 def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
-                descripcion, material, color, calibrar, fecha_calibracion,
-                unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
-                estatus, nombre_cat, subcategoria, cod_loc, localizacion, espacio, unidad_ad, 
-                dependencia, user, clasificacion):
+                 descripcion, material, color, calibrar, fecha_calibracion,
+                 unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
+                 estatus, nombre_cat, subcategoria, cod_loc, localizacion, 
+                 espacio, unidad_ad, dependencia, user, clasificacion):
 
     # Si ya existe el BM en el inventario
-    if (db(db.bien_mueble.bm_num == no_bien).select()):
+    if db(db.bien_mueble.bm_num == no_bien).select():
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0]
 
         response.flash = "El BM \"{0}\" ya ha sido ingresado anteriormente \
@@ -243,42 +238,43 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         return False
     
     if not unidad_med:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
     
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.bien_mueble.insert(
-            bm_nombre = nombre, 
-            bm_num = no_bien, 
-            bm_placa = no_placa, 
-            bm_marca = marca, 
-            bm_modelo = modelo, 
-            bm_serial = serial,
-            bm_descripcion = descripcion, 
-            bm_material = material, 
-            bm_color = color,
-            bm_calibrar =  calibrar,
-            bm_fecha_calibracion = fecha_calibracion,
-            bm_unidad = unidad_med, 
-            bm_ancho = ancho, 
-            bm_largo = largo,
-            bm_alto = alto, 
-            bm_diametro = diametro, 
-            bm_movilidad = movilidad, 
-            bm_uso = uso,
-            bm_estatus = estatus, 
-            bm_categoria = nombre_cat,
-            bm_subcategoria = subcategoria, 
-            bm_codigo_localizacion = cod_loc,
-            bm_localizacion = localizacion, 
-            bm_espacio_fisico = espacio,
-            bm_unidad_de_adscripcion = unidad_ad, 
-            bm_depedencia = dependencia, 
-            bm_crea_ficha = user,
-            bm_clasificacion = clasificacion
-        )
+        bm_nombre=nombre, 
+        bm_num=no_bien, 
+        bm_placa=no_placa, 
+        bm_marca=marca, 
+        bm_modelo=modelo, 
+        bm_serial=serial,
+        bm_descripcion=descripcion, 
+        bm_material=material, 
+        bm_color=color,
+        bm_calibrar= calibrar,
+        bm_fecha_calibracion=fecha_calibracion,
+        bm_unidad=unidad_med, 
+        bm_ancho=ancho, 
+        bm_largo=largo,
+        bm_alto=alto, 
+        bm_diametro=diametro, 
+        bm_movilidad=movilidad, 
+        bm_uso=uso,
+        bm_estatus=estatus, 
+        bm_categoria=nombre_cat,
+        bm_subcategoria=subcategoria, 
+        bm_codigo_localizacion=cod_loc,
+        bm_localizacion=localizacion, 
+        bm_espacio_fisico=espacio,
+        bm_unidad_de_adscripcion=unidad_ad, 
+        bm_depedencia=dependencia, 
+        bm_crea_ficha=user,
+        bm_clasificacion=clasificacion
+    )
+
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadido el bien mueble num: {}".format(no_bien)
     )
@@ -288,11 +284,11 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
-                descripcion, responsable, telf_responsable, dependencia, user,
-                es_particular=0, oculto=0):
+                 descripcion, responsable, telf_responsable, dependencia, user,
+                 es_particular=0, oculto=0):
 
     # Si ya existe el BM en el inventario
-    if (db(db.vehiculo.vh_placa == placa).select()):
+    if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
 
         response.flash = "El vehiculo de placa \"{0}\" ya ha sido ingresado anteriormente \
@@ -301,19 +297,19 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa,
       
     # Se agrega el nuevo vehiculo a la base de datos
     inv_id = db.bien_mueble.insert(
-        vh_marca = marca,
-        vh_modelo = modelo,
-        vh_ano = ano,
-        vh_serial_motor = serial_motor,
-        vh_serial_carroceria = serial_carroceria,
-        vh_placa = placa,
-        vh_descripcion = descripcion,
-        vh_responsable = responsable,
-        vh_telf_responsable = telf_responsable,
-        vh_es_particular = es_particular,
-        vh_oculto = oculto,
-        vh_dependencia = dependencia,
-        vh_crea_ficha = user
+        vh_marca=marca,
+        vh_modelo=modelo,
+        vh_ano=ano,
+        vh_serial_motor=serial_motor,
+        vh_serial_carroceria=serial_carroceria,
+        vh_placa=placa,
+        vh_descripcion=descripcion,
+        vh_responsable=responsable,
+        vh_telf_responsable=telf_responsable,
+        vh_es_particular=es_particular,
+        vh_oculto=oculto,
+        vh_dependencia=dependencia,
+        vh_crea_ficha=user
         )
 
     db.bitacora_general.insert(
@@ -327,19 +323,19 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
                 fecha_cert, observacion):
 
     inv_id = db.historial_mantenimiento_bm.insert(
-            hmbm_nro = no_bien, 
-            hmbm_fecha_sol = fecha_sol, 
-            hmbm_codigo = codigo, 
-            hmbm_tipo = tipo, 
-            hmbm_servicio = servicio, 
-            hmbm_accion = accion,
-            hmbm_descripcion = descripcion, 
-            hmbm_proveedor = proveedor, 
-            hmbm_fecha_inicio = fecha_inicio,
-            hmbm_fecha_fin =  fecha_fin,
-            hmbm_tiempo_ejec = tiempo_ejec,
-            hmbm_fecha_cert = fecha_cert, 
-            hmbm_observacion = observacion
+            hmbm_nro=no_bien, 
+            hmbm_fecha_sol=fecha_sol, 
+            hmbm_codigo=codigo, 
+            hmbm_tipo=tipo, 
+            hmbm_servicio=servicio, 
+            hmbm_accion=accion,
+            hmbm_descripcion=descripcion, 
+            hmbm_proveedor=proveedor, 
+            hmbm_fecha_inicio=fecha_inicio,
+            hmbm_fecha_fin= fecha_fin,
+            hmbm_tiempo_ejec=tiempo_ejec,
+            hmbm_fecha_cert=fecha_cert, 
+            hmbm_observacion=observacion
         )
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadido historial de mantenimiento del bien mueble num: {}".format(no_bien)
@@ -365,38 +361,38 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         return False
     
     if not unidad_dim:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
     
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.sin_bn.insert(
-        sb_cantidad = cantidad,
-        sb_nombre = nombre,   
-        sb_marca = marca, 
-        sb_modelo = modelo, 
-        sb_descripcion = descripcion, 
-        sb_material = material, 
-        sb_material_sec = material_sec,
-        sb_calibrar =  calibrar,
-        sb_unidad = unidad, 
-        sb_ancho = ancho, 
-        sb_largo = largo,
-        sb_alto = alto, 
-        sb_diametro = diametro, 
-        sb_espacio = espacio,
-        sb_clasificacion = clasificacion,
-        sb_presentacion = presentacion,
-        sb_unidades = unidades,
-        sb_total = total,
-        sb_aforado = aforado,
-        sb_ubicacion = ubicacion,
-        sb_capacidad = capacidad,
-        sb_unidad_dim = unidad_dim,
-        sb_unidad_de_adscripcion = unidad_adscripcion,
-        sb_depedencia = dependencia,
-        sb_crea_ficha = user,
+        sb_cantidad=cantidad,
+        sb_nombre=nombre,   
+        sb_marca=marca, 
+        sb_modelo=modelo, 
+        sb_descripcion=descripcion, 
+        sb_material=material, 
+        sb_material_sec=material_sec,
+        sb_calibrar= calibrar,
+        sb_unidad=unidad, 
+        sb_ancho=ancho, 
+        sb_largo=largo,
+        sb_alto=alto, 
+        sb_diametro=diametro, 
+        sb_espacio=espacio,
+        sb_clasificacion=clasificacion,
+        sb_presentacion=presentacion,
+        sb_unidades=unidades,
+        sb_total=total,
+        sb_aforado=aforado,
+        sb_ubicacion=ubicacion,
+        sb_capacidad=capacidad,
+        sb_unidad_dim=unidad_dim,
+        sb_unidad_de_adscripcion=unidad_adscripcion,
+        sb_depedencia=dependencia,
+        sb_crea_ficha=user,
     )
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: ".format(nombre, espacio_nombre)
@@ -423,10 +419,10 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
                         .".format(clasificacion,nombre)
 
     if not unidad_dim:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
 
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.modificacion_sin_bn.insert(
@@ -490,10 +486,10 @@ def __agregar_herramienta(nombre, num, marca, modelo, serial, presentacion, nump
         descripcion=None
     
     if not unidad:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
     
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.herramienta.insert(
@@ -546,36 +542,36 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
         descripcion=None
     
     if not unidad:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
     
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     inv_id = db.modificacion_herramienta.insert(
-        mhr_nombre = nombre,
+        mhr_nombre =nombre,
         mhr_num=num,   
-        mhr_marca = marca, 
-        mhr_modelo = modelo, 
-        mhr_serial = serial, 
-        mhr_presentacion = presentacion,
+        mhr_marca=marca, 
+        mhr_modelo=modelo, 
+        mhr_serial=serial, 
+        mhr_presentacion=presentacion,
         mhr_numpiezas= numpiezas,
         mhr_contenido =contenido,
-        mhr_descripcion = descripcion, 
-        mhr_material = material, 
-        mhr_unidad = unidad, 
-        mhr_ancho = ancho, 
-        mhr_largo = largo,
-        mhr_alto = alto, 
-        mhr_diametro = diametro, 
-        mhr_espacio_fisico = espacio,
-        mhr_ubicacion = ubicacion,
+        mhr_descripcion=descripcion, 
+        mhr_material=material, 
+        mhr_unidad=unidad, 
+        mhr_ancho=ancho, 
+        mhr_largo=largo,
+        mhr_alto=alto, 
+        mhr_diametro=diametro, 
+        mhr_espacio_fisico=espacio,
+        mhr_ubicacion=ubicacion,
         mhr_observacion= observacion,
-        mhr_motivo = motivo,
-        mhr_unidad_de_adscripcion = unidad_adscripcion,
-        mhr_depedencia = dependencia,
-        mhr_crea_ficha = user1,
-        mhr_modifica_ficha = user2
+        mhr_motivo=motivo,
+        mhr_unidad_de_adscripcion=unidad_adscripcion,
+        mhr_depedencia=dependencia,
+        mhr_crea_ficha=user1,
+        mhr_modifica_ficha=user2
     )
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadida una solicitud de modificación de herramienta. Nombre: {}. Espacio físico: {}".format(nombre, espacio_nombre)
@@ -587,7 +583,7 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
 # Funcion para agregar una modificacion pendiente a un vehiculo
 def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroceria, 
                                 marca, responsable, telf_responsable, dependencia,
-                                descripcion_uso, user, es_particular=0, oculto=0, confirmacion=None):
+                                descripcion_uso, user, es_particular=0, oculto=0):
 
     # Si ya existe una modificacion pendiente al vehiculo
     if (db(db.modificacion_vehiculo.mvh_placa == placa).select()):
@@ -789,7 +785,7 @@ def __get_descripcion(registro):
 def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
                 descripcion, material, color, calibrar, fecha_calibracion,
                 unidad_med, ancho, largo, alto, diametro, movilidad, uso, 
-                estatus, nombre_cat, subcategoria, cod_loc, localizacion, descripcion_mod, user, confirmacion=None):
+                estatus, nombre_cat, subcategoria, cod_loc, localizacion, descripcion_mod, user):
     # Si ya existe el BM en el inventario
     if (db(db.modificacion_bien_mueble.mbn_num == no_bien).select()):
         bm = db(db.bien_mueble.bm_num == no_bien).select()[0] #Se busca de la tabla de bm para tener el nombre original
@@ -799,10 +795,10 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     
     if not unidad_med:
-        ancho=None
-        largo=None
-        alto=None
-        diametro=None
+        ancho = None
+        largo = None
+        alto = None
+        diametro = None
     
     inv_id = db.modificacion_bien_mueble.insert(
             mbn_nombre = nombre, 
@@ -858,7 +854,7 @@ def index():
         len(solicitudes_pendientes['inventario_eliminar'][0]) + \
         len(solicitudes_pendientes['inventario_eliminar'][1]) + \
         len(solicitudes_pendientes['inventario_eliminar'][2])
-    return dict(numero_solicitudes = numero_solicitudes)
+    return dict(numero_solicitudes=numero_solicitudes)
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -926,8 +922,8 @@ def detalles_mod_herramientas():
         session.flash = "La información de la herramienta no ha sido modificada"
         redirect(URL('validaciones'))
 
-    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    unidad_med = ['cm','m']
+    material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+    unidad_med = ['cm', 'm']
     presentacion=["Unidad", "Conjunto"]
     if bien['mhr_presentacion'] == "Unidad":
         caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
@@ -969,12 +965,12 @@ def detalles_mod_herramientas():
         del caracteristicas_dict['Serial:']
         caracteristicas_list.remove('Serial:')
 
-    return dict(bien = bien,
-                material_pred = material_pred,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict,
-                unidad_med = unidad_med,
-                presentacion = presentacion
+    return dict(bien=bien,
+                material_pred=material_pred,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict,
+                unidad_med=unidad_med,
+                presentacion=presentacion
                 )
 
 @auth.requires(lambda: __check_role())
@@ -1033,7 +1029,7 @@ def detalles_mod_mat():
         redirect(URL('validaciones'))
 
     if bien_original['sb_clasificacion'] == "Material de Laboratorio":
-        caracteristicas_list = ['Cantidad:','Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
+        caracteristicas_list = ['Cantidad:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
         'Capacidad:', 'Unidad de medida:', 'Material predominante:', 'Material secundario:', 'Descripción:', 'Tipo:', 'Ubicación interna:']
         caracteristicas_dict = {
             'Cantidad:': bien['msb_cantidad'],
@@ -1063,10 +1059,10 @@ def detalles_mod_mat():
             'Ubicación interna:' : bien['msb_ubicacion'],
             'Tipo:': bien_original['sb_clasificacion']
         }
-    return dict(bien = bien,
-                bien_original = bien_original,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict
+    return dict(bien=bien,
+                bien_original=bien_original,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict
                 )
 
 @auth.requires(lambda: __check_role())
@@ -1158,12 +1154,12 @@ def detalles_mod():
         'Subcategoría:': bien['mbn_subcategoria']
     }
     
-    return dict(bien = bien,
-                bien_original = bien_original,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict,
-                sudebid_list = sudebid_list,
-                sudebid_dict = sudebid_dict)
+    return dict(bien=bien,
+                bien_original=bien_original,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict,
+                sudebid_list=sudebid_list,
+                sudebid_dict=sudebid_dict)
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -1249,15 +1245,15 @@ def detalles():
     nombre_espaciof = []
     unidad_adscripcion = []
 
-    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-    unidad_med = ['cm','m']
-    movilidad = ['Fijo','Portátil']
-    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+    color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+    'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+    unidad_med = ['cm', 'm']
+    movilidad = ['Fijo', 'Portátil']
+    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
     nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
     'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-    cod_localizacion = ['150301','240107']
+    cod_localizacion = ['150301', '240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
@@ -1302,20 +1298,20 @@ def detalles():
         'Subcategoría:': bien['bm_subcategoria']
     }
 
-    return dict(bien = bien,
-                material_pred = material_pred,
-                color_list = color,
-                unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict,
-                sudebid_list = sudebid_list,
-                sudebid_dict = sudebid_dict,
-                mantenimiento = mantenimiento)
+    return dict(bien=bien,
+                material_pred=material_pred,
+                color_list=color,
+                unidad_med=unidad_med,
+                movilidad_list=movilidad,
+                uso_list=uso,
+                nombre_cat=nombre_cat,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict,
+                sudebid_list=sudebid_list,
+                sudebid_dict=sudebid_dict,
+                mantenimiento=mantenimiento)
 
 
 @auth.requires(lambda: __check_role())
@@ -1399,18 +1395,18 @@ def detalles_mat():
         request.vars.ocultar = None
 
     aforado_options = ['Si', 'No', 'N/A']
-    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-    unidad_med = ['cm','m']
-    movilidad = ['Fijo','Portátil']
-    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+    color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+    'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+    unidad_med = ['cm', 'm']
+    movilidad = ['Fijo', 'Portátil']
+    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
     nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-    cod_localizacion = ['150301','240107']
+    cod_localizacion = ['150301', '240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+    unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
     presentacion=["Caja", "Paquete", "Unidad", "Otro"]
     if bien['sb_clasificacion'] == "Material de Laboratorio":
         caracteristicas_list = ['Cantidad:', 'Descripción:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
@@ -1443,20 +1439,20 @@ def detalles_mat():
             'Ubicación interna:' : bien['sb_ubicacion'],
             'Tipo:': bien['sb_clasificacion']
         }
-    return dict(bien = bien,
-                material_pred = material_pred,
-                color_list = color,
-                unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict,
-                aforado_options = aforado_options,
-                unidad_cap = unidad_cap,
-                presentacion = presentacion
+    return dict(bien=bien,
+                material_pred=material_pred,
+                color_list=color,
+                unidad_med=unidad_med,
+                movilidad_list=movilidad,
+                uso_list=uso,
+                nombre_cat=nombre_cat,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict,
+                aforado_options=aforado_options,
+                unidad_cap=unidad_cap,
+                presentacion=presentacion
                 )
 
 @auth.requires(lambda: __check_role())
@@ -1541,18 +1537,18 @@ def detalles_consumibles():
         request.vars.ocultar = None
 
     aforado_options = ['Si', 'No', 'N/A']
-    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-    'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-    unidad_med = ['cm','m']
-    movilidad = ['Fijo','Portátil']
-    uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+    material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+    color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+    'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+    unidad_med = ['cm', 'm']
+    movilidad = ['Fijo', 'Portátil']
+    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
     nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-    cod_localizacion = ['150301','240107']
+    cod_localizacion = ['150301', '240107']
     localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
     'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-    unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+    unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
     presentacion=["Caja", "Paquete", "Unidad", "Otro"]
     if bien['sb_clasificacion'] == "Material de Laboratorio":
         caracteristicas_list = ['Cantidad:', 'Descripción:', 'Marca:', 'Modelo:', 'Aforado:', 'Requiere calibración:', 
@@ -1585,20 +1581,20 @@ def detalles_consumibles():
             'Ubicación interna:' : bien['sb_ubicacion'],
             'Tipo:': bien['sb_clasificacion']
         }
-    return dict(bien = bien,
-                material_pred = material_pred,
-                color_list = color,
-                unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
-                caracteristicas_list = caracteristicas_list,
-                caracteristicas_dict = caracteristicas_dict,
-                aforado_options = aforado_options,
-                unidad_cap = unidad_cap,
-                presentacion = presentacion
+    return dict(bien=bien,
+                material_pred=material_pred,
+                color_list=color,
+                unidad_med=unidad_med,
+                movilidad_list=movilidad,
+                uso_list=uso,
+                nombre_cat=nombre_cat,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion,
+                caracteristicas_list=caracteristicas_list,
+                caracteristicas_dict=caracteristicas_dict,
+                aforado_options=aforado_options,
+                unidad_cap=unidad_cap,
+                presentacion=presentacion
                 )
 
 @auth.requires(lambda: __check_role())
@@ -1674,8 +1670,8 @@ def detalles_herramientas():
             response.flash = bien['hr_nombre'] + " ya se encuentra oculto en las consultas."
         request.vars.ocultar = None
 
-    material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-    unidad_med = ['cm','m']
+    material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+    unidad_med = ['cm', 'm']
     presentacion=["Unidad", "Conjunto"]
     if bien['hr_presentacion'] == "Unidad":
         caracteristicas_list = [ 'Número de Bien Nacional:', 'Marca:', 'Modelo:', 'Serial:', 'Presentación:', 
@@ -1864,15 +1860,15 @@ def bienes_muebles():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
@@ -1964,15 +1960,15 @@ def bienes_muebles():
             # Busca el inventario del espacio
             inventario = __get_inventario_espacio(espacio_id)
 
-            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-            unidad_med = ['cm','m']
-            movilidad = ['Fijo','Portátil']
-            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+            color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+            'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+            unidad_med = ['cm', 'm']
+            movilidad = ['Fijo', 'Portátil']
+            uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-            cod_localizacion = ['150301','240107']
+            cod_localizacion = ['150301', '240107']
             localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
             'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
@@ -2064,15 +2060,15 @@ def bienes_muebles():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
@@ -2245,18 +2241,18 @@ def material_lab():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_materiales_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+                unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
                 presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2347,18 +2343,18 @@ def material_lab():
             # Busca el inventario del espacio
             inventario = __get_inventario_materiales_espacio(espacio_id)
 
-            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-            unidad_med = ['cm','m']
-            movilidad = ['Fijo','Portátil']
-            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+            color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+            'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+            unidad_med = ['cm', 'm']
+            movilidad = ['Fijo', 'Portátil']
+            uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-            cod_localizacion = ['150301','240107']
+            cod_localizacion = ['150301', '240107']
             localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
             'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-            unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+            unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
             presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
             # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2450,18 +2446,18 @@ def material_lab():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_materiales_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+                unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
                 presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2606,8 +2602,8 @@ def __get_inventario_espacio_herramientas_eliminar(name, espacio, ubicacion):
 def __get_inventario_espacio_bn_validacion(num=None):
     return db(db.modificacion_bien_mueble.mbn_num == num).select()
 
-""" Dado el id de un espacio fisico retorna los materiales que componen
-el inventario de ese espacio. """
+# Dado el id de un espacio fisico retorna los materiales que componen
+# el inventario de ese espacio.
 def __get_inventario_espacio_materialesandconsumibles_validacion(nombre, espacio):
     return db((db.modificacion_sin_bn.msb_espacio == espacio) and (db.modificacion_sin_bn.msb_nombre == nombre)).select()
 
@@ -2757,18 +2753,18 @@ def consumibles():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_consumibles_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
                 'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+                unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
                 presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2859,18 +2855,18 @@ def consumibles():
             # Busca el inventario del espacio
             inventario = __get_inventario_consumibles_espacio(espacio_id)
 
-            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-            color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-            'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-            unidad_med = ['cm','m']
-            movilidad = ['Fijo','Portátil']
-            uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+            material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+            color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+            'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+            unidad_med = ['cm', 'm']
+            movilidad = ['Fijo', 'Portátil']
+            uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
             'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-            cod_localizacion = ['150301','240107']
+            cod_localizacion = ['150301', '240107']
             localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
             'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-            unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+            unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
             presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
             # Si se esta agregando un nuevo BM, se registra en la DB
@@ -2963,18 +2959,18 @@ def consumibles():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_consumibles_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                color = ['Amarillo','Azul','Beige','Blanco','Dorado','Gris','Madera','Marrón','Mostaza','Naranja',
-                'Negro','Plateado','Rojo','Rosado','Verde','Vinotinto','Otro color']
-                unidad_med = ['cm','m']
-                movilidad = ['Fijo','Portátil']
-                uso = ['Docencia','Investigación','Extensión','Apoyo administrativo']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
+                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
+                unidad_med = ['cm', 'm']
+                movilidad = ['Fijo', 'Portátil']
+                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria Construcción', 'Equipo Transporte', 'Equipo Comunicaciones', 
                 'Equipo Médico', 'Equipo Científico Religioso', 'Equipo Oficina']
-                cod_localizacion = ['150301','240107']
+                cod_localizacion = ['150301', '240107']
                 localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
                 'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-                unidad_cap = ['m³','l','ml','μl','kg','g','mg','μg','galón','oz','cup','lb']
+                unidad_cap = ['m³', 'l', 'ml', 'μl', 'kg', 'g', 'mg', 'μg', 'galón', 'oz', 'cup', 'lb']
                 presentacion=["Caja", "Paquete", "Unidad", "Otro"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -3149,8 +3145,8 @@ def herramientas():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_herramientas_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                unidad_med = ['cm','m']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                unidad_med = ['cm', 'm']
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -3237,8 +3233,8 @@ def herramientas():
             # Busca el inventario del espacio
             inventario = __get_inventario_herramientas_espacio(espacio_id)
 
-            material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-            unidad_med = ['cm','m']
+            material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+            unidad_med = ['cm', 'm']
             presentacion=["Unidad", "Conjunto"]
 
             # Si se esta agregando un nuevo BM, se registra en la DB
@@ -3327,8 +3323,8 @@ def herramientas():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_herramientas_espacio(espacio_id)
 
-                material_pred = ['Acero','Acrílico','Madera','Metal','Plástico','Tela','Vidrio', 'Otro']
-                unidad_med = ['cm','m']
+                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
+                unidad_med = ['cm', 'm']
                 presentacion=["Unidad", "Conjunto"]
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
@@ -3398,7 +3394,7 @@ def herramientas():
                 es_tecnico=es_tecnico,
                 inventario=inventario,
                 retroceder=retroceder,
-                material_pred = material_pred,
-                unidad_med = unidad_med,
-                presentacion = presentacion
-                ) 
+                material_pred=material_pred,
+                unidad_med=unidad_med,
+                presentacion=presentacion
+                )
