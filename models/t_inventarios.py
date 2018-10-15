@@ -475,5 +475,5 @@ db.define_table(
     )
 
 # PENDIENTE: Verificar la siguiente restriccion
-db.historial_mantenimiento_vh.hmvh_nro.requires = IS_IN_DB(db, db.vehiculo.placa, '%(vh_num)s')
+db.historial_mantenimiento_vh.hmvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
 db.historial_mantenimiento_vh.hmvh_crea_mantenimiento.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
