@@ -1732,13 +1732,13 @@ def detalles_vehiculo():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     vh = request.vars['vh']
-    vehi = db(db.vehiculo.placa == vh).select()[0]
+    vehi = db(db.vehiculo.vh_placa == vh).select()[0]
     mantenimiento = __get_mantenimiento_vh(vh)
 
     # Si se elimina
     if request.vars.si:
         db(db.historial_mantenimiento_vh.hmvh_placa == vh).delete()
-        db(db.vehiculo.placa == vh).delete()
+        db(db.vehiculo.vh_placa == vh).delete()
         db(db.modificacion_vehiculo.mvh_placa == vh).delete()
 
         db.bitacora_general.insert(
@@ -1752,7 +1752,7 @@ def detalles_vehiculo():
         db.bitacora_general.insert(
             f_accion = "[inventarios] Rechazada eliminación del vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
         )
-        db(db.vehiculo.placa == vehi['placa']).select().first().update_record(vh_eliminar = 2)
+        db(db.vehiculo.vh_placa == vehi['placa']).select().first().update_record(vh_eliminar = 2)
         session.flash = "El vehiculo no ha sido eliminado"
         redirect(URL('validaciones'))
 
