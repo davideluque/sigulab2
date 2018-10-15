@@ -455,4 +455,23 @@ db.modificacion_vehiculo.mvh_depedencia.requires = IS_IN_DB(db, db.dependencias.
 # PENDIENTE: Verificar la siguiente restriccion
 db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
 
-# PENDIENTE: mantenimiento_vehiculos historial_mantenimiento_vh
+db.define_table(
+    'historial_mantenimiento_vh',
+    Field('hmvh_placa', 'references vehiculo', label = T('Placa del vehiculo')),
+    Field('hmvh_fecha_sol', 'date', notnull = True, label = T('Fecha de solicitud')),
+    Field('hmvh_codigo', 'string', label = T('Codigo de Solicitud')),
+    Field('hmvh_tipo', 'string', notnull = True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
+    Field('hmvh_servicio', 'string', notnull = True, label = T('Servicio Ejecutado'),requires = IS_IN_SET(['Ajuste', 'Calibración', 'Inspección','Limpieza','Reparación','Sustitución de Partes','Verificación','Otro'])),
+    Field('hmvh_accion', 'string', notnull = True, label = T('Acción'),requires = IS_IN_SET(['Periódica', 'Extraordinaria', 'Urgente'])),
+    Field('hmvh_descripcion', 'string', notnull = True, label = T('Motivo de ejecución, desperfecto o falla.')),
+    Field('hmvh_proveedor', 'string', notnull = True, label = T('Proveedor del servicio')),
+    Field('hmvh_fecha_inicio', 'date', notnull = True, label = T('Fecha de inicio')),
+    Field('hmvh_fecha_fin', 'date', notnull = True, label = T('Fecha de culminación')),
+    Field('hmvh_tiempo_ejec', 'integer', notnull = True, label = T('Tiempo de ejecución')),
+    Field('hmvh_fecha_cert', 'date', notnull = True, label = T('Fecha de certificación')),
+    Field('hmvh_observacion', 'text', label = T('Observaciones')),
+    Field('hmvh_responsable', 'string', label = T('Responsable de mantenimiento')),
+    )
+
+# PENDIENTE: Verificar la siguiente restriccion
+db.historial_mantenimiento_vh.hmvh_nro.requires = IS_IN_DB(db, db.vehiculo.placa, '%(vh_num)s')
