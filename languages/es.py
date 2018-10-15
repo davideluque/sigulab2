@@ -643,12 +643,9 @@
 'Sure you want to delete this object?': '¿Está seguro que desea eliminar este objeto?',
 'Sustancia': 'Sustancia',
 'Sustancia comprada': 'Sustancia comprada',
-<<<<<<< 38337faa47a01962a720b60ca800ae58199ec19a
 'T bitacoras': 'T bitacoras',
-=======
 'T bitacora desechoses(created_by)': 'T bitacora desechoses(created_by)',
 'T bitacora desechoses(modified_by)': 'T bitacora desechoses(modified_by)',
->>>>>>> Cambios agregar registro
 'T bitacoras(created_by)': 'T bitacoras(created_by)',
 'T bitacoras(modified_by)': 'T bitacoras(modified_by)',
 'T compras(created_by)': 'T compras(created_by)',
