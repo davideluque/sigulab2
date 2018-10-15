@@ -753,3 +753,14 @@ if db(db.t_categoria_desechos).isempty():
 	for categoria in categorias_iniciales:
 		db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
 
+# Vehiculos
+
+if db(db.vehiculo).isempty():
+    user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
+    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
+    db.vehiculo.insert(
+        vh_marca="acme", vh_modelo="botemovil invisible", vh_ano=2001, vh_serial_motor="24", vh_serial_carroceria="25",
+        vh_placa="42", vh_descripcion="es invisible", vh_responsable="Sirenoman", vh_telf_responsable="5555555",
+        vh_depedencia=dep,
+        vh_crea_ficha=user
+        )
