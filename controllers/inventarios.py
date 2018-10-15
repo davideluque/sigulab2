@@ -288,8 +288,8 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
-                descripcion, responsable, telf_responsable, es_particular=0, 
-                oculto=0, dependencia, user):
+                descripcion, responsable, telf_responsable, dependencia, user,
+                es_particular=0, oculto=0):
 
     # Si ya existe el BM en el inventario
     if (db(db.vehiculo.vh_placa == placa).select()):
@@ -310,7 +310,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa,
         vh_descripcion = descripcion,
         vh_responsable = responsable,
         vh_telf_responsable = telf_responsable,
-        vh_es_particular = es_particular,,
+        vh_es_particular = es_particular,
         vh_oculto = oculto,
         vh_dependencia = dependencia,
         vh_crea_ficha = user
@@ -586,17 +586,17 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
 
 # Funcion para agregar una modificacion pendiente a un vehiculo
 def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroceria, 
-                                marca, responsable, telf_responsable, dependencia, es_particular=0, 
-                                descripcion_uso, oculto=0, user, confirmacion=None):
+                                marca, responsable, telf_responsable, dependencia,
+                                descripcion_uso, user, es_particular=0, oculto=0, confirmacion=None):
 
     # Si ya existe una modificacion pendiente al vehiculo
-    if (db(db.modificacion_vehiculos.mvh_placa == placa).select()):
+    if (db(db.modificacion_vehiculo.mvh_placa == placa).select()):
         vh = db(db.vehiculo.placa == placa).select()[0] #Se busca de la tabla de vh
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
     
-    inv_id = db.modificacion_vehiculos.insert(
+    inv_id = db.modificacion_vehiculo.insert(
             mvh_placa = placa,
             mvh_modelo = modelo,
             mvh_ano = ano,
@@ -1760,14 +1760,15 @@ def detalles_vehiculo():
         __agregar_modificar_vehiculo(
             vehiculo['placa'], request.vars.modelo, request.vars.ano,
             request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
-            request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, request.vars.es_particular,
-            request.vars.descripcion_uso, request.vars.oculto, user_id)
+            request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, 
+            request.vars.descripcion_uso, request.vars.es_particular, request.vars.oculto, user_id)
 
         request.vars.modificacion = None
         session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
         redirect(URL('validaciones'))
 
     # Si solo estoy cargando la vista
+    # PENDIENTE: Retornar el dicccionario adecuado
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
