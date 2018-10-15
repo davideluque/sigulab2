@@ -1,0 +1,972 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+    <!-- Estilos de modales y listados -->
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+{{end}}
+<!--
+{{block center}}
+    {{ if request.vars.delete: }}
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+    {{pass}}
+    <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
+    <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
+    {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
+        <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
+    {{pass}}
+    {{ if request.vars.delete: }}
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['bm_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
+
+    <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+{{pass}}
+-->
+
+<!-- Inicio Boton Modificar VEHICULO -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                {{ if request.vars.delete: }}
+                <form method="post">
+                    <!-- Boton para aceptar mod de bien mueble-->
+                    <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                    <!--Boton para rechazar el bien mueble-->
+                    <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                </form>
+                {{ else: }}
+                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <!-- Boton para eliminar bien mueble-->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                {{ pass }}
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<!-- Fin Boton Agregar Sustancia -->
+
+<!-- Ficha vehiculo aqui esta la infromacion del vehiculo -->
+<div class="wrapper">
+		
+        <div class="tab-wrapper">
+            <ul class="tabs">
+                    <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                    <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                    <li class="tab-link" data-tab="4"><br>UBICACIÓN</li>
+                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
+                </ul>
+        </div>
+    
+        <div class="content-wrapper">
+            <div id="tab-1" class="tab-content active">
+                <div class="grid-container">
+                    {{ for title in caracteristicas_list: }}
+                        <div class="grid-item">
+                            {{=title}}
+                        </div>
+                        <div class="grid-item">
+                            {{ if title.lower() == "placa": }}
+                                Placa: {{=vh['placa']}}
+                                <br>
+                            {{ else: }}
+                                {{= caracteristicas_dict.get(title)}}
+                            {{pass}} 
+                        </div>
+                    {{ pass }}
+                        <div class="grid-item">                        
+                            {{if vh['modelo'] != None:}}
+                                Modelo: {{=vh['modelo']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['ano'] != None:}}
+                                Año: {{=vh['ano']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['marca'] != None:}}
+                                Marca: {{=vh['marca']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['serial_carroceria'] != None:}}
+                                Seria de carrocería: {{=vh['serial_carroceria']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['serial_motor'] != None:}}
+                                Seria de motor: {{=vh['serial_motor']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['responsable'] != None:}}
+                                Responsable: {{=vh['responsable']}}
+                                <br>
+                            {{pass}}
+                            {{if vh['telf_responsable'] != None:}}
+                                Tlf. de Responsable: {{=vh['telf_responsable']}}
+                                <br>
+                            {{pass}}
+                        </div>
+                </div>
+            </div>
+<!--    
+        
+            <div id="tab-2" class="tab-content">
+                <div class="grid-container">
+                {{ for title in sudebid_list: }}
+                    <div class="grid-item">
+                        {{=title}}
+                    </div>
+                    <div class="grid-item">
+                        {{= sudebid_dict.get(title)}}
+                    </div>
+                {{ pass }}
+                </div>
+            </div>
+    
+            <div id="tab-3"class="tab-content">En desarrollo</div>
+            <div id="tab-4"class="tab-content">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        Espacio físico:
+                    </div>
+                    <div class="grid-item">
+                        {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
+                    </div>
+                    <div class="grid-item">
+                        Unidad de Adscripción:
+                    </div>
+                    <div class="grid-item">
+                        {{=db(db.dependencias.id == bien['bm_unidad_de_adscripcion']).select().first().nombre}}
+                    </div>
+                    <div class="grid-item">
+                        Dependencia:
+                    </div>
+                    <div class=grid-item>
+                        {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                    </div>
+                </div>
+            </div>
+            <div id="tab-5"class="tab-content">
+                {{include 'inventarios/mantenimiento.html'}}
+            </div>
+            <div id="tab-6"class="tab-content">En desarrollo</div>
+            <div id="tab-7"class="tab-content">En desarrollo</div>
+        -->   
+    
+        </div>
+        
+    </div>
+
+<!--Modal para eliminar Vehiculo-->
+<div class="modal fade" id="confirmdelete" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header" style="background-color: red;">
+              <div class="container">
+                  <i class="fas fa-trash fa-2x" style="
+                  display:block;
+                  margin-left: -16px;
+                  margin-top: 8px;
+                  color: white;
+                  "></i>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header" style="background-color: red;">
+              <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+              ">Confirmar eliminación<button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+        
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <br>
+            <form method="post" style="text-align: center;">
+                <div class="form-group">
+                    <label>Descripción de eliminación*</label>
+                    <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                    <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                </div>
+                <h4>¿Desea solicitar la eliminación de {{=vh['modelo']}} con placa {{=vh['placa']}}?</h4>
+                <br>
+                <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+            </form>
+            <br>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--Modal para oculta BM-->
+<div class="modal fade" id="confirmhide" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                  <div class="container">
+                      <i class="fas fa-eye-slash fa-2x" style="
+                      display:block;
+                      margin-left: -19px;
+                      margin-top: 12px;
+                      color: white;
+                      "></i>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Confirmar ocultar<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <br>
+                <form method="post" style="text-align: center;">
+                    <h4>¿Desea ocultar {{=vh['modelo']}} de las consultas?</h4>
+                    <br>
+                    <button type="submit button" class="btn btn-next botondelete" name="ocultar" value="True" style="text-align:center">Si</button>
+                    <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+                </form>
+                <br>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<!-- Modal añadir un BM nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container">
+                <i class="fas fa-pencil-alt fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Modificar Vehiculo<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post" onsubmit="return validar_campos()">
+ 
+                <!-- Primer paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                      <span class="step">4</span>
+                    </div>
+                    <!-- MODIFICAR BIEN ESTA AQUI-->
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del vehiculo</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+
+
+                        <div class="form-group" tag="Formato:">
+                                <label>Modelo*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el modelo del vehiculo" placeholder="Nombre*" value="{{=bien['bm_nombre']}}" required>
+                            <div class="field-error"> <p id="error-nombre"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>N° de placa</label>
+                            {{if vh['placa']==None:}}
+                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" placeholder="N° de placa">
+                            {{else:}}
+                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" value="{{=vh['placa']}}" placeholder="N° de placa">
+                            {{pass}}
+                            <font color="red"><div id="err_placa" hidden></div></font>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Marca*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vh['marca']}}" id="marca" name="marca" placeholder="Marca*" required >
+                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Año*</label>
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vh['ano']}}" id="ano" name="ano" placeholder="Año*" required >
+                            <div class="field-error"> <p id="error-ano"> </p> </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  <div style="position:fixed;bottom: 30px; right: 30px"><button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         </div>
+                  
+                </fieldset>
+                <!-- Fin Primer Paso -->
+
+                <!-- Segundo paso Parte 3-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Bien</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                                <label>Serial de carrocería*</label>
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=vh['serial_carroceria']}}" name="serial_carroceria" value="" placeholder="Serial de carrocería*" required>
+                                <div class="field-error"> <p id="error-serial_carroceria"> </p> </div>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label>Serial de motor*</label>
+                            <input type="text" class="form-control" id="serial_motor" style="text-transform:uppercase" value="{{=vh['serial_motor']}}" name="serial" placeholder="Serial de motor*" required>
+                            <div class="field-error"> <p id="error-serial_motor"> </p> </div>
+                        </div>
+ 
+
+                         
+
+
+                    </div> 
+                      </div>
+                    <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    </div>
+                    
+                  </fieldset>
+                  <!-- Fin Segundo Paso -->
+
+                  <!-- Fin segundo paso-->
+
+                  <!--Segundo Paso parte 2-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Vehículos</h4>                
+                        <label>Campos marcados con * son obligatorios</label>
+              
+                        
+          
+                        <div class="form-group">
+                            <label>Responsable*</label>
+                            <input type="text" class="form-control" id="responsable" style="text-transform:uppercase" value="{{=vh['responsable']}}" name="responsable" placeholder="responsable*" required>
+                            <div class="field-error"> <p id="error-responsable"> </p> </div>
+                        </div>
+ 
+            
+                        <div class="form-group">
+                            <label>Teléfono de Responsable*</label>
+                            <input type="text" class="form-control" id="telf_responsable" style="text-transform:uppercase" value="{{=vh['telf_responsable']}}" name="telf_responsable" placeholder="Teléfono de responsable*" required>
+                            <div class="field-error"> <p id="error-telf_responsable"> </p> </div>
+                        </div>
+ 
+                        
+
+                      </div>
+                <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm" onclick="colocar_subcategoria2(0);"><i class="fas fa-arrow-right"></i></button>       
+                </div>
+                    
+                  </fieldset>
+                  <!-- Fin segundo paso-->
+
+                <!-- Comienzo Tercer Paso Parte 1-->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                       <!-- Aqui va la informacion -->
+                       <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Vehículos</h4>                
+                        <label>Campos marcados con * son obligatorios</label>
+              
+                        
+          
+                        <div class="form-group">
+                            <label>Descripción de uso*</label>
+                            <input type="text" class="form-control" id="descripcion_uso" style="text-transform:uppercase" value="{{=vh['descripcion_uso']}}" name="descripcion_uso" placeholder="descripcion_uso*" required>
+                            <div class="field-error"> <p id="error-descripcion_uso"> </p> </div>
+                        </div>
+ 
+            
+                        <div class="form-group">
+                            <label>¿El vehículo es particular?*</label>
+                            <input type="text" class="form-control" id="es_particular" style="text-transform:uppercase" value="{{=vh['es_particular']}}" name="es_particular" placeholder="es_particular*" required>
+                            <div class="field-error"> <p id="error-es_particular"> </p> </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>¿Desea que el vehículo esté oculto?*</label>
+                            <input type="text" class="form-control" id="oculto" style="text-transform:uppercase" value="{{=vh['oculto']}}" name="es_particular" placeholder="oculto*" required>
+                            <div class="field-error"> <p id="error-oculto"> </p> </div>
+                        </div>
+
+                        
+
+                      </div>
+                    <div style="position:fixed;bottom: 30px; right: 30px">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                        <button type="submit button" form="formularioCarga" id="submit" name="modificacion" value="True" class="btn btn-submit botonForm"><i class="fas fa-pencil-alt"></i></button>
+                    </div>
+                    
+                </fieldset>
+                <!-- Fin Tercer Paso -->
+              </form>
+          </div>
+        </div>               
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fin Modal Agregar BM -->
+
+      
+      <!-- Fin Modal Agregar Mantenimiento -->
+
+<script type="text/javascript">
+
+    // Funcion para seleccionar valores de los select
+    function select_values(){
+        // selecciono valor del select de materiales
+        var material = document.getElementById("material");
+        var otro_material = document.getElementById("otro_material")
+        var value = "{{=bien['bm_material']}}"
+        var material_bool = "{{=bien['bm_material'] in material_pred}}"
+        if ( material_bool == "True"){
+            material.value = value;
+        }else{
+            material.removeAttribute("name");
+            otro_material.setAttribute("name","material");
+            material.value = "Otro"
+        }
+        //selecciono el valor del select de colores
+        var material = document.getElementById("color");
+        var otro_color = document.getElementById("otro_color")
+        var value = "{{=bien['bm_color']}}"
+        var color_bool = "{{=bien['bm_color'] in color_list}}"
+        if ( color_bool == "True"){
+            color.value = value;
+        }else{
+            color.removeAttribute("name");
+            otro_color.setAttribute("name","color");
+            color.value = "Otro color"
+        }
+    }
+
+    // Funcion para agregar otro material
+    function agregar_otro_mat(){
+        var material = document.getElementById("material")
+        var otro_material = document.getElementById("otro_material")
+        if ( material.value === "Otro" ){
+        material.removeAttribute("name");
+        otro_material.setAttribute("name","material");
+        otro_material.type =  "text";
+        }else{
+        otro_material.removeAttribute("name");
+        otro_material.type = "hidden";
+        material.setAttribute("name","material");
+        }
+    }
+
+    // Funcion para agregar otro color
+  function agregar_otro_color(){
+    var color = document.getElementById("color")
+    var otro_color = document.getElementById("otro_color")
+
+    if ( color.value === "Otro color" ){
+      color.removeAttribute("name");
+      otro_color.setAttribute("name","color");
+      otro_color.type =  "text";
+    }else{
+      otro_color.removeAttribute("name");
+      otro_color.type = "hidden";
+      color.setAttribute("name","color");
+    }
+  }
+
+    // Funcion para agregar otro servicio
+    function agregar_otro_servicio(){
+        var servicio = document.getElementById("servicio")
+        var otro_servicio = document.getElementById("otro_servicio")
+
+        if ( servicio.value === "Otro" ){
+        servicio.removeAttribute("name");
+        otro_servicio.setAttribute("name","servicio");
+        otro_servicio.type =  "text";
+        }else{
+        otro_servicio.removeAttribute("name");
+        otro_servicio.type = "hidden";
+        servicio.setAttribute("name","servicio");
+        }
+    }
+
+    // Funcion para colocar tiempo por default de ejecucion
+    function colocar_tiempo_ejec(){
+        var inicio = document.getElementById("fecha_inicio")
+        var fin = document.getElementById("fecha_fin")
+        var target = document.getElementById("tiempo_ejec")
+
+        //target.value= Math.abs(fin - inicio) / 36e5        
+        function split(time)
+        {
+            var t = time.split("-");
+            return new Date(t[0],t[1],t[2],0,0,0,0)
+        }
+
+        //value start
+        var start = split(inicio.value);
+        
+        //value end
+        var end = split(fin.value);
+
+        totalHours = NaN;
+        if (start.getTime() < end.getTime())
+        {
+            totalHours = Math.abs(end - start) / 36e5;
+        }
+        
+        target.value = totalHours;
+    }
+
+    // Funcion para mostrar campos dependendiendo de la categoria
+    function elegir_campos(){
+      var selecion = "{{=bien['bm_clasificacion']}} ";
+      if (selecion.value == "Mobiliario"){
+        document.getElementById("marca").type = 'hidden';
+        document.getElementById("modelo").type = 'hidden';
+        document.getElementById("serial").type = 'hidden';
+        document.getElementById("estatus").type = 'hidden';
+        document.getElementById("calibrar").style.display = 'none';
+      }
+      else{
+        document.getElementById("select-calibrar").setAttribute("required", "");
+        document.getElementById("marca").type = 'text';
+        document.getElementById("modelo").type = 'text';
+        document.getElementById("serial").type = 'text';
+        document.getElementById("estatus").type = 'text';
+        document.getElementById("calibrar").style.display = 'block';
+      }
+      document.getElementById("fecha_calibracion").style.display = 'none';
+    }
+  
+    // Mostrar fecha de calibracion
+    function display_date(value){
+      if ( value == "Si" ){
+        document.getElementById("fecha_calibracion").style.display = 'block';
+        document.getElementById("fecha_calibracion").setAttribute("required", "");
+      }else{
+        document.getElementById("fecha_calibracion").style.display = 'none';
+      }
+    }
+  
+    // Mostrar unidades
+    function display_units(value){
+      if ( value == '' ){
+        document.getElementById("unidad").type = 'hidden';
+        document.getElementById("ancho").type = 'hidden';
+        document.getElementById("largo").type = 'hidden';
+        document.getElementById("alto").type = 'hidden';
+        document.getElementById("diametro").type = 'hidden';
+        $('#grupo-ancho1').hide()
+        $('#grupo-largo1').hide()
+        $('#grupo-alto1').hide()
+        $('#grupo-diametro1').hide()
+      }else{
+        document.getElementById("unidad").type = 'text';
+        document.getElementById("ancho").type = 'text';
+        document.getElementById("largo").type = 'text';
+        document.getElementById("alto").type = 'text';
+        document.getElementById("diametro").type = 'text';
+        $('#grupo-ancho1').show()
+        $('#grupo-largo1').show()
+        $('#grupo-alto1').show()
+        $('#grupo-diametro1').show()
+      }
+    }
+  
+    // Valida los campos de la forma en el modal "addbm"
+    function validar_campos(){
+    console.log("alo")
+      // Buscando divs para ingresar mensajes de error
+      var error_total = document.getElementById("error-total");
+      var error_uso_interno = document.getElementById("error-uso-interno");
+      var fecha_calibracion = document.getElementById("fecha_calibracion")
+  
+      // Limpiando los mensajes <i class="fas fa-arrow-left"></i>es de validadores
+      if (error_total.innerText != ''){
+        error_total.innerText = '';
+      }
+      if (error_uso_interno.innerText != ''){
+        error_uso_interno.innerText = '';
+      }
+       
+      // Buscando los valores ingresados por el usuario en cada campo
+      var total = document.forms['formularioCarga']['total'].value;
+      var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+  
+      // Mensajes de error
+      var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+      var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+      var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+      var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+  
+      /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+      if (!is_number(total)) {
+        error_total.innerText = mensaje_error_tipo;
+        return false;
+      }
+      
+      if (is_negative(total)) {
+        error_total.innerText = mensaje_error_negativo;
+        return false;
+      }
+  
+      if (is_zero(total)) {
+        error_total.innerText = mensaje_error_nulo;
+        return false;
+      }
+  
+      /* Validando el campo uso_interno */
+      if (!is_number(uso_interno)) {
+        error_uso_interno.innerText = mensaje_error_tipo;
+        return false;
+      }
+      
+      if (is_negative(uso_interno)) {
+        error_uso_interno.innerText = mensaje_error_negativo;
+        return false;
+      }
+      // La cantidad de sustancia para uso interno no puede ser mayor al total
+      if (uso_interno > total) {
+        error_uso_interno.innerText = mensaje_error_uso_interno;
+        return false;
+      }
+  
+    }
+  
+    // True si "n" es un numero
+    function is_number(n){
+      return !isNaN(n);
+    }
+  
+    // True si "n" es negativo
+    function is_negative(n){
+      return (n < 0)
+    }
+  
+    // True si "n" es cero
+    function is_zero(n){
+      return (n == 0)
+    }
+  
+    function placeholder_localizacion(value){
+      var x = document.getElementById("cod_loc");
+      var y = document.getElementById("localizacion");
+  
+  
+      if (value  =='Edo Miranda, Municipio Baruta, Parroquia Baruta'){
+        x.placeholder = '150301';
+        x.value = '150301';
+      }else{;
+        x.placeholder ='240107';
+        x.value = '240107';
+  
+      }
+    }
+
+    function colocar_subcategoria2(indicador){
+    value = document.getElementById('categoria').value;
+      var dict = {
+        'Maquinaria y demás equipos de construcción, campo, industria y taller':
+			["Maquinaria y equipos de construcción y mantenimiento",
+			"Maquinarias y equipos para mantenimiento de automotores",
+			"Maquinarias y equipos agrícolas y pecuarios",
+			"Maquinarias y equipos de artes gráficas y reproducción",
+			"Maquinarias y equipos industriales y de taller",
+			"Maquinarias y equipos de energía",
+			"Maquinarias y equipos de riego y acueductos",
+			"Equipos de almacen",
+			"Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+		"Equipos de transporte, tracción y elevación":
+			["Vehículos automotores terrestres",
+			"Equipos ferroviarios y de cables aéreos",
+			"Equipos marítimos de transporte",
+			"Equipos aéreos de transporte",
+			"Vehículos de tracción no motorizados",
+			"Equipos auxiliares de transporte",
+			"Otros equipos de transporte, tracción y elevación"],
+		"Equipos de comunicaciones y de señalamiento":
+			["Equipos de telecomunicaciones",
+			"Equipos de señalamiento",
+			"Equipos de control de tráfico aéreo",
+			"Equipos de correo",
+			"Otros equipos de comunicaciones y de señalamiento"],
+		"Equipos médicos - quirúrgicos, dentales y veterinarios":
+			["Equipos médicos - quirúrgicos, dentales y veterinarios",
+			"Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+		"Equipos científicos, religiosos, de enseñanza y recreación":
+			["Equipos científicos y de laboratorio",
+			"Equipos de enseñanza, deporte y recreación",
+			"Obras de arte",
+			"Libros y revistas",
+			"Equipos religiosos",
+			"Instrumentos musicales",
+			"Otros equipos científicos, religiosos, de enseñanza y recreación"],
+		"Máquinas, muebles y demás equipos de oficina y de alojamiento" : 
+			["Mobiliario y equipos de oficina",
+			"Equipos de procesamiento de datos",
+			"Mobiliario y equipos de alojamiento",
+			"Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+    var n = 1;
+    var x;
+    var y = document.getElementById("numRegistro2");
+  
+    if (indicador == '1' || indicador == '2'){
+        var z = document.getElementById('Opcion0');
+        z.value = '';
+        z.innerHTML = 'Seleccione una opcion';
+        if (indicador == '2'){
+            z.selected = true;
+        }
+    }
+
+    if (value != ""){
+      for (var i in dict[value]){
+        x = document.getElementById("Opcion".concat(n.toString()));
+        x.innerText = dict[value][i];
+        x.style.display= "block";
+        $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+        $('#Opcion'.concat(n.toString())).show();
+        x.value = dict[value][i];
+        n = n + 1;  
+      }
+      while (n <= 9){
+        x = document.getElementById("Opcion".concat(n.toString()));
+        //x.innerText = "";
+        //x.style.display = "none";
+        $('#Opcion'.concat(n.toString())).hide();
+        $('#Opcion'.concat(n.toString())).html("");
+        x.value = "";
+        n = n +1;
+        
+      }
+      
+    }
+  }
+  </script>
+  <script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+      </script>
+
+<script>
+
+        var filtros = false;
+      
+        $(document).ready(function() {
+            // Setup - add a text input to each footer cell
+            $('#datatable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Filtro" />' );
+            } );
+         
+            // DataTable
+            var table = $('#datatable').DataTable();
+         
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+         
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+      
+            $('#datatable tfoot tr').appendTo('#datatable thead');
+            $("#datatable thead tr").not("#titulosListado").css("display","none");
+        } );
+      
+        function mostrarFiltro() {
+            if (filtros){
+              $("#datatable thead tr").not("#titulosListado").css("display","none");
+              filtros = false
+            }
+            else{
+              $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+              filtros = true
+            }
+      
+        }
+      </script>
+       
+       <script language="javascript">
+    
+            var table = $('#datatable').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            "columnDefs": [
+                { "width": "30%", "targets": 0, className: 'dt-body-left' },
+                { "width": "10%", "targets": [1,2,3] }
+            ],
+            initComplete: function(){
+                var api = this.api();
+        
+                new $.fn.dataTable.Buttons(api, {
+                buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+        
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-save"></i>',
+                        className: 'boton-sigulab',
+                        buttons: [
+                            { extend:'copy', text: 'Copiar' } ,
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]
+                    },
+                    { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                ]
+                });
+                //$('#botonModal').addClass('pull-left')
+                $('#filtrar').addClass('pull-left');
+                $('#espacioBuscar').addClass('pull-left');
+        
+        
+                $('.dataTables_filter').appendTo('#buttons');
+        
+                api.buttons().container().appendTo('#buttons');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('.dt-buttons').append($('#filtrar'));
+                $('#buttons').append('<br><br>');
+                $('.dataTables_info').addClass('pull-right');
+                $('.dataTables_filter').addClass('pull-left');
+        
+                $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable_next').html('<span class="fa fa-arrow-right" />');
+                
+            }
+            });
+    
+        </script>
+
+  {{end}}
