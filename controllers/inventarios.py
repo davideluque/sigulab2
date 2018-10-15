@@ -864,7 +864,6 @@ def index():
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def vehiculos():
-    #return "Esta es la vista de vehiculos"
 # Inicializando listas de espacios fisicos y dependencias
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
@@ -879,11 +878,7 @@ def vehiculos():
     inventario = []
     
     # Elementos que deben ser mostrados como una lista en el modal
-    # de agregar BM
-    material_pred = []
-    color = []
-    unidad_med = []
-    movilidad = []
+    # de agregar vehículo
     uso = []
     nombre_cat = []
     cod_localizacion = []
@@ -949,11 +944,6 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_vh_dep(dep_padre_id)
     
-                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
-                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
-                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
-                unidad_med = ['cm', 'm']
-                movilidad = ['Fijo', 'Portátil']
                 uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
@@ -1044,11 +1034,6 @@ def vehiculos():
             # Busca el inventario del espacio
             inventario = __get_vh_dep(dep_padre_id)
 
-            material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
-            color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
-            'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
-            unidad_med = ['cm', 'm']
-            movilidad = ['Fijo', 'Portátil']
             uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
@@ -1140,11 +1125,6 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                material_pred = ['Acero', 'Acrílico', 'Madera', 'Metal', 'Plástico', 'Tela', 'Vidrio', 'Otro']
-                color = ['Amarillo', 'Azul', 'Beige', 'Blanco', 'Dorado', 'Gris', 'Madera', 'Marrón', 'Mostaza', 'Naranja',
-                'Negro', 'Plateado', 'Rojo', 'Rosado', 'Verde', 'Vinotinto', 'Otro color']
-                unidad_med = ['cm', 'm']
-                movilidad = ['Fijo', 'Portátil']
                 uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
@@ -1211,6 +1191,7 @@ def vehiculos():
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
             inventario = __get_vh_dep(dep_id)
+
     return str(inventario)
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1223,14 +1204,10 @@ def vehiculos():
                 es_tecnico=es_tecnico,
                 inventario=inventario,
                 retroceder=retroceder,
-                material_pred = material_pred,
-                color_list = color,
-                unidad_med = unidad_med,
-                movilidad_list = movilidad,
-                uso_list = uso,
-                nombre_cat = nombre_cat,
-                cod_localizacion = cod_localizacion,
-                localizacion = localizacion,
+                uso_list=uso,
+                nombre_cat=nombre_cat,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion,
                 ) 
 
 @auth.requires(lambda: __check_role())
