@@ -410,3 +410,49 @@ db.define_table(
     
 db.vehiculo.vh_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.vehiculo.vh_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+
+db.define_table(
+    'modificacion_vehiculo',
+    # Datos de identificación
+    Field('mvh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('mvh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('mvh_ano', 'integer', notnull=True, label=T('Año del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('mvh_serial_motor','string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
+    Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
+    Field('mvh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
+    
+    # Descripción de uso
+    Field('mvh_descripcion','text', label=T('Descripción')),
+    
+    # Datos del responsable
+    # PENDIENTE: Referenciar usuarios de la BD aquí
+    Field('mvh_responsable','string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('mvh_telf_responsable','string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+
+    # Estatus de préstamo o mantenimiento
+    Field('mvh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
+    
+    # Estado = 0 : No es particular
+    # Estado = 1 : Es particular
+    Field('mvh_es_particular','integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
+    
+    # Estado = 0 : Visible
+    # Estado = 1 : Oculto
+    Field('mvh_oculto','integer', default=0, label=T('Visibilidad del vehículo'), requires=IS_INT_IN_RANGE(0,2)),
+
+    # Foráneas
+    Field('mvh_depedencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
+    Field('mvh_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
+    Field('mvh_motivo', 'string', length = 140, label = T('Motivo de la modificacion')),
+    # Estado = -1 :Denegado
+    # Estado = 0  :Por validación
+    # Estado = 1  :Aceptado
+    Field('mvh_estado','integer', default=0, label=T('Estado de Solicitud de Modificacion'), requires=IS_EMPTY_OR(IS_INT_IN_RANGE(-1,2)))
+    )
+
+db.modificacion_vehiculo.mvh_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+db.modificacion_vehiculo.mvh_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+# PENDIENTE: Verificar la siguiente restriccion
+db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
+
+# PENDIENTE: mantenimiento_vehiculos historial_mantenimiento_vh
