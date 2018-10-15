@@ -221,9 +221,9 @@ def __get_inventario_herramientas_dep(dep_id):
 
     return inventario
 
-# Dado el id de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
-def __get_mantenimiento_vh(id=None):
-    return db(db.historial_mantenimiento_vh.hmvh_placa == id).select()
+# Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
+def __get_mantenimiento_vh(placa=None):
+    return db(db.historial_mantenimiento_vh.hmvh_placa == placa).select()
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
@@ -1732,7 +1732,14 @@ def detalles_vehiculo():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     vh = request.vars['vh']
-    vehi = db(db.vehiculo.vh_placa == vh).select()[0]
+
+    try:
+        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
+    except IndexError:
+        # PENDIENTE: Transformar esto en una vista de control
+        # de errores
+        return "El vehiculo solicitado no existe."
+
     mantenimiento = __get_mantenimiento_vh(vh)
 
     # Si se elimina
