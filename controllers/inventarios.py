@@ -2129,7 +2129,9 @@ def detalles_vehiculo():
         request.vars.ocultar = None
 
     # Si solo estoy cargando la vista
-    # PENDIENTE: Retornar el dicccionario adecuado
+    return dict(vh=vehi, 
+                mantenimiento=mantenimiento
+                )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
