@@ -58,7 +58,7 @@
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo">
-	<h3 class="dep-titulo">INVENTARIO DE BIENES MUEBLES</h3>
+	<h3 class="dep-titulo">INVENTARIO DE VEHICULOS</h3>
 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
 		{{ dep_padre_nombre = 'ULAB'}}
 	{{ pass }}
@@ -131,10 +131,7 @@
 	<div class="container">
 		<div id="fila1" class="row">
 		</div>
-		{{ if espacios: }}
-			{{ title = "Espacio Físico" }}
-			{{dependencias = espacios}}
-		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
+		{{ if dep_nombre.find("DIRECCIÓN") != -1: }}
 			{{ title = "Dependencia" }}
 		{{else: }}
 			{{ title = "Secciones" }}
@@ -165,20 +162,18 @@
 
 <!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
 
-<!-- Inicio de la seccion con la lista de sustancias en el inventario --> 
 
-	<!-- Se lista el inventario del espacio fisico visitado -->
-	{{if espacio_visitado:}}
-		{{include 'inventarios/inventario_espacio.html'}}
+
+
 	<!-- Se lista el inventario de una dependencia de apoyo -->
-	{{elif (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_seccion.html'}}
+	{{if (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
+		{{include 'inventarios/inventario_dependencia_v.html'}}
 	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
-	{{elif (dep_nombre.find("DIRECCIÓN") != -1 or dep_nombre.find("LABORATORIO") != -1):}}
-		{{include 'inventarios/inventario_laboratorio.html'}}
+	<!--{{elif (dep_nombre.find("DEPENDENCIA") != -1 or dep_nombre.find("") != -1):}}
+		{{include 'inventarios/inventario_laboratorio.html'}}-->
 	<!-- Se lista el inventario de una seccion -->
-	{{else:}}
-		{{include 'inventarios/inventario_seccion.html'}}
+	<!--{{else:}}
+		{{include 'inventarios/inventario_seccion.html'}}-->
 	{{pass}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
