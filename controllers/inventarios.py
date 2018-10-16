@@ -1197,7 +1197,7 @@ def vehiculos():
 
     # PENDIENTE: Super refactoizar
     if request.vars.dependencia:
-        inventario = __get_vh_dep(request.vars.dependencia)
+        inventario = __get_vh_dep(int(request.vars.dependencia))
     else:
         inventario = db(db.vehiculo.id).select()
 
