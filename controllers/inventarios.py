@@ -2128,10 +2128,33 @@ def detalles_vehiculo():
             response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
         request.vars.ocultar = None
 
+    caracteristicas_list = [ 
+        'Marca:',
+        'Modelo:',
+        'Año:',
+        'Serial de motor:',
+        'Serial de carroceria:',
+        'Placa:',
+        'Descripción de uso:',
+    ]
+
+    caracteristicas_dict = {
+        'Marca:': vehi['vh_marca'],
+        'Modelo:': vehi['vh_modelo'],
+        'Año:': vehi['vh_ano'],
+        'Serial de motor:': vehi['vh_serial_motor'],
+        'Serial de carroceria:': vehi['vh_serial_carroceria'],
+        'Placa:': vehi['vh_placa'],
+        'Descripción de uso:': vehi['vh_descripcion'],
+    }
+
     # Si solo estoy cargando la vista
-    return dict(vh=vehi, 
-                mantenimiento=mantenimiento
-                )
+    return dict(
+        vehiculo=vehi, 
+        mantenimiento=mantenimiento,
+        caracteristicas_list=caracteristicas_list,
+        caracteristicas_dict=caracteristicas_dict
+    )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
