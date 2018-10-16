@@ -31,23 +31,21 @@
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
 <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
 {{end}}
-<!--
+
 {{block center}}
     {{ if request.vars.delete: }}
     <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
     {{pass}}
-    <h3 class="dep-titulo text-center">{{=bien['bm_nombre']}}</h3>
-    <h4 class="dep-titulo text-center">N/B: {{=bien['bm_num']}}</h4>
-    {{ if bien['bm_placa']!=None and bien['bm_placa']!="": }}
-        <h4 class="dep-titulo text-center">Placa: {{=bien['bm_placa']}}</h4>
-    {{pass}}
+    <h3 class="dep-titulo text-center">{{=vh['vh_marca']}} {{=vh['vh_modelo']}} </h3>
+    <h4 class="dep-titulo text-center">Año: {{=vh['vh_ano']}}</h4>
+    <h4 class="dep-titulo text-center">Placa: {{=vh['vh_placa']}}</h4>
     {{ if request.vars.delete: }}
-        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['bm_desc_eliminar'].upper()}}</h4>
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vh['vh_desc_eliminar'].upper()}}</h4>
     {{ pass }}
 
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
--->
+
 
 <!-- Inicio Boton Modificar VEHICULO -->
 <div class="container" id="containerAgregar">
@@ -136,42 +134,22 @@
                             {{pass}}
                         </div>
                 </div>
-            </div>
-<!--    
-        
-            <div id="tab-2" class="tab-content">
-                <div class="grid-container">
-                {{ for title in sudebid_list: }}
-                    <div class="grid-item">
-                        {{=title}}
-                    </div>
-                    <div class="grid-item">
-                        {{= sudebid_dict.get(title)}}
-                    </div>
-                {{ pass }}
-                </div>
-            </div>
-    
+            </div>   
+   
             <div id="tab-3"class="tab-content">En desarrollo</div>
             <div id="tab-4"class="tab-content">
                 <div class="grid-container">
                     <div class="grid-item">
-                        Espacio físico:
-                    </div>
-                    <div class="grid-item">
-                        {{=db(db.espacios_fisicos.id == bien['bm_espacio_fisico']).select().first().codigo}}
-                    </div>
-                    <div class="grid-item">
-                        Unidad de Adscripción:
-                    </div>
-                    <div class="grid-item">
-                        {{=db(db.dependencias.id == bien['bm_unidad_de_adscripcion']).select().first().nombre}}
-                    </div>
-                    <div class="grid-item">
                         Dependencia:
                     </div>
                     <div class=grid-item>
-                        {{=db(db.dependencias.id == bien['bm_depedencia']).select().first().nombre}}
+                        {{=db(db.dependencias.id == vh['vh_depedencia']).select().first().nombre}}
+                    </div>
+                    <div class="grid-item">
+                        Lugar de pernocta:
+                    </div>
+                    <div class="grid-item">
+                        PENDIENTE
                     </div>
                 </div>
             </div>
@@ -179,8 +157,7 @@
                 {{include 'inventarios/mantenimiento.html'}}
             </div>
             <div id="tab-6"class="tab-content">En desarrollo</div>
-            <div id="tab-7"class="tab-content">En desarrollo</div>
-        -->   
+
     
         </div>
         
