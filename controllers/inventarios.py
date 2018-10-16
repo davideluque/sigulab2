@@ -942,8 +942,6 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                #perro
-
                 # Busca el inventario del espacio
                 inventario = __get_vh_dep(dep_padre_id)
     
@@ -1196,6 +1194,12 @@ def vehiculos():
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
             inventario = __get_vh_dep(dep_id)
+
+    # PENDIENTE: Super refactoizar
+    if request.vars.dependencia:
+        inventario = __get_vh_dep(request.vars.dependencia)
+    else:
+        inventario = db(db.vehiculo.id).select()
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
