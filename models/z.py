@@ -759,8 +759,7 @@ if db(db.vehiculo).isempty():
     user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
     dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
     db.vehiculo.insert(
-        vh_marca="acme", vh_modelo="botemovil invisible", vh_ano=2001, vh_serial_motor="24", vh_serial_carroceria="25",
-        vh_placa="42", vh_descripcion="es invisible", vh_responsable="Sirenoman", vh_telf_responsable="5555555",
-        vh_depedencia=dep,
-        vh_crea_ficha=user
+        vh_marca="Chevrolet", vh_modelo="Wagon R+", vh_ano=2002, vh_serial_motor="S3R14LM0T0R1", vh_serial_carroceria="S3R14LC4RR0C3R14",
+        vh_placa="GBX73F", vh_descripcion="Camioneta de transporte", vh_responsable="Juan Reyes", vh_telf_responsable="0424-4257227",
+        vh_depedencia=dep, vh_crea_ficha=user, vh_lugar_pernocta="Estacionamiento de ENE"
         )

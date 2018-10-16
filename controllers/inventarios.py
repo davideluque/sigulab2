@@ -289,8 +289,8 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
-                 descripcion, responsable, telf_responsable, dependencia, user,
-                 es_particular=0, oculto=0):
+                 descripcion, lugar_pernocta, responsable, telf_responsable, 
+                 dependencia, user, es_particular=0, oculto=0):
 
     # Si ya existe el BM en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
@@ -309,6 +309,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa,
         vh_serial_carroceria=serial_carroceria,
         vh_placa=placa,
         vh_descripcion=descripcion,
+        vh_lugar_pernocta=lugar_pernocta,
         vh_responsable=responsable,
         vh_telf_responsable=telf_responsable,
         vh_es_particular=es_particular,
@@ -588,7 +589,8 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
 # Funcion para agregar una modificacion pendiente a un vehiculo
 def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroceria, 
                                 marca, responsable, telf_responsable, dependencia,
-                                descripcion_uso, user, es_particular=0, oculto=0):
+                                descripcion_uso, lugar_pernocta, user, es_particular=0, 
+                                oculto=0):
 
     # Si ya existe una modificacion pendiente al vehiculo
     if (db(db.modificacion_vehiculo.mvh_placa == placa).select()):
@@ -598,19 +600,20 @@ def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroc
         return False
     
     inv_id = db.modificacion_vehiculo.insert(
-            mvh_placa = placa,
-            mvh_modelo = modelo,
-            mvh_ano = ano,
-            mvh_serial_motor = serial_motor,
-            mvh_serial_carroceria = serial_carroceria,
-            mvh_marca = marca,
-            mvh_responsable = responsable,
-            mvh_telf_responsable = telf_responsable,
-            mvh_dependencia = dependencia,
-            mvh_es_particular = es_particular,
-            mvh_descripcion = descripcion_uso,
-            mvh_oculto = oculto,
-            mvh_modifica_ficha = user
+            mvh_placa=placa,
+            mvh_modelo=modelo,
+            mvh_ano=ano,
+            mvh_serial_motor=serial_motor,
+            mvh_serial_carroceria=serial_carroceria,
+            mvh_marca=marca,
+            mvh_responsable=responsable,
+            mvh_telf_responsable=telf_responsable,
+            mvh_dependencia=dependencia,
+            mvh_es_particular=es_particular,
+            mvh_descripcion=descripcion_uso,
+            mvh_lugar_pernocta=lugar_pernocta,
+            mvh_oculto=oculto,
+            mvh_modifica_ficha=user
 
         )
     db.bitacora_general.insert(
@@ -955,9 +958,11 @@ def vehiculos():
                 if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
                     __agregar_vh(
                         request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
-                        request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion,
-                        request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia,
-                        request.vars.user, request.vars.es_particular, request.vars.oculto)
+                        request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion, 
+                        request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
+                        request.vars.dependencia, request.vars.user, request.vars.es_particular, 
+                        request.vars.oculto
+                    )
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1046,8 +1051,8 @@ def vehiculos():
                 __agregar_vh(
                     request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
                     request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion,
-                    request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia,
-                    request.vars.user, request.vars.es_particular, request.vars.oculto)
+                    request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
+                    request.vars.dependencia, request.vars.user, request.vars.es_particular, request.vars.oculto)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -2113,7 +2118,7 @@ def detalles_vehiculo():
             vehiculo.vh_placa, request.vars.modelo, request.vars.ano,
             request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
             request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, 
-            request.vars.descripcion_uso, request.vars.es_particular, request.vars.oculto, user_id)
+            request.vars.descripcion_uso, request.vars.lugar_pernocta, request.vars.es_particular, request.vars.oculto, user_id)
 
         request.vars.modificacion = None
         session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."

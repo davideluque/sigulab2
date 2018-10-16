@@ -377,7 +377,8 @@ db.define_table(
     Field('vh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     
     # Descripción de uso
-    Field('vh_descripcion','text', label=T('Descripción')),
+    Field('vh_descripcion','text', notnull=True, default="", label=T('Descripción')),
+    Field('vh_lugar_pernocta','string', notnull=True, default="", label=T('Lugar de pernocta')),
     
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
@@ -422,7 +423,8 @@ db.define_table(
     Field('mvh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     
     # Descripción de uso
-    Field('mvh_descripcion','text', label=T('Descripción')),
+    Field('mvh_descripcion','text', notnull=True, default="", label=T('Descripción')),
+    Field('mvh_lugar_pernocta','string', notnull=True, default="", label=T('Lugar de pernocta')),
     
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
