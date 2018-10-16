@@ -1197,7 +1197,6 @@ def vehiculos():
             # pertenecen a la dependencia del usuario
             inventario = __get_vh_dep(dep_id)
 
-    return str(inventario)
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
                 espacios=espacios, 
