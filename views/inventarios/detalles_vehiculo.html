@@ -36,11 +36,11 @@
     {{ if request.vars.delete: }}
     <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
     {{pass}}
-    <h3 class="dep-titulo text-center">{{=vh['vh_marca']}} {{=vh['vh_modelo']}} </h3>
-    <h4 class="dep-titulo text-center">Año: {{=vh['vh_ano']}}</h4>
-    <h4 class="dep-titulo text-center">Placa: {{=vh['vh_placa']}}</h4>
+    <h3 class="dep-titulo text-center">{{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} </h3>
+    <h4 class="dep-titulo text-center">Año: {{=vehiculo['vh_ano']}}</h4>
+    <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
     {{ if request.vars.delete: }}
-        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vh['vh_desc_eliminar'].upper()}}</h4>
+        <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vehiculo['vh_desc_eliminar'].upper()}}</h4>
     {{ pass }}
 
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
@@ -107,13 +107,13 @@
                       Responsable: 
                 </div>
                 <div class="grid-item">
-                      {{=vh['vh_responsable']}}
+                      {{=vehiculo['vh_responsable']}}
                 </div>
                 <div class="grid-item">
                       Tlf. de Responsable:
                 </div>
                 <div class="grid-item">
-                       {{=vh['vh_telf_responsable']}}
+                       {{=vehiculo['vh_telf_responsable']}}
                 </div>
                 <div class="grid-item">
                       Es particular:
@@ -194,7 +194,7 @@
                     <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
                     <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
                 </div>
-                <h4>¿Desea solicitar la eliminación de {{=vh['vh_marca']}} {{=vh['vh_modelo']}} con placa {{=vh['vh_placa']}}?</h4>
+                <h4>¿Desea solicitar la eliminación de {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} con placa {{=vehiculo['vh_placa']}}?</h4>
                 <br>
                 <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
                 <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
@@ -241,7 +241,7 @@
             <div class="modal-body addBody">
                 <br>
                 <form method="post" style="text-align: center;">
-                    <h4>¿Desea ocultar o desocultar {{=vh['vh_marca']}} {{=vh['vh_modelo']}} de las consultas?</h4>
+                    <h4>¿Desea ocultar o desocultar {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} de las consultas?</h4>
                     <br>
                     <button type="submit button" class="btn btn-next botondelete" name="ocultar" value="True" style="text-align:center">Si</button>
                     <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
@@ -308,7 +308,7 @@
 
                         <div class="form-group" tag="Formato:">
                                 <label>Modelo*</label>
-                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el modelo del vehiculo" placeholder="Nombre*" value="{{=vh['vh_modelo']}}" required>
+                            <input type="text" class="form-control" style="text-transform:uppercase" id="nombre" name="nombre" title="Ingrese el modelo del vehiculo" placeholder="Nombre*" value="{{=vehiculo['vh_modelo']}}" required>
                             <div class="field-error"> <p id="error-nombre"> </p> </div>
                         </div>
 
@@ -317,20 +317,20 @@
                             {{if vh['vh_placa']==None:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" placeholder="N° de placa">
                             {{else:}}
-                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" value="{{=vh['vh_placa']}}" placeholder="N° de placa">
+                                <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" value="{{=vehiculo['vh_placa']}}" placeholder="N° de placa">
                             {{pass}}
                             <font color="red"><div id="err_placa" hidden></div></font>
                         </div>
 
                         <div class="form-group">
                             <label>Marca*</label>
-                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vh['vh_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vehiculo['vh_marca']}}" id="marca" name="marca" placeholder="Marca*" required >
                             <div class="field-error"> <p id="error-marca"> </p> </div>
                         </div>
 
                         <div class="form-group">
                             <label>Año*</label>
-                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vh['vh_ano']}}" id="ano" name="ano" placeholder="Año*" required >
+                            <input type="text" class="form-control" style="text-transform:uppercase" value="{{=vehiculo['vh_ano']}}" id="ano" name="ano" placeholder="Año*" required >
                             <div class="field-error"> <p id="error-ano"> </p> </div>
                         </div>
 
@@ -358,14 +358,14 @@
 
                         <div class="form-group">
                                 <label>Serial de carrocería*</label>
-                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=vh['vh_serial_carroceria']}}" name="serial_carroceria" value="" placeholder="Serial de carrocería*" required>
+                                <input type="text" class="form-control" style="text-transform:uppercase" id="modelo" value="{{=vehiculo['vh_serial_carroceria']}}" name="serial_carroceria" value="" placeholder="Serial de carrocería*" required>
                                 <div class="field-error"> <p id="error-serial_carroceria"> </p> </div>
                             
                         </div>
 
                         <div class="form-group">
                             <label>Serial de motor*</label>
-                            <input type="text" class="form-control" id="serial_motor" style="text-transform:uppercase" value="{{=vh['vh_serial_motor']}}" name="serial" placeholder="Serial de motor*" required>
+                            <input type="text" class="form-control" id="serial_motor" style="text-transform:uppercase" value="{{=vehiculo['vh_serial_motor']}}" name="serial" placeholder="Serial de motor*" required>
                             <div class="field-error"> <p id="error-serial_motor"> </p> </div>
                         </div>
  
@@ -404,14 +404,14 @@
           
                         <div class="form-group">
                             <label>Responsable*</label>
-                            <input type="text" class="form-control" id="responsable" style="text-transform:uppercase" value="{{=vh['vh_responsable']}}" name="responsable" placeholder="responsable*" required>
+                            <input type="text" class="form-control" id="responsable" style="text-transform:uppercase" value="{{=vehiculo['vh_responsable']}}" name="responsable" placeholder="responsable*" required>
                             <div class="field-error"> <p id="error-responsable"> </p> </div>
                         </div>
  
             
                         <div class="form-group">
                             <label>Teléfono de Responsable*</label>
-                            <input type="text" class="form-control" id="telf_responsable" style="text-transform:uppercase" value="{{=vh['vh_telf_responsable']}}" name="telf_responsable" placeholder="Teléfono de responsable*" required>
+                            <input type="text" class="form-control" id="telf_responsable" style="text-transform:uppercase" value="{{=vehiculo['vh_telf_responsable']}}" name="telf_responsable" placeholder="Teléfono de responsable*" required>
                             <div class="field-error"> <p id="error-telf_responsable"> </p> </div>
                         </div>
  
@@ -447,20 +447,20 @@
           
                         <div class="form-group">
                             <label>Descripción de uso*</label>
-                            <input type="text" class="form-control" id="descripcion_uso" style="text-transform:uppercase" value="{{=vh['vh_descripcion']}}" name="descripcion_uso" placeholder="descripcion_uso*" required>
+                            <input type="text" class="form-control" id="descripcion_uso" style="text-transform:uppercase" value="{{=vehiculo['vh_descripcion']}}" name="descripcion_uso" placeholder="descripcion_uso*" required>
                             <div class="field-error"> <p id="error-descripcion_uso"> </p> </div>
                         </div>
  
             
                         <div class="form-group">
                             <label>¿El vehículo es particular?*</label>
-                            <input type="text" class="form-control" id="es_particular" style="text-transform:uppercase" value="{{=vh['vh_es_particular']}}" name="es_particular" placeholder="es_particular*" required>
+                            <input type="text" class="form-control" id="es_particular" style="text-transform:uppercase" value="{{=vehiculo['vh_es_particular']}}" name="es_particular" placeholder="es_particular*" required>
                             <div class="field-error"> <p id="error-es_particular"> </p> </div>
                         </div>
                         
                         <div class="form-group">
                             <label>¿Desea que el vehículo esté oculto?*</label>
-                            <input type="text" class="form-control" id="oculto" style="text-transform:uppercase" value="{{=vh['vh_oculto']}}" name="es_particular" placeholder="oculto*" required>
+                            <input type="text" class="form-control" id="oculto" style="text-transform:uppercase" value="{{=vehiculo['vh_oculto']}}" name="es_particular" placeholder="oculto*" required>
                             <div class="field-error"> <p id="error-oculto"> </p> </div>
                         </div>
 
