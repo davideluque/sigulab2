@@ -166,15 +166,7 @@
 
 
 	<!-- Se lista el inventario de una dependencia de apoyo -->
-	{{if (dep_nombre.find("COORDINACIÒN") != -1 or dep_nombre.find("UNIDAD") != -1):}}
-		{{include 'inventarios/inventario_dependencia_v.html'}}
-	<!-- Se lista el inventario de la direccion o jefatura de laboratorio-->
-	<!--{{elif (dep_nombre.find("DEPENDENCIA") != -1 or dep_nombre.find("") != -1):}}
-		{{include 'inventarios/inventario_laboratorio.html'}}-->
-	<!-- Se lista el inventario de una seccion -->
-	<!--{{else:}}
-		{{include 'inventarios/inventario_seccion.html'}}-->
-	{{pass}}
+	{{include 'inventarios/inventario_dependencia_v.html'}}
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
@@ -264,8 +256,6 @@
 		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
 	  },
 	  "columnDefs": [
-		{ "width": "30%", "targets": 0 , className: 'dt-body-left'},
-		{ "width": "10%", "targets": [1,2,3] }
 	  ],
 	 initComplete: function(){
 		var api = this.api();
