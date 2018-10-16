@@ -80,7 +80,7 @@
         <div class="tab-wrapper">
             <ul class="tabs">
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
-                    <li class="tab-link" data-tab="3">DATOS ADQUISICIÓN</li>
+                    <li class="tab-link" data-tab="3"><br>RESPONSABLE</li>
                     <li class="tab-link" data-tab="4"><br>UBICACIÓN</li>
                     <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
                     <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
@@ -104,7 +104,11 @@
                             {{pass}} 
                         </div>
                     {{ pass }}
-                        <div class="grid-item">                        
+                        <div class="grid-item">
+                            {{if vh['vh_marca'] != None:}}
+                                Marca: {{=vh['vh_marca']}}
+                                <br>
+                            {{pass}}                     
                             {{if vh['vh_modelo'] != None:}}
                                 Modelo: {{=vh['vh_modelo']}}
                                 <br>
@@ -113,37 +117,58 @@
                                 Año: {{=vh['vh_ano']}}
                                 <br>
                             {{pass}}
-                            {{if vh['vh_marca'] != None:}}
-                                Marca: {{=vh['vh_marca']}}
+                            {{if vh['vh_serial_motor'] != None:}}
+                                Seria de motor: {{=vh['vh_serial_motor']}}
                                 <br>
                             {{pass}}
                             {{if vh['vh_serial_carroceria'] != None:}}
                                 Seria de carrocería: {{=vh['vh_serial_carroceria']}}
                                 <br>
                             {{pass}}
-                            {{if vh['vh_serial_motor'] != None:}}
-                                Seria de motor: {{=vh['vh_serial_motor']}}
+                            {{if vh['vh_placa'] != None:}}
+                                Placa: {{=vh['vh_placa']}}
                                 <br>
                             {{pass}}
-                            {{if vh['vh_responsable'] != None:}}
-                                Responsable: {{=vh['vh_responsable']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_telf_responsable'] != None:}}
-                                Tlf. de Responsable: {{=vh['vh_telf_responsable']}}
+                            {{if vh['vh_descripcion'] != None:}}
+                                Descripcion de uso: {{=vh['vh_descripcion']}}
                                 <br>
                             {{pass}}
                         </div>
                 </div>
             </div>   
    
-            <div id="tab-3"class="tab-content">En desarrollo</div>
+            <div id="tab-3"class="tab-content">
+              <div class="grid-container">
+                <div class="grid-item">
+                      Responsable: 
+                </div>
+                <div class="grid-item">
+                      {{=vh['vh_responsable']}}
+                </div>
+                <div class="grid-item">
+                      Tlf. de Responsable:
+                </div>
+                <div class="grid-item">
+                       {{=vh['vh_telf_responsable']}}
+                </div>
+                <div class="grid-item">
+                      Es particular:
+                </div>
+                <div class="grid-item">
+                  {{if vh['vh_es_particular'] == 1:}}
+                      SI
+                  {{else:}}
+                      NO
+                  {{pass}}
+                </div>
+              </div>
+            </div>
             <div id="tab-4"class="tab-content">
                 <div class="grid-container">
                     <div class="grid-item">
                         Dependencia:
                     </div>
-                    <div class=grid-item>
+                    <div class="grid-item">
                         {{=db(db.dependencias.id == vh['vh_depedencia']).select().first().nombre}}
                     </div>
                     <div class="grid-item">
