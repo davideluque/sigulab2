@@ -502,30 +502,7 @@
 
     // Funcion para seleccionar valores de los select
     function select_values(){
-        // selecciono valor del select de materiales
-        var material = document.getElementById("material");
-        var otro_material = document.getElementById("otro_material")
-        var value = "{{=bien['bm_material']}}"
-        var material_bool = "{{=bien['bm_material'] in material_pred}}"
-        if ( material_bool == "True"){
-            material.value = value;
-        }else{
-            material.removeAttribute("name");
-            otro_material.setAttribute("name","material");
-            material.value = "Otro"
-        }
-        //selecciono el valor del select de colores
-        var material = document.getElementById("color");
-        var otro_color = document.getElementById("otro_color")
-        var value = "{{=bien['bm_color']}}"
-        var color_bool = "{{=bien['bm_color'] in color_list}}"
-        if ( color_bool == "True"){
-            color.value = value;
-        }else{
-            color.removeAttribute("name");
-            otro_color.setAttribute("name","color");
-            color.value = "Otro color"
-        }
+        // Vacia for now
     }
 
     // Funcion para agregar otro material
@@ -605,23 +582,7 @@
 
     // Funcion para mostrar campos dependendiendo de la categoria
     function elegir_campos(){
-      var selecion = "{{=bien['bm_clasificacion']}} ";
-      if (selecion.value == "Mobiliario"){
-        document.getElementById("marca").type = 'hidden';
-        document.getElementById("modelo").type = 'hidden';
-        document.getElementById("serial").type = 'hidden';
-        document.getElementById("estatus").type = 'hidden';
-        document.getElementById("calibrar").style.display = 'none';
-      }
-      else{
-        document.getElementById("select-calibrar").setAttribute("required", "");
-        document.getElementById("marca").type = 'text';
-        document.getElementById("modelo").type = 'text';
-        document.getElementById("serial").type = 'text';
-        document.getElementById("estatus").type = 'text';
-        document.getElementById("calibrar").style.display = 'block';
-      }
-      document.getElementById("fecha_calibracion").style.display = 'none';
+      // vacio for now
     }
   
     // Mostrar fecha de calibracion
