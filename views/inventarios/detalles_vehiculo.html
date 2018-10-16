@@ -90,50 +90,14 @@
         <div class="content-wrapper">
             <div id="tab-1" class="tab-content active">
                 <div class="grid-container">
-                  pendiente
-                    {{ for title in mantenimiento: }}
+                    {{ for title in caracteristicas_list: }}
                         <div class="grid-item">
-                            {{=title}}
+                            {{= title}}
                         </div>
                         <div class="grid-item">
-                            {{ if title.lower() == "placa": }}
-                                Placa: {{=vh['vh_placa']}}
-                                <br>
-                            {{ else: }}
-                                {{= caracteristicas_dict.get(title)}}
-                            {{pass}} 
+                            {{= caracteristicas_dict.get(title)}}
                         </div>
                     {{ pass }}
-                        <div class="grid-item">
-                            {{if vh['vh_marca'] != None:}}
-                                Marca: {{=vh['vh_marca']}}
-                                <br>
-                            {{pass}}                     
-                            {{if vh['vh_modelo'] != None:}}
-                                Modelo: {{=vh['vh_modelo']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_ano'] != None:}}
-                                Año: {{=vh['vh_ano']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_serial_motor'] != None:}}
-                                Seria de motor: {{=vh['vh_serial_motor']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_serial_carroceria'] != None:}}
-                                Seria de carrocería: {{=vh['vh_serial_carroceria']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_placa'] != None:}}
-                                Placa: {{=vh['vh_placa']}}
-                                <br>
-                            {{pass}}
-                            {{if vh['vh_descripcion'] != None:}}
-                                Descripcion de uso: {{=vh['vh_descripcion']}}
-                                <br>
-                            {{pass}}
-                        </div>
                 </div>
             </div>   
    
