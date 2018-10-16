@@ -119,7 +119,7 @@
                       Es particular:
                 </div>
                 <div class="grid-item">
-                  {{if vh['vh_es_particular'] == 1:}}
+                  {{if vehiculo['vh_es_particular'] == 1:}}
                       SI
                   {{else:}}
                       NO
@@ -133,7 +133,7 @@
                         Dependencia:
                     </div>
                     <div class="grid-item">
-                        {{=db(db.dependencias.id == vh['vh_depedencia']).select().first().nombre}}
+                        {{=db(db.dependencias.id == vehiculo['vh_depedencia']).select().first().nombre}}
                     </div>
                     <div class="grid-item">
                         Lugar de pernocta:
@@ -314,7 +314,7 @@
 
                         <div class="form-group">
                             <label>N° de placa</label>
-                            {{if vh['vh_placa']==None:}}
+                            {{if vehiculo['vh_placa']==None:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" placeholder="N° de placa">
                             {{else:}}
                                 <input type="text" class="form-control" id="no_placa" name="no_placa" title="Formato: ####### (7 dígitos)" value="{{=vehiculo['vh_placa']}}" placeholder="N° de placa">
