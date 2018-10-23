@@ -417,7 +417,7 @@ db.define_table(
     Field('vh_factura', 'string', notnull=True, label=T('Factura')),
     Field('vh_proveedor', 'string', label=T('Proveedor')),
     Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
-    Field('vh_nro_donacion', 'int', label=T('Nº Donación')),
+    Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
     Field('vh_donante', 'string', label=T('Donante')),
     Field('vh_contacto', 'string', label=T('Contacto del donante')),
 

@@ -761,7 +761,7 @@ if db(db.vehiculo).isempty():
     dep2 = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
     db.vehiculo.insert(
         vh_marca="Chevrolet", vh_modelo="Wagon R+", vh_ano=2002, vh_serial_motor="S3R14LM0T0R1", vh_serial_carroceria="S3R14LC4RR0C3R14",
-        vh_placa="GBX73F", vh_descripcion="Camioneta de transporte", vh_responsable="Juan Reyes", vh_telf_responsable="0424-4257227",
+        vh_placa="GBX73F", vh_descripcion="Camioneta de transporte", vh_propietario="Juan Reyes",vh_responsable="Juan Reyes", vh_telf_responsable="0424-4257227",
         vh_depedencia=dep, vh_crea_ficha=user, vh_lugar_pernocta="Estacionamiento de ENE", vh_serial_chasis="S3R1ALCH4S1S",
         vh_intt="123456", vh_color="Negro", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara="Tara",
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=10, vh_custodio="Antonella Requena", vh_telf_custodio="04144561782",
@@ -771,7 +771,7 @@ if db(db.vehiculo).isempty():
         )
     db.vehiculo.insert(
         vh_marca="Chevrolet", vh_modelo="Optra", vh_ano=2006, vh_serial_motor="S3R14LM0T0R13", vh_serial_carroceria="S3R14LC4RR40C3R14",
-        vh_placa="GBX73G", vh_descripcion="Carro de carga", vh_responsable="Marla Ovalles", vh_telf_responsable="0424-4257127",
+        vh_placa="GBX73G", vh_descripcion="Carro de carga", vh_propietario="Juan Reyes",vh_responsable="Marla Ovalles", vh_telf_responsable="0424-4257127",
         vh_depedencia=dep2, vh_crea_ficha=user, vh_lugar_pernocta="Estacionamiento de MEU", vh_serial_chasis="S3R1ALCH4S123S",
         vh_intt="12345642", vh_color="Plata", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara="Tara",
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=12, vh_custodio="Juan Mendez", vh_telf_custodio="041618263896",
