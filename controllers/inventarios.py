@@ -2136,24 +2136,48 @@ def detalles_vehiculo():
             response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
         request.vars.ocultar = None
 
+    # PENDIENTE: Optimizar esto en una sola structura,
+    # iterar en caracteristica dict
     caracteristicas_list = [ 
-        'Marca:',
-        'Modelo:',
-        'Año:',
-        'Serial de motor:',
-        'Serial de carroceria:',
-        'Placa:',
-        'Descripción de uso:',
+        'Placa',
+        'Marca',
+        'Modelo',
+        'Año',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
+        'Color',
+        'Clase',
+        'Tipo',
+        'Uso',
+        'Servicio',
+        'Nº de Puestos',
+        'Nº de Ejes',
+        'Tara',
+        'Capacidad de carga',
+        'Nº de Autorización INTT',
+        'Descripción de uso',
     ]
 
     caracteristicas_dict = {
-        'Marca:': vehi['vh_marca'],
-        'Modelo:': vehi['vh_modelo'],
-        'Año:': vehi['vh_ano'],
-        'Serial de motor:': vehi['vh_serial_motor'],
-        'Serial de carroceria:': vehi['vh_serial_carroceria'],
-        'Placa:': vehi['vh_placa'],
-        'Descripción de uso:': vehi['vh_descripcion'],
+        'Placa': vehi['vh_placa'],
+        'Marca': vehi['vh_marca'],
+        'Modelo': vehi['vh_modelo'],
+        'Año': vehi['vh_ano'],
+        'Serial de carroceria': vehi['vh_serial_carroceria'],
+        'Serial de motor': vehi['vh_serial_motor'],
+        'Serial de chasis': vehi['vh_serial_chasis'],
+        'Color': vehi['vh_color'],
+        'Clase': vehi['vh_clase'],
+        'Tipo': "Particular" if vehi['vh_es_particular'] else "Oficial",
+        'Uso': vehi['vh_uso'],
+        'Servicio': vehi['vh_servicio'],
+        'Nº de Puestos': vehi['vh_nro_puestos'],
+        'Nº de Ejes': vehi['vh_nro_ejes'],
+        'Tara': vehi['vh_tara'],
+        'Capacidad de carga': vehi['vh_capacidad_carga'],
+        'Nº de Autorización INTT': vehi['vh_intt'],
+        'Descripción de uso': vehi['vh_descripcion'],
     }
 
     # Si solo estoy cargando la vista
