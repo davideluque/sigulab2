@@ -15,9 +15,10 @@
                 <th class="camposTabla linksNombres">Placa</th>
                 <th class="camposTabla linksNombres">Marca</th>
                 <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Tipo</th>
                 <th class="camposTabla linksNombres">Dependencia</th>
                 <th class="camposTabla linksNombres">Responsable</th>
-                <!--th class="camposTabla linksNombres">Estatus</th> -->
+                <th class="camposTabla linksNombres">Estatus</th>
                 <!-- <th class="camposTabla linksNombres">Estatus</th> -->
             </tr>
         </thead>
@@ -27,8 +28,16 @@
                 <td class="camposTabla"> <a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehiculo['vh_placa']))}}">{{=vehiculo['vh_placa']}}</a></td>
                 <td class="camposTabla">{{=vehiculo['vh_marca']}}</td>
                 <td class="camposTabla">{{=vehiculo['vh_modelo']}}</td>
+                <td class="camposTabla">
+                  {{ if vehiculo['vh_es_particular']: }}
+                    PARTICULAR
+                  {{ else: }}
+                    OFICIAL
+                  {{pass}}
+                </td>
                 <td class="camposTabla">{{=db(db.dependencias.id == vehiculo['vh_depedencia']).select().first().nombre}}</td>
                 <td class="camposTabla">{{=vehiculo['vh_responsable']}}</td>
+                <td class="camposTabla">{{=vehiculo['vh_estatus']}}</td>
               </tr>
           {{pass}}           
         </tbody>
