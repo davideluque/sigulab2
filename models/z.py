@@ -767,7 +767,7 @@ if db(db.vehiculo).isempty():
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=10, vh_custodio="Antonella Requena", vh_telf_custodio="04144561782",
         vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
         vh_sudebip_categoria_especifica="Catesp1", vh_sede="Sartenejas", vh_fecha_adquisicion="2018-02-01", vh_factura="123456",
-        vh_origen="Compra", vh_proveedor_rif="J-01234568-9"
+        vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 1, C.A."
         )
     db.vehiculo.insert(
         vh_marca="Chevrolet", vh_modelo="Optra", vh_ano=2006, vh_serial_motor="S3R14LM0T0R13", vh_serial_carroceria="S3R14LC4RR40C3R14",
@@ -777,5 +777,5 @@ if db(db.vehiculo).isempty():
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=12, vh_custodio="Juan Mendez", vh_telf_custodio="041618263896",
         vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
         vh_sudebip_categoria_especifica="Catesp1", vh_sede="Litoral", vh_fecha_adquisicion="2018-02-01", vh_factura="1234561",
-        vh_origen="Compra", vh_proveedor_rif="J-01234568-9"
+        vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 2, C.A."
         )
