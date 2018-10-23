@@ -5,7 +5,6 @@
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
 def __check_role():
-
     roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR',
                         'COORDINADOR', 'PERSONAL DE DEPENDENCIA', 'TÉCNICO', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'PERSONAL INTERNO', 
@@ -222,8 +221,8 @@ def __get_vh_dep(dep_id=None):
     return db(db.vehiculo.vh_depedencia == dep_id).select()
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
-def __get_mantenimiento_vh(placa=None):
-    return db(db.historial_mantenimiento_vh.hmvh_placa == placa).select()
+def __get_mantenimiento_vh(vh_id=None):
+    return db(db.historial_mantenimiento_vh.hmvh_placa == vh_id).select()
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
@@ -594,7 +593,7 @@ def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroc
 
     # Si ya existe una modificacion pendiente al vehiculo
     if (db(db.modificacion_vehiculo.mvh_placa == placa).select()):
-        vh = db(db.vehiculo.placa == placa).select()[0] #Se busca de la tabla de vh
+        vh = db(db.vehiculo.vh_placa == placa).select()[0] #Se busca de la tabla de vh
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
@@ -2093,7 +2092,8 @@ def detalles_vehiculo():
         # de errores
         return "El vehiculo solicitado no existe."
 
-    mantenimiento = __get_mantenimiento_vh(vh)
+    # TO-DO: ARREGLAR ESTO, da error raro
+    mantenimiento = __get_mantenimiento_vh(vehi['id'])
 
     # Si se elimina
     if request.vars.si:
@@ -2112,13 +2112,13 @@ def detalles_vehiculo():
         db.bitacora_general.insert(
             f_accion = "[inventarios] Rechazada eliminación del vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
         )
-        db(db.vehiculo.vh_placa == vehi['placa']).select().first().update_record(vh_eliminar = 2)
+        db(db.vehiculo.vh_placa == vehi['vh_placa']).select().first().update_record(vh_eliminar = 2)
         session.flash = "El vehiculo no ha sido eliminado"
         redirect(URL('validaciones'))
 
     if request.vars.modificacion:
         __agregar_modificar_vehiculo(
-            vehi.vh_placa, request.vars.modelo, request.vars.ano,
+            vehi['vh_placa'], request.vars.modelo, request.vars.ano,
             request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
             request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia, 
             request.vars.descripcion_uso, request.vars.lugar_pernocta, request.vars.es_particular, request.vars.oculto, user_id)
