@@ -93,8 +93,9 @@
         <div class="tab-wrapper">
             <ul class="tabs">
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
-                    <li class="tab-link" data-tab="3"><br>RESPONSABLE</li>
-                    <li class="tab-link" data-tab="4"><br>UBICACIÓN</li>
+                    <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
+                    <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
+                    <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
                     <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
                     <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
                 </ul>
@@ -105,7 +106,7 @@
                 <div class="grid-container">
                     {{ for title in caracteristicas_list: }}
                         <div class="grid-item">
-                            {{= title}}
+                            {{= title}}:
                         </div>
                         <div class="grid-item">
                             {{= caracteristicas_dict.get(title)}}
@@ -114,7 +115,7 @@
                 </div>
             </div>   
    
-            <div id="tab-3"class="tab-content">
+            <div id="tab-2"class="tab-content">
               <div class="grid-container">
                 <div class="grid-item">
                       Responsable: 
@@ -129,33 +130,129 @@
                        {{=vehiculo['vh_telf_responsable']}}
                 </div>
                 <div class="grid-item">
-                      Es particular:
+                      Custodio: 
                 </div>
                 <div class="grid-item">
-                  {{if vehiculo['vh_es_particular'] == 1:}}
-                      SI
-                  {{else:}}
-                      NO
-                  {{pass}}
+                      {{=vehiculo['vh_custodio']}}
                 </div>
-              </div>
-            </div>
-            <div id="tab-4"class="tab-content">
-                <div class="grid-container">
-                    <div class="grid-item">
-                        Dependencia:
-                    </div>
-                    <div class="grid-item">
-                        {{=db(db.dependencias.id == vehiculo['vh_depedencia']).select().first().nombre}}
-                    </div>
-                    <div class="grid-item">
-                        Lugar de pernocta:
+                <div class="grid-item">
+                      Tlf. de Custodio:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['vh_telf_custodio']}}
+                </div>
+                <div class="grid-item">
+                      Sede:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['vh_sede']}}
+                </div>
+                <div class="grid-item">
+                      Dependencia:
+                </div>
+                <div class="grid-item">
+                  {{=db(db.dependencias.id == vehiculo['vh_depedencia']).select().first().nombre}}
+                </div>
+                <div class="grid-item">
+                        Ubicación de pernocta:
                     </div>
                     <div class="grid-item">
                         {{=vehiculo['vh_lugar_pernocta']}}
                     </div>
+              </div>
+            </div>
+
+            <div id="tab-3"class="tab-content">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        Localización:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_sudebip_localizacion']}}
+                    </div>
+                    <div class="grid-item">
+                        Código de Localización:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_sudebip_codigo_localizacion']}}
+                    </div>
+                    <div class="grid-item">
+                        Categoría:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_sudebip_categoria']}}
+                    </div>
+                    <div class="grid-item">
+                        Subcategoría:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_sudebip_subcategoria']}}
+                    </div>
+                    <div class="grid-item">
+                        Categoría Específica:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_sudebip_categoria_especifica']}}
+                    </div>
                 </div>
             </div>
+
+            <div id="tab-4"class="tab-content">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        Fecha de adquisición:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_fecha_adquisicion']}}
+                    </div>
+                    <div class="grid-item">
+                        Origen:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_origen']}}
+                    </div>
+                    <div class="grid-item">
+                        Factura:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_factura']}}
+                    </div>
+                    {{ if vehiculo['vh_origen'] == 'Compra': }}
+                    <div class="grid-item">
+                        Proveedor:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_proveedor']}}
+                    </div>
+                    <div class="grid-item">
+                        RIF:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_proveedor_rif']}}
+                    </div>
+                    {{ else: }}
+                    <div class="grid-item">
+                        Nº. Donación:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_nro_donacion']}}
+                    </div>
+                    <div class="grid-item">
+                        Donante:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_donante']}}
+                    </div>
+                    <div class="grid-item">
+                        Contacto:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_contacto']}}
+                    </div>
+                    {{ pass }}
+                </div>
+            </div>
+
             <div id="tab-5"class="tab-content">
                 {{include 'inventarios/mantenimiento.html'}}
             </div>
