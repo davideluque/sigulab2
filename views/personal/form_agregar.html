@@ -35,6 +35,8 @@
                           <span class="step activePass">1</span>
                           <span class="step">2</span>
                           <span class="step">3</span>
+                          <span class="step">4</span>
+                          <span class="step">5</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -178,6 +180,8 @@
                           <span class="step">1</span>
                           <span class="step activePass">2</span>
                           <span class="step">3</span>
+                          <span class="step">4</span>
+                          <span class="step">5</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -297,6 +301,8 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
@@ -386,12 +392,172 @@
                       </div>
 
                     </div>
-                    <div class="botones-form">
+                    <div class="botones-form" style="margin-top: 1rem;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                      </div>
+                  </fieldset>
+                    <!-- Fin Tercer Paso -->
+
+
+                  <!-- Cuarto Paso -->
+                  <fieldset class="formField" id="p4">
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
+                        <span class="step">5</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Historial laboral</h4>
+                        <div class="rows-plantilla">
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <h4>Trabajo</h4>
+                          </div>
+                        </div>
+                        <div class="trabajo">
+
+                        <div class="form-group">
+                          <div class="col-sm-6">
+                            <label>Desde:</label>
+                            <input class="datepicker" value="{{''}}"
+                            name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                          </div>
+                          <div class="col-sm-6">
+                            <label>Hasta:</label> 
+                            <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-sm-6">
+                                <br>
+                                <label>Organizacion</label>
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                            <div class="col-sm-6">
+                                <br>
+                                <label>Cargo</label>
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Analista de sistemas" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                        </div>
+
+                        </div>
+
+                       
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <br>
+                            <font color="blue"><label id="Add-Trabajo">Agregar otro trabajo</label></font>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <h4>Comisión/Comité</h4>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                  
+
+                          <div class="col-sm-6">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre de la Comisión o Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
+                          <div class="col-sm-6">
+                            <label>Fecha</label> 
+                            <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                          </div>
+                          <div class="col-sm-6">
+                            <label>Rol</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
+                          <div class="form-group">
+                          <div class="col-sm-12">
+                            <br>
+                            <font color="blue"><label id="Add-Trabajo">Agregar otra comisión/comité</label></font>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+
+                        
+                    </div>
+
+                    <div class="botones-form" style="margin-top: 1rem;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Cuarto Paso -->
+
+                  <!-- Quinto Paso -->
+                  <fieldset class="formField" id="p5">
+                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step activePass">5</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Competencias laborales</h4>
+                        <div class="rows-plantilla">
+
+                          <div class="col-sm-12">
+                            <label>Agregue sus competencias</label>
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Física cuántica" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                            <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Física de la relatividad" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                            <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Matemáticas avanzadas" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                            <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Excel" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                            <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="botones-form" style="margin-top: 1rem;">
                       <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                       <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
                     </div>
                   </fieldset>
-                    <!-- Fin Tercer Paso -->
+                  <!-- Fin Quinto Paso -->
+
 
                 </form>
             </div>
