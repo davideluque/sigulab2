@@ -37,6 +37,7 @@
                           <span class="step">3</span>
                           <span class="step">4</span>
                           <span class="step">5</span>
+                          <span class="step">6</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -59,7 +60,7 @@
                                 </div>
                               </div>
 
-                          </div>
+                            </div>
 
                           <div class="rows-planilla">
 
@@ -182,6 +183,7 @@
                           <span class="step">3</span>
                           <span class="step">4</span>
                           <span class="step">5</span>
+                          <span class="step">4</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -303,6 +305,7 @@
                         <span class="step activePass">3</span>
                         <span class="step">4</span>
                         <span class="step">5</span>
+                        <span class="step">6</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
@@ -410,18 +413,18 @@
                         <span class="step">3</span>
                         <span class="step activePass">4</span>
                         <span class="step">5</span>
+                        <span class="step">6</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Historial laboral</h4>
-                        <div class="rows-plantilla">
+
                         <div class="form-group">
                           <div class="col-sm-12">
-                            <h4>Trabajo</h4>
+                            <label>Período</label>
                           </div>
                         </div>
-                        <div class="trabajo">
 
                         <div class="form-group">
                           <div class="col-sm-6">
@@ -434,14 +437,15 @@
                             <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
                           </div>
                         </div>
+
                         <div class="form-group">
                           <div class="col-sm-6">
                                 <br>
-                                <label>Organizacion</label>
+                                <label>Dependencia</label>
                               <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
                                   data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
                               <font color="red"><div id="err_celular" hidden></div></font>
-                            </div>
+                          </div>
                             <div class="col-sm-6">
                                 <br>
                                 <label>Cargo</label>
@@ -451,53 +455,328 @@
                             </div>
                         </div>
 
-                        </div>
-
-                       
                         <div class="form-group">
                           <div class="col-sm-12">
                             <br>
-                            <font color="blue"><label id="Add-Trabajo">Agregar otro trabajo</label></font>
+                            <label>Organizacion</label>
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                            
                           </div>
                         </div>
 
                         <div class="form-group">
                           <div class="col-sm-12">
-                            <h4>Comisión/Comité</h4>
+                            <p onclick="toggleTrabajo('trabajo2', 'texto2')" style="display: block" id="texto2" style="color: blue">Agregar otro trabajo</p>
                           </div>
                         </div>
 
-                        <div class="form-group">
-                  
 
-                          <div class="col-sm-6">
-                            <label>Comité/Comisión</label> 
-                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre de la Comisión o Comité" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                          </div>
 
-                          <div class="col-sm-6">
-                            <label>Fecha</label> 
-                            <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                          </div>
-                          <div class="col-sm-6">
-                            <label>Rol</label> 
-                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
+
+                        <div style="display: none" id = "trabajo2">
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <br>
+                              <label>Período</label>
+                            </div>
                           </div>
 
                           <div class="form-group">
-                          <div class="col-sm-12">
-                            <br>
-                            <font color="blue"><label id="Add-Trabajo">Agregar otra comisión/comité</label></font>
+                            <div class="col-sm-6">
+                              <label>Desde:</label>
+                              <input class="datepicker" value="{{''}}"
+                              name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                            <div class="col-sm-6">
+                              <label>Hasta:</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                                  <br>
+                                  <label>Dependencia</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                              <div class="col-sm-6">
+                                  <br>
+                                  <label>Cargo</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Analista de sistemas" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <br>
+                              <label>Organizacion</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                              <hr style="height:1px;border-top:1px solid grey">
+                            </div>
                           </div>
                         </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <p onclick="toggleTrabajo('trabajo3', 'texto3')" style="display: none" id="texto3" style="color: blue">Agregar otro trabajo</p>
+                          </div>
                         </div>
+
+
+                        <div style="display: none" id = "trabajo3">
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <br>
+                              <label>Período</label>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <label>Desde:</label>
+                              <input class="datepicker" value="{{''}}"
+                              name = "fecha_ingreso_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                            <div class="col-sm-6">
+                              <label>Hasta:</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                                  <br>
+                                  <label>Dependencia</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                              <div class="col-sm-6">
+                                  <br>
+                                  <label>Cargo</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Analista de sistemas" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <br>
+                              <label>Organizacion</label>
+                                <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Universidad Simón Bolívar" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                              <hr style="height:1px;border-top:1px solid grey">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <p onclick="toggleTrabajo('trabajo3', 'texto3')" style="display: block" id="texto3  " style="color: blue">Agregar otro trabajo</p>
+                          </div>
+                        </div>
+
+
+
+                   <script type="text/javascript">
+                     function toggleTrabajo(id, idText) {
+                      var trabajo = document.getElementById(id);
+                      var texto = document.getElementById(idText);
+                      trabajo.style.display = 'block';
+                      texto.style.display = 'none'
+                     }
+                   </script>
+                        
+
+                    <div class="botones-form" style="margin-top: 1rem; margin-bottom: 2rem;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Cuarto Paso -->
+
+
+                  <fieldset class="formField" id="p5">
+                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step activePass">5</span>
+                        <span class="step">6</span>
                       </div>
 
-                        
+
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Participación en Comisiones/Comités</h4>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre Comisión/Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Fecha</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Rol</label> 
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div> 
+                        </div>  
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre Comisión/Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Fecha</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Rol</label> 
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div> 
+                        </div> 
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre Comisión/Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Fecha</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Rol</label> 
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div> 
+                        </div> 
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre Comisión/Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Fecha</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Rol</label> 
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div> 
+                        </div> 
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Comité/Comisión</label> 
+                            <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Nombre Comisión/Comité" required
+                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                              <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Fecha</label> 
+                              <input class="datepicker" value="{{''}}" name = "fecha_salida_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="rows-planilla">
+                          <div class="form-group">
+                            <div class="col-sm-6">
+                              <br>
+                              <label>Rol</label> 
+                              <input value="{{''}}" type="text" class="form-control" name="persona_contacto" placeholder="Miembro" required
+                                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+                                <font color="red"><div id="err_celular" hidden></div></font>
+                            </div>
+                          </div> 
+                        </div> 
+                      </div>
+
                     </div>
 
                     <div class="botones-form" style="margin-top: 1rem;">
@@ -505,18 +784,18 @@
                         <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
                     </div>
                   </fieldset>
-                  <!-- Fin Cuarto Paso -->
 
                   <!-- Quinto Paso -->
-                  <fieldset class="formField" id="p5">
-                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                  <fieldset class="formField" id="p6">
+                    <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step activePass">5</span>
+                        <span class="step">5</span>
+                        <span class="step activePass">6</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
@@ -551,10 +830,12 @@
                         </div>
                       </div>
                     </div>
+                    
                     <div class="botones-form" style="margin-top: 1rem;">
                       <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                       <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
                     </div>
+
                   </fieldset>
                   <!-- Fin Quinto Paso -->
 
