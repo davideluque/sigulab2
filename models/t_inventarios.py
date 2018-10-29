@@ -414,7 +414,9 @@ db.define_table(
     # FALTA VALIDACIÓN
     Field('vh_fecha_adquisicion', 'date', notnull = True, label=T('Fecha de adquisición')),
     Field('vh_origen', 'string', notnull=True, label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_factura', 'string', notnull=True, label=T('Factura')),
+    Field('vh_nro_factura', 'integer', notnull=True, label=T('Número de Factura')),
+    Field('vh_fecha_factura', 'date', notnull=False, label=T('Fecha de Factura')),
+    Field('vh_nro_oficio', 'integer', notnull=False, label=T('Número de Oficio')),
     Field('vh_proveedor', 'string', label=T('Proveedor')),
     Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
     Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
