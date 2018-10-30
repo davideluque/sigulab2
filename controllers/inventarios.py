@@ -1248,7 +1248,7 @@ def vehiculos():
         inventario = db(db.vehiculo.id).select()
 
     #devolvemos las categorias de vehiculos
-    categorias_dict = __obtener_categorias()
+    dict_categorias = __obtener_categorias()
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1265,7 +1265,7 @@ def vehiculos():
                 nombre_cat=nombre_cat,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion,
-                categorias = categorias_dict
+                categorias=dict_categorias
                 ) 
 
 @auth.requires(lambda: __check_role())
@@ -2231,7 +2231,7 @@ def detalles_vehiculo():
         'Descripción de uso': vehi['vh_descripcion'],
     }
 
-    Categorias_dict = __obtener_categorias() 
+    dict_categorias = __obtener_categorias() 
 
     # Si solo estoy cargando la vista
     return dict(
@@ -2239,7 +2239,7 @@ def detalles_vehiculo():
         mantenimiento=mantenimiento,
         caracteristicas_list=caracteristicas_list,
         caracteristicas_dict=caracteristicas_dict,
-        categorias = Categorias_dict 
+        categorias=dict_categorias 
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
