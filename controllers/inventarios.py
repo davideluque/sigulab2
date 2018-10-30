@@ -994,9 +994,6 @@ def vehiculos():
                 uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301', '240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
                 # Si se esta agregando un nuevo vehiculo, se registra en la DB
                 if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
@@ -1086,9 +1083,6 @@ def vehiculos():
             uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-            cod_localizacion = ['150301', '240107']
-            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
             # Si se esta agregando un nuevo vehiculo, se registra en la DB
             if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
@@ -1177,9 +1171,6 @@ def vehiculos():
                 uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301', '240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
@@ -1247,8 +1238,19 @@ def vehiculos():
     else:
         inventario = db(db.vehiculo.id).select()
 
-    #devolvemos las categorias de vehiculos
+    # Devolvemos las categorias de vehiculos
     dict_categorias = __obtener_categorias()
+
+    # Obtenemos otros datos de SUDEBIP
+    cod_localizacion = {
+        'Sartenejas': 150301, 
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
 
     return dict(dep_nombre=dep_nombre, 
                 dependencias=dependencias, 
@@ -1265,7 +1267,9 @@ def vehiculos():
                 nombre_cat=nombre_cat,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion,
-                categorias=dict_categorias
+                categorias=dict_categorias,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion
                 ) 
 
 @auth.requires(lambda: __check_role())
@@ -2231,6 +2235,16 @@ def detalles_vehiculo():
         'Descripción de uso': vehi['vh_descripcion'],
     }
 
+    cod_localizacion = {
+        'Sartenejas': 150301, 
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
+
     dict_categorias = __obtener_categorias() 
 
     # Si solo estoy cargando la vista
@@ -2239,7 +2253,9 @@ def detalles_vehiculo():
         mantenimiento=mantenimiento,
         caracteristicas_list=caracteristicas_list,
         caracteristicas_dict=caracteristicas_dict,
-        categorias=dict_categorias 
+        categorias=dict_categorias,
+        cod_localizacion=cod_localizacion,
+        localizacion=localizacion
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
