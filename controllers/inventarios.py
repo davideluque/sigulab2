@@ -1,5 +1,5 @@
 #Importamos el diccionario con las categorias de los vehiculos.
-from diccionarioCategorias import diccionarioCategorias
+from info_inventarios import diccionarioCategorias
 # -*- coding: utf-8 -*-
 
 # < -------- Funciones privadas de SMDYP ------------>

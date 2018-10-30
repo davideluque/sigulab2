@@ -1,6 +1,6 @@
  #coding: utf-8 
 
-diccionari = {'15010-0000 - Vehículos automotores terrestres': ['15010-0001 - Ambulancias', '15010-0002 - Autobuses', '15010-0003 - Automóviles' , '15010-0004 - Camiones cisterna para asfalto',
+diccionarioCategorias = {'15010-0000 - Vehículos automotores terrestres': ['15010-0001 - Ambulancias', '15010-0002 - Autobuses', '15010-0003 - Automóviles' , '15010-0004 - Camiones cisterna para asfalto',
 '15010-0005 - Camiones cisterna para agua',
 '15010-0006 - Camiones cisterna para gasolina',  '15010-0007 - Camiones cisterna para gas', '15010-0008 - Camiones chasis', '15010-0009 - Camiones de estaca',
 '15010-0010 - Camiones volteos', '15010-0011 - Camiones ganaderos', '15010-0012 - Camiones gruas', '15010-0013 - Camiones para basura', '15010-0014 - Camionetas de carga cubiertas', '15010-0015 - Camionetas de carga pick-up',
