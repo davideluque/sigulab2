@@ -4,8 +4,9 @@ Controlador de las vistas relacionadas a la gestión de inventarios,
 vehículos y solicitudes de préstamos.
 '''
 
+# PENDIENTE: Corregir esto
 # Importamos el diccionario con las categorias de los vehiculos.
-from info_inventarios import CATEGORIAS_VEHICULOS
+from applications.sigulab2.controllers.info_inventarios import CATEGORIAS_VEHICULOS
 
 
 # < -------- Funciones privadas de SMDYP ------------>
@@ -1196,7 +1197,7 @@ def vehiculos():
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                 dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
                                       ).select(db.dependencias.ALL))
-                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
                 if len(dependencias) == 0:
@@ -1252,9 +1253,9 @@ def vehiculos():
         'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
     }
 
-    return dict(dep_nombre=dep_nombre, 
-                dependencias=dependencias, 
-                espacios=espacios, 
+    return dict(dep_nombre=dep_nombre,
+                dependencias=dependencias,
+                espacios=espacios,
                 es_espacio=es_espacio,
                 espacio_visitado=espacio_visitado,
                 dep_padre_id=dep_padre_id,
@@ -1265,12 +1266,10 @@ def vehiculos():
                 retroceder=retroceder,
                 uso_list=uso,
                 nombre_cat=nombre_cat,
-                cod_localizacion=cod_localizacion,
-                localizacion=localizacion,
                 categorias=dict_categorias,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion
-                ) 
+                )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
