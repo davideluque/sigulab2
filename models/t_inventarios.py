@@ -378,17 +378,17 @@ db.define_table(
     Field('vh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_intt', 'integer', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
     Field('vh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
-    
+
     # Descripción de uso
     Field('vh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),
     Field('vh_lugar_pernocta', 'string', notnull=True, default="", label=T('Lugar de pernocta')),
-    Field('vh_color','string', label = T('Color')),
-    
+    Field('vh_color', 'string', label=T('Color')),
+
     # Categorias
-    Field('vh_clase', 'string', notnull=True, label = T('Clase')),
-    Field('vh_uso', 'string', notnull=True, label = T('Uso')),
-    Field('vh_servicio', 'string', notnull=True, label = T('Servicio')),
-    Field('vh_tara', 'string', label = T('Tara')),
+    Field('vh_clase', 'string', notnull=True, label=T('Clase')),
+    Field('vh_uso', 'string', notnull=True, label=T('Uso')),
+    Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
+    Field('vh_tara', 'string', label=T('Tara')),
 
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
@@ -411,17 +411,16 @@ db.define_table(
     Field('vh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    # FALTA VALIDACIÓN
-    Field('vh_fecha_adquisicion', 'date', notnull = True, label=T('Fecha de adquisición')),
+    Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_nro_factura', 'integer', notnull=True, default=0, label=T('Número de Factura')),
-    Field('vh_fecha_factura', 'date', notnull=False, label=T('Fecha de Factura')),
-    Field('vh_nro_oficio', 'integer', notnull=False, label=T('Número de Oficio')),
+    Field('vh_nro_factura', 'integer', label=T('Número de Factura')),
+    Field('vh_fecha_factura', 'date', label=T('Fecha de Factura')),
+    Field('vh_nro_oficio', 'integer', label=T('Número de Oficio')),
     Field('vh_proveedor', 'string', label=T('Proveedor')),
     Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
     Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
     Field('vh_donante', 'string', label=T('Donante')),
-    Field('vh_contacto', 'string', label=T('Contacto del donante')),
+    Field('vh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('vh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
@@ -465,32 +464,48 @@ db.define_table(
     # Descripción de uso
     Field('mvh_descripcion','text', notnull=True, default="", label=T('Descripción')),
     Field('mvh_lugar_pernocta','string', notnull=True, default="", label=T('Lugar de pernocta')),
-    Field('mvh_color','string', label = T('Color')),
-    
+    Field('mvh_color', 'string', label=T('Color')),
+
     # Categorias
-    Field('mvh_uso', 'string', notnull=True, label = T('Uso')),
-    Field('mvh_servicio', 'string', notnull=True, label = T('Servicio')),
-    Field('mvh_tara', 'string', label = T('Tara')),
-    
+    Field('mvh_clase', 'string', notnull=True, label=T('Clase')),
+    Field('mvh_uso', 'string', notnull=True, label=T('Uso')),
+    Field('mvh_servicio', 'string', notnull=True, label=T('Servicio')),
+    Field('mvh_tara', 'string', label=T('Tara')),
+
     # Capacidades
+    Field('mvh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
     Field('mvh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
     Field('mvh_capacidad_carga', 'integer', notnull=True, default=0, label = T('Capacidad de Carga')),
 
-   
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
-    Field('mvh_propietario','string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
-    Field('mvh_responsable','string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
-    Field('mvh_telf_responsable','string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-    Field('mvh_custodio','string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('mvh_telf_custodio','string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('mvh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
+    Field('mvh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('mvh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('mvh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('mvh_telf_custodio', 'string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
     
      # Datos SUDEBIP
     Field('mvh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
-    Field('mvh_sudebip_codigo_localizacion', 'string', notnull=True, label=T('SUDEBIP: Código de Localización')),
-    
+    Field('mvh_sudebip_codigo_localizacion', 'string', notnull=True, default="", label=T('SUDEBIP: Código de Localización')),
+    Field('mvh_sudebip_categoria', 'string', notnull=True, label=T('SUDEBIP: Categoría')),
+    Field('mvh_sudebip_subcategoria', 'string', notnull=True, label=T('SUDEBIP: Subcategoría')),
+    Field('mvh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
+   
+   # Datos Adquisición
+    Field('mvh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
+    Field('mvh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
+    Field('mvh_nro_factura', 'integer', label=T('Número de Factura')),
+    Field('mvh_fecha_factura', 'date', label=T('Fecha de Factura')),
+    Field('mvh_nro_oficio', 'integer', label=T('Número de Oficio')),
+    Field('mvh_proveedor', 'string', label=T('Proveedor')),
+    Field('mvh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
+    Field('mvh_nro_donacion', 'integer', label=T('Nº Donación')),
+    Field('mvh_donante', 'string', label=T('Donante')),
+    Field('mvh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+
     # Estatus de préstamo o mantenimiento
-    Field('mvh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
+    Field('mvh_estatus', 'string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento','En uso','Averiado'])),
 
     # Estado = 0 : No es particular
     # Estado = 1 : Es particular
