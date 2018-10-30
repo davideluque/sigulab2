@@ -294,9 +294,14 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # Registra un nuevo vehiculo en la dependencia indicada. Si el vehiculo ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
-def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
-                 descripcion, lugar_pernocta, responsable, telf_responsable, 
-                 dependencia, user, es_particular=0, oculto=0):
+def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
+                 placa, intt, sede, descripcion, lugar_pernocta, color, clase, uso,
+                 servicio, tara, nro_puestos, nro_ejes, capacidad_larga, propietario,
+                 responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
+                 sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
+                 sudebip_categoria_especifica, fecha_adquisicion, origen, nro_factura,
+                 fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion,
+                 donante, contacto, dependencia, user, es_particular=0, oculto=0):
 
     # Si ya existe el BM en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
@@ -307,17 +312,46 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa,
         return False
       
     # Se agrega el nuevo vehiculo a la base de datos
-    inv_id = db.bien_mueble.insert(
+    inv_id = db.vehiculo.insert(
         vh_marca=marca,
         vh_modelo=modelo,
         vh_ano=ano,
         vh_serial_motor=serial_motor,
         vh_serial_carroceria=serial_carroceria,
+        vh_serial_chasis=serial_chasis,
         vh_placa=placa,
+        vh_intt=intt,
+        vh_sede=sede,
         vh_descripcion=descripcion,
         vh_lugar_pernocta=lugar_pernocta,
+        vh_color=color,
+        vh_clase=clase,
+        vh_uso=uso,
+        vh_servicio=servicio,
+        vh_tara=tara,
+        vh_nro_puestos=nro_puestos,
+        vh_nro_ejes=nro_ejes,
+        vh_capacidad_carga=capacidad_larga,
+        vh_propietario=propietario,
         vh_responsable=responsable,
         vh_telf_responsable=telf_responsable,
+        vh_custodio=custodio,
+        vh_telf_custodio=telf_custodio,
+        vh_sudebip_localizacion=sudebip_localizacion,
+        vh_sudebip_codigo_localizacion=sudebip_codigo_localizacion,
+        vh_sudebip_categoria=sudebip_categoria,
+        vh_sudebip_subcategoria=sudebip_subcategoria,
+        vh_sudebip_categoria_especifica=sudebip_categoria_especifica,
+        vh_fecha_adquisicion=fecha_adquisicion,
+        vh_origen=origen,
+        vh_nro_factura=nro_factura,
+        vh_fecha_factura=fecha_factura,
+        vh_nro_oficio=nro_oficio,
+        vh_proveedor=Proveedor,
+        vh_proveedor_rif=proveedor_rif,
+        vh_nro_donacion=nro_donacion,
+        vh_donante=donante,
+        vh_contacto=contacto,
         vh_es_particular=es_particular,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
