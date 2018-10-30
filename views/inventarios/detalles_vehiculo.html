@@ -211,13 +211,19 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_origen']}}
                     </div>
-                    <div class="grid-item">
-                        Factura:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_factura']}}
-                    </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
+                    <div class="grid-item">
+                        Nº. Factura:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_nro_factura']}}
+                    </div>
+                    <div class="grid-item">
+                        Fecha Factura:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_fecha_factura']}}
+                    </div>
                     <div class="grid-item">
                         Proveedor:
                     </div>
