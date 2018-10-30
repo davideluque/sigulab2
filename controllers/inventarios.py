@@ -1,13 +1,19 @@
-#Importamos el diccionario con las categorias de los vehiculos.
-from info_inventarios import diccionarioCategorias
 # -*- coding: utf-8 -*-
+'''
+Controlador de las vistas relacionadas a la gestión de inventarios,
+vehículos y solicitudes de préstamos.
+'''
+
+# Importamos el diccionario con las categorias de los vehiculos.
+from info_inventarios import CATEGORIAS_VEHICULOS
+
 
 # < -------- Funciones privadas de SMDYP ------------>
 
-#Funcion que devuelve un diccionario, con las categorias y 
+# Funcion que devuelve un diccionario, con las categorias y 
 #subcategorias de los vehiculos
 def __obtener_categorias():
-    return diccionarioCategorias 
+    return CATEGORIAS_VEHICULOS 
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
