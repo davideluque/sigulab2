@@ -109,53 +109,45 @@
                     <span class="step">3</span>
                     <span class="step">4</span>
                     <span class="step">5</span>
+                    <span class="step">6</span>
+                    <span class="step">7</span>
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
                     <h4 class="titulosForm">Características del vehículo</h4>                
                     <label>Campos marcados con * son obligatorios.</label>
                     <div class="form-group" tag="Formato:">
-                            <label>Placa*</label>
-                            <input type="text" class="form-control" id="placa" name="placa" title="Ingrese la placa del vehículo" placeholder="Placa*"  required>
-                            <div class="field-error"> <p id="error-placa"> </p> </div>
+                        <label>Placa*</label>
+                        <input type="text" class="form-control" id="placa" name="placa" title="Ingrese la placa del vehículo" placeholder="Placa*"  required>
+                        <div class="field-error"> <p id="error-placa"> </p> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
-                            <label>Marca*</label>
-                            <input type="text" class="form-control" id="marca" name="marca" title="Ingrese la marca del vehículo" placeholder="Marca*"  required>
-                            <div class="field-error"> <p id="error-marca"> </p> </div>
+                        <label>Marca*</label>
+                        <input type="text" class="form-control" id="marca" name="marca" title="Ingrese la marca del vehículo" placeholder="Marca*"  required>
+                        <div class="field-error"> <p id="error-marca"> </p> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
-                            <label>Año*</label>
-                            <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*"  required>
-                            <div class="field-error"> <p id="error-ano"> </p> </div>
+                        <label>Año*</label>
+                        <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*"  required>
+                        <div class="field-error"> <p id="error-ano"> </p> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
-                            <label>Serial de carroceria*</label>
-                            <input type="text" class="form-control" id="serialC" name="serialC" title="Ingrese el serial de carroceria del vehículo" placeholder="Serial de carroceria*"  required>
-                            <div class="field-error"> <p id="error-serialc"> </p> </div>
+                        <label>Color*</label>
+                        <input type="text" class="form-control" id="color" name="color" title="Ingrese el color del vehículo" placeholder="Color*"  required>
+                        <div class="field-error"> <p id="error-color"> </p> </div>
+                    </div>  
+                    <div class="form-group">
+                        <label>Descripción de uso*</label>
+                        <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"   required>
+                        <div class="field-error"> <p id="error-descripcion_uso"> </p> </div>
                     </div>
-                    <div class="form-group" tag="Formato:">
-                            <label>Serial del motor*</label>
-                            <input type="text" class="form-control" id="serialM" name="serialM" title="Ingrese el serial del motor del vehículo" placeholder="Serial del motor*"  required>
-                            <div class="field-error"> <p id="error-serialm"> </p> </div>
-                    </div>
-                    <div class="form-group" tag="Formato:">
-                            <label>Serial del chasis*</label>
-                            <input type="text" class="form-control" id="serialCh" name="serialCh" title="Ingrese el serial del chasis del vehículo" placeholder="Serial del chasis*"  required>
-                            <div class="field-error"> <p id="error-serialch"> </p> </div>
-                    </div>
-                    <div class="form-group" tag="Formato:">
-                            <label>Color*</label>
-                            <input type="text" class="form-control" id="color" name="color" title="Ingrese el color del vehículo" placeholder="Color*"  required>
-                            <div class="field-error"> <p id="error-color"> </p> </div>
-                    </div>
-                <div style="position:fixed;bottom: 30px; right: 30px">
-                 <button type="button" class="btn btn-next botonForm" onclick="elegir_campos(this);"><i class="fas fa-arrow-right"></i></button>  
+                  </div>
                 </div>
-                
+                <div style="position:fixed;bottom: 30px; right: 30px">
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                </div>
               </fieldset>
           
-                
                 <!-- Segundo paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
@@ -166,14 +158,72 @@
                       <span class="step">3</span>
                       <span class="step">4</span>
                       <span class="step">5</span>
+                      <span class="step">6</span>
+                      <span class="step">7</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
                       <h4 class="titulosForm">Características del Vehículo</h4>                
                       <label>Campos marcados con * son obligatorios.</label>
-
+                        <div class="form-group" tag="Formato:">
+                            <label>Serial de carrocería*</label>
+                            <input type="text" class="form-control" id="serialC" name="serialC" title="Ingrese el serial de carrocería del vehículo" placeholder="Serial de carrocería*"  required>
+                            <div class="field-error"> <p id="error-serialc"> </p> </div>
+                        </div>
 
                         <div class="form-group" tag="Formato:">
+                            <label>Serial del motor*</label>
+                            <input type="text" class="form-control" id="serialM" name="serialM" title="Ingrese el serial del motor del vehículo" placeholder="Serial del motor*"  required>
+                            <div class="field-error"> <p id="error-serialm"> </p> </div>
+                        </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Serial del chasis*</label>
+                            <input type="text" class="form-control" id="serialCh" name="serialCh" title="Ingrese el serial del chasis del vehículo" placeholder="Serial del chasis*"  required>
+                            <div class="field-error"> <p id="error-serialch"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nº de Autorización INTT*</label>
+                            <input type="text" class="form-control" id="autorizacion" name="autorizacion" placeholder="Nº de Autorización INTT*" title="Ingrese el Nº de Autorización INTT"   required>
+                            <div class="field-error"> <p id="error-autorizacion"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo*</label> <br>
+                            <input type="radio" value="oficial" " id="oficial" name="tipo">
+                            <label for="oficial"> Oficial</label>
+                            <input type="radio" value="privado" id="privado" name="tipo">
+                            <label for="privado"> Privado</label>
+                            <div class="field-error"> <p id="error-tipo"> </p> </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+                <!-- Fin Segundo Paso -->     
+
+                <!-- Tercer paso -->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body"> 
+                      <span class="step">1</span>
+                      <span class="step">2</span>
+                      <span class="step activePass">3</span>
+                      <span class="step">4</span>
+                      <span class="step">5</span>
+                      <span class="step">6</span>
+                      <span class="step">7</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+                      <div class="form-group" tag="Formato:">
                             <label>Clase*</label>
                             <input type="text" class="form-control" id="clase" name="clase" title="Ingrese la clase del vehículo" placeholder="Clase*"  required>
                             <div class="field-error"> <p id="error-clase"> </p> </div>
@@ -184,17 +234,58 @@
                             <input type="text" class="form-control" id="uso" name="uso" placeholder="Uso del vehículo*" title="Ingrese el uso del vehículo"   required>
                             <div class="field-error"> <p id="error-uso"> </p> </div>
                         </div>
+
                         <div class="form-group">
                             <label>Servicio*</label>
                             <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Servicio del vehículo*" title="Ingrese el servicio del vehículo"   required>
                             <div class="field-error"> <p id="error-servicio"> </p> </div>
                         </div>
+
+                        <div class="form-group">
+                          <label>Tara*</label>
+                          <input type="text" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
+                          <div class="field-error"> <p id="error-tara"> </p> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Unidad de medida Tara*</label>
+                          <input type="text" class="form-control"  id="md-tara" name="md-tara" placeholder="kg/ton*" required >
+                          <div class="field-error"> <p id="error-md-tara"> </p> </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                  </div>
+              </fieldset>
+                <!-- Fin Tercer Paso -->
+
+                <!-- Comienzo Cuarto Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Vehículo</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
                             <label>N° de puestos*</label>
                             <input type="text" class="form-control" id="no_puestos" name="no_puestos" title="Ingrese el N° de puestos del vehículo" placeholder="N° de puestos">
                             <div class="field-error"> <p id="error-no_puestos"> </p> </div>
                             <!-- <font color="red"><div id="err_no_puestos" hidden></div></font> -->
                         </div>
+
                         <div class="form-group">
                             <label>N° de ejes*</label>
                             <input type="text" class="form-control" id="no_ejes" name="no_ejes" title="Ingrese el N° de ejes del vehículo" placeholder="N° de pejes">
@@ -202,46 +293,39 @@
                             <!-- <font color="red"><div id="err_no_puestos" hidden></div></font> -->
                         </div>
 
-                        <div class="form-group">
-                          <label>Tara*</label>
-                          <input type="text" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
-                          <div class="field-error"> <p id="error-tara"> </p> </div>
-                      </div>
                       <div class="form-group">
                           <label>Capacidad de carga*</label>
                           <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"   required>
                           <div class="field-error"> <p id="error-carga"> </p> </div>
                       </div>
                       <div class="form-group">
-                          <label>Nº de Autorización INTT*</label>
-                          <input type="text" class="form-control" id="autorizacion" name="autorizacion" placeholder="Nº de Autorización INTT*" title="Ingrese el Nº de Autorización INTT"   required>
-                          <div class="field-error"> <p id="error-autorizacion"> </p> </div>
-                      </div>
-                      <div class="form-group">
-                          <label>Descripción de uso*</label>
-                          <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"   required>
-                          <div class="field-error"> <p id="error-descripcion_uso"> </p> </div>
+                          <label>Sede*</label> <br>
+                          <input type="radio" value="Sartenejas" " id="sartenejas" name="sede">
+                          <label for="sartenejas"> Sartenejas</label>
+                          <input type="radio" value="Litoral" id="litoral" name="sede">
+                          <label for="litoral"> Litoral</label>
+                          <div class="field-error"> <p id="error-responsable"> </p> </div>
                       </div>
                     </div>
                   </div>
                   <div style="position:fixed;bottom: 30px; right: 30px">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>         
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </div>
-                  
-                </fieldset>
-                <!-- Fin Segundo Paso -->     
+              </fieldset>
 
-                <!-- Tercer paso Parte 3-->
+                <!-- Quinto Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                       <div class="col-sm-1 col1Body"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
-                        <span class="step activePass">3</span>
+                        <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step">5</span>
+                        <span class="step activePass">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -250,12 +334,12 @@
                         <div class="form-group">
                             <label>Nombre del responsable*</label>
                             <input type="text" class="form-control" id="responsable" name="responsable" placeholder="Nombre del responsable*" title="Ingrese el nombre del responsable del vehículo" required>
-                            <div class="field-error"> <p id="error-responsalbe"> </p> </div>
+                            <div class="field-error"> <p id="error-responsable"> </p> </div>
                         </div>
                         <div class="form-group">
                             <label>Telefono del responsable*</label>
                             <input type="tel" class="form-control" id="tel_responsable" name="tel_responsable" placeholder="Telefono del responsable*" title="Ingrese el telefono del responsable del vehículo" required>
-                            <div class="field-error"> <p id="error-tel_responsalbe"> </p> </div>
+                            <div class="field-error"> <p id="error-tel_responsable"> </p> </div>
                         </div>
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
@@ -268,14 +352,6 @@
                             <div class="field-error"> <p id="error-tel_custodio"> </p> </div>
                         </div>
                         <div class="form-group">
-                            <label>Sede*</label> <br>
-                            <input type="radio" value="Sartenejas" " id="sartenejas" name="sede">
-                            <label for="sartenejas"> Sartenejas</label>
-                            <input type="radio" value="Litoral" id="litoral" name="sede">
-                            <label for="litoral"> Litoral</label>
-                            <div class="field-error"> <p id="error-responsalbe"> </p> </div>
-                        </div>
-                        <div class="form-group">
                             <label>Dependencia*</label>
                             <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Dependencia*" title="Ingrese la dependencia vehículo" required>
                             <div class="field-error"> <p id="error-dependendencia"> </p> </div>
@@ -285,25 +361,27 @@
                             <input type="text" class="form-control" id="pernocta" name="pernocta" placeholder="Ubicacion de pernocta*" title="Ingrese la ubicacion de pernocta del vehículo" required>
                             <div class="field-error"> <p id="error-pernocta"> </p> </div>
                         </div>
-                        </div>
                       </div>
-                      <div style="position:fixed;bottom: 30px; right: 30px">
-                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                        <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
-                      </div>
-                    
-                  </fieldset>
-                  <!-- Fin Tercer Paso -->
-                <!-- Comienzo Cuarto Paso -->
+                    </div>
+                    <div style="position:fixed;bottom: 30px; right: 30px">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    </div>
+                </fieldset>
+                <!-- Fin Quinto Paso -->
+
+                <!-- Comienzo Sexto Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                    <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body">
-                        <span class="step activePass">1</span>
+                        <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
-                        <span class="step activePass">4</span>
+                        <span class="step">4</span>
                         <span class="step">5</span>
+                        <span class="step activePass">6</span>
+                        <span class="step">7</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -339,32 +417,37 @@
                     </div>
                     <div style="position:fixed;bottom: 30px; right: 30px">
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                      <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                     </div>
                 </fieldset>
+                <!-- Fin Sexto Paso -->
+
+                <!-- Comienzo Séptimo Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                    <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body">
-                        <span class="step activePass">1</span>
+                        <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step activePass">5</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step activePass">7</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos de adquisición</h4>
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
-                            <label>Fecha de adquisición*</label>
-                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required>
-                            <div class="field-error"> <p id="error-fecha_adquisicion"> </p> </div>
-                        </div>
-                        <div class="form-group">
                             <label>Origen*</label>
                             <input type="text" class="form-control" id="origen" name="origen" placeholder="Origen*" title="Ingrese el origen vehículo" required>
                             <div class="field-error"> <p id="error-origen"> </p> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de adquisición*</label>
+                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required>
+                            <div class="field-error"> <p id="error-fecha_adquisicion"> </p> </div>
                         </div>
                         <div class="form-group">
                             <label>Nro Factura*</label>
@@ -402,9 +485,14 @@
                             <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" required>
                             <div class="field-error"> <p id="error-nro_oficio"> </p> </div>
                         </div>
-                      </div>
-
-                <!-- Fin Cuarto Paso -->
+                    </div>
+                  </div>
+                  <div style="position:fixed;bottom: 30px; right: 30px">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                  </div>
+              </fieldset>
+                <!-- Fin Séptimo Paso -->
               </form>
           </div>
         </div>               
