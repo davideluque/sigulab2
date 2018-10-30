@@ -377,7 +377,7 @@ db.define_table(
     Field('vh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires =IS_NOT_EMPTY()),
     Field('vh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_intt', 'integer', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
-    Field('vh_sede', 'string', notnull=True, default="Sarteneas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
+    Field('vh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
     
     # Descripción de uso
     Field('vh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),
@@ -459,16 +459,36 @@ db.define_table(
     Field('mvh_serial_motor','string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
     Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
     Field('mvh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
+    Field('mvh_intt', 'integer', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
+    Field('mvh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
 
     # Descripción de uso
     Field('mvh_descripcion','text', notnull=True, default="", label=T('Descripción')),
     Field('mvh_lugar_pernocta','string', notnull=True, default="", label=T('Lugar de pernocta')),
+    Field('mvh_color','string', label = T('Color')),
+    
+    # Categorias
+    Field('mvh_uso', 'string', notnull=True, label = T('Uso')),
+    Field('mvh_servicio', 'string', notnull=True, label = T('Servicio')),
+    Field('mvh_tara', 'string', label = T('Tara')),
+    
+    # Capacidades
+    Field('mvh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
+    Field('mvh_capacidad_carga', 'integer', notnull=True, default=0, label = T('Capacidad de Carga')),
+
    
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
+    Field('mvh_propietario','string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('mvh_responsable','string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
     Field('mvh_telf_responsable','string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-
+    Field('mvh_custodio','string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('mvh_telf_custodio','string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    
+     # Datos SUDEBIP
+    Field('mvh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
+    Field('mvh_sudebip_codigo_localizacion', 'string', notnull=True, label=T('SUDEBIP: Código de Localización')),
+    
     # Estatus de préstamo o mantenimiento
     Field('mvh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
 
