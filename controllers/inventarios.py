@@ -6,7 +6,7 @@ vehículos y solicitudes de préstamos.
 
 # PENDIENTE: Corregir esto
 # Importamos el diccionario con las categorias de los vehiculos.
-from applications.sigulab2.controllers.info_inventarios import CATEGORIAS_VEHICULOS
+from info_inventarios import CATEGORIAS_VEHICULOS
 
 
 # < -------- Funciones privadas de SMDYP ------------>
