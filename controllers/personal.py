@@ -159,6 +159,11 @@ def add_form():
              "condicion" : request.post_vars.condicion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
+             "fecha_inicio" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_add),
+             "fecha_final" : transformar_fecha_formato_original(request.post_vars.fecha_final_add),
+             "dependencia_hist" : request.post_vars.dependencia_add,
+             "organizacion" : request.post_vars.dependencia_hist_add,
+             "cargo_hist": request.post_vars.cargo_hist_add
             }
 
     ubicaciones = request.post_vars.ubicacion_add
@@ -229,6 +234,21 @@ def add_form():
             f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
             mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
+
+
+
+
+        # En lugar de update debe ser insert!
+        # Ver como hacer para insertar la referencia
+
+        # Añadir al historial de trabajo
+        historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == dic['email'])
+        historial.update(f_fecha_inicio = dic["fecha_inicio"],
+            f_fecha_final = dic["fecha_final"],
+            f_dependencia_hist = dic["dependencia_hist"],
+            f_organizacion = dic["organizacion"],
+            f_cargo_hist = dic["cargo_hist"]
+            )
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
