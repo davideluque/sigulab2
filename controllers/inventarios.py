@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
+'''
+Controlador de las vistas relacionadas a la gestión de inventarios,
+vehículos y solicitudes de préstamos.
+'''
+
+# PENDIENTE: Corregir esto
+# Importamos el diccionario con las categorias de los vehiculos.
+from info_inventarios import CATEGORIAS_VEHICULOS
+
 
 # < -------- Funciones privadas de SMDYP ------------>
+
+# Funcion que devuelve un diccionario, con las categorias y 
+#subcategorias de los vehiculos
+def __obtener_categorias():
+    return CATEGORIAS_VEHICULOS 
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -218,7 +232,7 @@ def __get_inventario_herramientas_dep(dep_id):
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
-    return db(db.vehiculo.vh_depedencia == dep_id).select()
+    return db(db.vehiculo.vh_dependencia == dep_id).select()
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
 def __get_mantenimiento_vh(vh_id=None):
@@ -287,10 +301,15 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # Registra un nuevo vehiculo en la dependencia indicada. Si el vehiculo ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
-def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa, 
-                 descripcion, lugar_pernocta, responsable, telf_responsable, 
-                 dependencia, user, es_particular=0, oculto=0):
-
+def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
+                 placa, intt, sede, descripcion, lugar_pernocta, color, clase, uso,
+                 servicio, tara, tara_md, nro_puestos, nro_ejes, capacidad_carga, propietario,
+                 responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
+                 sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
+                 sudebip_categoria_especifica, fecha_adquisicion, origen, nro_factura,
+                 fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion,
+                 donante, contacto_donante, dependencia, user, es_particular=0, oculto=0):
+    
     # Si ya existe el BM en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
@@ -300,17 +319,46 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, placa,
         return False
       
     # Se agrega el nuevo vehiculo a la base de datos
-    inv_id = db.bien_mueble.insert(
+    inv_id = db.vehiculo.insert(
         vh_marca=marca,
         vh_modelo=modelo,
         vh_ano=ano,
         vh_serial_motor=serial_motor,
         vh_serial_carroceria=serial_carroceria,
+        vh_serial_chasis=serial_chasis,
         vh_placa=placa,
+        vh_intt=intt,
+        vh_sede=sede,
         vh_descripcion=descripcion,
         vh_lugar_pernocta=lugar_pernocta,
+        vh_color=color,
+        vh_clase=clase,
+        vh_uso=uso,
+        vh_servicio=servicio,
+        vh_tara=tara,
+        vh_nro_puestos=nro_puestos,
+        vh_nro_ejes=nro_ejes,
+        vh_capacidad_carga=capacidad_carga,
+        vh_propietario=propietario,
         vh_responsable=responsable,
         vh_telf_responsable=telf_responsable,
+        vh_custodio=custodio,
+        vh_telf_custodio=telf_custodio,
+        vh_sudebip_localizacion=sudebip_localizacion,
+        vh_sudebip_codigo_localizacion=sudebip_codigo_localizacion,
+        vh_sudebip_categoria=sudebip_categoria,
+        vh_sudebip_subcategoria=sudebip_subcategoria,
+        vh_sudebip_categoria_especifica=sudebip_categoria_especifica,
+        vh_fecha_adquisicion=fecha_adquisicion,
+        vh_origen=origen,
+        vh_nro_factura=nro_factura,
+        vh_fecha_factura=fecha_factura,
+        vh_nro_oficio=nro_oficio,
+        vh_proveedor=proveedor,
+        vh_proveedor_rif=proveedor_rif,
+        vh_nro_donacion=nro_donacion,
+        vh_donante=donante,
+        vh_contacto=contacto_donante,
         vh_es_particular=es_particular,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
@@ -878,13 +926,23 @@ def vehiculos():
     # Lista de BM en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
     inventario = []
+    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
+
+    # Obtenemos otros datos de SUDEBIP
+    cod_localizacion = {
+        'Sartenejas': 150301, 
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
     
     # Elementos que deben ser mostrados como una lista en el modal
     # de agregar vehículo
     uso = []
     nombre_cat = []
-    cod_localizacion = []
-    localizacion = []
     nombre_espaciof = []
     unidad_adscripcion = []
     unidad_cap = []
@@ -909,6 +967,55 @@ def vehiculos():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     user_dep_id = user.f_dependencia
+
+    # Si se esta agregando un nuevo vehiculo, se registra en la DB
+    if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
+        __agregar_vh(
+            marca=request.vars.marca, 
+            modelo=request.vars.modelo,
+            ano=int(request.vars.ano), 
+            serial_motor=request.vars.serialM,
+            serial_carroceria=request.vars.serialC,
+            serial_chasis=request.vars.serialCh,
+            placa=request.vars.placa,
+            intt=request.vars.intt,
+            sede=request.vars.sede,
+            descripcion=request.vars.descripcion_uso,
+            lugar_pernocta=request.vars.pernocta,
+            color=request.vars.color,
+            clase=request.vars.clase,
+            uso=request.vars.uso,
+            servicio=request.vars.servicio,
+            tara=float(request.vars.tara),
+            tara_md=request.vars.tara_md,
+            nro_puestos=int(request.vars.nro_puestos),
+            nro_ejes=int(request.vars.nro_ejes),
+            capacidad_carga=float(request.vars.capacidad),
+            propietario=request.vars.propietario,
+            responsable=request.vars.responsable,
+            telf_responsable=request.vars.telf_responsable,
+            custodio=request.vars.custodio,
+            telf_custodio=request.vars.telf_custodio,
+            sudebip_localizacion=localizacion[request.vars.sede],
+            sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
+            sudebip_categoria="(15000-0000) Equipos de transporte, tracción y elevación",
+            sudebip_subcategoria=request.vars.sudebip_subcategoria,
+            sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
+            fecha_adquisicion=request.vars.fecha_adquisicion,
+            origen=request.vars.origen,
+            nro_factura=request.vars.nro_factura,
+            fecha_factura=request.vars.fecha_factura,
+            nro_oficio=request.vars.nro_oficio,
+            proveedor=request.vars.proveedor,
+            proveedor_rif=request.vars.proveedor_rif,
+            nro_donacion=request.vars.nro_donacion,
+            donante=request.vars.donante,
+            contacto_donante=request.vars.contacto_donante,
+            dependencia=request.vars.dependencia,
+            user=user,
+            es_particular=(1 if (request.vars.tipo == "Particular") else 0),
+            oculto=0
+        )
 
     if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
@@ -944,22 +1051,9 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_vh_dep(dep_padre_id)
     
-                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301', '240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
 
-                # Si se esta agregando un nuevo vehiculo, se registra en la DB
-                if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
-                    __agregar_vh(
-                        request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
-                        request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion, 
-                        request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
-                        request.vars.dependencia, request.vars.user, request.vars.es_particular, 
-                        request.vars.oculto
-                    )
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1036,20 +1130,8 @@ def vehiculos():
             # Busca el inventario del espacio
             inventario = __get_vh_dep(dep_padre_id)
 
-            uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-            cod_localizacion = ['150301', '240107']
-            localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-            'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-
-            # Si se esta agregando un nuevo vehiculo, se registra en la DB
-            if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
-                __agregar_vh(
-                    request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
-                    request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion,
-                    request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
-                    request.vars.dependencia, request.vars.user, request.vars.es_particular, request.vars.oculto)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -1127,24 +1209,8 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-                cod_localizacion = ['150301', '240107']
-                localizacion = ['Edo Miranda, Municipio Baruta, Parroquia Baruta',
-                'Edo Vargas, Municipio Vargas, Parroquia Macuto']
-
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
 
@@ -1158,7 +1224,7 @@ def vehiculos():
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                 dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
                                       ).select(db.dependencias.ALL))
-                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
                 if len(dependencias) == 0:
@@ -1200,9 +1266,12 @@ def vehiculos():
     else:
         inventario = db(db.vehiculo.id).select()
 
-    return dict(dep_nombre=dep_nombre, 
-                dependencias=dependencias, 
-                espacios=espacios, 
+    # Devolvemos las categorias de vehiculos
+    dict_categorias = __obtener_categorias()
+
+    return dict(dep_nombre=dep_nombre,
+                dependencias=dependencias,
+                espacios=espacios,
                 es_espacio=es_espacio,
                 espacio_visitado=espacio_visitado,
                 dep_padre_id=dep_padre_id,
@@ -1213,9 +1282,10 @@ def vehiculos():
                 retroceder=retroceder,
                 uso_list=uso,
                 nombre_cat=nombre_cat,
+                categorias=dict_categorias,
                 cod_localizacion=cod_localizacion,
-                localizacion=localizacion,
-                ) 
+                localizacion=localizacion
+                )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -1549,7 +1619,7 @@ def detalles():
 
     if request.vars.modificacion:
         __agregar_modificar_bm(
-            request.vars.nombre, bien['bm_num'],request.vars.no_placa, 
+            request.vars.nombre, bien['bm_num'], request.vars.no_placa, 
             request.vars.marca, request.vars.modelo, request.vars.serial,
             request.vars.descripcion, request.vars.material, request.vars.color,
             request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
@@ -1561,7 +1631,7 @@ def detalles():
     
     if request.vars.mantenimiento_nuevo:
         __agregar_mantenimiento_bm(
-            bien['bm_num'],request.vars.fecha_sol, 
+            bien['bm_num'], request.vars.fecha_sol, 
             request.vars.codigo, request.vars.tipo, request.vars.servicio,
             request.vars.accion, request.vars.descripcion_man, request.vars.proveedor,
             request.vars.fecha_inicio, request.vars.fecha_fin, request.vars.tiempo_ejec, 
@@ -2180,12 +2250,27 @@ def detalles_vehiculo():
         'Descripción de uso': vehi['vh_descripcion'],
     }
 
+    cod_localizacion = {
+        'Sartenejas': 150301, 
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
+
+    dict_categorias = __obtener_categorias() 
+
     # Si solo estoy cargando la vista
     return dict(
         vehiculo=vehi, 
         mantenimiento=mantenimiento,
         caracteristicas_list=caracteristicas_list,
-        caracteristicas_dict=caracteristicas_dict
+        caracteristicas_dict=caracteristicas_dict,
+        categorias=dict_categorias,
+        cod_localizacion=cod_localizacion,
+        localizacion=localizacion
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene

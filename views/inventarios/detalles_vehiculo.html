@@ -151,7 +151,7 @@
                       Dependencia:
                 </div>
                 <div class="grid-item">
-                  {{=db(db.dependencias.id == vehiculo['vh_depedencia']).select().first().nombre}}
+                  {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
                 </div>
                 <div class="grid-item">
                         Ubicación de pernocta:
@@ -211,13 +211,19 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_origen']}}
                     </div>
-                    <div class="grid-item">
-                        Factura:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_factura']}}
-                    </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
+                    <div class="grid-item">
+                        Nº. Factura:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_nro_factura']}}
+                    </div>
+                    <div class="grid-item">
+                        Fecha Factura:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_fecha_factura']}}
+                    </div>
                     <div class="grid-item">
                         Proveedor:
                     </div>
@@ -247,7 +253,7 @@
                         Contacto:
                     </div>
                     <div class="grid-item">
-                        {{=vehiculo['vh_contacto']}}
+                        {{=vehiculo['vh_contacto_donante']}}
                     </div>
                     {{ pass }}
                 </div>
@@ -721,7 +727,6 @@
   
     // Valida los campos de la forma en el modal "addbm"
     function validar_campos(){
-    console.log("alo")
       // Buscando divs para ingresar mensajes de error
       var error_total = document.getElementById("error-total");
       var error_uso_interno = document.getElementById("error-uso-interno");
