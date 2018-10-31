@@ -407,7 +407,7 @@ db.define_table(
     # Datos SUDEBIP
     Field('vh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
     Field('vh_sudebip_codigo_localizacion', 'string', notnull=True, default="", label=T('SUDEBIP: Código de Localización')),
-    Field('vh_sudebip_categoria', 'string', notnull=True, label=T('SUDEBIP: Categoría')),
+    Field('vh_sudebip_categoria', 'string', notnull=True, default="(15000-0000) Equipos de transporte, tracción y elevación", label=T('SUDEBIP: Categoría')),
     Field('vh_sudebip_subcategoria', 'string', notnull=True, label=T('SUDEBIP: Subcategoría')),
     Field('vh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 

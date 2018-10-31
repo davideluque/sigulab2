@@ -989,7 +989,7 @@ def vehiculos():
             telf_custodio=request.vars.telf_custodio,
             sudebip_localizacion=request.vars.sudebip_localizacion,
             sudebip_codigo_localizacion=request.vars.sudebip_cod_localizacion,
-            sudebip_categoria=request.vars.sudebip_categoria,
+            sudebip_categoria="(15000-0000) Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
             fecha_adquisicion=request.vars.fecha_adquisicion,
