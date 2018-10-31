@@ -376,7 +376,7 @@ db.define_table(
     Field('vh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
     Field('vh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires =IS_NOT_EMPTY()),
     Field('vh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
-    Field('vh_intt', 'integer', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
+    Field('vh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
     Field('vh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
 
     # Descripción de uso
@@ -389,19 +389,20 @@ db.define_table(
     Field('vh_uso', 'string', notnull=True, label=T('Uso')),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
     Field('vh_tara', 'string', label=T('Tara')),
+    Field('vh_tara_md', 'string', label=T('Tara'), requires=IS_IN_SET(['kg', 'ton'])),
 
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
     Field('vh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
-    Field('vh_capacidad_carga', 'integer', notnull=True, default=0, label = T('Capacidad de Carga')), # Tipo
+    Field('vh_capacidad_carga', 'double', notnull=True, default=0, label = T('Capacidad de Carga')), # Tipo
 
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
-    Field('vh_propietario','string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
-    Field('vh_responsable','string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
-    Field('vh_telf_responsable','string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-    Field('vh_custodio','string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('vh_telf_custodio','string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('vh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
+    Field('vh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('vh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('vh_telf_custodio', 'string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
 
     # Datos SUDEBIP
     Field('vh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
@@ -413,9 +414,9 @@ db.define_table(
     # Datos Adquisición
     Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_nro_factura', 'integer', label=T('Número de Factura')),
+    Field('vh_nro_factura', 'string', label=T('Número de Factura')),
     Field('vh_fecha_factura', 'date', label=T('Fecha de Factura')),
-    Field('vh_nro_oficio', 'integer', label=T('Número de Oficio')),
+    Field('vh_nro_oficio', 'string', label=T('Número de Oficio')),
     Field('vh_proveedor', 'string', label=T('Proveedor')),
     Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
     Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
@@ -423,18 +424,18 @@ db.define_table(
     Field('vh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
-    Field('vh_estatus','string',label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
+    Field('vh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),
 
     # Estado = 0 : No es particular
     # Estado = 1 : Es particular
-    Field('vh_es_particular','integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
+    Field('vh_es_particular', 'integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
 
     # Estado = 0 : Visible
     # Estado = 1 : Oculto
-    Field('vh_oculto','integer', default=0, label=T('Visibilidad del vehículo'), requires=IS_INT_IN_RANGE(0,2)),
+    Field('vh_oculto', 'integer', default=0, label=T('Visibilidad del vehículo'), requires=IS_INT_IN_RANGE(0,2)),
 
     # Foráneas
-    Field('vh_depedencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
+    Field('vh_dependencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
     Field('vh_crea_ficha', 'reference auth_user', notnull = True, label = T('Usuario que crea la ficha')),
 
     # Eliminación
@@ -447,7 +448,7 @@ db.define_table(
     )
     
 db.vehiculo.vh_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
-db.vehiculo.vh_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+db.vehiculo.vh_dependencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 
 db.define_table(
     'modificacion_vehiculo',
@@ -458,7 +459,7 @@ db.define_table(
     Field('mvh_serial_motor','string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
     Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
     Field('mvh_placa','string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
-    Field('mvh_intt', 'integer', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
+    Field('mvh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
     Field('mvh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
 
     # Descripción de uso
@@ -475,7 +476,7 @@ db.define_table(
     # Capacidades
     Field('mvh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
     Field('mvh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
-    Field('mvh_capacidad_carga', 'integer', notnull=True, default=0, label = T('Capacidad de Carga')),
+    Field('mvh_capacidad_carga', 'double', notnull=True, default=0, label = T('Capacidad de Carga')),
 
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
@@ -495,9 +496,9 @@ db.define_table(
    # Datos Adquisición
     Field('mvh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('mvh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('mvh_nro_factura', 'integer', label=T('Número de Factura')),
+    Field('mvh_nro_factura', 'string', label=T('Número de Factura')),
     Field('mvh_fecha_factura', 'date', label=T('Fecha de Factura')),
-    Field('mvh_nro_oficio', 'integer', label=T('Número de Oficio')),
+    Field('mvh_nro_oficio', 'string', label=T('Número de Oficio')),
     Field('mvh_proveedor', 'string', label=T('Proveedor')),
     Field('mvh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
     Field('mvh_nro_donacion', 'integer', label=T('Nº Donación')),
@@ -516,7 +517,7 @@ db.define_table(
     Field('mvh_oculto','integer', default=0, label=T('Visibilidad del vehículo'), requires=IS_INT_IN_RANGE(0,2)),
 
     # Foráneas
-    Field('mvh_depedencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
+    Field('mvh_dependencia', 'reference dependencias', notnull=True, label = T('Nombre de la dependencia asociada')),
     Field('mvh_modifica_ficha', 'reference auth_user', notnull = True, label = T('Usuario que modifica la ficha')),
     Field('mvh_motivo', 'string', length = 140, label = T('Motivo de la modificacion')),
     # Estado = -1 :Denegado
@@ -526,7 +527,7 @@ db.define_table(
     )
 
 db.modificacion_vehiculo.mvh_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
-db.modificacion_vehiculo.mvh_depedencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
 # PENDIENTE: Verificar la siguiente restriccion
 db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
 
