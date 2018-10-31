@@ -144,7 +144,7 @@
                     
                   </div>
                 </div>
-                <div style="position:fixed;bottom: 30px; right: 30px">
+                <div style="position:fixed; bottom: 15px; right: 30px;">
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                 </div>
               </fieldset>
@@ -186,7 +186,7 @@
 
                         <div class="form-group">
                             <label>Nº de Autorización INTT*</label>
-                            <input type="text" class="form-control" id="intt" name="intt" placeholder="Nº de Autorización INTT*" title="Ingrese el Nº de Autorización INTT"   required>
+                            <input type="text" class="form-control" id="intt" name="intt" placeholder="Nº de Autorización INTT*" title="Ingrese el Nº de Autorización INTT"  required>
                             <div class="dr"> <p id="error-intt"> </p> </div>
                         </div>
 
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                   </div>
-                  <div style="position:fixed;bottom: 30px; right: 30px">
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </div>
@@ -232,13 +232,13 @@
 
                         <div class="form-group">
                             <label>Uso*</label>
-                            <input type="text" class="form-control" id="uso" name="uso" placeholder="Uso del vehículo*" title="Ingrese el uso del vehículo"   required>
+                            <input type="text" class="form-control" id="uso" name="uso" placeholder="Uso del vehículo*" title="Ingrese el uso del vehículo"  required>
                             <div class="dr"> <p id="error-uso"> </p> </div>
                         </div>
 
                         <div class="form-group">
                             <label>Servicio*</label>
-                            <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Servicio del vehículo*" title="Ingrese el servicio del vehículo"   required>
+                            <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Servicio del vehículo*" title="Ingrese el servicio del vehículo"  required>
                             <div class="dr"> <p id="error-servicio"> </p> </div>
                         </div>
 
@@ -259,7 +259,7 @@
                         </div>
                       </div>
                   </div>
-                  <div style="position:fixed;bottom: 30px; right: 30px">
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                   </div>
@@ -300,13 +300,23 @@
 
                       <div class="form-group">
                           <label>Capacidad de carga*</label>
-                          <input type="number" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"   required>
+                          <input type="number" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
                           <div class="dr"> <p id="error-carga"> </p> </div>
                       </div>
                       <div class="form-group">
                           <label>Descripción de uso*</label>
-                          <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"   required>
+                          <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"  required>
                           <div class="dr"> <p id="error-descripcion_uso"> </p> </div>
+                      </div>
+                      <div class="form-group">
+                          <label>Dependencia*</label>
+                          <select class="form-control" type="select" name="dependencia" id="dependencia" class="input" required>
+                            <option value=""></option>
+                            {{for dep in dependencias:}}
+                              <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="dr"> <p id="error-dependendencia"> </p> </div>
                       </div>
                       <div class="form-group">
                           <label>Sede*</label> <br>
@@ -316,19 +326,9 @@
                           <label for="litoral"> Litoral</label>
                           <div class="dr"> <p id="error-sede"> </p> </div>
                       </div>
-                      <div class="form-group">
-                          <label>Dependencia*</label>
-                          <select name="dependencia" id="dependencia" class="input" required>
-                            <option value=""></option>
-                            {{for dep in dependencias:}}
-                              <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
-                            {{pass}}
-                          </select>
-                          <div class="dr"> <p id="error-dependendencia"> </p> </div>
-                      </div>
                     </div>
                   </div>
-                  <div style="position:fixed;bottom: 30px; right: 30px">
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </div>
@@ -363,7 +363,7 @@
                         </div>
                         <div class="form-group">
                             <label>Telefono del responsable*</label>
-                            <input type="tel" class="form-control" id="telf_responsable" name="telf_responsable" placeholder="Telefono del responsable*" title="Ingrese el telefono del responsable del vehículo" required>
+                            <input type="text" class="form-control" id="telf_responsable" name="telf_responsable" placeholder="Telefono del responsable*" title="Ingrese el telefono del responsable del vehículo" required>
                             <div class="dr"> <p id="error-telf_responsable"> </p> </div>
                         </div>
                         <div class="form-group">
@@ -373,7 +373,7 @@
                         </div>
                         <div class="form-group">
                             <label>Telefono del custodio*</label>
-                            <input type="tel" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio*" title="Ingrese el telefono del custodio del vehículo" required>
+                            <input type="text" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio*" title="Ingrese el telefono del custodio del vehículo" required>
                             <div class="dr"> <p id="error-telf_custodio"> </p> </div>
                         </div>
                         <div class="form-group">
@@ -383,7 +383,7 @@
                         </div>
                       </div>
                     </div>
-                    <div style="position:fixed;bottom: 30px; right: 30px">
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
                     </div>
@@ -422,17 +422,24 @@
                         </div>
                         <div class="form-group">
                             <label>Subcategoría*</label>
-                            <input type="text" class="form-control" id="sudebip_subcategoria" name="sudebip_subcategoria" placeholder="Subcategoría*" title="Ingrese la subcategoría vehículo" required>
+                            <select class="form-control" type="select" id="sudebip_subcategoria" name="sudebip_subcategoria" placeholder="Subcategoría*" title="Ingrese la subcategoría del vehículo" required>
+                                <option value="">Seleccione una opción</option>
+                                {{ for subcat, _ in categorias.items(): }}
+                                <option value="{{=subcat}}">{{=subcat}}</option>
+                                {{ pass }}
+                            </select>
                             <div class="dr"> <p id="error-sudebip_subcategoria"> </p> </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="grupo-catesp" style="display: none;">
                             <label>Categoría específica*</label>
-                            <input type="text" class="form-control" id="sudebip_categoria_especifica" name="sudebip_categoria_especifica" placeholder="Categoría específica*" title="Ingrese la categoría específica vehículo" required>
+                            <select class="form-control" type="select" id="sudebip_categoria_especifica" name="sudebip_categoria_especifica" placeholder="Categoría específica*" title="Ingrese la categoría específica del vehículo" required>
+                              <option value="">Seleccione una opción</option>
+                            </select>
                             <div class="dr"> <p id="error-categoria_específica"> </p> </div>
                         </div>
                       </div>
                     </div>
-                    <div style="position:fixed;bottom: 30px; right: 30px">
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                     </div>
@@ -464,54 +471,54 @@
                         <div class="form-group">
                             <label>Origen*</label>
                             <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
-                              <option value="">Seleccione una opción</option>
-                              <option value="Compra">Compra</option>
-                              <option value="Donación">Donación</option>
-                          </select>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Compra">Compra</option>
+                                <option value="Donación">Donación</option>
+                            </select>
                             <div class="dr"> <p id="error-origen"> </p> </div>
                         </div>
                         <div id="grupo-compra" style="display: none;">
                           <div class="form-group">
                               <label>Nro Factura*</label>
-                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" required>
+                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura">
                               <div class="dr"> <p id="error-nro_factura"> </p> </div>
                           </div>
                           <div class="form-group">
                               <label>Fecha de factura*</label>
-                              <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" required>
+                              <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura">
                               <div class="dr"> <p id="error-fecha_factura"> </p> </div>
                           </div>
                           <div class="form-group">
                               <label>Proveedor*</label>
-                              <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo" required>
+                              <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo">
                               <div class="dr"> <p id="error-proveedor"> </p> </div>
                           </div>
                           <div class="form-group">
                               <label>RIF*</label>
-                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF*" title="Ingrese el RIF" required>
+                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF*" title="Ingrese el RIF">
                               <div class="dr"> <p id="error-rif"> </p> </div>
                           </div>
                         </div>
                         <div id="grupo-donacion" style="display: none;">
                           <div class="form-group">
                               <label>Nº Oficio*</label>
-                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" required>
+                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio">
                               <div class="dr"> <p id="error-nro_oficio"> </p> </div>
                           </div>
                           <div class="form-group">
                               <label>Donante*</label>
-                              <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante" required>
+                              <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante">
                               <div class="dr"> <p id="error-donante"> </p> </div>
                           </div>
                           <div class="form-group">
                               <label>Teléfono del Donante*</label>
-                              <input type="tel" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante" required>
+                              <input type="text" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante">
                               <div class="dr"> <p id="error-contacto_donante"> </p> </div>
                           </div>
                         </div>
                     </div>
                   </div>
-                  <div style="position:fixed;bottom: 30px; right: 30px">
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
                   </div>
@@ -530,6 +537,38 @@
 <!-- Inicio javascript de control de formulario -->
 
 <script type="text/javascript">
+  var categorias_sudebip = {};
+
+  // Carga las categorias de sudebip
+  $(document).ready(function() {
+    {{ for subcat, lista_cat_esp in categorias.items(): }}
+      categorias_sudebip["{{=subcat}}"] = [
+        {{ for cat_esp in lista_cat_esp: }}
+          "{{=cat_esp}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+  });
+  
+  // Actualiza selector de categorias sudebip 
+  $("#sudebip_subcategoria").change(function() {
+    var subcat = $(this).children("option:selected").val();
+    $("#grupo-catesp").show("fast");
+    $('#sudebip_categoria_especifica option:gt(0)').remove(); 
+
+    var longitud = categorias_sudebip[subcat].length;
+    for (var i = 0; i < longitud; i++) {
+      $("#sudebip_categoria_especifica").append(
+        $("<option></option>").attr("value", categorias_sudebip[subcat][i]).text(categorias_sudebip[subcat][i])
+      );
+    }
+
+    if (subcat == "") {
+      $("#grupo-catesp").hide("fast");
+    }
+
+  });
+
   // Mostrar datos de compra o donacion según lo escogido
   $("#origen").change(function() {
     var origen = $(this).children("option:selected").val();
