@@ -310,9 +310,9 @@
                     </div>
                       <div class="form-group">
                           <label>Sede*</label> <br>
-                          <input type="radio" value="Sartenejas" id="sartenejas" name="sede">
+                          <input type="radio" value="Sartenejas" id="Sartenejas" name="sede">
                           <label for="sartenejas"> Sartenejas</label>
-                          <input type="radio" value="Litoral" id="litoral" name="sede">
+                          <input type="radio" value="Litoral" id="Litoral" name="sede">
                           <label for="litoral"> Litoral</label>
                           <div class="dr"> <p id="error-sede"> </p> </div>
                       </div>
@@ -539,9 +539,27 @@
     if (origen == "Compra") {
       $("#grupo-compra").show("fast");
       $("#grupo-donacion").hide("fast");
-    } else {
+    } else if (origen == "Donación") {
       $("#grupo-compra").hide("fast");
       $("#grupo-donacion").show("fast");
+    } else {
+      $("#grupo-compra").hide("fast");
+      $("#grupo-donacion").hide("fast");
+    }
+  });
+
+  // Coloca primeros datos de SUDEBIP de acuerdo a sede (localizacion y codigo localizacion)
+  $("input[name='sede']").change(function() {
+    var sede = $("input[name='sede']:checked").val();
+    if (sede == "Sartenejas") {
+      $("#sudebip_localizacion").val("{{=localizacion['Sartenejas']}}");
+      $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Sartenejas']}}");
+    } else if (sede == "Litoral") {
+      $("#sudebip_localizacion").val("{{=localizacion['Litoral']}}");
+      $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Litoral']}}");
+    } else {
+      $("#sudebip_localizacion").val("");
+      $("#sudebip_cod_localizacion").val("");
     }
   });
 
