@@ -985,7 +985,7 @@ def vehiculos():
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
         __agregar_vh(
             num=request.vars.num,
-            marca=request.vars.marca, 
+            marca=request.vars.marca if request.vars.marca != "Otro" else "Otro: " + request.vars.marca2, 
             modelo=request.vars.modelo,
             ano=int(request.vars.ano), 
             serial_motor=request.vars.serialM,
@@ -998,8 +998,8 @@ def vehiculos():
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
             clase=request.vars.clase,
-            tipo=request.vars.tipo,
-            clasificacion=requests.vars.clasificacion,
+            tipo=request.vars.tipo if request.vars.tipo != "Otros aparatos para circular" else "Otros aparatos para circular: " + request.vars.tipo2,
+            clasificacion=request.vars.clasificacion if request.vars.clasificacion != "Emergencia" else "Emergencia: " + requesr.vars.clasificacion2,
             uso=request.vars.uso,
             servicio=request.vars.servicio,
             tara=float(request.vars.tara),
@@ -1008,11 +1008,11 @@ def vehiculos():
             nro_ejes=int(request.vars.nro_ejes),
             capacidad_carga=float(request.vars.capacidad),
             capacidad_carga_md=request.vars.capacidad_carga_md,
-            rines=request.vars.rines,
+            rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
             ubicacion_custodio=request.vars.ubicacion_custodio,
             propietario=request.vars.propietario,
             responsable=request.vars.responsable,
-            telf_responsable=request.vars.telf_responsable,
+            telf_responsable="(0000) 000-0000", # Quitar este campo
             custodio=request.vars.custodio,
             telf_custodio=request.vars.telf_custodio,
             extension=request.vars.extension,
@@ -1033,7 +1033,7 @@ def vehiculos():
             contacto_donante=request.vars.contacto_donante,
             dependencia=request.vars.dependencia,
             user=user,
-            es_particular=(1 if (request.vars.tipo == "Particular") else 0),
+            es_particular=0,
             oculto=0
         )
 

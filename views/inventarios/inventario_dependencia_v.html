@@ -287,7 +287,7 @@
                           <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación*">
                               <option value="">Seleccione una opción</option>
                           </select>
-                          <select class="form-control" type="select" id="clasificacion-emergencia" name="clasificacion-emergencia" disabled style="display: none;">
+                          <select class="form-control" type="select" id="clasificacion2" name="clasificacion2" disabled style="display: none;">
                               <option value="">Seleccione una opción</option>
                               <option value="Vehículos policiales">Vehículos policiales</option>
                               <option value="Vehículos militares">Vehículos militares</option>
@@ -403,6 +403,19 @@
                       </div>
 
                       <div class="form-group">
+                          <label>Rines</label>
+                          <select class="form-control" type="select" name="rines" id="rines" class="input">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Acero">Acero</option>
+                            <option value="Hierro">Hierro</option>
+                            <option value="Magnesio">Magnesio</option>
+                            <option value="Otro">Otro</option>
+                          </select>
+                          <input type="text" class="form-control" id="rines2" name="rines2" title="Ingrese los rines del vehículo" placeholder="Especifique" disabled style="display:none;">
+                          <div class="dr"> <p id="error-rines"> </p> </div>
+                      </div>
+
+                      <div class="form-group">
                           <label>Dependencia*</label>
                           <select class="form-control" type="select" name="dependencia" id="dependencia" class="input" required>
                             <option value=""></option>
@@ -410,7 +423,7 @@
                               <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
                             {{pass}}
                           </select>
-                          <div class="dr"> <p id="error-dependendencia"> </p> </div>
+                          <div class="dr"> <p id="error-dependencia"> </p> </div>
                       </div>
 
                       <div class="form-group">
@@ -741,13 +754,13 @@
   $("#clasificacion").change(function() {
     var clasificacion = $(this).children("option:selected").val();
     if (clasificacion == "Emergencia") {
-      $("#clasificacion-emergencia").show("fast");
-      $("#clasificacion-emergencia").prop('disabled', false)
-      $("#clasificacion-emergencia").prop('required', true)
+      $("#clasificacion2").show("fast");
+      $("#clasificacion2").prop('disabled', false)
+      $("#clasificacion2").prop('required', true)
     } else {
-      $("#clasificacion-emergencia").hide();
-      $("#clasificacion-emergencia").prop('disabled', true)
-      $("#clasificacion-emergencia").prop('required', false)
+      $("#clasificacion2").hide();
+      $("#clasificacion2").prop('disabled', true)
+      $("#clasificacion2").prop('required', false)
     }
   });
 
@@ -759,6 +772,19 @@
     } else {
       $("#tipo2").hide();
       $("#tipo2").prop('disabled', true)
+    }
+  });
+
+  $("#rines").change(function() {
+    var rines = $(this).children("option:selected").val();
+    if (rines == "Otro") {
+      $("#rines2").show("fast");
+      $("#rines2").prop('disabled', false)
+      $("#rines2").prop('required', true)
+    } else {
+      $("#rines2").hide();
+      $("#rines2").prop('required', false)
+      $("#rines2").prop('disabled', true)
     }
   });
 
