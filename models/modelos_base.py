@@ -234,19 +234,3 @@ db.define_table(
 #
 #######################################################################################################################
 
-#t_Personal: Tabla de Historial de trabajo.
-db.define_table(
-    #Nombre de la entidad
-    't_Historial_trabajo', 
-    #Atributos;
-    Field('f_fecha_inicio', 'date', label=T('Desde')),
-    Field('f_fecha_final', 'date', label=T('Hasta')),
-    Field('f_dependencia_hist', 'string', label=T('Dependencia')),
-    Field('f_organizacion',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Organización')),
-    Field('f_cargo_hist',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
-    #Referencia (Revisar si el label es asistio o organizo)
-    Field('f_Historial_trabajo_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Posee')),
-    )
-
-db.t_Historial_trabajo._plural = 'Historial de trabajo'
-db.t_Historial_trabajo._singular = 'Historial de trabajo'

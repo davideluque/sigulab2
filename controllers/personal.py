@@ -199,6 +199,15 @@ def add_form():
             f_validado=False,
             f_comentario="",
             f_rol= dic["rol"])
+        
+        # Añadir al historial de trabajo
+        db.t_Historial_trabajo.insert(f_fecha_inicio = dic["fecha_inicio"],
+            f_fecha_final = dic["fecha_final"],
+            f_dependencia_hist = dic["dependencia_hist"],
+            f_organizacion = dic["organizacion"],
+            f_cargo_hist = dic["cargo_hist"]
+            )
+
         session.ficha_negada=""
         _id = personal.select().first().id
         db(db.es_encargado.tecnico == _id).delete()
@@ -235,20 +244,6 @@ def add_form():
             mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
 
-
-
-
-        # En lugar de update debe ser insert!
-        # Ver como hacer para insertar la referencia
-
-        # Añadir al historial de trabajo
-        historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == dic['email'])
-        historial.update(f_fecha_inicio = dic["fecha_inicio"],
-            f_fecha_final = dic["fecha_final"],
-            f_dependencia_hist = dic["dependencia_hist"],
-            f_organizacion = dic["organizacion"],
-            f_cargo_hist = dic["cargo_hist"]
-            )
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
