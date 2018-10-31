@@ -389,29 +389,29 @@ db.define_table(
     # Categorias
     Field('vh_clase', 'string', notnull=True, label=T('Clase')),
     Field('vh_tipo', 'string', notnull=True, label=T('Tipo')),
-    Field('vh_clasificación', 'string', notnull=True, label=T('Clasificació')),
+    Field('vh_clasificacion', 'string', notnull=True, label=T('Clasificación')),
     Field('vh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
     
     Field('vh_tara', 'double', label=T('Tara')),
-    Field('vh_tara_md', 'string', label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
+    Field('vh_tara_md', 'string', default="kg", label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
 
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
     Field('vh_nro_ejes', 'integer', default=0, label = T('Nº de Ejes')),
     Field('vh_capacidad_carga', 'double', default=0, label = T('Capacidad de Carga')),
-    Field('vh_capacidad_carga_md', 'string', label=T('Capacidad de Carga (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
+    Field('vh_capacidad_carga_md', 'string', default="kg", label=T('Capacidad de Carga (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
 
-    Field('vh_rines', 'string', label=T('Rines')),
+    Field('vh_rines', 'string', default="", label=T('Rines')),
 
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
     Field('vh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
     Field('vh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
-    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY())
-    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),,
+    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
-    Field('vh_extension', 'integer', label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
+    Field('vh_extension', 'integer', default="", label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
 
 
     # Datos SUDEBIP
@@ -424,14 +424,14 @@ db.define_table(
     # Datos Adquisición
     Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_nro_factura', 'string', label=T('Número de Factura')),
+    Field('vh_nro_factura', 'string', default="", label=T('Número de Factura')),
     Field('vh_fecha_factura', 'date', label=T('Fecha de Factura')),
-    Field('vh_nro_oficio', 'string', label=T('Número de Oficio')),
-    Field('vh_proveedor', 'string', label=T('Proveedor')),
-    Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
+    Field('vh_nro_oficio', 'string', default="", label=T('Número de Oficio')),
+    Field('vh_proveedor', 'string', default="", label=T('Proveedor')),
+    Field('vh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
     Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
-    Field('vh_donante', 'string', label=T('Donante')),
-    Field('vh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+    Field('vh_donante', 'string', default="", label=T('Donante')),
+    Field('vh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('vh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible','En préstamo','En mantenimiento','En uso','Averiado'])),

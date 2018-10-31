@@ -39,7 +39,7 @@
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
-  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'vehiculos')}}">Vehículos</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Vehículos</a>
   <span class="breadcrumb-item active">Detalles de {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} ({{=vehiculo['vh_placa']}})</span>
   </div>
 </nav>
@@ -52,6 +52,7 @@
     <h3 class="dep-titulo text-center">{{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} </h3>
     <h4 class="dep-titulo text-center">Año: {{=vehiculo['vh_ano']}}</h4>
     <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
+    <h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>
     {{ if request.vars.delete: }}
         <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vehiculo['vh_desc_eliminar'].upper()}}</h4>
     {{ pass }}
@@ -118,6 +119,18 @@
             <div id="tab-2"class="tab-content">
               <div class="grid-container">
                 <div class="grid-item">
+                      Sede:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['vh_sede']}}
+                </div>
+                <div class="grid-item">
+                      Dependencia:
+                </div>
+                <div class="grid-item">
+                  {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
+                </div>
+                <div class="grid-item">
                       Responsable: 
                 </div>
                 <div class="grid-item">
@@ -136,29 +149,29 @@
                       {{=vehiculo['vh_custodio']}}
                 </div>
                 <div class="grid-item">
+                      Ubicación de Custodio:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['vh_ubicacion_custodio']}}
+                </div>
+                <div class="grid-item">
                       Tlf. de Custodio:
                 </div>
                 <div class="grid-item">
                        {{=vehiculo['vh_telf_custodio']}}
                 </div>
                 <div class="grid-item">
-                      Sede:
+                      Extensión:
                 </div>
                 <div class="grid-item">
-                       {{=vehiculo['vh_sede']}}
+                       {{ if vehiculo['vh_extension']: }} {{=vehiculo['vh_extension']}} {{ pass }}
                 </div>
                 <div class="grid-item">
-                      Dependencia:
+                    Ubicación de pernocta:
                 </div>
                 <div class="grid-item">
-                  {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
+                    {{=vehiculo['vh_lugar_pernocta']}}
                 </div>
-                <div class="grid-item">
-                        Ubicación de pernocta:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_lugar_pernocta']}}
-                    </div>
               </div>
             </div>
 
@@ -563,7 +576,7 @@
           
                         <div class="form-group">
                             <label>Descripción de uso*</label>
-                            <input type="text" class="form-control" id="descripcion_uso" style="text-transform:uppercase" value="{{=vehiculo['vh_descripcion']}}" name="descripcion_uso" placeholder="descripcion_uso*" required>
+                            <input type="text" class="form-control" id="descripcion_uso" style="text-transform:uppercase" value="{{=vehiculo['vh_observaciones']}}" name="descripcion_uso" placeholder="descripcion_uso*" required>
                             <div class="field-error"> <p id="error-descripcion_uso"> </p> </div>
                         </div>
  
