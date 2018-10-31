@@ -159,11 +159,16 @@ def add_form():
              "condicion" : request.post_vars.condicion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
-             "fecha_inicio" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_add),
-             "fecha_final" : transformar_fecha_formato_original(request.post_vars.fecha_final_add),
-             "dependencia_hist" : request.post_vars.dependencia_add,
-             "organizacion" : request.post_vars.dependencia_hist_add,
-             "cargo_hist": request.post_vars.cargo_hist_add
+             "fecha_inicio_1" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_1_add),
+             "fecha_final_1" : transformar_fecha_formato_original(request.post_vars.fecha_final_1_add),
+             "dependencia_hist_1" : request.post_vars.dependencia_hist_1_add,
+             "organizacion_1" : request.post_vars.organizacion_1_add,
+             "cargo_hist_1": request.post_vars.cargo_hist_1_add,
+             "fecha_inicio_2" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_2_add),
+             "fecha_final_2" : transformar_fecha_formato_original(request.post_vars.fecha_final_2_add),
+             "dependencia_hist_2" : request.post_vars.dependencia_hist_2_add,
+             "organizacion_2" : request.post_vars.organizacion_2_add,
+             "cargo_hist_2": request.post_vars.cargo_hist_2_add
             }
 
     ubicaciones = request.post_vars.ubicacion_add
@@ -201,11 +206,16 @@ def add_form():
             f_rol= dic["rol"])
         
         # Añadir al historial de trabajo
-        db.t_Historial_trabajo.insert(f_fecha_inicio = dic["fecha_inicio"],
-            f_fecha_final = dic["fecha_final"],
-            f_dependencia_hist = dic["dependencia_hist"],
-            f_organizacion = dic["organizacion"],
-            f_cargo_hist = dic["cargo_hist"]
+        db.t_Historial_trabajo.insert(f_fecha_inicio_1 = dic["fecha_inicio_1"],
+            f_fecha_final_1 = dic["fecha_final_1"],
+            f_dependencia_hist_1 = dic["dependencia_hist_1"],
+            f_organizacion_1 = dic["organizacion_1"],
+            f_cargo_hist_1 = dic["cargo_hist_1"],
+            f_fecha_inicio_2 = dic["fecha_inicio_2"],
+            f_fecha_fina_2 = dic["fecha_final_2"],
+            f_dependencia_hist_2 = dic["dependencia_hist_2"],
+            f_organizacion_2 = dic["organizacion_2"],
+            f_cargo_hist_2 = dic["cargo_hist_2"]
             )
 
         session.ficha_negada=""

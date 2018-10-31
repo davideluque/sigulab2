@@ -55,11 +55,16 @@ db.define_table(
     #Nombre de la entidad
     't_Historial_trabajo', 
     #Atributos;
-    Field('f_fecha_inicio', 'date', label=T('Desde')),
-    Field('f_fecha_final', 'date', label=T('Hasta')),
-    Field('f_dependencia_hist', 'string', label=T('Dependencia')),
-    Field('f_organizacion',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Organización')),
-    Field('f_cargo_hist',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
+    Field('f_fecha_inicio_1', 'date', label=T('Desde')),
+    Field('f_fecha_final_1', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_1', 'string', label=T('Dependencia')),
+    Field('f_organizacion_1',          'string', label=T('Organización')),
+    Field('f_cargo_hist_1',          'string', label=T('Cargo')),
+    Field('f_fecha_inicio_2', 'date', label=T('Desde')),
+    Field('f_fecha_final_2', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_2', 'string', label=T('Dependencia')),
+    Field('f_organizacion_2',          'string', label=T('Organización')),
+    Field('f_cargo_hist_2',          'string', label=T('Cargo')),
     #Referencia (Revisar si el label es asistio o organizo)
     Field('f_Historial_trabajo_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Posee')),
     )
