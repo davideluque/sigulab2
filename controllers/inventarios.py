@@ -232,7 +232,7 @@ def __get_inventario_herramientas_dep(dep_id):
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
-    return db(db.vehiculo.vh_depedencia == dep_id).select()
+    return db(db.vehiculo.vh_dependencia == dep_id).select()
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
 def __get_mantenimiento_vh(vh_id=None):
@@ -303,13 +303,13 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # el mismo. 
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
                  placa, intt, sede, descripcion, lugar_pernocta, color, clase, uso,
-                 servicio, tara, nro_puestos, nro_ejes, capacidad_larga, propietario,
+                 servicio, tara, tara_md, nro_puestos, nro_ejes, capacidad_carga, propietario,
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                  sudebip_categoria_especifica, fecha_adquisicion, origen, nro_factura,
                  fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion,
-                 donante, contacto, dependencia, user, es_particular=0, oculto=0):
-
+                 donante, contacto_donante, dependencia, user, es_particular=0, oculto=0):
+    
     # Si ya existe el BM en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
@@ -338,7 +338,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_tara=tara,
         vh_nro_puestos=nro_puestos,
         vh_nro_ejes=nro_ejes,
-        vh_capacidad_carga=capacidad_larga,
+        vh_capacidad_carga=capacidad_carga,
         vh_propietario=propietario,
         vh_responsable=responsable,
         vh_telf_responsable=telf_responsable,
@@ -354,11 +354,11 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_nro_factura=nro_factura,
         vh_fecha_factura=fecha_factura,
         vh_nro_oficio=nro_oficio,
-        vh_proveedor=Proveedor,
+        vh_proveedor=proveedor,
         vh_proveedor_rif=proveedor_rif,
         vh_nro_donacion=nro_donacion,
         vh_donante=donante,
-        vh_contacto=contacto,
+        vh_contacto=contacto_donante,
         vh_es_particular=es_particular,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
@@ -958,6 +958,55 @@ def vehiculos():
     user_id = user.id
     user_dep_id = user.f_dependencia
 
+    # Si se esta agregando un nuevo vehiculo, se registra en la DB
+    if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
+        __agregar_vh(
+            marca=request.vars.marca, 
+            modelo=request.vars.modelo,
+            ano=int(request.vars.ano), 
+            serial_motor=request.vars.serialM,
+            serial_carroceria=request.vars.serialC,
+            serial_chasis=request.vars.serialCh,
+            placa=request.vars.placa,
+            intt=request.vars.intt,
+            sede=request.vars.sede,
+            descripcion=request.vars.descripcion_uso,
+            lugar_pernocta=request.vars.pernocta,
+            color=request.vars.color,
+            clase=request.vars.clase,
+            uso=request.vars.uso,
+            servicio=request.vars.servicio,
+            tara=float(request.vars.tara),
+            tara_md=request.vars.tara_md,
+            nro_puestos=int(request.vars.nro_puestos),
+            nro_ejes=int(request.vars.nro_ejes),
+            capacidad_carga=float(request.vars.capacidad),
+            propietario=request.vars.propietario,
+            responsable=request.vars.responsable,
+            telf_responsable=request.vars.telf_responsable,
+            custodio=request.vars.custodio,
+            telf_custodio=request.vars.telf_custodio,
+            sudebip_localizacion=request.vars.sudebip_localizacion,
+            sudebip_codigo_localizacion=request.vars.sudebip_cod_localizacion,
+            sudebip_categoria=request.vars.sudebip_categoria,
+            sudebip_subcategoria=request.vars.sudebip_subcategoria,
+            sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
+            fecha_adquisicion=request.vars.fecha_adquisicion,
+            origen=request.vars.origen,
+            nro_factura=request.vars.nro_factura,
+            fecha_factura=request.vars.fecha_factura,
+            nro_oficio=request.vars.nro_oficio,
+            proveedor=request.vars.proveedor,
+            proveedor_rif=request.vars.proveedor_rif,
+            nro_donacion=request.vars.nro_donacion,
+            donante=request.vars.donante,
+            contacto_donante=request.vars.contacto_donante,
+            dependencia=request.vars.dependencia,
+            user=user,
+            es_particular=(1 if (request.vars.tipo == "Particular") else 0),
+            oculto=0
+        )
+
     if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
         if request.vars.dependencia:
@@ -996,15 +1045,6 @@ def vehiculos():
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
 
-                # Si se esta agregando un nuevo vehiculo, se registra en la DB
-                if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
-                    __agregar_vh(
-                        request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
-                        request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion, 
-                        request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
-                        request.vars.dependencia, request.vars.user, request.vars.es_particular, 
-                        request.vars.oculto
-                    )
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1084,14 +1124,6 @@ def vehiculos():
             uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-
-            # Si se esta agregando un nuevo vehiculo, se registra en la DB
-            if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
-                __agregar_vh(
-                    request.vars.marca,request.vars.modelo,request.vars.ano,request.vars.serial_motor, 
-                    request.vars.serial_carroceria, request.vars.placa, request.vars.descripcion,
-                    request.vars.lugar_pernocta, request.vars.responsable, request.vars.telf_responsable, 
-                    request.vars.dependencia, request.vars.user, request.vars.es_particular, request.vars.oculto)
 
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
@@ -1176,7 +1208,7 @@ def vehiculos():
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
                     __agregar_bm(
-                        request.vars.nombre,request.vars.no_bien,request.vars.no_placa, 
+                        request.vars.nombre, request.vars.no_bien, request.vars.no_placa, 
                         request.vars.marca, request.vars.modelo, request.vars.serial,
                         request.vars.descripcion, request.vars.material, request.vars.color,
                         request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
@@ -1603,7 +1635,7 @@ def detalles():
 
     if request.vars.modificacion:
         __agregar_modificar_bm(
-            request.vars.nombre, bien['bm_num'],request.vars.no_placa, 
+            request.vars.nombre, bien['bm_num'], request.vars.no_placa, 
             request.vars.marca, request.vars.modelo, request.vars.serial,
             request.vars.descripcion, request.vars.material, request.vars.color,
             request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
@@ -1615,7 +1647,7 @@ def detalles():
     
     if request.vars.mantenimiento_nuevo:
         __agregar_mantenimiento_bm(
-            bien['bm_num'],request.vars.fecha_sol, 
+            bien['bm_num'], request.vars.fecha_sol, 
             request.vars.codigo, request.vars.tipo, request.vars.servicio,
             request.vars.accion, request.vars.descripcion_man, request.vars.proveedor,
             request.vars.fecha_inicio, request.vars.fecha_fin, request.vars.tiempo_ejec, 
