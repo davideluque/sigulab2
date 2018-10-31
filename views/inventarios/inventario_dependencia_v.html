@@ -304,10 +304,10 @@
                           <div class="dr"> <p id="error-carga"> </p> </div>
                       </div>
                       <div class="form-group">
-                        <label>Descripción de uso*</label>
-                        <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"   required>
-                        <div class="dr"> <p id="error-descripcion_uso"> </p> </div>
-                    </div>
+                          <label>Descripción de uso*</label>
+                          <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"   required>
+                          <div class="dr"> <p id="error-descripcion_uso"> </p> </div>
+                      </div>
                       <div class="form-group">
                           <label>Sede*</label> <br>
                           <input type="radio" value="Sartenejas" id="Sartenejas" name="sede">
@@ -315,6 +315,16 @@
                           <input type="radio" value="Litoral" id="Litoral" name="sede">
                           <label for="litoral"> Litoral</label>
                           <div class="dr"> <p id="error-sede"> </p> </div>
+                      </div>
+                      <div class="form-group">
+                          <label>Dependencia*</label>
+                          <select name="dependencia" id="dependencia" class="input" required>
+                            <option value=""></option>
+                            {{for dep in dependencias:}}
+                              <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
+                            {{pass}}
+                          </select>
+                          <div class="dr"> <p id="error-dependendencia"> </p> </div>
                       </div>
                     </div>
                   </div>
@@ -365,16 +375,6 @@
                             <label>Telefono del custodio*</label>
                             <input type="tel" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio*" title="Ingrese el telefono del custodio del vehículo" required>
                             <div class="dr"> <p id="error-telf_custodio"> </p> </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Dependencia*</label>
-                            <select name="dependencia" id="dependencia" class="input" required>
-                              <option value=""></option>
-                              {{for dep in dependencias:}}
-                                <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
-                              {{pass}}
-                            </select>
-                            <div class="dr"> <p id="error-dependendencia"> </p> </div>
                         </div>
                         <div class="form-group">
                             <label>Ubicacion de pernocta*</label>
