@@ -926,6 +926,7 @@ def vehiculos():
     # Lista de BM en el inventario de un espacio fisico o que componen 
     # el inventario agregado de una dependencia
     inventario = []
+    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
     
     # Elementos que deben ser mostrados como una lista en el modal
     # de agregar vehículo
@@ -1041,7 +1042,6 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_vh_dep(dep_padre_id)
     
-                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
 
@@ -1121,7 +1121,6 @@ def vehiculos():
             # Busca el inventario del espacio
             inventario = __get_vh_dep(dep_padre_id)
 
-            uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
             nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
             'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
 
@@ -1201,21 +1200,8 @@ def vehiculos():
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
 
-                uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
                 nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento', 
                 'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-
-                # Si se esta agregando un nuevo BM, se registra en la DB
-                if request.vars.nombre: # Verifico si me pasan como argumento el nombre del BM.
-                    __agregar_bm(
-                        request.vars.nombre, request.vars.no_bien, request.vars.no_placa, 
-                        request.vars.marca, request.vars.modelo, request.vars.serial,
-                        request.vars.descripcion, request.vars.material, request.vars.color,
-                        request.vars.calibrar, request.vars.fecha_calibracion, request.vars.unidad, 
-                        request.vars.ancho, request.vars.largo, request.vars.alto,
-                        request.vars.diametro, request.vars.movilidad, request.vars.tipo_uso, request.vars.estatus, 
-                        request.vars.nombre_cat, request.vars.subcategoria, request.vars.cod_loc, request.vars.localizacion, espacio, dep_padre_unid_ads, 
-                        dep_padre_id, user_id, request.vars.clasificacion)
 
             else:
 
