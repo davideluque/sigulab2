@@ -369,40 +369,50 @@ db.historial_mantenimiento_sin_bn.hmsb_nombre.requires = IS_IN_DB(db, db.sin_bn.
 db.define_table(
     'vehiculo',
     # Datos de identificación
+    Field('vh_num', 'string', notnull=True, unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
+    Field('vh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('vh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_ano', 'integer', notnull=True, label=T('Año del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_serial_motor', 'string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
     Field('vh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
-    Field('vh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires =IS_NOT_EMPTY()),
+    Field('vh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires=[IS_NOT_EMPTY(), IS_LENGTH(17)]),
     Field('vh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
     Field('vh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
 
     # Descripción de uso
-    Field('vh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),
+    Field('vh_observaciones', 'text', default="", label=T('Observaciones')),
     Field('vh_lugar_pernocta', 'string', notnull=True, default="", label=T('Lugar de pernocta')),
     Field('vh_color', 'string', label=T('Color')),
 
     # Categorias
     Field('vh_clase', 'string', notnull=True, label=T('Clase')),
-    Field('vh_uso', 'string', notnull=True, label=T('Uso')),
+    Field('vh_tipo', 'string', notnull=True, label=T('Tipo')),
+    Field('vh_clasificación', 'string', notnull=True, label=T('Clasificació')),
+    Field('vh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
-    Field('vh_tara', 'string', label=T('Tara')),
-    Field('vh_tara_md', 'string', label=T('Tara'), requires=IS_IN_SET(['kg', 'ton'])),
+    
+    Field('vh_tara', 'double', label=T('Tara')),
+    Field('vh_tara_md', 'string', label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
 
     # Capacidades
-    Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
-    Field('vh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
-    Field('vh_capacidad_carga', 'double', notnull=True, default=0, label = T('Capacidad de Carga')), # Tipo
+    Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
+    Field('vh_nro_ejes', 'integer', default=0, label = T('Nº de Ejes')),
+    Field('vh_capacidad_carga', 'double', default=0, label = T('Capacidad de Carga')),
+    Field('vh_capacidad_carga_md', 'string', label=T('Capacidad de Carga (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
+
+    Field('vh_rines', 'string', label=T('Rines')),
 
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
-    Field('vh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('vh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
-    Field('vh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('vh_telf_custodio', 'string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('vh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY())
+    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),,
+    Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('vh_extension', 'integer', label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
+
 
     # Datos SUDEBIP
     Field('vh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
