@@ -287,6 +287,14 @@
                           <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación*">
                               <option value="">Seleccione una opción</option>
                           </select>
+                          <select class="form-control" type="select" id="clasificacion-emergencia" name="clasificacion-emergencia" disabled style="display: none;">
+                              <option value="">Seleccione una opción</option>
+                              <option value="Vehículos policiales">Vehículos policiales</option>
+                              <option value="Vehículos militares">Vehículos militares</option>
+                              <option value="Ambulancias">Ambulancias</option>
+                              <option value="Bomberos">Bomberos</option>
+                              <option value="Forenses">Forenses</option>
+                          </select>
                           <div class="dr"> <p id="error-uso"> </p> </div>
                       </div>
 
@@ -638,6 +646,7 @@
 
 <script type="text/javascript">
   var categorias_sudebip = {};
+  var clasificaciones = {};
 
   // Carga las categorias de sudebip
   $(document).ready(function() {
@@ -645,6 +654,14 @@
       categorias_sudebip["{{=subcat}}"] = [
         {{ for cat_esp in lista_cat_esp: }}
           "{{=cat_esp}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+
+    {{ for tipo, lista_clasif in clasificaciones.items(): }}
+      clasificaciones["{{=tipo}}"] = [
+        {{ for clasif in lista_clasif: }}
+          "{{=clasif}}",
         {{ pass }}
         ];
     {{ pass }}
@@ -667,6 +684,29 @@
       $("#grupo-catesp").hide("fast");
     }
 
+  });
+
+  // Actualiza selector de clasificaciones por tipo
+  $("#tipo").change(function() {
+    var tipo = $(this).children("option:selected").val();
+
+    if (tipo == "Otros aparatos para circular") {
+      $("#grupo-clasificacion").prop('disabled', true);
+      $("#grupo-clasificacion").prop('required', false);
+      $("#grupo-clasificacion").hide("fast");
+    } else {
+      $("#grupo-clasificacion").show("fast");
+      $("#grupo-clasificacion").prop('disabled', false)
+      $("#grupo-clasificacion").prop('required', true)
+      $('#clasificacion option:gt(0)').remove(); 
+
+      var longitud = clasificaciones[tipo].length;
+      for (var i = 0; i < longitud; i++) {
+        $("#clasificacion").append(
+          $("<option></option>").attr("value", clasificaciones[tipo][i]).text(clasificaciones[tipo][i])
+        );
+      }
+    }
   });
 
   // Mostrar datos de compra o donacion según lo escogido
@@ -695,6 +735,19 @@
       $("#marca2").hide();
       $("#marca2").prop('disabled', true)
       $("#marca2").prop('required', false)
+    }
+  });
+
+  $("#clasificacion").change(function() {
+    var clasificacion = $(this).children("option:selected").val();
+    if (clasificacion == "Emergencia") {
+      $("#clasificacion-emergencia").show("fast");
+      $("#clasificacion-emergencia").prop('disabled', false)
+      $("#clasificacion-emergencia").prop('required', true)
+    } else {
+      $("#clasificacion-emergencia").hide();
+      $("#clasificacion-emergencia").prop('disabled', true)
+      $("#clasificacion-emergencia").prop('required', false)
     }
   });
 

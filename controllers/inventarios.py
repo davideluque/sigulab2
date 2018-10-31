@@ -6,7 +6,7 @@ vehículos y solicitudes de préstamos.
 
 # PENDIENTE: Corregir esto
 # Importamos el diccionario con las categorias de los vehiculos.
-from info_inventarios import CATEGORIAS_VEHICULOS
+from info_inventarios import CATEGORIAS_VEHICULOS, CLASIFICACIONES_VEHICULOS
 
 
 # < -------- Funciones privadas de SMDYP ------------>
@@ -14,7 +14,12 @@ from info_inventarios import CATEGORIAS_VEHICULOS
 # Funcion que devuelve un diccionario, con las categorias y 
 #subcategorias de los vehiculos
 def __obtener_categorias():
-    return CATEGORIAS_VEHICULOS 
+    return CATEGORIAS_VEHICULOS
+
+# Funcion que devuelve un diccionario, con las clasificaciones
+# de los vehiculos
+def __obtener_clasificaciones():
+    return CLASIFICACIONES_VEHICULOS
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -1283,6 +1288,7 @@ def vehiculos():
 
     # Devolvemos las categorias de vehiculos
     dict_categorias = __obtener_categorias()
+    dict_clasificaciones = __obtener_clasificaciones()
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
@@ -1298,6 +1304,7 @@ def vehiculos():
                 uso_list=uso,
                 nombre_cat=nombre_cat,
                 categorias=dict_categorias,
+                clasificaciones=dict_clasificaciones,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion
                 )

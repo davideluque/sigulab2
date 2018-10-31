@@ -120,3 +120,36 @@ CATEGORIAS_VEHICULOS = {
         '15990-0001 - Otros equipos de transporte, traccion y elevacion'
     ]
 }
+
+CLASIFICACIONES_VEHICULOS = {
+    'Motocicleta': [
+        'Comercial',
+        'Oficial',
+        'Deportiva',
+        'Policial',
+        'Paseo'
+    ],
+    'Automóvil': [
+        'De pasajeros sin fines de lucro',
+        'De pasajeros con fines de lucro de alquiler',
+        'De pasajeros con fines de lucro por puesto'
+    ],
+    'Minibús': [
+        'Sin fines de lucro',
+        'Con fines de lucro'
+    ],
+    'Autobús': [
+        'Uso público',
+        'Uso privado'
+    ],
+    'Vehículos de carga': [
+        'General, a granel, perecedera y frágil',
+        'De alto riesgo'
+    ],
+    'Vehículos especiales': [
+        'Enseñanza',
+        'Emergencia',
+        'Escolares',
+        'Diplomático'
+    ]
+}
