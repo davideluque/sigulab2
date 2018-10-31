@@ -407,7 +407,7 @@ db.define_table(
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
     Field('vh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
-    Field('vh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('vh_telf_responsable', 'string', label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
