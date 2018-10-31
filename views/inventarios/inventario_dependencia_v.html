@@ -114,8 +114,13 @@
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Características del vehículo</h4>                
+                    <h4 class="titulosForm">Características del vehículo</h4>       
                     <label>Campos marcados con * son obligatorios.</label>
+                    <div class="form-group">
+                        <label>Nº Bien Nacional*</label>
+                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" required>
+                        <font color="red"><div id="err_num" hidden></div></font>
+                    </div>
                     <div class="form-group" tag="Formato:">
                         <label>Placa*</label>
                         <input type="text" class="form-control" id="placa" name="placa" title="Ingrese la placa del vehículo" placeholder="Placa*" required>
@@ -123,11 +128,36 @@
                     </div>
                     <div class="form-group" tag="Formato:">
                         <label>Marca*</label>
-                        <input type="text" class="form-control" id="marca" name="marca" title="Ingrese la marca del vehículo" placeholder="Marca*" required>
+                        <select class="form-control" type="select" id="marca" name="marca" placeholder="Ingrese la marca del vehículo" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Citroen">Citroen</option>
+                            <option value="Fiat">Fiat</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Iveco">Iveco</option>
+                            <option value="Jeep">Jeep</option>
+                            <option value="Kia">Kia</option>
+                            <option value="Mazda">Mazda</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Mitsubishi">Mitsubishi</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Renault">Renault</option>
+                            <option value="Sert">Sert</option>
+                            <option value="Subaru">Subaru</option>
+                            <option value="Suzuki">Suzuki</option>
+                            <option value="Tesla">Tesla</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Volvo">Volvo</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <input type="text" class="form-control" id="marca2" name="marca2" title="Ingrese la marca del vehículo" placeholder="Especifique" disabled style="display:none;">
                         <div class="dr"> <p id="error-marca"> </p> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
-                        <label>Modelo*</label>
+                        <label>Modelo / Código*</label>
                         <input type="text" class="form-control" id="modelo" name="modelo" title="Ingrese el modelo del vehículo" placeholder="Modelo*" required>
                         <div class="dr"> <p id="error-marca"> </p> </div>
                     </div>
@@ -191,13 +221,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Tipo*</label> <br>
-                            <input type="radio" value="Oficial" id="Oficial">
-                            <label for="Oficial"> Oficial</label>
-                            <input type="radio" value="Particular" id="Particular">
-                            <label for="Particular"> Particular</label>
-                            <div class="dr"> <p id="error-tipo"> </p> </div>
-                        </div>
+                          <label>Sede*</label> <br>
+                          <input type="radio" value="Sartenejas" id="Sartenejas" name="sede">
+                          <label for="sartenejas"> Sartenejas</label>
+                          <input type="radio" value="Litoral" id="Litoral" name="sede">
+                          <label for="litoral"> Litoral</label>
+                          <div class="dr"> <p id="error-sede"> </p> </div>
+                      </div>
+
                     </div>
                   </div>
                   <div style="position:fixed; bottom: 15px; right: 30px;">
@@ -225,38 +256,82 @@
                       <h4 class="titulosForm">Características del Vehículo</h4>                
                       <label>Campos marcados con * son obligatorios.</label>
                       <div class="form-group" tag="Formato:">
-                            <label>Clase*</label>
-                            <input type="text" class="form-control" id="clase" name="clase" title="Ingrese la clase del vehículo" placeholder="Clase*" required>
-                            <div class="dr"> <p id="error-clase"> </p> </div>
-                        </div>
+                          <label>Clase*</label>
+                          <select class="form-control" type="select" id="clase" name="clase" placeholder="Clase*" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="No motorizados o de tracción a sangre">No motorizados o de tracción a sangre</option>
+                            <option value="A motor">A motor</option>
+                            <option value="Maquinarias y aparatos aptos para circular">Maquinarias y aparatos aptos para circular</option>
+                        </select>
+                          <div class="dr"> <p id="error-clase"> </p> </div>
+                      </div>
+
+                      <div class="form-group" tag="Formato:">
+                          <label>Tipo*</label>
+                          <select class="form-control" type="select" id="tipo" name="tipo" placeholder="Tipo*" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Motocicleta">Motocicleta</option>
+                            <option value="Automóvil">Automóvil</option>
+                            <option value="Minibús">Minibús</option>
+                            <option value="Autobús">Autobús</option>
+                            <option value="Vehículos de carga">Vehículos de carga</option>
+                            <option value="Vehículos especiales">Vehículos especiales</option>
+                            <option value="Otros aparatos para circular">Otros aparatos para circular</option>
+                        </select>
+                        <input type="text" class="form-control" id="tipo2" name="tipo2" title="Ingrese la marca del vehículo" placeholder="Especifique" disabled style="display:none;">
+                          <div class="dr"> <p id="error-clase"> </p> </div>
+                      </div>
+
+                      <div class="form-group" id="grupo-clasificacion" style="display: none;">
+                          <label>Clasificación*</label>
+                          <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación*">
+                              <option value="">Seleccione una opción</option>
+                          </select>
+                          <div class="dr"> <p id="error-uso"> </p> </div>
+                      </div>
 
                         <div class="form-group">
                             <label>Uso*</label>
-                            <input type="text" class="form-control" id="uso" name="uso" placeholder="Uso del vehículo*" title="Ingrese el uso del vehículo"  required>
+                            <select class="form-control" type="select" id="uso" name="uso" placeholder="Uso*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Público">Público</option>
+                                <option value="Privado">Privado</option>
+                            </select>
                             <div class="dr"> <p id="error-uso"> </p> </div>
                         </div>
 
                         <div class="form-group">
                             <label>Servicio*</label>
-                            <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Servicio del vehículo*" title="Ingrese el servicio del vehículo"  required>
+                            <select class="form-control" type="select" id="servicio" name="servicio" placeholder="Servicio*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Transporte terrestre de personas">Transporte terrestre de personas</option>
+                                <option value="Transporte terrestre de cargas">Transporte terrestre de cargas</option>
+                                <option value="Servicios conexos">Servicios conexos</option>
+                            </select>
                             <div class="dr"> <p id="error-servicio"> </p> </div>
                         </div>
 
-                        <div class="form-group">
-                          <label>Tara*</label>
-                          <input type="number" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
-                          <div class="dr"> <p id="error-tara"> </p> </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Tara*</label>
+                              <input type="number" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
+                              <div class="dr"> <p id="error-tara"> </p> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Unidad de medida Tara*</label>
+                              <select class="form-control" type="select" id="tara_md" name="tara_md" placeholder="Unidad de medida Tara" required>
+                                  <option value="">Seleccione una opción</option>
+                                  <option value="ton">Toneladas (ton)</option>
+                                  <option value="kg">Kilogramos (kg)</option>
+                              </select>
+                              <div class="dr"> <p id="error-tara_md"> </p> </div>
+                            </div>
+                          </div>
                         </div>
 
-                        <div class="form-group">
-                          <label>Unidad de medida Tara*</label>
-                          <select class="form-control" type="select" id="tara_md" name="tara_md" placeholder="Unidad de medida Tara" required>
-                              <option value="">Seleccione una opción</option>
-                              <option value="ton">Toneladas (ton)</option>
-                              <option value="kg">Kilogramos (kg)</option>
-                          </select>
-                          <div class="dr"> <p id="error-tara_md"> </p> </div>
-                        </div>
                       </div>
                   </div>
                   <div style="position:fixed; bottom: 15px; right: 30px;">
@@ -298,16 +373,27 @@
                             <!-- <font color="red"><div id="err_nro_puestos" hidden></div></font> -->
                         </div>
 
-                      <div class="form-group">
-                          <label>Capacidad de carga*</label>
-                          <input type="number" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
-                          <div class="dr"> <p id="error-carga"> </p> </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Capacidad de carga*</label>
+                              <input type="number" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
+                              <div class="dr"> <p id="error-carga"> </p> </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Unidad de medida Capacidad de Carga*</label>
+                            <select class="form-control" type="select" id="capacidad_carga_md" name="capacidad_carga_md" placeholder="Unidad de medida Capacidad de Carga" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="ton">Toneladas (ton)</option>
+                                <option value="kg">Kilogramos (kg)</option>
+                            </select>
+                            <div class="dr"> <p id="error-capacidad_carga_md"> </p> </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="form-group">
-                          <label>Descripción de uso*</label>
-                          <input type="text" class="form-control" id="descripcion_uso" name="descripcion_uso" placeholder="Descripción de uso*" title="Ingrese una Descripción de uso"  required>
-                          <div class="dr"> <p id="error-descripcion_uso"> </p> </div>
-                      </div>
+
                       <div class="form-group">
                           <label>Dependencia*</label>
                           <select class="form-control" type="select" name="dependencia" id="dependencia" class="input" required>
@@ -318,14 +404,13 @@
                           </select>
                           <div class="dr"> <p id="error-dependendencia"> </p> </div>
                       </div>
+
                       <div class="form-group">
-                          <label>Sede*</label> <br>
-                          <input type="radio" value="Sartenejas" id="Sartenejas" name="sede">
-                          <label for="sartenejas"> Sartenejas</label>
-                          <input type="radio" value="Litoral" id="Litoral" name="sede">
-                          <label for="litoral"> Litoral</label>
-                          <div class="dr"> <p id="error-sede"> </p> </div>
+                          <label>Observaciones</label>
+                          <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="Indicar cualquier otra información relevante" title="Indicar cualquier otra información relevante">
+                          <div class="dr"> <p id="error-observaciones"> </p> </div>
                       </div>
+
                     </div>
                   </div>
                   <div style="position:fixed; bottom: 15px; right: 30px;">
@@ -361,21 +446,36 @@
                             <input type="text" class="form-control" id="responsable" name="responsable" placeholder="Nombre del responsable*" title="Ingrese el nombre del responsable del vehículo" required>
                             <div class="dr"> <p id="error-responsable"> </p> </div>
                         </div>
-                        <div class="form-group">
-                            <label>Telefono del responsable*</label>
-                            <input type="text" class="form-control" id="telf_responsable" name="telf_responsable" placeholder="Telefono del responsable*" title="Ingrese el telefono del responsable del vehículo" required>
-                            <div class="dr"> <p id="error-telf_responsable"> </p> </div>
-                        </div>
+                    
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
                             <input type="text" class="form-control" id="custodio" name="custodio" placeholder="Nombre del custodio del vehículo*" title="Ingrese el nombre del custodio del vehículo" required>
                             <div class="dr"> <p id="error-custodio"> </p> </div>
                         </div>
+
                         <div class="form-group">
-                            <label>Telefono del custodio*</label>
-                            <input type="text" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio*" title="Ingrese el telefono del custodio del vehículo" required>
-                            <div class="dr"> <p id="error-telf_custodio"> </p> </div>
+                            <label>Ubicación del custodio*</label>
+                            <input type="text" class="form-control" id="ubicacion_custodio" name="ubicacion_custodio" placeholder="Ubicación del custodio*" title="Ingrese la ubicación del custodio del vehículo" required>
+                            <div class="dr"> <p id="error-ubicacion_custodio"> </p> </div>
                         </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telefono del custodio</label>
+                                <input type="text" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr"> <p id="error-telf_custodio"> </p> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión</label>
+                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr"> <p id="error-extension"> </p> </div>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Ubicacion de pernocta*</label>
                             <input type="text" class="form-control" id="pernocta" name="pernocta" placeholder="Ubicacion de pernocta*" title="Ingrese la ubicacion de pernocta del vehículo" required>
@@ -581,6 +681,31 @@
     } else {
       $("#grupo-compra").hide("fast");
       $("#grupo-donacion").hide("fast");
+    }
+  });
+
+  // Marca otro
+  $("#marca").change(function() {
+    var marca = $(this).children("option:selected").val();
+    if (marca == "Otro") {
+      $("#marca2").show("fast");
+      $("#marca2").prop('disabled', false)
+      $("#marca2").prop('required', true)
+    } else {
+      $("#marca2").hide();
+      $("#marca2").prop('disabled', true)
+      $("#marca2").prop('required', false)
+    }
+  });
+
+  $("#tipo").change(function() {
+    var tipo = $(this).children("option:selected").val();
+    if (tipo == "Otros aparatos para circular") {
+      $("#tipo2").show("fast");
+      $("#tipo2").prop('disabled', false)
+    } else {
+      $("#tipo2").hide();
+      $("#tipo2").prop('disabled', true)
     }
   });
 
