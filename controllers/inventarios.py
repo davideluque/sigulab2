@@ -302,12 +302,13 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el mismo. 
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
-                 placa, intt, sede, descripcion, lugar_pernocta, color, clase, uso,
+                 placa, intt, sede, observaciones, lugar_pernocta, color, clase, uso,
                  servicio, tara, tara_md, nro_puestos, nro_ejes, capacidad_carga, propietario,
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                  sudebip_categoria_especifica, fecha_adquisicion, origen, nro_factura,
-                 fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion,
+                 fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion, num,
+                 clasificacion, tipo, capacidad_carga_md,rines, ubicacion_custodio, extension,
                  donante, contacto_donante, dependencia, user, es_particular=0, oculto=0):
     
     # Si ya existe el BM en el inventario
@@ -320,16 +321,23 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
       
     # Se agrega el nuevo vehiculo a la base de datos
     inv_id = db.vehiculo.insert(
+        vh_num=int(num),
         vh_marca=marca,
         vh_modelo=modelo,
         vh_ano=ano,
+        vh_extension=extension,
+        vh_ubicacion_custodio=ubicacion_custodio,
         vh_serial_motor=serial_motor,
         vh_serial_carroceria=serial_carroceria,
         vh_serial_chasis=serial_chasis,
         vh_placa=placa,
+        vh_rines=rines,
+        vh_capacidad_carga_md=capacidad_carga_md,
         vh_intt=intt,
         vh_sede=sede,
-        vh_descripcion=descripcion,
+        vh_tipo=tipo,
+        vh_clasificacion=clasificacion,
+        vh_observaciones=observaciones,
         vh_lugar_pernocta=lugar_pernocta,
         vh_color=color,
         vh_clase=clase,
@@ -971,6 +979,7 @@ def vehiculos():
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
         __agregar_vh(
+            num=request.vars.num,
             marca=request.vars.marca, 
             modelo=request.vars.modelo,
             ano=int(request.vars.ano), 
@@ -980,10 +989,12 @@ def vehiculos():
             placa=request.vars.placa,
             intt=request.vars.intt,
             sede=request.vars.sede,
-            descripcion=request.vars.descripcion_uso,
+            observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
             clase=request.vars.clase,
+            tipo=request.vars.tipo,
+            clasificacion=requests.vars.clasificacion,
             uso=request.vars.uso,
             servicio=request.vars.servicio,
             tara=float(request.vars.tara),
@@ -991,11 +1002,15 @@ def vehiculos():
             nro_puestos=int(request.vars.nro_puestos),
             nro_ejes=int(request.vars.nro_ejes),
             capacidad_carga=float(request.vars.capacidad),
+            capacidad_carga_md=request.vars.capacidad_carga_md,
+            rines=request.vars.rines,
+            ubicacion_custodio=request.vars.ubicacion_custodio,
             propietario=request.vars.propietario,
             responsable=request.vars.responsable,
             telf_responsable=request.vars.telf_responsable,
             custodio=request.vars.custodio,
             telf_custodio=request.vars.telf_custodio,
+            extension=request.vars.extension,
             sudebip_localizacion=localizacion[request.vars.sede],
             sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
             sudebip_categoria="(15000-0000) Equipos de transporte, tracción y elevación",
