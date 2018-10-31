@@ -927,13 +927,22 @@ def vehiculos():
     # el inventario agregado de una dependencia
     inventario = []
     uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
+
+    # Obtenemos otros datos de SUDEBIP
+    cod_localizacion = {
+        'Sartenejas': 150301, 
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
     
     # Elementos que deben ser mostrados como una lista en el modal
     # de agregar vehículo
     uso = []
     nombre_cat = []
-    cod_localizacion = []
-    localizacion = []
     nombre_espaciof = []
     unidad_adscripcion = []
     unidad_cap = []
@@ -987,8 +996,8 @@ def vehiculos():
             telf_responsable=request.vars.telf_responsable,
             custodio=request.vars.custodio,
             telf_custodio=request.vars.telf_custodio,
-            sudebip_localizacion=request.vars.sudebip_localizacion,
-            sudebip_codigo_localizacion=request.vars.sudebip_cod_localizacion,
+            sudebip_localizacion=localizacion[request.vars.sede],
+            sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
             sudebip_categoria="(15000-0000) Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
@@ -1259,17 +1268,6 @@ def vehiculos():
 
     # Devolvemos las categorias de vehiculos
     dict_categorias = __obtener_categorias()
-
-    # Obtenemos otros datos de SUDEBIP
-    cod_localizacion = {
-        'Sartenejas': 150301, 
-        'Litoral': 240107
-    }
-
-    localizacion = {
-        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
-        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
-    }
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
