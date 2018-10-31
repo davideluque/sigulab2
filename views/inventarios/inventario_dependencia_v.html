@@ -460,50 +460,57 @@
                         <h4 class="titulosForm">Datos de adquisición</h4>
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
-                            <label>Origen*</label>
-                            <input type="text" class="form-control" id="origen" name="origen" placeholder="Origen*" title="Ingrese el origen vehículo" required>
-                            <div class="dr"> <p id="error-origen"> </p> </div>
-                        </div>
-                        <div class="form-group">
                             <label>Fecha de adquisición*</label>
                             <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required>
                             <div class="dr"> <p id="error-fecha_adquisicion"> </p> </div>
                         </div>
                         <div class="form-group">
-                            <label>Nro Factura*</label>
-                            <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" required>
-                            <div class="dr"> <p id="error-nro_factura"> </p> </div>
+                            <label>Origen*</label>
+                            <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
+                              <option value="">Seleccione una opción</option>
+                              <option value="Compra">Compra</option>
+                              <option value="Donación">Donación</option>
+                          </select>
+                            <div class="dr"> <p id="error-origen"> </p> </div>
                         </div>
-                        <div class="form-group">
-                            <label>Fecha de factura*</label>
-                            <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" required>
-                            <div class="dr"> <p id="error-fecha_factura"> </p> </div>
+                        <div id="grupo-compra" style="display: none;">
+                          <div class="form-group">
+                              <label>Nro Factura*</label>
+                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" required>
+                              <div class="dr"> <p id="error-nro_factura"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Fecha de factura*</label>
+                              <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" required>
+                              <div class="dr"> <p id="error-fecha_factura"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Proveedor*</label>
+                              <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo" required>
+                              <div class="dr"> <p id="error-proveedor"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>RIF*</label>
+                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF*" title="Ingrese el RIF" required>
+                              <div class="dr"> <p id="error-rif"> </p> </div>
+                          </div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Proveedor*</label>
-                            <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo" required>
-                            <div class="dr"> <p id="error-proveedor"> </p> </div>
-                        </div>
-                        <div class="form-group">
-                            <label>RIF*</label>
-                            <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF*" title="Ingrese el RIF" required>
-                            <div class="dr"> <p id="error-rif"> </p> </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Donante*</label>
-                            <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante" required>
-                            <div class="dr"> <p id="error-donante"> </p> </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Teléfono del Donante*</label>
-                            <input type="tel" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante" required>
-                            <div class="dr"> <p id="error-contacto_donante"> </p> </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Nº Oficio*</label>
-                            <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" required>
-                            <div class="dr"> <p id="error-nro_oficio"> </p> </div>
+                        <div id="grupo-donacion" style="display: none;">
+                          <div class="form-group">
+                              <label>Nº Oficio*</label>
+                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" required>
+                              <div class="dr"> <p id="error-nro_oficio"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Donante*</label>
+                              <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante" required>
+                              <div class="dr"> <p id="error-donante"> </p> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Teléfono del Donante*</label>
+                              <input type="tel" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante" required>
+                              <div class="dr"> <p id="error-contacto_donante"> </p> </div>
+                          </div>
                         </div>
                     </div>
                   </div>
@@ -522,3 +529,21 @@
 </div>
 
 <!-- Fin Modal Agregar BM -->
+
+<!-- Inicio javascript de control de formulario -->
+
+<script type="text/javascript">
+  // Mostrar datos de compra o donacion según lo escogido
+  $("#origen").change(function() {
+    var origen = $(this).children("option:selected").val();
+    if (origen == "Compra") {
+      $("#grupo-compra").show("fast");
+      $("#grupo-donacion").hide("fast");
+    } else {
+      $("#grupo-compra").hide("fast");
+      $("#grupo-donacion").show("fast");
+    }
+  });
+
+
+</script>
