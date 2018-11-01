@@ -245,7 +245,8 @@ def add_form():
             f_fecha_final_5 = dic["fecha_final_5"],
             f_dependencia_hist_5 = dic["dependencia_hist_5"],
             f_organizacion_5 = dic["organizacion_5"],
-            f_cargo_hist_5 = dic["cargo_hist_5"]
+            f_cargo_hist_5 = dic["cargo_hist_5"],
+            f_Historial_trabajo_Personal= personal.select().first().id
             )
 
         session.ficha_negada=""
@@ -482,6 +483,9 @@ def ficha():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
 
+    historial_rows = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == elm.id).select()[0]
+    historial = historial_rows.as_dict()
+
     return dict(
         personal=personal,
         categorias=categorias,
@@ -493,7 +497,8 @@ def ficha():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario_logged=usuario_logged,
-        usuario = usuario
+        usuario = usuario,
+        historial=historial
     )
 
 def cambiar_validacion(validacion, personal):
