@@ -314,8 +314,62 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                  sudebip_categoria_especifica, fecha_adquisicion, origen, nro_factura,
                  fecha_factura, nro_oficio, proveedor, proveedor_rif, nro_donacion, num,
                  clasificacion, tipo, capacidad_carga_md,rines, ubicacion_custodio, extension,
-                 donante, contacto_donante, dependencia, user, es_particular=0, oculto=0):
+                 donante, contacto_donante, dependencia, user, es_particular=0, oculto=0, modificacion=False):
     
+    #PENDIENTE: Eliminar
+    if modificacion:
+        db(db.vehiculo.vh_placa == placa).update(
+        vh_num=int(num),
+        vh_marca=marca,
+        vh_modelo=modelo,
+        vh_ano=ano,
+        vh_extension=extension,
+        vh_ubicacion_custodio=ubicacion_custodio,
+        vh_serial_motor=serial_motor,
+        vh_serial_carroceria=serial_carroceria,
+        vh_serial_chasis=serial_chasis,
+        vh_placa=placa,
+        vh_rines=rines,
+        vh_capacidad_carga_md=capacidad_carga_md,
+        vh_intt=intt,
+        vh_sede=sede,
+        vh_tipo=tipo,
+        vh_observaciones=observaciones,
+        vh_lugar_pernocta=lugar_pernocta,
+        vh_color=color,
+        vh_clase=clase,
+        vh_uso=uso,
+        vh_servicio=servicio,
+        vh_tara=tara,
+        vh_nro_puestos=nro_puestos,
+        vh_nro_ejes=nro_ejes,
+        vh_capacidad_carga=capacidad_carga,
+        vh_propietario=propietario,
+        vh_responsable=responsable,
+        vh_telf_responsable=telf_responsable,
+        vh_custodio=custodio,
+        vh_telf_custodio=telf_custodio,
+        vh_sudebip_localizacion=sudebip_localizacion,
+        vh_sudebip_codigo_localizacion=sudebip_codigo_localizacion,
+        vh_sudebip_categoria=sudebip_categoria,
+        vh_sudebip_subcategoria=sudebip_subcategoria,
+        vh_sudebip_categoria_especifica=sudebip_categoria_especifica,
+        vh_fecha_adquisicion=fecha_adquisicion,
+        vh_origen=origen,
+        vh_nro_factura=nro_factura,
+        vh_fecha_factura=fecha_factura,
+        vh_nro_oficio=nro_oficio,
+        vh_proveedor=proveedor,
+        vh_proveedor_rif=proveedor_rif,
+        vh_nro_donacion=nro_donacion,
+        vh_donante=donante,
+        vh_contacto=contacto_donante,
+        vh_es_particular=es_particular,
+        vh_oculto=oculto,
+        )
+
+        return True
+
     # Si ya existe el BM en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
@@ -2186,6 +2240,16 @@ def detalles_vehiculo():
     user_id = user.id
     vh = request.vars['vh']
 
+    cod_localizacion = {
+        'Sartenejas': 150301,
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
+
     try:
         vehi = db(db.vehiculo.vh_placa == vh).select()[0]
     except IndexError:
@@ -2227,6 +2291,67 @@ def detalles_vehiculo():
         db(db.vehiculo.vh_placa == vehi['vh_placa']).select().first().update_record(vh_eliminar = 2)
         session.flash = "El vehiculo no ha sido eliminado"
         redirect(URL('validaciones'))
+
+
+    # PENDIENTE: Quitar esto
+    if request.vars.modificacion:
+        __agregar_vh(
+            num=request.vars.num,
+            marca=request.vars.marca if request.vars.marca != "Otro" else "Otro: " + request.vars.marca2, 
+            modelo=request.vars.modelo,
+            ano=int(request.vars.ano), 
+            serial_motor=request.vars.serialM,
+            serial_carroceria=request.vars.serialC,
+            serial_chasis=request.vars.serialCh,
+            placa=request.vars.placa,
+            intt=request.vars.intt,
+            sede=request.vars.sede,
+            observaciones=request.vars.observaciones,
+            lugar_pernocta=request.vars.pernocta,
+            color=request.vars.color,
+            clase=request.vars.clase,
+            tipo=request.vars.tipo if request.vars.tipo != "Otros aparatos para circular" else "Otros aparatos para circular: " + request.vars.tipo2,
+            clasificacion=request.vars.clasificacion if request.vars.clasificacion != "Emergencia" else "Emergencia: " + requesr.vars.clasificacion2,
+            uso=request.vars.uso,
+            servicio=request.vars.servicio,
+            tara=float(request.vars.tara),
+            tara_md=request.vars.tara_md,
+            nro_puestos=int(request.vars.nro_puestos),
+            nro_ejes=int(request.vars.nro_ejes),
+            capacidad_carga=float(request.vars.capacidad),
+            capacidad_carga_md=request.vars.capacidad_carga_md,
+            rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
+            ubicacion_custodio=request.vars.ubicacion_custodio,
+            propietario=request.vars.propietario,
+            responsable=request.vars.responsable,
+            telf_responsable="(0000) 000-0000", # Quitar este campo
+            custodio=request.vars.custodio,
+            telf_custodio=request.vars.telf_custodio,
+            extension=request.vars.extension,
+            sudebip_localizacion=localizacion[request.vars.sede],
+            sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
+            sudebip_categoria="15000-0000 - Equipos de transporte, tracción y elevación",
+            sudebip_subcategoria=request.vars.sudebip_subcategoria,
+            sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
+            fecha_adquisicion=request.vars.fecha_adquisicion,
+            origen=request.vars.origen,
+            nro_factura=request.vars.nro_factura,
+            fecha_factura=request.vars.fecha_factura,
+            nro_oficio=request.vars.nro_oficio,
+            proveedor=request.vars.proveedor,
+            proveedor_rif=request.vars.proveedor_rif,
+            nro_donacion=request.vars.nro_donacion,
+            donante=request.vars.donante,
+            contacto_donante=request.vars.contacto_donante,
+            dependencia=request.vars.dependencia,
+            user=user,
+            es_particular=0,
+            oculto=0,
+            modificacion=True
+        )
+        request.vars.modificacion = None
+        session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
+        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
 
     if request.vars.modificacion:
         __agregar_modificar_vehiculo(
@@ -2300,17 +2425,8 @@ def detalles_vehiculo():
         'Observaciones': vehi['vh_observaciones'],
     }
 
-    cod_localizacion = {
-        'Sartenejas': 150301, 
-        'Litoral': 240107
-    }
-
-    localizacion = {
-        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
-        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
-    }
-
-    dict_categorias = __obtener_categorias() 
+    dict_categorias = __obtener_categorias()
+    dict_clasificaciones = __obtener_clasificaciones()
 
     # Si solo estoy cargando la vista
     return dict(
@@ -2320,7 +2436,8 @@ def detalles_vehiculo():
         caracteristicas_dict=caracteristicas_dict,
         categorias=dict_categorias,
         cod_localizacion=cod_localizacion,
-        localizacion=localizacion
+        localizacion=localizacion,
+        clasificaciones=dict_clasificaciones
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
