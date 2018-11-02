@@ -2184,8 +2184,21 @@ def detalles_vehiculo():
         # de errores
         return "El vehiculo solicitado no existe."
 
-    # TO-DO: ARREGLAR ESTO, da error raro
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
+
+    print(request.vars)
+
+    # PENDIENTE: Agregar lógica de validación
+    if request.vars.eliminacion:
+        db(db.historial_mantenimiento_vh.hmvh_placa == vehi['id']).delete()
+        db(db.vehiculo.vh_placa == vh).delete()
+        db(db.modificacion_vehiculo.mvh_placa == vh).delete()
+
+        db.bitacora_general.insert(
+            f_accion = "[inventarios] Eliminado el vehiculo de placa {} de la dependencia {}".format(vehi['vh_placa'], vehi['vh_dependencia'])
+        )
+        session.flash = "El vehiculo de placa %s ha sido eliminado." % vh
+        redirect(URL('inventarios', 'vehiculos'))
 
     # Si se elimina
     if request.vars.si:
