@@ -119,8 +119,17 @@ def dropdowns():
     #Dropdown de operadores
     operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
+    # Competencias
+    competencias = [
+            "Administración", "Alimentación", "Ambiente", "Arquitectura", "Arte", "Biología", "Calidad", "Ciencias del Agro",
+            "Ciencias del mar", "Comunicación", "Contaduría", "Crecimiento Personal", "Derecho", "Dietética", "Docencia", "Economía",
+            "Electrónica", "Estadística", "Filosofía", "Física", "Gerencia", "Gestión", "Humanidades", "Idiomas", "Información",
+            "Informática", "Ingeniería", "Letras", "Liderazgo", "Matemática", "Medicina", "Música", "Negocio", "Nutrición",
+            "Química", "Recreación", "Salud Laboral", "Seguridad", "Tecnología", "Urbanismo",
+            ]
 
-    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
+
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias)
 
 # Esta funcion toma la fecha desde el front que tiene
 # el formato dd-mm-yyyy y la transforma en el formato
@@ -202,6 +211,22 @@ def add_form():
             ubicaciones
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
+
+        personal_id = personal.select()[0].id
+        competencias = dropdowns()[-1]
+        for ind, comp in enumerate(competencias):
+            if request.post_vars['check-competencia-{0}'.format(ind)]:
+                observaciones = request.post_vars['competencia-{0}'.format(ind)]
+                db.t_Competencias.update_or_insert(
+                        (db.t_Competencias.f_nombre==comp) &
+                        (db.t_Competencias.f_Competencia_Personal==personal_id),
+                        f_nombre=comp,
+                        f_observaciones=observaciones,
+                        f_Competencia_Personal=personal_id
+                        )
+            else:
+                db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
+
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
@@ -302,7 +327,7 @@ def listado():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
 
     empleados = validacion_estilo()['empleados']
 
@@ -318,7 +343,9 @@ def listado():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario=usuario,
-        empleados = empleados
+        empleados = empleados,
+        competencias=competencias,
+        comp_list=lista_competencias(usuario)
         )
 
 def transformar_fecha(fecha):
@@ -425,7 +452,7 @@ def ficha():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
 
     return dict(
         personal=personal,
@@ -438,7 +465,9 @@ def ficha():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario_logged=usuario_logged,
-        usuario = usuario
+        usuario=usuario,
+        competencias=competencias,
+        comp_list=lista_competencias(personal)
     )
 
 def cambiar_validacion(validacion, personal):
@@ -566,3 +595,11 @@ def reporte_listado():
         accion = '[Personal] Reporte de Personal Generado'
         db.bitacora_general.insert(f_accion = accion)
     return redirect(URL('listado_estilo'))
+
+def lista_competencias(personal):
+    query = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal)
+    rows = query.select(db.t_Competencias.ALL)
+    lista = {}
+    for row in rows:
+        lista[row.f_nombre] = row.f_observaciones
+    return lista
