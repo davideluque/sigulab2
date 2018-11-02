@@ -163,7 +163,7 @@
                     </div>
                     <div class="form-group" tag="Formato:">
                         <label>Año*</label>
-                        <input type="number" step="1" class="form-control" min="0" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required>
+                        <input type="text" class="form-control" min="0" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required>
                         <div class="dr" id="error-ano" style="color: #d03e3e;"> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
@@ -323,7 +323,7 @@
                           <div class="col-md-6">
                             <div class="form-group">
                               <label>Tara*</label>
-                              <input type="number" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
+                              <input type="text" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
                               <div class="dr" id="error-tara" style="color: #d03e3e;"> </div>
                             </div>
                           </div>
@@ -369,14 +369,14 @@
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
                             <label>N° de puestos*</label>
-                            <input type="number" class="form-control" id="nro_puestos" name="nro_puestos" title="Ingrese el N° de puestos del vehículo" placeholder="N° de puestos">
+                            <input type="text" class="form-control" id="nro_puestos" name="nro_puestos" title="Ingrese el N° de puestos del vehículo" placeholder="N° de puestos">
                             <div class="dr" id="error-nro_puestos" style="color: #d03e3e;"> </div>
                             <!-- <div style="color: #d03e3e;" id="err_nro_puestos" hidden></div> -->
                         </div>
 
                         <div class="form-group">
                             <label>N° de ejes*</label>
-                            <input type="number" class="form-control" id="nro_ejes" name="nro_ejes" title="Ingrese el N° de ejes del vehículo" placeholder="N° de ejes">
+                            <input type="text" class="form-control" id="nro_ejes" name="nro_ejes" title="Ingrese el N° de ejes del vehículo" placeholder="N° de ejes">
                             <div class="dr" id="error-nro_ejes" style="color: #d03e3e;"> </div>
                             <!-- <div style="color: #d03e3e;" id="err_nro_puestos" hidden></div> -->
                         </div>
@@ -385,7 +385,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                               <label>Capacidad de carga*</label>
-                              <input type="number" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
+                              <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
                               <div class="dr" id="error-carga" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -539,7 +539,7 @@
                         </div>
                         <div class="form-group">
                             <label>Categoría*</label>
-                            <input type="text" class="form-control" id="sudebip_categoria" name="sudebip_categoria" placeholder="Categoría*" title="Ingrese la categoría vehículo" value="(15000-0000) Equipos de transporte, tracción y elevación" disabled>
+                            <input type="text" class="form-control" id="sudebip_categoria" name="sudebip_categoria" placeholder="Categoría*" title="Ingrese la categoría vehículo" value="15000-0000 - Equipos de transporte, tracción y elevación" disabled>
                         </div>
                         <div class="form-group">
                             <label>Subcategoría*</label>
@@ -660,7 +660,8 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
-  var regexTlf = new RegExp("^\(0[0-9]{3}\) [0-9]{3}-[0-9]{4}$");
+  var regexTlf = new RegExp("^\(0[0-9]{3}\) [0-9]{3}\-[0-9]{4}$");
+  var regexExtension = new RegExp("^[0-9]{4}$");
 
   function isNum(str) {
     return !isNaN(str);
@@ -707,6 +708,35 @@
       $(this).next().text("Introduce número en formato de dos dígitos: XX");
     }
   });
+
+  // Validación de formato de telf custodio (formato del regex establecido)
+  $("#telf_custodio").focusout(function() {
+    var tlf = $(this).val();
+    if (regexTlf.test(tlf)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+    }
+    else if (tlf.length != 0) {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: (0###) ###-####");
+    }
+  });
+
+  // Validación de formato de extension custodio (formato del regex establecido)
+  $("#extension").focusout(function() {
+    var extension = $(this).val();
+    if (regexExtension.test(extension)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+    }
+    else if (extension.length != 0) {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: ####");
+    }
+  });
+
 
   // Validación de campos requeridos y no llenados
   // (ignora el resto de campos especiales)
