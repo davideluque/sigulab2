@@ -2186,8 +2186,6 @@ def detalles_vehiculo():
 
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
 
-    print(request.vars)
-
     # PENDIENTE: Agregar lógica de validación
     if request.vars.eliminacion:
         db(db.historial_mantenimiento_vh.hmvh_placa == vehi['id']).delete()
