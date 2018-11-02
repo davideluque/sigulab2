@@ -221,33 +221,65 @@ def add_form():
             f_rol= dic["rol"])
         
         # Añadir al historial de trabajo
-        db.t_Historial_trabajo.insert(f_fecha_inicio_1 = dic["fecha_inicio_1"],
-            f_fecha_final_1 = dic["fecha_final_1"],
-            f_dependencia_hist_1 = dic["dependencia_hist_1"],
-            f_organizacion_1 = dic["organizacion_1"],
-            f_cargo_hist_1 = dic["cargo_hist_1"],
-            f_fecha_inicio_2 = dic["fecha_inicio_2"],
-            f_fecha_final_2 = dic["fecha_final_2"],
-            f_dependencia_hist_2 = dic["dependencia_hist_2"],
-            f_organizacion_2 = dic["organizacion_2"],
-            f_cargo_hist_2 = dic["cargo_hist_2"],
-            f_fecha_inicio_3 = dic["fecha_inicio_3"],
-            f_fecha_final_3 = dic["fecha_final_3"],
-            f_dependencia_hist_3 = dic["dependencia_hist_3"],
-            f_organizacion_3 = dic["organizacion_3"],
-            f_cargo_hist_3 = dic["cargo_hist_3"],
-            f_fecha_inicio_4 = dic["fecha_inicio_4"],
-            f_fecha_final_4 = dic["fecha_final_4"],
-            f_dependencia_hist_4 = dic["dependencia_hist_4"],
-            f_organizacion_4 = dic["organizacion_4"],
-            f_cargo_hist_4 = dic["cargo_hist_4"],
-            f_fecha_inicio_5 = dic["fecha_inicio_5"],
-            f_fecha_final_5 = dic["fecha_final_5"],
-            f_dependencia_hist_5 = dic["dependencia_hist_5"],
-            f_organizacion_5 = dic["organizacion_5"],
-            f_cargo_hist_5 = dic["cargo_hist_5"],
-            f_Historial_trabajo_Personal= personal.select().first().id
-            )
+        historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == personal.select().first().id)
+        
+        if (historial == None):
+
+            db.t_Historial_trabajo.insert(f_fecha_inicio_1 = dic["fecha_inicio_1"],
+                f_fecha_final_1 = dic["fecha_final_1"],
+                f_dependencia_hist_1 = dic["dependencia_hist_1"],
+                f_organizacion_1 = dic["organizacion_1"],
+                f_cargo_hist_1 = dic["cargo_hist_1"],
+                f_fecha_inicio_2 = dic["fecha_inicio_2"],
+                f_fecha_final_2 = dic["fecha_final_2"],
+                f_dependencia_hist_2 = dic["dependencia_hist_2"],
+                f_organizacion_2 = dic["organizacion_2"],
+                f_cargo_hist_2 = dic["cargo_hist_2"],
+                f_fecha_inicio_3 = dic["fecha_inicio_3"],
+                f_fecha_final_3 = dic["fecha_final_3"],
+                f_dependencia_hist_3 = dic["dependencia_hist_3"],
+                f_organizacion_3 = dic["organizacion_3"],
+                f_cargo_hist_3 = dic["cargo_hist_3"],
+                f_fecha_inicio_4 = dic["fecha_inicio_4"],
+                f_fecha_final_4 = dic["fecha_final_4"],
+                f_dependencia_hist_4 = dic["dependencia_hist_4"],
+                f_organizacion_4 = dic["organizacion_4"],
+                f_cargo_hist_4 = dic["cargo_hist_4"],
+                f_fecha_inicio_5 = dic["fecha_inicio_5"],
+                f_fecha_final_5 = dic["fecha_final_5"],
+                f_dependencia_hist_5 = dic["dependencia_hist_5"],
+                f_organizacion_5 = dic["organizacion_5"],
+                f_cargo_hist_5 = dic["cargo_hist_5"],
+                f_Historial_trabajo_Personal= personal.select().first().id
+                )
+        else:
+            historial.update(f_fecha_inicio_1 = dic["fecha_inicio_1"],
+                f_fecha_final_1 = dic["fecha_final_1"],
+                f_dependencia_hist_1 = dic["dependencia_hist_1"],
+                f_organizacion_1 = dic["organizacion_1"],
+                f_cargo_hist_1 = dic["cargo_hist_1"],
+                f_fecha_inicio_2 = dic["fecha_inicio_2"],
+                f_fecha_final_2 = dic["fecha_final_2"],
+                f_dependencia_hist_2 = dic["dependencia_hist_2"],
+                f_organizacion_2 = dic["organizacion_2"],
+                f_cargo_hist_2 = dic["cargo_hist_2"],
+                f_fecha_inicio_3 = dic["fecha_inicio_3"],
+                f_fecha_final_3 = dic["fecha_final_3"],
+                f_dependencia_hist_3 = dic["dependencia_hist_3"],
+                f_organizacion_3 = dic["organizacion_3"],
+                f_cargo_hist_3 = dic["cargo_hist_3"],
+                f_fecha_inicio_4 = dic["fecha_inicio_4"],
+                f_fecha_final_4 = dic["fecha_final_4"],
+                f_dependencia_hist_4 = dic["dependencia_hist_4"],
+                f_organizacion_4 = dic["organizacion_4"],
+                f_cargo_hist_4 = dic["cargo_hist_4"],
+                f_fecha_inicio_5 = dic["fecha_inicio_5"],
+                f_fecha_final_5 = dic["fecha_final_5"],
+                f_dependencia_hist_5 = dic["dependencia_hist_5"],
+                f_organizacion_5 = dic["organizacion_5"],
+                f_cargo_hist_5 = dic["cargo_hist_5"],
+                f_Historial_trabajo_Personal= personal.select().first().id
+                )
 
         session.ficha_negada=""
         _id = personal.select().first().id
