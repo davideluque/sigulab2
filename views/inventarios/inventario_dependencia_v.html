@@ -163,7 +163,7 @@
                     </div>
                     <div class="form-group" tag="Formato:">
                         <label>Año*</label>
-                        <input type="text" class="form-control" min="0" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required>
+                        <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required>
                         <div class="dr" id="error-ano" style="color: #d03e3e;"> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
@@ -705,7 +705,21 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce número en formato de dos dígitos: XX");
+      $(this).next().text("Introduce número en formato de dos dígitos: ##");
+    }
+  });
+
+  // Validación de formato de año (####)
+  $("#ano").focusout(function() {
+    var ano = $(this).val();
+    if (ano.length == 4) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce año en formato de cuatro dígitos: ####");
     }
   });
 
@@ -746,6 +760,7 @@
     if (   !$(this).is("#num") 
         && !$(this).is("#serialCh")
         && !$(this).is("#nro_puestos")
+        && !$(this).is("#ano")
        ) {
       if (value.length == 0) {
         $(this).css('border-color', '#d03e3e');
