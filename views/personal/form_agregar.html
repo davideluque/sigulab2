@@ -35,6 +35,7 @@
                           <span class="step activePass">1</span>
                           <span class="step">2</span>
                           <span class="step">3</span>
+                          <span class="step">4</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -178,6 +179,7 @@
                           <span class="step">1</span>
                           <span class="step activePass">2</span>
                           <span class="step">3</span>
+                          <span class="step">4</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -297,6 +299,7 @@
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step activePass">3</span>
+                        <span class="step">4</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
@@ -386,20 +389,61 @@
                       </div>
 
                     </div>
-                    <div class="botones-form">
+                    
+                    <div class="botones-form" style="margin-top: 1rem;">
                       <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                      <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                      <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
                     </div>
+
                   </fieldset>
                     <!-- Fin Tercer Paso -->
+                    <!-- Cuarto Paso -->
+                    <fieldset class="formField" id="p4">
+                      <div class="form-bottom" data-step="4" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span>
+                        </div>
+
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Competencias (Máximo 10)</h4>
+
+                          {{ for ind, comp in enumerate(competencias): }}
+                          <div class="form-group competencias">
+                            {{if comp in comp_list:}}
+                            <div class="col-sm-12">
+                              <input class="comp-check" type="checkbox" name="check-competencia-{{=ind}}" checked />
+                              <label>{{=comp}}</label><br/>
+                              <input type="text" name="competencia-{{=ind}}" value="{{=comp_list[comp]}}" maxlength="150">
+                            </div>
+                            {{else:}}
+                            <div class="col-sm-12">
+                              <input class="comp-check" type="checkbox" name="check-competencia-{{=ind}}" />
+                              <label>{{=comp}}</label><br/>
+                              <input type="text" name="competencia-{{=ind}}" maxlength="150">
+                            </div>
+                            {{pass}}
+                          </div>
+                          {{pass}}
+
+                        </div>
+
+                      </div>
+                      <div class="botones-form">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                      </div>
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
 
                 </form>
             </div>
           </div>
-
-
         </div>
       </div>
-
     </div>
   </div>
