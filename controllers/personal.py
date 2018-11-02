@@ -168,6 +168,31 @@ def add_form():
              "condicion" : request.post_vars.condicion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
+             "fecha_inicio_1" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_1_add),
+             "fecha_final_1" : transformar_fecha_formato_original(request.post_vars.fecha_final_1_add),
+             "dependencia_hist_1" : request.post_vars.dependencia_hist_1_add,
+             "organizacion_1" : request.post_vars.organizacion_1_add,
+             "cargo_hist_1": request.post_vars.cargo_hist_1_add,
+             "fecha_inicio_2" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_2_add),
+             "fecha_final_2" : transformar_fecha_formato_original(request.post_vars.fecha_final_2_add),
+             "dependencia_hist_2" : request.post_vars.dependencia_hist_2_add,
+             "organizacion_2" : request.post_vars.organizacion_2_add,
+             "cargo_hist_2": request.post_vars.cargo_hist_2_add,
+             "fecha_inicio_3" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_3_add),
+             "fecha_final_3" : transformar_fecha_formato_original(request.post_vars.fecha_final_3_add),
+             "dependencia_hist_3" : request.post_vars.dependencia_hist_3_add,
+             "organizacion_3" : request.post_vars.organizacion_3_add,
+             "cargo_hist_3": request.post_vars.cargo_hist_3_add,
+             "fecha_inicio_4" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_4_add),
+             "fecha_final_4" : transformar_fecha_formato_original(request.post_vars.fecha_final_4_add),
+             "dependencia_hist_4" : request.post_vars.dependencia_hist_4_add,
+             "organizacion_4" : request.post_vars.organizacion_4_add,
+             "cargo_hist_4": request.post_vars.cargo_hist_4_add,
+             "fecha_inicio_5" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_5_add),
+             "fecha_final_5" : transformar_fecha_formato_original(request.post_vars.fecha_final_5_add),
+             "dependencia_hist_5" : request.post_vars.dependencia_hist_5_add,
+             "organizacion_5" : request.post_vars.organizacion_5_add,
+             "cargo_hist_5": request.post_vars.cargo_hist_5_add
             }
 
     ubicaciones = request.post_vars.ubicacion_add
@@ -203,6 +228,39 @@ def add_form():
             f_validado=False,
             f_comentario="",
             f_rol= dic["rol"])
+        
+        # Añadir al historial de trabajo
+
+        db.t_Historial_trabajo.update_or_insert(
+            db.t_Historial_trabajo.f_Historial_trabajo_Personal== personal.select().first().id,
+            f_fecha_inicio_1 = dic["fecha_inicio_1"],
+            f_fecha_final_1 = dic["fecha_final_1"],
+            f_dependencia_hist_1 = dic["dependencia_hist_1"],
+            f_organizacion_1 = dic["organizacion_1"],
+            f_cargo_hist_1 = dic["cargo_hist_1"],
+            f_fecha_inicio_2 = dic["fecha_inicio_2"],
+            f_fecha_final_2 = dic["fecha_final_2"],
+            f_dependencia_hist_2 = dic["dependencia_hist_2"],
+            f_organizacion_2 = dic["organizacion_2"],
+            f_cargo_hist_2 = dic["cargo_hist_2"],
+            f_fecha_inicio_3 = dic["fecha_inicio_3"],
+            f_fecha_final_3 = dic["fecha_final_3"],
+            f_dependencia_hist_3 = dic["dependencia_hist_3"],
+            f_organizacion_3 = dic["organizacion_3"],
+            f_cargo_hist_3 = dic["cargo_hist_3"],
+            f_fecha_inicio_4 = dic["fecha_inicio_4"],
+            f_fecha_final_4 = dic["fecha_final_4"],
+            f_dependencia_hist_4 = dic["dependencia_hist_4"],
+            f_organizacion_4 = dic["organizacion_4"],
+            f_cargo_hist_4 = dic["cargo_hist_4"],
+            f_fecha_inicio_5 = dic["fecha_inicio_5"],
+            f_fecha_final_5 = dic["fecha_final_5"],
+            f_dependencia_hist_5 = dic["dependencia_hist_5"],
+            f_organizacion_5 = dic["organizacion_5"],
+            f_cargo_hist_5 = dic["cargo_hist_5"],
+            f_Historial_trabajo_Personal= personal.select().first().id
+            )
+
         session.ficha_negada=""
         _id = personal.select().first().id
         db(db.es_encargado.tecnico == _id).delete()
@@ -254,6 +312,7 @@ def add_form():
             f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
             mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
+
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
@@ -454,6 +513,9 @@ def ficha():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
 
+    historial_rows = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == elm.id).select()[0]
+    historial = historial_rows.as_dict()
+
     return dict(
         personal=personal,
         categorias=categorias,
@@ -467,7 +529,8 @@ def ficha():
         usuario_logged=usuario_logged,
         usuario=usuario,
         competencias=competencias,
-        comp_list=lista_competencias(personal)
+        comp_list=lista_competencias(personal),
+        historial=historial
     )
 
 def cambiar_validacion(validacion, personal):
