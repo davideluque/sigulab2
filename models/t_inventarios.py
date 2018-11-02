@@ -411,7 +411,7 @@ db.define_table(
     Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
-    Field('vh_extension', 'integer', default="", label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
+    Field('vh_extension', 'integer', default=0, label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
 
 
     # Datos SUDEBIP
