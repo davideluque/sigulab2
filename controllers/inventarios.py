@@ -389,7 +389,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadido el vehiculo de placa : {}".format(placa)
     )
-    session.flash = "El vehículo ha sido agregado satisfactoriamente."
+    response.flash = "El vehículo ha sido agregado satisfactoriamente."
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 # Registra un nuevo mantenimiento a un bm indicado.
