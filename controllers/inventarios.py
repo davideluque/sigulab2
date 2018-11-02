@@ -323,6 +323,14 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         response.flash = "El vehiculo de placa \"{0}\" ya ha sido ingresado anteriormente \
                           a la dependencia \"{1}\".".format(vh.vh_placa, vh.vh_dependencia)
         return False
+
+    # Si ya existe el numero de BM:
+    if db(db.vehiculo.vh_num == int(num)).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de número \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
       
     # Se agrega el nuevo vehiculo a la base de datos
     inv_id = db.vehiculo.insert(
@@ -381,6 +389,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
     db.bitacora_general.insert(
         f_accion = "[inventarios] Añadido el vehiculo de placa : {}".format(placa)
     )
+    session.flash = "El vehículo ha sido agregado satisfactoriamente."
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
 # Registra un nuevo mantenimiento a un bm indicado.
@@ -389,18 +398,18 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
                 fecha_cert, observacion):
 
     inv_id = db.historial_mantenimiento_bm.insert(
-            hmbm_nro=no_bien, 
-            hmbm_fecha_sol=fecha_sol, 
-            hmbm_codigo=codigo, 
-            hmbm_tipo=tipo, 
-            hmbm_servicio=servicio, 
+            hmbm_nro=no_bien,
+            hmbm_fecha_sol=fecha_sol,
+            hmbm_codigo=codigo,
+            hmbm_tipo=tipo,
+            hmbm_servicio=servicio,
             hmbm_accion=accion,
-            hmbm_descripcion=descripcion, 
-            hmbm_proveedor=proveedor, 
+            hmbm_descripcion=descripcion,
+            hmbm_proveedor=proveedor,
             hmbm_fecha_inicio=fecha_inicio,
             hmbm_fecha_fin= fecha_fin,
             hmbm_tiempo_ejec=tiempo_ejec,
-            hmbm_fecha_cert=fecha_cert, 
+            hmbm_fecha_cert=fecha_cert,
             hmbm_observacion=observacion
         )
     db.bitacora_general.insert(
@@ -413,7 +422,7 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo 
 # el bm. 
 def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
-                descripcion, aforado, calibrar, capacidad, unidad, unidad_dim, 
+                descripcion, aforado, calibrar, capacidad, unidad, unidad_dim,
                  ancho, largo, alto, diametro, material, material_sec, presentacion,
                  unidades,total, unidad_adscripcion, dependencia, user , clasificacion):
 
