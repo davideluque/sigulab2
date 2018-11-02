@@ -660,26 +660,14 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
+  var regexTlf = new RegExp("^\(0[0-9]{3}\) [0-9]{3}-[0-9]{4}$");
 
   function isNum(str) {
     return !isNaN(str);
   }
 
-  $("input[required]").focusout(function() {
-    var value = $(this).val();
-
-    if (value.length == 0) {
-      $(this).css('border-color', '#d03e3e');
-      $(this).next().show();
-      $(this).next().text("Este campo es obligatorio.");
-    } else {
-      $(this).next().hide();
-      $(this).css('border-color', '#ddd');
-    }
-  });
-
   // Validación de bien mueble
-  $("#num").change(function() {
+  $("#num").focusout(function() {
     var num = $(this).val();
     if (isNum(num) && num.length == 6) {
       $(this).next().hide();
@@ -689,6 +677,54 @@
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Introduce un número de 6 dígitos");
+    }
+  });
+
+  // Validación de serial de carrocería (17 dígitos)
+  $("#serialCh").focusout(function() {
+    var serial = $(this).val();
+    if (serial.length == 17) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce un serial de 17 dígitos");
+    }
+  });
+
+  // Validación de formato de puestos (2 dígitos)
+  $("#nro_puestos").focusout(function() {
+    var nro_puestos = $(this).val();
+    if (nro_puestos.length == 2) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce número en formato de dos dígitos: XX");
+    }
+  });
+
+  // Validación de campos requeridos y no llenados
+  // (ignora el resto de campos especiales)
+  $("input[required]").focusout(function() {
+    var value = $(this).val();
+
+    if (   !$(this).is("#num") 
+        && !$(this).is("#serialCh")
+        && !$(this).is("#nro_puestos")
+       ) {
+      if (value.length == 0) {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Este campo es obligatorio.");
+      } else {
+        $(this).next().hide();
+        $(this).css('border-color', '#ddd');
+      }
     }
   });
 
