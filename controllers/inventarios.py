@@ -1018,7 +1018,7 @@ def vehiculos():
             extension=request.vars.extension,
             sudebip_localizacion=localizacion[request.vars.sede],
             sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
-            sudebip_categoria="(15000-0000) Equipos de transporte, tracción y elevación",
+            sudebip_categoria="15000-0000 - Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
             fecha_adquisicion=request.vars.fecha_adquisicion,
