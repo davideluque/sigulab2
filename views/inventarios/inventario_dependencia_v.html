@@ -391,7 +391,7 @@
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label>Unidad de medida Capacidad de Carga*</label>
+                            <label>Unidad de medida Cap. Carga*</label>
                             <select class="form-control" type="select" id="capacidad_carga_md" name="capacidad_carga_md" placeholder="Unidad de medida Capacidad de Carga" required>
                                 <option value="">Seleccione una opción</option>
                                 <option value="ton">Toneladas (ton)</option>
@@ -660,7 +660,7 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
-  var regexTlf = new RegExp("^\(0[0-9]{3}\) [0-9]{3}\-[0-9]{4}$");
+  var regexTlf = new RegExp("^\([0][0-9]{3}\)\ [0-9]{3}\-[0-9]{4}$");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
   function isNum(str) {
@@ -673,6 +673,7 @@
     if (isNum(num) && num.length == 6) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else {
       $(this).css('border-color', '#d03e3e');
@@ -687,6 +688,7 @@
     if (serial.length == 17) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else {
       $(this).css('border-color', '#d03e3e');
@@ -701,6 +703,7 @@
     if (nro_puestos.length == 2) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else {
       $(this).css('border-color', '#d03e3e');
@@ -715,6 +718,7 @@
     if (ano.length == 4) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else {
       $(this).css('border-color', '#d03e3e');
@@ -726,9 +730,10 @@
   // Validación de formato de telf custodio (formato del regex establecido)
   $("#telf_custodio").focusout(function() {
     var tlf = $(this).val();
-    if (regexTlf.test(tlf)) {
+    if (regexTlf.test(tlf) || tlf.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else if (tlf.length != 0) {
       $(this).css('border-color', '#d03e3e');
@@ -740,9 +745,10 @@
   // Validación de formato de extension custodio (formato del regex establecido)
   $("#extension").focusout(function() {
     var extension = $(this).val();
-    if (regexExtension.test(extension)) {
+    if (regexExtension.test(extension) || extension.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
     }
     else if (extension.length != 0) {
       $(this).css('border-color', '#d03e3e');
@@ -769,6 +775,7 @@
       } else {
         $(this).next().hide();
         $(this).css('border-color', '#ddd');
+        $(this).css('color', '#888');
       }
     }
   });
