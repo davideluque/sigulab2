@@ -18,9 +18,6 @@
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
 
 
-
-
-
 {{end}}
 
 {{block center}}
@@ -50,18 +47,47 @@
             <li role="presentation" class="nav-item active">
               <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Datos Básicos</b></a>
             </li>
-            <li class="nav-item ">
-              <a class="nav-link  " href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Datos Laborales</b></a>
-            </li>
-            <li class="nav-item ">
+
+            <li class="nav-item " id="dropdown">
               <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Datos Personales</b></a>
+              <div class="dropdown-content">
+                <a href="#"><b>Estudios</b></a>
+                <a href="#"><b>Trabajos / Tesis</b></a>
+                <a href="#"><b>Cursos</b></a>
+                <a href="#"><b>Reconocimientos</b></a>
+              </div>
             </li>
-            <li class="nav-item">
+
+
+            <li class="nav-item" id="dropdown">
+              <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Datos Laborales</b></a>
+              <div class="dropdown-content">
+                <a href="#"><b>Historial</b></a>
+                <a href="#"><b>Comisiones</b></a>
+              </div>
+            </li>
+
+
+
+            <li class="nav-item" id="dropdown">
               <a class="nav-link" id="tab_competencias" href="#competencias" data-toggle="tab" role="tab" aria-controls="competencias" ><b>Competencias</b></a>
+              <div class="dropdown-content">
+                <a href="#"><b>Docencia</b></a>
+                <a href="#"><b>Investigación</b></a>
+                <a href="#"><b>Extensión / Servicios</b></a>
+                <a href="#"><b>Eventos</b></a>
+                <a href="#"><b>Actividades</b></a>
+              </div>
             </li>
-            <li class="nav-item ">
-              <a class="nav-link" id="tab_historia_laboral" href="#historial_laboral" data-toggle="tab" role="tab" aria-controls="datos_personales" ><b>Historial Laboral</b></a>
-            </li>
+
+            <!-- <li class="nav-item" id="dropdown">
+              <a class="nav-link" id="tab_historia_laboral" href="#historial_laboral" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Historial Laboral</b></a>
+              <div class="dropdown-content">
+                <a href="#"><b>Actividades académicas</b></a>
+                <a href="#"><b>Actividades administrativas</b></a>
+              </div>
+            </li> -->
+
           </ul>
 
           <div class="tab-content" id="tabla_">
@@ -192,7 +218,18 @@
               </table>
             </div>
 
-             <div class="tab-pane" id="datos_personales" role="tabpanel">
+            <div class="tab-pane" id="datos_personales" role="tabpanel">
+
+              <!-- <div class="container">
+                <div class="btn-group" style="margin-top: 2rem; margin-bottom: 2rem;">
+                  <button type="button" class="btn btn-primary">Historial</button>
+                </div>
+                <div class="btn-group" style="margin-top: 2rem; margin-bottom: 2rem;">
+                  <button type="button" class="btn btn-primary">Comisiones</button>
+                </div>
+              </div>
+ -->
+
               <table class="table contenidoFicha" id="tabla_datos_personales">
                 <tbody>
                     <tr>
