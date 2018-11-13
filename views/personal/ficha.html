@@ -48,45 +48,24 @@
               <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Datos Básicos</b></a>
             </li>
 
-            <li class="nav-item " id="dropdown">
+            <li class="nav-item ">
               <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Datos Personales</b></a>
-              <div class="dropdown-content">
-                <a href="#"><b>Estudios</b></a>
-                <a href="#"><b>Trabajos / Tesis</b></a>
-                <a href="#"><b>Cursos</b></a>
-                <a href="#"><b>Reconocimientos</b></a>
-              </div>
             </li>
 
 
-            <li class="nav-item" id="dropdown">
+            <li class="nav-item">
               <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Datos Laborales</b></a>
-              <div class="dropdown-content">
-                <a href="#"><b>Historial</b></a>
-                <a href="#"><b>Comisiones</b></a>
-              </div>
             </li>
 
 
 
-            <li class="nav-item" id="dropdown">
+            <li class="nav-item">
               <a class="nav-link" id="tab_competencias" href="#competencias" data-toggle="tab" role="tab" aria-controls="competencias" ><b>Competencias</b></a>
-              <div class="dropdown-content">
-                <a href="#"><b>Docencia</b></a>
-                <a href="#"><b>Investigación</b></a>
-                <a href="#"><b>Extensión / Servicios</b></a>
-                <a href="#"><b>Eventos</b></a>
-                <a href="#"><b>Actividades</b></a>
-              </div>
             </li>
 
-            <!-- <li class="nav-item" id="dropdown">
+            <li class="nav-item">
               <a class="nav-link" id="tab_historia_laboral" href="#historial_laboral" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Historial Laboral</b></a>
-              <div class="dropdown-content">
-                <a href="#"><b>Actividades académicas</b></a>
-                <a href="#"><b>Actividades administrativas</b></a>
-              </div>
-            </li> -->
+            </li>
 
           </ul>
 
@@ -291,108 +270,7 @@
             </div>
 
             <div class="tab-pane" id="historial_laboral" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_historial_laboral">
-                <tbody>
-
-                    <tr> 
-                      <th> Desde </th>
-                      <th> Hasta </th>
-                      <th> Dependencia </th>
-                      <th> Cargo </th>
-                      <th> Organización </th>
-                    </tr>
-                    <tr>
-                      {{if bool(historial['f_fecha_inicio_1']) :}}
-                        <td id="field_desde">{{=historial['f_fecha_inicio_1']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_fecha_final_1']) :}}
-                        <td id="field_hasta">{{=historial['f_fecha_final_1']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_dependencia_hist_1']) :}}
-                        <td id="field_hasta">{{=historial['f_dependencia_hist_1']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_cargo_hist_1']) :}}
-                        <td id="field_hasta">{{=historial['f_cargo_hist_1']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_organizacion_1']) :}}
-                        <td id="field_hasta">{{=historial['f_organizacion_1']}}</td>
-                      {{pass}}
-                    </tr>
-
-                    <tr>
-                      {{if bool(historial['f_fecha_inicio_2']) :}}
-                        <td id="field_desde">{{=historial['f_fecha_inicio_2']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_fecha_final_2']) :}}
-                        <td id="field_hasta">{{=historial['f_fecha_final_2']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_dependencia_hist_2']) :}}
-                        <td id="field_hasta">{{=historial['f_dependencia_hist_2']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_cargo_hist_2']) :}}
-                        <td id="field_hasta">{{=historial['f_cargo_hist_2']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_organizacion_2']) :}}
-                        <td id="field_hasta">{{=historial['f_organizacion_2']}}</td>
-                      {{pass}}
-                    </tr>
-
-                    <tr>
-                      {{if bool(historial['f_fecha_inicio_3']) :}}
-                        <td id="field_desde">{{=historial['f_fecha_inicio_3']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_fecha_final_3']) :}}
-                        <td id="field_hasta">{{=historial['f_fecha_final_3']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_dependencia_hist_3']) :}}
-                        <td id="field_hasta">{{=historial['f_dependencia_hist_3']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_cargo_hist_3']) :}}
-                        <td id="field_hasta">{{=historial['f_cargo_hist_3']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_organizacion_3']) :}}
-                        <td id="field_hasta">{{=historial['f_organizacion_3']}}</td>
-                      {{pass}}
-                    </tr>
-
-                    <tr>
-                      {{if bool(historial['f_fecha_inicio_4']) :}}
-                        <td id="field_desde">{{=historial['f_fecha_inicio_4']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_fecha_final_4']) :}}
-                        <td id="field_hasta">{{=historial['f_fecha_final_4']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_dependencia_hist_4']) :}}
-                        <td id="field_hasta">{{=historial['f_dependencia_hist_4']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_cargo_hist_4']) :}}
-                        <td id="field_hasta">{{=historial['f_cargo_hist_4']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_organizacion_4']) :}}
-                        <td id="field_hasta">{{=historial['f_organizacion_4']}}</td>
-                      {{pass}}
-                    </tr>
-
-                    <tr>
-                      {{if bool(historial['f_fecha_inicio_5']) :}}
-                        <td id="field_desde">{{=historial['f_fecha_inicio_5']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_fecha_final_5']) :}}
-                        <td id="field_hasta">{{=historial['f_fecha_final_5']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_dependencia_hist_5']) :}}
-                        <td id="field_hasta">{{=historial['f_dependencia_hist_5']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_cargo_hist_5']) :}}
-                        <td id="field_hasta">{{=historial['f_cargo_hist_5']}}</td>
-                      {{pass}}
-                      {{if bool(historial['f_organizacion_5']) :}}
-                        <td id="field_hasta">{{=historial['f_organizacion_5']}}</td>
-                      {{pass}}
-                    </tr>
-                </tbody>
-
-              </table>
+              {{include 'personal/historial.html'}}
             </div>
 
             {{if personal['por_validar']:}}
