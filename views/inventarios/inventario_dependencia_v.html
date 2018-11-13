@@ -699,7 +699,7 @@
   // Validación de formato de puestos (2 dígitos)
   $("#nro_puestos").focusout(function() {
     var nro_puestos = $(this).val();
-    if (nro_puestos.length == 2) {
+    if (nro_puestos.length == 1 || nro_puestos.length == 2) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -707,7 +707,7 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce número en formato de dos dígitos: ##");
+      $(this).next().text("Introduce número en formato de uno o dos dígitos: # ó ##");
     }
   });
 
