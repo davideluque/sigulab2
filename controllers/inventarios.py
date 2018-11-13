@@ -1066,6 +1066,7 @@ def vehiculos():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     user_dep_id = user.f_dependencia
+    dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
@@ -1079,7 +1080,7 @@ def vehiculos():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=request.vars.sede,
+            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -2315,7 +2316,7 @@ def detalles_vehiculo():
         session.flash = "El vehiculo no ha sido eliminado"
         redirect(URL('validaciones'))
 
-
+    dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
     # PENDIENTE: Quitar esto
     if request.vars.modificacion:
         __agregar_vh(
@@ -2328,7 +2329,7 @@ def detalles_vehiculo():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=request.vars.sede,
+            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
