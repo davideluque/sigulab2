@@ -68,25 +68,79 @@ if db(db.auth_user).isempty():
 
     # Laboratorio A
     db.auth_user.insert(first_name="Laboratorio A", last_name="", email='usb-laba@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio B
     db.auth_user.insert(first_name="Laboratorio B", last_name="", email='usb-labb@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio C
     db.auth_user.insert(first_name="Laboratorio C", last_name="", email='usb-labc@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio D
     db.auth_user.insert(first_name="Laboratorio D", last_name="", email='usb-labd@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio E
     db.auth_user.insert(first_name="Laboratorio E", last_name="", email='usb-labe@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio F
     db.auth_user.insert(first_name="Laboratorio F", last_name="", email='usb-labf@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
     # Laboratorio G
     db.auth_user.insert(first_name="Laboratorio G", last_name="", email='usb-labg@usb.ve',
-                                            password=db.auth_user.password.validate('0000')[0])
+                        password=db.auth_user.password.validate('0000')[0])
+
+    # ---- Jefes de Laboratorio
+    # NOTA: Los correos de los jefes de Laboratorio NO existen. Estos correos deberían ser
+    # los de cada jefe en particular. Pero en cualquier caso, estos usuarios deberían agregarse
+    # a través del módulo de Personal como usuarios regulares.
+
+    # Jefatura Laboratorio A
+    db.auth_user.insert(first_name="Jefe Laboratorio A", last_name="", email='jefe-usb-laba@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio B
+    db.auth_user.insert(first_name="Jefe Laboratorio B", last_name="", email='jefe-usb-labb@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio C
+    db.auth_user.insert(first_name="Jefe Laboratorio C", last_name="", email='jefe-usb-labc@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio D
+    db.auth_user.insert(first_name="Jefe Laboratorio D", last_name="", email='jefe-usb-labd@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio E
+    db.auth_user.insert(first_name="Jefe Laboratorio E", last_name="", email='jefe-usb-labe@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio F
+    db.auth_user.insert(first_name="Jefe Laboratorio F", last_name="", email='jefe-usb-labf@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Jefatura Laboratorio G
+    db.auth_user.insert(first_name="Jefe Laboratorio G", last_name="", email='jefe-usb-labg@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+
+    # ---- Unidades de apoyo
+    # NOTA: Los correos de los usuarios de apoyo de Laboratorio NO existen. Estos correos deberían
+    # ser los de cada encargado en particular. Pero en cualquier caso, estos usuarios deberían 
+    # agregarse a través del módulo de Personal como usuarios regulares.
+
+    # Apoyo Laboratorio A
+    db.auth_user.insert(first_name="Apoyo Laboratorio A", last_name="", email='apoyo-usb-laba@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio B
+    db.auth_user.insert(first_name="Apoyo Laboratorio B", last_name="", email='apoyo-usb-labb@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio C
+    db.auth_user.insert(first_name="Apoyo Laboratorio C", last_name="", email='apoyo-usb-labc@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio D
+    db.auth_user.insert(first_name="Apoyo Laboratorio D", last_name="", email='apoyo-usb-labd@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio E
+    db.auth_user.insert(first_name="Apoyo Laboratorio E", last_name="", email='apoyo-usb-labe@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio F
+    db.auth_user.insert(first_name="Apoyo Laboratorio F", last_name="", email='apoyo-usb-labf@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
+    # Apoyo Laboratorio G
+    db.auth_user.insert(first_name="Apoyo Laboratorio G", last_name="", email='apoyo-usb-labg@usb.ve',
+                        password=db.auth_user.password.validate('0000')[0])
 
 # Sedes
 
@@ -150,6 +204,101 @@ if db(db.dependencias).isempty():
 	db.dependencias.insert(nombre='LABORATORIO G', id_sede=litoral,
 		unidad_de_adscripcion=direccionid, id_jefe_dependencia=user,
 		codigo_registro="ULLG")
+
+    # Jefaturas
+	labaid = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
+	labbid = db(db.dependencias.nombre == 'LABORATORIO B').select()[0].id
+	labcid = db(db.dependencias.nombre == 'LABORATORIO C').select()[0].id
+	labdid = db(db.dependencias.nombre == 'LABORATORIO D').select()[0].id
+	labeid = db(db.dependencias.nombre == 'LABORATORIO E').select()[0].id
+	labfid = db(db.dependencias.nombre == 'LABORATORIO F').select()[0].id
+	labgid = db(db.dependencias.nombre == 'LABORATORIO G').select()[0].id
+
+	# Jefatura Laboratorio A
+	user = db(db.auth_user.email == 'jefe-usb-laba@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO A', id_sede=sartenejas,
+		unidad_de_adscripcion=labaid, id_jefe_dependencia=user,
+		codigo_registro="ULLAJ")
+
+    # Jefatura Laboratorio B
+	user = db(db.auth_user.email == 'jefe-usb-labb@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO B', id_sede=sartenejas,
+		unidad_de_adscripcion=labbid, id_jefe_dependencia=user,
+		codigo_registro="ULLBJ")
+
+	# Jefatura Laboratorio C
+	user = db(db.auth_user.email == 'jefe-usb-labc@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO C', id_sede=sartenejas,
+		unidad_de_adscripcion=labcid, id_jefe_dependencia=user,
+		codigo_registro="ULLCJ")
+
+	# Jefatura Laboratorio D
+	user = db(db.auth_user.email == 'jefe-usb-labd@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO D', id_sede=sartenejas,
+		unidad_de_adscripcion=labdid, id_jefe_dependencia=user,
+		codigo_registro="ULLDJ")
+
+	# Jefatura Laboratorio E
+	user = db(db.auth_user.email == 'jefe-usb-labe@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO E', id_sede=sartenejas,
+		unidad_de_adscripcion=labeid, id_jefe_dependencia=user,
+		codigo_registro="ULLEJ")
+
+	# Jefatura Laboratorio F
+	user = db(db.auth_user.email == 'jefe-usb-labf@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO F', id_sede=sartenejas,
+		unidad_de_adscripcion=labfid, id_jefe_dependencia=user,
+		codigo_registro="ULLFJ")
+
+	# Jefatura Laboratorio G
+	user = db(db.auth_user.email == 'jefe-usb-labg@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='JEFATURA LABORATORIO G', id_sede=litoral,
+		unidad_de_adscripcion=labgid, id_jefe_dependencia=user,
+		codigo_registro="ULLGJ")
+
+	# Unidades de Apoyo
+
+	# Unidad de Apoyo Laboratorio A
+	user = db(db.auth_user.email == 'apoyo-usb-laba@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO A', id_sede=sartenejas,
+		unidad_de_adscripcion=labaid, id_jefe_dependencia=user,
+		codigo_registro="ULLAA")
+
+    # Unidad de Apoyo Laboratorio B
+	user = db(db.auth_user.email == 'apoyo-usb-labb@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO B', id_sede=sartenejas,
+		unidad_de_adscripcion=labbid, id_jefe_dependencia=user,
+		codigo_registro="ULLBA")
+
+	# Unidad de Apoyo Laboratorio C
+	user = db(db.auth_user.email == 'apoyo-usb-labc@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO C', id_sede=sartenejas,
+		unidad_de_adscripcion=labcid, id_jefe_dependencia=user,
+		codigo_registro="ULLCA")
+
+	# Unidad de Apoyo Laboratorio D
+	user = db(db.auth_user.email == 'apoyo-usb-labd@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO D', id_sede=sartenejas,
+		unidad_de_adscripcion=labdid, id_jefe_dependencia=user,
+		codigo_registro="ULLDA")
+
+	# Unidad de Apoyo Laboratorio E
+	user = db(db.auth_user.email == 'apoyo-usb-labe@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO E', id_sede=sartenejas,
+		unidad_de_adscripcion=labeid, id_jefe_dependencia=user,
+		codigo_registro="ULLEA")
+
+	# Unidad de Apoyo Laboratorio F
+	user = db(db.auth_user.email == 'apoyo-usb-labf@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO F', id_sede=sartenejas,
+		unidad_de_adscripcion=labfid, id_jefe_dependencia=user,
+		codigo_registro="ULLFA")
+
+	# Unidad de Apoyo Laboratorio G
+	user = db(db.auth_user.email == 'apoyo-usb-labg@usb.ve').select()[0].id
+	db.dependencias.insert(nombre='UNIDAD DE APOYO LABORATORIO G', id_sede=litoral,
+		unidad_de_adscripcion=labgid, id_jefe_dependencia=user,
+		codigo_registro="ULLGA")
 
 	# Coordinaciones
 
