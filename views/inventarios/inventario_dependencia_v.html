@@ -228,7 +228,7 @@
 
                         <div class="form-group">
                           <label>Sede*</label> <br>
-                          <input type="text" class="form-control" id="s"ede name="sede" placeholder="Sede*" title="Ingrese la Sede" disabled value="{{= db(db.sedes.id == sede_id).select().first().nombre }}">
+                          <input type="text" class="form-control" id="sede" name="sede" placeholder="Sede*" title="Ingrese la Sede" disabled value="{{= db(db.sedes.id == sede_id).select().first().nombre }}">
                           <div class="dr" id="error-sede" style="color: #d03e3e;"> </div>
                         </div>
 
@@ -420,12 +420,7 @@
 
                       <div class="form-group">
                           <label>Dependencia*</label>
-                          <select class="form-control" type="select" name="dependencia" id="dependencia" class="input" required>
-                            <option value=""></option>
-                            {{for dep in dependencias:}}
-                              <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
-                            {{pass}}
-                          </select>
+                          <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Dependencia*" title="Ingrese la Dependencia" disabled value="{{= db(db.dependencias.id == dep_padre_id).select().first().nombre }}">
                           <div class="dr" id="error-dependencia" style="color: #d03e3e;"> </div>
                       </div>
 
@@ -848,9 +843,6 @@
     var fecha = new Date($(this).val());
     var maximo = new Date();
     var minimo = new Date("1967-07-18");
-
-    alert(minimo <= fecha);
-    alert(fecha <= maximo);
 
     if ((minimo <= fecha) && (fecha <= maximo)) {
       $(this).next().hide();

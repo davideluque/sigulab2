@@ -1069,9 +1069,9 @@ def vehiculos():
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
-        dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
+        dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
 
-        if dependencia_escogida.sede_id == 1:
+        if dependencia_escogida.id_sede == 1:
             sede_verbosa = "Sartenejas"
         else:
             sede_verbosa = "Litoral"
@@ -1086,7 +1086,7 @@ def vehiculos():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=dependencia_escogida.sede_id,
+            sede=dependencia_escogida.id_sede,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -2327,9 +2327,9 @@ def detalles_vehiculo():
 
     # PENDIENTE: Quitar esto
     if request.vars.modificacion:
-        dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
+        dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
 
-        if dependencia_escogida.sede_id == 1:
+        if dependencia_escogida.id_sede == 1:
             sede_verbosa = "Sartenejas"
         else:
             sede_verbosa = "Litoral"
@@ -2344,7 +2344,7 @@ def detalles_vehiculo():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=dependencia_escogida.sede_id,
+            sede=dependencia_escogida.id_sede,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
