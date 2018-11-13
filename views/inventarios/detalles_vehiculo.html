@@ -792,7 +792,8 @@
                           <div class="col-md-6">
                             <div class="form-group">
                                 <label>Extensión</label>
-                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo" value="{{=vehiculo['vh_extension']}}">
+                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo"  
+                                {{if vehiculo['vh_extension'] != None :}} value = "{{=vehiculo['vh_extension']}}" {{else:}} pass {{pass}} >
                                 <div class="dr" id="error-extension" style="color: #d03e3e;"> </div>
                             </div>
                           </div>
