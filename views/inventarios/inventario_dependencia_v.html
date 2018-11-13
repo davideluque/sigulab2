@@ -4,9 +4,11 @@
 <div id="inventario-dependencia" class="container">
 <div class="row">
 
+  {{ if len(dependencias) == 0: }}
     <div>
         <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo Vehículo" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
     </div>
+  {{ pass }}
 
     <br><br>
     <br><br>
@@ -42,7 +44,11 @@
                   {{pass}}
                 </td>
                 <td class="camposTabla">{{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}</td>
-                <td class="camposTabla">{{=vehiculo['vh_responsable']}}</td>
+                <td class="camposTabla">
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}}
+                  &nbsp;
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
+                </td>
                 <td class="camposTabla">{{=vehiculo['vh_estatus']}}</td>
               </tr>
           {{pass}}           
@@ -222,12 +228,9 @@
 
                         <div class="form-group">
                           <label>Sede*</label> <br>
-                          <input type="radio" value="Sartenejas" id="Sartenejas" name="sede">
-                          <label for="sartenejas"> Sartenejas</label>
-                          <input type="radio" value="Litoral" id="Litoral" name="sede">
-                          <label for="litoral"> Litoral</label>
+                          <input type="text" class="form-control" id="sede" name="sede" placeholder="Sede*" title="Ingrese la Sede" disabled value="{{= db(db.sedes.id == sede_id).select().first().nombre }}">
                           <div class="dr" id="error-sede" style="color: #d03e3e;"> </div>
-                      </div>
+                        </div>
 
                     </div>
                   </div>
@@ -417,12 +420,7 @@
 
                       <div class="form-group">
                           <label>Dependencia*</label>
-                          <select class="form-control" type="select" name="dependencia" id="dependencia" class="input" required>
-                            <option value=""></option>
-                            {{for dep in dependencias:}}
-                              <option id="{{=dep.nombre}}" value="{{=dep.id}}">{{=dep.nombre}}</option>
-                            {{pass}}
-                          </select>
+                          <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Dependencia*" title="Ingrese la Dependencia" disabled value="{{= db(db.dependencias.id == dep_padre_id).select().first().nombre }}">
                           <div class="dr" id="error-dependencia" style="color: #d03e3e;"> </div>
                       </div>
 
@@ -462,15 +460,26 @@
                             <input type="text" class="form-control" id="propietario" name="propietario" placeholder="Nombre del propietario*" title="Ingrese el nombre del propietario del vehículo" required>
                             <div class="dr" id="error-propietario" style="color: #d03e3e;"> </div>
                         </div>
+
                         <div class="form-group">
-                            <label>Nombre del responsable*</label>
-                            <input type="text" class="form-control" id="responsable" name="responsable" placeholder="Nombre del responsable*" title="Ingrese el nombre del responsable del vehículo" required>
+                            <label>Responsable*</label>
+                            <select class="form-control" type="select" name="responsable" id="responsable" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
                             <div class="dr" id="error-responsable" style="color: #d03e3e;"> </div>
                         </div>
                     
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
-                            <input type="text" class="form-control" id="custodio" name="custodio" placeholder="Nombre del custodio del vehículo*" title="Ingrese el nombre del custodio del vehículo" required>
+                            <select class="form-control" type="select" name="custodio" id="custodio" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
                             <div class="dr" id="error-custodio" style="color: #d03e3e;"> </div>
                         </div>
 
@@ -586,7 +595,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
                             <label>Fecha de adquisición*</label>
-                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required>
+                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" min="1967-07-18" required>
                             <div class="dr" id="error-fecha_adquisicion" style="color: #d03e3e;"> </div>
                         </div>
                         <div class="form-group">
@@ -660,7 +669,7 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
-  var regexTlf = new RegExp("^\([0][0-9]{3}\)\ [0-9]{3}\-[0-9]{4}$");
+  var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
   function isNum(str) {
@@ -700,7 +709,7 @@
   // Validación de formato de puestos (2 dígitos)
   $("#nro_puestos").focusout(function() {
     var nro_puestos = $(this).val();
-    if (nro_puestos.length == 2) {
+    if (nro_puestos.length == 1 || nro_puestos.length == 2) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -708,7 +717,7 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce número en formato de dos dígitos: ##");
+      $(this).next().text("Introduce número en formato de uno o dos dígitos: # ó ##");
     }
   });
 
@@ -716,11 +725,24 @@
   $("#ano").focusout(function() {
     var ano = $(this).val();
     if (ano.length == 4) {
-      $(this).next().hide();
-      $(this).css('border-color', '#ddd');
-      $(this).css('color', '#888');
-    }
-    else {
+      var numeric_ano = parseInt(ano);
+      if (numeric_ano >= 1960) {
+        var max_ano = (new Date()).getFullYear();
+        if (numeric_ano <= max_ano) {
+          $(this).next().hide();
+          $(this).css('border-color', '#ddd');
+          $(this).css('color', '#888');
+        } else {
+          $(this).css('border-color', '#d03e3e');
+          $(this).next().show();
+          $(this).next().text("Introduce año menor o igual al año en curso");
+        }
+      } else {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Introduce año mayor o igual a 1960");
+      }
+    } else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Introduce año en formato de cuatro dígitos: ####");
@@ -740,6 +762,11 @@
       $(this).next().show();
       $(this).next().text("Formato: (0###) ###-####");
     }
+  });
+
+  // Máscara js para formato de teléfono
+  $(document).ready(function() {
+    $('#telf_custodio').mask('(0000) 000-0000');
   });
 
   // Validación de formato de extension custodio (formato del regex establecido)
@@ -797,6 +824,36 @@
         {{ pass }}
         ];
     {{ pass }}
+  });
+
+  // Valida la fecha del selector de fecha adquisición
+  $(document).ready(function() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var maximo = yyyy + "-" + mm + "-" + dd;
+
+    $("#fecha_adquisicion").attr('max', maximo);
+  });
+
+  // Verifica la fecha introducida
+  $("#fecha_adquisicion").change(function() {
+    var fecha = new Date($(this).val());
+    var maximo = new Date();
+    var minimo = new Date("1967-07-18");
+
+    if ((minimo <= fecha) && (fecha <= maximo)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha válida.");
+    }
   });
   
   // Actualiza selector de categorias sudebip 
@@ -907,13 +964,42 @@
     }
   });
 
+  // Dropdown origen no vacío
+  $(".btn-submit").click(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen.length == 0) {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
+  // Dropdown origen no vacío, parte 2
+  $("#origen").change(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen != "Compra" && origen != "Donación") {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").css('color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
   // Coloca primeros datos de SUDEBIP de acuerdo a sede (localizacion y codigo localizacion)
-  $("input[name='sede']").change(function() {
-    var sede = $("input[name='sede']:checked").val();
-    if (sede == "Sartenejas") {
+  $(document).ready(function() {
+    var sede = {{=sede_id}};
+    if (sede == 1) { // Sartenejas
       $("#sudebip_localizacion").val("{{=localizacion['Sartenejas']}}");
       $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Sartenejas']}}");
-    } else if (sede == "Litoral") {
+    } else if (sede == 2) { // Litoral
       $("#sudebip_localizacion").val("{{=localizacion['Litoral']}}");
       $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Litoral']}}");
     } else {
