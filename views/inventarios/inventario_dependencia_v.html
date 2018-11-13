@@ -716,30 +716,27 @@
     var ano = $(this).val();
     if (ano.length == 4) {
       var numeric_ano = parseInt(ano);
-      if (numeric_ano >= 1950) {
+      if (numeric_ano >= 1960) {
         var max_ano = (new Date()).getFullYear();
         if (numeric_ano <= max_ano) {
           $(this).next().hide();
           $(this).css('border-color', '#ddd');
           $(this).css('color', '#888');
-        }
-        else {
+        } else {
           $(this).css('border-color', '#d03e3e');
           $(this).next().show();
-          $(this).next().text("Introduce año menos o igual al año en curso");
+          $(this).next().text("Introduce año menor o igual al año en curso");
         }
-      }
-      else {
+      } else {
         $(this).css('border-color', '#d03e3e');
         $(this).next().show();
-        $(this).next().text("Introduce año mayor a 1950");
-    }
-    else {
+        $(this).next().text("Introduce año mayor o igual a 1960");
+      }
+    } else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Introduce año en formato de cuatro dígitos: ####");
     }
-  }
   });
 
   // Validación de formato de telf custodio (formato del regex establecido)
