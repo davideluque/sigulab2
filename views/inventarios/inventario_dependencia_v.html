@@ -418,11 +418,13 @@
                           <div class="dr" id="error-rines" style="color: #d03e3e;"> </div>
                       </div>
 
+                      {{ if len(dependencias) == 0: }}
                       <div class="form-group">
                           <label>Dependencia*</label>
                           <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Dependencia*" title="Ingrese la Dependencia" disabled value="{{= db(db.dependencias.id == dep_padre_id).select().first().nombre }}">
                           <div class="dr" id="error-dependencia" style="color: #d03e3e;"> </div>
                       </div>
+                      {{ pass }}
 
                       <div class="form-group">
                           <label>Observaciones</label>
