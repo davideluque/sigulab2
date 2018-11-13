@@ -907,7 +907,7 @@
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
                             <label>Fecha de adquisición*</label>
-                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required value="{{=vehiculo['vh_fecha_adquisicion']}}">
+                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required value="{{=vehiculo['vh_fecha_adquisicion']}}" min="1967-07-18">
                             <div class="dr" id="error-fecha_adquisicion" style="color: #d03e3e;"> </div>
                         </div>
                         <div class="form-group">
@@ -1138,6 +1138,39 @@
         {{ pass }}
         ];
     {{ pass }}
+  });
+
+  // Valida la fecha del selector de fecha adquisición
+  $(document).ready(function() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var maximo = yyyy + "-" + mm + "-" + dd;
+
+    $("#fecha_adquisicion").attr('max', maximo);
+  });
+
+  // Verifica la fecha introducida
+  $("#fecha_adquisicion").change(function() {
+    var fecha = new Date($(this).val());
+    var maximo = new Date();
+    var minimo = new Date("1967-07-18");
+
+    alert(minimo <= fecha);
+    alert(fecha <= maximo);
+
+    if ((minimo <= fecha) && (fecha <= maximo)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha válida.");
+    }
   });
   
   // Actualiza selector de categorias sudebip 
