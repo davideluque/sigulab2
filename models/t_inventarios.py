@@ -406,10 +406,10 @@ db.define_table(
 
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
-    Field('vh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('vh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
     Field('vh_telf_responsable', 'string', label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
-    Field('vh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio'), requires=IS_NOT_EMPTY()),
+    Field('vh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio')),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('vh_extension', 'integer', default=0, label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
 
@@ -456,9 +456,9 @@ db.define_table(
     Field('vh_eliminar','integer', default=2, label=T('Estado de Solicitud de Eliminacion'), requires=IS_INT_IN_RANGE(-1,3)),
     Field('vh_desc_eliminar', 'string', length = 140, label = T('Razon de Eliminacion')),
     )
-    
+
 db.vehiculo.vh_crea_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
-db.vehiculo.vh_dependencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
+db.vehiculo.vh_dependencia.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre)s')
 
 db.define_table(
     'modificacion_vehiculo',
@@ -491,9 +491,9 @@ db.define_table(
     # Datos del responsable
     # PENDIENTE: Referenciar usuarios de la BD aquí
     Field('mvh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
-    Field('mvh_responsable', 'string', notnull=True, label=T('Nombre del responsable patrimonial'), requires=IS_NOT_EMPTY()),
+    Field('mvh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
     Field('mvh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-    Field('mvh_custodio', 'string', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('mvh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio')),
     Field('mvh_telf_custodio', 'string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
     
      # Datos SUDEBIP

@@ -44,7 +44,11 @@
                   {{pass}}
                 </td>
                 <td class="camposTabla">{{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}</td>
-                <td class="camposTabla">{{=vehiculo['vh_responsable']}}</td>
+                <td class="camposTabla">
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}}
+                  &nbsp;
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
+                </td>
                 <td class="camposTabla">{{=vehiculo['vh_estatus']}}</td>
               </tr>
           {{pass}}           
@@ -463,15 +467,26 @@
                             <input type="text" class="form-control" id="propietario" name="propietario" placeholder="Nombre del propietario*" title="Ingrese el nombre del propietario del vehículo" required>
                             <div class="dr" id="error-propietario" style="color: #d03e3e;"> </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label>Nombre del responsable*</label>
-                            <input type="text" class="form-control" id="responsable" name="responsable" placeholder="Nombre del responsable*" title="Ingrese el nombre del responsable del vehículo" required>
+                            <label>Responsable*</label>
+                            <select class="form-control" type="select" name="responsable" id="responsable" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
                             <div class="dr" id="error-responsable" style="color: #d03e3e;"> </div>
                         </div>
                     
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
-                            <input type="text" class="form-control" id="custodio" name="custodio" placeholder="Nombre del custodio del vehículo*" title="Ingrese el nombre del custodio del vehículo" required>
+                            <select class="form-control" type="select" name="custodio" id="custodio" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
                             <div class="dr" id="error-custodio" style="color: #d03e3e;"> </div>
                         </div>
 

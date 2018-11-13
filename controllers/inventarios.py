@@ -1098,9 +1098,9 @@ def vehiculos():
             rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
             ubicacion_custodio=request.vars.ubicacion_custodio,
             propietario=request.vars.propietario,
-            responsable=request.vars.responsable,
+            responsable=int(request.vars.responsable),
             telf_responsable="(0000) 000-0000", # Quitar este campo
-            custodio=request.vars.custodio,
+            custodio=int(request.vars.custodio),
             telf_custodio=request.vars.telf_custodio,
             extension=request.vars.extension,
             sudebip_localizacion=localizacion[request.vars.sede],
@@ -2347,9 +2347,9 @@ def detalles_vehiculo():
             rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
             ubicacion_custodio=request.vars.ubicacion_custodio,
             propietario=request.vars.propietario,
-            responsable=request.vars.responsable,
+            responsable=int(request.vars.responsable),
             telf_responsable="(0000) 000-0000", # Quitar este campo
-            custodio=request.vars.custodio,
+            custodio=int(request.vars.custodio),
             telf_custodio=request.vars.telf_custodio,
             extension=request.vars.extension,
             sudebip_localizacion=localizacion[request.vars.sede],
