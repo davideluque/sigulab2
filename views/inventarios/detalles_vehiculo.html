@@ -148,18 +148,22 @@
                 <div class="grid-item">
                        {{=vehiculo['vh_ubicacion_custodio']}}
                 </div>
+                {{ if vehiculo['vh_telf_custodio']: }}
                 <div class="grid-item">
                       Tlf. de Custodio:
                 </div>
                 <div class="grid-item">
                        {{=vehiculo['vh_telf_custodio']}}
                 </div>
+                {{ pass }}
+                {{ if vehiculo['vh_extension']: }}
                 <div class="grid-item">
                       Extensión:
                 </div>
                 <div class="grid-item">
-                       {{ if vehiculo['vh_extension']: }} {{=vehiculo['vh_extension']}} {{ pass }}
+                        {{=vehiculo['vh_extension']}}
                 </div>
+                {{ pass }}
                 <div class="grid-item">
                     Ubicación de pernocta:
                 </div>
@@ -793,7 +797,7 @@
                             <div class="form-group">
                                 <label>Extensión</label>
                                 <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo"  
-                                {{if vehiculo['vh_extension'] != None :}} value = "{{=vehiculo['vh_extension']}}" {{else:}} pass {{pass}} >
+                                {{ if vehiculo['vh_extension'] != None : }} value="{{=vehiculo['vh_extension']}}" {{pass}} >
                                 <div class="dr" id="error-extension" style="color: #d03e3e;"> </div>
                             </div>
                           </div>
