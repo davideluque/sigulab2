@@ -1211,6 +1211,35 @@
     }
   });
 
+  // Dropdown origen no vacío
+  $(".btn-submit").click(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen.length == 0) {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
+  // Dropdown origen no vacío, parte 2
+  $("#origen").change(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen != "Compra" && origen != "Donación") {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").css('color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
   // Coloca primeros datos de SUDEBIP de acuerdo a sede (localizacion y codigo localizacion)
   $("input[name='sede']").change(function() {
     var sede = $("input[name='sede']:checked").val();
