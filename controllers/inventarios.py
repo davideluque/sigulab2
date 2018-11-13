@@ -370,7 +370,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         return True
 
-    # Si ya existe el BM en el inventario
+    # Si ya existe el VH en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
 
@@ -378,11 +378,33 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                           a la dependencia \"{1}\".".format(vh.vh_placa, vh.vh_dependencia)
         return False
 
-    # Si ya existe el numero de BM:
+    # Si ya existe el numero de VH:
     if db(db.vehiculo.vh_num == int(num)).select():
         vh = db(db.vehiculo.vh_num == num).select()[0]
 
         response.flash = "El vehiculo de número \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    # Validación de seriales:
+    if db(db.vehiculo.vh_serial_carroceria == serial_carroceria).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de carrocería \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_serial_chasis == serial_chasis).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de chasis \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_serial_motor == serial_motor).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de motor \"{0}\" ya ha sido ingresado anteriormente \
                           a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
         return False
       
