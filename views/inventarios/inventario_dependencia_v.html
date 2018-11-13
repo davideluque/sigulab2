@@ -4,9 +4,11 @@
 <div id="inventario-dependencia" class="container">
 <div class="row">
 
+  {{ if len(dependencias) == 0: }}
     <div>
         <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo Vehículo" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
     </div>
+  {{ pass }}
 
     <br><br>
     <br><br>
