@@ -379,7 +379,7 @@ db.define_table(
     Field('vh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires=[IS_NOT_EMPTY(), IS_LENGTH(17)]),
     Field('vh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
-    Field('vh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
+    Field('vh_sede', 'reference sedes', notnull=True, default=1, label=T('Sede de adscripción')),
 
     # Descripción de uso
     Field('vh_observaciones', 'text', default="", label=T('Observaciones')),
@@ -469,7 +469,7 @@ db.define_table(
     Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
     Field('mvh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
-    Field('mvh_sede', 'string', notnull=True, default="Sartenejas", label=T('Sede de adscripción'), requires=IS_IN_SET(['Sartenejas', 'Litoral'])),
+    Field('mvh_sede', 'reference sedes', notnull=True, default=1, label=T('Sede de adscripción')),
 
     # Descripción de uso
     Field('mvh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),

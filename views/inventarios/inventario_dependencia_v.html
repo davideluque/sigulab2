@@ -228,11 +228,9 @@
 
                         <div class="form-group">
                           <label>Sede*</label> <br>
-                          <input name="Sede" disabled>
-                          <label for="sartenejas"> Sartenejas</label>
-                          <label for="litoral"> Litoral</label>
+                          <input type="text" class="form-control" id="s"ede name="sede" placeholder="Sede*" title="Ingrese la Sede" disabled value="{{= db(db.sedes.id == sede_id).select().first().nombre }}">
                           <div class="dr" id="error-sede" style="color: #d03e3e;"> </div>
-                      </div>
+                        </div>
 
                     </div>
                   </div>
@@ -1004,12 +1002,12 @@
   });
 
   // Coloca primeros datos de SUDEBIP de acuerdo a sede (localizacion y codigo localizacion)
-  $("input[name='sede']").change(function() {
-    var sede = $("input[name='sede']:checked").val();
-    if (sede == "Sartenejas") {
+  $(document).ready(function() {
+    var sede = {{=sede_id}};
+    if (sede == 1) { // Sartenejas
       $("#sudebip_localizacion").val("{{=localizacion['Sartenejas']}}");
       $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Sartenejas']}}");
-    } else if (sede == "Litoral") {
+    } else if (sede == 2) { // Litoral
       $("#sudebip_localizacion").val("{{=localizacion['Litoral']}}");
       $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Litoral']}}");
     } else {

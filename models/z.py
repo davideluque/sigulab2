@@ -915,7 +915,7 @@ if db(db.vehiculo).isempty():
         vh_intt="123456", vh_color="Negro", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara=123.3,
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=10, vh_custodio=1, vh_telf_custodio="04144561782",
         vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
-        vh_sudebip_categoria_especifica="Catesp1", vh_sede="Sartenejas", vh_fecha_adquisicion="2018-02-01", vh_factura="123456",
+        vh_sudebip_categoria_especifica="Catesp1", vh_sede=1, vh_fecha_adquisicion="2018-02-01", vh_factura="123456",
         vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 1, C.A.", vh_tipo="Tipo1", vh_clasificacion="Clasifc1",
         vh_tara_md="kg", vh_capacidad_carga_md="kg", vh_rines="Hierro",
         vh_ubicacion_custodio="MyS", vh_num=128946
@@ -927,7 +927,7 @@ if db(db.vehiculo).isempty():
         vh_intt="12345642", vh_color="Plata", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara=283.43,
         vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=12, vh_custodio=2, vh_telf_custodio="041618263896",
         vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
-        vh_sudebip_categoria_especifica="Catesp1", vh_sede="Litoral", vh_fecha_adquisicion="2018-02-01", vh_factura="1234561",
+        vh_sudebip_categoria_especifica="Catesp1", vh_sede=2, vh_fecha_adquisicion="2018-02-01", vh_factura="1234561",
         vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 2, C.A.", vh_tipo="Tipo1", vh_clasificacion="Clasifc1",
         vh_tara_md="kg", vh_capacidad_carga_md="kg", vh_rines="Hierro",
         vh_ubicacion_custodio="MyS", vh_num=123456

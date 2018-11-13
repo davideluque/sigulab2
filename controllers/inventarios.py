@@ -1070,6 +1070,12 @@ def vehiculos():
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
         dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
+
+        if dependencia_escogida.sede_id == 1:
+            sede_verbosa = "Sartenejas"
+        else:
+            sede_verbosa = "Litoral"
+
         __agregar_vh(
             num=request.vars.num,
             marca=request.vars.marca if request.vars.marca != "Otro" else "Otro: " + request.vars.marca2,
@@ -1080,7 +1086,7 @@ def vehiculos():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
+            sede=dependencia_escogida.sede_id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -1103,8 +1109,8 @@ def vehiculos():
             custodio=int(request.vars.custodio),
             telf_custodio=request.vars.telf_custodio,
             extension=request.vars.extension,
-            sudebip_localizacion=localizacion[request.vars.sede],
-            sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
+            sudebip_localizacion=localizacion[sede_verbosa],
+            sudebip_codigo_localizacion=cod_localizacion[sede_verbosa],
             sudebip_categoria="15000-0000 - Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
@@ -1136,8 +1142,8 @@ def vehiculos():
                 # Determinando si el usuario tiene privilegios suficientes para
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user,
-                                    int(request.vars.dependencia),
-                                        request.vars.es_espacio):
+                                          int(request.vars.dependencia),
+                                          request.vars.es_espacio):
                     redirect(URL('vehiculos'))
 
                 espacio_id = request.vars.dependencia
@@ -1246,7 +1252,7 @@ def vehiculos():
         elif request.vars.es_espacio == 'False':
             if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
-                    redirect(URL('vehiculos'))
+                redirect(URL('vehiculos'))
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user,
@@ -1259,7 +1265,7 @@ def vehiculos():
             dep_nombre = db(db.dependencias.id == user_dep_id
                            ).select().first().nombre
 
-            es_espacio = True                       
+            es_espacio = True               
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # entrar a la vista inicial de inventarios
         else:
@@ -1377,6 +1383,8 @@ def vehiculos():
     dict_categorias = __obtener_categorias()
     dict_clasificaciones = __obtener_clasificaciones()
 
+    sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1393,8 +1401,9 @@ def vehiculos():
                 categorias=dict_categorias,
                 clasificaciones=dict_clasificaciones,
                 cod_localizacion=cod_localizacion,
-                localizacion=localizacion
-                )
+                localizacion=localizacion,
+                sede_id=sede_id
+            )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -2319,6 +2328,12 @@ def detalles_vehiculo():
     # PENDIENTE: Quitar esto
     if request.vars.modificacion:
         dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
+
+        if dependencia_escogida.sede_id == 1:
+            sede_verbosa = "Sartenejas"
+        else:
+            sede_verbosa = "Litoral"
+
         __agregar_vh(
             num=request.vars.num,
             marca=request.vars.marca if request.vars.marca != "Otro" else "Otro: " + request.vars.marca2,
@@ -2329,7 +2344,7 @@ def detalles_vehiculo():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
+            sede=dependencia_escogida.sede_id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -2352,8 +2367,8 @@ def detalles_vehiculo():
             custodio=int(request.vars.custodio),
             telf_custodio=request.vars.telf_custodio,
             extension=request.vars.extension,
-            sudebip_localizacion=localizacion[request.vars.sede],
-            sudebip_codigo_localizacion=cod_localizacion[request.vars.sede],
+            sudebip_localizacion=localizacion[sede_verbosa],
+            sudebip_codigo_localizacion=cod_localizacion[sede_verbosa],
             sudebip_categoria="15000-0000 - Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
@@ -2452,6 +2467,7 @@ def detalles_vehiculo():
 
     dict_categorias = __obtener_categorias()
     dict_clasificaciones = __obtener_clasificaciones()
+    sede_id = int(vehi['vh_sede'])
 
     # Si solo estoy cargando la vista
     return dict(
@@ -2462,7 +2478,8 @@ def detalles_vehiculo():
         categorias=dict_categorias,
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
-        clasificaciones=dict_clasificaciones
+        clasificaciones=dict_clasificaciones,
+        sede_id=sede_id
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
