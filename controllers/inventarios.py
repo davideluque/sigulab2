@@ -370,7 +370,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         return True
 
-    # Si ya existe el BM en el inventario
+    # Si ya existe el VH en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
 
@@ -378,11 +378,33 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                           a la dependencia \"{1}\".".format(vh.vh_placa, vh.vh_dependencia)
         return False
 
-    # Si ya existe el numero de BM:
+    # Si ya existe el numero de VH:
     if db(db.vehiculo.vh_num == int(num)).select():
         vh = db(db.vehiculo.vh_num == num).select()[0]
 
         response.flash = "El vehiculo de número \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    # Validación de seriales:
+    if db(db.vehiculo.vh_serial_carroceria == serial_carroceria).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de carrocería \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_serial_chasis == serial_chasis).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de chasis \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_serial_motor == serial_motor).select():
+        vh = db(db.vehiculo.vh_num == num).select()[0]
+
+        response.flash = "El vehiculo de serial de motor \"{0}\" ya ha sido ingresado anteriormente \
                           a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
         return False
       
@@ -1043,6 +1065,7 @@ def vehiculos():
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = user.id
     user_dep_id = user.f_dependencia
+    dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
@@ -1056,7 +1079,7 @@ def vehiculos():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=request.vars.sede,
+            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -2292,7 +2315,7 @@ def detalles_vehiculo():
         session.flash = "El vehiculo no ha sido eliminado"
         redirect(URL('validaciones'))
 
-
+    dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
     # PENDIENTE: Quitar esto
     if request.vars.modificacion:
         __agregar_vh(
@@ -2305,7 +2328,7 @@ def detalles_vehiculo():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=request.vars.sede,
+            sede = db(db.sedes.id == dependencia_escogida['sede']).select()[0].id,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
