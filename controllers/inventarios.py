@@ -1181,13 +1181,13 @@ def vehiculos():
 
                 es_espacio = True
 
-        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
+        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de
         # entrar a la opcion de vehiculos
         else:
             # Se buscan las secciones a las que pertenecen los espacios que
             # tiene a cargo el usuario
             espacios_a_cargo = db(
-                (db.es_encargado.tecnico == user_id) & 
+                (db.es_encargado.tecnico == user_id) &
                 (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
                                  ).select()
 
@@ -4020,14 +4020,14 @@ def herramientas():
                 # Si se esta agregando un nuevo BM, se registra en la DB
                 if request.vars.nombre_her: # Verifico si me pasan como argumento el nombre del BM.
                     __agregar_herramienta(
-                        request.vars.nombre_her, request.vars.num_her,request.vars.marca_her, request.vars.modelo_her,
+                        request.vars.nombre_her, request.vars.num_her, request.vars.marca_her, request.vars.modelo_her,
                         request.vars.serial_her, request.vars.presentacion, request.vars.numpiezas_her, request.vars.contenido_her,
-                        request.vars.descripcion_her,  request.vars.material_mat,request.vars.unidad, request.vars.ancho_her,
+                        request.vars.descripcion_her, request.vars.material_mat, request.vars.unidad, request.vars.ancho_her,
                         request.vars.largo_her, request.vars.alto_her, request.vars.diametro_her, request.vars.ubicacion_int ,
                         request.vars.descripcion_herramientas, espacio, dep_padre_unid_ads, dep_padre_id, user_id)
             else:
 
-            # Evaluando la correctitud de los parametros del GET 
+            # Evaluando la correctitud de los parametros del GET
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('herramientas'))
@@ -4037,7 +4037,7 @@ def herramientas():
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                 dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
                                       ).select(db.dependencias.ALL))
-                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
                 if len(dependencias) == 0:
@@ -4046,7 +4046,7 @@ def herramientas():
                                       ).select(db.espacios_fisicos.ALL))
                     es_espacio = True
 
-                # Guardando el ID y nombre de la dependencia padre para el link 
+                # Guardando el ID y nombre de la dependencia padre para el link
                 # de navegacion de retorno
                 dep_padre_id = db(db.dependencias.id == request.vars.dependencia
                                  ).select().first().unidad_de_adscripcion
@@ -4087,4 +4087,4 @@ def herramientas():
                 material_pred=material_pred,
                 unidad_med=unidad_med,
                 presentacion=presentacion
-                )
+            )
