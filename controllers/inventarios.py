@@ -1390,7 +1390,7 @@ def vehiculos():
                 espacios=espacios,
                 es_espacio=es_espacio,
                 espacio_visitado=espacio_visitado,
-                dep_padre_id=dep_padre_id,
+                dep_padre_id=dep_padre_id if dep_id else 1,
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
