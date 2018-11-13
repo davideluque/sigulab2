@@ -754,6 +754,11 @@
     }
   });
 
+  // Máscara js para formato de teléfono
+  $(document).ready(function() {
+    $('#telf_custodio').mask('(0000) 000-0000');
+  });
+
   // Validación de formato de extension custodio (formato del regex establecido)
   $("#extension").focusout(function() {
     var extension = $(this).val();
