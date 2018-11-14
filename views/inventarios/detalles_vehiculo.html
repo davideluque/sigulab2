@@ -1011,6 +1011,8 @@
       }
     });
 
+    $("#tipo").trigger('change');
+
     // Clasificación (OJO: Falta clasificación2 y manejo de emergencia)
     $("#clasificacion > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_clasificacion']}}") {
@@ -1052,11 +1054,14 @@
       }
     });
     
+    // Origen
     $("#origen > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_origen']}}") {
         $(this).attr('selected', 'true');
       }
     });
+
+    $("#origen").trigger('change');
 
   });
 
