@@ -1380,27 +1380,7 @@ def vehiculos():
     dict_clasificaciones = __obtener_clasificaciones()
 
     sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
-
-    for key, value in dict(dep_nombre=dep_nombre,
-                dependencias=dependencias,
-                espacios=espacios,
-                es_espacio=es_espacio,
-                espacio_visitado=espacio_visitado,
-                dep_padre_id=dep_padre_id,
-                dep_padre_nombre=dep_padre_nombre,
-                direccion_id=direccion_id,
-                es_tecnico=es_tecnico,
-                inventario=inventario,
-                retroceder=retroceder,
-                categorias=dict_categorias,
-                clasificaciones=dict_clasificaciones,
-                cod_localizacion=cod_localizacion,
-                localizacion=localizacion,
-                sede_id=sede_id,
-                acceso_direccion=acceso_direccion
-               ).items():
-        print("%s: %s" % (key, value))
-
+    
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,

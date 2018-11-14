@@ -147,11 +147,6 @@
 		{{ else: }}
 			<div class="grid-container" id="secciones" style="display: none">
 		{{ pass }}	
-			{{ if not acceso_direccion and dep_nombre.find("DIRECCIÓN") != -1: }}
-			<div class="grid-item" onclick="redirect('{{=URL('vehiculos',vars=dict(dependencia=1, es_espacio=True, acceso_direccion=True))}}');">
-				DIRECCIÓN
-			</div>
-			{{ pass }}
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('vehiculos',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
 				{{if espacios:}}
@@ -160,6 +155,13 @@
 					{{ =espacio.nombre }}
 				{{pass}}
 			</div>
+			{{ if espacio.nombre.find("LABORATORIO G") != -1: }}
+					{{ if not acceso_direccion and dep_nombre.find("DIRECCIÓN") != -1: }}
+						<div class="grid-item" onclick="redirect('{{=URL('vehiculos',vars=dict(dependencia=1, es_espacio=True, acceso_direccion=True))}}');">
+							DIRECCIÓN
+						</div>
+					{{ pass }}
+				{{ pass }}
 			{{ pass }}
 		</div>
 	</div>
