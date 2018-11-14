@@ -1,4 +1,17 @@
 #------------------------------------------------Modulo de Personal-----------------------------------------------------------------------------------------------------------------------------------------------------------
+#t_Personal: Tabla de publicaciones.
+db.define_table(
+    #Nombre de la entidad
+    't_Publicacion', 
+    #Atributos;
+    Field('f_anio',          'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año de Publicación')),
+    Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    Field('f_titulo',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Título')),
+    Field('f_autores',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Autores')),
+    Field('f_referencia',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Referencia')),
+    #Referencia
+    Field('f_publicacion_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Autor')),
+)
 
 #t_Personal: Tabla de publicaciones arbitradas.
 db.define_table(
@@ -45,7 +58,7 @@ db.t_Publicacion_arbitrada._singular = 'Publicacion'
 #t_Personal: Tabla de publicaciones no arbitradas.
 db.define_table(
     #Nombre de la entidad
-    't_Publicacion', 
+    't_Publicacion_no_arbitrada', 
     #Atributos;
     Field('f_categoria',          'string', label=T('Categoría')),
     Field('f_anio',             'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100), notnull=True, label=T('Año de Publicación')),
@@ -81,8 +94,8 @@ db.define_table(
     Field('f_publicacion_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Autor')),
     )
 
-db.t_Publicacion._plural = 'Publicaciones'
-db.t_Publicacion._singular = 'Publicacion'
+db.t_Publicacion_no_arbitrada._plural = 'PublicacionesNA'
+db.t_Publicacion_no_arbitrada._singular = 'PublicacionNA'
 
 #t_Personal: Tabla de proyectos de investigación.
 db.define_table(

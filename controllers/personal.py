@@ -339,7 +339,7 @@ def add_form():
             )
 
         # Publicaciones No Arbitradas
-        db.t_Publicacion.update_or_insert(
+        db.t_Publicacion_no_arbitrada.update_or_insert(
             f_categoria = dic["categoria_publicacion_na_1"],
             f_anio = dic["anio_publicacion_na_1"],
             f_titulo = dic["titulo_publicacion_na_1"],
@@ -622,7 +622,7 @@ def ficha():
     publicaciones_rows = db(db.t_Publicacion_arbitrada.f_publicacion_Personal == elm.id).select().first()
     publicaciones = publicaciones_rows.as_dict()
 
-    publicaciones_na_rows = db(db.t_Publicacion.f_publicacion_Personal == elm.id).select().first()
+    publicaciones_na_rows = db(db.t_Publicacion_no_arbitrada.f_publicacion_Personal == elm.id).select().first()
     publicaciones_na = publicaciones_na_rows.as_dict()
 
     proyectos_rows = db(db.t_Proyecto.f_proyecto_Personal == elm.id).select().first()
