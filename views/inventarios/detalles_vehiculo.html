@@ -714,8 +714,8 @@
                             <label>Unidad de medida Cap. Carga*</label>
                             <select class="form-control" type="select" id="capacidad_carga_md" name="capacidad_carga_md" placeholder="Unidad de medida Capacidad de Carga" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="ton" {{ if vehiculo['vh_capacidad_carga_md'] == 'ton' }}selected{{ pass }}>Toneladas (ton)</option>
-                                <option value="kg" {{ if vehiculo['vh_capacidad_carga_md'] == 'kg' }}selected{{ pass }}>Kilogramos (kg)</option>
+                                <option value="ton" {{ if vehiculo['vh_capacidad_carga_md'] == 'ton': }}selected{{ pass }}>Toneladas (ton)</option>
+                                <option value="kg" {{ if vehiculo['vh_capacidad_carga_md'] == 'kg': }}selected{{ pass }}>Kilogramos (kg)</option>
                             </select>
                             <div class="dr" id="error-capacidad_carga_md" style="color: #d03e3e;"> </div>
                           </div>
