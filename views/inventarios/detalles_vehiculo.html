@@ -652,8 +652,8 @@
                               <label>Unidad de medida Tara*</label>
                               <select class="form-control" type="select" id="tara_md" name="tara_md" placeholder="Unidad de medida Tara" required>
                                   <option value="">Seleccione una opción</option>
-                                  <option value="ton">Toneladas (ton)</option>
-                                  <option value="kg">Kilogramos (kg)</option>
+                                  <option value="ton" {{ if vehiculo['vh_tara_md'] == 'ton': }}selected{{ pass }}>Toneladas (ton)</option>
+                                  <option value="kg" {{ if vehiculo['vh_tara_md'] == 'kg': }}selected{{ pass }}>Kilogramos (kg)</option>
                               </select>
                               <div class="dr" id="error-tara_md" style="color: #d03e3e;"> </div>
                             </div>
@@ -981,6 +981,59 @@
       <!-- Fin Modal Agregar Mantenimiento -->
 
 <script type="text/javascript">
+
+  // Auto-seleccionamos campos de dropdown al cargar
+  $(document).ready(function(){
+    // Marca
+    $("#marca > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_marca']}}") {
+        $(this).attr('selected', 'true');
+      } else if ($(this).val() == "Otro" && "{{=vehiculo['vh_marca']}}".includes("Otro"))  {
+        $(this).attr('selected', 'true');
+        $("#marca2").show("fast");
+        $("#marca2").prop('disabled', false)
+        $("#marca2").prop('required', true)
+        $("#marca2").val("{{=vehiculo['vh_marca']}}")
+      }
+    });
+
+    // Clase
+    $("#clase > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_clase']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+    // Tipo
+    $("#tipo > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_tipo']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+    // Clasificación (OJO: Falta clasificación2 y manejo de emergencia)
+    $("#clasificacion > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_clasificacion']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+    // Uso
+    $("#uso > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_uso']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+    // Servicio
+    $("#servicio > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_servicio']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+  });
+
   var categorias_sudebip = {};
   var clasificaciones = {};
   var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
