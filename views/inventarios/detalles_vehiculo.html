@@ -77,7 +77,7 @@
                 </form>
                 {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
                 <!-- Boton para eliminar bien mueble-->
                 <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
@@ -602,7 +602,7 @@
                           <div class="dr" id="error-clase" style="color: #d03e3e;"> </div>
                       </div>
 
-                      <div class="form-group" id="grupo-clasificacion" style="display: none;">
+                      <div class="form-group" id="grupo-clasificacion">
                           <label>Clasificación*</label>
                           <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación*">
                               <option value="">Seleccione una opción</option>
@@ -705,7 +705,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                               <label>Capacidad de carga*</label>
-                              <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required value="{{=vehiculo['vh_capacidad_carga']}}">
+                              <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo" required value="{{=vehiculo['vh_capacidad_carga']}}">
                               <div class="dr" id="error-carga" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -714,8 +714,8 @@
                             <label>Unidad de medida Cap. Carga*</label>
                             <select class="form-control" type="select" id="capacidad_carga_md" name="capacidad_carga_md" placeholder="Unidad de medida Capacidad de Carga" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="ton">Toneladas (ton)</option>
-                                <option value="kg">Kilogramos (kg)</option>
+                                <option value="ton" {{ if vehiculo['vh_capacidad_carga_md'] == 'ton' }}selected{{ pass }}>Toneladas (ton)</option>
+                                <option value="kg" {{ if vehiculo['vh_capacidad_carga_md'] == 'kg' }}selected{{ pass }}>Kilogramos (kg)</option>
                             </select>
                             <div class="dr" id="error-capacidad_carga_md" style="color: #d03e3e;"> </div>
                           </div>
@@ -1081,7 +1081,7 @@
   // Máscara js para formato de teléfono
   $(document).ready(function() {
     $('#telf_custodio').mask('(0000) 000-0000');
-  }
+  });
 
   // Validación de formato de extension custodio (formato del regex establecido)
   $("#extension").focusout(function() {
