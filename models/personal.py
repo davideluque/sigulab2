@@ -1,21 +1,170 @@
 #------------------------------------------------Modulo de Personal-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#t_Personal: Tabla de publicaciones.
+#t_Personal: Tabla de publicaciones arbitradas.
+db.define_table(
+    #Nombre de la entidad
+    't_Publicacion_arbitrada', 
+    #Atributos;
+    Field('f_categoria',          'string', label=T('Categoría')),
+    Field('f_anio',             'integer', label=T('Año de Publicación')),
+    #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    Field('f_titulo',          'string', label=T('Título')),
+    Field('f_autores',          'string', label=T('Autores')),
+    Field('f_referencia',          'string', label=T('Referencia')),
+    # Field('f_categoria_2',          'string', label=T('Categoría')),
+    # Field('f_anio_2',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_2',          'string', label=T('Título')),
+    # Field('f_autores_2',          'string', label=T('Autores')),
+    # Field('f_referencia_2',          'string', label=T('Referencia')),
+    # Field('f_categoria_3',          'string', label=T('Categoría')),
+    # Field('f_anio_3',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_3',          'string', label=T('Título')),
+    # Field('f_autores_3',          'string', label=T('Autores')),
+    # Field('f_referencia_3',          'string', label=T('Referencia')),
+    # Field('f_categoria_4',          'string', label=T('Categoría')),
+    # Field('f_anio_4',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_4',          'string', label=T('Título')),
+    # Field('f_autores_4',          'string', label=T('Autores')),
+    # Field('f_referencia_4',          'string', label=T('Referencia')),
+    # Field('f_categoria_5',          'string', label=T('Categoría')),
+    # Field('f_anio_5',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_5',          'string', label=T('Título')),
+    # Field('f_autores_5',          'string', label=T('Autores')),
+    # Field('f_referencia_5',          'string', label=T('Referencia')),    
+    #Referencia
+    Field('f_publicacion_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Autor')),
+    )
+
+db.t_Publicacion_arbitrada._plural = 'Publicaciones'
+db.t_Publicacion_arbitrada._singular = 'Publicacion'
+
+#t_Personal: Tabla de publicaciones no arbitradas.
 db.define_table(
     #Nombre de la entidad
     't_Publicacion', 
     #Atributos;
-    Field('f_anio',          'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año de Publicación')),
-    Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    Field('f_categoria',          'string', label=T('Categoría')),
+    Field('f_anio',             'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100), notnull=True, label=T('Año de Publicación')),
+    #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
     Field('f_titulo',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Título')),
     Field('f_autores',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Autores')),
     Field('f_referencia',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Referencia')),
+    # Field('f_categoria_2',          'string', label=T('Categoría')),
+    # Field('f_anio_2',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_2',          'string', label=T('Título')),
+    # Field('f_autores_2',          'string', label=T('Autores')),
+    # Field('f_referencia_2',          'string', label=T('Referencia')),
+    # Field('f_categoria_3',          'string', label=T('Categoría')),
+    # Field('f_anio_3',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_3',          'string', label=T('Título')),
+    # Field('f_autores_3',          'string', label=T('Autores')),
+    # Field('f_referencia_3',          'string', label=T('Referencia')),
+    # Field('f_categoria_4',          'string', label=T('Categoría')),
+    # Field('f_anio_4',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_4',          'string', label=T('Título')),
+    # Field('f_autores_4',          'string', label=T('Autores')),
+    # Field('f_referencia_4',          'string', label=T('Referencia')),
+    # Field('f_categoria_5',          'string', label=T('Categoría')),
+    # Field('f_anio_5',             'integer', label=T('Año de Publicación')),
+    # #Field('f_arbitrada',          'boolean', requires=IS_NOT_EMPTY(), notnull=True, label=T('Arbitrada')),
+    # Field('f_titulo_5',          'string', label=T('Título')),
+    # Field('f_autores_5',          'string', label=T('Autores')),
+    # Field('f_referencia_5',          'string', label=T('Referencia')), 
     #Referencia
     Field('f_publicacion_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Autor')),
     )
 
 db.t_Publicacion._plural = 'Publicaciones'
 db.t_Publicacion._singular = 'Publicacion'
+
+#t_Personal: Tabla de proyectos de investigación.
+db.define_table(
+    #Nombre de la entidad
+    't_Proyecto', 
+    #Atributos;
+    Field('f_categoria',          'string', label=T('Categoría')),
+    Field('f_fecha_inicio',        'date',label=T('Desde')),
+    Field('f_fecha_fin',            'date',label=T('Hasta')),
+    Field('f_titulo',          'string', label=T('Título')),
+    Field('f_responsabilidad',     'string', label=T('Responsabilidad')),
+    Field('f_resultados',          'string', label=T('Resultados')),
+    Field('f_institucion',          'string', label=T('Institución')),
+    # Field('f_categoria_2',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_2',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_2',            'date',label=T('Hasta')),
+    # Field('f_titulo_2',          'string', label=T('Título')),
+    # Field('f_responsabilidad_2',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_2',          'string', label=T('Resultados')),
+    # Field('f_institucion_2',          'string', label=T('Institución')),
+    # Field('f_categoria_3',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_3',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_3',            'date',label=T('Hasta')),
+    # Field('f_titulo_3',          'string', label=T('Título')),
+    # Field('f_responsabilidad_3',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_3',          'string', label=T('Resultados')),
+    # Field('f_institucion_3',          'string', label=T('Institución')),
+    # Field('f_categoria_4',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_4',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_4',            'date',label=T('Hasta')),
+    # Field('f_titulo_4',          'string', label=T('Título')),
+    # Field('f_responsabilidad_4',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_4',          'string', label=T('Resultados')),
+    # Field('f_institucion_4',          'string', label=T('Institución')),
+    # Field('f_categoria_5',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_5',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_5',            'date',label=T('Hasta')),
+    # Field('f_titulo_5',          'string', label=T('Título')),
+    # Field('f_responsabilidad_5',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_5',          'string', label=T('Resultados')),
+    # Field('f_institucion_5',          'string', label=T('Institución')),
+    # Field('f_categoria_6',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_6',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_6',            'date',label=T('Hasta')),
+    # Field('f_titulo_6',          'string', label=T('Título')),
+    # Field('f_responsabilidad_6',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_6',          'string', label=T('Resultados')),
+    # Field('f_institucion_6',          'string', label=T('Institución')),
+    # Field('f_categoria_7',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_7',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_7',            'date',label=T('Hasta')),
+    # Field('f_titulo_7',          'string', label=T('Título')),
+    # Field('f_responsabilidad_7',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_7',          'string', label=T('Resultados')),
+    # Field('f_institucion_7',          'string', label=T('Institución')),
+    # Field('f_categoria_8',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_8',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_8',            'date',label=T('Hasta')),
+    # Field('f_titulo_8',          'string', label=T('Título')),
+    # Field('f_responsabilidad_8',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_8',          'string', label=T('Resultados')),
+    # Field('f_institucion_8',          'string', label=T('Institución')),
+    # Field('f_categoria_9',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_9',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_9',            'date',label=T('Hasta')),
+    # Field('f_titulo_9',          'string', label=T('Título')),
+    # Field('f_responsabilidad_9',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_9',          'string', label=T('Resultados')),
+    # Field('f_institucion_9',          'string', label=T('Institución')),
+    # Field('f_categoria_10',          'string', label=T('Categoría')),
+    # Field('f_fecha_inicio_10',        'date',label=T('Desde')),
+    # Field('f_fecha_fin_10',            'date',label=T('Hasta')),
+    # Field('f_titulo_10',          'string', label=T('Título')),
+    # Field('f_responsabilidad_10',     'string', label=T('Responsabilidad')),
+    # Field('f_resultados_10',          'string', label=T('Resultados')),
+    # Field('f_institucion_10',          'string', label=T('Institución')),
+    #Referencia
+    Field('f_proyecto_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Autor')),
+    )
+
+db.t_Proyecto._plural = 'Proyectos'
+db.t_Proyecto._singular = 'Proyecto'
 
 #t_Personal: Tabla de eventos.
 db.define_table(
