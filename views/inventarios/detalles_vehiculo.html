@@ -872,7 +872,7 @@
                             </select>
                             <div class="dr" id="error-sudebip_subcategoria" style="color: #d03e3e;"> </div>
                         </div>
-                        <div class="form-group" id="grupo-catesp" style="display: none;">
+                        <div class="form-group" id="grupo-catesp">
                             <label>Categoría específica*</label>
                             <select class="form-control" type="select" id="sudebip_categoria_especifica" name="sudebip_categoria_especifica" placeholder="Categoría específica*" title="Ingrese la categoría específica del vehículo" required>
                               <option value="">Seleccione una opción</option>
@@ -993,7 +993,7 @@
         $("#marca2").show("fast");
         $("#marca2").prop('disabled', false)
         $("#marca2").prop('required', true)
-        $("#marca2").val("{{=vehiculo['vh_marca']}}")
+        $("#marca2").val("{{=vehiculo['vh_marca']}}".replace('Otro: ', ''))
       }
     });
 
@@ -1028,6 +1028,32 @@
     // Servicio
     $("#servicio > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_servicio']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
+    // Rines
+    $("#rines > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_rines']}}") {
+        $(this).attr('selected', 'true');
+      } else if ($(this).val() == "Otro" && "{{=vehiculo['vh_rines']}}".includes("Otro"))  {
+        $(this).attr('selected', 'true');
+        $("#rines2").show("fast");
+        $("#rines2").prop('disabled', false)
+        $("#rines2").prop('required', true)
+        $("#rines2").val("{{=vehiculo['vh_rines']}}".replace('Otro: ', ''))
+      }
+    });
+
+    // Categoría específica
+    $("#sudebip_categoria_especifica > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_sudebip_categoria_especifica']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+    
+    $("#origen > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_origen']}}") {
         $(this).attr('selected', 'true');
       }
     });
