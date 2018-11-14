@@ -1025,7 +1025,6 @@ def vehiculos():
     # Lista de BM en el inventario de un espacio fisico o que componen
     # el inventario agregado de una dependencia
     inventario = []
-    uso = ['Docencia', 'Investigación', 'Extensión', 'Apoyo administrativo']
 
     # Obtenemos otros datos de SUDEBIP
     cod_localizacion = {
@@ -1163,10 +1162,6 @@ def vehiculos():
 
                 # Busca el inventario del espacio
                 inventario = __get_vh_dep(dep_padre_id)
-
-                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento',
-                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1243,10 +1238,6 @@ def vehiculos():
             # Busca el inventario del espacio
             inventario = __get_vh_dep(dep_padre_id)
 
-            nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento',
-            'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-
-
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # regresar a la vista inicial de inventarios
         elif request.vars.es_espacio == 'False':
@@ -1321,10 +1312,6 @@ def vehiculos():
 
                 # Busca el inventario del espacio
                 inventario = __get_inventario_espacio(espacio_id)
-
-                nombre_cat = ['Maquinaria y demás equipos de construcción, campo, industria y taller', 'Equipos de transporte, tracción y elevación', 'Equipos de comunicaciones y de señalamiento',
-                'Equipos médicos - quirúrgicos, dentales y veterinarios', 'Equipos científicos, religiosos, de enseñanza y recreación', 'Máquinas, muebles y demás equipos de oficina y de alojamiento']
-
             else:
 
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
@@ -1396,14 +1383,12 @@ def vehiculos():
                 es_tecnico=es_tecnico,
                 inventario=inventario,
                 retroceder=retroceder,
-                uso_list=uso,
-                nombre_cat=nombre_cat,
                 categorias=dict_categorias,
                 clasificaciones=dict_clasificaciones,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion,
                 sede_id=sede_id
-            )
+               )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
