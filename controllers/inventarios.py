@@ -2286,17 +2286,26 @@ def detalles_vehiculo():
 
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
 
-    # PENDIENTE: Agregar lógica de validación
-    if request.vars.eliminacion:
-        db(db.historial_mantenimiento_vh.hmvh_placa == vehi['id']).delete()
-        db(db.vehiculo.vh_placa == vh).delete()
-        db(db.modificacion_vehiculo.mvh_placa == vh).delete()
+    print(vehi['vh_eliminar'])
+    print(vehi['vh_desc_eliminar'])
 
-        db.bitacora_general.insert(
-            f_accion="[inventarios] Eliminado el vehiculo de placa {} de la dependencia {}".format(vehi['vh_placa'], vehi['vh_dependencia'])
-        )
-        session.flash = "El vehiculo de placa %s ha sido eliminado." % vh
-        redirect(URL('inventarios', 'vehiculos'))
+    # Si mandamos eliminación
+    if request.vars.eliminacion:
+        # Si ya hay una eliminación pendiente, la rechazamos
+        if vehi['vh_eliminar'] == 0:
+            session.flash = "Ya se está esperando respuesta para la eliminación del vehículo de placa %s por motivo: %s." % (vh, vehi['vh_desc_eliminar'])
+        # Si no hay eliminaciones pendientes, la ponemos en cola
+        else:
+            db(db.vehiculo.vh_placa == vh).update(
+                vh_eliminar=0,
+                vh_desc_eliminar=request.vars.descripcion_eliminacion
+            )
+
+            db.bitacora_general.insert(
+                f_accion="[inventarios] Solicitada eliminación del vehiculo de placa {} de la dependencia {}.".format(vehi['vh_placa'], vehi['vh_dependencia'])
+            )
+            session.flash = "Se ha solicitado la eliminación del vehículo de placa %s." % vh
+        redirect(URL('detalles_vehiculo', vars=dict(vh=vh)))
 
     # Si se elimina
     if request.vars.si:
