@@ -2,3 +2,37 @@ db.tables()
 exit()
 databases/
 exit()
+db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == usuario.id).select().first()
+db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 1).select().first()
+a=db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 1).select().first()
+a
+a=db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 20).select().first()
+a
+exit
+exit()
+a=db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 20).select().first()
+a.as_dict()
+list(a)
+dropdowns()
+a
+a.f_rol_hist_2
+db.t_Personal.id
+a.as_dict()
+historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == db.t_Personal.id).select().first()
+for r in historial:
+q
+for r in historial:
+print r
+for r in historial:
+    print r
+historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 20).select().first()
+for r in historial:
+    print r
+db.t_Personal.id
+db.t_Personal.id.first(
+
+historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 20).select().first()
+historial(
+historial
+historial.as_dict()
+exit()

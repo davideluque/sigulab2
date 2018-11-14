@@ -1,0 +1,304 @@
+<!--  Formulario para agregar historial laboral en el menu modal -->
+
+<div class="col-sm-11 col11Body">
+  <h4 class="titulosForm">Historial laboral</h4>
+
+  <div class="form-group">
+
+    <div class="col-sm-12">
+      <label>Período</label>
+    </div>
+  
+    <div class="col-sm-6">
+      <label>Desde:</label>
+      <input class="datepicker" value="{{''}}"
+      name = "fecha_inicio_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+    </div>
+
+    <div class="col-sm-6">
+      <label>Hasta:</label> 
+      <input class="datepicker" value="{{''}}" name = "fecha_final_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+    </div>
+
+    <div class="col-sm-6">
+      <br>
+      <label>Dependencia</label>
+      <input value="{{''}}" type="text" class="form-control" name="dependencia_hist_1_add" placeholder="Laboratorio" required
+        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+    </div>
+
+    <div class="col-sm-6">
+      <br>
+      <label>Organizacion</label>
+      <input value="{{''}}" type="text" class="form-control" name="organizacion_1_add" placeholder="Universidad Simón Bolívar" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font> 
+    </div>
+
+    <div class="col-sm-6">
+      <br>
+      <label>Cargo</label>
+      <input value="{{''}}" type="text" class="form-control" name="cargo_hist_1_add" placeholder="Analista de sistemas" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+    </div>
+
+    <div class="col-sm-6">
+      <br>
+      <label>Rol</label>
+      <input value="{{''}}" type="text" class="form-control" name="rol_hist_1_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+    </div>
+
+
+    <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo2', 'texto2', 'texto3')" style="display: block;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto2">Agregar otro trabajo</p>
+    </div>
+  </div>
+
+
+
+
+  <div style="display: none;" id = "trabajo2">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
+
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_2_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <label>Hasta:</label> 
+        <input class="datepicker" value="{{''}}" name = "fecha_final_2_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="dependencia_hist_2_add" placeholder="Laboratorio" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Organizacion</label>
+          <input value="{{''}}" type="text" class="form-control" name="organizacion_2_add" placeholder="Universidad Simón Bolívar" required
+              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+          <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_2_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_2_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo3', 'texto3', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto3">Agregar otro trabajo</p>
+    </div>
+  </div>
+
+
+
+
+  <div style="display: none;" id = "trabajo3">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
+
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_3_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <label>Hasta:</label> 
+        <input class="datepicker" value="{{''}}" name = "fecha_final_3_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="dependencia_hist_3_add" placeholder="Laboratorio" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Organizacion</label>
+          <input value="{{''}}" type="text" class="form-control" name="organizacion_3_add" placeholder="Universidad Simón Bolívar" required
+              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+          <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_3_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_3_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo4', 'texto4', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto4">Agregar otro trabajo</p>
+    </div>
+  </div>
+
+
+
+
+  <div style="display: none;" id = "trabajo4">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
+
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_4_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <label>Hasta:</label> 
+        <input class="datepicker" value="{{''}}" name = "fecha_final_4_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="dependencia_hist_4_add" placeholder="Laboratorio" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Organizacion</label>
+          <input value="{{''}}" type="text" class="form-control" name="organizacion_4_add" placeholder="Universidad Simón Bolívar" required
+              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+          <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_4_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_4_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo5', 'texto5', '')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto5">Agregar otro trabajo</p>
+    </div>
+  </div>
+
+  <div style="display: none;" id = "trabajo5">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
+
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_5_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <label>Hasta:</label> 
+        <input class="datepicker" value="{{''}}" name = "fecha_final_5_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="dependencia_hist_5_add" placeholder="Laboratorio" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Organizacion</label>
+          <input value="{{''}}" type="text" class="form-control" name="organizacion_5_add" placeholder="Universidad Simón Bolívar" required
+              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+          <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_5_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_5_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Para agregar formularios de trabajos al hacer a "Agregar otro trabajo" -->
+<script type="text/javascript">
+ function toggleTrabajo(id, idText, idText2) {
+  var trabajo = document.getElementById(id);
+  var texto = document.getElementById(idText);
+  if (idText2) {
+    var texto2 = document.getElementById(idText2);
+  }
+  trabajo.style.display = 'block';
+  texto.style.display = 'none';
+  texto2.style.display = 'block';
+ }
+</script>

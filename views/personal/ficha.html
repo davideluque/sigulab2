@@ -45,11 +45,7 @@
 
           <ul class="nav nav-tabs " id="myTab" role="tablist">
             <li role="presentation" class="nav-item active">
-              <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Básico</b></a>
-            </li>
-
-            <li class="nav-item ">
-              <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Personal</b></a>
+              <a href="#datos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Datos</b></a>
             </li>
 
             <li class="nav-item">
@@ -57,234 +53,50 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#datos_laborales" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Laboral</b></a>
-            </li>
-
-
-
-            <li class="nav-item">
-              <a class="nav-link" id="tab_competencias" href="#competencias" data-toggle="tab" role="tab" aria-controls="competencias" ><b>Competencias</b></a>
+              <a class="nav-link" href="#laboral" data-toggle="tab" role="tab" aria-controls="datos_laborales"><b>Laboral</b></a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" id="tab_historia_laboral" href="#historial_laboral" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Historial Laboral</b></a>
+              <a class="nav-link" id="tab_historia_laboral" href="#academicas" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Actividades Académicas</b></a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link" id="tab_historia_laboral" href="#academicas" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Act. Académicas</b></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" id="tab_historia_laboral" href="#" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Act. Admininistrativas</b></a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" id="tab_historia_laboral" href="#" data-toggle="tab" role="tab" aria-controls="historial_laboral" ><b>Reconocimientos</b></a>
-            </li>
+            <!-- Si el usuario es administrativo no deben salirle las pestañas de act. admin. -->
+            
+              <li class="nav-item">
+                <a class="nav-link" id="tab_historia_laboral" href="#administrativas" data-toggle="tab" role="tab" aria-controls="historial_laboral"><div id="fingreso"
+                              {{if personal['gremio'] == 'Administrativo':}}
+                              hidden
+                              {{pass}}><b>Actividades Admininistrativas</b></div></a>
+              </li>
 
           </ul>
 
           <div class="tab-content" id="tabla_">
-            <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_datos_basicos">
-                <tbody>
-                    {{if bool(personal['nombre']) :}}
-                  <tr>
-                    <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['apellido']) :}}
-                  <tr>
-                    <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['email']) :}}
-                  <tr>
-                    <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['extension_USB']) :}}
-                  <tr>
-                    <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['extension_interna']) :}}
-                  <tr>
-                    <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['pagina_web']) :}}
-                  <tr>
-                    <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['rol']) :}}
-                  <tr>
-                    <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['dependencia']) :}}
-                  <tr>
-                    <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['unidad_jerarquica_superior']) :}}
-                  <tr>
-                      <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
-                  </tr>
-                    {{pass}}
-                    {{if bool(personal['ubicaciones']) :}}
-                    <tr>
-                        <td>Ubicación(es):</td><td id="field_ubicacion">
-                          <ul>
-                            {{for ubicacion in personal['ubicaciones']:}}
-                            <li>{{=ubicacion.codigo}}</li>
-                            {{pass}}
-                          </ul>
-                        </td>
-                    </tr>
-                    {{pass}}
-                 
-                </tbody>
-              </table>
-            </div>
-
-            <div class="tab-pane" id="datos_personales" role="tabpanel">
-
-
-              <table class="table contenidoFicha" id="tabla_datos_personales">
-                <tbody>
-                    <tr>
-                      <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
-                    </tr>
-                    {{pass}}
-                    <tr>
-                      <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
-                    </tr>
-                    {{pass}}
-                    <tr>
-                      <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
-                    </tr>
-                    {{pass}}
-                    <tr>
-                        <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
-                    </tr>
-                    {{pass}}
-                    <tr>
-                      <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
-                    </tr>
-                    {{pass}}
-                  </tbody>
-                 </table>
-                    
-                 <h5 class=" text-center"><b>En caso de emergencia llamar a:</b></h5></br>
-                    
-                 <table class="table contenidoFicha">
-                     <tbody>
-                    <tr>
-                      <td >Contacto:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
-                    </tr>
-                    <tr >
-                      <td>Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
-                    </tr>
-                </tbody>
-              </table>
+            
+            <div class="tab-pane active" id="datos" role="tabpanel">
+              {{include 'personal/datos.html'}}
             </div>
 
             <div class="tab-pane" id="educacion" role="tabpanel">
               {{include 'personal/educacion.html'}}
             </div>
 
-            <div class="tab-pane " id="datos_laborales" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_datos_laborales">
-                <tbody>
-                    {{if bool(personal['cargo']) :}}
-                    <tr>
-                      <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['gremio']) :}}
-
-                    <tr>
-                      <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['estatus']) :}}
-                    <tr>
-                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['condicion']) :}}
-                    <tr>
-                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['categoria']) :}}
-                    <tr>
-                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
-                    </tr>
-                    {{pass}}
-
-                    {{if bool(personal['fecha_ingreso']) :}}
-                    <tr>
-                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['fecha_salida']) :}}
-                    <tr >
-                      <td>Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['fecha_ingreso_usb']) :}}
-                    <tr>
-                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['fecha_ingreso_ulab']) :}}
-                    <tr>
-                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
-                    </tr>
-                    {{pass}}
-                    {{if bool(personal['fecha_ingreso_admin_publica']) :}}
-                    <tr>
-                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
-                    </tr>
-                    {{pass}}
-                    
-                    <tr>
-                      <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
-                    </tr>
-                </tbody>
-              </table>
+            <div class="tab-pane" id="laboral" role="tabpanel">
+              {{include 'personal/laboral.html'}}
             </div>
 
-            <div class="tab-pane" id="historial_laboral" role="tabpanel">
-              {{include 'personal/historial.html'}}
-            </div>
-
-            <div class="tab-pane " id="competencias" role="tabpanel">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <h3>Lista de competencias</h3>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <dl>
-                    {{for comp in comp_list:}}
-                    <dt>{{=comp}}</dt>
-                    <dd>{{=comp_list[comp]}}</dd>
-                    {{pass}}
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            
-            </div>
 
             <div class="tab-pane" id="academicas" role="tabpanel">
               {{include 'personal/academicas.html'}}
+            </div>
+
+            <div class="tab-pane" id="administrativas" role="tabpanel">
+              <div id="fingreso"
+                              {{if personal['gremio'] == 'Administrativo':}}
+                              hidden
+                              {{pass}}>
+                {{include 'personal/administrativas.html'}}
+              </div>
             </div>
             
 

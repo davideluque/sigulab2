@@ -2,25 +2,41 @@
 <div class="tab-pane" id="tab2">
   <div class="span8">
     <div class="tabbable tabs-left">
+
       <ul class="nav nav-tabs " id="myTab" role="tablist">
+
         <li role="presentation" class="nav-item active">
           <a href="#estudios" class="nav-link active " data-toggle="tab" role="tab" aria-controls="cargos_desempe"><b>Estudios formales</b></a>
         </li>
 
         <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#eventos" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Eventos de Formación</b></a>
+          <a class="nav-link  " id="tab_datos_personales" href="#eventos" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Cursos / Eventos de Formación</b></a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="nav-link  " id="tab_datos_personales" href="#reconoc_educ" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Reconocimientos</b></a>
         </li>
 
       </ul>
+
       <div class="tab-content">
         <div class="tab-pane active" id="estudios">
-          
+          {{include 'personal/estudios.html'}}
         </div>
+
         <div class="tab-pane" id="eventos">
-          
+          <p>Aqui van los eventos</p>
         </div>
+
+        <div class="tab-pane" id="reconoc_educ">
+          <p>Aqui van los reconocimientos</p>
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
 
