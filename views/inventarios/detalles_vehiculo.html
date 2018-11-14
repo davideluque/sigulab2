@@ -106,12 +106,14 @@
             <div id="tab-1" class="tab-content active">
                 <div class="grid-container">
                     {{ for title in caracteristicas_list: }}
+                        {{ if caracteristicas_dict.get(title): }}
                         <div class="grid-item">
                             {{= title}}:
                         </div>
                         <div class="grid-item">
                             {{= caracteristicas_dict.get(title)}}
                         </div>
+                        {{ pass }}
                     {{ pass }}
                 </div>
             </div>   
