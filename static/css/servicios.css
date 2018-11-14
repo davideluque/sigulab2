@@ -174,3 +174,8 @@ body{
 	padding-right: 4px;
 	width: 21em;
 }
+
+.campo-oculto {
+  display: none;
+  visibility: hidden;
+}
