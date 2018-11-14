@@ -30,9 +30,59 @@ for r in historial:
     print r
 db.t_Personal.id
 db.t_Personal.id.first(
-
 historial = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == 20).select().first()
 historial(
 historial
 historial.as_dict()
+exit()
+historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == 20).select().first()
+historial_rows
+historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == 19).select().first()
+historial_rows
+historial_rows.as_dict()
+historial_rows.f_fecha_inicio_1
+transformar_fecha(historial_rows.f_fecha_inicio_1)
+def transformar_fecha(fecha):
+    dias_meses = {
+        1: '01',
+        2: '02',
+        3: '03',
+        4: '04',
+        5: '05',
+        6: '06',
+        7: '07',
+        8: '08',
+        9: '09',
+    }
+    if fecha != None:
+        if fecha.day < 10 and fecha.month < 10:
+            return dias_meses[fecha.day] + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        elif fecha.day < 10:
+            return dias_meses[fecha.day] + "-" + str(fecha.month) + "-" + str(fecha.year)
+        elif fecha.month < 10:
+            return str(fecha.day) + "-" + dias_meses[fecha.month] + "-" + str(fecha.year)
+        else:
+            return str(fecha.day) + "-" + str(fecha.month) + "-" + str(fecha.year)
+transformar_fecha(historial_rows.f_fecha_inicio_1)
+db(db.t_Personal.f_ci == usuario.f_ci).select().first()
+db(db.t_Personal.f_ci == 23787291).select().first()
+user=db(db.t_Personal.f_ci == 23787291).select().first()
+user
+user=db(db.t_Personal.f_ci == '23787291').select().first()
+user
+auth.user,id
+auth.user.id
+db.auth.user.id
+idUser = db(db.t_Personal.f_ci == '23787291').select(db.t_Personal.id).first()
+idUser
+idUser = db(db.t_Personal.f_ci == 'V-23787291').select(db.t_Personal.id).first()
+idUser
+idUser = db(db.t_Personal.f_ci == 'V-23787291').select(db.t_Personal.id)
+idUser
+idUser = db(db.t_Personal.f_ci == 'V-23787291').select().first()
+idUser
+idUser = db(db.t_Personal.f_ci == 'V-23787291').select().first().id
+idUser
+historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == idUser).select().first()
+historial_rows
 exit()

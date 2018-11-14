@@ -236,8 +236,8 @@ def add_form():
         
         # Añadir al historial de trabajo
 
-        db.t_Historial_trabajo.update_or_insert(
-            db.t_Historial_trabajo.f_Historial_trabajo_Personal== personal.select().first().id,
+        db.t_Historial_trabajo_nuevo.update_or_insert(
+            db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal== personal.select().first().id,
             f_fecha_inicio_1 = dic["fecha_inicio_1"],
             f_fecha_final_1 = dic["fecha_final_1"],
             f_dependencia_hist_1 = dic["dependencia_hist_1"],
@@ -380,7 +380,11 @@ class Usuario(object):
         # dependencia ya dada arriba
         self.f_es_supervisor = usuario.f_es_supervisor
         self.f_persona_contacto = usuario.f_persona_contacto
+        self.f_organizacion_1 = ""
 
+        def setHist(self, historial):
+            pass
+     
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
@@ -399,7 +403,9 @@ def listado():
     gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
 
     empleados = validacion_estilo()['empleados']
-
+    idUser = db(db.t_Personal.f_ci == usuario.f_ci).select().first().id
+    historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == idUser).select().first()
+    
 
     return dict(
         grid=tabla,
@@ -414,7 +420,9 @@ def listado():
         usuario=usuario,
         empleados = empleados,
         competencias=competencias,
-        comp_list=lista_competencias(usuario)
+        comp_list=lista_competencias(usuario),
+        historial = getDictHistorial(historial_rows)
+
         )
 
 def transformar_fecha(fecha):
@@ -523,8 +531,7 @@ def ficha():
     #Obtenemos los elementos de los dropdowns
     gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
 
-    historial_rows = db(db.t_Historial_trabajo.f_Historial_trabajo_Personal == elm.id).select()[0]
-    historial = historial_rows.as_dict()
+    historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == elm.id).select().first()
 
     return dict(
         personal=personal,
@@ -540,7 +547,8 @@ def ficha():
         usuario=usuario,
         competencias=competencias,
         comp_list=lista_competencias(personal),
-        historial=historial
+        historial=getDictHistorial(historial_rows)
+
     )
 
 def cambiar_validacion(validacion, personal):
@@ -676,3 +684,72 @@ def lista_competencias(personal):
     for row in rows:
         lista[row.f_nombre] = row.f_observaciones
     return lista
+
+def getDictHistorial(historial):
+    dic = {}
+    if (historial != None):
+        dic = {  "f_fecha_inicio_1" : transformar_fecha(historial.f_fecha_inicio_1),
+                 "f_fecha_final_1" : transformar_fecha(historial.f_fecha_final_1),
+                 "f_dependencia_hist_1" : historial.f_dependencia_hist_1,
+                 "f_organizacion_1" : historial.f_organizacion_1,
+                 "f_cargo_hist_1": historial.f_cargo_hist_1,
+                 "f_rol_hist_1": historial.f_rol_hist_1,
+                 "f_fecha_inicio_2" : transformar_fecha(historial.f_fecha_inicio_2),
+                 "f_fecha_final_2" : transformar_fecha(historial.f_fecha_final_2),
+                 "f_dependencia_hist_2" : historial.f_dependencia_hist_2,
+                 "f_organizacion_2" : historial.f_organizacion_2,
+                 "f_cargo_hist_2": historial.f_cargo_hist_2,
+                 "f_rol_hist_2": historial.f_rol_hist_2,
+                 "f_fecha_inicio_3" : transformar_fecha(historial.f_fecha_inicio_3),
+                 "f_fecha_final_3" : transformar_fecha(historial.f_fecha_final_3),
+                 "f_dependencia_hist_3" : historial.f_dependencia_hist_3,
+                 "f_organizacion_3" : historial.f_organizacion_3,
+                 "f_cargo_hist_3": historial.f_cargo_hist_3,
+                 "f_rol_hist_3": historial.f_rol_hist_3,
+                 "f_fecha_inicio_4" : transformar_fecha(historial.f_fecha_inicio_4),
+                 "f_fecha_final_4" : transformar_fecha(historial.f_fecha_final_4),
+                 "f_dependencia_hist_4" : historial.f_dependencia_hist_4,
+                 "f_organizacion_4" : historial.f_organizacion_4,
+                 "f_cargo_hist_4": historial.f_cargo_hist_4,
+                 "f_rol_hist_4": historial.f_rol_hist_4,
+                 "f_fecha_inicio_5" : transformar_fecha(historial.f_fecha_inicio_5),
+                 "f_fecha_final_5" : transformar_fecha(historial.f_fecha_final_5),
+                 "f_dependencia_hist_5" : historial.f_dependencia_hist_5,
+                 "f_organizacion_5" : historial.f_organizacion_5,
+                 "f_cargo_hist_5": historial.f_cargo_hist_5,
+                 "f_rol_hist_5": historial.f_rol_hist_5,
+        } 
+    else:
+        dic = {  "f_fecha_inicio_1" : '',
+                 "f_fecha_final_1" : '',
+                 "f_dependencia_hist_1" : '',
+                 "f_organizacion_1" : '',
+                 "f_cargo_hist_1": '',
+                 "f_rol_hist_1": '',
+                 "f_fecha_inicio_2" : '',
+                 "f_fecha_final_2" : '',
+                 "f_dependencia_hist_2" : '',
+                 "f_organizacion_2" : '',
+                 "f_cargo_hist_2": '',
+                 "f_rol_hist_2": '',
+                 "f_fecha_inicio_3" : '',
+                 "f_fecha_final_3" : '',
+                 "f_dependencia_hist_3" : '',
+                 "f_organizacion_3" : '',
+                 "f_cargo_hist_3": '',
+                 "f_rol_hist_3": '',
+                 "f_fecha_inicio_4" : '',
+                 "f_fecha_final_4" : '',
+                 "f_dependencia_hist_4" : '',
+                 "f_organizacion_4" : '',
+                 "f_cargo_hist_4": '',
+                 "f_rol_hist_4": '',
+                 "f_fecha_inicio_5" : '',
+                 "f_fecha_final_5" : '',
+                 "f_dependencia_hist_5" : '',
+                 "f_organizacion_5" : '',
+                 "f_cargo_hist_5": '',
+                 "f_rol_hist_5": '',
+        } 
+    return dic
+
