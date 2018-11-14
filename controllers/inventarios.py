@@ -1067,7 +1067,7 @@ def vehiculos():
     user_dep_id = user.f_dependencia
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
-    if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehiclo.
+    if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehículo.
         dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
 
         if dependencia_escogida.id_sede == 1:
@@ -1360,8 +1360,17 @@ def vehiculos():
             # pertenecen a la dependencia del usuario
             inventario = __get_vh_dep(dep_id)
 
+    acceso_direccion = False
+
     # PENDIENTE: Super refactoizar
-    if request.vars.dependencia:
+    if request.vars.acceso_direccion:
+        print("ENTRÉ")
+        acceso_direccion = True
+        inventario = __get_vh_dep(1)
+        dep_padre_id = 1
+        dep_padre_nombre = "ULAB"
+        dep_nombre = "DIRECCIÓN"
+    elif request.vars.dependencia:
         inventario = __get_vh_dep(int(request.vars.dependencia))
     else:
         inventario = db(db.vehiculo.id).select()
@@ -1371,6 +1380,26 @@ def vehiculos():
     dict_clasificaciones = __obtener_clasificaciones()
 
     sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
+
+    for key, value in dict(dep_nombre=dep_nombre,
+                dependencias=dependencias,
+                espacios=espacios,
+                es_espacio=es_espacio,
+                espacio_visitado=espacio_visitado,
+                dep_padre_id=dep_padre_id,
+                dep_padre_nombre=dep_padre_nombre,
+                direccion_id=direccion_id,
+                es_tecnico=es_tecnico,
+                inventario=inventario,
+                retroceder=retroceder,
+                categorias=dict_categorias,
+                clasificaciones=dict_clasificaciones,
+                cod_localizacion=cod_localizacion,
+                localizacion=localizacion,
+                sede_id=sede_id,
+                acceso_direccion=acceso_direccion
+               ).items():
+        print("%s: %s" % (key, value))
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
@@ -1387,7 +1416,8 @@ def vehiculos():
                 clasificaciones=dict_clasificaciones,
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion,
-                sede_id=sede_id
+                sede_id=sede_id,
+                acceso_direccion=acceso_direccion
                )
 
 @auth.requires(lambda: __check_role())
