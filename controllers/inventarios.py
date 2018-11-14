@@ -1364,7 +1364,6 @@ def vehiculos():
 
     # PENDIENTE: Super refactoizar
     if request.vars.acceso_direccion:
-        print("ENTRÉ")
         acceso_direccion = True
         inventario = __get_vh_dep(1)
         dep_padre_id = 1
@@ -1380,7 +1379,7 @@ def vehiculos():
     dict_clasificaciones = __obtener_clasificaciones()
 
     sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
-    
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,

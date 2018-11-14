@@ -158,6 +158,7 @@
 			{{ if espacio.nombre.find("LABORATORIO G") != -1: }}
 					{{ if not acceso_direccion and dep_nombre.find("DIRECCIÓN") != -1: }}
 						<div class="grid-item" onclick="redirect('{{=URL('vehiculos',vars=dict(dependencia=1, es_espacio=True, acceso_direccion=True))}}');">
+							<br/>
 							DIRECCIÓN
 						</div>
 					{{ pass }}
