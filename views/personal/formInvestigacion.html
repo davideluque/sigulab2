@@ -1,0 +1,152 @@
+<div class="col-sm-11 col11Body">
+    <h4 class="titulosForm"> Investigación </h4>
+    <h4>Publicaciones Arbitradas</h4>               
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label>Categoría</label>
+                <select class="form-control" id="sel_categoria_publicacion" name="categoria_publicacion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                {{for competencia in competencias:}}
+                <option value="{{=competencia}}">{{=competencia}}</option>
+                {{pass}}
+                </select>
+        </div>
+        
+        <div class="col-sm-12">
+            <br>
+            <label>Año</label>
+             <input value="{{''}}" type="text" class="form-control" name="anio_publicacion_1_add" placeholder="Formato aaaa" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+ 
+ 
+
+        <div class="col-sm-12">
+            <br>
+            <label>Título del Trabajo</label>
+             <input value="{{''}}" type="text" class="form-control" name="titulo_publicacion_1_add" placeholder="Título" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+        
+        <div class="col-sm-12">
+            <br>
+            <label>Autores</label>
+            <!-- MAXIMO 5-->
+            <input value="{{''}}" type="text" class="form-control" name="autores_publicacion_1_add" placeholder="Autores (Máximo 5)" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+
+        <div class="col-sm-12">
+        <br>    
+        <label>Referencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="referencia_publicacion_1_add" placeholder="Referencia" required
+                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <br>
+        </div>
+    </div>
+    <br>
+    <h4>Publicaciones No Arbitradas</h4>               
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label>Categoría</label>
+                <select class="form-control" id="sel_categoria_publicacion" name="categoria_publicacion_na_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                {{for competencia in competencias:}}
+                <option value="{{=competencia}}">{{=competencia}}</option>
+                {{pass}}
+                </select>
+        </div>
+        
+        <div class="col-sm-12">
+            <br>
+            <label>Año</label>
+             <input value="{{''}}" type="text" class="form-control" name="anio_publicacion_na_1_add" placeholder="Formato aaaa" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+ 
+
+        <div class="col-sm-12">
+            <br>
+            <label>Título del Trabajo</label>
+             <input value="{{''}}" type="text" class="form-control" name="titulo_publicacion_na_1_add" placeholder="Título" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+        
+        <div class="col-sm-12">
+            <br>
+            <label>Autores</label>
+            <!-- MAXIMO 5-->
+            <input value="{{''}}" type="text" class="form-control" name="autores_publicacion_na_1_add" placeholder="Autores (Máximo 5)" required
+                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        </div>
+
+        <div class="col-sm-12">
+        <br>    
+        <label>Referencia</label>
+        <input value="{{''}}" type="text" class="form-control" name="referencia_publicacion_na_1_add" placeholder="Referencia" required
+                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <br>
+        </div>
+        
+    </div>
+
+    <br>
+    <h4>Proyectos de Investigación</h4>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label>Categoría</label>
+                <select class="form-control" id="sel_categoria_proyecto" name="categoria_proyecto_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                {{for competencia in competencias:}}
+                <option value="{{=competencia}}">{{=competencia}}</option>
+                {{pass}}
+                </select>
+                <br>
+            </div>
+
+            <div class="col-sm-12">
+                <label>Período</label>
+            </div>
+
+
+            <div class="col-sm-6">
+                <br>
+                <label>Desde:</label>
+                <input class="datepicker" value="{{''}}" name = "fecha_inicio_proyecto_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+            </div>
+            <div class="col-sm-6">
+                <br>
+                <label>Hasta:</label> 
+                <input class="datepicker" value="{{''}}" name = "fecha_final_proyecto_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+            </div>             
+
+            <div class="col-sm-12">
+                <br>
+                <label>Título del Proyecto</label>
+                <input value="{{''}}" type="text" class="form-control" name="titulo_proyecto_1_add" placeholder="Título" required
+                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+            </div>
+
+            <div class="col-sm-12">
+                <br>
+                <label>Responsabilidad</label>
+                <input value="{{''}}" type="text" class="form-control" name="responsabilidad_proyecto_1_add" placeholder="Responsabilidad" required
+                        data-toggle="popover" data-placement="bottom" data-trigger="manual"  data-content="Este campo es requerido" data-valido="true">
+            </div>                
+   
+            <div class="col-sm-12">
+                <br>
+                <label>Resultados</label>
+                <input value="{{''}}" type="text" class="form-control" name="resultados_proyecto_1_add" placeholder="Resultados"
+                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-valido="true">
+            </div>
+
+            <div class="col-sm-12">
+                <br>
+                <label>Institutción</label>
+                <input value="{{''}}" type="text" class="form-control" name="institucion_proyecto_1_add" placeholder="Institución" required
+                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+            </div>
+    </div>    
+</div>        
+
+
+

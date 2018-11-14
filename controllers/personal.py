@@ -198,6 +198,43 @@ def add_form():
              "organizacion_5" : request.post_vars.organizacion_5_add,
              "cargo_hist_5": request.post_vars.cargo_hist_5_add,
              "rol_hist_5": request.post_vars.rol_hist_5_add,
+             "categoria_publicacion_1" : request.post_vars.categoria_publicacion_add,
+             "anio_publicacion_1" : request.post_vars.anio_publicacion_1_add,
+             "titulo_publicacion_1" : request.post_vars.titulo_publicacion_1_add,
+             "autores_publicacion_1" : request.post_vars.autores_publicacion_1_add,
+             "referencia_publicacion_1" : request.post_vars.referencia_publicacion_1_add,
+            #  "categoria_publicacion_2" : request.post_vars.categoria_publicacion_2_add,
+            #  "anio_publicacion_2" : request.post_vars.anio_publicacion_2_add,
+            #  "titulo_publicacion_2" : request.post_vars.titulo_publicacion_2_add,
+            #  "autores_publicacion_2" : request.post_vars.autores_publicacion_2_add,
+            #  "referencia_publicacion_2" : request.post_vars.referencia_publicacion_2_add,
+            #  "categoria_publicacion_3" : request.post_vars.categoria_publicacion_3_add,
+            #  "anio_publicacion_3" : request.post_vars.anio_publicacion_3_add,
+            #  "titulo_publicacion_3" : request.post_vars.titulo_publicacion_3_add,
+            #  "autores_publicacion_3" : request.post_vars.autores_publicacion_3_add,
+            #  "referencia_publicacion_3" : request.post_vars.referencia_publicacion_3_add,
+            #  "categoria_publicacion_4" : request.post_vars.categoria_publicacion_4_add,
+            #  "anio_publicacion_4" : request.post_vars.anio_publicacion_4_add,
+            #  "titulo_publicacion_4" : request.post_vars.titulo_publicacion_4_add,
+            #  "autores_publicacion_4" : request.post_vars.autores_publicacion_4_add,
+            #  "referencia_publicacion_4" : request.post_vars.referencia_publicacion_4_add,
+            #  "categoria_publicacion_5" : request.post_vars.categoria_publicacion_5_add,
+            #  "anio_publicacion_5" : request.post_vars.anio_publicacion_5_add,
+            #  "titulo_publicacion_5" : request.post_vars.titulo_publicacion_5_add,
+            #  "autores_publicacion_5" : request.post_vars.autores_publicacion_5_add,
+            #  "referencia_publicacion_5" : request.post_vars.referencia_publicacion_5_add,                                                    
+             "categoria_publicacion_na_1" : request.post_vars.categoria_publicacion_na_add,
+             "anio_publicacion_na_1" : request.post_vars.anio_publicacion_na_1_add,
+             "titulo_publicacion_na_1" : request.post_vars.titulo_publicacion_na_1_add,
+             "autores_publicacion_na_1" : request.post_vars.autores_publicacion_na_1_add,
+             "referencia_publicacion_na_1" : request.post_vars.referencia_publicacion_na_1_add,
+             "categoria_proyecto_1" : request.post_vars.categoria_proyecto_add,
+             "fecha_inicio_proyecto_1" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_proyecto_1_add),
+             "fecha_final_proyecto_1" : transformar_fecha_formato_original(request.post_vars.fecha_final_proyecto_1_add),
+             "titulo_proyecto_1" : request.post_vars.titulo_proyecto_1_add,
+             "responsabilidad_proyecto_1" : request.post_vars.responsabilidad_proyecto_1_add,
+             "resultados_proyecto_1" : request.post_vars.resultados_proyecto_1_add,
+             "institucion_proyecto_1" : request.post_vars.institucion_proyecto_1_add             
             }
 
     ubicaciones = request.post_vars.ubicacion_add
@@ -270,6 +307,61 @@ def add_form():
             f_rol_hist_5 = dic["rol_hist_5"],
             f_Historial_trabajo_Personal= personal.select().first().id
             )
+
+        # Publicaciones Arbitradas
+        db.t_Publicacion_arbitrada.update_or_insert(
+            f_categoria = dic["categoria_publicacion_1"],
+            f_anio = dic["anio_publicacion_1"],
+            f_titulo = dic["titulo_publicacion_1"],
+            f_autores = dic["autores_publicacion_1"],
+            f_referencia = dic["referencia_publicacion_1"],
+            # f_categoria_2 = dic["categoria_publicacion_2"],
+            # f_anio_2 = dic["anio_publicacion_2"],
+            # f_titulo_2 = dic["titulo_publicacion_2"],
+            # f_autores_2 = dic["autores_publicacion_2"],
+            # f_referencia_2 = dic["referencia_publicacion_2"],
+            # f_categoria_3 = dic["categoria_publicacion_3"],
+            # f_anio_3 = dic["anio_publicacion_3"],
+            # f_titulo_3 = dic["titulo_publicacion_3"],
+            # f_autores_3 = dic["autores_publicacion_3"],
+            # f_referencia_3 = dic["referencia_publicacion_3"],
+            # f_categoria_4 = dic["categoria_publicacion_4"],
+            # f_anio_4 = dic["anio_publicacion_4"],
+            # f_titulo_4 = dic["titulo_publicacion_4"],
+            # f_autores_4 = dic["autores_publicacion_4"],
+            # f_referencia_4 = dic["referencia_publicacion_4"],
+            # f_categoria_5 = dic["categoria_publicacion_5"],
+            # f_anio_5 = dic["anio_publicacion_5"],
+            # f_titulo_5 = dic["titulo_publicacion_5"],
+            # f_autores_5 = dic["autores_publicacion_5"],
+            # f_referencia_5 = dic["referencia_publicacion_5"],                                      
+            f_publicacion_Personal = personal.select().first().id
+            )
+
+        # Publicaciones No Arbitradas
+        db.t_Publicacion_no_arbitrada.update_or_insert(
+            f_categoria = dic["categoria_publicacion_na_1"],
+            f_anio = dic["anio_publicacion_na_1"],
+            f_titulo = dic["titulo_publicacion_na_1"],
+            f_autores = dic["autores_publicacion_na_1"],
+            f_referencia = dic["referencia_publicacion_na_1"],
+            f_publicacion_Personal = personal.select().first().id
+            )
+
+        # Proyectos de Investigación
+
+        db.t_Proyecto.update_or_insert(
+            f_categoria = dic["categoria_proyecto_1"],
+            f_fecha_inicio = dic["fecha_inicio_proyecto_1"],
+            f_fecha_fin = dic["fecha_final_proyecto_1"],
+            f_titulo = dic["titulo_proyecto_1"],
+            f_responsabilidad = dic["responsabilidad_proyecto_1"],
+            f_resultados = dic["resultados_proyecto_1"],
+            f_institucion = dic["institucion_proyecto_1"],
+            f_proyecto_Personal = personal.select().first().id
+        )        
+
+
 
         session.ficha_negada=""
         _id = personal.select().first().id
@@ -533,6 +625,26 @@ def ficha():
 
     historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == elm.id).select().first()
 
+
+    publicaciones_rows = db(db.t_Publicacion_arbitrada.f_publicacion_Personal == elm.id).select().first()
+    if (publicaciones_rows == None):
+        publicaciones = {}
+    else:
+        publicaciones = publicaciones_rows.as_dict()
+
+    publicaciones_na_rows = db(db.t_Publicacion_no_arbitrada.f_publicacion_Personal == elm.id).select().first()
+    if (publicaciones_na_rows == None):
+        publicaciones_na = {}
+    else:
+        publicaciones_na = publicaciones_na_rows.as_dict()
+
+    proyectos_rows = db(db.t_Proyecto.f_proyecto_Personal == elm.id).select().first()
+    if (proyectos_rows == None):
+        proyectos = {}
+    else:
+        proyectos = proyectos_rows.as_dict()
+
+
     return dict(
         personal=personal,
         categorias=categorias,
@@ -547,8 +659,10 @@ def ficha():
         usuario=usuario,
         competencias=competencias,
         comp_list=lista_competencias(personal),
-        historial=getDictHistorial(historial_rows)
-
+        historial=getDictHistorial(historial_rows),
+        publicaciones=publicaciones,
+        publicaciones_na=publicaciones_na,
+        proyectos=proyectos
     )
 
 def cambiar_validacion(validacion, personal):
