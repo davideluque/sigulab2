@@ -1011,25 +1011,7 @@
       }
     });
 
-    var tipo = $("#tipo").children("option:selected").val();
-
-    if (tipo == "Otros aparatos para circular") {
-      $("#grupo-clasificacion").prop('disabled', true);
-      $("#grupo-clasificacion").prop('required', false);
-      $("#grupo-clasificacion").hide("fast");
-    } else {
-      $("#grupo-clasificacion").show("fast");
-      $("#grupo-clasificacion").prop('disabled', false)
-      $("#grupo-clasificacion").prop('required', true)
-      $('#clasificacion option:gt(0)').remove(); 
-
-      var longitud = clasificaciones[tipo].length;
-      for (var i = 0; i < longitud; i++) {
-        $("#clasificacion").append(
-          $("<option></option>").attr("value", clasificaciones[tipo][i]).text(clasificaciones[tipo][i])
-        );
-      }
-    }
+    $("#tipo").trigger('change');
 
     // Clasificación (OJO: Falta clasificación2 y manejo de emergencia)
     $("#clasificacion > option").each(function() {
@@ -1065,19 +1047,6 @@
       }
     });
 
-    $("#sudebip_subcategoria").trigger('change');
-
-    var subcat = $("#sudebip_subcategoria").children("option:selected").val();
-    $("#grupo-catesp").show("fast");
-    $('#sudebip_categoria_especifica option:gt(0)').remove(); 
-
-    var longitud = categorias_sudebip[subcat].length;
-    for (var i = 0; i < longitud; i++) {
-      $("#sudebip_categoria_especifica").append(
-        $("<option></option>").attr("value", categorias_sudebip[subcat][i]).text(categorias_sudebip[subcat][i])
-      );
-    }
-
     // Categoría específica
     $("#sudebip_categoria_especifica > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_sudebip_categoria_especifica']}}") {
@@ -1089,15 +1058,10 @@
     $("#origen > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_origen']}}") {
         $(this).attr('selected', 'true');
-        if ($(this).val() == "Compra") {
-          $("#grupo-compra").show("fast");
-          $("#grupo-donacion").hide("fast");
-        } else {
-          $("#grupo-compra").hide("fast");
-          $("#grupo-donacion").show("fast");
-        }
       }
     });
+
+    $("#origen").trigger('change');
 
   });
 
