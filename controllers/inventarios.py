@@ -315,7 +315,7 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo
 # el mismo.
 def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
-                 placa, intt, sede, observaciones, lugar_pernocta, color, clase, uso,
+                 placa, intt, observaciones, lugar_pernocta, color, clase, uso,
                  servicio, tara, tara_md, nro_puestos, nro_ejes, capacidad_carga, propietario,
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
@@ -341,7 +341,6 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
             vh_rines=rines,
             vh_capacidad_carga_md=capacidad_carga_md,
             vh_intt=intt,
-            vh_sede=sede,
             vh_tipo=tipo,
             vh_observaciones=observaciones,
             vh_lugar_pernocta=lugar_pernocta,
@@ -432,7 +431,6 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_rines=rines,
         vh_capacidad_carga_md=capacidad_carga_md,
         vh_intt=intt,
-        vh_sede=sede,
         vh_tipo=tipo,
         vh_clasificacion=clasificacion,
         vh_observaciones=observaciones,
@@ -1099,7 +1097,6 @@ def vehiculos():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=dependencia_escogida.id_sede,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -1399,6 +1396,10 @@ def vehiculos():
     dict_clasificaciones = __obtener_clasificaciones()
 
     sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
+    if request.vars.dependencia:
+        dep_id = int(request.vars.dependencia)
+    else:
+        dep_id = 1
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
@@ -1416,6 +1417,7 @@ def vehiculos():
                 cod_localizacion=cod_localizacion,
                 localizacion=localizacion,
                 sede_id=sede_id,
+                dep_id=dep_id,
                 acceso_direccion=acceso_direccion
                )
 
@@ -2362,7 +2364,6 @@ def detalles_vehiculo():
             serial_chasis=request.vars.serialCh,
             placa=request.vars.placa,
             intt=request.vars.intt,
-            sede=dependencia_escogida.id_sede,
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
@@ -2485,7 +2486,8 @@ def detalles_vehiculo():
 
     dict_categorias = __obtener_categorias()
     dict_clasificaciones = __obtener_clasificaciones()
-    sede_id = int(vehi['vh_sede'])
+    depend = db(db.dependencias.id == vehi['vh_dependencia']).select().first()
+    sede_id = int(depend.id_sede)
 
     # Si solo estoy cargando la vista
     return dict(
