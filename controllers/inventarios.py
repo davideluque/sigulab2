@@ -410,7 +410,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_proveedor=proveedor,
         vh_proveedor_rif=proveedor_rif,
         vh_donante=donante,
-        vh_contacto=contacto_donante,
+        vh_contacto_donante=contacto_donante,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
         vh_crea_ficha=user
@@ -1764,7 +1764,7 @@ def detalles_mod_vehiculo():
             vh_proveedor=vehiculo['mvh_proveedor'],
             vh_proveedor_rif=vehiculo['mvh_proveedor_rif'],
             vh_donante=vehiculo['mvh_donante'],
-            vh_contacto=vehiculo['mvh_contacto_donante'],
+            vh_contacto_donante=vehiculo['mvh_contacto_donante'],
             vh_oculto=vehiculo['mvh_oculto'],
         )
 
