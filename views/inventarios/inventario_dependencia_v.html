@@ -37,11 +37,7 @@
                 <td class="camposTabla">{{=vehiculo['vh_marca']}}</td>
                 <td class="camposTabla">{{=vehiculo['vh_modelo']}}</td>
                 <td class="camposTabla">
-                  {{ if vehiculo['vh_es_particular']: }}
-                    PARTICULAR
-                  {{ else: }}
-                    OFICIAL
-                  {{pass}}
+                  {{= vehiculo['vh_tipo'].upper() }}
                 </td>
                 <td class="camposTabla">{{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}</td>
                 <td class="camposTabla">

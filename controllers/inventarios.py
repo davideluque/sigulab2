@@ -410,7 +410,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_proveedor=proveedor,
         vh_proveedor_rif=proveedor_rif,
         vh_donante=donante,
-        vh_contacto=contacto_donante,
+        vh_contacto_donante=contacto_donante,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
         vh_crea_ficha=user
@@ -766,7 +766,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
-def __acceso_permitido(user, dep_id, es_espacio):
+def __acceso_permitido(user, dep_id, es_espacio, es_direccion=False):
     """
     Args:
         * user_id (str): id del usuario en la tabla t_Personal (diferente de auth.user.id)
@@ -810,7 +810,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
         # Si dep_id es un espacio fisico, se sube un nivel en la jerarquia (hasta
         # las secciones) ya que los espacios fisicos no aparecen en la lista de
         # adyacencias pero si las secciones a las que pertenecen
-        if es_espacio == "True":
+        if es_espacio == "True" and not es_direccion:
             dep_actual = db(db.espacios_fisicos.id == dep_id).select().first().dependencia
 
         while dep_actual is not None:
@@ -1018,6 +1018,7 @@ def vehiculos():
     # PENDIENTE: Cableando la variable de es_espacio 
     if not request.vars.acceso_direccion:
         request.vars.es_espacio = 'False'
+        request.vars.acceso_direccion = False
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
     espacios = []
@@ -1143,7 +1144,8 @@ def vehiculos():
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user,
                                           int(request.vars.dependencia),
-                                          request.vars.es_espacio):
+                                          request.vars.es_espacio,
+                                          request.vars.acceso_direccion):
                     redirect(URL('vehiculos'))
 
                 espacio_id = request.vars.dependencia
@@ -1196,7 +1198,7 @@ def vehiculos():
 
             secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
 
-            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0],
+            dependencias = map(lambda x: db(db.dependencias.id == x).select(db.dependencias.ALL, orderby=db.dependencias.id)[0],
                                secciones_ids)
 
             dep_nombre = "Secciones"
@@ -1212,7 +1214,8 @@ def vehiculos():
             # consultar la dependencia en request.vars.dependencia
             if not request.vars.dependencia == user_dep_id and not __acceso_permitido(user,
                                 int(request.vars.dependencia),
-                                    request.vars.es_espacio):
+                                    request.vars.es_espacio,
+                                    request.vars.acceso_direccion):
                 redirect(URL('vehiculos'))
 
             # Evaluando la correctitud de los parametros del GET
@@ -1277,7 +1280,8 @@ def vehiculos():
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user,
                                 int(request.vars.dependencia),
-                                    request.vars.es_espacio):
+                                    request.vars.es_espacio,
+                                    request.vars.acceso_direccion):
                 redirect(URL('vehiculos'))
 
             if request.vars.es_espacio == "True":
@@ -1315,7 +1319,7 @@ def vehiculos():
                 dep_id = request.vars.dependencia
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                 dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
-                                      ).select(db.dependencias.ALL))
+                                      ).select(db.dependencias.ALL, orderby=db.dependencias.id))
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
@@ -1346,7 +1350,7 @@ def vehiculos():
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
-                                  ).select(db.dependencias.ALL))
+                                  ).select(db.dependencias.ALL, orderby=db.dependencias.id))
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
@@ -1764,7 +1768,7 @@ def detalles_mod_vehiculo():
             vh_proveedor=vehiculo['mvh_proveedor'],
             vh_proveedor_rif=vehiculo['mvh_proveedor_rif'],
             vh_donante=vehiculo['mvh_donante'],
-            vh_contacto=vehiculo['mvh_contacto_donante'],
+            vh_contacto_donante=vehiculo['mvh_contacto_donante'],
             vh_oculto=vehiculo['mvh_oculto'],
         )
 
@@ -3528,7 +3532,11 @@ def validaciones():
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
     vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
 
-    vehics = vehiculos_responsable + vehiculos_custodio
+    vehics = []
+    for vh in vehiculos_responsable:
+        vehics.append(vh)
+    for vh in vehiculos_custodio:
+        vehics.append(vh)
 
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
