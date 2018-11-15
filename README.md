@@ -36,3 +36,12 @@ Desarrolladores del Módulo de Gestión de Personal
 - Francisco Marquez
 - Daniel Francis
 - German Robayo
+
+Desarrolladores de la Gestión de Vehículos y Sistema de Préstamos
+- Andrés Ignacio Torres
+- María Gabriela Jaimes
+- María José Grimaldi
+- Javier Medina
+- Julio Pérez
+- Francisco Marcos
+- Leonardo López

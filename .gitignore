@@ -109,3 +109,4 @@ uploads/
 .hg/
 *.bak
 .merge*
+*.pyc

@@ -1,0 +1,496 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+    <!-- Estilos de modales y listados -->
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+{{end}}
+
+{{block center}}
+
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
+  <a class="breadcrumb-item" href="{{=URL('vehiculos')}}">Vehículos</a>
+  <span class="breadcrumb-item active">{{=vehiculo['mvh_marca']}} {{=vehiculo['mvh_modelo']}} ({{=vehiculo['mvh_placa']}})</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+
+    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+    <h3 class="dep-titulo text-center">{{=vehiculo['mvh_marca']}} {{=vehiculo['mvh_modelo']}} ({{=vehiculo['mvh_placa']}})</h3>
+    <h4 class="text-center">DESCRIPCIÓN DE LA MODIFICACIÓN: {{=vehiculo['mvh_motivo']}}</h4>
+{{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<!-- Inicio Boton Modificar BM -->
+<div class="container" id="containerAgregar">
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-5">
+                <!-- Botón para atrás -->
+                <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
+                    <i class="fas fa-arrow-left"></i>               
+                </button>
+            </div>
+            <div id="columnBotonAgregar" class="col-sm-6">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <form method="post">
+                        <!-- Boton para aceptar mod de bien mueble-->
+                        <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                        <!--Boton para rechazar el bien mueble-->
+                        <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Fin Boton Agregar Sustancia -->
+
+    <br/>
+
+<!-- Ficha vehiculo aqui esta la infromacion del vehiculo -->
+<div class="wrapper">
+		
+        <div class="tab-wrapper">
+            <ul class="tabs">
+                    <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                    <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
+                    <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
+                    <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
+                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
+                </ul>
+        </div>
+    
+        <div class="content-wrapper">
+            <div id="tab-1" class="tab-content active">
+                <div class="grid-container">
+                    {{ for title in caracteristicas_list: }}
+                        {{ if caracteristicas_dict.get(title): }}
+                        <div class="grid-item">
+                            {{= title}}:
+                        </div>
+                        <div class="grid-item">
+                            {{= caracteristicas_dict.get(title)}}
+                            <span class="float-right">
+                                {{ if caracteristicas_dict.get(title) != caracteristicas_originales_dict.get(title): }}
+                                    <em>(<b>anteriormente</b>: {{= caracteristicas_originales_dict.get(title)}})</em>
+                                {{pass}}
+                            </span>
+                        </div>
+                        {{ pass }}
+                    {{ pass }}
+                </div>
+            </div>   
+   
+            <div id="tab-2"class="tab-content">
+              <div class="grid-container">
+                <div class="grid-item">
+                      Sede:
+                </div>
+                <div class="grid-item">
+                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
+                </div>
+                <div class="grid-item">
+                      Dependencia:
+                </div>
+                <div class="grid-item">
+                  {{=db(db.dependencias.id == vehiculo['mvh_dependencia']).select().first().nombre}}
+                </div>
+                <div class="grid-item">
+                      Responsable: 
+                </div>
+                <div class="grid-item">
+                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().first_name}} 
+                      &nbsp;
+                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().last_name}}
+
+                      {{ if vehiculo['mvh_responsable'] != vehiculo_original['vh_responsable']: }}
+                          <em>(<b>anteriormente</b>: 
+                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().first_name}}
+                            &nbsp;
+                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().last_name}})
+                        </em>
+                      {{pass}}
+                </div>
+                <div class="grid-item">
+                      Custodio: 
+                </div>
+                <div class="grid-item">
+                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().first_name}} 
+                      &nbsp;
+                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().last_name}}
+
+                      {{ if vehiculo['mvh_custodio'] != vehiculo_original['vh_custodio']: }}
+                          <em>(<b>anteriormente</b>: 
+                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().first_name}}
+                            &nbsp;
+                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().last_name}})
+                        </em>
+                      {{pass}}
+                </div>
+                <div class="grid-item">
+                      Ubicación de Custodio:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['mvh_ubicacion_custodio']}}
+
+                       {{ if vehiculo['mvh_ubicacion_custodio'] != vehiculo_original['vh_ubicacion_custodio']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_ubicacion_custodio'] }})
+                        {{ pass }}
+                </div>
+                {{ if vehiculo['mvh_telf_responsable']: }}
+                <div class="grid-item">
+                      Tlf. de Responsable:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['mvh_telf_responsable']}}
+
+                       {{ if vehiculo['mvh_telf_responsable'] != vehiculo_original['vh_telf_responsable']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_responsable'] if vehiculo_original['vh_telf_responsable'] != None else "N/A" }})</em>
+                        {{ pass }}
+                </div>
+                {{ pass }}
+                {{ if vehiculo['mvh_extension_responsable']: }}
+                <div class="grid-item">
+                      Extensión responsable:
+                </div>
+                <div class="grid-item">
+                        {{=vehiculo['mvh_extension_responsable']}}
+
+                        {{ if vehiculo['mvh_extension_responsable'] != vehiculo_original['vh_extension_responsable']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_responsable'] if vehiculo_original['vh_extension_responsable'] != None else "N/A" }})</em>
+                        {{ pass }}
+                </div>
+                {{ pass }}
+                {{ if vehiculo['mvh_telf_custodio']: }}
+                <div class="grid-item">
+                      Tlf. de Custodio:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['mvh_telf_custodio']}}
+
+                       {{ if vehiculo['mvh_telf_custodio'] != vehiculo_original['vh_telf_custodio']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_custodio'] if vehiculo_original['vh_telf_custodio'] != None else "N/A" }})</em>
+                        {{ pass }}
+                </div>
+                {{ pass }}
+                {{ if vehiculo['mvh_extension_custodio']: }}
+                <div class="grid-item">
+                      Extensión custodio:
+                </div>
+                <div class="grid-item">
+                        {{=vehiculo['mvh_extension_custodio']}}
+
+                        {{ if vehiculo['mvh_extension_custodio'] != vehiculo_original['vh_extension_custodio']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_custodio'] if vehiculo_original['vh_extension_custodio'] != None else "N/A" }})</em>
+                        {{ pass }}
+                </div>
+                {{ pass }}
+                <div class="grid-item">
+                    Ubicación de pernocta:
+                </div>
+                <div class="grid-item">
+                    {{=vehiculo['mvh_lugar_pernocta']}}
+
+                    {{ if vehiculo['mvh_lugar_pernocta'] != vehiculo_original['vh_lugar_pernocta']: }}
+                      <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_lugar_pernocta'] }})</em>
+                    {{ pass }}
+                </div>
+              </div>
+            </div>
+
+            <div id="tab-3"class="tab-content">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        Localización:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_sudebip_localizacion']}}
+                    </div>
+                    <div class="grid-item">
+                        Código de Localización:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_sudebip_codigo_localizacion']}}
+                    </div>
+                    <div class="grid-item">
+                        Categoría:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_sudebip_categoria']}}
+                    </div>
+                    <div class="grid-item">
+                        Subcategoría:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_sudebip_subcategoria']}}
+
+                        {{ if vehiculo['mvh_sudebip_subcategoria'] != vehiculo_original['vh_sudebip_subcategoria']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_sudebip_subcategoria'] }})</em>
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        Categoría Específica:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_sudebip_categoria_especifica']}}
+
+                        {{ if vehiculo['mvh_sudebip_categoria_especifica'] != vehiculo_original['vh_sudebip_categoria_especifica']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_sudebip_categoria_especifica'] }})</em>
+                        {{ pass }}
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-4"class="tab-content">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        Origen:
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_origen']}}
+
+                        {{ if vehiculo['mvh_origen'] != vehiculo_original['vh_origen']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_origen'] }})</em>
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{ if vehiculo['mvh_origen'] == 'Compra': }}
+                            Nº. Factura:
+                        {{ elif vehiculo['mvh_origen'] == 'Donación': }}
+                            Nº. Oficio:
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_nro_adquisicion']}}
+
+                        {{ if vehiculo['mvh_nro_adquisicion'] != vehiculo_original['vh_nro_adquisicion']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_nro_adquisicion'] }})</em>
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{ if vehiculo['mvh_origen'] == 'Compra': }}
+                            Fecha Factura:
+                        {{ elif vehiculo['mvh_origen'] == 'Donación': }}
+                            Fecha Oficio:
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['mvh_fecha_adquisicion']}}
+
+                        {{ if vehiculo['mvh_fecha_adquisicion'] != vehiculo_original['vh_fecha_adquisicion']: }}
+                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_fecha_adquisicion'] }})</em>
+                        {{ pass }}
+                    </div>
+                    {{ if vehiculo['mvh_origen'] == 'Compra': }}
+                        <div class="grid-item">
+                            Proveedor:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['mvh_proveedor']}}
+
+                            {{ if vehiculo['mvh_proveedor'] != vehiculo_original['vh_proveedor']: }}
+                              <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_proveedor'] }})</em>
+                            {{ pass }}
+                        </div>
+                        <div class="grid-item">
+                            RIF:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['mvh_proveedor_rif']}}
+
+                            {{ if vehiculo['mvh_proveedor_rif'] != vehiculo_original['vh_proveedor_rif']: }}
+                              <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_proveedor_rif'] }})</em>
+                            {{ pass }}
+                        </div>
+                    {{ else: }}
+                        <div class="grid-item">
+                            Donante:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['mvh_donante']}}
+
+                            {{ if vehiculo['mvh_donante'] != vehiculo_original['vh_donante']: }}
+                              <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_donante'] }})</em>
+                            {{ pass }}
+                        </div>
+                        <div class="grid-item">
+                            Contacto donante:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['mvh_contacto_donante']}}
+
+                            {{ if vehiculo['mvh_contacto_donante'] != vehiculo_original['vh_contacto_donante']: }}
+                              <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_contacto_donante'] }})</em>
+                            {{ pass }}
+                        </div>
+                    {{ pass }}
+                </div>
+            </div>
+
+            <div id="tab-5"class="tab-content">
+                {{include 'inventarios/mantenimiento.html'}}
+            </div>
+            <div id="tab-6"class="tab-content">En desarrollo</div>
+
+    
+        </div>
+        
+    </div>
+
+
+
+  <script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+      </script>
+
+<script>
+
+        var filtros = false;
+      
+        $(document).ready(function() {
+            // Setup - add a text input to each footer cell
+            $('#datatable tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Filtro" />' );
+            } );
+         
+            // DataTable
+            var table = $('#datatable').DataTable();
+         
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+         
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+      
+            $('#datatable tfoot tr').appendTo('#datatable thead');
+            $("#datatable thead tr").not("#titulosListado").css("display","none");
+        } );
+      
+        function mostrarFiltro() {
+            if (filtros){
+              $("#datatable thead tr").not("#titulosListado").css("display","none");
+              filtros = false
+            }
+            else{
+              $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+              filtros = true
+            }
+      
+        }
+      </script>
+       
+       <script language="javascript">
+    
+            var table = $('#datatable').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            "columnDefs": [
+                { "width": "30%", "targets": 0, className: 'dt-body-left' },
+                { "width": "10%", "targets": [1,2,3] }
+            ],
+            initComplete: function(){
+                var api = this.api();
+        
+                new $.fn.dataTable.Buttons(api, {
+                buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+        
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-save"></i>',
+                        className: 'boton-sigulab',
+                        buttons: [
+                            { extend:'copy', text: 'Copiar' } ,
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]
+                    },
+                    { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                ]
+                });
+                //$('#botonModal').addClass('pull-left')
+                $('#filtrar').addClass('pull-left');
+                $('#espacioBuscar').addClass('pull-left');
+        
+        
+                $('.dataTables_filter').appendTo('#buttons');
+        
+                api.buttons().container().appendTo('#buttons');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('.dt-buttons').append($('#filtrar'));
+                $('#buttons').append('<br><br>');
+                $('.dataTables_info').addClass('pull-right');
+                $('.dataTables_filter').addClass('pull-left');
+        
+                $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable_next').html('<span class="fa fa-arrow-right" />');
+                
+            }
+            });
+    
+        </script>
+
+  {{end}}
