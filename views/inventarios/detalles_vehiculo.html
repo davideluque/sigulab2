@@ -1232,6 +1232,11 @@
     $('.campo_telf').mask('(0000) 000-0000');
   });
 
+  // Máscara js para formato de extensión
+  $(document).ready(function() {
+    $('.campo_extension').mask('0000');
+  });
+
   // Validación de formato de extension custodio (formato del regex establecido)
   $(".campo_extension").focusout(function() {
     var extension = $(this).val();
