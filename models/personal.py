@@ -175,3 +175,57 @@ db.define_table(
 
 db.t_Extension._plural = 'Extensiones'
 db.t_Extension._singular = 'Extension'
+
+#t_Competencias: Tabla de Competencias.
+db.define_table(
+    't_Competencias',
+    # Atributos
+    Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Competencia')),
+    Field('f_observaciones', 'string', length=150, label=T('Observaciones')),
+    Field('f_Competencia_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Competencias._plural = 'Competencias'
+db.t_Competencias._singular = 'Competencia'
+
+#t_Personal: Tabla de Historial de trabajo.
+db.define_table(
+    #Nombre de la entidad
+    't_Historial_trabajo_nuevo', 
+    #Atributos;
+    Field('f_fecha_inicio_1', 'date', label=T('Desde')),
+    Field('f_fecha_final_1', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_1', 'string', label=T('Dependencia')),
+    Field('f_organizacion_1',          'string', label=T('Organización')),
+    Field('f_cargo_hist_1',          'string', label=T('Cargo')),
+    Field('f_rol_hist_1',          'string', label=T('Rol')),
+    Field('f_fecha_inicio_2', 'date', label=T('Desde')),
+    Field('f_fecha_final_2', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_2', 'string', label=T('Dependencia')),
+    Field('f_organizacion_2',          'string',label=T('Organización')),
+    Field('f_cargo_hist_2',          'string', label=T('Cargo')),
+    Field('f_rol_hist_2',          'string', label=T('Rol')),
+    Field('f_fecha_inicio_3', 'date', label=T('Desde')),
+    Field('f_fecha_final_3', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_3', 'string', label=T('Dependencia')),
+    Field('f_organizacion_3',          'string', label=T('Organización')),
+    Field('f_cargo_hist_3',          'string', label=T('Cargo')),
+    Field('f_rol_hist_3',          'string', label=T('Rol')),
+    Field('f_fecha_inicio_4', 'date', label=T('Desde')),
+    Field('f_fecha_final_4', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_4', 'string', label=T('Dependencia')),
+    Field('f_organizacion_4',          'string', label=T('Organización')),
+    Field('f_cargo_hist_4',          'string', label=T('Cargo')),
+    Field('f_rol_hist_4',          'string', label=T('Rol')),
+    Field('f_fecha_inicio_5', 'date', label=T('Desde')),
+    Field('f_fecha_final_5', 'date', label=T('Hasta')),
+    Field('f_dependencia_hist_5', 'string', label=T('Dependencia')),
+    Field('f_organizacion_5',          'string', label=T('Organización')),
+    Field('f_cargo_hist_5',          'string', label=T('Cargo')),
+    Field('f_rol_hist_5',          'string',label=T('Rol')),
+    #Referencia (Revisar si el label es asistio o organizo)
+    Field('f_Historial_trabajo_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Posee')),
+    )
+
+db.t_Historial_trabajo_nuevo._plural = 'Historial de trabajo'
+db.t_Historial_trabajo_nuevo._singular = 'Historial de trabajo'
