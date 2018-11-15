@@ -3,12 +3,31 @@
  */
 
 const requiredFieldMessage = 'Este campo es requerido'
+
+
+
+
+
+
+
+
+
+/*
+COLOCA EN INPUTS TODOS TUS CAMPOS
+*/
+
+
+
+
+
+
 const inputs = [
     'nombre_add', 'apellido_add', 'ci_add', 'email_add', 'email_alt_add', 'telefono_add',
     'pagina_web_add', 'categoria_add', 'cargo_add', 'fecha_ingreso_add', 'fecha_salida_add',
     'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add',
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
+    'fecha_inicio_1_add',
 ]
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
@@ -282,7 +301,7 @@ function validaFechaSalida(){
     const fecha_final = voltearFecha($this.val());
 
     if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isSameOrBefore(fecha_final)){
-        $this.attr("data-content", "La fecha de egreso tiene que ser antes que la fecha de ingreso o igual a esta");
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -460,6 +479,397 @@ const validadoresTercerPaso = [
     validarRol
 ]
 
+// Funciones para validar los campos de historial de trabajo
+
+function validaTrabajo1() {
+    // Campos del formulario de un trabajo
+    const $fechIn= $('[name="fecha_inicio_1_add"]');
+    const $fechFin = $('[name="fecha_final_1_add');
+    const $depen = $('[name="dependencia_hist_1_add"]');
+    const $org = $('[name="organizacion_1_add"]');
+    const $cargo = $('[name="cargo_hist_1_add"]');
+    var arreglo = [$fechIn, $fechFin, $depen, $org, $cargo]
+    var validacion = true;
+    //Si uno de los campos de un trabajo esta lleno entonces los
+    // demás también son requeridos
+    for (var i=0; i<arreglo.length; i++) {
+        if (arreglo[i].val() !== "") {
+            for (var j=0; j<arreglo.length; j++) {
+                if (arreglo[j].val() === ""){
+                    arreglo[j].attr("data-content", requiredFieldMessage);
+                    arreglo[j].addClass('input-error');
+                    arreglo[j].attr("data-valido", "false");
+                    arreglo[j].popover('show');
+                    validacion = false;
+                } else {
+                    arreglo[j].removeClass('input-error');
+                    arreglo[j].popover('hide');
+                }
+            }
+            break;
+        }
+    }
+    return validacion;
+}
+
+function validaTrabajo2() {
+    const $fechIn= $('[name="fecha_inicio_2_add"]');
+    const $fechFin = $('[name="fecha_final_2_add');
+    const $depen = $('[name="dependencia_hist_2_add"]');
+    const $org = $('[name="organizacion_2_add"]');
+    const $cargo = $('[name="cargo_hist_2_add"]');
+    var arreglo = [$fechIn, $fechFin, $depen, $org, $cargo]
+    var validacion = true;
+
+    for (var i=0; i<arreglo.length; i++) {
+        if (arreglo[i].val() !== "") {
+            for (var j=0; j<arreglo.length; j++) {
+                if (arreglo[j].val() === ""){
+                    arreglo[j].attr("data-content", requiredFieldMessage);
+                    arreglo[j].addClass('input-error');
+                    arreglo[j].attr("data-valido", "false");
+                    arreglo[j].popover('show');
+                    validacion = false;
+                } else {
+                    arreglo[j].removeClass('input-error');
+                    arreglo[j].popover('hide');
+                }
+            }
+            break;
+        }
+    }
+    return validacion;
+}
+
+function validaTrabajo3() {
+    const $fechIn= $('[name="fecha_inicio_3_add"]');
+    const $fechFin = $('[name="fecha_final_3_add');
+    const $depen = $('[name="dependencia_hist_3_add"]');
+    const $org = $('[name="organizacion_3_add"]');
+    const $cargo = $('[name="cargo_hist_3_add"]');
+    var arreglo = [$fechIn, $fechFin, $depen, $org, $cargo]
+    var validacion = true;
+
+    for (var i=0; i<arreglo.length; i++) {
+        if (arreglo[i].val() !== "") {
+            for (var j=0; j<arreglo.length; j++) {
+                if (arreglo[j].val() === ""){
+                    arreglo[j].attr("data-content", requiredFieldMessage);
+                    arreglo[j].addClass('input-error');
+                    arreglo[j].attr("data-valido", "false");
+                    arreglo[j].popover('show');
+                    validacion = false;
+                } else {
+                    arreglo[j].removeClass('input-error');
+                    arreglo[j].popover('hide');
+                }
+            }
+            break;
+        }
+    }
+    return validacion;
+}
+
+function validaTrabajo4() {
+    const $fechIn= $('[name="fecha_inicio_4_add"]');
+    const $fechFin = $('[name="fecha_final_4_add');
+    const $depen = $('[name="dependencia_hist_4_add"]');
+    const $org = $('[name="organizacion_4_add"]');
+    const $cargo = $('[name="cargo_hist_4_add"]');
+    var arreglo = [$fechIn, $fechFin, $depen, $org, $cargo]
+    var validacion = true;
+
+    for (var i=0; i<arreglo.length; i++) {
+        if (arreglo[i].val() !== "") {
+            for (var j=0; j<arreglo.length; j++) {
+                if (arreglo[j].val() === ""){
+                    arreglo[j].attr("data-content", requiredFieldMessage);
+                    arreglo[j].addClass('input-error');
+                    arreglo[j].attr("data-valido", "false");
+                    arreglo[j].popover('show');
+                    validacion = false;
+                } else {
+                    arreglo[j].removeClass('input-error');
+                    arreglo[j].popover('hide');
+                }
+            }
+            break;
+        }
+    }
+    return validacion;
+}
+
+function validaTrabajo5() {
+    const $fechIn= $('[name="fecha_inicio_5_add"]');
+    const $fechFin = $('[name="fecha_final_5_add');
+    const $depen = $('[name="dependencia_hist_5_add"]');
+    const $org = $('[name="organizacion_5_add"]');
+    const $cargo = $('[name="cargo_hist_5_add"]');
+    var arreglo = [$fechIn, $fechFin, $depen, $org, $cargo]
+    var validacion = true;
+
+    for (var i=0; i<arreglo.length; i++) {
+        if (arreglo[i].val() !== "") {
+            for (var j=0; j<arreglo.length; j++) {
+                if (arreglo[j].val() === ""){
+                    arreglo[j].attr("data-content", requiredFieldMessage);
+                    arreglo[j].addClass('input-error');
+                    arreglo[j].attr("data-valido", "false");
+                    arreglo[j].popover('show');
+                    validacion = false;
+                } else {
+                    arreglo[j].removeClass('input-error');
+                    arreglo[j].popover('hide');
+                }
+            }
+            break;
+        }
+    }
+    return validacion;
+}
+
+function validaFechaInicio1(){
+    const $this = $('[name="fecha_inicio_1_add"]');
+    if ($this.val() !== ""){
+        if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.addClass('input-error');
+            $this.attr("data-valido", 'false');
+            $this.popover('show');
+            return false;
+        }
+        else{
+            $this.removeClass('input-error');
+            $this.popover('hide');
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validaFechaFin1(){
+    const $this = $('[name="fecha_final_1_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_inicio_1_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaInicio2(){
+    const $this = $('[name="fecha_inicio_2_add"]');
+    if ($this.val() != ""){
+        if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.addClass('input-error');
+            $this.attr("data-valido", 'false');
+            $this.popover('show');
+            return false;
+        }
+        else{
+            $this.removeClass('input-error');
+            $this.popover('hide');
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validaFechaFin2(){
+    const $this = $('[name="fecha_final_2_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_inicio_2_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaInicio3(){
+    const $this = $('[name="fecha_inicio_3_add"]');
+    if ($this.val() != ""){
+        if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.addClass('input-error');
+            $this.attr("data-valido", 'false');
+            $this.popover('show');
+            return false;
+        }
+        else{
+            $this.removeClass('input-error');
+            $this.popover('hide');
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validaFechaFin3(){
+    const $this = $('[name="fecha_final_3_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_inicio_3_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaInicio4(){
+    const $this = $('[name="fecha_inicio_4_add"]');
+    if ($this.val() != ""){
+        if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.addClass('input-error');
+            $this.attr("data-valido", 'false');
+            $this.popover('show');
+            return false;
+        }
+        else{
+            $this.removeClass('input-error');
+            $this.popover('hide');
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validaFechaFin4(){
+    const $this = $('[name="fecha_final_4_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_inicio_4_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+function validaFechaInicio5(){
+    const $this = $('[name="fecha_inicio_5_add"]');
+    if ($this.val() != ""){
+        if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.addClass('input-error');
+            $this.attr("data-valido", 'false');
+            $this.popover('show');
+            return false;
+        }
+        else{
+            $this.removeClass('input-error');
+            $this.popover('hide');
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validaFechaFin5(){
+    const $this = $('[name="fecha_final_5_add"]');
+    const fecha_inicio = voltearFecha($('[name="fecha_inicio_5_add"]').val());
+    const fecha_final = voltearFecha($this.val());
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
+const validadoresQuintoPaso = [
+    validaTrabajo1,
+    validaTrabajo2,
+    validaTrabajo3,
+    validaTrabajo4,
+    validaTrabajo5,
+    validaFechaInicio1,
+    validaFechaFin1,
+    validaFechaInicio2,
+    validaFechaFin2,
+    validaFechaInicio3,
+    validaFechaFin3,
+    validaFechaInicio4,
+    validaFechaFin4,
+    validaFechaInicio5,
+    validaFechaFin5
+]
+
+
+
+// ESCRIBE AQUI TUS FUNCIONES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ESCRIBE ALGO COMO
+/*
+const validadoresSextoPaso = [
+]
+*/
+
+
+
+
+
+
 // Funcion que valida los campos cuando el usuario pasa a llenar otro input
 function validacionTiempoReal(){
 
@@ -479,6 +889,8 @@ function validacionTiempoReal(){
     $('[name="pagina_web_add"]').on('change', validaPaginaWeb)
 
     $('[name="direccion_add"]').on('change', validaDireccionHab)
+
+    //$('[name="fecha_inicio_1_add"]').on('change', validaFechaInicio)
 }
 
 /**
@@ -537,6 +949,7 @@ $(document).ready(function () {
 
     // next step
     $('.registration-form .btn-next').on('click', function () {
+
         var parent_fieldset = $(this).parents('fieldset');
         var next_step = true;
         if (parent_fieldset.attr('id') === 'p1') {
@@ -555,6 +968,42 @@ $(document).ready(function () {
                 next_step = validadoresCorrectos(validadoresSegundoPaso)
             }
         }
+        else if (parent_fieldset.attr('id') === 'p3'){
+            next_step = validadoresCorrectos(validadoresTercerPaso)
+        }
+
+
+
+
+
+
+
+
+        /* AQUI VAN OTROS ELSE IF CON LOS PASOS POR EJEMPLO
+        
+        //Paso de Moises
+        else if (parent_fieldset.attr('id') === 'p4')
+            next_step = validadoresCorrectos(validadoresCuartoPaso)
+        
+        // Paso de Constanza
+        else if(parent_fieldset.attr('id') === 'p5')
+            next_step = validadoresCorrectos(validadoresQuintoPaso)
+
+        SI EL TUYO ES EL ULTIMO PASO ANTES DE HACER SUBMMIT NO VA AQUI
+
+        */
+
+
+
+
+
+
+
+
+
+
+
+
 
         if (next_step) {
             parent_fieldset.fadeOut(400, function () {
@@ -586,9 +1035,32 @@ $(document).ready(function () {
         }
       });
     // submit
-    $('#submit').on('click', function (e) {
+    $('.registration-form .btn-submit').on('click', function (e) {
+        
         var parent_fieldset = $(this).parents('fieldset');
-        var enviar = validadoresCorrectos(validadoresTercerPaso);
+        
+        var enviar = validadoresCorrectos(validadoresQuintoPaso);
+
+
+
+
+        /* 
+        SI TU PASO ES EL ULTIMO ANTES DE HACER SUBMIT ENTONCES COLOCA TUS
+        FUNCIONES EN ENVIAR POR EJEMPLO
+        var enviar = validadoresCorrectos(validadoresSextoPaso);
+        Y LISTO
+        */
+
+
+
+
+
+
+
+
+
+
+
         console.log(enviar)
         if (enviar){
             $(this).attr("type", "submit");

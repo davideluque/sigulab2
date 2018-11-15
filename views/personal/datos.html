@@ -1,0 +1,126 @@
+<!-- Subseccion con los datos basicos y personales del usuario -->
+<br>
+<div class="tab-pane" id="tab2">
+  <div class="span8">
+    <div class="tabbable tabs-left">
+
+      <ul class="nav nav-tabs " id="myTab" role="tablist">
+
+        <li role="presentation" class="nav-item active">
+          <a href="#datos_basicos" class="nav-link  active " data-toggle="tab" role="tab" aria-controls="datos_basicos"><b>Básico</b></a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="nav-link  " id="tab_datos_personales" href="#datos_personales" data-toggle="tab" role="tab" aria-controls="datos_personales"><b>Personal</b></a>
+        </li>
+
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active " id="datos_basicos" role="tabpanel">
+          <table class="table contenidoFicha" id="tabla_datos_basicos">
+            <tbody>
+                {{if bool(personal['nombre']) :}}
+              <tr>
+                <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['apellido']) :}}
+              <tr>
+                <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['email']) :}}
+              <tr>
+                <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['extension_USB']) :}}
+              <tr>
+                <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['extension_interna']) :}}
+              <tr>
+                <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['pagina_web']) :}}
+              <tr>
+                <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['rol']) :}}
+              <tr>
+                <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['dependencia']) :}}
+              <tr>
+                <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['unidad_jerarquica_superior']) :}}
+              <tr>
+                  <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
+              </tr>
+                {{pass}}
+                {{if bool(personal['ubicaciones']) :}}
+                <tr>
+                    <td>Ubicación(es):</td><td id="field_ubicacion">
+                      <ul>
+                        {{for ubicacion in personal['ubicaciones']:}}
+                        <li>{{=ubicacion.codigo}}</li>
+                        {{pass}}
+                      </ul>
+                    </td>
+                </tr>
+                {{pass}}
+             
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane" id="datos_personales" role="tabpanel">
+          <table class="table contenidoFicha" id="tabla_datos_personales">
+            <tbody>
+                <tr>
+                  <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
+                </tr>
+                {{pass}}
+                <tr>
+                  <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
+                </tr>
+                {{pass}}
+                <tr>
+                  <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
+                </tr>
+                {{pass}}
+                <tr>
+                    <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
+                </tr>
+                {{pass}}
+                <tr>
+                  <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
+                </tr>
+                {{pass}}
+              </tbody>
+             </table>
+                
+             <h5 class=" text-center"><b>En caso de emergencia llamar a:</b></h5></br>
+                
+             <table class="table contenidoFicha">
+                 <tbody>
+                <tr>
+                  <td >Contacto:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
+                </tr>
+                <tr >
+                  <td>Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

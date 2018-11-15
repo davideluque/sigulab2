@@ -164,6 +164,111 @@
                   </fieldset>
                   <!-- Fin Tercer Paso -->
 
+                  <fieldset>
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
+                        <span class="step">5</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos Laborales</h4>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Cargo</label>
+                            <input value="{{=usuario.f_cargo or ''}}" type="text" class="form-control" name="cargo_add" placeholder="Cargo" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                            <font color="red"><div id="err_cargo" hidden></div></font>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                              <label>Gremio</label>
+                            <select class="form-control" id="sel1" name="gremio_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_gremio :}}
+                              selected
+                              {{pass}}
+                              >Gremio</option>
+                              {{for gremio in gremios:}}
+                              <option
+                              {{ if gremio == usuario.f_gremio: }}
+                              selected
+                              {{pass}}
+                              value="{{=gremio}}">{{=gremio}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label>Dependencia</label>
+                            <input type="text" class="form-control" name="dependencia_add" placeholder="Dependencia" readonly required value="{{=usuario.f_dependencia or ''}}">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                              <label>Ubicación</label>
+                            <select multiple="multiple" class="form-control fselect" id="sel1" name="ubicacion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                              <option selected hidden disabled value=""
+                              {{ if not usuario.f_ubicacion :}}
+                              selected
+                              {{pass}}
+                              >Ubicación</option>
+                              {{for ubicacion in ubicaciones:}}
+                              <option
+                              {{ if str(ubicacion.id) in usuario.f_ubicacion: }}
+                              selected
+                              {{pass}}
+                              value="{{=ubicacion.id}}">{{=ubicacion.codigo}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                        </div>
+                        <div hidden class="form-group">
+                          <div class="col-sm-12">
+                            <label>Extension</label>
+                            <input type="text" class="form-control" name="extension_add" placeholder="Extension" >
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                              <label>Rol</label>
+                              <select class="form-control" id="sel1" name="rol_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
+                            <option selected hidden disabled
+                            {{ if not usuario.f_rol :}}
+                              selected
+                              {{pass}}
+                              >Rol</option>
+                              {{for rol in roles:}}
+                              <option
+                              {{ if rol == usuario.f_rol: }}
+                              selected
+                              {{pass}}
+                              value="{{=rol}}">{{=rol}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="botones-form">
+                      <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                      <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                    </div>
+
+                  </fieldset>
+
               </form>
           </div>
         </div>               

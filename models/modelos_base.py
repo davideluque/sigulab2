@@ -226,3 +226,4 @@ db.define_table(
     Field('f_accion', label=T('Acción')),
     auth.signature
 )
+
