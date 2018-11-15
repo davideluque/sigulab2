@@ -131,7 +131,7 @@
                       Sede:
                 </div>
                 <div class="grid-item">
-                       {{=db(db.sedes.id == vehiculo['vh_sede']).select().first().nombre}}
+                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
                 </div>
                 <div class="grid-item">
                       Dependencia:
@@ -1186,7 +1186,7 @@
     }
   }
   });
-  
+
   // Máscara js para formato de RIF
   $(document).ready(function() {
     $('#proveedor_rif').mask('X-000000000-0', {
