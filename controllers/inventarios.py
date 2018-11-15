@@ -1717,6 +1717,177 @@ def detalles_mod():
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_mod_vehiculo():
+    vh_id = request.vars['vh']
+    vehiculo = db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).select()[0] # vh que sera modificado
+    vehiculo_original = db(db.vehiculo.id == vh_id).select()[0]
+
+    cod_localizacion = {
+        'Sartenejas': 150301,
+        'Litoral': 240107
+    }
+
+    localizacion = {
+        'Sartenejas': 'Edo Miranda, Municipio Baruta, Parroquia Baruta',
+        'Litoral': 'Edo Vargas, Municipio Vargas, Parroquia Macuto'
+    }
+
+    mantenimiento = __get_mantenimiento_vh(vehiculo_original['id'])
+
+    if request.vars.si:
+        db(db.vehiculo.id == vh_id).select().first().update_record(
+            vh_num=vehiculo['mvh_num'],
+            vh_marca=vehiculo['mvh_marca'],
+            vh_modelo=vehiculo['mvh_modelo'],
+            vh_ano=vehiculo['mvh_ano'],
+            vh_extension_custodio=vehiculo['mvh_extension_custodio'],
+            vh_ubicacion_custodio=vehiculo['mvh_ubicacion_custodio'],
+            vh_serial_motor=vehiculo['mvh_serial_motor'],
+            vh_serial_carroceria=vehiculo['mvh_serial_carroceria'],
+            vh_serial_chasis=vehiculo['mvh_serial_chasis'],
+            vh_placa=vehiculo['mvh_placa'],
+            vh_rines=vehiculo['mvh_rines'],
+            vh_capacidad_carga_md=vehiculo['mvh_capacidad_carga_md'],
+            vh_intt=vehiculo['mvh_intt'],
+            vh_tipo=vehiculo['mvh_tipo'],
+            vh_clasificacion=vehiculo['mvh_clasificacion'],
+            vh_observaciones=vehiculo['mvh_observaciones'],
+            vh_lugar_pernocta=vehiculo['mvh_lugar_pernocta'],
+            vh_color=vehiculo['mvh_color'],
+            vh_clase=vehiculo['mvh_clase'],
+            vh_uso=vehiculo['mvh_uso'],
+            vh_servicio=vehiculo['mvh_servicio'],
+            vh_tara=vehiculo['mvh_tara'],
+            vh_tara_md=vehiculo['mvh_tara_md'],
+            vh_nro_puestos=vehiculo['mvh_nro_puestos'],
+            vh_nro_ejes=vehiculo['mvh_nro_ejes'],
+            vh_capacidad_carga=vehiculo['mvh_capacidad_carga'],
+            vh_propietario=vehiculo['mvh_propietario'],
+            vh_responsable=vehiculo['mvh_responsable'],
+            vh_telf_responsable=vehiculo['mvh_telf_responsable'],
+            vh_extension_responsable=vehiculo['mvh_extension_responsable'],
+            vh_custodio=vehiculo['mvh_custodio'],
+            vh_telf_custodio=vehiculo['mvh_telf_custodio'],
+            vh_sudebip_subcategoria=vehiculo['mvh_sudebip_subcategoria'],
+            vh_sudebip_categoria_especifica=vehiculo['mvh_sudebip_categoria_especifica'],
+            vh_fecha_adquisicion=vehiculo['mvh_fecha_adquisicion'],
+            vh_origen=vehiculo['mvh_origen'],
+            vh_nro_adquisicion=vehiculo['mvh_nro_adquisicion'],
+            vh_proveedor=vehiculo['mvh_proveedor'],
+            vh_proveedor_rif=vehiculo['mvh_proveedor_rif'],
+            vh_donante=vehiculo['mvh_donante'],
+            vh_contacto=vehiculo['mvh_contacto_donante'],
+            vh_es_particular=vehiculo['mvh_es_particular'],
+            vh_oculto=vehiculo['mvh_oculto'],
+        )
+
+        db.bitacora_general.insert(
+            f_accion="[inventarios] Modificada la información del vehículo num {}".format(vehiculo['mvh_num'])
+        )
+        db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
+        session.flash = "La información sobre el vehículo ha sido modificada"
+        redirect(URL('validaciones'))
+
+    if request.vars.no:
+        db.bitacora_general.insert(
+            f_accion="[inventarios] Rechazada modificación de la información del vehículo num {}".format(vehiculo['mvh_num'])
+        )
+        db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
+        session.flash = "La información sobre el vehículo no ha sido modificada"
+        redirect(URL('validaciones'))
+
+    caracteristicas_list = [
+        'Nº Bien Mueble',
+        'Propietario',
+        'Placa',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
+        'Marca',
+        'Modelo / Código',
+        'Año',
+        'Color',
+        'Clase',
+        'Tipo',
+        'Clasificación',
+        'Uso',
+        'Servicio',
+        'Nº de Puestos',
+        'Nº de Ejes',
+        'Tara',
+        'Capacidad de carga',
+        'Nº de Autorización INTT',
+        'Rines',
+        'Observaciones',
+    ]
+
+    caracteristicas_dict = {
+        'Nº Bien Mueble': vehiculo['mvh_num'],
+        'Propietario': vehiculo['mvh_propietario'],
+        'Placa': vehiculo['mvh_placa'],
+        'Marca': vehiculo['mvh_marca'],
+        'Modelo / Código': vehiculo['mvh_modelo'],
+        'Año': vehiculo['mvh_ano'],
+        'Serial de carroceria': vehiculo['mvh_serial_carroceria'],
+        'Serial de motor': vehiculo['mvh_serial_motor'],
+        'Serial de chasis': vehiculo['mvh_serial_chasis'],
+        'Color': vehiculo['mvh_color'],
+        'Clase': vehiculo['mvh_clase'],
+        'Tipo': vehiculo['mvh_tipo'],
+        'Clasificación': vehiculo['mvh_clasificacion'],
+        'Uso': vehiculo['mvh_uso'],
+        'Servicio': vehiculo['mvh_servicio'],
+        'Nº de Puestos': vehiculo['mvh_nro_puestos'],
+        'Nº de Ejes': vehiculo['mvh_nro_ejes'],
+        'Tara': str(vehiculo['mvh_tara']) + " " + vehiculo['mvh_tara_md'],
+        'Capacidad de carga': str(vehiculo['mvh_capacidad_carga']) + " " + vehiculo['mvh_capacidad_carga_md'],
+        'Nº de Autorización INTT': vehiculo['mvh_intt'],
+        'Rines': vehiculo['mvh_rines'],
+        'Observaciones': vehiculo['mvh_observaciones'],
+    }
+
+    caracteristicas_originales_dict = {
+        'Nº Bien Mueble': vehiculo_original['vh_num'],
+        'Propietario': vehiculo_original['vh_propietario'],
+        'Placa': vehiculo_original['vh_placa'],
+        'Marca': vehiculo_original['vh_marca'],
+        'Modelo / Código': vehiculo_original['vh_modelo'],
+        'Año': vehiculo_original['vh_ano'],
+        'Serial de carroceria': vehiculo_original['vh_serial_carroceria'],
+        'Serial de motor': vehiculo_original['vh_serial_motor'],
+        'Serial de chasis': vehiculo_original['vh_serial_chasis'],
+        'Color': vehiculo_original['vh_color'],
+        'Clase': vehiculo_original['vh_clase'],
+        'Tipo': vehiculo_original['vh_tipo'],
+        'Clasificación': vehiculo_original['vh_clasificacion'],
+        'Uso': vehiculo_original['vh_uso'],
+        'Servicio': vehiculo_original['vh_servicio'],
+        'Nº de Puestos': vehiculo_original['vh_nro_puestos'],
+        'Nº de Ejes': vehiculo_original['vh_nro_ejes'],
+        'Tara': str(vehiculo_original['vh_tara']) + " " + vehiculo_original['vh_tara_md'],
+        'Capacidad de carga': str(vehiculo_original['vh_capacidad_carga']) + " " + vehiculo_original['vh_capacidad_carga_md'],
+        'Nº de Autorización INTT': vehiculo_original['vh_intt'],
+        'Rines': vehiculo_original['vh_rines'],
+        'Observaciones': vehiculo_original['vh_observaciones'],
+    }
+
+    depend = db(db.dependencias.id == vehiculo['mvh_dependencia']).select().first()
+    sede_id = int(depend.id_sede)
+
+    return dict(
+        vehiculo=vehiculo,
+        vehiculo_original=vehiculo_original,
+        mantenimiento=mantenimiento,
+        caracteristicas_list=caracteristicas_list,
+        caracteristicas_originales_dict=caracteristicas_originales_dict,
+        caracteristicas_dict=caracteristicas_dict,
+        cod_localizacion=cod_localizacion,
+        localizacion=localizacion,
+        sede_id=sede_id
+    )
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -1741,7 +1912,7 @@ def detalles():
         db.bitacora_general.insert(
             f_accion="[inventarios] Rechazada eliminación del bien mueble num {} del espacio físico {}".format(bien['bm_num'], espacio_nombre)
         )
-        db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar = 2)
+        db(db.bien_mueble.bm_num == bien['bm_num']).select().first().update_record(bm_eliminar=2)
         session.flash = "El bien mueble no ha sido eliminado"
         redirect(URL('validaciones'))
 
