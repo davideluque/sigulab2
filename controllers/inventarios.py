@@ -237,11 +237,11 @@ def __get_inventario_herramientas_dep(dep_id):
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
-    return db(db.vehiculo.vh_dependencia == dep_id).select()
+    return db(db.vehiculo.vh_dependencia == dep_id and db.vehiculo.vh_eliminar != 1).select()
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
 def __get_mantenimiento_vh(vh_id=None):
-    return db(db.historial_mantenimiento_vh.hmvh_placa == vh_id).select()
+    return db(db.historial_mantenimiento_vh.hmvh_id == vh_id).select()
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo
@@ -995,19 +995,25 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 def index():
     solicitudes_pendientes = validaciones()
     numero_solicitudes = 0
-    if(len(solicitudes_pendientes['inventario'][0]) != 0 or \
+    if (
+        len(solicitudes_pendientes['inventario'][0]) != 0 or \
         len(solicitudes_pendientes['inventario'][1]) != 0 or \
         len(solicitudes_pendientes['inventario'][2]) != 0 or \
         len(solicitudes_pendientes['inventario_eliminar'][0]) != 0 or \
         len(solicitudes_pendientes['inventario_eliminar'][1]) != 0 or \
-        len(solicitudes_pendientes['inventario_eliminar'][2]) != 0
-        ):
+        len(solicitudes_pendientes['inventario_eliminar'][2]) != 0 or \
+        len(solicitudes_pendientes['inventario_eliminar_vehiculos']) != 0 or \
+        len(solicitudes_pendientes['inventario_vehiculos']) != 0
+    ):
         numero_solicitudes = len(solicitudes_pendientes['inventario'][0]) + \
         len(solicitudes_pendientes['inventario'][1]) + \
         len(solicitudes_pendientes['inventario'][2]) + \
         len(solicitudes_pendientes['inventario_eliminar'][0]) + \
         len(solicitudes_pendientes['inventario_eliminar'][1]) + \
-        len(solicitudes_pendientes['inventario_eliminar'][2])
+        len(solicitudes_pendientes['inventario_eliminar'][2]) + \
+        len(solicitudes_pendientes['inventario_vehiculos']) + \
+        len(solicitudes_pendientes['inventario_eliminar_vehiculos'])
+
     return dict(numero_solicitudes=numero_solicitudes)
 
 @auth.requires(lambda: __check_role())
@@ -1372,7 +1378,7 @@ def vehiculos():
     elif request.vars.dependencia:
         inventario = __get_vh_dep(int(request.vars.dependencia))
     else:
-        inventario = db(db.vehiculo.id).select()
+        inventario = db(db.vehiculo.id and db.vehiculo.vh_eliminar != 1).select()
 
     # Devolvemos las categorias de vehiculos
     dict_categorias = __obtener_categorias()
@@ -2284,6 +2290,7 @@ def detalles_vehiculo():
         # de errores
         return "El vehiculo solicitado no existe."
 
+    nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
 
     print(vehi['vh_eliminar'])
@@ -2302,30 +2309,27 @@ def detalles_vehiculo():
             )
 
             db.bitacora_general.insert(
-                f_accion="[inventarios] Solicitada eliminación del vehiculo de placa {} de la dependencia {}.".format(vehi['vh_placa'], vehi['vh_dependencia'])
+                f_accion="[inventarios] Solicitada eliminación del vehiculo de placa {} de la dependencia {}.".format(vehi['vh_placa'], nombre_dependencia)
             )
             session.flash = "Se ha solicitado la eliminación del vehículo de placa %s." % vh
         redirect(URL('detalles_vehiculo', vars=dict(vh=vh)))
 
     # Si se elimina
     if request.vars.si:
-        db(db.historial_mantenimiento_vh.hmvh_placa == vh).delete()
-        db(db.vehiculo.vh_placa == vh).delete()
-        db(db.modificacion_vehiculo.mvh_placa == vh).delete()
-
         db.bitacora_general.insert(
-            f_accion="[inventarios] Eliminado el vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
+            f_accion="[inventarios] Eliminado el vehiculo de placa {} de la dependencia {}".format(vehi['vh_placa'], nombre_dependencia)
         )
+        db(db.vehiculo.vh_placa == vehi['vh_placa']).select().first().update_record(vh_eliminar=1)
         session.flash = "El vehiculo ha sido eliminado"
         redirect(URL('validaciones'))
 
     # Si no se elimina
     if request.vars.no:
         db.bitacora_general.insert(
-            f_accion="[inventarios] Rechazada eliminación del vehiculo de placa {} de la dependencia {}".format(vehi['placa'], vehi['dependencia_asignada'])
+            f_accion="[inventarios] Rechazada eliminación del vehiculo de placa {} de la dependencia {}".format(vehi['vh_placa'], nombre_dependencia)
         )
-        db(db.vehiculo.vh_placa == vehi['vh_placa']).select().first().update_record(vh_eliminar = 2)
-        session.flash = "El vehiculo no ha sido eliminado"
+        db(db.vehiculo.vh_placa == vehi['vh_placa']).select().first().update_record(vh_eliminar=2)
+        session.flash = "El vehiculo no ha sido eliminado."
         redirect(URL('validaciones'))
 
     # PENDIENTE: Quitar esto
@@ -3367,8 +3371,26 @@ def validaciones():
         inventario = __get_inventario_dep_validaciones(dep_id)
         inventario_eliminar = __get_inventario_dep_validaciones(dep_id, "eliminar")
 
+    # Obtenemos todos los vehículos
+    vehiculos = db(db.vehiculo.vh_responsable == user_id or db.vehiculo.vh_custodio == user_id).select()
+    inventario_vehiculos = []
+    inventario_eliminar_vehiculos = []
+    for auto in vehiculos:
+        if auto['vh_eliminar'] == 0:
+            inventario_eliminar_vehiculos.append(auto)
+        elif not db(
+                db.modificacion_vehiculo.mvh_estado == 0 and \
+                db.modificacion_vehiculo.mvh_placa == auto.vh_placa and \
+                (db.modificacion_vehiculo.mvh_responsable == user_id or \
+                    db.modificacion_vehiculo.mvh_custodio == user_id)
+            ).isempty():
+            inventario_vehiculos.append(auto)
+
     return dict(inventario=inventario,
-                inventario_eliminar = inventario_eliminar)
+                inventario_eliminar=inventario_eliminar,
+                inventario_vehiculos=inventario_vehiculos,
+                inventario_eliminar_vehiculos=inventario_eliminar_vehiculos
+            )
 
 # Muestra un crud para añadir bienes muebles
 def entrega0():

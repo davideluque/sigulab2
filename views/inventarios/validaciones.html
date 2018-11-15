@@ -179,7 +179,19 @@
 				  <td class="camposTabla">HERRAMIENTA</td>
 				  <td class="camposTabla">{{=herramienta['hr_desc_eliminar'].upper()}}</td>
 			  </tr>
-			{{pass}}              
+				{{pass}}
+				{{for vehi in inventario_eliminar_vehiculos:}}
+				<tr>
+					<td class="camposTabla">
+						<a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehi['vh_placa'], delete=True))}}">
+							{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+						</a>
+					</td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">{{=vehi['vh_tipo']}}</td>
+					<td class="camposTabla">{{=vehi['vh_desc_eliminar']}}</td>
+				</tr>
+				{{pass}}           
 			</tbody>
 	
 			<tfoot id="collapseFiltros">

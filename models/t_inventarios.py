@@ -541,7 +541,7 @@ db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa,
 
 db.define_table(
     'historial_mantenimiento_vh',
-    Field('hmvh_placa', 'references vehiculo', label = T('Placa del vehiculo')),
+    Field('hmvh_id', 'references vehiculo', label = T('Placa del vehiculo')),
     Field('hmvh_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
     Field('hmvh_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmvh_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
@@ -559,5 +559,5 @@ db.define_table(
     )
 
 # PENDIENTE: Verificar la siguiente restriccion
-db.historial_mantenimiento_vh.hmvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
+db.historial_mantenimiento_vh.hmvh_id.requires = IS_IN_DB(db, db.vehiculo.id, '%(id)s')
 db.historial_mantenimiento_vh.hmvh_crea_mantenimiento.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
