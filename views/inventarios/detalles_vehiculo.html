@@ -1237,6 +1237,16 @@
     $('.campo_extension').mask('0000');
   });
 
+  // Máscara js para formato de año
+  $(document).ready(function() {
+    $('#ano').mask('0000');
+  });
+
+  // Máscara js para formato de número de bien
+  $(document).ready(function() {
+    $('#num').mask('000000');
+  });
+
   // Validación de formato de extension custodio (formato del regex establecido)
   $(".campo_extension").focusout(function() {
     var extension = $(this).val();
