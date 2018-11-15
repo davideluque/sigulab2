@@ -320,7 +320,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
                  proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
-                 donante, contacto_donante, es_particular=0, oculto=0):
+                 donante, contacto_donante, oculto=0):
 
     # Si ya existe el VH en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
@@ -411,7 +411,6 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_proveedor_rif=proveedor_rif,
         vh_donante=donante,
         vh_contacto=contacto_donante,
-        vh_es_particular=es_particular,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
         vh_crea_ficha=user
@@ -696,7 +695,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
                                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
                                  proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
                                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
-                                 donante, contacto_donante, motivo, es_particular=0, oculto=0):
+                                 donante, contacto_donante, motivo, oculto=0):
 
     # Si ya existe una modificacion pendiente al vehículo
     if db(db.modificacion_vehiculo.mvh_id_vehiculo == id_vh).select():
@@ -754,7 +753,6 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
         mvh_donante=donante,
         mvh_contacto_donante=contacto_donante,
         mvh_motivo=motivo,
-        mvh_es_particular=es_particular,
         mvh_oculto=oculto
     )
 
@@ -1128,7 +1126,6 @@ def vehiculos():
             contacto_donante=request.vars.contacto_donante,
             dependencia=request.vars.dependencia,
             user=user,
-            es_particular=0,
             oculto=0
         )
         session.flash = "El vehículo de placa %s ha sido agregado." % request.vars.placa
@@ -1777,7 +1774,6 @@ def detalles_mod_vehiculo():
             vh_proveedor_rif=vehiculo['mvh_proveedor_rif'],
             vh_donante=vehiculo['mvh_donante'],
             vh_contacto=vehiculo['mvh_contacto_donante'],
-            vh_es_particular=vehiculo['mvh_es_particular'],
             vh_oculto=vehiculo['mvh_oculto'],
         )
 
@@ -2568,7 +2564,6 @@ def detalles_vehiculo():
             donante=request.vars.donante,
             contacto_donante=request.vars.contacto_donante,
             motivo=request.vars.motivo,
-            es_particular=0,
             oculto=0
         )
 
