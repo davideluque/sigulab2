@@ -1198,7 +1198,7 @@ def vehiculos():
 
             secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
 
-            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0],
+            dependencias = map(lambda x: db(db.dependencias.id == x).select(db.dependencias.ALL, orderby=db.dependencias.id)[0],
                                secciones_ids)
 
             dep_nombre = "Secciones"
@@ -1319,7 +1319,7 @@ def vehiculos():
                 dep_id = request.vars.dependencia
                 dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                 dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
-                                      ).select(db.dependencias.ALL))
+                                      ).select(db.dependencias.ALL, orderby=db.dependencias.id))
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
@@ -1350,7 +1350,7 @@ def vehiculos():
             # Se muestran las dependencias que componen a la dependencia que
             # tiene a cargo el usuario y el inventario agregado de esta
             dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
-                                  ).select(db.dependencias.ALL))
+                                  ).select(db.dependencias.ALL, orderby=db.dependencias.id))
 
             # Se muestra como inventario el egregado de los inventarios que
             # pertenecen a la dependencia del usuario
@@ -1385,8 +1385,6 @@ def vehiculos():
         dep_id = int(request.vars.dependencia)
     else:
         dep_id = 1
-
-        dependencias
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
