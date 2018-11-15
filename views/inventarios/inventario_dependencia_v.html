@@ -627,7 +627,7 @@
                           </div>
                           <div class="form-group">
                               <label>RIF*</label>
-                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF*" title="Ingrese el RIF">
+                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF* Formato X-000000000-0 " title="Ingrese el RIF - Formato X-000000000-0">
                               <div class="dr" id="error-rif" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -672,6 +672,7 @@
   var categorias_sudebip = {};
   var clasificaciones = {};
   var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
+  var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
   function isNum(str) {
@@ -764,6 +765,34 @@
       $(this).next().show();
       $(this).next().text("Formato: (0###) ###-####");
     }
+  });
+
+  $("#proveedor_rif").focusout(function() {
+    var rif = $(this).val();
+    if (regexRif.test(rif)) {
+      console.log("Pipi")
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+  else{
+    if ((rif.length < 13) && (rif.length >= 0)) {
+      console.log("NOPipi")
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: X-000000000-0. Complete con 0 en caso de ser necesario");
+    }
+  }
+  });
+  // Máscara js para formato de RIF
+  $(document).ready(function() {
+    $('#proveedor_rif').mask('X-000000000-0', {
+      translation: {
+        "X": {
+          pattern: /[JGVEPC]/
+            }
+        }
+    });
   });
 
   // Máscara js para formato de teléfono
