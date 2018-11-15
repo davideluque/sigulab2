@@ -1,0 +1,64 @@
+<h3>Extensión - Servicios</h3>
+
+{{for i in range(1,11):}}
+<div class="form-row">
+  <h4>Trabajo ({{=i}})</h4>
+    <div class="col-sm-6">
+        <label>Desde:</label>
+        <input class="datepicker" value="{{=lista_extension[i]['f_fecha_inicio']}}"
+                                  name="extension_desde_{{=i}}" type="text" id=""
+               data-placement="bottom" data-trigger="manual"
+               data-content="Seleccione una fecha"data-date-end-date="0d"/>
+        <span class="help-block"></span>
+
+    </div>
+    <div class="col-sm-6">
+        <label>Hasta:</label>
+        <input class="datepicker" value="{{=lista_extension[i]['f_fecha_fin']}}" name="extension_hasta_{{=i}}"
+               type="text" id="" data-placement="bottom"
+               data-trigger="manual" data-content="Seleccione una fecha" data-date-end-date="0d"/>
+        <span class="help-block"></span>
+    </div>
+
+</div>
+<div class="form-row">
+    <div class="col-sm-6">
+        <label>Nombre de la actividad:</label>
+        <input value="{{=lista_extension[i]['f_nombre']}}" type="text" class="form-control" name="extension_nombre_{{=i}}"
+         placeholder="" data-toggle="popover" data-placement="bottom"
+         data-trigger="manual" data-content="Este campo es requerido"/>
+        <span class="help-block"></span>
+    </div>
+    <div class="col-sm-6">
+        <label>Institucion:</label>
+        <input value="{{=lista_extension[i]['f_institucion']}}" type="text" class="form-control" name="extension_institucion_{{=i}}"
+         placeholder="Institucion" data-toggle="popover" data-placement="bottom"
+         data-trigger="manual" data-content="Este campo es requerido"/>
+        <span class="help-block"></span>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-sm-6">
+        <label>Descripción:</label>
+        <input value="{{=lista_extension[i]['f_descripcion']}}" type="text" class="form-control" name="extension_descripcion_{{=i}}"
+         placeholder="Institucion" id="" data-toggle="popover" data-placement="bottom"
+         data-trigger="manual" data-content="Este campo es requerido" required/>
+        <span class="help-block"></span>
+    </div>
+    <div class="col-sm-6">
+        <label>Categoría:</label>
+        <select class="form-control" name="extension_categoria_{{=i}}"
+            data-toggle="popover" data-placement="bottom"
+            data-trigger="manual" data-content="Este campo es requerido"/>
+        {{for competencia in competencias:}}
+        {{if competencia==lista_extension[i]['f_categoria']:}}
+        <option selected value="{{=competencia}}">{{=competencia}}</option>
+        {{else:}}
+        <option selected value="{{=competencia}}">{{=competencia}}</option>
+        {{pass}}
+        {{pass}}
+        </select>
+        <span class="help-block"></span>
+    </div>
+</div>
+{{pass}}

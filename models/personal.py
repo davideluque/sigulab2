@@ -350,6 +350,7 @@ db.define_table(
 db.t_Competencias._plural = 'Competencias'
 db.t_Competencias._singular = 'Competencia'
 
+<<<<<<< HEAD
 #t_Personal: Tabla de Historial de trabajo.
 db.define_table(
     #Nombre de la entidad
@@ -391,3 +392,28 @@ db.define_table(
 
 db.t_Historial_trabajo_nuevo._plural = 'Historial de trabajo'
 db.t_Historial_trabajo_nuevo._singular = 'Historial de trabajo'
+=======
+db.define_table(
+    't_Administrativas',
+    Field('f_fecha_inicio', 'string', requires=IS_DATE(), notnull=True, label=T('Fecha (desde)')),
+    Field('f_fecha_fin', 'string', requires=IS_DATE(), notnull=True, label=T('Fecha (hasta)')),
+    Field('f_cargo', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
+    Field('f_institucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Institución')),
+    Field('f_numero', 'integer', requires=IS_NOT_EMPTY(), notnull=True),
+    Field('f_Administrativas_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+        )
+
+db.define_table(
+    't_Extservicios',
+    Field('f_fecha_inicio', 'string', requires=IS_DATE(), notnull=True, label=T('Fecha (desde)')),
+    Field('f_fecha_fin', 'string', requires=IS_DATE(), notnull=True, label=T('Fecha (hasta)')),
+    Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Nombre de la actividad')),
+    Field('f_categoria', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Categoría')),
+    Field('f_descripcion', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Descripción')),
+    Field('f_institucion', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Institución')),
+    Field('f_numero', 'integer', requires=IS_NOT_EMPTY(), notnull=True),
+    Field('f_Extservicios_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+        )
+>>>>>>> c10d1182c41e25273d2da41e510cfa7a2bc67035

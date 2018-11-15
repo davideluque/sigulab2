@@ -241,6 +241,61 @@ def add_form():
     if type(ubicaciones) == str:
         ubicaciones = [ubicaciones]
 
+    
+    personal_id = db(db.t_Personal.f_email==dic['email']).select().first().id
+    # Extension y Servicios
+    for i in range(1,11):
+        params_extension = {
+                'f_fecha_inicio' : getattr(request.post_vars, 'extension_desde_{}'.format(i)),
+                'f_fecha_fin': getattr(request.post_vars,'extension_hasta_{}'.format(i)),
+                'f_nombre': getattr(request.post_vars,'extension_nombre_{}'.format(i)),
+                'f_descripcion': getattr(request.post_vars, 'extension_descripcion_{}'.format(i)),
+                'f_institucion': getattr(request.post_vars,'extension_institucion_{}'.format(i)),
+                'f_categoria': getattr(request.post_vars,'extension_categoria_{}'.format(i)),
+                'f_numero': i,
+                'f_Extservicios_Personal': personal_id
+                }
+
+        if not (None in params_extension.values())\
+           and not ('' in params_extension.values()):
+            db.t_Extservicios.update_or_insert(
+                    (db.t_Extservicios.f_numero==i) &
+                    (db.t_Extservicios.f_Extservicios_Personal==personal_id),
+                    f_fecha_inicio=params_extension['f_fecha_inicio'],
+                    f_fecha_fin=params_extension['f_fecha_fin'],
+                    f_nombre=params_extension['f_nombre'],
+                    f_descripcion=params_extension['f_descripcion'],
+                    f_institucion=params_extension['f_institucion'],
+                    f_categoria=params_extension['f_categoria'],
+                    f_numero=params_extension['f_numero'],
+                    f_Extservicios_Personal=params_extension['f_Extservicios_Personal'],
+                    )
+
+    # Actividades Administrativas
+    for i in range(1,6):
+        params_administrativas = {
+                'f_fecha_inicio' : getattr(request.post_vars,'administrativas_desde_{}'.format(i)),
+                'f_fecha_fin': getattr(request.post_vars,'administrativas_hasta_{}'.format(i)),
+                'f_cargo': getattr(request.post_vars, 'administrativas_cargo_{}'.format(i)),
+                'f_institucion': getattr(request.post_vars, 'administrativas_institucion_{}'.format(i)),
+                'f_numero' : i,
+                'f_Administrativas_Personal':personal_id
+                }
+        if not ('' in params_administrativas.values())\
+            and not (None in params_administrativas.values()):
+            db.t_Administrativas.update_or_insert(
+                    (db.t_Administrativas.f_numero==i) &
+                    (db.t_Administrativas.f_Administrativas_Personal==personal_id),
+                    f_fecha_inicio=params_administrativas['f_fecha_inicio'],
+                    f_fecha_fin=params_administrativas['f_fecha_fin'],
+                    f_cargo=params_administrativas['f_cargo'],
+                    f_institucion=params_administrativas['f_institucion'],
+                    f_Administrativas_Personal=params_administrativas['f_Administrativas_Personal'],
+                    f_numero=i,
+                    )
+
+
+
     #Si el diccionario no esta vacio
     if (not(None in dic.values())):
         #Insertamos en la base de datos
@@ -372,6 +427,7 @@ def add_form():
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
 
+        # Competencias
         personal_id = personal.select()[0].id
         competencias = dropdowns()[-1]
         for ind, comp in enumerate(competencias):
@@ -386,7 +442,10 @@ def add_form():
                         )
             else:
                 db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
+        
+        # Extension y Servicios
 
+        # Actividades Administrativas
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
@@ -513,8 +572,13 @@ def listado():
         empleados = empleados,
         competencias=competencias,
         comp_list=lista_competencias(usuario),
+<<<<<<< HEAD
         historial = getDictHistorial(historial_rows)
 
+=======
+        lista_admin=lista_adminsitrativas(usuario),
+        lista_extension=lista_extension(usuario)
+>>>>>>> c10d1182c41e25273d2da41e510cfa7a2bc67035
         )
 
 def transformar_fecha(fecha):
@@ -659,10 +723,16 @@ def ficha():
         usuario=usuario,
         competencias=competencias,
         comp_list=lista_competencias(personal),
+<<<<<<< HEAD
         historial=getDictHistorial(historial_rows),
         publicaciones=publicaciones,
         publicaciones_na=publicaciones_na,
         proyectos=proyectos
+=======
+        lista_extension=lista_extension(usuario),
+        lista_admin=lista_adminsitrativas(usuario),
+        historial=historial
+>>>>>>> c10d1182c41e25273d2da41e510cfa7a2bc67035
     )
 
 def cambiar_validacion(validacion, personal):
@@ -799,6 +869,7 @@ def lista_competencias(personal):
         lista[row.f_nombre] = row.f_observaciones
     return lista
 
+<<<<<<< HEAD
 def getDictHistorial(historial):
     dic = {}
     if (historial != None):
@@ -867,3 +938,41 @@ def getDictHistorial(historial):
         } 
     return dic
 
+=======
+def lista_extension(personal):
+    personal_id = db(db.t_Personal.f_ci == personal.f_ci).select().first().id
+    query = db(db.t_Extservicios.f_Extservicios_Personal== personal_id)
+    rows = query.select(db.t_Extservicios.ALL,
+                        orderby=db.t_Extservicios.f_numero)
+    lista = { 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 
+              6:{}, 7:{}, 8:{}, 9:{}, 10:{} }
+    for key in lista:
+        lista[key]={
+                'f_fecha_inicio':'',
+                'f_fecha_fin': '',
+                'f_nombre': '',
+                'f_categoria': '',
+                'f_descripcion': '',
+                'f_institucion': ''
+                }
+    for row in rows:
+        lista[row.f_numero]=dict(row)
+    return lista
+
+def lista_adminsitrativas(personal):
+    personal_id = db(db.t_Personal.f_ci == personal.f_ci).select().first().id
+    query = db(db.t_Administrativas.f_Administrativas_Personal== personal_id)
+    rows = query.select(db.t_Administrativas.ALL,
+                        orderby=db.t_Administrativas.f_numero)
+    lista = { 1:{}, 2:{}, 3:{}, 4:{}, 5:{} }
+    for key in lista:
+        lista[key]={
+                'f_fecha_inicio':'',
+                'f_fecha_fin': '',
+                'f_cargo': '',
+                'f_institucion': ''
+                }
+    for row in rows:
+        lista[row.f_numero]=dict(row)
+    return lista
+>>>>>>> c10d1182c41e25273d2da41e510cfa7a2bc67035

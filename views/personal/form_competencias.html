@@ -1,0 +1,18 @@
+<h4 class="titulosForm">Competencias (Máximo 10)</h4>
+{{ for ind, comp in enumerate(competencias): }}
+<div class="form-group competencias">
+  {{if comp in comp_list:}}
+  <div class="col-sm-12">
+    <input class="comp-check" type="checkbox" name="check-competencia-{{=ind}}" checked />
+    <label>{{=comp}}</label><br/>
+    <input type="text" name="competencia-{{=ind}}" value="{{=comp_list[comp]}}" maxlength="150">
+  </div>
+  {{else:}}
+  <div class="col-sm-12">
+    <input class="comp-check" type="checkbox" name="check-competencia-{{=ind}}" />
+    <label>{{=comp}}</label><br/>
+    <input type="text" name="competencia-{{=ind}}" maxlength="150">
+  </div>
+  {{pass}}
+</div>
+{{pass}}
