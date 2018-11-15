@@ -237,7 +237,15 @@ def __get_inventario_herramientas_dep(dep_id):
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
-    return db(db.vehiculo.vh_dependencia == dep_id and db.vehiculo.vh_eliminar != 1).select()
+    lista_vh = []
+    query_vehiculos = db(db.vehiculo.vh_dependencia == dep_id).select()
+
+    # Filtramos los eliminados
+    for vehiculo in query_vehiculos:
+        if vehiculo.vh_eliminar != 1:
+            lista_vh.append(vehiculo)
+
+    return lista_vh
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
 def __get_mantenimiento_vh(vh_id=None):
@@ -1370,15 +1378,21 @@ def vehiculos():
 
     # PENDIENTE: Super refactoizar
     if request.vars.acceso_direccion:
+        # Si accedemos a la Dirección cableada, entonces
+        # mostramos solo los vehículos de la Dirección
         acceso_direccion = True
         inventario = __get_vh_dep(1)
         dep_padre_id = 1
         dep_padre_nombre = "ULAB"
         dep_nombre = "DIRECCIÓN"
     elif request.vars.dependencia:
+        # Si accedemos a cualquier dependencia, entonces mostramos
+        # los vehículos de esa dependencia
         inventario = __get_vh_dep(int(request.vars.dependencia))
     else:
-        inventario = db(db.vehiculo.id and db.vehiculo.vh_eliminar != 1).select()
+        # En la vista general, nos traemos todos los vehículos que
+        # no hayan sido eliminados
+        inventario = db(db.vehiculo.vh_eliminar != 1).select()
 
     # Devolvemos las categorias de vehiculos
     dict_categorias = __obtener_categorias()
