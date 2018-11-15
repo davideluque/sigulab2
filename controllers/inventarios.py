@@ -1145,7 +1145,7 @@ def vehiculos():
                 if not __acceso_permitido(user,
                                           int(request.vars.dependencia),
                                           request.vars.es_espacio,
-                                          request.vars.acceso_direccion)):
+                                          request.vars.acceso_direccion):
                     redirect(URL('vehiculos'))
 
                 espacio_id = request.vars.dependencia
@@ -1215,7 +1215,7 @@ def vehiculos():
             if not request.vars.dependencia == user_dep_id and not __acceso_permitido(user,
                                 int(request.vars.dependencia),
                                     request.vars.es_espacio,
-                                    request.vars.acceso_direccion)):
+                                    request.vars.acceso_direccion):
                 redirect(URL('vehiculos'))
 
             # Evaluando la correctitud de los parametros del GET
