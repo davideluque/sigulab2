@@ -766,7 +766,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
 # Dado el id de una depencia y conociendo si es un espacio fisico o una dependencia
 # comun, determina si el usuario tiene privilegios suficientes para obtener informacion
 # de esta
-def __acceso_permitido(user, dep_id, es_espacio):
+def __acceso_permitido(user, dep_id, es_espacio, es_direccion=False):
     """
     Args:
         * user_id (str): id del usuario en la tabla t_Personal (diferente de auth.user.id)
@@ -810,7 +810,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
         # Si dep_id es un espacio fisico, se sube un nivel en la jerarquia (hasta
         # las secciones) ya que los espacios fisicos no aparecen en la lista de
         # adyacencias pero si las secciones a las que pertenecen
-        if es_espacio == "True":
+        if es_espacio == "True" and not es_direccion:
             dep_actual = db(db.espacios_fisicos.id == dep_id).select().first().dependencia
 
         while dep_actual is not None:
@@ -1018,6 +1018,7 @@ def vehiculos():
     # PENDIENTE: Cableando la variable de es_espacio 
     if not request.vars.acceso_direccion:
         request.vars.es_espacio = 'False'
+        request.vars.acceso_direccion = False
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
     espacios = []
@@ -1143,7 +1144,8 @@ def vehiculos():
                 # consultar la dependencia en request.vars.dependencia
                 if not __acceso_permitido(user,
                                           int(request.vars.dependencia),
-                                          request.vars.es_espacio):
+                                          request.vars.es_espacio,
+                                          request.vars.acceso_direccion)):
                     redirect(URL('vehiculos'))
 
                 espacio_id = request.vars.dependencia
@@ -1212,7 +1214,8 @@ def vehiculos():
             # consultar la dependencia en request.vars.dependencia
             if not request.vars.dependencia == user_dep_id and not __acceso_permitido(user,
                                 int(request.vars.dependencia),
-                                    request.vars.es_espacio):
+                                    request.vars.es_espacio,
+                                    request.vars.acceso_direccion)):
                 redirect(URL('vehiculos'))
 
             # Evaluando la correctitud de los parametros del GET
@@ -1277,7 +1280,8 @@ def vehiculos():
             # consultar la dependencia en request.vars.dependencia
             if not __acceso_permitido(user,
                                 int(request.vars.dependencia),
-                                    request.vars.es_espacio):
+                                    request.vars.es_espacio,
+                                    request.vars.acceso_direccion):
                 redirect(URL('vehiculos'))
 
             if request.vars.es_espacio == "True":
@@ -1381,6 +1385,8 @@ def vehiculos():
         dep_id = int(request.vars.dependencia)
     else:
         dep_id = 1
+
+        dependencias
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
