@@ -126,7 +126,19 @@
 				  <td class="camposTabla">HERRAMIENTA</td>
 				  <td class="camposTabla">{{=herramienta['mhr_motivo'].upper()}}</td>
 			  </tr>
-			{{pass}}           
+			{{pass}}
+			{{for vehi in inventario_vehiculos:}}
+				<tr>
+					<td class="camposTabla">
+						<a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehi['vh_placa']))}}">
+							{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+						</a>
+					</td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">VEHÍCULO</td>
+					<td class="camposTabla">{{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}</td>
+				</tr>
+				{{pass}}            
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
@@ -199,7 +211,7 @@
 						</a>
 					</td>
 					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-					<td class="camposTabla">{{=vehi['vh_tipo']}}</td>
+					<td class="camposTabla">VEHÍCULO</td>
 					<td class="camposTabla">{{=vehi['vh_desc_eliminar']}}</td>
 				</tr>
 				{{pass}}           

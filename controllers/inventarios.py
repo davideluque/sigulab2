@@ -318,62 +318,9 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
-                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines, 
+                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
-                 donante, contacto_donante, es_particular=0, oculto=0, modificacion=False):
-                 
-
-    #PENDIENTE: Eliminar
-    if modificacion:
-        db(db.vehiculo.vh_placa == placa).update(
-            vh_num=int(num),
-            vh_marca=marca,
-            vh_modelo=modelo,
-            vh_ano=ano,
-            vh_extension_custodio=extension_custodio,
-            vh_ubicacion_custodio=ubicacion_custodio,
-            vh_serial_motor=serial_motor,
-            vh_serial_carroceria=serial_carroceria,
-            vh_serial_chasis=serial_chasis,
-            vh_placa=placa,
-            vh_rines=rines,
-            vh_capacidad_carga_md=capacidad_carga_md,
-            vh_intt=intt,
-            vh_tipo=tipo,
-            vh_observaciones=observaciones,
-            vh_lugar_pernocta=lugar_pernocta,
-            vh_color=color,
-            vh_clase=clase,
-            vh_uso=uso,
-            vh_servicio=servicio,
-            vh_tara=tara,
-            vh_tara_md=tara_md,
-            vh_nro_puestos=nro_puestos,
-            vh_nro_ejes=nro_ejes,
-            vh_capacidad_carga=capacidad_carga,
-            vh_propietario=propietario,
-            vh_responsable=responsable,
-            vh_telf_responsable=telf_responsable,
-            vh_extension_responsable=extension_responsable,
-            vh_custodio=custodio,
-            vh_telf_custodio=telf_custodio,
-            vh_sudebip_localizacion=sudebip_localizacion,
-            vh_sudebip_codigo_localizacion=sudebip_codigo_localizacion,
-            vh_sudebip_categoria=sudebip_categoria,
-            vh_sudebip_subcategoria=sudebip_subcategoria,
-            vh_sudebip_categoria_especifica=sudebip_categoria_especifica,
-            vh_fecha_adquisicion=fecha_adquisicion,
-            vh_origen=origen,
-            vh_nro_adquisicion=nro_adquisicion,
-            vh_proveedor=proveedor,
-            vh_proveedor_rif=proveedor_rif,
-            vh_donante=donante,
-            vh_contacto=contacto_donante,
-            vh_es_particular=es_particular,
-            vh_oculto=oculto,
-        )
-
-        return True
+                 donante, contacto_donante, es_particular=0, oculto=0):
 
     # Si ya existe el VH en el inventario
     if db(db.vehiculo.vh_placa == placa).select():
@@ -419,7 +366,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         return False
 
     # Se agrega el nuevo vehiculo a la base de datos
-    inv_id = db.vehiculo.insert(
+    db.vehiculo.insert(
         vh_num=int(num),
         vh_marca=marca,
         vh_modelo=modelo,
@@ -473,6 +420,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
     db.bitacora_general.insert(
         f_accion="[inventarios] Añadido el vehiculo de placa : {}".format(placa)
     )
+
     response.flash = "El vehículo ha sido agregado satisfactoriamente."
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
@@ -740,39 +688,80 @@ def __agregar_herramienta_modificar(nombre, num, marca, modelo, serial, presenta
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
 # Funcion para agregar una modificacion pendiente a un vehiculo
-def __agregar_modificar_vehiculo(placa, modelo, ano, serial_motor, serial_carroceria,
-                                 marca, responsable, telf_responsable, dependencia,
-                                 descripcion_uso, lugar_pernocta, user, es_particular=0,
-                                 oculto=0):
+def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial_carroceria, serial_chasis,
+                                 placa, intt, observaciones, lugar_pernocta, color, clase, uso, dependencia,
+                                 servicio, tara, tara_md, nro_puestos, nro_ejes, capacidad_carga, propietario,
+                                 responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
+                                 sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
+                                 sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
+                                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
+                                 capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
+                                 donante, contacto_donante, motivo, es_particular=0, oculto=0):
 
-    # Si ya existe una modificacion pendiente al vehiculo
-    if (db(db.modificacion_vehiculo.mvh_placa == placa).select()):
-        vh = db(db.vehiculo.vh_placa == placa).select()[0] #Se busca de la tabla de vh
+    # Si ya existe una modificacion pendiente al vehículo
+    if db(db.modificacion_vehiculo.mvh_id_vehiculo == id_vh).select():
+        vh = db(db.vehiculo.id== id_vh).select()[0] #Se busca de la tabla de vh POR ID (no varía)
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
 
-    inv_id = db.modificacion_vehiculo.insert(
-        mvh_placa=placa,
+    db.modificacion_vehiculo.insert(
+        mvh_id_vehiculo=id_vh,
+        mvh_marca=marca,
         mvh_modelo=modelo,
         mvh_ano=ano,
         mvh_serial_motor=serial_motor,
         mvh_serial_carroceria=serial_carroceria,
-        mvh_marca=marca,
+        mvh_serial_chasis=serial_chasis,
+        mvh_placa=placa,
+        mvh_intt=intt,
+        mvh_observaciones=observaciones,
+        mvh_lugar_pernocta=lugar_pernocta,
+        mvh_color=color,
+        mvh_clase=clase,
+        mvh_uso=uso,
+        mvh_dependencia=dependencia,
+        mvh_servicio=servicio,
+        mvh_tara=tara,
+        mvh_tara_md=tara_md,
+        mvh_nro_puestos=nro_puestos,
+        mvh_nro_ejes=nro_ejes,
+        mvh_capacidad_carga=capacidad_carga,
+        mvh_propietario=propietario,
         mvh_responsable=responsable,
         mvh_telf_responsable=telf_responsable,
-        mvh_dependencia=dependencia,
+        mvh_custodio=custodio,
+        mvh_telf_custodio=telf_custodio,
+        mvh_sudebip_localizacion=sudebip_localizacion,
+        mvh_sudebip_codigo_localizacion=sudebip_codigo_localizacion,
+        mvh_sudebip_categoria=sudebip_categoria,
+        mvh_sudebip_subcategoria=sudebip_subcategoria,
+        mvh_sudebip_categoria_especifica=sudebip_categoria_especifica,
+        mvh_fecha_adquisicion=fecha_adquisicion,
+        mvh_nro_adquisicion=nro_adquisicion,
+        mvh_origen=origen,
+        mvh_proveedor=proveedor,
+        mvh_proveedor_rif=proveedor_rif,
+        mvh_num=num,
+        mvh_tipo=tipo,
+        mvh_clasificacion=clasificacion,
+        mvh_modifica_ficha=user,
+        mvh_rines=rines,
+        mvh_capacidad_carga_md=capacidad_carga_md,
+        mvh_ubicacion_custodio=ubicacion_custodio,
+        mvh_extension_custodio=extension_custodio,
+        mvh_extension_responsable=extension_responsable,
+        mvh_donante=donante,
+        mvh_contacto_donante=contacto_donante,
+        mvh_motivo=motivo,
         mvh_es_particular=es_particular,
-        mvh_descripcion=descripcion_uso,
-        mvh_lugar_pernocta=lugar_pernocta,
-        mvh_oculto=oculto,
-        mvh_modifica_ficha=user
-        )
+        mvh_oculto=oculto
+    )
 
     db.bitacora_general.insert(
         f_accion="[inventarios] Añadida solicitud de modificación del vehiculo de placa {}".format(placa)
     )
-    response.flash = "Se ha realizado exitosamente la solicitud de modificación del vehiculo de placa" + str(placa)
+    response.flash = "Se ha realizado exitosamente la solicitud de modificación del vehiculo de placa %s." % placa 
     return True
 
 
@@ -1027,6 +1016,10 @@ def index():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def vehiculos():
 # Inicializando listas de espacios fisicos y dependencias
+    
+    # PENDIENTE: Cableando la variable de es_espacio 
+    if not request.vars.acceso_direccion:
+        request.vars.es_espacio = 'False'
 
     # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
     espacios = []
@@ -1138,6 +1131,7 @@ def vehiculos():
             es_particular=0,
             oculto=0
         )
+        session.flash = "El vehículo de placa %s ha sido agregado." % request.vars.placa
 
     if auth.has_membership("PERSONAL INTERNO") or auth.has_membership("TÉCNICO"):
         # Si el tecnico ha seleccionado un espacio fisico
@@ -1472,6 +1466,7 @@ def detalles_mod_herramientas():
         db((db.modificacion_herramienta.mhr_nombre == name) & (db.modificacion_herramienta.mhr_espacio_fisico==espacio) & (db.modificacion_herramienta.mhr_ubicacion==ubicacion)).delete()
         session.flash = "La información de la herramienta ha sido actualizada"
         redirect(URL('validaciones'))
+
     # Si no se modifica
     if request.vars.no:
         db.bitacora_general.insert(
@@ -2344,17 +2339,17 @@ def detalles_vehiculo():
         session.flash = "El vehiculo no ha sido eliminado."
         redirect(URL('validaciones'))
 
-    # PENDIENTE: Quitar esto
+    # Si se solicita la modificación
     if request.vars.modificacion:
-        dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
+        dependencia_escogida = db(db.dependencias.id == vehi['vh_dependencia']).select()[0]
 
         if dependencia_escogida.id_sede == 1:
             sede_verbosa = "Sartenejas"
         else:
             sede_verbosa = "Litoral"
 
-        __agregar_vh(
-            num=request.vars.num,
+        resultado = __agregar_modificar_vehiculo(
+            id_vh=vehi['id'],
             marca=request.vars.marca if request.vars.marca != "Otro" else "Otro: " + request.vars.marca2,
             modelo=request.vars.modelo,
             ano=int(request.vars.ano),
@@ -2371,6 +2366,7 @@ def detalles_vehiculo():
             clasificacion=request.vars.clasificacion if request.vars.clasificacion != "Emergencia" else "Emergencia: " + requesr.vars.clasificacion2,
             uso=request.vars.uso,
             servicio=request.vars.servicio,
+            dependencia=vehi['vh_dependencia'],
             tara=float(request.vars.tara),
             tara_md=request.vars.tara_md,
             nro_puestos=int(request.vars.nro_puestos),
@@ -2378,7 +2374,6 @@ def detalles_vehiculo():
             capacidad_carga=float(request.vars.capacidad),
             capacidad_carga_md=request.vars.capacidad_carga_md,
             rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
-            ubicacion_custodio=request.vars.ubicacion_custodio,
             propietario=request.vars.propietario,
             responsable=int(request.vars.responsable),
             telf_responsable=request.vars.telf_responsable,
@@ -2396,28 +2391,19 @@ def detalles_vehiculo():
             nro_adquisicion=request.vars.nro_factura if request.vars.origen == "Compra" else request.vars.nro_oficio,
             proveedor=request.vars.proveedor,
             proveedor_rif=request.vars.proveedor_rif,
+            num=request.vars.num,
+            user=user,
+            ubicacion_custodio=request.vars.ubicacion_custodio,
             donante=request.vars.donante,
             contacto_donante=request.vars.contacto_donante,
-            dependencia=request.vars.dependencia,
-            user=user,
+            motivo=request.vars.motivo,
             es_particular=0,
-            oculto=0,
-            modificacion=True
+            oculto=0
         )
-        request.vars.modificacion = None
-        session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
-        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
-
-    if request.vars.modificacion:
-        dependencia_escogida = db(db.dependencias.id == request.vars.dependencia).select()[0]
-        __agregar_modificar_vehiculo(
-            vehi['vh_placa'], request.vars.modelo, request.vars.ano,
-            request.vars.serial_motor, request.vars.serial_carroceria, request.vars.marca,
-            request.vars.responsable, request.vars.telf_responsable, request.vars.dependencia,
-            request.vars.descripcion_uso, request.vars.lugar_pernocta, request.vars.es_particular, request.vars.oculto, user_id)
 
         request.vars.modificacion = None
-        session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
+        if resultado:
+            session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
         redirect(URL('validaciones'))
 
     if request.vars.ocultar:
@@ -3382,7 +3368,11 @@ def validaciones():
         inventario_eliminar = __get_inventario_dep_validaciones(dep_id, "eliminar")
 
     # Obtenemos todos los vehículos
-    vehics = db(db.vehiculo.vh_responsable == user_id or db.vehiculo.vh_custodio == user_id).select()
+    vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
+    vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
+
+    vehics = vehiculos_responsable + vehiculos_custodio
+
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
     for auto in vehics:
@@ -3390,10 +3380,12 @@ def validaciones():
             inventario_eliminar_vehiculos.append(auto)
         elif not db(
                 db.modificacion_vehiculo.mvh_estado == 0 and \
-                db.modificacion_vehiculo.mvh_placa == auto.vh_placa and \
-                (db.modificacion_vehiculo.mvh_responsable == user_id or \
-                    db.modificacion_vehiculo.mvh_custodio == user_id)
-            ).isempty():
+                db.modificacion_vehiculo.mvh_id_vehiculo == auto.id and \
+                (db.modificacion_vehiculo.mvh_responsable == user_id)).isempty() \
+            or not db(
+                db.modificacion_vehiculo.mvh_estado == 0 and \
+                db.modificacion_vehiculo.mvh_id_vehiculo == auto.id and \
+                (db.modificacion_vehiculo.mvh_custodio == user_id)).isempty():
             inventario_vehiculos.append(auto)
 
     return dict(inventario=inventario,

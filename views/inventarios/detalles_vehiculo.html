@@ -637,15 +637,15 @@
                               <option value="Bomberos">Bomberos</option>
                               <option value="Forenses">Forenses</option>
                           </select>
-                          <div class="dr" id="error-uso" style="color: #d03e3e;"> </div>
+                          <div class="dr" id="error-clasificacion" style="color: #d03e3e;"> </div>
                       </div>
 
                         <div class="form-group">
                             <label>Uso*</label>
                             <select class="form-control" type="select" id="uso" name="uso" placeholder="Uso*" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Público">Público</option>
-                                <option value="Privado">Privado</option>
+                                <option value="Público" {{ if vehiculo['vh_uso'] == "Público": }}selected{{ pass }}>Público</option>
+                                <option value="Privado" {{ if vehiculo['vh_uso'] == "Privado": }}selected{{ pass }}>Privado</option>
                             </select>
                             <div class="dr" id="error-uso" style="color: #d03e3e;"> </div>
                         </div>
@@ -654,9 +654,9 @@
                             <label>Servicio*</label>
                             <select class="form-control" type="select" id="servicio" name="servicio" placeholder="Servicio*" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Transporte terrestre de personas">Transporte terrestre de personas</option>
-                                <option value="Transporte terrestre de cargas">Transporte terrestre de cargas</option>
-                                <option value="Servicios conexos">Servicios conexos</option>
+                                <option value="Transporte terrestre de personas" {{ if vehiculo['vh_servicio'] == "Transporte terrestre de personas": }}selected{{ pass }}>Transporte terrestre de personas</option>
+                                <option value="Transporte terrestre de cargas" {{ if vehiculo['vh_servicio'] == "Transporte terrestre de cargas": }}selected{{ pass }}>Transporte terrestre de cargas</option>
+                                <option value="Servicios conexos" {{ if vehiculo['vh_servicio'] == "Servicios conexos": }}selected{{ pass }}>Servicios conexos</option>
                             </select>
                             <div class="dr" id="error-servicio" style="color: #d03e3e;"> </div>
                         </div>
@@ -749,12 +749,12 @@
                           <label>Rines</label>
                           <select class="form-control" type="select" name="rines" id="rines" class="input">
                             <option value="">Seleccione una opción</option>
-                            <option value="Acero">Acero</option>
-                            <option value="Hierro">Hierro</option>
-                            <option value="Magnesio">Magnesio</option>
-                            <option value="Otro">Otro</option>
+                            <option value="Acero" {{ if vehiculo['vh_rines'] == "Acero": }}selected{{ pass }}>Acero</option>
+                            <option value="Hierro" {{ if vehiculo['vh_rines'] == "Hierro": }}selected{{ pass }}>Hierro</option>
+                            <option value="Magnesio" {{ if vehiculo['vh_rines'] == "Magnesio": }}selected{{ pass }}>Magnesio</option>
+                            <option value="Otro" {{ if vehiculo['vh_rines'][0:4] == "Otro": }}selected{{ pass }}>Otro</option>
                           </select>
-                          <input type="text" class="form-control" id="rines2" name="rines2" title="Ingrese los rines del vehículo" placeholder="Especifique" disabled style="display:none;">
+                          <input type="text" class="form-control" id="rines2" name="rines2" title="Ingrese los rines del vehículo" placeholder="Especifique" {{ if vehiculo['vh_rines'][0:4] != "Otro": }}disabled style="display:none;"{{ else: }}required{{ pass }}>
                           <div class="dr" id="error-rines" style="color: #d03e3e;"> </div>
                       </div>
 
@@ -953,12 +953,12 @@
                             <label>Origen*</label>
                             <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Compra">Compra</option>
-                                <option value="Donación">Donación</option>
+                                <option value="Compra" {{ if vehiculo['vh_origen'] == "Compra": }}selected{{ pass }}>Compra</option>
+                                <option value="Donación" {{ if vehiculo['vh_origen'] == "Donación": }}selected{{ pass }}>Donación</option>
                             </select>
                             <div class="dr" id="error-origen" style="color: #d03e3e;"> </div>
                         </div>
-                        <div id="grupo-compra" style="display: none;">
+                        <div id="grupo-compra" {{ if vehiculo['vh_origen'] != "Compra": }}style="display: none;"{{ pass }}>
                           <div class="form-group">
                               <label>Nro Factura*</label>
                               <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
@@ -980,7 +980,7 @@
                               <div class="dr" id="error-rif" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
-                        <div id="grupo-donacion" style="display: none;">
+                        <div id="grupo-donacion" {{ if vehiculo['vh_origen'] != "Donación": }}style="display: none;"{{ pass }}>
                           <div class="form-group">
                               <label>Nº Oficio*</label>
                               <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
@@ -1004,7 +1004,6 @@
                         </div>
                     </div>
                   </div>
-                  <input type="hidden" name="modificacion" id="modificacion" value="True">
                   <div style="position:fixed; bottom: 15px; right: 30px;">
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
