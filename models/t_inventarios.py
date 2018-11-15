@@ -392,16 +392,14 @@ db.define_table(
     Field('vh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
 
-    Field('vh_tara', 'double', label=T('Tara')),
-    Field('vh_tara_md', 'string', default="kg", label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
-
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
     Field('vh_nro_ejes', 'integer', default=0, label = T('Nº de Ejes')),
     Field('vh_capacidad_carga', 'double', default=0, label = T('Capacidad de Carga')),
     Field('vh_capacidad_carga_md', 'string', default="kg", label=T('Capacidad de Carga (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
-
     Field('vh_rines', 'string', default="", label=T('Rines')),
+    Field('vh_tara', 'double', label=T('Tara')),
+    Field('vh_tara_md', 'string', default="kg", label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
 
     # Datos del responsable
     Field('vh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
@@ -411,7 +409,6 @@ db.define_table(
     Field('vh_extension_responsable', 'integer', label=T('Extensión de teléfono del responsable patrimonial'), requires=IS_MATCH('^[0-9]{4}')),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('vh_extension_custodio', 'integer', label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
-
 
     # Datos SUDEBIP
     Field('vh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
@@ -459,6 +456,8 @@ db.vehiculo.vh_dependencia.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre
 db.define_table(
     'modificacion_vehiculo',
     # Datos de identificación
+    Field('mvh_num', 'string', notnull=True, unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
+    Field('mvh_id_vehiculo', 'reference vehiculo', notnull=True, unique=True, label=T('ID del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_ano', 'integer', notnull=True, label=T('Año del Vehículo'), requires=IS_NOT_EMPTY()),
@@ -468,20 +467,25 @@ db.define_table(
     Field('mvh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
 
     # Descripción de uso
-    Field('mvh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),
+    Field('mvh_observaciones', 'text', default="", label=T('Observaciones')),
     Field('mvh_lugar_pernocta', 'string', notnull=True, default="", label=T('Lugar de pernocta')),
     Field('mvh_color', 'string', label=T('Color')),
 
     # Categorias
     Field('mvh_clase', 'string', notnull=True, label=T('Clase')),
-    Field('mvh_uso', 'string', notnull=True, label=T('Uso')),
+    Field('mvh_tipo', 'string', notnull=True, label=T('Tipo')),
+    Field('mvh_clasificacion', 'string', notnull=True, label=T('Clasificación')),
+    Field('mvh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('mvh_servicio', 'string', notnull=True, label=T('Servicio')),
-    Field('mvh_tara', 'string', label=T('Tara')),
 
     # Capacidades
-    Field('mvh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos')),
-    Field('mvh_nro_ejes', 'integer', notnull=True, default=0, label = T('Nº de Ejes')),
-    Field('mvh_capacidad_carga', 'double', notnull=True, default=0, label = T('Capacidad de Carga')),
+    Field('mvh_nro_puestos', 'integer', notnull=True, default=0, label = T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
+    Field('mvh_nro_ejes', 'integer', default=0, label = T('Nº de Ejes')),
+    Field('mvh_capacidad_carga', 'double', default=0, label = T('Capacidad de Carga')),
+    Field('mvh_capacidad_carga_md', 'string', default="kg", label=T('Capacidad de Carga (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
+    Field('mvh_rines', 'string', default="", label=T('Rines')),
+    Field('mvh_tara', 'double', label=T('Tara')),
+    Field('mvh_tara_md', 'string', default="kg", label=T('Tara (medida)'), requires=IS_IN_SET(['kg', 'ton'])),
 
     # Datos del responsable
     Field('mvh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
@@ -532,7 +536,6 @@ db.define_table(
 
 db.modificacion_vehiculo.mvh_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
-db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
 
 db.define_table(
     'historial_mantenimiento_vh',
