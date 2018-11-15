@@ -463,6 +463,7 @@ db.define_table(
     Field('mvh_ano', 'integer', notnull=True, label=T('Año del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_serial_motor', 'string', notnull=True, unique=True, label = T('Serial del Motor'), requires =IS_NOT_EMPTY()),
     Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
+    Field('mvh_serial_chasis', 'string', notnull=True, unique=True, label = T('Serial de Chasis'), requires=[IS_NOT_EMPTY(), IS_LENGTH(17)]),
     Field('mvh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
 
