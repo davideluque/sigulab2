@@ -773,6 +773,13 @@
   // Validación de formato de telf custodio (formato del regex establecido)
   $(".campo_telf").focusout(function() {
     var tlf = $(this).val();
+
+    if (tlf.length > 0) {
+        $(this).attr('required', true);
+    } else {
+        $(this).attr('required', false);
+    }
+    
     if (regexTlf.test(tlf) || tlf.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
@@ -835,6 +842,13 @@
   // Validación de formato de extension custodio (formato del regex establecido)
   $(".campo_extension").focusout(function() {
     var extension = $(this).val();
+
+    if (extension.length > 0) {
+        $(this).attr('required', true);
+    } else {
+        $(this).attr('required', false);
+    }
+
     if (regexExtension.test(extension) || extension.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
