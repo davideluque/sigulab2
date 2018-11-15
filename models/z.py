@@ -722,3 +722,8 @@ if db(db.t_categoria_desechos).isempty():
 	for categoria in categorias_iniciales:
 		db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
 
+
+if db(db.espacios_fisicos).isempty():
+    db.espacios_fisicos.insert(codigo='ALT-001A', uso='SALA DE EQUIPOS DE INTERCONEXION A INTERNET', ext_USB= ''  ,ext_interna= '', dependencia=5)
+    db.espacios_fisicos.insert(codigo='ALT-002A', uso='SALA DE EQUIPOS DE INTERCONEXI', ext_USB= ''  ,ext_interna= '', dependencia=10)
+

@@ -33,7 +33,7 @@
     <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
     <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
     <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
-    <span class="breadcrumb-item active">Bitácora</span>
+    <span class="breadcrumb-item active">Balance</span>
   </div>
 </nav>
 <!-- Fin del Breadcrumb de navegación --> 
@@ -42,8 +42,9 @@
 <div id="inventario-dependencia" class="container">
 <div class="row">
   <div>
-    <h3 id="titulo" class="titulos"> Bitácora</h3>
-    <h3 id="subtitulo" class="titulos"> {{=sust_nombre}} ({{=espacio_nombre}})</h3>
+    <h3 id="titulo" class="titulos"> BALANCE</h3>
+    <h3 id="subtitulo" class="titulos"> {{=sust_nombre}}</h3>
+    <h3 id="subtitulo" class="titulos"> ({{=espacio_nombre}})</h3>
   </div>
   <!-- Inicio Boton Agregar Sustancia -->
   <div class="container" id="containerAgregar">

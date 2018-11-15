@@ -61,8 +61,8 @@
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
-	<h3 class="dep-titulo">INVENTARIO DE SyM</h3>
+	<div class="container titulo ">
+	<h3 class="inicio-titulo">INVENTARIO DE SyM</h3>
 	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
 		{{ dep_padre_nombre = 'ULAB'}}
 	{{ pass }}
@@ -77,8 +77,8 @@
 			</button>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
-			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
+			<h3 class="inicio-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="inicio-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
@@ -152,7 +152,7 @@
 		{{ if espacios: }}
 			<div class="grid-container-ef" id="secciones" style="display: none">
 		{{ else: }}
-			<div class="grid-container" id="secciones" style="display: none">
+			<div class="grid-container" id="secciones" style="display: true">
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('inventarios',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
