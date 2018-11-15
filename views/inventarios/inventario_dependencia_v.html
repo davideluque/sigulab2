@@ -770,20 +770,19 @@
   $("#proveedor_rif").focusout(function() {
     var rif = $(this).val();
     if (regexRIF.test(rif)) {
-      console.log("Pipi")
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
     }
   else{
     if ((rif.length < 13) && (rif.length >= 0)) {
-      console.log("NOPipi")
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Formato: X-000000000-0. Complete con 0 en caso de ser necesario");
     }
   }
   });
+  
   // Máscara js para formato de RIF
   $(document).ready(function() {
     $('#proveedor_rif').mask('X-000000000-0', {
