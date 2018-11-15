@@ -3541,6 +3541,8 @@ def validaciones():
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
     for auto in vehics:
+        if auto['vh_eliminar'] == 1:
+            continue
         if auto['vh_eliminar'] == 0:
             inventario_eliminar_vehiculos.append(auto)
         elif not db(
