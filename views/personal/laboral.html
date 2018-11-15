@@ -97,23 +97,21 @@
         </div>
 
         <div class="tab-pane " id="competencias" role="tabpanel">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <h3>Lista de competencias</h3>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <dl>
-                    {{for comp in comp_list:}}
-                    <dt>{{=comp}}</dt>
-                    <dd>{{=comp_list[comp]}}</dd>
-                    {{pass}}
-                    </dl>
-                  </div>
-                </div>
-              </div>
+          <table class="table contenidoFicha" id="tabla_datos_laborales">
+            <br>
+            <tbody>
+              <tr style="color: White;">
+                <th><b>Categoría</b></th>
+                <th><b>Observaciones</b></th>
+              </tr>
+              {{for comp in comp_list:}}
+              <tr>
+                <td>{{=comp}}</td>
+                <td>{{=comp_list[comp]}}</td>
+              </tr>
+              {{pass}}
+            </tbody>
+          </table>
         </div>
 
         <div class="tab-pane" id="reconoc_lab">
