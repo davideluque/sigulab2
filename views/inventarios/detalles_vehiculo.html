@@ -453,6 +453,7 @@
                     <span class="step">5</span>
                     <span class="step">6</span>
                     <span class="step">7</span>
+                    <span class="step">8</span>
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
@@ -533,6 +534,7 @@
                       <span class="step">5</span>
                       <span class="step">6</span>
                       <span class="step">7</span>
+                      <span class="step">8</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -589,6 +591,7 @@
                       <span class="step">5</span>
                       <span class="step">6</span>
                       <span class="step">7</span>
+                      <span class="step">8</span>
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
@@ -700,6 +703,7 @@
                         <span class="step">5</span>
                         <span class="step">6</span>
                         <span class="step">7</span>
+                        <span class="step">8</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -780,6 +784,7 @@
                         <span class="step activePass">5</span>
                         <span class="step">6</span>
                         <span class="step">7</span>
+                        <span class="step">8</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -881,6 +886,7 @@
                         <span class="step">5</span>
                         <span class="step activePass">6</span>
                         <span class="step">7</span>
+                        <span class="step">8</span>
                       </div>
   
                       <!-- Aqui va la informacion -->
@@ -937,6 +943,7 @@
                         <span class="step">5</span>
                         <span class="step">6</span>
                         <span class="step activePass">7</span>
+                        <span class="step">8</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
@@ -999,11 +1006,44 @@
                   </div>
                   <input type="hidden" name="modificacion" id="modificacion" value="True">
                   <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+              </fieldset>
+                <!-- Fin Séptimo Paso -->
+
+                <!-- Comienzo Octavo Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="8" data-title="Octavo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step activePass">7</span>
+                        <span class="step">8</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Modificación</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>Motivo de modificación*</label>
+                            <input type="text" class="form-control" id="motivo" name="motivo" placeholder="Motivo de la modificación*" title="Ingrese el motivo de la modificación" required>
+                            <div class="dr" id="error-motivo" style="color: #d03e3e;"> </div>
+                        </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="modificacion" id="modificacion" value="True">
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
                     <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
                   </div>
               </fieldset>
-                <!-- Fin Séptimo Paso -->
+                <!-- Fin Octavo Paso -->
               </form>
           </div>
         </div>               
