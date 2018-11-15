@@ -769,7 +769,7 @@
 
   $("#proveedor_rif").focusout(function() {
     var rif = $(this).val();
-    if (regexRif.test(rif)) {
+    if (regexRIF.test(rif)) {
       console.log("Pipi")
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
