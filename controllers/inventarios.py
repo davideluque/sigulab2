@@ -1210,13 +1210,13 @@ def vehiculos():
         if request.vars.es_espacio == 'True':
             # Determinando si el usuario tiene privilegios suficientes para
             # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user,
+            if not request.vars.dependencia == user_dep_id and not __acceso_permitido(user,
                                 int(request.vars.dependencia),
                                     request.vars.es_espacio):
                 redirect(URL('vehiculos'))
 
             # Evaluando la correctitud de los parametros del GET
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+            if not request.vars.dependencia == user_dep_id and not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
                     __is_bool(request.vars.es_espacio)):
                 redirect(URL('vehiculos'))
 
@@ -1242,15 +1242,6 @@ def vehiculos():
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # regresar a la vista inicial de inventarios
         elif request.vars.es_espacio == 'False':
-            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
-                    __is_bool(request.vars.es_espacio)):
-                redirect(URL('vehiculos'))
-            # Determinando si el usuario tiene privilegios suficientes para
-            # consultar la dependencia en request.vars.dependencia
-            if not __acceso_permitido(user,
-                                int(request.vars.dependencia),
-                                    request.vars.es_espacio):
-                redirect(URL('vehiculos'))
             espacios = list(db(
                               db.espacios_fisicos.dependencia == user_dep_id
                               ).select(db.espacios_fisicos.ALL))
