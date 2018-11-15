@@ -3528,7 +3528,11 @@ def validaciones():
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
     vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
 
-    vehics = vehiculos_responsable + vehiculos_custodio
+    vehics = []
+    for vh in vehiculos_responsable:
+        vehics.append(vh)
+    for vh in vehiculos_custodio:
+        vehics.append(vh)
 
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
