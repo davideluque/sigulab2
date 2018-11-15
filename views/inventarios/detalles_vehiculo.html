@@ -1254,6 +1254,11 @@
     $('#num').mask('000000');
   });
 
+  // Máscara js para formato de ejes
+  $(document).ready(function() {
+    $('#nro_ejes').mask('000');
+  });
+
   // Validación de formato de extension custodio (formato del regex establecido)
   $(".campo_extension").focusout(function() {
     var extension = $(this).val();

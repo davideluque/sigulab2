@@ -662,7 +662,7 @@
                           </div>
                           <div class="form-group">
                               <label>Teléfono del Donante*</label>
-                              <input type="text" class="form-control .campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante">
+                              <input type="text" class="form-control campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante">
                               <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -779,7 +779,7 @@
     } else {
         $(this).attr('required', false);
     }
-    
+
     if (regexTlf.test(tlf) || tlf.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
@@ -837,6 +837,11 @@
   // Máscara js para formato de número de bien
   $(document).ready(function() {
     $('#num').mask('000000');
+  });
+
+  // Máscara js para formato de ejes
+  $(document).ready(function() {
+    $('#nro_ejes').mask('000');
   });
 
   // Validación de formato de extension custodio (formato del regex establecido)
