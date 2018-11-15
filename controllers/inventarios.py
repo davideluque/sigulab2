@@ -4,10 +4,8 @@ Controlador de las vistas relacionadas a la gestión de inventarios,
 vehículos y solicitudes de préstamos.
 '''
 
-# PENDIENTE: Corregir esto
 # Importamos el diccionario con las categorias de los vehiculos.
 from info_inventarios import CATEGORIAS_VEHICULOS, CLASIFICACIONES_VEHICULOS
-
 
 # < -------- Funciones privadas de SMDYP ------------>
 
@@ -1334,7 +1332,7 @@ def vehiculos():
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
-                if len(dependencias) == 0:
+                if dependencias:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
@@ -2822,7 +2820,7 @@ def bienes_muebles():
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
-                if len(dependencias) == 0:
+                if dependencias:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
@@ -3210,7 +3208,7 @@ def material_lab():
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
-                if len(dependencias) == 0:
+                if dependencias:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
@@ -3379,10 +3377,10 @@ def validaciones():
         inventario_eliminar = __get_inventario_dep_validaciones(dep_id, "eliminar")
 
     # Obtenemos todos los vehículos
-    vehiculos = db(db.vehiculo.vh_responsable == user_id or db.vehiculo.vh_custodio == user_id).select()
+    vehics = db(db.vehiculo.vh_responsable == user_id or db.vehiculo.vh_custodio == user_id).select()
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
-    for auto in vehiculos:
+    for auto in vehics:
         if auto['vh_eliminar'] == 0:
             inventario_eliminar_vehiculos.append(auto)
         elif not db(
@@ -3742,7 +3740,7 @@ def consumibles():
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
-                if len(dependencias) == 0:
+                if dependencias:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
@@ -4091,7 +4089,7 @@ def herramientas():
                 # Si la lista de dependencias es vacia, entonces la dependencia no
                 # tiene otras dependencias por debajo (podria tener espacios fisicos
                 # o estar vacia)
-                if len(dependencias) == 0:
+                if dependencias:
                     # Buscando espacios fisicos que apunten a la dependencia escogida
                     espacios = list(db(db.espacios_fisicos.dependencia == dep_id
                                       ).select(db.espacios_fisicos.ALL))
