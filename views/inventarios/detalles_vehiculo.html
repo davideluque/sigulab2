@@ -161,6 +161,22 @@
                 <div class="grid-item">
                        {{=vehiculo['vh_ubicacion_custodio']}}
                 </div>
+                {{ if vehiculo['vh_telf_responsable']: }}
+                <div class="grid-item">
+                      Tlf. de Responsable:
+                </div>
+                <div class="grid-item">
+                       {{=vehiculo['vh_telf_responsable']}}
+                </div>
+                {{ pass }}
+                {{ if vehiculo['vh_extension_responsable']: }}
+                <div class="grid-item">
+                      Extensión responsable:
+                </div>
+                <div class="grid-item">
+                        {{=vehiculo['vh_extension_responsable']}}
+                </div>
+                {{ pass }}
                 {{ if vehiculo['vh_telf_custodio']: }}
                 <div class="grid-item">
                       Tlf. de Custodio:
@@ -169,12 +185,12 @@
                        {{=vehiculo['vh_telf_custodio']}}
                 </div>
                 {{ pass }}
-                {{ if vehiculo['vh_extension']: }}
+                {{ if vehiculo['vh_extension_custodio']: }}
                 <div class="grid-item">
-                      Extensión:
+                      Extensión custodio:
                 </div>
                 <div class="grid-item">
-                        {{=vehiculo['vh_extension']}}
+                        {{=vehiculo['vh_extension_custodio']}}
                 </div>
                 {{ pass }}
                 <div class="grid-item">
@@ -224,61 +240,57 @@
             <div id="tab-4"class="tab-content">
                 <div class="grid-container">
                     <div class="grid-item">
-                        Fecha de adquisición:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_fecha_adquisicion']}}
-                    </div>
-                    <div class="grid-item">
                         Origen:
                     </div>
                     <div class="grid-item">
                         {{=vehiculo['vh_origen']}}
                     </div>
+                    <div class="grid-item">
+                        {{ if vehiculo['vh_origen'] == 'Compra': }}
+                            Nº. Factura:
+                        {{ elif vehiculo['vh_origen'] == 'Donación': }}
+                            Nº. Oficio:
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_nro_adquisicion']}}
+                    </div>
+                    <div class="grid-item">
+                        {{ if vehiculo['vh_origen'] == 'Compra': }}
+                            Fecha Factura:
+                        {{ elif vehiculo['vh_origen'] == 'Donación': }}
+                            Fecha Oficio:
+                        {{ pass }}
+                    </div>
+                    <div class="grid-item">
+                        {{=vehiculo['vh_fecha_adquisicion']}}
+                    </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
-                    <div class="grid-item">
-                        Nº. Factura:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_nro_factura']}}
-                    </div>
-                    <div class="grid-item">
-                        Fecha Factura:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_fecha_factura']}}
-                    </div>
-                    <div class="grid-item">
-                        Proveedor:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_proveedor']}}
-                    </div>
-                    <div class="grid-item">
-                        RIF:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_proveedor_rif']}}
-                    </div>
+                        <div class="grid-item">
+                            Proveedor:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['vh_proveedor']}}
+                        </div>
+                        <div class="grid-item">
+                            RIF:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['vh_proveedor_rif']}}
+                        </div>
                     {{ else: }}
-                    <div class="grid-item">
-                        Nº. Donación:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_nro_donacion']}}
-                    </div>
-                    <div class="grid-item">
-                        Donante:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_donante']}}
-                    </div>
-                    <div class="grid-item">
-                        Contacto:
-                    </div>
-                    <div class="grid-item">
-                        {{=vehiculo['vh_contacto_donante']}}
-                    </div>
+                        <div class="grid-item">
+                            Donante:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['vh_donante']}}
+                        </div>
+                        <div class="grid-item">
+                            Contacto donante:
+                        </div>
+                        <div class="grid-item">
+                            {{=vehiculo['vh_contacto_donante']}}
+                        </div>
                     {{ pass }}
                 </div>
             </div>
@@ -781,7 +793,7 @@
                         
                         <div class="form-group">
                             <label>Responsable*</label>
-                            <select class="form-control" type="select" name="responsable" id="responsable" class="input" required>
+                            <select class="form-control seleccion-escrita" type="select" name="responsable" id="responsable" class="input" required>
                               <option value="">Seleccione una opción</option>
                               {{for usuario in db(db.auth_user).select() :}}
                                 <option id="{{=usuario.id}}" value="{{=usuario.id}}" {{ if vehiculo['vh_responsable'] == usuario.id: }}selected{{ pass }}>{{=usuario.first_name}} {{=usuario.last_name }}</option>
@@ -792,7 +804,7 @@
                     
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
-                            <select class="form-control" type="select" name="custodio" id="custodio" class="input" required>
+                            <select class="form-control seleccion-escrita" type="select" name="custodio" id="custodio" class="input" required>
                               <option value="">Seleccione una opción</option>
                               {{for usuario in db(db.auth_user).select() :}}
                                 <option id="{{=usuario.id}}" value="{{=usuario.id}}" {{ if vehiculo['vh_custodio'] == usuario.id: }}selected{{ pass }}>{{=usuario.first_name}} {{=usuario.last_name }}</option>
@@ -807,29 +819,47 @@
                             <div class="dr" id="error-ubicacion_custodio" style="color: #d03e3e;"> </div>
                         </div>
 
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Telefono del custodio</label>
-                                <input type="text" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio" title="Ingrese el teléfono del custodio del vehículo" value="{{=vehiculo['vh_telf_custodio']}}">
-                                <div class="dr" id="error-telf_custodio" style="color: #d03e3e;"> </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Extensión</label>
-                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo"  
-                                {{ if vehiculo['vh_extension'] != None : }} value="{{=vehiculo['vh_extension']}}" {{pass}} >
-                                <div class="dr" id="error-extension" style="color: #d03e3e;"> </div>
-                            </div>
-                          </div>
-                        </div>
-
                         <div class="form-group">
                             <label>Ubicacion de pernocta*</label>
                             <input type="text" class="form-control" id="pernocta" name="pernocta" placeholder="Ubicacion de pernocta*" title="Ingrese la ubicacion de pernocta del vehículo" required value="{{=vehiculo['vh_ubicacion_custodio']}}">
                             <div class="dr" id="error-pernocta" style="color: #d03e3e;"> </div>
                         </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del responsable</label>
+                                <input type="text" class="form-control campo_telf" id="telf_responsable" name="telf_responsable" placeholder="Teléfono del responsable" title="Ingrese el teléfono del responsable del vehículo" value="{{=vehiculo['vh_telf_responsable']}}">
+                                <div class="dr" id="error-telf_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión responsable</label>
+                                <input type="text" class="form-control campo_extension" id="extension_responsable" name="extension_responsable" placeholder="Extensión responsable" title="Ingrese la extensión responsable del vehículo" {{ if vehiculo['vh_extension_responsable'] != None : }} value="{{=vehiculo['vh_extension_responsable']}}" {{pass}}>
+                                <div class="dr" id="error-extension_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del custodio</label>
+                                <input type="text" class="form-control campo_telf" id="telf_custodio" name="telf_custodio" placeholder="Teléfono del custodio" title="Ingrese el teléfono del custodio del vehículo" value="{{=vehiculo['vh_telf_custodio']}}">
+                                <div class="dr" id="error-telf_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión custodio</label>
+                                <input type="text" class="form-control campo_extension" id="extension_custodio" name="extension_custodio" placeholder="Extensión custodio" title="Ingrese el teléfono del custodio del vehículo"  
+                                {{ if vehiculo['vh_extension_custodio'] != None : }} value="{{=vehiculo['vh_extension_custodio']}}" {{pass}}>
+                                <div class="dr" id="error-extension_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                     <div style="position:fixed; bottom: 15px; right: 30px;">
@@ -913,11 +943,6 @@
                         <h4 class="titulosForm">Datos de adquisición</h4>
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
-                            <label>Fecha de adquisición*</label>
-                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" required value="{{=vehiculo['vh_fecha_adquisicion']}}" min="1967-07-18">
-                            <div class="dr" id="error-fecha_adquisicion" style="color: #d03e3e;"> </div>
-                        </div>
-                        <div class="form-group">
                             <label>Origen*</label>
                             <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
                                 <option value="">Seleccione una opción</option>
@@ -929,12 +954,12 @@
                         <div id="grupo-compra" style="display: none;">
                           <div class="form-group">
                               <label>Nro Factura*</label>
-                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" value="{{=vehiculo['vh_nro_factura']}}">
+                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
                               <div class="dr" id="error-nro_factura" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
                               <label>Fecha de factura*</label>
-                              <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" value="{{=vehiculo['vh_fecha_factura']}}">
+                              <input type="date" class="form-control campo_fecha" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
                               <div class="dr" id="error-fecha_factura" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
@@ -951,8 +976,13 @@
                         <div id="grupo-donacion" style="display: none;">
                           <div class="form-group">
                               <label>Nº Oficio*</label>
-                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" value="{{=vehiculo['vh_nro_oficio']}}">
+                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
                               <div class="dr" id="error-nro_oficio" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Fecha de oficio*</label>
+                              <input type="date" class="form-control campo_fecha" id="fecha_oficio" name="fecha_oficio" placeholder="Fecha de oficio*" title="Ingrese la fecha de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
+                              <div class="dr" id="error-fecha_oficio" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
                               <label>Donante*</label>
@@ -961,7 +991,7 @@
                           </div>
                           <div class="form-group">
                               <label>Teléfono del Donante*</label>
-                              <input type="text" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante" value="{{=vehiculo['vh_contacto_donante']}}">
+                              <input type="text" class="form-control campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante" value="{{=vehiculo['vh_contacto_donante']}}">
                               <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -988,7 +1018,6 @@
       <!-- Fin Modal Agregar Mantenimiento -->
 
 <script type="text/javascript">
-
   // Auto-seleccionamos campos de dropdown al cargar
   $(document).ready(function(){
     // Marca
@@ -1157,7 +1186,7 @@
 
   // Validación de formato de telf custodio (formato del regex establecido)
 
-  $("#telf_custodio").focusout(function() {
+  $(".campo_telf").focusout(function() {
     var tlf = $(this).val();
     if (regexTlf.test(tlf) || tlf.length == 0) {
       $(this).next().hide();
@@ -1200,11 +1229,11 @@
 
   // Máscara js para formato de teléfono
   $(document).ready(function() {
-    $('#telf_custodio').mask('(0000) 000-0000');
+    $('.campo_telf').mask('(0000) 000-0000');
   });
 
   // Validación de formato de extension custodio (formato del regex establecido)
-  $("#extension").focusout(function() {
+  $(".campo_extension").focusout(function() {
     var extension = $(this).val();
     if (regexExtension.test(extension) || extension.length == 0) {
       $(this).next().hide();
@@ -1269,11 +1298,11 @@
 
     var maximo = yyyy + "-" + mm + "-" + dd;
 
-    $("#fecha_adquisicion").attr('max', maximo);
+    $(".campo_fecha").attr('max', maximo);
   });
 
   // Verifica la fecha introducida
-  $("#fecha_adquisicion").change(function() {
+  $(".campo_fecha").change(function() {
     var fecha = new Date($(this).val());
     var maximo = new Date();
     var minimo = new Date("1967-07-18");

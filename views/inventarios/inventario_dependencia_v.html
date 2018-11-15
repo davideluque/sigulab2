@@ -109,7 +109,7 @@
             <fieldset class="formField">
                 <div class="form-bottom" data-step="1" data-title="Primer Paso">
                   <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                  <div class="col-sm-1 col1Body"> 
+                  <div class="col-sm-1 col1Body columna-gris-formulario"> 
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
@@ -189,7 +189,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body"> 
+                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
@@ -245,7 +245,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body"> 
+                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
                       <span class="step">1</span>
                       <span class="step">2</span>
                       <span class="step activePass">3</span>
@@ -356,7 +356,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -444,7 +444,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> 
+                      <div class="col-sm-1 col1Body columna-gris-formulario"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -465,7 +465,7 @@
 
                         <div class="form-group">
                             <label>Responsable*</label>
-                            <select class="form-control" type="select" name="responsable" id="responsable" class="input" required>
+                            <select class="form-control seleccion-escrita" type="select" name="responsable" id="responsable" class="input" required>
                               <option value="">Seleccione una opción</option>
                               {{for usuario in db(db.auth_user).select() :}}
                                 <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
@@ -476,7 +476,7 @@
                     
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
-                            <select class="form-control" type="select" name="custodio" id="custodio" class="input" required>
+                            <select class="form-control seleccion-escrita" type="select" name="custodio" id="custodio" class="input" required>
                               <option value="">Seleccione una opción</option>
                               {{for usuario in db(db.auth_user).select() :}}
                                 <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
@@ -491,28 +491,46 @@
                             <div class="dr" id="error-ubicacion_custodio" style="color: #d03e3e;"> </div>
                         </div>
 
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Telefono del custodio</label>
-                                <input type="text" class="form-control" id="telf_custodio" name="telf_custodio" placeholder="Telefono del custodio" title="Ingrese el teléfono del custodio del vehículo">
-                                <div class="dr" id="error-telf_custodio" style="color: #d03e3e;"> </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Extensión</label>
-                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Extensión" title="Ingrese el teléfono del custodio del vehículo">
-                                <div class="dr" id="error-extension" style="color: #d03e3e;"> </div>
-                            </div>
-                          </div>
-                        </div>
-
                         <div class="form-group">
                             <label>Ubicacion de pernocta*</label>
                             <input type="text" class="form-control" id="pernocta" name="pernocta" placeholder="Ubicacion de pernocta*" title="Ingrese la ubicacion de pernocta del vehículo" required>
                             <div class="dr" id="error-pernocta" style="color: #d03e3e;"> </div>
                         </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del responsable</label>
+                                <input type="text" class="form-control campo_telf" id="telf_responsable" name="telf_responsable" placeholder="Teléfono del responsable" title="Ingrese el teléfono del responsable del vehículo">
+                                <div class="dr" id="error-telf_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión responsable</label>
+                                <input type="text" class="form-control campo_extension" id="extension_responsable" name="extension_responsable" placeholder="Extensión responsable" title="Ingrese la extensión responsable del vehículo">
+                                <div class="dr" id="error-extension_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del custodio</label>
+                                <input type="text" class="form-control campo_telf" id="telf_custodio" name="telf_custodio" placeholder="Teléfono del custodio" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr" id="error-telf_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión custodio</label>
+                                <input type="text" class="form-control campo_extension" id="extension_custodio" name="extension_custodio" placeholder="Extensión custodio" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr" id="error-extension_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                     <div style="position:fixed; bottom: 15px; right: 30px;">
@@ -526,7 +544,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -582,7 +600,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -595,11 +613,6 @@
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos de adquisición</h4>
                         <label>Campos marcados con * son obligatorios.</label>
-                        <div class="form-group">
-                            <label>Fecha de adquisición*</label>
-                            <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" placeholder="Fecha de adquisición*" title="Ingrese la fecha de adquisición vehículo" min="1967-07-18" required>
-                            <div class="dr" id="error-fecha_adquisicion" style="color: #d03e3e;"> </div>
-                        </div>
                         <div class="form-group">
                             <label>Origen*</label>
                             <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
@@ -617,7 +630,7 @@
                           </div>
                           <div class="form-group">
                               <label>Fecha de factura*</label>
-                              <input type="date" class="form-control" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura">
+                              <input type="date" class="form-control campo_fecha" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" min="1967-07-18" title="Ingrese la fecha de factura">
                               <div class="dr" id="error-fecha_factura" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
@@ -638,13 +651,18 @@
                               <div class="dr" id="error-nro_oficio" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
+                              <label>Fecha de oficio*</label>
+                              <input type="date" class="form-control campo_fecha" id="fecha_oficio" name="fecha_oficio" placeholder="Fecha de oficio*" min="1967-07-18" title="Ingrese la fecha de oficio">
+                              <div class="dr" id="error-fecha_oficio" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
                               <label>Donante*</label>
                               <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante">
                               <div class="dr" id="error-donante" style="color: #d03e3e;"> </div>
                           </div>
                           <div class="form-group">
                               <label>Teléfono del Donante*</label>
-                              <input type="text" class="form-control" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el telefono del Donante">
+                              <input type="text" class="form-control .campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante">
                               <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
                           </div>
                         </div>
@@ -753,7 +771,7 @@
   });
 
   // Validación de formato de telf custodio (formato del regex establecido)
-  $("#telf_custodio").focusout(function() {
+  $(".campo_telf").focusout(function() {
     var tlf = $(this).val();
     if (regexTlf.test(tlf) || tlf.length == 0) {
       $(this).next().hide();
@@ -796,11 +814,11 @@
 
   // Máscara js para formato de teléfono
   $(document).ready(function() {
-    $('#telf_custodio').mask('(0000) 000-0000');
+    $('.campo_telf').mask('(0000) 000-0000');
   });
 
   // Validación de formato de extension custodio (formato del regex establecido)
-  $("#extension").focusout(function() {
+  $(".campo_extension").focusout(function() {
     var extension = $(this).val();
     if (regexExtension.test(extension) || extension.length == 0) {
       $(this).next().hide();
@@ -856,7 +874,7 @@
     {{ pass }}
   });
 
-  // Valida la fecha del selector de fecha adquisición
+  // Valida la fecha del selector de fecha factura/oficio
   $(document).ready(function() {
     var today = new Date();
     var dd = today.getDate();
@@ -865,11 +883,11 @@
 
     var maximo = yyyy + "-" + mm + "-" + dd;
 
-    $("#fecha_adquisicion").attr('max', maximo);
+    $(".campo_fecha").attr('max', maximo);
   });
 
-  // Verifica la fecha introducida
-  $("#fecha_adquisicion").change(function() {
+  // Verifica la fecha introducida en factura y/o oficio
+  $(".campo_fecha").change(function() {
     var fecha = new Date($(this).val());
     var maximo = new Date();
     var minimo = new Date("1967-07-18");
@@ -934,9 +952,25 @@
     if (origen == "Compra") {
       $("#grupo-compra").show("fast");
       $("#grupo-donacion").hide("fast");
+      $("#fecha_factura").attr('required', true);
+      $("#nro_factura").attr('required', true);
+      $("#proveedor").attr('required', true);
+      $("#proveedor_rif").attr('required', true);
+      $("#fecha_oficio").attr('required', false);
+      $("#nro_oficio").attr('required', false);
+      $("#donante").attr('required', false);
+      $("#contacto_donante").attr('required', false);
     } else if (origen == "Donación") {
       $("#grupo-compra").hide("fast");
       $("#grupo-donacion").show("fast");
+      $("#fecha_factura").attr('required', false);
+      $("#nro_factura").attr('required', false);
+      $("#proveedor").attr('required', false);
+      $("#proveedor_rif").attr('required', false);
+      $("#fecha_oficio").attr('required', true);
+      $("#nro_oficio").attr('required', true);
+      $("#donante").attr('required', true);
+      $("#contacto_donante").attr('required', true);
     } else {
       $("#grupo-compra").hide("fast");
       $("#grupo-donacion").hide("fast");
