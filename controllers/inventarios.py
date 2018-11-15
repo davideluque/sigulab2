@@ -2293,9 +2293,6 @@ def detalles_vehiculo():
     nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
 
-    print(vehi['vh_eliminar'])
-    print(vehi['vh_desc_eliminar'])
-
     # Si mandamos eliminación
     if request.vars.eliminacion:
         # Si ya hay una eliminación pendiente, la rechazamos
