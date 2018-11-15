@@ -770,10 +770,10 @@ if db(db.auth_membership).isempty():
 # Unidades de medida (*!* Si se agregan nuevas unidades se debera modificar la funcion
 # __sumar_cantidad del controlador __agregar_inventarios de smydp)
 if db(db.t_Unidad_de_medida).isempty():
-	db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
-	db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')
-	db.t_Unidad_de_medida.insert(f_nombre='Gramos', f_abreviatura='g')
-	db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
+    db.t_Unidad_de_medida.insert(f_nombre='Mililitros', f_abreviatura='ml')
+    db.t_Unidad_de_medida.insert(f_nombre='Litros', f_abreviatura='l')
+    db.t_Unidad_de_medida.insert(f_nombre='Gramos', f_abreviatura='g')
+    db.t_Unidad_de_medida.insert(f_nombre='Kilogramos', f_abreviatura='kg')
 
 
 # Catalogo de sustancias
@@ -897,38 +897,15 @@ if db(db.t_Sustancia).isempty():
 # Categorias de desechos
 
 if db(db.t_categoria_desechos).isempty():
-	categorias_iniciales = ['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes']
+    CATEGORIAS_INICIALES = [
+        'Sales Inorgánicas',
+        'Ácidos',
+        'Bases',
+        'Alcoholes',
+        'Orgánicos halogenados',
+        'Orgánicos no halogenados',
+        'Oxidantes'
+    ]
 
-	for categoria in categorias_iniciales:
-		db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
-
-# Vehiculos
-
-if db(db.vehiculo).isempty():
-    user = db(db.auth_user.email == 'sigulabusb@gmail.com').select()[0].id
-    dep = db(db.dependencias.nombre == 'DIRECCIÓN').select()[0].id
-    dep2 = db(db.dependencias.nombre == 'LABORATORIO A').select()[0].id
-    db.vehiculo.insert(
-        vh_marca="Chevrolet", vh_modelo="Wagon R+", vh_ano=2002, vh_serial_motor="S3R14LM0T0R1", vh_serial_carroceria="S3R14LC4RR0C3R14",
-        vh_placa="GBX73F", vh_observaciones="Camioneta de transporte", vh_propietario="Juan Reyes",vh_responsable=2, vh_telf_responsable="0424-4257227",
-        vh_dependencia=dep, vh_crea_ficha=user, vh_lugar_pernocta="Estacionamiento de ENE", vh_serial_chasis="S3R1ALCH4S1S",
-        vh_intt="123456", vh_color="Negro", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara=123.3,
-        vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=10, vh_custodio=1, vh_telf_custodio="04144561782",
-        vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
-        vh_sudebip_categoria_especifica="Catesp1", vh_sede=1, vh_fecha_adquisicion="2018-02-01", vh_factura="123456",
-        vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 1, C.A.", vh_tipo="Tipo1", vh_clasificacion="Clasifc1",
-        vh_tara_md="kg", vh_capacidad_carga_md="kg", vh_rines="Hierro",
-        vh_ubicacion_custodio="MyS", vh_num=128946
-        )
-    db.vehiculo.insert(
-        vh_marca="Chevrolet", vh_modelo="Optra", vh_ano=2006, vh_serial_motor="S3R14LM0T0R13", vh_serial_carroceria="S3R14LC4RR40C3R14",
-        vh_placa="GBX73G", vh_observaciones="Carro de carga", vh_propietario="Juan Reyes",vh_responsable=3, vh_telf_responsable="0424-4257127",
-        vh_dependencia=dep2, vh_crea_ficha=user, vh_lugar_pernocta="Estacionamiento de MEU", vh_serial_chasis="S3R1ALCH4S123S",
-        vh_intt="12345642", vh_color="Plata", vh_clase="Clase", vh_uso="Uso", vh_servicio="Servicio", vh_tara=283.43,
-        vh_nro_puestos=5, vh_nro_ejes=2, vh_capacidad_carga=12, vh_custodio=2, vh_telf_custodio="041618263896",
-        vh_sudebip_localizacion="Sartenejas", vh_sudebip_codigo_localizacion="123456", vh_sudebip_categoria="Cat1", vh_sudebip_subcategoria="Subcat2",
-        vh_sudebip_categoria_especifica="Catesp1", vh_sede=2, vh_fecha_adquisicion="2018-02-01", vh_factura="1234561",
-        vh_origen="Compra", vh_proveedor_rif="J-01234568-9", vh_proveedor="Compañia 2, C.A.", vh_tipo="Tipo1", vh_clasificacion="Clasifc1",
-        vh_tara_md="kg", vh_capacidad_carga_md="kg", vh_rines="Hierro",
-        vh_ubicacion_custodio="MyS", vh_num=123456
-        )
+    for categoria in CATEGORIAS_INICIALES:
+        db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
