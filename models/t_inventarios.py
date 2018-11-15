@@ -405,11 +405,12 @@ db.define_table(
 
     # Datos del responsable
     Field('vh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
-    Field('vh_telf_responsable', 'string', label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('vh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
     Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio')),
+    Field('vh_telf_responsable', 'string', default="", label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('vh_extension_responsable', 'integer', label=T('Extensión de teléfono del responsable patrimonial'), requires=IS_MATCH('^[0-9]{4}')),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
-    Field('vh_extension', 'integer', default=0, label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
+    Field('vh_extension_custodio', 'integer', label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
 
 
     # Datos SUDEBIP
@@ -420,14 +421,11 @@ db.define_table(
     Field('vh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_nro_factura', 'string', default="", label=T('Número de Factura')),
-    Field('vh_fecha_factura', 'date', label=T('Fecha de Factura')),
-    Field('vh_nro_oficio', 'string', default="", label=T('Número de Oficio')),
+    Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de Adquisición')),
+    Field('vh_nro_adquisicion', 'string', notnull=True, default="", label=T('Número de Adquisición')),
     Field('vh_proveedor', 'string', default="", label=T('Proveedor')),
     Field('vh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
-    Field('vh_nro_donacion', 'integer', label=T('Nº Donación')),
     Field('vh_donante', 'string', default="", label=T('Donante')),
     Field('vh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
@@ -468,7 +466,6 @@ db.define_table(
     Field('mvh_serial_carroceria', 'string', notnull=True, unique=True, label = T('Serial de Carrocería'), requires =IS_NOT_EMPTY()),
     Field('mvh_placa', 'string', notnull=True, unique=True, label=T('Placa del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_intt', 'string', notnull=True, unique=True, label=T('Nº. Autorización INTT')),
-    Field('mvh_sede', 'reference sedes', notnull=True, default=1, label=T('Sede de adscripción')),
 
     # Descripción de uso
     Field('mvh_descripcion', 'text', notnull=True, default="", label=T('Descripción')),
@@ -489,9 +486,12 @@ db.define_table(
     # Datos del responsable
     Field('mvh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('mvh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
-    Field('mvh_telf_responsable', 'string', notnull=True, label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
-    Field('mvh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio')),
-    Field('mvh_telf_custodio', 'string', notnull=True, default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^[-()+0-9]*')]),
+    Field('mvh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('mvh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio')),
+    Field('mvh_telf_responsable', 'string', default="", label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('mvh_extension_responsable', 'integer', label=T('Extensión de teléfono del responsable patrimonial'), requires=IS_MATCH('^[0-9]{4}')),
+    Field('mvh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
+    Field('mvh_extension_custodio', 'integer', label=T('Extensión de teléfono del custodio'), requires=IS_MATCH('^[0-9]{4}')),
 
     # Datos SUDEBIP
     Field('mvh_sudebip_localizacion', 'string', notnull=True, label=T('SUDEBIP: Localización')),
@@ -501,16 +501,13 @@ db.define_table(
     Field('mvh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    Field('mvh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de adquisición')),
     Field('mvh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('mvh_nro_factura', 'string', label=T('Número de Factura')),
-    Field('mvh_fecha_factura', 'date', label=T('Fecha de Factura')),
-    Field('mvh_nro_oficio', 'string', label=T('Número de Oficio')),
-    Field('mvh_proveedor', 'string', label=T('Proveedor')),
-    Field('mvh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
-    Field('mvh_nro_donacion', 'integer', label=T('Nº Donación')),
-    Field('mvh_donante', 'string', label=T('Donante')),
-    Field('mvh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+    Field('mvh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de Adquisición')),
+    Field('mvh_nro_adquisicion', 'string', notnull=True, default="", label=T('Número de Adquisición')),
+    Field('mvh_proveedor', 'string', default="", label=T('Proveedor')),
+    Field('mvh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
+    Field('mvh_donante', 'string', default="", label=T('Donante')),
+    Field('mvh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('mvh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
@@ -535,7 +532,6 @@ db.define_table(
 
 db.modificacion_vehiculo.mvh_modifica_ficha.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
 db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias.id,'%(nombre)s')
-# PENDIENTE: Verificar la siguiente restriccion
 db.modificacion_vehiculo.mvh_placa.requires = IS_IN_DB(db, db.vehiculo.vh_placa, '%(vh_placa)s')
 
 db.define_table(
