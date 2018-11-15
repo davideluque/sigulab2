@@ -403,8 +403,8 @@ db.define_table(
 
     # Datos del responsable
     Field('vh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
-    Field('vh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('vh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio')),
+    Field('vh_custodio', 'reference auth_user', notnull=True, default="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('vh_ubicacion_custodio', 'string', notnull=True, default="", label=T('Ubicación del custodio')),
     Field('vh_telf_responsable', 'string', default="", label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('vh_extension_responsable', 'integer', label=T('Extensión de teléfono del responsable patrimonial'), requires=IS_MATCH('^[0-9]{4}')),
     Field('vh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
@@ -428,10 +428,6 @@ db.define_table(
 
     # Estatus de préstamo o mantenimiento
     Field('vh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
-
-    # Estado = 0 : No es particular
-    # Estado = 1 : Es particular
-    Field('vh_es_particular', 'integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
 
     # Estado = 0 : Visible
     # Estado = 1 : Oculto
@@ -491,8 +487,8 @@ db.define_table(
     # Datos del responsable
     Field('mvh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('mvh_responsable', 'reference auth_user', notnull=True, label=T('Nombre del responsable patrimonial')),
-    Field('mvh_custodio', 'reference auth_user', notnull=True, defaut="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
-    Field('mvh_ubicacion_custodio', 'string', notnull=True, defaut="", label=T('Ubicación del custodio')),
+    Field('mvh_custodio', 'reference auth_user', notnull=True, default="", label=T('Nombre del custodio'), requires=IS_NOT_EMPTY()),
+    Field('mvh_ubicacion_custodio', 'string', notnull=True, default="", label=T('Ubicación del custodio')),
     Field('mvh_telf_responsable', 'string', default="", label=T('Número de teléfono del responsable patrimonial'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
     Field('mvh_extension_responsable', 'integer', label=T('Extensión de teléfono del responsable patrimonial'), requires=IS_MATCH('^[0-9]{4}')),
     Field('mvh_telf_custodio', 'string', default="", label=T('Número de teléfono del custodio'), requires=[IS_NOT_EMPTY(), IS_MATCH('^(0[0-9]{3}) [0-9]{3}-[0-9]{4}')]),
@@ -516,10 +512,6 @@ db.define_table(
 
     # Estatus de préstamo o mantenimiento
     Field('mvh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
-
-    # Estado = 0 : No es particular
-    # Estado = 1 : Es particular
-    Field('mvh_es_particular', 'integer', default=0, label=T('Vehículo particular'), requires=IS_INT_IN_RANGE(0,2)),
 
     # Estado = 0 : Visible
     # Estado = 1 : Oculto
