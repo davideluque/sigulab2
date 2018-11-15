@@ -20,6 +20,7 @@
       <div class="tab-content">
         <div class="tab-pane active" id="proyectos">
           <table class="table contenidoFicha" id="tab_proyectos">
+            <br>
             <tbody>
 
                 <tr> 
@@ -32,27 +33,7 @@
                     <th> Institución </th>
                 </tr>
                 <tr>
-                    {{if bool(proyectos['f_categoria']) :}}
-                    <td id="field_categoria">{{=proyectos['f_categoria']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_fecha_inicio']) :}}
-                    <td id="field_desde">{{=proyectos['f_fecha_inicio']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_fecha_fin']) :}}
-                    <td id="field_hasta">{{=proyectos['f_fecha_fin']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_titulo']) :}}
-                    <td id="field_titulo">{{=proyectos['f_titulo']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_responsabilidad']) :}}
-                    <td id="field_responsabilidad">{{=proyectos['f_responsabilidad']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_resultados']) :}}
-                    <td id="field_resultados">{{=proyectos['f_resultados']}}</td>
-                    {{pass}}
-                    {{if bool(proyectos['f_institucion']) :}}
-                    <td id="field_institucion">{{=proyectos['f_institucion']}}</td>
-                    {{pass}}
+                    
                       
                 </tr>
             </tbody>
@@ -61,6 +42,7 @@
 
         <div class="tab-pane" id="pubArb">
            <table class="table contenidoFicha" id="tab_publicaciones_arbitradas">
+            <br>
             <tbody>
               <tr> 
                   <th> Categoría </th>
@@ -70,21 +52,7 @@
                   <th> Referencia </th>
               </tr>
               <tr>
-                  {{if bool(publicaciones['f_categoria']) :}}
-                  <td id="field_categoria">{{=publicaciones['f_categoria']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones['f_anio']) :}}
-                  <td id="field_anio">{{=publicaciones['f_anio']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones['f_titulo']) :}}
-                  <td id="field_titulo">{{=publicaciones['f_titulo']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones['f_autores']) :}}
-                  <td id="field_autores">{{=publicaciones['f_autores']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones['f_referencia']) :}}
-                  <td id="field_referencia">{{=publicaciones['f_referencia']}}</td>
-                  {{pass}}
+                  
               </tr>   
 
             </tbody>
@@ -93,6 +61,7 @@
 
         <div class="tab-pane" id="pubNoArb">
            <table class="table contenidoFicha" id="tab_publicaciones_no_arbitradas">
+            <br>
             <tbody>
               <tr> 
                   <th> Categoría </th>
@@ -102,21 +71,7 @@
                   <th> Referencia </th>
               </tr>
               <tr>
-                  {{if bool(publicaciones_na['f_categoria']) :}}
-                  <td id="field_categoria">{{=publicaciones_na['f_categoria']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones_na['f_anio']) :}}
-                  <td id="field_anio">{{=publicaciones_na['f_anio']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones_na['f_titulo']) :}}
-                  <td id="field_titulo">{{=publicaciones_na['f_titulo']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones_na['f_autores']) :}}
-                  <td id="field_autores">{{=publicaciones_na['f_autores']}}</td>
-                  {{pass}}
-                  {{if bool(publicaciones_na['f_referencia']) :}}
-                  <td id="field_referencia">{{=publicaciones_na['f_referencia']}}</td>
-                  {{pass}}
+                  
               </tr>
 
 
