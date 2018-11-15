@@ -379,40 +379,45 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
     if db(db.vehiculo.vh_placa == placa).select():
         vh = db(db.vehiculo.vh_placa == placa).select()[0]
 
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de placa \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_placa, vh.vh_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_placa, nombre_dependencia)
         return False
 
     # Si ya existe el numero de VH:
     if db(db.vehiculo.vh_num == int(num)).select():
-        vh = db(db.vehiculo.vh_num == num).select()[0]
+        vh = db(db.vehiculo.vh_num == int(num)).select()[0]
 
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de número \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
         return False
 
     # Validación de seriales:
     if db(db.vehiculo.vh_serial_carroceria == serial_carroceria).select():
-        vh = db(db.vehiculo.vh_num == num).select()[0]
+        vh = db(db.vehiculo.vh_serial_carroceria == serial_carroceria).select()[0]
 
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de carrocería \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_chasis == serial_chasis).select():
-        vh = db(db.vehiculo.vh_num == num).select()[0]
+        vh = db(db.vehiculo.vh_serial_chasis == serial_chasis).select()[0]
 
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de chasis \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_motor == serial_motor).select():
-        vh = db(db.vehiculo.vh_num == num).select()[0]
+        vh = db(db.vehiculo.vh_serial_motor == serial_motor).select()[0]
 
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de motor \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, vh.vh_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
         return False
-     
+
     # Se agrega el nuevo vehiculo a la base de datos
     inv_id = db.vehiculo.insert(
         vh_num=int(num),
@@ -1104,7 +1109,7 @@ def vehiculos():
             tara=float(request.vars.tara),
             tara_md=request.vars.tara_md,
             nro_puestos=int(request.vars.nro_puestos),
-            nro_ejes=int(request.vars.nro_ejes),
+            nro_ejes=0 if not request.vars.nro_ejes else int(request.vars.nro_ejes),
             capacidad_carga=float(request.vars.capacidad),
             capacidad_carga_md=request.vars.capacidad_carga_md,
             rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
@@ -2369,7 +2374,7 @@ def detalles_vehiculo():
             tara=float(request.vars.tara),
             tara_md=request.vars.tara_md,
             nro_puestos=int(request.vars.nro_puestos),
-            nro_ejes=int(request.vars.nro_ejes),
+            nro_ejes=0 if not request.vars.nro_ejes else int(request.vars.nro_ejes),
             capacidad_carga=float(request.vars.capacidad),
             capacidad_carga_md=request.vars.capacidad_carga_md,
             rines=request.vars.rines if request.vars.rines != "Otro" else "Otro: " + request.vars.rines2,
