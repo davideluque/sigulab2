@@ -1399,7 +1399,14 @@ def vehiculos():
     dict_categorias = __obtener_categorias()
     dict_clasificaciones = __obtener_clasificaciones()
 
-    sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
+    if request.vars.dependencia:
+        id_actual = int(request.vars.dependencia)
+    elif dep_padre_id:
+        id_actual = int(dep_padre_id)
+    else:
+        id_actual = 1
+
+    sede_id = db(db.dependencias.id == id_actual).select()[0].id_sede
     if request.vars.dependencia:
         dep_id = int(request.vars.dependencia)
     else:
