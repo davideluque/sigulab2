@@ -1057,6 +1057,37 @@
       <!-- Fin Modal Agregar Mantenimiento -->
 
 <script type="text/javascript">
+  var categorias_sudebip = {};
+  var clasificaciones = {};
+  var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
+  var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
+  var regexExtension = new RegExp("^[0-9]{4}$");
+
+
+  // Carga las categorias de sudebip
+  $(document).ready(function() {
+    {{ for subcat, lista_cat_esp in categorias.items(): }}
+      categorias_sudebip["{{=subcat}}"] = [
+        {{ for cat_esp in lista_cat_esp: }}
+          "{{=cat_esp}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+
+    {{ for tipo, lista_clasif in clasificaciones.items(): }}
+      clasificaciones["{{=tipo}}"] = [
+        {{ for clasif in lista_clasif: }}
+          "{{=clasif}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+  });
+  
+  function isNum(str) {
+    return !isNaN(str);
+  }
+
+
   // Auto-seleccionamos campos de dropdown al cargar
   $(document).ready(function(){
     // Marca
@@ -1088,7 +1119,7 @@
 
     $("#tipo").trigger('change');
 
-    // Clasificación (OJO: Falta clasificación2 y manejo de emergencia)
+    // Clasificación
     $("#clasificacion > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_clasificacion']}}") {
         $(this).attr('selected', 'true');
@@ -1122,13 +1153,6 @@
       }
     });
 
-    // Categoría específica
-    $("#sudebip_categoria_especifica > option").each(function() {
-      if ($(this).val() == "{{=vehiculo['vh_sudebip_categoria_especifica']}}") {
-        $(this).attr('selected', 'true');
-      }
-    });
-    
     // Origen
     $("#origen > option").each(function() {
       if ($(this).val() == "{{=vehiculo['vh_origen']}}") {
@@ -1138,17 +1162,64 @@
 
     $("#origen").trigger('change');
 
+    var tipo = $("#tipo").children("option:selected").val();
+
+    if (tipo == "Otros aparatos para circular") {
+      $("#grupo-clasificacion").prop('disabled', true);
+      $("#grupo-clasificacion").prop('required', false);
+      $("#grupo-clasificacion").hide("fast");
+    } else {
+      $("#grupo-clasificacion").show("fast");
+      $("#grupo-clasificacion").prop('disabled', false)
+      $("#grupo-clasificacion").prop('required', true)
+      $('#clasificacion option:gt(0)').remove(); 
+
+      var longitud = clasificaciones[tipo].length;
+      for (var i = 0; i < longitud; i++) {
+        $("#clasificacion").append(
+          $("<option></option>").attr("value", clasificaciones[tipo][i]).text(clasificaciones[tipo][i])
+        );
+      }
+    }
+
+    $("#clasificacion > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_clasificacion']}}") {
+        $(this).attr('selected', 'true');
+        if ("{{=vehiculo['vh_clasificacion']}}".includes("Emergencia")) {
+          // Mostramos el campo y lo hacemos requerido
+          $("#clasificacion2").show("fast");
+          $("#clasificacion2").prop('disabled', false)
+          $("#clasificacion2").prop('required', true)
+
+          // Autoseleccionamos la opción que es
+          $("#clasificacion2 > option").each(function() {
+            if ($(this).val() == "{{=vehiculo['vh_clasificacion']}}".replace('Emergencia: ', '')) {
+              $(this).attr('selected', 'true');
+            }
+          });
+        }
+      }
+    });
+
+    var subcat = $("#sudebip_subcategoria").children("option:selected").val();
+    $("#grupo-catesp").show("fast");
+    $('#sudebip_categoria_especifica option:gt(0)').remove(); 
+
+    var longitud = categorias_sudebip[subcat].length;
+    for (var i = 0; i < longitud; i++) {
+      $("#sudebip_categoria_especifica").append(
+        $("<option></option>").attr("value", categorias_sudebip[subcat][i]).text(categorias_sudebip[subcat][i])
+      );
+    }
+
+    // Categoría específica
+    $("#sudebip_categoria_especifica > option").each(function() {
+      if ($(this).val() == "{{=vehiculo['vh_sudebip_categoria_especifica']}}") {
+        $(this).attr('selected', 'true');
+      }
+    });
+
   });
-
-  var categorias_sudebip = {};
-  var clasificaciones = {};
-  var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
-  var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
-  var regexExtension = new RegExp("^[0-9]{4}$");
-
-  function isNum(str) {
-    return !isNaN(str);
-  }
 
   // Validación de bien mueble
   $("#num").focusout(function() {
@@ -1341,25 +1412,6 @@
         $(this).css('color', '#888');
       }
     }
-  });
-
-  // Carga las categorias de sudebip
-  $(document).ready(function() {
-    {{ for subcat, lista_cat_esp in categorias.items(): }}
-      categorias_sudebip["{{=subcat}}"] = [
-        {{ for cat_esp in lista_cat_esp: }}
-          "{{=cat_esp}}",
-        {{ pass }}
-        ];
-    {{ pass }}
-
-    {{ for tipo, lista_clasif in clasificaciones.items(): }}
-      clasificaciones["{{=tipo}}"] = [
-        {{ for clasif in lista_clasif: }}
-          "{{=clasif}}",
-        {{ pass }}
-        ];
-    {{ pass }}
   });
 
   // Valida la fecha del selector de fecha adquisición
