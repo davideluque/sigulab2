@@ -3564,6 +3564,8 @@ def validaciones():
     for vh in vehiculos_custodio:
         vehics.append(vh)
 
+    vehics = list(set(vehics))
+
     inventario_vehiculos = []
     inventario_eliminar_vehiculos = []
     for auto in vehics:
