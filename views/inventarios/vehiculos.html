@@ -66,7 +66,18 @@
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
-		{{if espacios or es_espacio or espacio_visitado:}}
+		{{ if acceso_direccion: }}
+		<div class="col-xs-2">
+			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('vehiculos')}}')">
+				<i class="fas fa-arrow-left"></i>	    		
+			</button>
+		</div>
+		<div class="col-xs-8">
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
+		</div>
+		<div class="col-xs-2"> </div>
+		{{ elif espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2">
 			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('vehiculos', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}')">
 				<i class="fas fa-arrow-left"></i>	    		
@@ -149,11 +160,7 @@
 		{{ pass }}	
 			{{ for espacio in dependencias: }}
 			<div class="grid-item" onclick="redirect('{{=URL('vehiculos',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
-				{{if espacios:}}
-					{{ =espacio.codigo }}
-				{{else:}}
 					{{ =espacio.nombre }}
-				{{pass}}
 			</div>
 			{{ if espacio.nombre.find("LABORATORIO G") != -1: }}
 					{{ if not acceso_direccion and dep_nombre.find("DIRECCIÓN") != -1: }}
@@ -169,8 +176,6 @@
 	
 
 <!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
-
-
 
 
 	<!-- Se lista el inventario de una dependencia de apoyo -->

@@ -1148,9 +1148,19 @@ def vehiculos():
                                           request.vars.acceso_direccion):
                     redirect(URL('vehiculos'))
 
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+                try: 
+                    # Se muestra el inventario del espacio
+                    espacio_id = request.vars.dependencia
+                    espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                    dep_nombre = espacio.codigo
+                    dep_padre_id = espacio.dependencia
+
+                    # Busca el inventario del espacio
+                    inventario = __get_vh_dep(dep_padre_id)
+                except IndexError:
+                    dep_nombre = "DIRECCIÓN"
+                    dep_padre_id = 1
+                    inventario = __get_vh_dep(1)
 
                 # Guardando el ID y nombre de la dependencia padre para el link
                 # de navegacion de retorno
@@ -1163,8 +1173,6 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_vh_dep(dep_padre_id)
             else:
                 # Espacios a cargo del usuario user_id que pertenecen a la seccion
                 # en request.vars.dependencia
@@ -1223,14 +1231,22 @@ def vehiculos():
                     __is_bool(request.vars.es_espacio)):
                 redirect(URL('vehiculos'))
 
+            try: 
+                # Se muestra el inventario del espacio
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.codigo
+                dep_padre_id = espacio.dependencia
 
-            espacio_id = request.vars.dependencia
-            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-            dep_nombre = espacio.codigo
+                # Busca el inventario del espacio
+                inventario = __get_vh_dep(dep_padre_id)
+            except IndexError:
+                dep_nombre = "DIRECCIÓN"
+                dep_padre_id = 1
+                inventario = __get_vh_dep(1)
 
             # Guardando el ID y nombre de la dependencia padre para el link
             # de navegacion de retorno
-            dep_padre_id = espacio.dependencia
             dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                 ).select().first().nombre
             # Guardando la unidad de adscripcion
@@ -1238,9 +1254,6 @@ def vehiculos():
                                 ).select().first().unidad_de_adscripcion
 
             espacio_visitado = True
-
-            # Busca el inventario del espacio
-            inventario = __get_vh_dep(dep_padre_id)
 
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # regresar a la vista inicial de inventarios
@@ -1286,18 +1299,26 @@ def vehiculos():
 
             if request.vars.es_espacio == "True":
 
-                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos)  and
+                if not request.vars.acceso_direccion and not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos)  and
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('vehiculos'))
 
-                # Se muestra el inventario del espacio
-                espacio_id = request.vars.dependencia
-                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
-                dep_nombre = espacio.codigo
+                try: 
+                    # Se muestra el inventario del espacio
+                    espacio_id = request.vars.dependencia
+                    espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                    dep_nombre = espacio.codigo
+                    dep_padre_id = espacio.dependencia
+
+                    # Busca el inventario del espacio
+                    inventario = __get_inventario_espacio(espacio_id)
+                except IndexError:
+                    dep_nombre = "DIRECCIÓN"
+                    dep_padre_id = 1
+                    inventario = __get_vh_dep(1)
 
                 # Guardando el ID y nombre de la dependencia padre para el link
                 # de navegacion de retorno
-                dep_padre_id = espacio.dependencia
                 dep_padre_nombre = db(db.dependencias.id == dep_padre_id
                                     ).select().first().nombre
                 # Guardando la unidad de adscripcion
@@ -1306,10 +1327,8 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                # Busca el inventario del espacio
-                inventario = __get_inventario_espacio(espacio_id)
+                
             else:
-
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('vehiculos'))
@@ -1380,7 +1399,14 @@ def vehiculos():
     dict_categorias = __obtener_categorias()
     dict_clasificaciones = __obtener_clasificaciones()
 
-    sede_id = db(db.dependencias.id == (int(dep_padre_id) if dep_padre_id else 1)).select()[0].id_sede
+    if request.vars.dependencia:
+        id_actual = int(request.vars.dependencia)
+    elif dep_padre_id:
+        id_actual = int(dep_padre_id)
+    else:
+        id_actual = 1
+
+    sede_id = db(db.dependencias.id == id_actual).select()[0].id_sede
     if request.vars.dependencia:
         dep_id = int(request.vars.dependencia)
     else:
