@@ -128,17 +128,19 @@
 			  </tr>
 			{{pass}}
 			{{for vehi in inventario_vehiculos:}}
-				<tr>
-					<td class="camposTabla">
-						<a href="{{=URL('detalles_mod_vehiculo', vars=dict(vh=vehi['id']))}}">
-							{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
-						</a>
-					</td>
-					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
-					<td class="camposTabla">VEHÍCULO</td>
-					<td class="camposTabla">{{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}</td>
-				</tr>
-				{{pass}}            
+				{{ if {{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}.select().first() != None: }}
+					<tr>
+						<td class="camposTabla">
+							<a href="{{=URL('detalles_mod_vehiculo', vars=dict(vh=vehi['id']))}}">
+								{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+							</a>
+						</td>
+						<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+						<td class="camposTabla">VEHÍCULO</td>
+						<td class="camposTabla">{{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}</td>
+					</tr>
+					{{ pass }}
+				{{ pass }}
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
