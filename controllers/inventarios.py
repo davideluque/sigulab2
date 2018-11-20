@@ -3559,21 +3559,26 @@ def validaciones():
     vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
 
     vehics = []
+    lista_ids = set()
     for vh in vehiculos_responsable:
-        vehics.append(vh)
+        if vh['id'] not in lista_ids:
+            lista_ids.add(vh['id'])
+            vehics.append(vh)
     for vh in vehiculos_custodio:
-        vehics.append(vh)
+        if vh['id'] not in lista_ids:
+            lista_ids.add(vh['id'])
+            vehics.append(vh)
 
     vehics = list(set(vehics))
 
-    inventario_vehiculos = []
-    inventario_eliminar_vehiculos = []
+    inventario_vehiculos_aux = []
+    inventario_eliminar_vehiculos_aux = []
     for auto in vehics:
         if auto['vh_eliminar'] == 1:
             continue
         if auto['vh_eliminar'] == 0:
-            inventario_eliminar_vehiculos.append(auto)
-        elif not db(
+            inventario_eliminar_vehiculos_aux.append(auto)
+        if not db(
                 db.modificacion_vehiculo.mvh_estado == 0 and \
                 db.modificacion_vehiculo.mvh_id_vehiculo == auto.id and \
                 (db.modificacion_vehiculo.mvh_responsable == user_id)).isempty() \
@@ -3581,7 +3586,22 @@ def validaciones():
                 db.modificacion_vehiculo.mvh_estado == 0 and \
                 db.modificacion_vehiculo.mvh_id_vehiculo == auto.id and \
                 (db.modificacion_vehiculo.mvh_custodio == user_id)).isempty():
+            inventario_vehiculos_aux.append(auto)
+
+    inventario_vehiculos = []
+    inventario_eliminar_vehiculos = []
+
+    lista_ids = set()
+    for auto in inventario_vehiculos_aux:
+        if auto['id'] not in lista_ids:
+            lista_ids.add(auto['id'])
             inventario_vehiculos.append(auto)
+    
+    lista_ids = set()
+    for auto in inventario_eliminar_vehiculos_aux:
+        if auto['id'] not in lista_ids:
+            lista_ids.add(auto['id'])
+            inventario_eliminar_vehiculos.append(auto)
 
     return dict(inventario=inventario,
                 inventario_eliminar=inventario_eliminar,

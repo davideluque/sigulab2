@@ -128,7 +128,7 @@
 			  </tr>
 			{{pass}}
 			{{for vehi in inventario_vehiculos:}}
-				{{ if {{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}.select().first() != None: }}
+				{{ if db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first() != None: }}
 					<tr>
 						<td class="camposTabla">
 							<a href="{{=URL('detalles_mod_vehiculo', vars=dict(vh=vehi['id']))}}">
