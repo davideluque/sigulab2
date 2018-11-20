@@ -987,28 +987,36 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 
 # < ------- Vistas del modulo de inventario -------->
 def index():
-    solicitudes_pendientes = validaciones()
-    numero_solicitudes = 0
+    validaciones_pendientes = validaciones()
+    prestamos_pendientes = prestamos()['prestamos']
+    numero_validaciones = 0
+    numero_prestamos = 0
     if (
-        len(solicitudes_pendientes['inventario'][0]) != 0 or \
-        len(solicitudes_pendientes['inventario'][1]) != 0 or \
-        len(solicitudes_pendientes['inventario'][2]) != 0 or \
-        len(solicitudes_pendientes['inventario_eliminar'][0]) != 0 or \
-        len(solicitudes_pendientes['inventario_eliminar'][1]) != 0 or \
-        len(solicitudes_pendientes['inventario_eliminar'][2]) != 0 or \
-        len(solicitudes_pendientes['inventario_eliminar_vehiculos']) != 0 or \
-        len(solicitudes_pendientes['inventario_vehiculos']) != 0
+        len(validaciones_pendientes['inventario'][0]) != 0 or \
+        len(validaciones_pendientes['inventario'][1]) != 0 or \
+        len(validaciones_pendientes['inventario'][2]) != 0 or \
+        len(validaciones_pendientes['inventario_eliminar'][0]) != 0 or \
+        len(validaciones_pendientes['inventario_eliminar'][1]) != 0 or \
+        len(validaciones_pendientes['inventario_eliminar'][2]) != 0 or \
+        len(validaciones_pendientes['inventario_eliminar_vehiculos']) != 0 or \
+        len(validaciones_pendientes['inventario_vehiculos']) != 0
     ):
-        numero_solicitudes = len(solicitudes_pendientes['inventario'][0]) + \
-        len(solicitudes_pendientes['inventario'][1]) + \
-        len(solicitudes_pendientes['inventario'][2]) + \
-        len(solicitudes_pendientes['inventario_eliminar'][0]) + \
-        len(solicitudes_pendientes['inventario_eliminar'][1]) + \
-        len(solicitudes_pendientes['inventario_eliminar'][2]) + \
-        len(solicitudes_pendientes['inventario_vehiculos']) + \
-        len(solicitudes_pendientes['inventario_eliminar_vehiculos'])
-
-    return dict(numero_solicitudes=numero_solicitudes)
+        numero_validaciones = len(validaciones_pendientes['inventario'][0]) + \
+        len(validaciones_pendientes['inventario'][1]) + \
+        len(validaciones_pendientes['inventario'][2]) + \
+        len(validaciones_pendientes['inventario_eliminar'][0]) + \
+        len(validaciones_pendientes['inventario_eliminar'][1]) + \
+        len(validaciones_pendientes['inventario_eliminar'][2]) + \
+        len(validaciones_pendientes['inventario_vehiculos']) + \
+        len(validaciones_pendientes['inventario_eliminar_vehiculos'])
+    
+    if len(prestamos_pendientes) > 0:
+        numero_prestamos = len(prestamos_pendientes)
+ 
+    return dict(
+        numero_validaciones=numero_validaciones,
+        numero_prestamos=numero_prestamos
+    )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -3523,13 +3531,27 @@ def __get_inventario_espacio_materialesandconsumibles_eliminar(nombre, espacio):
     return []
 
 
+# Muestra las solicitudes de préstamo pendientes por dar respuesta de acuerdo
+# al cargo del usuario y la dependencia que tiene a cargo, así como los vehículos
+# de los cuales es responsable
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def prestamos():
+    user_id = auth.user.id
+    personal = db(db.t_Personal.f_usuario == user_id).select().first()
+    dependencia_id = personal.f_dependencia
+
+    # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
+    
+    return dict(
+        prestamos=[1, 2, 3] # Aca se retorna el arreglo con los prestamos pendientes
+    )
+
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
 # usuario y la dependencia que tiene a cargo
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def validaciones():
-# Inicializando listas de espacios fisicos y dependencias
-
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = auth.user.id # PENDIENTE: Revisar por qué no es user.id
