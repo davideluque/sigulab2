@@ -680,7 +680,10 @@
         var error_categoria = document.getElementById("error-categoria");
 
         // Limpiando los mensajes anteriores de validadores
-
+        if (error_identificacion.innerText != '') {
+            error_identificacion.innerText = '';
+            document.getElementById("identificacion").style.border = "3px solid #ddd";
+        }
         if(error_capacidad.innerText != '') {
             error_capacidad.innerText = '';
             document.getElementById("capacidad").style.border = "3px solid #ddd";

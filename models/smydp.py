@@ -309,6 +309,8 @@ db.define_table(
     # Descripcion del registro para ser mostrada en la tabla de la bitacora
     Field('f_descripcion', 'string', label=T('Descripción')),
 
+    # Fecha de la modificacion esta fecha es cuando se uso la sustancia para asi llevar un calculo mas completo 
+    Field('f_fechaUso', 'date', requires=IS_NOT_EMPTY(), label=T('Fecha de uso')),
     # Referencias a otras tablas
 
     # Referencias obligatorias
