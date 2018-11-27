@@ -60,6 +60,10 @@ def __get_inventario_espacio(espacio_id=None):
 def __get_mantenimiento_bm(bm_id=None):
     return db(db.historial_mantenimiento_bm.hmbm_nro == bm_id).select()
 
+# Dado el id de un vehículo, retorna el historial de préstamo del vehículo
+def __get_prestamos_vh(vh_id=None):
+    return db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select()
+
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
 def __get_inventario_materiales_espacio(espacio_id=None):
