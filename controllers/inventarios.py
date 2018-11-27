@@ -232,6 +232,83 @@ def __get_inventario_herramientas_dep(dep_id):
 
     return inventario
 
+# Dado el id de un usuario, determina los ids de las dependencias de las cuales es jefe
+def __es_jefe_de(user_id):
+    dependencias = db(db.dependencias.id).select()
+
+    lista_ids = set()
+    for dep in dependencias:
+        if dep['id_jefe_dependencia'] == user_id:
+            lista_ids.add(dep['id'])
+
+    return lista_ids
+
+# Determina la cadena jerárquica de dependencias
+def __ids_dependencias_jefe(dep_id):
+    try:
+        dependencia = db(db.dependencias.id == dep_id).select().first()
+    except:
+        return set()
+
+    ids_validos = set()
+    set.add(dep_id)
+
+    while dep_id != 1:
+        dep_id = dependencia['unidad_de_adscripcion']
+        set.add(dep_id)
+        try:
+            dependencia = db(db.dependencias.id == dep_id).select().first()
+        except:
+            return ids_validos
+
+    return ids_validos
+
+# Dado el id de un usuario y el id de un vehículo, determina si el usuario puede
+# ver el vehícuo dada su visibilidad
+def __puede_ver_vehiculo(user_id, vh_id):
+    try:
+        vehiculo = db(db.vehiculo.id == vh_id).select().first()
+    except:
+        return False
+
+    # Los que son visibles los puede ver todo el mundo
+    if vehiculo['vh_oculto'] == 0:
+        return True
+
+    # El responsable siempre puede ver su vehiculo
+    if vehiculo['vh_responsable'] == user_id:
+        return True
+
+    # El custodio siempre puede ver su vehiculo
+    if vehiculo['vh_custodio'] == user_id:
+        return True
+
+    # El personal de la misma dependencia siempre puede ver su vehiculo
+    try:
+        personal = db(db.t_Personal.f_usuario == user_id).select()[0]
+        dependencia_id = personal.f_dependencia
+    except:
+        return False
+
+    if vehiculo['vh_dependencia'] == dependencia_id:
+        return True
+
+    # Por último revisamos cadenas de jefes
+    dep_es_jefe_usuario = __es_jefe_de(user_id)
+    dep_jefes_autorizados = __ids_dependencias_jefe(dependencia_id)
+
+    # Intersección entre los departamentos que el usuario es jefe
+    # y los departamenos autorizados
+    inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
+
+    # Si alguno coincide, puede ver
+    if len(inter) is not 0:
+        return True
+    
+    # Si ningún criterio se cumple, impedimos la visibilidad
+    return False
+
+
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
@@ -3548,7 +3625,7 @@ def prestamos():
     dependencia_id = personal.f_dependencia
 
     # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
-    
+
     return dict(
         prestamos=[1, 2, 3] # Aca se retorna el arreglo con los prestamos pendientes
     )
