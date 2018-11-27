@@ -2643,7 +2643,7 @@ def detalles_vehiculo():
         'Modelo / Código': vehi['vh_modelo'],
         'Año': vehi['vh_ano'],
         'Color': vehi['vh_color'],
-        'Placa': vehi['vh_placa'],
+        'Placa': vehi['vh_placa'].upper(),
         'Propietario': vehi['vh_propietario'],
         'Serial de carroceria': vehi['vh_serial_carroceria'],
         'Serial de motor': vehi['vh_serial_motor'],
