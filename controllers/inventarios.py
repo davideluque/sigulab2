@@ -251,11 +251,11 @@ def __ids_dependencias_jefe(dep_id):
         return set()
 
     ids_validos = set()
-    set.add(dep_id)
+    ids_validos.add(dep_id)
 
     while dep_id != 1:
         dep_id = dependencia['unidad_de_adscripcion']
-        set.add(dep_id)
+        ids_validos.add(dep_id)
         try:
             dependencia = db(db.dependencias.id == dep_id).select().first()
         except:
@@ -273,6 +273,10 @@ def __puede_ver_vehiculo(user_id, vh_id):
 
     # Los que son visibles los puede ver todo el mundo
     if vehiculo['vh_oculto'] == 0:
+        return True
+
+    # El super-usuario puede ver todos los vehículos
+    if auth.user.id == 1:
         return True
 
     # El responsable siempre puede ver su vehiculo
@@ -300,11 +304,12 @@ def __puede_ver_vehiculo(user_id, vh_id):
     # Intersección entre los departamentos que el usuario es jefe
     # y los departamenos autorizados
     inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
+    print(dep_es_jefe_usuario)
 
     # Si alguno coincide, puede ver
     if len(inter) is not 0:
         return True
-    
+
     # Si ningún criterio se cumple, impedimos la visibilidad
     return False
 
@@ -1349,7 +1354,7 @@ def vehiculos():
             dep_nombre = db(db.dependencias.id == user_dep_id
                            ).select().first().nombre
 
-            es_espacio = True               
+            es_espacio = True
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # entrar a la vista inicial de inventarios
         else:
@@ -1388,7 +1393,7 @@ def vehiculos():
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('vehiculos'))
 
-                try: 
+                try:
                     # Se muestra el inventario del espacio
                     espacio_id = request.vars.dependencia
                     espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1412,7 +1417,7 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                
+
             else:
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
                         __is_bool(request.vars.es_espacio)):
@@ -1497,6 +1502,13 @@ def vehiculos():
     else:
         dep_id = 1
 
+    # Ocultamos inventario acorde a lo requerido
+    inventario_visible = []
+    id_usuario = auth.user.id
+    for vh in inventario:
+        if __puede_ver_vehiculo(id_usuario, vh['id']):
+            inventario_visible.append(vh)
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1506,7 +1518,7 @@ def vehiculos():
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
-                inventario=inventario,
+                inventario=inventario_visible,
                 retroceder=retroceder,
                 categorias=dict_categorias,
                 clasificaciones=dict_clasificaciones,
@@ -3638,7 +3650,10 @@ def validaciones():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = auth.user.id # PENDIENTE: Revisar por qué no es user.id
-    user_dep_id = user.f_dependencia
+    try:
+        user_dep_id = user.f_dependencia
+    except:
+        user_dep_id = 0
     inventario = [[], [], []]
     inventario_eliminar = [[], [], []]
 
