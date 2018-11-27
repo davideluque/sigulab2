@@ -1908,7 +1908,8 @@ def detalles_mod_vehiculo():
         caracteristicas_dict=caracteristicas_dict,
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
-        sede_id=sede_id
+        sede_id=sede_id,
+        historial_prestamos=[]
     )
 
 @auth.requires(lambda: __check_role())
@@ -2677,7 +2678,8 @@ def detalles_vehiculo():
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
         clasificaciones=dict_clasificaciones,
-        sede_id=sede_id
+        sede_id=sede_id,
+        historial_prestamos=[]
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
@@ -3542,9 +3544,11 @@ def prestamos():
     dependencia_id = personal.f_dependencia
 
     # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
-    
+
     return dict(
-        prestamos=[1, 2, 3] # Aca se retorna el arreglo con los prestamos pendientes
+        prestamos=[1, 2, 3], # Aca se retorna el arreglo con los prestamos pendientes
+        solicitudes_recibidas=[],
+        solicitudes_realizadas=[],
     )
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
