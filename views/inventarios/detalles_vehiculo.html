@@ -126,80 +126,84 @@
             </div>   
    
             <div id="tab-2"class="tab-content">
-              <div class="grid-container">
-                <div class="grid-item">
-                      Sede:
-                </div>
-                <div class="grid-item">
-                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Dependencia:
-                </div>
-                <div class="grid-item">
-                  {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Responsable: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
-                </div>
-                <div class="grid-item">
-                      Custodio: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().last_name}}
-                </div>
-                <div class="grid-item">
+              <h3 class="text-center">Responsabilidad</h3>
+                <div class="grid-container">
+                  <div class="grid-item">
+                        Responsable: 
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}} 
+                        &nbsp;
+                        {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
+                  </div>
+                  {{ if vehiculo['vh_telf_responsable']: }}
+                  <div class="grid-item">
+                        Tlf. de Responsable:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_telf_responsable']}}
+                  </div>
+                  {{ pass }}
+                  {{ if vehiculo['vh_extension_responsable']: }}
+                  <div class="grid-item">
+                        Extensión responsable:
+                  </div>
+                  <div class="grid-item">
+                          {{=vehiculo['vh_extension_responsable']}}
+                  </div>
+                  {{ pass }}
+                  <div class="grid-item">
+                        Custodio: 
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().first_name}} 
+                        &nbsp;
+                        {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().last_name}}
+                  </div>
+                  {{ if vehiculo['vh_telf_custodio']: }}
+                  <div class="grid-item">
+                        Tlf. de Custodio:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_telf_custodio']}}
+                  </div>
+                  {{ pass }}
+                  {{ if vehiculo['vh_extension_custodio']: }}
+                  <div class="grid-item">
+                        Extensión custodio:
+                  </div>
+                  <div class="grid-item">
+                          {{=vehiculo['vh_extension_custodio']}}
+                  </div>
+                  {{ pass }}
+                  <div class="grid-item">
                       Ubicación de Custodio:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_ubicacion_custodio']}}
+                  </div>
                 </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_ubicacion_custodio']}}
+              <h3 class="text-center">Ubicación</h3>
+                <div class="grid-container">
+                  <div class="grid-item">
+                        Sede:
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.sedes.id == sede_id).select().first().nombre}}
+                  </div>
+                  <div class="grid-item">
+                        Dependencia:
+                  </div>
+                  <div class="grid-item">
+                    {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
+                  </div>
+                  <div class="grid-item">
+                      Ubicación de pernocta:
+                  </div>
+                  <div class="grid-item">
+                      {{=vehiculo['vh_lugar_pernocta']}}
+                  </div>
                 </div>
-                {{ if vehiculo['vh_telf_responsable']: }}
-                <div class="grid-item">
-                      Tlf. de Responsable:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_telf_responsable']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_extension_responsable']: }}
-                <div class="grid-item">
-                      Extensión responsable:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['vh_extension_responsable']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_telf_custodio']: }}
-                <div class="grid-item">
-                      Tlf. de Custodio:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_telf_custodio']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_extension_custodio']: }}
-                <div class="grid-item">
-                      Extensión custodio:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['vh_extension_custodio']}}
-                </div>
-                {{ pass }}
-                <div class="grid-item">
-                    Ubicación de pernocta:
-                </div>
-                <div class="grid-item">
-                    {{=vehiculo['vh_lugar_pernocta']}}
-                </div>
-              </div>
             </div>
 
             <div id="tab-3"class="tab-content">
