@@ -62,7 +62,6 @@
 
 
 <!-- Inicio Boton Modificar VEHICULO -->
-{{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
 <div class="container" id="containerAgregar">
     <div class="row">
         <div class="col-sm-1">
@@ -76,6 +75,7 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
+              {{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
                 {{ if request.vars.delete: }}
                 <form method="post">
                     <!-- Boton para aceptar mod de bien mueble-->
@@ -89,6 +89,7 @@
                 <!-- Boton para eliminar bien mueble-->
                 <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
+              {{ pass }}
             </div>
         </div>
     </div>
@@ -412,7 +413,8 @@
         </div>
     </div>
 
-<!-- Modal añadir un BM nuevo al inventario -->
+{{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
+<!-- Modal editar vehículo -->
 <div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
 
@@ -1058,6 +1060,7 @@
     </div>
   </div>
 </div>
+{{ pass }}
 
 <!-- Fin Modal Agregar BM -->
 

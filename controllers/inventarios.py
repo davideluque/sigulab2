@@ -3578,11 +3578,11 @@ def validaciones():
 
     # Obtenemos todos los vehículos
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
-    #vehiculos_superusuario = db(db.vehiculo.vh_custodio == user_id).select()
+
+    vehiculos_superusuario = []
     if auth.user.id == 1:
         vehiculos_superusuario = db(db.vehiculo.id).select()
-    else:
-        vehiculos_superusuario = []
+
 
     vehics = []
     lista_ids = set()
@@ -3622,7 +3622,7 @@ def validaciones():
         if auto['id'] not in lista_ids:
             lista_ids.add(auto['id'])
             inventario_vehiculos.append(auto)
-    
+
     lista_ids = set()
     for auto in inventario_eliminar_vehiculos_aux:
         if auto['id'] not in lista_ids:
