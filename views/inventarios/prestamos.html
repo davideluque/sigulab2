@@ -86,33 +86,45 @@
           <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
                 <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
-                    <th class="camposTabla linksNombres">ESTATUS</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
     
             <tbody>
-                {{for vehi in solicitudes_recibidas:}}
-                  <tr>
+                {{for solicitud in solicitudes_recibidas:}}
+                <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
                     <td class="camposTabla">
-                      <a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehi['id']))}}">
-                        {{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
-                      </a>
+                        <a href="{{=URL('detalles_vehiculo', vars=dict(vh=db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['id']))}}">
+                            {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_marca']}}
+                            &nbsp;
+                            {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_modelo']}}
+                            &nbsp;
+                            {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_placa']}}
+                        </a>
                     </td>
-                    <td class="camposTabla">IMPLEMENTAR ESTATUS</td>
-                    <td class="camposTabla">IMPLEMENTAR SOLICITANTE</td>
-                    <td class="camposTabla">IMPLEMENTAR MOTIVO</td>
-                  </tr>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id == solicitud['hpvp_solicitante']).select().first().first_name() }}
+                        &nbsp;
+                        {{= db(db.auth_user.id == solicitud['hpvp_solicitante']).select().first().last_name() }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvp_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvp_estatus'] }}</td>
+                </tr>
                 {{ pass }}
             </tbody>
     
             <tfoot id="collapseFiltros">
-              <th class="camposTabla linksNombres">NOMBRE</th>
-                <th class="camposTabla linksNombres">ESTATUS</th>
-                <th class="camposTabla linksNombres">SOLICITANTE</th>
-                <th class="camposTabla linksNombres">MOTIVO</th>
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
     
@@ -132,33 +144,45 @@
           <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
                 <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
-                    <th class="camposTabla linksNombres">ESTATUS</th>
                     <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
     
             <tbody>
-                {{for vehi in solicitudes_realizadas:}}
+                {{for solicitud in solicitudes_realizadas:}}
                   <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
                     <td class="camposTabla">
-                      <a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehi['id']))}}">
-                        {{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+                      <a href="{{=URL('detalles_vehiculo', vars=dict(vh=db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['id']))}}">
+                        {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_marca']}}
+                        &nbsp;
+                        {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_modelo']}}
+                        &nbsp;
+                        {{= db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_placa']}}
                       </a>
                     </td>
-                    <td class="camposTabla">IMPLEMENTAR ESTATUS</td>
-                    <td class="camposTabla">IMPLEMENTAR SOLICITANTE</td>
-                    <td class="camposTabla">IMPLEMENTAR MOTIVO</td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_responsable']).select().first().first_name() }}
+                        &nbsp;
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvp_vh_id']).select().first()['vh_responsable']).select().first().last_name() }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvp_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvp_estatus'] }}</td>
                   </tr>
                 {{ pass }}
             </tbody>
-    
+
             <tfoot id="collapseFiltros">
-              <th class="camposTabla linksNombres">NOMBRE</th>
-                <th class="camposTabla linksNombres">ESTATUS</th>
-                <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
-                <th class="camposTabla linksNombres">MOTIVO</th>
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
     
