@@ -1763,6 +1763,7 @@ def detalles_mod_vehiculo():
     }
 
     mantenimiento = __get_mantenimiento_vh(vehiculo_original['id'])
+    prestamos = __get_prestamos_vh(vehiculo_original['id'])
 
     if request.vars.si:
         db(db.vehiculo.id == vh_id).select().first().update_record(
@@ -1913,7 +1914,7 @@ def detalles_mod_vehiculo():
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
         sede_id=sede_id,
-        historial_prestamos=[]
+        historial_prestamos=prestamos
     )
 
 @auth.requires(lambda: __check_role())
@@ -2503,6 +2504,7 @@ def detalles_vehiculo():
 
     nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
+    prestamos = __get_prestamos_vh(vehi['id'])
 
     # Si mandamos eliminación
     if request.vars.eliminacion:
@@ -2683,7 +2685,7 @@ def detalles_vehiculo():
         localizacion=localizacion,
         clasificaciones=dict_clasificaciones,
         sede_id=sede_id,
-        historial_prestamos=[]
+        historial_prestamos=prestamos
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
