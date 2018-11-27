@@ -583,8 +583,10 @@ db.define_table(
     Field('hpvh_nro_celular_usuario', 'string', label=T('Nº Celular Usuario')),
     Field('hpvh_ci_usuario', 'string', label=T('C.I. Usuario')),
 
+    # Estatus (@TODO: Cambiar estatus por código int)
     Field('hpvh_autorizado_por', 'references auth_user', label=T('Autorizado por')),
     Field('hpvh_estatus', 'string', notnull=True, default="Solicitud recibida", label=T('Estatus de solicitud'), requires=IS_IN_SET(["Solicitud recibida", "Solicitud aprobada: en espera", "Solicitud rechazada", "Solicitud aprobada: en tránsito", "Solicitud aprobada: vehículo devuelto"])),
+    Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
 
     # Datos de salida
     Field('hpvh_km_salida', 'integer', label=T('Kilometraje (salida)')),
