@@ -5,8 +5,14 @@
 #-----------------------------------#
 
 def index():
-    redirect(URL('listado_estilo'))
+    redirect(URL('opciones'))
     return dict()
+
+def opciones():
+    return {}
+
+def busqueda():
+    return {}
 
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
