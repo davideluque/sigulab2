@@ -841,7 +841,27 @@ const validadoresQuintoPaso = [
     validaFechaFin5
 ]
 
+function validaCompetencia(){
 
+    return true
+    // const chosenval = $('#competencia1_categoria').trigger("chosen-updated").val().length;
+    // chosen_container = $('#competencia1_categoria_chosen');
+    // if (chosenval == 0){
+    //     chosen_container.attr("data-content", requiredFieldMessage);
+    //     chosen_container.addClass('input-error');
+    //     chosen_container.attr("data-valido", 'false');
+    //     chosen_container.popover('show');
+    //     return false
+    // }
+    // else {
+    //     chosen_container.removeClass('input-error');
+    //     chosen_container.popover('hide');
+    //     return true;
+    // }
+}
+const validadoresCuartoPaso = [
+    validaCompetencia
+]
 
 // ESCRIBE AQUI TUS FUNCIONES
 
@@ -889,6 +909,7 @@ function validacionTiempoReal(){
     $('[name="pagina_web_add"]').on('change', validaPaginaWeb)
 
     $('[name="direccion_add"]').on('change', validaDireccionHab)
+
 
     //$('[name="fecha_inicio_1_add"]').on('change', validaFechaInicio)
 }
@@ -972,6 +993,9 @@ $(document).ready(function () {
             next_step = validadoresCorrectos(validadoresTercerPaso)
         }
 
+        else if (parent_fieldset.attr('id') === 'p4'){
+            next_step = validadoresCorrectos(validadoresCuartoPaso)
+        }
 
 
 

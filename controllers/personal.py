@@ -233,7 +233,7 @@ def add_form():
             f_validado=False,
             f_comentario="",
             f_rol= dic["rol"])
-        
+
         # Añadir al historial de trabajo
 
         db.t_Historial_trabajo_nuevo.update_or_insert(
@@ -280,21 +280,20 @@ def add_form():
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
 
-        personal_id = personal.select()[0].id
-        competencias = dropdowns()[-1]
-        for ind, comp in enumerate(competencias):
-            if request.post_vars['check-competencia-{0}'.format(ind)]:
-                observaciones = request.post_vars['competencia-{0}'.format(ind)]
-                db.t_Competencias.update_or_insert(
-                        (db.t_Competencias.f_nombre==comp) &
-                        (db.t_Competencias.f_Competencia_Personal==personal_id),
-                        f_nombre=comp,
-                        f_observaciones=observaciones,
-                        f_Competencia_Personal=personal_id
-                        )
-            else:
-                db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
-
+        # personal_id = personal.select()[0].id
+        # competencias = dropdowns()[-1]
+        # for ind, comp in enumerate(competencias):
+        #     if request.post_vars['check-competencia-{0}'.format(ind)]:
+        #         observaciones = request.post_vars['competencia-{0}'.format(ind)]
+        #         db.t_Competencias.update_or_insert(
+        #                 (db.t_Competencias.f_nombre==comp) &
+        #                 (db.t_Competencias.f_Competencia_Personal==personal_id),
+        #                 f_nombre=comp,
+        #                 f_observaciones=observaciones,
+        #                 f_Competencia_Personal=personal_id
+        #                 )
+        #     else:
+        #         db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
@@ -321,6 +320,9 @@ def add_form():
             '''.format(f_nombre=first_name, f_apellido=last_name,
             f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
             mail.send(destinatario, asunto, cuerpo)
+
+        personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
+        session.flash = BEAUTIFY(__get_competencias(request, personal))
         redirect(URL('listado_estilo'))
 
 
@@ -384,7 +386,7 @@ class Usuario(object):
 
         def setHist(self, historial):
             pass
-     
+
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
@@ -405,7 +407,7 @@ def listado():
     empleados = validacion_estilo()['empleados']
     idUser = db(db.t_Personal.f_ci == usuario.f_ci).select().first().id
     historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == idUser).select().first()
-    
+
 
     return dict(
         grid=tabla,
@@ -455,7 +457,7 @@ def ficha():
     ci = request.args[0]
 
     # Buscamos en la base de datos
-    personal = db(db.t_Personal.f_ci == ci).select()[0]
+    personal = db(db.t_Personal.f_ci == ci).select().first()
     infoUsuario = db(db.t_Personal.f_ci == ci).select(db.t_Personal.ALL).first()
     usuario = Usuario(infoUsuario)
 
@@ -620,7 +622,7 @@ def validacion_estilo():
 def contar_notificaciones(correo):
     #usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
     usuario =db(db.t_Personal.f_email == correo).select(db.t_Personal.ALL)
-    
+
     if(len(usuario)>1): usuario = usuario[1]
     else: usuario = usuario.first()
     es_supervisor = usuario.f_es_supervisor
@@ -679,11 +681,8 @@ def reporte_listado():
 
 def lista_competencias(personal):
     query = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal)
-    rows = query.select(db.t_Competencias.ALL)
-    lista = {}
-    for row in rows:
-        lista[row.f_nombre] = row.f_observaciones
-    return lista
+    rows = query.select(db.t_Competencias.ALL, orderby=db.t_Competencias.f_numero)
+    return rows
 
 def getDictHistorial(historial):
     dic = {}
@@ -718,7 +717,7 @@ def getDictHistorial(historial):
                  "f_organizacion_5" : historial.f_organizacion_5,
                  "f_cargo_hist_5": historial.f_cargo_hist_5,
                  "f_rol_hist_5": historial.f_rol_hist_5,
-        } 
+        }
     else:
         dic = {  "f_fecha_inicio_1" : '',
                  "f_fecha_final_1" : '',
@@ -750,6 +749,46 @@ def getDictHistorial(historial):
                  "f_organizacion_5" : '',
                  "f_cargo_hist_5": '',
                  "f_rol_hist_5": '',
-        } 
+        }
     return dic
+
+def __get_competencias(request, personal):
+    params = {}
+    # params = {
+    #         'f_nombre1': request.post_vars.competencia1_nombre,
+    #         'f_categorias1':request.post_vars.competencia1_categoria,
+    #         'f_observaciones1': request.post_vars.competencia1_observaciones,
+    #         'f_nombre2': request.post_vars.competencia2_nombre,
+    #         'f_categorias2':request.post_vars.competencia2_categoria,
+    #         'f_observaciones2': request.post_vars.competencia2_observaciones
+    #         }
+    fies = []
+    for i in range(1,11):
+        if 'competencia{0}_nombre'.format(i) in request.post_vars:
+            params = {
+                    'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
+                    'f_categoria' : request.post_vars['competencia{}_categoria'.format(i)],
+                    'f_observaciones' : request.post_vars['competencia{}_observaciones'.format(i)],
+                    'f_numero': i,
+                    'f_Competencia_Personal': personal.id
+                    }
+            if not(
+                    (None or '') ==  params['f_nombre']
+                    or (None or '') == params['f_categoria']):
+                db.t_Competencias.update_or_insert(
+                        (db.t_Competencias.f_numero==i)&
+                        (db.t_Competencias.f_Competencia_Personal==personal.id),
+                        f_nombre=params['f_nombre'],
+                        f_categorias=params['f_categoria'],
+                        f_observaciones= params['f_observaciones'],
+                        f_numero= params['f_numero'],
+                        f_Competencia_Personal= params['f_Competencia_Personal'],
+                        )
+                fies.append(params)
+
+    # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
+    #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
+    return fies
+
+
 
