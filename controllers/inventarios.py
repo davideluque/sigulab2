@@ -232,6 +232,87 @@ def __get_inventario_herramientas_dep(dep_id):
 
     return inventario
 
+# Dado el id de un usuario, determina los ids de las dependencias de las cuales es jefe
+def __es_jefe_de(user_id):
+    dependencias = db(db.dependencias.id).select()
+
+    lista_ids = set()
+    for dep in dependencias:
+        if dep['id_jefe_dependencia'] == user_id:
+            lista_ids.add(dep['id'])
+
+    return lista_ids
+
+# Determina la cadena jerárquica de dependencias
+def __ids_dependencias_jefe(dep_id):
+    try:
+        dependencia = db(db.dependencias.id == dep_id).select().first()
+    except:
+        return set()
+
+    ids_validos = set()
+    ids_validos.add(dep_id)
+
+    while dep_id != 1:
+        dep_id = dependencia['unidad_de_adscripcion']
+        ids_validos.add(dep_id)
+        try:
+            dependencia = db(db.dependencias.id == dep_id).select().first()
+        except:
+            return ids_validos
+
+    return ids_validos
+
+# Dado el id de un usuario y el id de un vehículo, determina si el usuario puede
+# ver el vehícuo dada su visibilidad
+def __puede_ver_vehiculo(user_id, vh_id):
+    try:
+        vehiculo = db(db.vehiculo.id == vh_id).select().first()
+    except:
+        return False
+
+    # Los que son visibles los puede ver todo el mundo
+    if vehiculo['vh_oculto'] == 0:
+        return True
+
+    # El super-usuario puede ver todos los vehículos
+    if auth.user.id == 1:
+        return True
+
+    # El responsable siempre puede ver su vehiculo
+    if vehiculo['vh_responsable'] == user_id:
+        return True
+
+    # El custodio siempre puede ver su vehiculo
+    if vehiculo['vh_custodio'] == user_id:
+        return True
+
+    # El personal de la misma dependencia siempre puede ver su vehiculo
+    try:
+        personal = db(db.t_Personal.f_usuario == user_id).select()[0]
+        dependencia_id = personal.f_dependencia
+    except:
+        return False
+
+    if vehiculo['vh_dependencia'] == dependencia_id:
+        return True
+
+    # Por último revisamos cadenas de jefes
+    dep_es_jefe_usuario = __es_jefe_de(user_id)
+    dep_jefes_autorizados = __ids_dependencias_jefe(vehiculo['vh_dependencia'])
+
+    # Intersección entre los departamentos que el usuario es jefe
+    # y los departamenos autorizados
+    inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
+
+    # Si alguno coincide, puede ver
+    if len(inter) is not 0:
+        return True
+
+    # Si ningún criterio se cumple, impedimos la visibilidad
+    return False
+
+
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
@@ -1272,7 +1353,7 @@ def vehiculos():
             dep_nombre = db(db.dependencias.id == user_dep_id
                            ).select().first().nombre
 
-            es_espacio = True               
+            es_espacio = True
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # entrar a la vista inicial de inventarios
         else:
@@ -1311,7 +1392,7 @@ def vehiculos():
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('vehiculos'))
 
-                try: 
+                try:
                     # Se muestra el inventario del espacio
                     espacio_id = request.vars.dependencia
                     espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1335,7 +1416,7 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                
+
             else:
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
                         __is_bool(request.vars.es_espacio)):
@@ -1420,6 +1501,13 @@ def vehiculos():
     else:
         dep_id = 1
 
+    # Ocultamos inventario acorde a lo requerido
+    inventario_visible = []
+    id_usuario = auth.user.id
+    for vh in inventario:
+        if __puede_ver_vehiculo(id_usuario, vh['id']):
+            inventario_visible.append(vh)
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1429,7 +1517,7 @@ def vehiculos():
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
-                inventario=inventario,
+                inventario=inventario_visible,
                 retroceder=retroceder,
                 categorias=dict_categorias,
                 clasificaciones=dict_clasificaciones,
@@ -1823,15 +1911,15 @@ def detalles_mod_vehiculo():
 
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -1843,20 +1931,21 @@ def detalles_mod_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehiculo['mvh_num'],
-        'Propietario': vehiculo['mvh_propietario'],
-        'Placa': vehiculo['mvh_placa'],
         'Marca': vehiculo['mvh_marca'],
         'Modelo / Código': vehiculo['mvh_modelo'],
         'Año': vehiculo['mvh_ano'],
+        'Color': vehiculo['mvh_color'],
+        'Placa': vehiculo['mvh_placa'],
+        'Propietario': vehiculo['mvh_propietario'],
         'Serial de carroceria': vehiculo['mvh_serial_carroceria'],
         'Serial de motor': vehiculo['mvh_serial_motor'],
         'Serial de chasis': vehiculo['mvh_serial_chasis'],
-        'Color': vehiculo['mvh_color'],
         'Clase': vehiculo['mvh_clase'],
         'Tipo': vehiculo['mvh_tipo'],
         'Clasificación': vehiculo['mvh_clasificacion'],
@@ -1868,6 +1957,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo['mvh_capacidad_carga']) + " " + vehiculo['mvh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo['mvh_intt'],
         'Rines': vehiculo['mvh_rines'],
+        'Visibilidad': None if vehiculo['mvh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo['mvh_observaciones'],
     }
 
@@ -1893,6 +1983,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo_original['vh_capacidad_carga']) + " " + vehiculo_original['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo_original['vh_intt'],
         'Rines': vehiculo_original['vh_rines'],
+        'Visibilidad': None if vehiculo_original['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo_original['vh_observaciones'],
     }
 
@@ -2602,27 +2693,28 @@ def detalles_vehiculo():
         redirect(URL('validaciones'))
 
     if request.vars.ocultar:
-        if vehi.vh_oculto == 1:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto =1)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
+        if vehi['vh_oculto'] == 1:
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=0)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
         else:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto=0)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=1)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
         request.vars.ocultar = None
+        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
 
     # PENDIENTE: Optimizar esto en una sola structura,
     # iterar en caracteristica dict
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -2634,20 +2726,21 @@ def detalles_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehi['vh_num'],
-        'Propietario': vehi['vh_propietario'],
-        'Placa': vehi['vh_placa'],
         'Marca': vehi['vh_marca'],
         'Modelo / Código': vehi['vh_modelo'],
         'Año': vehi['vh_ano'],
+        'Color': vehi['vh_color'],
+        'Placa': vehi['vh_placa'].upper(),
+        'Propietario': vehi['vh_propietario'],
         'Serial de carroceria': vehi['vh_serial_carroceria'],
         'Serial de motor': vehi['vh_serial_motor'],
         'Serial de chasis': vehi['vh_serial_chasis'],
-        'Color': vehi['vh_color'],
         'Clase': vehi['vh_clase'],
         'Tipo': vehi['vh_tipo'],
         'Clasificación': vehi['vh_clasificacion'],
@@ -2659,6 +2752,7 @@ def detalles_vehiculo():
         'Capacidad de carga': str(vehi['vh_capacidad_carga']) + " " + vehi['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehi['vh_intt'],
         'Rines': vehi['vh_rines'],
+        'Visibilidad': None if vehi['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehi['vh_observaciones'],
     }
 
@@ -3542,7 +3636,7 @@ def prestamos():
     dependencia_id = personal.f_dependencia
 
     # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
-    
+
     return dict(
         prestamos=[1, 2, 3] # Aca se retorna el arreglo con los prestamos pendientes
     )
@@ -3555,7 +3649,10 @@ def validaciones():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_id = auth.user.id # PENDIENTE: Revisar por qué no es user.id
-    user_dep_id = user.f_dependencia
+    try:
+        user_dep_id = user.f_dependencia
+    except:
+        user_dep_id = 0
     inventario = [[], [], []]
     inventario_eliminar = [[], [], []]
 
@@ -3578,7 +3675,11 @@ def validaciones():
 
     # Obtenemos todos los vehículos
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
-    vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
+
+    vehiculos_superusuario = []
+    if auth.user.id == 1:
+        vehiculos_superusuario = db(db.vehiculo.id).select()
+
 
     vehics = []
     lista_ids = set()
@@ -3586,7 +3687,7 @@ def validaciones():
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
-    for vh in vehiculos_custodio:
+    for vh in vehiculos_superusuario:
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
@@ -3618,7 +3719,7 @@ def validaciones():
         if auto['id'] not in lista_ids:
             lista_ids.add(auto['id'])
             inventario_vehiculos.append(auto)
-    
+
     lista_ids = set()
     for auto in inventario_eliminar_vehiculos_aux:
         if auto['id'] not in lista_ids:

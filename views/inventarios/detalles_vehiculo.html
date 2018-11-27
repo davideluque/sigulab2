@@ -75,6 +75,7 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
+              {{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
                 {{ if request.vars.delete: }}
                 <form method="post">
                     <!-- Boton para aceptar mod de bien mueble-->
@@ -85,14 +86,18 @@
                 {{ else: }}
                 <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
                 <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
-                <!-- Boton para eliminar bien mueble-->
+                <!-- Boton para ocultar el vehículo -->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye fa-1x"></i></button>
+                <!-- Boton para eliminar vehículo-->
                 <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
+              {{ pass }}
             </div>
         </div>
     </div>
 </div>
 <br>
+{{ pass }}
 <!-- Fin Boton Agregar Sustancia -->
 
 <!-- Ficha vehiculo aqui esta la infromacion del vehiculo -->
@@ -126,80 +131,84 @@
             </div>   
    
             <div id="tab-2"class="tab-content">
-              <div class="grid-container">
-                <div class="grid-item">
-                      Sede:
-                </div>
-                <div class="grid-item">
-                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Dependencia:
-                </div>
-                <div class="grid-item">
-                  {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Responsable: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
-                </div>
-                <div class="grid-item">
-                      Custodio: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().last_name}}
-                </div>
-                <div class="grid-item">
+              <h3 class="text-center">Responsabilidad</h3>
+                <div class="grid-container">
+                  <div class="grid-item">
+                        Responsable: 
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}} 
+                        &nbsp;
+                        {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
+                  </div>
+                  {{ if vehiculo['vh_telf_responsable']: }}
+                  <div class="grid-item">
+                        Tlf. de Responsable:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_telf_responsable']}}
+                  </div>
+                  {{ pass }}
+                  {{ if vehiculo['vh_extension_responsable']: }}
+                  <div class="grid-item">
+                        Extensión responsable:
+                  </div>
+                  <div class="grid-item">
+                          {{=vehiculo['vh_extension_responsable']}}
+                  </div>
+                  {{ pass }}
+                  <div class="grid-item">
+                        Custodio: 
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().first_name}} 
+                        &nbsp;
+                        {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().last_name}}
+                  </div>
+                  {{ if vehiculo['vh_telf_custodio']: }}
+                  <div class="grid-item">
+                        Tlf. de Custodio:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_telf_custodio']}}
+                  </div>
+                  {{ pass }}
+                  {{ if vehiculo['vh_extension_custodio']: }}
+                  <div class="grid-item">
+                        Extensión custodio:
+                  </div>
+                  <div class="grid-item">
+                          {{=vehiculo['vh_extension_custodio']}}
+                  </div>
+                  {{ pass }}
+                  <div class="grid-item">
                       Ubicación de Custodio:
+                  </div>
+                  <div class="grid-item">
+                        {{=vehiculo['vh_ubicacion_custodio']}}
+                  </div>
                 </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_ubicacion_custodio']}}
+              <h3 class="text-center">Ubicación</h3>
+                <div class="grid-container">
+                  <div class="grid-item">
+                        Sede:
+                  </div>
+                  <div class="grid-item">
+                        {{=db(db.sedes.id == sede_id).select().first().nombre}}
+                  </div>
+                  <div class="grid-item">
+                        Dependencia:
+                  </div>
+                  <div class="grid-item">
+                    {{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}
+                  </div>
+                  <div class="grid-item">
+                      Ubicación de pernocta:
+                  </div>
+                  <div class="grid-item">
+                      {{=vehiculo['vh_lugar_pernocta']}}
+                  </div>
                 </div>
-                {{ if vehiculo['vh_telf_responsable']: }}
-                <div class="grid-item">
-                      Tlf. de Responsable:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_telf_responsable']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_extension_responsable']: }}
-                <div class="grid-item">
-                      Extensión responsable:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['vh_extension_responsable']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_telf_custodio']: }}
-                <div class="grid-item">
-                      Tlf. de Custodio:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['vh_telf_custodio']}}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['vh_extension_custodio']: }}
-                <div class="grid-item">
-                      Extensión custodio:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['vh_extension_custodio']}}
-                </div>
-                {{ pass }}
-                <div class="grid-item">
-                    Ubicación de pernocta:
-                </div>
-                <div class="grid-item">
-                    {{=vehiculo['vh_lugar_pernocta']}}
-                </div>
-              </div>
             </div>
 
             <div id="tab-3"class="tab-content">
@@ -305,6 +314,7 @@
         
     </div>
 
+{{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
 <!--Modal para eliminar Vehiculo-->
 <div class="modal fade" id="confirmdelete" role="dialog">
     <div class="modal-dialog">
@@ -356,6 +366,7 @@
       </div>
     </div>
 </div>
+{{ pass }}
 
 <!--Modal para oculta BM-->
 <div class="modal fade" id="confirmhide" role="dialog">
@@ -382,7 +393,7 @@
                     text-align: left;
                     padding-top: 12px;
                     color: white;
-                  ">Confirmar ocultar<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  ">Cambiar visibilidad<button type="button" class="close" data-dismiss="modal">&times;</button>
                   </h4>
                 </div>
               </div>
@@ -393,6 +404,7 @@
             <div class="modal-body addBody">
                 <br>
                 <form method="post" style="text-align: center;">
+                    <h4>El vehículo {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} actualmente se encuentra {{ if vehiculo['vh_oculto']: }}oculto{{ else: }}visible{{ pass }}.</h4>
                     <h4>¿Desea ocultar o desocultar {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} de las consultas?</h4>
                     <br>
                     <button type="submit button" class="btn btn-next botondelete" name="ocultar" value="True" style="text-align:center">Si</button>
@@ -404,7 +416,8 @@
         </div>
     </div>
 
-<!-- Modal añadir un BM nuevo al inventario -->
+{{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
+<!-- Modal editar vehículo -->
 <div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
 
@@ -1050,6 +1063,7 @@
     </div>
   </div>
 </div>
+{{ pass }}
 
 <!-- Fin Modal Agregar BM -->
 
