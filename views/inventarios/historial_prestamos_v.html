@@ -23,12 +23,16 @@
             </thead>
     
             <tbody>
-            {{for vh in historial_prestamos:}}
+            {{for solicitud in historial_prestamos:}}
                 <tr>
-                    <td class="camposTabla">POR IMPLEMENTAR</td>
-                    <td class="camposTabla">POR IMPLEMENTAR</td>
-                    <td class="camposTabla">POR IMPLEMENTAR</td>
-                    <td class="camposTabla">POR IMPLEMENTAR</td>
+                    <td class="camposTabla">{{ solicitud['hpvp_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">
+                        {{ db(db.auth_user.id == solicitud['hpvp_solicitante']).select().first().first_name() }}
+                        &nbsp;
+                        {{ db(db.auth_user.id == solicitud['hpvp_solicitante']).select().first().last_name() }}
+                    </td>
+                    <td class="camposTabla">{{ solicitud['hpvp_motivo'] }}</td>
+                    <td class="camposTabla">{{ solicitud['hpvp_estatus'] }}</td>
                 </tr>
             {{pass}}           
             </tbody>
