@@ -28,6 +28,8 @@ const inputs = [
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
     'fecha_inicio_1_add',
+    // Competencias
+    'competencia1_nombre',
 ]
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
@@ -842,22 +844,35 @@ const validadoresQuintoPaso = [
 ]
 
 function validaCompetencia(){
+    var valid=true;
+    const nombre = $('#competencia1_nombre');
+    const chosenval = $('#competencia1_categoria').trigger("chosen-updated").val().length;
+    chosen_container = $('#competencia1_categoria_chosen');
+    if (chosenval == 0){
+        chosen_container.attr("data-content", requiredFieldMessage);
+        chosen_container.addClass('input-error');
+        chosen_container.attr("data-valido", 'false');
+        chosen_container.popover('show');
+        valid = valid && false
+    }
+    else {
+        chosen_container.removeClass('input-error');
+        chosen_container.popover('hide');
+        valid = valid && true;
+    }
+    if (nombre.val()==='') {
+        nombre.attr("data-content", requiredFieldMessage);
+        nombre.popover('show');
+        nombre.addClass('input-error');
+        valid = valid && false;
+    }
+    else {
+        nombre.removeClass('input-error');
+        nombre.popover('hide');
+        valid = valid && true;
+    }
+    return valid
 
-    return true
-    // const chosenval = $('#competencia1_categoria').trigger("chosen-updated").val().length;
-    // chosen_container = $('#competencia1_categoria_chosen');
-    // if (chosenval == 0){
-    //     chosen_container.attr("data-content", requiredFieldMessage);
-    //     chosen_container.addClass('input-error');
-    //     chosen_container.attr("data-valido", 'false');
-    //     chosen_container.popover('show');
-    //     return false
-    // }
-    // else {
-    //     chosen_container.removeClass('input-error');
-    //     chosen_container.popover('hide');
-    //     return true;
-    // }
 }
 const validadoresCuartoPaso = [
     validaCompetencia
