@@ -992,9 +992,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # < ------- Vistas del modulo de inventario -------->
 def index():
     validaciones_pendientes = validaciones()
-    prestamos_pendientes = prestamos()['prestamos']
+    prestamos_pendientes = prestamos()['cant_prestamos']
     numero_validaciones = 0
-    numero_prestamos = 0
     if (
         len(validaciones_pendientes['inventario'][0]) != 0 or \
         len(validaciones_pendientes['inventario'][1]) != 0 or \
@@ -1013,13 +1012,10 @@ def index():
         len(validaciones_pendientes['inventario_eliminar'][2]) + \
         len(validaciones_pendientes['inventario_vehiculos']) + \
         len(validaciones_pendientes['inventario_eliminar_vehiculos'])
-    
-    if len(prestamos_pendientes) > 0:
-        numero_prestamos = len(prestamos_pendientes)
- 
+
     return dict(
         numero_validaciones=numero_validaciones,
-        numero_prestamos=numero_prestamos
+        numero_prestamos=prestamos_pendientes
     )
 
 @auth.requires(lambda: __check_role())
@@ -3549,12 +3545,23 @@ def prestamos():
     personal = db(db.t_Personal.f_usuario == user_id).select().first()
     dependencia_id = personal.f_dependencia
 
-    # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
+    solicitudes_realizadas = db(db.historial_prestamo_vh.hpvh_solicitante == user_id).select()
+    solicitudes_recibidas_aux = db(db.historial_prestamo_vh.id).select()
+
+    solicitudes_recibidas = []
+    for solicitud in solicitudes_recibidas_aux:
+        vehiculo = db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()
+        if vehiculo['vh_responsable'] == user_id or vehiculo['vh_custodio'] == user_id:
+            solicitudes_recibidas.append(solicitud)
+
+    c = 0
+    c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
+    c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
 
     return dict(
-        prestamos=[1, 2, 3], # Aca se retorna el arreglo con los prestamos pendientes
-        solicitudes_recibidas=[],
-        solicitudes_realizadas=[],
+        cant_prestamos=c,
+        solicitudes_recibidas=solicitudes_recibidas,
+        solicitudes_realizadas=solicitudes_realizadas,
     )
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
