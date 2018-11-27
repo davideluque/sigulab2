@@ -2602,13 +2602,14 @@ def detalles_vehiculo():
         redirect(URL('validaciones'))
 
     if request.vars.ocultar:
-        if vehi.vh_oculto == 1:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto =1)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
+        if vehi['vh_oculto'] == 1:
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=0)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
         else:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto=0)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=1)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
         request.vars.ocultar = None
+        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
 
     # PENDIENTE: Optimizar esto en una sola structura,
     # iterar en caracteristica dict
