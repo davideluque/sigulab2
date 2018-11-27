@@ -1823,15 +1823,15 @@ def detalles_mod_vehiculo():
 
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -1848,15 +1848,15 @@ def detalles_mod_vehiculo():
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehiculo['mvh_num'],
-        'Propietario': vehiculo['mvh_propietario'],
-        'Placa': vehiculo['mvh_placa'],
         'Marca': vehiculo['mvh_marca'],
         'Modelo / Código': vehiculo['mvh_modelo'],
         'Año': vehiculo['mvh_ano'],
+        'Color': vehiculo['mvh_color'],
+        'Placa': vehiculo['mvh_placa'],
+        'Propietario': vehiculo['mvh_propietario'],
         'Serial de carroceria': vehiculo['mvh_serial_carroceria'],
         'Serial de motor': vehiculo['mvh_serial_motor'],
         'Serial de chasis': vehiculo['mvh_serial_chasis'],
-        'Color': vehiculo['mvh_color'],
         'Clase': vehiculo['mvh_clase'],
         'Tipo': vehiculo['mvh_tipo'],
         'Clasificación': vehiculo['mvh_clasificacion'],
@@ -2614,15 +2614,15 @@ def detalles_vehiculo():
     # iterar en caracteristica dict
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -2639,15 +2639,15 @@ def detalles_vehiculo():
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehi['vh_num'],
-        'Propietario': vehi['vh_propietario'],
-        'Placa': vehi['vh_placa'],
         'Marca': vehi['vh_marca'],
         'Modelo / Código': vehi['vh_modelo'],
         'Año': vehi['vh_ano'],
+        'Color': vehi['vh_color'],
+        'Placa': vehi['vh_placa'].upper(),
+        'Propietario': vehi['vh_propietario'],
         'Serial de carroceria': vehi['vh_serial_carroceria'],
         'Serial de motor': vehi['vh_serial_motor'],
         'Serial de chasis': vehi['vh_serial_chasis'],
-        'Color': vehi['vh_color'],
         'Clase': vehi['vh_clase'],
         'Tipo': vehi['vh_tipo'],
         'Clasificación': vehi['vh_clasificacion'],
@@ -3578,7 +3578,11 @@ def validaciones():
 
     # Obtenemos todos los vehículos
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
-    vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
+
+    vehiculos_superusuario = []
+    if auth.user.id == 1:
+        vehiculos_superusuario = db(db.vehiculo.id).select()
+
 
     vehics = []
     lista_ids = set()
@@ -3586,7 +3590,7 @@ def validaciones():
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
-    for vh in vehiculos_custodio:
+    for vh in vehiculos_superusuario:
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
@@ -3618,7 +3622,7 @@ def validaciones():
         if auto['id'] not in lista_ids:
             lista_ids.add(auto['id'])
             inventario_vehiculos.append(auto)
-    
+
     lista_ids = set()
     for auto in inventario_eliminar_vehiculos_aux:
         if auto['id'] not in lista_ids:
