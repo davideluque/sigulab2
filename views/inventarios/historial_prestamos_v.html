@@ -1,42 +1,34 @@
 <!-- Inicio Listado de sustancias -->
 <div class="container" style="margin-left: -150px">
-    <div class="row">
-    
-        
-        <button class="dt-button btn boton-sigulabPlus" title="Agregar Mantenimiento" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addman"><i class="fa fa-plus"></i></button>  
-        
-    
+    <div class="row rowcito">
+
         <br><br>
-    
         <br><br>
-        <div id="buttons">
+
+        <div id="buttons2">
         <!-- Filtrado -->
-        <!-- Filtrado -->    
+        <!-- Filtrado -->
         </div>
         <br>
-    
+
         <div class="table-responsive no-padding no-margin">
-        <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
                 <tr id="titulosListado">
                     <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
-                    <th class="camposTabla linksNombres">STATUS</th>
-
-                    <!--<th class="camposTabla linksNombres">Estatus</th>-->
+                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
     
             <tbody>
             {{for vh in historial_prestamos:}}
                 <tr>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
-                    <td class="camposTabla">{{POR IMPLEMENTAR}}</td>
+                    <td class="camposTabla">POR IMPLEMENTAR</td>
+                    <td class="camposTabla">POR IMPLEMENTAR</td>
+                    <td class="camposTabla">POR IMPLEMENTAR</td>
+                    <td class="camposTabla">POR IMPLEMENTAR</td>
                 </tr>
             {{pass}}           
             </tbody>
@@ -45,8 +37,7 @@
                 <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                 <th class="camposTabla linksNombres">SOLICITANTE</th>
                 <th class="camposTabla linksNombres">MOTIVO</th>
-                <th class="camposTabla linksNombres">STATUS</th>
-            <!--<th class="camposTabla linksNombres">Estatus</th>-->
+                <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
     

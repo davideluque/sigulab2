@@ -69,7 +69,7 @@
         <div class="col-sm-5">
             <!-- Botón para atrás -->
             <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
-                <i class="fas fa-arrow-left"></i>               
+                <i class="fas fa-arrow-left"></i>
             </button>
         </div>
         <div id="columnBotonAgregar" class="col-sm-6">
@@ -309,9 +309,9 @@
                 {{include 'inventarios/historial_prestamos_v.html'}}
             </div>
 
-    
+
         </div>
-        
+
     </div>
 
 {{ if (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1): }}
@@ -1665,12 +1665,12 @@
               $("#datatable thead tr").not("#titulosListado").css("display","table-row");
               filtros = true
             }
-      
+
         }
       </script>
-       
+
        <script language="javascript">
-    
+
             var table = $('#datatable').DataTable({
             'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
             //dom: 'Bfrtip',
@@ -1709,26 +1709,98 @@
                     { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
                 ]
                 });
-                //$('#botonModal').addClass('pull-left')
                 $('#filtrar').addClass('pull-left');
                 $('#espacioBuscar').addClass('pull-left');
-        
-        
+
                 $('.dataTables_filter').appendTo('#buttons');
-        
+
                 api.buttons().container().appendTo('#buttons');
-                //$('.dt-buttons').append($('#botonModal'));
                 $('.dt-buttons').append($('#filtrar'));
                 $('#buttons').append('<br><br>');
                 $('.dataTables_info').addClass('pull-right');
                 $('.dataTables_filter').addClass('pull-left');
-        
+
                 $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
                 $('#datatable_next').html('<span class="fa fa-arrow-right" />');
-                
+
             }
             });
-    
+
+            var table = $('#datatable2').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+                url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            "columnDefs": [
+                { "width": "30%", "targets": 0, className: 'dt-body-left' },
+                { "width": "10%", "targets": [1,2,3] }
+            ],
+            initComplete: function(){
+                var api = this.api();
+        
+                new $.fn.dataTable.Buttons(api, {
+                buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+        
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-save"></i>',
+                        className: 'boton-sigulab',
+                        buttons: [
+                            { extend:'copy', text: 'Copiar' } ,
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]
+                    },
+                    { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                ]
+                });
+                $('#filtrar').addClass('pull-left');
+                $('#espacioBuscar ').addClass('pull-left');
+
+                $('.dataTables2_filter').appendTo('#buttons2');
+                $('.dataTables2_filter').addClass('pull-left');
+
+                api.buttons().container().appendTo('#buttons2');
+                $('.dt-buttons').append($('#filtrar'));
+                $('#buttons2').append('<br><br>');
+                $('.dataTables2_info').addClass('pull-right');
+
+                $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+
+            }
+            });
+
         </script>
+
+        <style>
+        #datatable2_filter {
+          float: left!important;
+        }
+
+        .rowcito {
+          margin-right: 0px!important;
+          margin-left: 0px!important;
+        }
+
+        #datatable2_info {
+          text-align:right;
+          width: 100%;
+        }
+
+        #datatable2_filter {
+          padding-left: 20px;
+        }
+        </style>
 
   {{end}}
