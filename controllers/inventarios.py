@@ -299,12 +299,11 @@ def __puede_ver_vehiculo(user_id, vh_id):
 
     # Por último revisamos cadenas de jefes
     dep_es_jefe_usuario = __es_jefe_de(user_id)
-    dep_jefes_autorizados = __ids_dependencias_jefe(dependencia_id)
+    dep_jefes_autorizados = __ids_dependencias_jefe(vehiculo['vh_dependencia'])
 
     # Intersección entre los departamentos que el usuario es jefe
     # y los departamenos autorizados
     inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
-    print(dep_es_jefe_usuario)
 
     # Si alguno coincide, puede ver
     if len(inter) is not 0:
