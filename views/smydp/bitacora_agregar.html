@@ -225,6 +225,22 @@ del concepto y tipo de ingreso o egreso -->
       fecha_compra_div.style.display = "block";
       almacen_div.style.display = "none";
       fecha_sumi_div.style.display="none";
+
+    }else if (valor == "Prestamo"){
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+      almacen_div.style.display = "none";
+      fecha_sumi_div.style.display="block";
+
+    }else if (valor == "Cesion"){
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+      almacen_div.style.display = "none";
+      fecha_sumi_div.style.display="block";
     }
     // Si fue por envio desde el almacen
     else{
@@ -240,8 +256,15 @@ del concepto y tipo de ingreso o egreso -->
   function activarCamposEgreso(valor){
     // En cualquier caso, se activa el div servicio_div y se
     // desactivan los demas
-    servicio_div.style.display = "block";
-    fecha_uso_div.style.display = "block";
+    if (valor== 'Prestamo'){
+      servicio_div.style.display = "none";
+      fecha_uso_div.style.display = "block";
+    }else{
+      servicio_div.style.display = "block";
+      fecha_uso_div.style.display = "block";
+    }
+    
+
 
   }
 

@@ -72,9 +72,9 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Fecha Uso</th>
                 <th class="camposTabla linksNombres">Fecha Carga</th>
                 <th class="camposTabla linksNombres">Hora Carga</th>
-                <th class="camposTabla linksNombres">Fecha Uso</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
                 <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
@@ -89,9 +89,9 @@
             {{usuario = registro['t_Personal']}}
             {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
             <tr>
+                <td class="camposTabla">{{=reg['f_fechaUso']}}</td>
                 <td class="camposTabla">{{=fecha[0]}}</td>
                 <td class="camposTabla">{{=fecha[1]}}</td>
-                <td class="camposTabla">{{=reg['f_fechaUso']}}</td>
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
