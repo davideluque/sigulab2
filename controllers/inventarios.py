@@ -1843,6 +1843,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
@@ -1868,6 +1869,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo['mvh_capacidad_carga']) + " " + vehiculo['mvh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo['mvh_intt'],
         'Rines': vehiculo['mvh_rines'],
+        'Visibilidad': None if vehiculo['mvh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo['mvh_observaciones'],
     }
 
@@ -1893,6 +1895,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo_original['vh_capacidad_carga']) + " " + vehiculo_original['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo_original['vh_intt'],
         'Rines': vehiculo_original['vh_rines'],
+        'Visibilidad': None if vehiculo_original['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo_original['vh_observaciones'],
     }
 
@@ -2635,6 +2638,7 @@ def detalles_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
@@ -2660,6 +2664,7 @@ def detalles_vehiculo():
         'Capacidad de carga': str(vehi['vh_capacidad_carga']) + " " + vehi['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehi['vh_intt'],
         'Rines': vehi['vh_rines'],
+        'Visibilidad': None if vehi['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehi['vh_observaciones'],
     }
 
