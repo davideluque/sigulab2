@@ -8,7 +8,19 @@ def index():
     return dict()
 
 def busqueda():
-    return {}
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    return dict(
+        gremios=gremios,
+        competencias=competencias
+    )
+
+def resultados_busqueda():
+    return dict(
+        gremio = request.post_vars.gremio_busqueda,
+        cargo = request.post_vars.cargo_busqueda,
+        competencia = request.post_vars.competencia_busqueda,
+        categoria = request.post_vars.categoria_busqueda
+    )
 
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
