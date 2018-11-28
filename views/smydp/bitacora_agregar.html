@@ -9,6 +9,13 @@
     } );
   </script>
 
+<script>
+  $( function() {
+    var d1=$( "#datepickerUso" ).datepicker({maxDate:'0'});
+    $( "#datepicker2Uso" ).datepicker({maxDate:'0'});
+  } );
+</script>
+
   <div class="modal fade" id="addregister" role="dialog">
     <div class="modal-dialog">
 
@@ -106,10 +113,19 @@
                               <font color="red"><div id="err_rif" hidden></div></font>
                             </div>
                             <div id="fecha_compra_div" class="esconder">
-                              <p>Fecha de Compra: <input name = "fecha_compra" type="text" id="datepicker"></p>
+                              <p>Fecha de Compra: <input name = "fecha_compra" type="date" data-date-format="YYYY MM DD"></p>
                               <font color="red"><div id="err_fecha_compra" hidden></div></font>
                             </div>
-                            <!-- Fin datos de la compra -->
+
+                           <!-- Fin datos de la compra -->
+
+                           <!-- para usar el suministro con fecha  -->
+                            <div id="fecha_sumi_div" class="esconder">
+                              <p>Fecha de Suministro: <input name = "fecha_sumi" type="date" data-date-format="YYYY MM DD"></p>
+                              <font color="red"><div id="err_fecha_sumi" hidden></div></font>
+                            </div>
+
+                            <!-- para usar el suministro con fecha  -->
 
                             <!-- Si es un ingreso por almacen, se listan los espacios fisicos para seleccionar el almacen -->                            
                             <div id="almacen_div" class="form-group esconder">
@@ -123,12 +139,17 @@
 
                             <!-- Si es un egreso, se listan los servicios -->                            
                             <div id="servicio_div" class="form-group esconder">
-                              <select class="form-control" type="select" id="servicio" name="servicio">
+                              <select class="form-control" type="select" id="servicio" name="servicio" onclick="activarFecha()">
                                 <option value="" selected hidden >Servicio*</option>
                                 {{for s in servicios:}}
                                 <option value="{{=s.id}}">{{=s.nombre}}</option>
                                 {{pass}}
                               </select>
+                            </div>
+
+                            <div id="fecha_uso_div" class="form-group esconder">
+                              <p>Fecha de uso: <input name = "fecha_uso" type="date"  data-date-format="YYYY MM DD"></p>
+                              <font color="red"><div id="err_fecha_uso" hidden></div></font>
                             </div>
 
                         </div>
@@ -159,7 +180,9 @@ del concepto y tipo de ingreso o egreso -->
   var nro_factura_div = document.getElementById("nro_factura_div");
   var institucion_div = document.getElementById("institucion_div");
   var rif_div = document.getElementById("rif_div");
+  var fecha_uso_div = document.getElementById("fecha_uso_div");
   var fecha_compra_div = document.getElementById("fecha_compra_div");
+  var fecha_sumi_div = document.getElementById("fecha_sumi_div");
   var almacen_div = document.getElementById("almacen_div");
   var servicio_div = document.getElementById("servicio_div");
   // Muestra los elementos a llenar de acuerdo al concepto y tipo 
@@ -173,6 +196,9 @@ del concepto y tipo de ingreso o egreso -->
       // Todos los campos de egresos que estuvieran activados son
       // desactivados
       servicio_div.style.display = "none"
+      fecha_uso_div.style.display = "none";
+      fecha_sumi_div.style.display="none";
+      
     }
     else{
       tipo_egreso_div.style.display = "block";
@@ -185,6 +211,7 @@ del concepto y tipo de ingreso o egreso -->
       institucion_div.style.display = "none";
       rif_div.style.display = "none";
       fecha_compra_div.style.display = "none";
+      fecha_sumi_div.style.display="none";
     }
 
   }
@@ -197,10 +224,28 @@ del concepto y tipo de ingreso o egreso -->
       rif_div.style.display = "block";
       fecha_compra_div.style.display = "block";
       almacen_div.style.display = "none";
+      fecha_sumi_div.style.display="none";
+
+    }else if (valor == "Prestamo"){
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+      almacen_div.style.display = "none";
+      fecha_sumi_div.style.display="block";
+
+    }else if (valor == "Cesion"){
+      nro_factura_div.style.display = "none";
+      institucion_div.style.display = "none";
+      rif_div.style.display = "none";
+      fecha_compra_div.style.display = "none";
+      almacen_div.style.display = "none";
+      fecha_sumi_div.style.display="block";
     }
     // Si fue por envio desde el almacen
     else{
       almacen_div.style.display = "block";
+      fecha_sumi_div.style.display="block";
       nro_factura_div.style.display = "none";
       institucion_div.style.display = "none";
       rif_div.style.display = "none";
@@ -211,7 +256,15 @@ del concepto y tipo de ingreso o egreso -->
   function activarCamposEgreso(valor){
     // En cualquier caso, se activa el div servicio_div y se
     // desactivan los demas
-    servicio_div.style.display = "block";
+    if (valor== 'Prestamo'){
+      servicio_div.style.display = "none";
+      fecha_uso_div.style.display = "block";
+    }else{
+      servicio_div.style.display = "block";
+      fecha_uso_div.style.display = "block";
+    }
+    
+
 
   }
 

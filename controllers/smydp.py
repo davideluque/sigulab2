@@ -274,7 +274,8 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
                                 f_tipo_ingreso=tipo_ing,
                                 f_medida=unidad_id,
                                 f_inventario=inv_id,
-                                f_sustancia=sustancia_id)
+                                f_sustancia=sustancia_id,
+                                f_fechaUso=datetime.date.today())
 
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -393,6 +394,12 @@ def __get_descripcion(registro):
             descripcion = "Otorgado por la Sección \"{0}\" del \"{1}\" "\
                           "en calidad de \"{2}\"".format(seccion.nombre,
                           lab.nombre, respuesta.f_calidad[0])
+
+
+        elif registro.f_tipo_ingreso[0] == "Prestamo":
+            descripcion = "Ingreso por prestamo "
+
+
         elif registro.f_tipo_ingreso[0] == "Ingreso inicial":
             descripcion = "Ingreso inicial de la sustancia al inventario"
 
@@ -417,7 +424,12 @@ def __get_descripcion(registro):
             nombre = servicio.nombre
 
             descripcion = "Ejecución del servicio \"{0}\"".format(nombre)
-            
+
+
+        elif registro.f_tipo_egreso[0] == "Prestamo":
+           
+
+            descripcion = "prestamo a .."
         # Cuando es un egreso en respuesta a una solicitud
         else:
             
@@ -476,7 +488,7 @@ def __agregar_registro(concepto):
 
     if concepto == 'Ingreso':
         tipo_ing = request.vars.tipo_ingreso
-
+        fecha_sumi = request.vars.fecha_sumi
         # Nueva cantidad total y nueva cantidad para uso interno
         total_nuevo = total_viejo + cantidad
         uso_interno_nuevo = uso_interno_viejo + cantidad
@@ -495,10 +507,33 @@ def __agregar_registro(concepto):
                 f_cantidad_total=total_nuevo,
                 f_concepto=concepto,
                 f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
                 f_medida=inv.f_medida,
                 f_inventario=inv.id,
                 f_sustancia=inv.sustancia,
                 f_almacen=almacen)
+
+        elif  tipo_ing == 'Prestamo':
+            db.t_Bitacora.insert(
+                f_cantidad=cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto=concepto,
+                f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
+                f_medida=inv.f_medida,
+                f_inventario=inv.id,
+                f_sustancia=inv.sustancia)
+
+        elif tipo_ing == 'Cesion':
+             db.t_Bitacora.insert(
+                f_cantidad=cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto=concepto,
+                f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
+                f_medida=inv.f_medida,
+                f_inventario=inv.id,
+                f_sustancia=inv.sustancia)
 
         # Tipo ingreso es compra
         else:
@@ -529,10 +564,14 @@ def __agregar_registro(concepto):
                 f_medida=inv.f_medida,
                 f_compra=compra_id,
                 f_inventario=inv.id,
-                f_sustancia=inv.sustancia)
+                f_sustancia=inv.sustancia,
+                f_fechaUso=fecha_compra)
 
     else:
         tipo_eg = request.vars.tipo_egreso            
+        fecha_uso= request.vars.fecha_uso
+       
+
         
         # Nueva cantidad total luego del consumo
         total_nuevo = total_viejo - cantidad
@@ -555,6 +594,7 @@ def __agregar_registro(concepto):
         db.t_Bitacora.insert(
             f_cantidad=cantidad,
             f_cantidad_total=total_nuevo,
+            f_fechaUso= fecha_uso,         
             f_concepto=concepto,
             f_tipo_egreso=tipo_eg,
             f_medida=inv.f_medida,
@@ -576,11 +616,11 @@ def bitacora():
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
-    tipos_egreso = ['Docencia','Investigación','Extensión']
+    tipos_egreso = ['Docencia','Investigación','Extensión','Prestamo','Cesion']
 
     # Tipos de ingresos
     #tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
-    tipos_ingreso = ['Compra','Almacén']
+    tipos_ingreso = ['Compra','Almacén','Prestamo','Cesion']
 
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
