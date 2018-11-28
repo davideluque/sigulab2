@@ -3,7 +3,8 @@
 {{block head}}
   <!-- Hoja de estilos específica para la página de gestión de servicios -->
   <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}"> 
-  <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}">  
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}"> 
+
 
 {{end}}
 
@@ -19,13 +20,52 @@
 <!-- Fin del Breadcrum de navegación --> 
 
 <!-- Contenido principal de la página de filtrado de busqueda-->
-<div id="main" class="container">
-    <div id="fila1" class="row">
-      <div class="col-sm-6 col-sm-offset-3">
-        <h2 id="tituloBienvenida">Búsqueda de Personal</h2>
-      </div>
-    </div>
+<div  class="container">
+    <div class="row">
+		<div class="col-sm-12 ">
+			<h2 id="tituloBienvenida">Búsqueda de Personal</h2>
+		</div>
 
+	  	<div class="col-sm-12 ">
+	  		<h3 class="text-center" style="padding-top: 2rem;">Opciones de búsqueda</h3>
+	  		<hr>
+	  	</div>
+
+    	<div class="col-sm-6 col-sm-offset-3 ">
+			<form class="form-horizontal">
+				<fieldset>
+					<!-- Text input-->
+					<div class="form-group">
+					  <div class="col-md-12 ">
+						  <label for="Gremio">Gremio:</label>  
+						  <input id="Gremio" name="Gremio" type="text" placeholder="Por ej.: Analista de Sistemas" class="form-control input-md">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <div class="col-md-12 ">
+						  <label for="Gremio">Cargo desempeñado:</label>  
+						  <input id="Gremio" name="Gremio" type="text" placeholder="Por ej.: Analista de Sistemas" class="form-control input-md">
+					  </div>
+					</div>
+					<div class="form-group">
+					  <div class="col-md-6 ">
+						  <label for="Competencia">Competencia:</label>  
+						  <input id="Competencia" name="Competencia" type="text" placeholder="Por ej.: Analista de Sistemas" class="form-control input-md">
+					  </div> 
+					  <div class="col-md-6 ">
+						  <label for="Competencia">Categoria:</label>  
+						  <input id="Competencia" name="Competencia" type="text" placeholder="Por ej.: Analista de Sistemas" class="form-control input-md">
+					  </div> 
+					</div>
+				</fieldset>
+				<div class="text-right">
+				<button type="submit">Buscar <i class="fa fa-search"></i></button>
+			</div>
+			</div>
+			</form>
+	  	</div>
+
+	</div>
 </div>
 
 
