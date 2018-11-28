@@ -5,11 +5,7 @@
 #-----------------------------------#
 
 def index():
-    redirect(URL('opciones'))
     return dict()
-
-def opciones():
-    return {}
 
 def busqueda():
     return {}

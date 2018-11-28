@@ -1,1 +1,34 @@
-<p>Aqui va la busqueda</p>
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}"> 
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}">  
+
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <span class="breadcrumb-item active">Personal</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación --> 
+
+<!-- Contenido principal de la página de filtrado de busqueda-->
+<div id="main" class="container">
+    <div id="fila1" class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <h2 id="tituloBienvenida">Búsqueda de Personal</h2>
+      </div>
+    </div>
+
+</div>
+
+
+{{end}}
+
+{{end}}
