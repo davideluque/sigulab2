@@ -119,8 +119,17 @@ def dropdowns():
     #Dropdown de operadores
     operadores = ['+58414', '+58424', '+58412', '+58416', '+58426']
 
+    # Competencias
+    competencias = [
+            "Administración", "Alimentación", "Ambiente", "Arquitectura", "Arte", "Biología", "Calidad", "Ciencias del Agro",
+            "Ciencias del mar", "Comunicación", "Contaduría", "Crecimiento Personal", "Derecho", "Dietética", "Docencia", "Economía",
+            "Electrónica", "Estadística", "Filosofía", "Física", "Gerencia", "Gestión", "Humanidades", "Idiomas", "Información",
+            "Informática", "Ingeniería", "Letras", "Liderazgo", "Matemática", "Medicina", "Música", "Negocio", "Nutrición",
+            "Química", "Recreación", "Salud Laboral", "Seguridad", "Tecnología", "Urbanismo",
+            ]
 
-    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores)
+
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias)
 
 # Esta funcion toma la fecha desde el front que tiene
 # el formato dd-mm-yyyy y la transforma en el formato
@@ -159,6 +168,36 @@ def add_form():
              "condicion" : request.post_vars.condicion_add,
              "dependencia" : request.post_vars.dependencia_add,
              "rol" : request.post_vars.rol_add,
+             "fecha_inicio_1" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_1_add),
+             "fecha_final_1" : transformar_fecha_formato_original(request.post_vars.fecha_final_1_add),
+             "dependencia_hist_1" : request.post_vars.dependencia_hist_1_add,
+             "organizacion_1" : request.post_vars.organizacion_1_add,
+             "cargo_hist_1": request.post_vars.cargo_hist_1_add,
+             "rol_hist_1": request.post_vars.rol_hist_1_add,
+             "fecha_inicio_2" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_2_add),
+             "fecha_final_2" : transformar_fecha_formato_original(request.post_vars.fecha_final_2_add),
+             "dependencia_hist_2" : request.post_vars.dependencia_hist_2_add,
+             "organizacion_2" : request.post_vars.organizacion_2_add,
+             "cargo_hist_2": request.post_vars.cargo_hist_2_add,
+             "rol_hist_2": request.post_vars.rol_hist_2_add,
+             "fecha_inicio_3" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_3_add),
+             "fecha_final_3" : transformar_fecha_formato_original(request.post_vars.fecha_final_3_add),
+             "dependencia_hist_3" : request.post_vars.dependencia_hist_3_add,
+             "organizacion_3" : request.post_vars.organizacion_3_add,
+             "cargo_hist_3": request.post_vars.cargo_hist_3_add,
+             "rol_hist_3": request.post_vars.rol_hist_3_add,
+             "fecha_inicio_4" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_4_add),
+             "fecha_final_4" : transformar_fecha_formato_original(request.post_vars.fecha_final_4_add),
+             "dependencia_hist_4" : request.post_vars.dependencia_hist_4_add,
+             "organizacion_4" : request.post_vars.organizacion_4_add,
+             "cargo_hist_4": request.post_vars.cargo_hist_4_add,
+             "rol_hist_4": request.post_vars.rol_hist_4_add,
+             "fecha_inicio_5" : transformar_fecha_formato_original(request.post_vars.fecha_inicio_5_add),
+             "fecha_final_5" : transformar_fecha_formato_original(request.post_vars.fecha_final_5_add),
+             "dependencia_hist_5" : request.post_vars.dependencia_hist_5_add,
+             "organizacion_5" : request.post_vars.organizacion_5_add,
+             "cargo_hist_5": request.post_vars.cargo_hist_5_add,
+             "rol_hist_5": request.post_vars.rol_hist_5_add,
             }
 
     ubicaciones = request.post_vars.ubicacion_add
@@ -194,6 +233,44 @@ def add_form():
             f_validado=False,
             f_comentario="",
             f_rol= dic["rol"])
+        
+        # Añadir al historial de trabajo
+
+        db.t_Historial_trabajo_nuevo.update_or_insert(
+            db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal== personal.select().first().id,
+            f_fecha_inicio_1 = dic["fecha_inicio_1"],
+            f_fecha_final_1 = dic["fecha_final_1"],
+            f_dependencia_hist_1 = dic["dependencia_hist_1"],
+            f_organizacion_1 = dic["organizacion_1"],
+            f_cargo_hist_1 = dic["cargo_hist_1"],
+            f_rol_hist_1 = dic["rol_hist_1"],
+            f_fecha_inicio_2 = dic["fecha_inicio_2"],
+            f_fecha_final_2 = dic["fecha_final_2"],
+            f_dependencia_hist_2 = dic["dependencia_hist_2"],
+            f_organizacion_2 = dic["organizacion_2"],
+            f_cargo_hist_2 = dic["cargo_hist_2"],
+            f_rol_hist_2 = dic["rol_hist_2"],
+            f_fecha_inicio_3 = dic["fecha_inicio_3"],
+            f_fecha_final_3 = dic["fecha_final_3"],
+            f_dependencia_hist_3 = dic["dependencia_hist_3"],
+            f_organizacion_3 = dic["organizacion_3"],
+            f_cargo_hist_3 = dic["cargo_hist_3"],
+            f_rol_hist_3 = dic["rol_hist_3"],
+            f_fecha_inicio_4 = dic["fecha_inicio_4"],
+            f_fecha_final_4 = dic["fecha_final_4"],
+            f_dependencia_hist_4 = dic["dependencia_hist_4"],
+            f_organizacion_4 = dic["organizacion_4"],
+            f_cargo_hist_4 = dic["cargo_hist_4"],
+            f_rol_hist_4 = dic["rol_hist_4"],
+            f_fecha_inicio_5 = dic["fecha_inicio_5"],
+            f_fecha_final_5 = dic["fecha_final_5"],
+            f_dependencia_hist_5 = dic["dependencia_hist_5"],
+            f_organizacion_5 = dic["organizacion_5"],
+            f_cargo_hist_5 = dic["cargo_hist_5"],
+            f_rol_hist_5 = dic["rol_hist_5"],
+            f_Historial_trabajo_Personal= personal.select().first().id
+            )
+
         session.ficha_negada=""
         _id = personal.select().first().id
         db(db.es_encargado.tecnico == _id).delete()
@@ -202,6 +279,22 @@ def add_form():
             ubicaciones
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
+
+        personal_id = personal.select()[0].id
+        competencias = dropdowns()[-1]
+        for ind, comp in enumerate(competencias):
+            if request.post_vars['check-competencia-{0}'.format(ind)]:
+                observaciones = request.post_vars['competencia-{0}'.format(ind)]
+                db.t_Competencias.update_or_insert(
+                        (db.t_Competencias.f_nombre==comp) &
+                        (db.t_Competencias.f_Competencia_Personal==personal_id),
+                        f_nombre=comp,
+                        f_observaciones=observaciones,
+                        f_Competencia_Personal=personal_id
+                        )
+            else:
+                db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
+
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
@@ -229,6 +322,7 @@ def add_form():
             f_nombre_validar=dic['nombre'], f_apellido_validar=dic['apellido'])
             mail.send(destinatario, asunto, cuerpo)
         redirect(URL('listado_estilo'))
+
 
 
 #Creamos la clase usuario que contiene la informacion del usuario que se entregara a la vista
@@ -286,7 +380,11 @@ class Usuario(object):
         # dependencia ya dada arriba
         self.f_es_supervisor = usuario.f_es_supervisor
         self.f_persona_contacto = usuario.f_persona_contacto
+        self.f_organizacion_1 = ""
 
+        def setHist(self, historial):
+            pass
+     
 #Funcion que envia los datos a la vista
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def listado():
@@ -302,10 +400,12 @@ def listado():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
 
     empleados = validacion_estilo()['empleados']
-
+    idUser = db(db.t_Personal.f_ci == usuario.f_ci).select().first().id
+    historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == idUser).select().first()
+    
 
     return dict(
         grid=tabla,
@@ -318,7 +418,11 @@ def listado():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario=usuario,
-        empleados = empleados
+        empleados = empleados,
+        competencias=competencias,
+        comp_list=lista_competencias(usuario),
+        historial = getDictHistorial(historial_rows)
+
         )
 
 def transformar_fecha(fecha):
@@ -425,7 +529,9 @@ def ficha():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
+
+    historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == elm.id).select().first()
 
     return dict(
         personal=personal,
@@ -438,7 +544,11 @@ def ficha():
         operadores=operadores,
         ubicaciones=ubicaciones,
         usuario_logged=usuario_logged,
-        usuario = usuario
+        usuario=usuario,
+        competencias=competencias,
+        comp_list=lista_competencias(personal),
+        historial=getDictHistorial(historial_rows)
+
     )
 
 def cambiar_validacion(validacion, personal):
@@ -566,3 +676,80 @@ def reporte_listado():
         accion = '[Personal] Reporte de Personal Generado'
         db.bitacora_general.insert(f_accion = accion)
     return redirect(URL('listado_estilo'))
+
+def lista_competencias(personal):
+    query = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal)
+    rows = query.select(db.t_Competencias.ALL)
+    lista = {}
+    for row in rows:
+        lista[row.f_nombre] = row.f_observaciones
+    return lista
+
+def getDictHistorial(historial):
+    dic = {}
+    if (historial != None):
+        dic = {  "f_fecha_inicio_1" : transformar_fecha(historial.f_fecha_inicio_1),
+                 "f_fecha_final_1" : transformar_fecha(historial.f_fecha_final_1),
+                 "f_dependencia_hist_1" : historial.f_dependencia_hist_1,
+                 "f_organizacion_1" : historial.f_organizacion_1,
+                 "f_cargo_hist_1": historial.f_cargo_hist_1,
+                 "f_rol_hist_1": historial.f_rol_hist_1,
+                 "f_fecha_inicio_2" : transformar_fecha(historial.f_fecha_inicio_2),
+                 "f_fecha_final_2" : transformar_fecha(historial.f_fecha_final_2),
+                 "f_dependencia_hist_2" : historial.f_dependencia_hist_2,
+                 "f_organizacion_2" : historial.f_organizacion_2,
+                 "f_cargo_hist_2": historial.f_cargo_hist_2,
+                 "f_rol_hist_2": historial.f_rol_hist_2,
+                 "f_fecha_inicio_3" : transformar_fecha(historial.f_fecha_inicio_3),
+                 "f_fecha_final_3" : transformar_fecha(historial.f_fecha_final_3),
+                 "f_dependencia_hist_3" : historial.f_dependencia_hist_3,
+                 "f_organizacion_3" : historial.f_organizacion_3,
+                 "f_cargo_hist_3": historial.f_cargo_hist_3,
+                 "f_rol_hist_3": historial.f_rol_hist_3,
+                 "f_fecha_inicio_4" : transformar_fecha(historial.f_fecha_inicio_4),
+                 "f_fecha_final_4" : transformar_fecha(historial.f_fecha_final_4),
+                 "f_dependencia_hist_4" : historial.f_dependencia_hist_4,
+                 "f_organizacion_4" : historial.f_organizacion_4,
+                 "f_cargo_hist_4": historial.f_cargo_hist_4,
+                 "f_rol_hist_4": historial.f_rol_hist_4,
+                 "f_fecha_inicio_5" : transformar_fecha(historial.f_fecha_inicio_5),
+                 "f_fecha_final_5" : transformar_fecha(historial.f_fecha_final_5),
+                 "f_dependencia_hist_5" : historial.f_dependencia_hist_5,
+                 "f_organizacion_5" : historial.f_organizacion_5,
+                 "f_cargo_hist_5": historial.f_cargo_hist_5,
+                 "f_rol_hist_5": historial.f_rol_hist_5,
+        } 
+    else:
+        dic = {  "f_fecha_inicio_1" : '',
+                 "f_fecha_final_1" : '',
+                 "f_dependencia_hist_1" : '',
+                 "f_organizacion_1" : '',
+                 "f_cargo_hist_1": '',
+                 "f_rol_hist_1": '',
+                 "f_fecha_inicio_2" : '',
+                 "f_fecha_final_2" : '',
+                 "f_dependencia_hist_2" : '',
+                 "f_organizacion_2" : '',
+                 "f_cargo_hist_2": '',
+                 "f_rol_hist_2": '',
+                 "f_fecha_inicio_3" : '',
+                 "f_fecha_final_3" : '',
+                 "f_dependencia_hist_3" : '',
+                 "f_organizacion_3" : '',
+                 "f_cargo_hist_3": '',
+                 "f_rol_hist_3": '',
+                 "f_fecha_inicio_4" : '',
+                 "f_fecha_final_4" : '',
+                 "f_dependencia_hist_4" : '',
+                 "f_organizacion_4" : '',
+                 "f_cargo_hist_4": '',
+                 "f_rol_hist_4": '',
+                 "f_fecha_inicio_5" : '',
+                 "f_fecha_final_5" : '',
+                 "f_dependencia_hist_5" : '',
+                 "f_organizacion_5" : '',
+                 "f_cargo_hist_5": '',
+                 "f_rol_hist_5": '',
+        } 
+    return dic
+

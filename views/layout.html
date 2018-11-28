@@ -21,13 +21,16 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{{=URL('static', 'favicon.ico')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/chosen.min.css')}}"
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 
   
   <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+  <script src="{{=URL('static','js/jquery.mask.js')}}"></script>
   <script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+  <script src="{{=URL('static', 'js/chosen.jquery.min.js')}}"></script>
 
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -80,6 +83,7 @@
                   <li><a href="{{=URL('inventarios', 'consumibles')}}">Consumibles</a></li>
                   <li><a href="{{=URL('inventarios', 'herramientas')}}">Herramientas</a></li>
                   <li><a href="{{=URL('inventarios', 'mantenimiento')}}">Mantenimiento</a></li>
+                  <li><a href="{{=URL('inventarios', 'vehiculos')}}">Vehículos</a></li>
                   {{ if auth.has_membership("JEFE DE SECCIÓN") or auth.has_membership("JEFE DE LABORATORIO") \
                   or auth.has_membership("COORDINADOR") or auth.has_membership("DIRECTOR") or \
                   auth.has_membership("WEBMASTER"): }}
@@ -179,6 +183,13 @@
 
 {{block center}}
 {{end}}
+
+<script type="text/javascript">
+  $(".seleccion-escrita").chosen({
+    disable_search_threshold: 5, 
+    width: '100%' 
+  });
+</script>
 
 <script type="text/javascript">
   if(window.location.pathname.includes('personal')){

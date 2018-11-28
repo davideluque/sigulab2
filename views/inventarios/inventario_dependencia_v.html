@@ -1,0 +1,1106 @@
+<!-- Contiene la seccion del listado de sustancias cuando se visita una dependencia -->
+
+<!-- Inicio Listado de sustancias -->
+<div id="inventario-dependencia" class="container">
+<div class="row">
+
+  {{ if len(dependencias) == 0: }}
+    <div>
+        <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo Vehículo" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
+    </div>
+  {{ pass }}
+
+    <br><br>
+    <br><br>
+
+    <div id="buttons">
+      <!-- Filtrado -->    
+    </div>
+    <br>
+    <div class="table-responsive no-padding no-margin">
+      <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+        <thead>
+            <tr id="titulosListado">
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Dependencia</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+                <th class="camposTabla linksNombres">Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+          {{for vehiculo in inventario:}}
+            <tr>
+                <td class="camposTabla"> <a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehiculo['vh_placa']))}}">{{=vehiculo['vh_placa']}}</a></td>
+                <td class="camposTabla">{{=vehiculo['vh_marca']}}</td>
+                <td class="camposTabla">{{=vehiculo['vh_modelo']}}</td>
+                <td class="camposTabla">
+                  {{= vehiculo['vh_tipo'].upper() }}
+                </td>
+                <td class="camposTabla">{{=db(db.dependencias.id == vehiculo['vh_dependencia']).select().first().nombre}}</td>
+                <td class="camposTabla">
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}}
+                  &nbsp;
+                  {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().last_name}}
+                </td>
+                <td class="camposTabla">{{=vehiculo['vh_estatus']}}</td>
+              </tr>
+          {{pass}}           
+        </tbody>
+
+        <tfoot id="collapseFiltros">
+            <tr>
+                <th class="camposTabla linksNombres">Placa</th>
+                <th class="camposTabla linksNombres">Marca</th>
+                <th class="camposTabla linksNombres">Modelo</th>
+                <th class="camposTabla linksNombres">Tipo</th>
+                <th class="camposTabla linksNombres">Dependencia</th>
+                <th class="camposTabla linksNombres">Responsable</th>
+                <th class="camposTabla linksNombres">Estatus</th>
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>  
+<!-- Fin Listado de inventario -->
+
+
+<!-- Modal añadir un vehiculo nuevo al inventario -->
+<div class="modal fade" id="addbm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Vehículo<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioCarga" class="registration-form" method="post">
+
+            <!-- Primer paso-->
+            <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                  <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                    <span class="step">3</span>
+                    <span class="step">4</span>
+                    <span class="step">5</span>
+                    <span class="step">6</span>
+                    <span class="step">7</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Características del vehículo</h4>       
+                    <label>Campos marcados con * son obligatorios.</label>
+                    <div class="form-group">
+                        <label>Nº Bien Nacional*</label>
+                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" required>
+                        <div style="color: #d03e3e;" id="err_num" hidden></div>
+                    </div>
+                    <div class="form-group" tag="Formato:">
+                        <label>Placa*</label>
+                        <input type="text" class="form-control" id="placa" name="placa" title="Ingrese la placa del vehículo" placeholder="Placa*" required>
+                        <div class="dr" id="error-placa" style="color: #d03e3e;"> </div>
+                    </div>
+                    <div class="form-group" tag="Formato:">
+                        <label>Marca*</label>
+                        <select class="form-control" type="select" id="marca" name="marca" placeholder="Ingrese la marca del vehículo" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Citroen">Citroen</option>
+                            <option value="Fiat">Fiat</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Iveco">Iveco</option>
+                            <option value="Jeep">Jeep</option>
+                            <option value="Kia">Kia</option>
+                            <option value="Mazda">Mazda</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Mitsubishi">Mitsubishi</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Renault">Renault</option>
+                            <option value="Sert">Sert</option>
+                            <option value="Subaru">Subaru</option>
+                            <option value="Suzuki">Suzuki</option>
+                            <option value="Tesla">Tesla</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Volvo">Volvo</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <input type="text" class="form-control" id="marca2" name="marca2" title="Ingrese la marca del vehículo" placeholder="Especifique" disabled style="display:none;">
+                        <div class="dr" id="error-marca" style="color: #d03e3e;"> </div>
+                    </div>
+                    <div class="form-group" tag="Formato:">
+                        <label>Modelo / Código*</label>
+                        <input type="text" class="form-control" id="modelo" name="modelo" title="Ingrese el modelo del vehículo" placeholder="Modelo*" required>
+                        <div class="dr" id="error-marca" style="color: #d03e3e;"> </div>
+                    </div>
+                    <div class="form-group" tag="Formato:">
+                        <label>Año*</label>
+                        <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required>
+                        <div class="dr" id="error-ano" style="color: #d03e3e;"> </div>
+                    </div>
+                    <div class="form-group" tag="Formato:">
+                        <label>Color</label>
+                        <input type="text" class="form-control" id="color" name="color" title="Ingrese el color del vehículo" placeholder="Color">
+                        <div class="dr" id="error-color" style="color: #d03e3e;"> </div>
+                    </div>  
+                    
+                  </div>
+                </div>
+                <div style="position:fixed; bottom: 15px; right: 30px;">
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                </div>
+              </fieldset>
+          
+                <!-- Segundo paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                      <span class="step">4</span>
+                      <span class="step">5</span>
+                      <span class="step">6</span>
+                      <span class="step">7</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group" tag="Formato:">
+                            <label>Serial de carrocería*</label>
+                            <input type="text" class="form-control" id="serialC" name="serialC" title="Ingrese el serial de carrocería del vehículo" placeholder="Serial de carrocería*" required>
+                            <div class="dr" id="error-serialc" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Serial del motor*</label>
+                            <input type="text" class="form-control" id="serialM" name="serialM" title="Ingrese el serial del motor del vehículo" placeholder="Serial del motor*" required>
+                            <div class="dr" id="error-serialm" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Serial del chasis*</label>
+                            <input type="text" class="form-control" id="serialCh" name="serialCh" title="Ingrese el serial del chasis del vehículo" placeholder="Serial del chasis*" required>
+                            <div class="dr" id="error-serialch" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nº de Autorización INTT*</label>
+                            <input type="text" class="form-control" id="intt" name="intt" placeholder="Nº de Autorización INTT*" title="Ingrese el Nº de Autorización INTT"  required>
+                            <div class="dr" id="error-intt" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group campo-oculto">
+                          <label>Sede*</label> <br>
+                          <input type="text" class="form-control" id="sede" name="sede" placeholder="Sede*" title="Ingrese la Sede" disabled value="{{= db(db.sedes.id == sede_id).select().first().nombre }}">
+                          <div class="dr" id="error-sede" style="color: #d03e3e;"> </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+                <!-- Fin Segundo Paso -->     
+
+                <!-- Tercer paso -->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                      <span class="step">1</span>
+                      <span class="step">2</span>
+                      <span class="step activePass">3</span>
+                      <span class="step">4</span>
+                      <span class="step">5</span>
+                      <span class="step">6</span>
+                      <span class="step">7</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <label>Campos marcados con * son obligatorios.</label>
+                      <div class="form-group" tag="Formato:">
+                          <label>Clase*</label>
+                          <select class="form-control" type="select" id="clase" name="clase" placeholder="Clase*" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="No motorizados o de tracción a sangre">No motorizados o de tracción a sangre</option>
+                            <option value="A motor">A motor</option>
+                            <option value="Maquinarias y aparatos aptos para circular">Maquinarias y aparatos aptos para circular</option>
+                        </select>
+                          <div class="dr" id="error-clase" style="color: #d03e3e;"> </div>
+                      </div>
+
+                      <div class="form-group" tag="Formato:">
+                          <label>Tipo*</label>
+                          <select class="form-control" type="select" id="tipo" name="tipo" placeholder="Tipo*" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Motocicleta">Motocicleta</option>
+                            <option value="Automóvil">Automóvil</option>
+                            <option value="Minibús">Minibús</option>
+                            <option value="Autobús">Autobús</option>
+                            <option value="Vehículos de carga">Vehículos de carga</option>
+                            <option value="Vehículos especiales">Vehículos especiales</option>
+                            <option value="Otros aparatos para circular">Otros aparatos para circular</option>
+                        </select>
+                        <input type="text" class="form-control" id="tipo2" name="tipo2" title="Ingrese la marca del vehículo" placeholder="Especifique" disabled style="display:none;">
+                          <div class="dr" id="error-clase" style="color: #d03e3e;"> </div>
+                      </div>
+
+                      <div class="form-group" id="grupo-clasificacion" style="display: none;">
+                          <label>Clasificación*</label>
+                          <select class="form-control" type="select" id="clasificacion" name="clasificacion" placeholder="Clasificación*">
+                              <option value="">Seleccione una opción</option>
+                          </select>
+                          <select class="form-control" type="select" id="clasificacion2" name="clasificacion2" disabled style="display: none;">
+                              <option value="">Seleccione una opción</option>
+                              <option value="Vehículos policiales">Vehículos policiales</option>
+                              <option value="Vehículos militares">Vehículos militares</option>
+                              <option value="Ambulancias">Ambulancias</option>
+                              <option value="Bomberos">Bomberos</option>
+                              <option value="Forenses">Forenses</option>
+                          </select>
+                          <div class="dr" id="error-clasificacion" style="color: #d03e3e;"> </div>
+                      </div>
+
+                        <div class="form-group">
+                            <label>Uso*</label>
+                            <select class="form-control" type="select" id="uso" name="uso" placeholder="Uso*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Público">Público</option>
+                                <option value="Privado">Privado</option>
+                            </select>
+                            <div class="dr" id="error-uso" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Servicio*</label>
+                            <select class="form-control" type="select" id="servicio" name="servicio" placeholder="Servicio*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Transporte terrestre de personas">Transporte terrestre de personas</option>
+                                <option value="Transporte terrestre de cargas">Transporte terrestre de cargas</option>
+                                <option value="Servicios conexos">Servicios conexos</option>
+                            </select>
+                            <div class="dr" id="error-servicio" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Tara*</label>
+                              <input type="text" class="form-control"  id="tara" name="tara" placeholder="Tara*" required >
+                              <div class="dr" id="error-tara" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Unidad de medida Tara*</label>
+                              <select class="form-control" type="select" id="tara_md" name="tara_md" placeholder="Unidad de medida Tara" required>
+                                  <option value="">Seleccione una opción</option>
+                                  <option value="ton">Toneladas (ton)</option>
+                                  <option value="kg">Kilogramos (kg)</option>
+                              </select>
+                              <div class="dr" id="error-tara_md" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                  </div>
+              </fieldset>
+                <!-- Fin Tercer Paso -->
+
+                <!-- Comienzo Cuarto Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step activePass">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Características del Vehículo</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>N° de puestos*</label>
+                            <input type="text" class="form-control" id="nro_puestos" name="nro_puestos" title="Ingrese el N° de puestos del vehículo" placeholder="N° de puestos">
+                            <div class="dr" id="error-nro_puestos" style="color: #d03e3e;"> </div>
+                            <!-- <div style="color: #d03e3e;" id="err_nro_puestos" hidden></div> -->
+                        </div>
+
+                        <div class="form-group">
+                            <label>N° de ejes*</label>
+                            <input type="text" class="form-control" id="nro_ejes" name="nro_ejes" title="Ingrese el N° de ejes del vehículo" placeholder="N° de ejes">
+                            <div class="dr" id="error-nro_ejes" style="color: #d03e3e;"> </div>
+                            <!-- <div style="color: #d03e3e;" id="err_nro_puestos" hidden></div> -->
+                        </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Capacidad de carga*</label>
+                              <input type="text" class="form-control" id="capacidad" name="capacidad" placeholder="Capacidad de carga*" title="Ingrese la capacidad de carga del vehículo"  required>
+                              <div class="dr" id="error-carga" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Unidad de medida Cap. Carga*</label>
+                            <select class="form-control" type="select" id="capacidad_carga_md" name="capacidad_carga_md" placeholder="Unidad de medida Capacidad de Carga" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="ton">Toneladas (ton)</option>
+                                <option value="kg">Kilogramos (kg)</option>
+                            </select>
+                            <div class="dr" id="error-capacidad_carga_md" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label>Rines</label>
+                          <select class="form-control" type="select" name="rines" id="rines" class="input">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Acero">Acero</option>
+                            <option value="Hierro">Hierro</option>
+                            <option value="Magnesio">Magnesio</option>
+                            <option value="Otro">Otro</option>
+                          </select>
+                          <input type="text" class="form-control" id="rines2" name="rines2" title="Ingrese los rines del vehículo" placeholder="Especifique" disabled style="display:none;">
+                          <div class="dr" id="error-rines" style="color: #d03e3e;"> </div>
+                      </div>
+
+                      {{ if len(dependencias) == 0: }}
+                      <div class="form-group">
+                          <label>Dependencia*</label>
+                          <input type="text" class="form-control" id="dependencia" name="dependencia" placeholder="Dependencia*" title="Ingrese la Dependencia" disabled value="{{= db(db.dependencias.id == dep_id).select().first().nombre }}">
+                          <div class="dr" id="error-dependencia" style="color: #d03e3e;"> </div>
+                      </div>
+                      {{ pass }}
+
+                      <div class="form-group">
+                          <label>Observaciones</label>
+                          <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="Indicar cualquier otra información relevante" title="Indicar cualquier otra información relevante">
+                          <div class="dr" id="error-observaciones" style="color: #d03e3e;"> </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+              </fieldset>
+
+                <!-- Quinto Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step activePass">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Ubicacion y responsable del Vehículo</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>Nombre del propietario*</label>
+                            <input type="text" class="form-control" id="propietario" name="propietario" placeholder="Nombre del propietario*" title="Ingrese el nombre del propietario del vehículo" required>
+                            <div class="dr" id="error-propietario" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Responsable*</label>
+                            <select class="form-control seleccion-escrita" type="select" name="responsable" id="responsable" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
+                            <div class="dr" id="error-responsable" style="color: #d03e3e;"> </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Custodio del vehículo*</label>
+                            <select class="form-control seleccion-escrita" type="select" name="custodio" id="custodio" class="input" required>
+                              <option value="">Seleccione una opción</option>
+                              {{for usuario in db(db.auth_user).select() :}}
+                                <option id="{{=usuario.id}}" value="{{=usuario.id}}">{{=usuario.first_name}} {{=usuario.last_name }}</option>
+                              {{pass}}
+                            </select>
+                            <div class="dr" id="error-custodio" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ubicación del custodio*</label>
+                            <input type="text" class="form-control" id="ubicacion_custodio" name="ubicacion_custodio" placeholder="Ubicación del custodio*" title="Ingrese la ubicación del custodio del vehículo" required>
+                            <div class="dr" id="error-ubicacion_custodio" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ubicacion de pernocta*</label>
+                            <input type="text" class="form-control" id="pernocta" name="pernocta" placeholder="Ubicacion de pernocta*" title="Ingrese la ubicacion de pernocta del vehículo" required>
+                            <div class="dr" id="error-pernocta" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del responsable</label>
+                                <input type="text" class="form-control campo_telf" id="telf_responsable" name="telf_responsable" placeholder="Teléfono del responsable" title="Ingrese el teléfono del responsable del vehículo">
+                                <div class="dr" id="error-telf_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión responsable</label>
+                                <input type="text" class="form-control campo_extension" id="extension_responsable" name="extension_responsable" placeholder="Extensión responsable" title="Ingrese la extensión responsable del vehículo">
+                                <div class="dr" id="error-extension_responsable" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono del custodio</label>
+                                <input type="text" class="form-control campo_telf" id="telf_custodio" name="telf_custodio" placeholder="Teléfono del custodio" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr" id="error-telf_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Extensión custodio</label>
+                                <input type="text" class="form-control campo_extension" id="extension_custodio" name="extension_custodio" placeholder="Extensión custodio" title="Ingrese el teléfono del custodio del vehículo">
+                                <div class="dr" id="error-extension_custodio" style="color: #d03e3e;"> </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    </div>
+                </fieldset>
+                <!-- Fin Quinto Paso -->
+
+                <!-- Comienzo Sexto Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step activePass">6</span>
+                        <span class="step">7</span>
+                      </div>
+  
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">SUDEBIP</h4>
+                        <label>Importante: llene según requerimientos de SUDEBIP</label>
+                        <div class="form-group">
+                            <label>Localización*</label>
+                            <input type="text" class="form-control" id="sudebip_localizacion" name="sudebip_localizacion" placeholder="Localización*" title="Ingrese la localizacion vehículo" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Código de Localización*</label>
+                            <input type="text" class="form-control" id="sudebip_cod_localizacion" name="sudebip_cod_localizacion" placeholder="Código de Localización*" title="Ingrese el código de localización del vehículo" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoría*</label>
+                            <input type="text" class="form-control" id="sudebip_categoria" name="sudebip_categoria" placeholder="Categoría*" title="Ingrese la categoría vehículo" value="15000-0000 - Equipos de transporte, tracción y elevación" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Subcategoría*</label>
+                            <select class="form-control" type="select" id="sudebip_subcategoria" name="sudebip_subcategoria" placeholder="Subcategoría*" title="Ingrese la subcategoría del vehículo" required>
+                                <option value="">Seleccione una opción</option>
+                                {{ for subcat, _ in categorias.items(): }}
+                                <option value="{{=subcat}}">{{=subcat}}</option>
+                                {{ pass }}
+                            </select>
+                            <div class="dr" id="error-sudebip_subcategoria" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group" id="grupo-catesp" style="display: none;">
+                            <label>Categoría específica*</label>
+                            <select class="form-control" type="select" id="sudebip_categoria_especifica" name="sudebip_categoria_especifica" placeholder="Categoría específica*" title="Ingrese la categoría específica del vehículo" required>
+                              <option value="">Seleccione una opción</option>
+                            </select>
+                            <div class="dr" id="error-categoria_específica" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </fieldset>
+                <!-- Fin Sexto Paso -->
+
+                <!-- Comienzo Séptimo Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step activePass">7</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos de adquisición</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>Origen*</label>
+                            <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Compra">Compra</option>
+                                <option value="Donación">Donación</option>
+                            </select>
+                            <div class="dr" id="error-origen" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div id="grupo-compra" style="display: none;">
+                          <div class="form-group">
+                              <label>Nro Factura*</label>
+                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura">
+                              <div class="dr" id="error-nro_factura" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Fecha de factura*</label>
+                              <input type="date" class="form-control campo_fecha" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" min="1967-07-18" title="Ingrese la fecha de factura">
+                              <div class="dr" id="error-fecha_factura" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Proveedor*</label>
+                              <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo">
+                              <div class="dr" id="error-proveedor" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>RIF*</label>
+                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF* Formato X-000000000-0 " title="Ingrese el RIF - Formato X-000000000-0">
+                              <div class="dr" id="error-rif" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                        <div id="grupo-donacion" style="display: none;">
+                          <div class="form-group">
+                              <label>Nº Oficio*</label>
+                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio">
+                              <div class="dr" id="error-nro_oficio" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Fecha de oficio*</label>
+                              <input type="date" class="form-control campo_fecha" id="fecha_oficio" name="fecha_oficio" placeholder="Fecha de oficio*" min="1967-07-18" title="Ingrese la fecha de oficio">
+                              <div class="dr" id="error-fecha_oficio" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Donante*</label>
+                              <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante">
+                              <div class="dr" id="error-donante" style="color: #d03e3e;"> </div>
+                          </div>
+                          <div class="form-group">
+                              <label>Teléfono del Donante*</label>
+                              <input type="text" class="form-control campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante">
+                              <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                  </div>
+              </fieldset>
+                <!-- Fin Séptimo Paso -->
+              </form>
+          </div>
+        </div>               
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fin Modal Agregar BM -->
+
+<!-- Inicio javascript de control de formulario -->
+
+<script type="text/javascript">
+  var categorias_sudebip = {};
+  var clasificaciones = {};
+  var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
+  var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
+  var regexExtension = new RegExp("^[0-9]{4}$");
+
+  function isNum(str) {
+    return !isNaN(str);
+  }
+
+  // Validación de bien mueble
+  $("#num").focusout(function() {
+    var num = $(this).val();
+    if (isNum(num) && num.length == 6) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce un número de 6 dígitos");
+    }
+  });
+
+  // Validación de serial de carrocería (17 dígitos)
+  $("#serialCh").focusout(function() {
+    var serial = $(this).val();
+    if (serial.length == 17) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce un serial de 17 dígitos");
+    }
+  });
+
+  // Validación de formato de puestos (2 dígitos)
+  $("#nro_puestos").focusout(function() {
+    var nro_puestos = $(this).val();
+    if (nro_puestos.length == 1 || nro_puestos.length == 2) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce número en formato de uno o dos dígitos: # ó ##");
+    }
+  });
+
+  // Validación de formato de año (####)
+  $("#ano").focusout(function() {
+    var ano = $(this).val();
+    if (ano.length == 4) {
+      var numeric_ano = parseInt(ano);
+      if (numeric_ano >= 1960) {
+        var max_ano = (new Date()).getFullYear();
+        if (numeric_ano <= max_ano) {
+          $(this).next().hide();
+          $(this).css('border-color', '#ddd');
+          $(this).css('color', '#888');
+        } else {
+          $(this).css('border-color', '#d03e3e');
+          $(this).next().show();
+          $(this).next().text("Introduce año menor o igual al año en curso");
+        }
+      } else {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Introduce año mayor o igual a 1960");
+      }
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce año en formato de cuatro dígitos: ####");
+    }
+  });
+
+  // Validación de formato de telf custodio (formato del regex establecido)
+  $(".campo_telf").focusout(function() {
+    var tlf = $(this).val();
+
+    if (tlf.length > 0) {
+        $(this).attr('required', true);
+    } else {
+        $(this).attr('required', false);
+    }
+
+    if (regexTlf.test(tlf) || tlf.length == 0) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else if (tlf.length != 0) {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: (0###) ###-####");
+    }
+  });
+
+  $("#proveedor_rif").focusout(function() {
+    var rif = $(this).val();
+    if (regexRIF.test(rif)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+  else{
+    if ((rif.length < 13) && (rif.length >= 0)) {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: X-000000000-0. Complete con 0 en caso de ser necesario");
+    }
+  }
+  });
+
+  // Máscara js para formato de RIF
+  $(document).ready(function() {
+    $('#proveedor_rif').mask('X-000000000-0', {
+      translation: {
+        "X": {
+          pattern: /[JGVEPC]/
+            }
+        }
+    });
+  });
+
+  // Máscara js para formato de teléfono
+  $(document).ready(function() {
+    $('.campo_telf').mask('(0000) 000-0000');
+  });
+
+  // Máscara js para formato de extensión
+  $(document).ready(function() {
+    $('.campo_extension').mask('0000');
+  });
+
+  // Máscara js para formato de año
+  $(document).ready(function() {
+    $('#ano').mask('0000');
+  });
+
+  // Máscara js para formato de número de bien
+  $(document).ready(function() {
+    $('#num').mask('000000');
+  });
+
+  // Máscara js para formato de ejes
+  $(document).ready(function() {
+    $('#nro_ejes').mask('000');
+  });
+
+  // Validación de formato de extension custodio (formato del regex establecido)
+  $(".campo_extension").focusout(function() {
+    var extension = $(this).val();
+
+    if (extension.length > 0) {
+        $(this).attr('required', true);
+    } else {
+        $(this).attr('required', false);
+    }
+
+    if (regexExtension.test(extension) || extension.length == 0) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else if (extension.length != 0) {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: ####");
+    }
+  });
+
+
+  // Validación de campos requeridos y no llenados
+  // (ignora el resto de campos especiales)
+  $("input[required]").focusout(function() {
+    var value = $(this).val();
+
+    if (   !$(this).is("#num") 
+        && !$(this).is("#serialCh")
+        && !$(this).is("#nro_puestos")
+        && !$(this).is("#ano")
+       ) {
+      if (value.length == 0) {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Este campo es obligatorio.");
+      } else {
+        $(this).next().hide();
+        $(this).css('border-color', '#ddd');
+        $(this).css('color', '#888');
+      }
+    }
+  });
+
+  // Carga las categorias de sudebip
+  $(document).ready(function() {
+    {{ for subcat, lista_cat_esp in categorias.items(): }}
+      categorias_sudebip["{{=subcat}}"] = [
+        {{ for cat_esp in lista_cat_esp: }}
+          "{{=cat_esp}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+
+    {{ for tipo, lista_clasif in clasificaciones.items(): }}
+      clasificaciones["{{=tipo}}"] = [
+        {{ for clasif in lista_clasif: }}
+          "{{=clasif}}",
+        {{ pass }}
+        ];
+    {{ pass }}
+  });
+
+  // Valida la fecha del selector de fecha factura/oficio
+  $(document).ready(function() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var maximo = yyyy + "-" + mm + "-" + dd;
+
+    $(".campo_fecha").attr('max', maximo);
+  });
+
+  // Verifica la fecha introducida en factura y/o oficio
+  $(".campo_fecha").change(function() {
+    var fecha = new Date($(this).val());
+    var maximo = new Date();
+    var minimo = new Date("1967-07-18");
+
+    if ((minimo <= fecha) && (fecha <= maximo)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha válida.");
+    }
+  });
+  
+  // Actualiza selector de categorias sudebip 
+  $("#sudebip_subcategoria").change(function() {
+    var subcat = $(this).children("option:selected").val();
+    $("#grupo-catesp").show("fast");
+    $('#sudebip_categoria_especifica option:gt(0)').remove(); 
+
+    var longitud = categorias_sudebip[subcat].length;
+    for (var i = 0; i < longitud; i++) {
+      $("#sudebip_categoria_especifica").append(
+        $("<option></option>").attr("value", categorias_sudebip[subcat][i]).text(categorias_sudebip[subcat][i])
+      );
+    }
+
+    if (subcat == "") {
+      $("#grupo-catesp").hide("fast");
+    }
+
+  });
+
+  // Actualiza selector de clasificaciones por tipo
+  $("#tipo").change(function() {
+    var tipo = $(this).children("option:selected").val();
+
+    if (tipo == "Otros aparatos para circular") {
+      $("#grupo-clasificacion").prop('disabled', true);
+      $("#grupo-clasificacion").prop('required', false);
+      $("#grupo-clasificacion").hide("fast");
+    } else {
+      $("#grupo-clasificacion").show("fast");
+      $("#grupo-clasificacion").prop('disabled', false)
+      $("#grupo-clasificacion").prop('required', true)
+      $('#clasificacion option:gt(0)').remove(); 
+
+      var longitud = clasificaciones[tipo].length;
+      for (var i = 0; i < longitud; i++) {
+        $("#clasificacion").append(
+          $("<option></option>").attr("value", clasificaciones[tipo][i]).text(clasificaciones[tipo][i])
+        );
+      }
+    }
+  });
+
+  // Mostrar datos de compra o donacion según lo escogido
+  $("#origen").change(function() {
+    var origen = $(this).children("option:selected").val();
+    if (origen == "Compra") {
+      $("#grupo-compra").show("fast");
+      $("#grupo-donacion").hide("fast");
+      $("#fecha_factura").attr('required', true);
+      $("#nro_factura").attr('required', true);
+      $("#proveedor").attr('required', true);
+      $("#proveedor_rif").attr('required', true);
+      $("#fecha_oficio").attr('required', false);
+      $("#nro_oficio").attr('required', false);
+      $("#donante").attr('required', false);
+      $("#contacto_donante").attr('required', false);
+    } else if (origen == "Donación") {
+      $("#grupo-compra").hide("fast");
+      $("#grupo-donacion").show("fast");
+      $("#fecha_factura").attr('required', false);
+      $("#nro_factura").attr('required', false);
+      $("#proveedor").attr('required', false);
+      $("#proveedor_rif").attr('required', false);
+      $("#fecha_oficio").attr('required', true);
+      $("#nro_oficio").attr('required', true);
+      $("#donante").attr('required', true);
+      $("#contacto_donante").attr('required', true);
+    } else {
+      $("#grupo-compra").hide("fast");
+      $("#grupo-donacion").hide("fast");
+    }
+  });
+
+  // Marca otro
+  $("#marca").change(function() {
+    var marca = $(this).children("option:selected").val();
+    if (marca == "Otro") {
+      $("#marca2").show("fast");
+      $("#marca2").prop('disabled', false)
+      $("#marca2").prop('required', true)
+    } else {
+      $("#marca2").hide();
+      $("#marca2").prop('disabled', true)
+      $("#marca2").prop('required', false)
+    }
+  });
+
+  $("#clasificacion").change(function() {
+    var clasificacion = $(this).children("option:selected").val();
+    if (clasificacion == "Emergencia") {
+      $("#clasificacion2").show("fast");
+      $("#clasificacion2").prop('disabled', false)
+      $("#clasificacion2").prop('required', true)
+    } else {
+      $("#clasificacion2").hide();
+      $("#clasificacion2").prop('disabled', true)
+      $("#clasificacion2").prop('required', false)
+    }
+  });
+
+  $("#tipo").change(function() {
+    var tipo = $(this).children("option:selected").val();
+    if (tipo == "Otros aparatos para circular") {
+      $("#tipo2").show("fast");
+      $("#tipo2").prop('disabled', false)
+    } else {
+      $("#tipo2").hide();
+      $("#tipo2").prop('disabled', true)
+    }
+  });
+
+  $("#rines").change(function() {
+    var rines = $(this).children("option:selected").val();
+    if (rines == "Otro") {
+      $("#rines2").show("fast");
+      $("#rines2").prop('disabled', false)
+      $("#rines2").prop('required', true)
+    } else {
+      $("#rines2").hide();
+      $("#rines2").prop('required', false)
+      $("#rines2").prop('disabled', true)
+    }
+  });
+
+  // Dropdown origen no vacío
+  $(".btn-submit").click(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen.length == 0) {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
+  // Dropdown origen no vacío, parte 2
+  $("#origen").change(function() {
+    var origen = $("#origen").children("option:selected").val();
+    if (origen != "Compra" && origen != "Donación") {
+      $("#origen").css('border-color', '#d03e3e');
+      $("#origen").css('color', '#d03e3e');
+      $("#origen").next().show();
+      $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
+    } else {
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+      $("#origen").next().hide();
+    }
+  });
+
+  // Coloca primeros datos de SUDEBIP de acuerdo a sede (localizacion y codigo localizacion)
+  $(document).ready(function() {
+    var sede = {{=sede_id}};
+    if (sede == 1) { // Sartenejas
+      $("#sudebip_localizacion").val("{{=localizacion['Sartenejas']}}");
+      $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Sartenejas']}}");
+    } else if (sede == 2) { // Litoral
+      $("#sudebip_localizacion").val("{{=localizacion['Litoral']}}");
+      $("#sudebip_cod_localizacion").val("{{=cod_localizacion['Litoral']}}");
+    } else {
+      $("#sudebip_localizacion").val("");
+      $("#sudebip_cod_localizacion").val("");
+    }
+  });
+
+
+</script>

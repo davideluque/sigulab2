@@ -1,0 +1,41 @@
+<br>
+<div class="tab-pane" id="tab2">
+  <div class="span8">
+    <div class="tabbable">
+      <ul class="nav nav-tabs " id="myTab" role="tablist">
+        <li role="presentation" class="nav-item active">
+          <a href="#docencia" class="nav-link active " data-toggle="tab" role="tab" aria-controls="cargos_desempe"><b>Docencia</b></a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="nav-link  " id="tab_datos_personales" href="#investigacion" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Investigación</b></a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="nav-link  " id="tab_datos_personales" href="#eventosAcad" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Eventos</b></a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="docencia">
+          {{include 'personal/docencia.html'}}
+        </div>
+
+        <div class="tab-pane" id="investigacion">
+          {{include 'personal/investigacion.html'}}
+        </div>
+
+        <div class="tab-pane" id="extension">
+          {{include 'personal/extension.html'}}
+        </div>
+
+        <div class="tab-pane" id="eventosAcad">
+          <p>Aqui van los eventos academicos</p>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+

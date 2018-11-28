@@ -57,6 +57,17 @@
 <div class="container titulo">
 	<h3 class="dep-titulo">VALIDACIONES PENDIENTES</h3>
 </div>
+
+<!-- Botón para atrás -->
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-6">
+		<button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'inventarios')}}';">
+		    <i class="fas fa-arrow-left"></i>               
+		</button>
+	</div>
+</div>
+
 <div class="tab-wrapper">
 		<ul class="tabs">
 			<li class="tab-link active" data-tab="1">MODIFICACIÓN</li>
@@ -115,7 +126,21 @@
 				  <td class="camposTabla">HERRAMIENTA</td>
 				  <td class="camposTabla">{{=herramienta['mhr_motivo'].upper()}}</td>
 			  </tr>
-			{{pass}}           
+			{{pass}}
+			{{for vehi in inventario_vehiculos:}}
+				{{ if db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first() != None: }}
+					<tr>
+						<td class="camposTabla">
+							<a href="{{=URL('detalles_mod_vehiculo', vars=dict(vh=vehi['id']))}}">
+								{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+							</a>
+						</td>
+						<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+						<td class="camposTabla">VEHÍCULO</td>
+						<td class="camposTabla">{{= db(db.modificacion_vehiculo.mvh_id_vehiculo == vehi['id']).select().first().mvh_motivo }}</td>
+					</tr>
+					{{ pass }}
+				{{ pass }}
 			</tbody>
 	
 			<tfoot id="collapseFiltros">
@@ -179,7 +204,19 @@
 				  <td class="camposTabla">HERRAMIENTA</td>
 				  <td class="camposTabla">{{=herramienta['hr_desc_eliminar'].upper()}}</td>
 			  </tr>
-			{{pass}}              
+				{{pass}}
+				{{for vehi in inventario_eliminar_vehiculos:}}
+				<tr>
+					<td class="camposTabla">
+						<a href="{{=URL('detalles_vehiculo', vars=dict(vh=vehi['vh_placa'], delete=True))}}">
+							{{=vehi['vh_marca']}} {{=vehi['vh_modelo']}} {{=vehi['vh_placa']}}
+						</a>
+					</td>
+					<!-- *!* Colocar anchor a la entrada del  bm en el catalogo de bm -->
+					<td class="camposTabla">VEHÍCULO</td>
+					<td class="camposTabla">{{=vehi['vh_desc_eliminar']}}</td>
+				</tr>
+				{{pass}}           
 			</tbody>
 	
 			<tfoot id="collapseFiltros">

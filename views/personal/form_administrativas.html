@@ -1,0 +1,44 @@
+<h3>Actividades administrativas</h3>
+
+{{for i in range(1,6):}}
+<div {{#'hidden' if 1 < i else ''}}>
+    <h4>Actividad ({{=i}})</h4>
+    <div class="form-row">
+        <div class="col-sm-6">
+            <label>Desde:</label>
+            <input class="datepicker" value="{{=lista_admin[i]['f_fecha_inicio']}}"
+                   name="administrativas_desde_{{=i}}" type="text" 
+                   data-placement="bottom" data-trigger="manual"
+                   data-content="Seleccione una fecha"/>
+            <span class="help-block"></span>
+
+        </div>
+        <div class="col-sm-6">
+            <label>Hasta:</label>
+            <input class="datepicker"
+                   value="{{=lista_admin[i]['f_fecha_fin']}}"
+                   name="administrativas_hasta_{{=i}}"
+                   type="text" data-placement="bottom"
+                   data-trigger="manual" data-content="Seleccione una fecha">
+            <span class="help-block"></span>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="col-sm-6">
+            <label>Cargo:</label>
+            <input type="text" class="form-control" name="administrativas_cargo_{{=i}}"
+             value="{{=lista_admin[i]['f_cargo']}}" data-toggle="popover" data-placement="bottom"
+             data-trigger="manual" data-content="Este campo es requerido" >
+            <span class="help-block"></span>
+        </div>
+        <div class="col-sm-6">
+            <label>Institucion:</label>
+            <input value="{{=lista_admin[i]['f_institucion']}}" type="text" class="form-control" name="administrativas_institucion_{{=i}}"
+             placeholder="Institucion" data-toggle="popover" data-placement="bottom"
+             data-trigger="manual" data-content="Este campo es requerido">
+            <span class="help-block"></span>
+        </div>
+    </div>
+</div>
+{{pass}}

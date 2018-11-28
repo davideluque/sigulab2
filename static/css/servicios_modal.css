@@ -29,7 +29,7 @@
 	#col11Header{
 		background-color: #337ab7;
 		height: 50px;
-		width: 91.67% !important;
+		/*width: 91.67% !important;*/
 		border-top-right-radius: 5px;
 	}
 
@@ -42,7 +42,7 @@
 	.col1Body{
 		padding-left: 10px !important;
 		background-color: #505050;
-		height: 608px !important;
+		height: 675px !important;
 	}
 
 	#nuevoServicio{

@@ -103,6 +103,8 @@
 
           <!-- Boton Bienes Muebles -->
           <div class="col-sm-3 columnas">
+            <span class="badge-notificacion" data-count-notificacion="{{=numero_prestamos}}">
+              </span>
             <a href="{{=URL('prestamos')}}">
                 <img class="iconos" src="{{=URL('static','inventarios/images/file(1).png')}}">
                 <div>
@@ -115,7 +117,7 @@
           or auth.has_membership("COORDINADOR") or auth.has_membership("DIRECTOR") or \
           auth.has_membership("WEBMASTER"): }}
             <div class="col-sm-3 columnas">
-              <span class="badge-notificacion" data-count-notificacion="{{=numero_solicitudes}}">
+              <span class="badge-notificacion" data-count-notificacion="{{=numero_validaciones}}">
                 </span>
                 <a href="{{=URL('validaciones')}}">
                     <img class="iconos" src="{{=URL('static','inventarios/images/workplace.png')}}">
