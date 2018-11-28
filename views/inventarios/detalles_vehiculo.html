@@ -573,19 +573,19 @@
 
                           <div class="form-group">
                               <label>Nº Licencia de Conducir*</label>
-                              <input type="text" class="form-control" id="licencia_conducir" name="licencia_conducir" placeholder="Ingrese el Nº de Licencia de Conducir*" title="Ingrese la Nº Licencia de Conducir*" required>
+                              <input type="text" class="form-control" id="licencia_conducir" name="licencia_conducir" placeholder="Ingrese el Nº de Licencia de Conducir*" title="Ingrese el Nº Licencia de Conducir*" required>
                               <div style="color: #d03e3e;" id="err_licencia_conducir" hidden></div>
                           </div>
 
                           <div class="form-group">
                               <label>Certificado Médico</label>
-                              <input type="text" class="form-control" id="certificado_medico" name="certificado_medico" placeholder="Ingrese el Nº de Certificado Médico*" title="Ingrese la Nº Certificado Médico*">
+                              <input type="text" class="form-control" id="certificado_medico" name="certificado_medico" placeholder="Ingrese el Nº de Certificado Médico" title="Ingrese el Nº Certificado Médico">
                               <div style="color: #d03e3e;" id="err_certificado_medico" hidden></div>
                           </div>
 
                           <div class="form-group">
                               <label>Certificado Psicológico</label>
-                              <input type="text" class="form-control" id="certificado_psicologico" name="certificado_psicologico" placeholder="Ingrese el Nº de Certificado Psicológico*" title="Ingrese la Nº Certificado Psicológico*">
+                              <input type="text" class="form-control" id="certificado_psicologico" name="certificado_psicologico" placeholder="Ingrese el Nº de Certificado Psicológico" title="Ingrese el Nº Certificado Psicológico">
                               <div style="color: #d03e3e;" id="err_certificado_psicologico" hidden></div>
                           </div>
 
@@ -2052,8 +2052,8 @@
                 url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
             },
             "columnDefs": [
-                { "width": "30%", "targets": 0, className: 'dt-body-left' },
-                { "width": "10%", "targets": [1,2,3] }
+                { "width": "35%", "targets": [1, 3], className: 'dt-body-left' },
+                { "width": "10%", "targets": [0,2,4] }
             ],
             initComplete: function(){
                 var api = this.api();
