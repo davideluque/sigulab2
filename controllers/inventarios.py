@@ -1852,7 +1852,7 @@ def detalles_mod_vehiculo():
         'Modelo / Código': vehiculo['mvh_modelo'],
         'Año': vehiculo['mvh_ano'],
         'Color': vehiculo['mvh_color'],
-        'Placa': vehiculo['mvh_placa'],
+        'Placa': vehiculo['mvh_placa'].upper(),
         'Propietario': vehiculo['mvh_propietario'],
         'Serial de carroceria': vehiculo['mvh_serial_carroceria'],
         'Serial de motor': vehiculo['mvh_serial_motor'],
