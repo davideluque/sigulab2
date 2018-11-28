@@ -1964,7 +1964,7 @@ def detalles_mod_vehiculo():
     caracteristicas_originales_dict = {
         'Nº Bien Mueble': vehiculo_original['vh_num'],
         'Propietario': vehiculo_original['vh_propietario'],
-        'Placa': vehiculo_original['vh_placa'],
+        'Placa': vehiculo_original['vh_placa'].upper(),
         'Marca': vehiculo_original['vh_marca'],
         'Modelo / Código': vehiculo_original['vh_modelo'],
         'Año': vehiculo_original['vh_ano'],
