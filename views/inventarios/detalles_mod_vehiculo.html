@@ -118,121 +118,126 @@
             </div>   
    
             <div id="tab-2"class="tab-content">
-              <div class="grid-container">
-                <div class="grid-item">
-                      Sede:
-                </div>
-                <div class="grid-item">
-                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Dependencia:
-                </div>
-                <div class="grid-item">
-                  {{=db(db.dependencias.id == vehiculo['mvh_dependencia']).select().first().nombre}}
-                </div>
-                <div class="grid-item">
-                      Responsable: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().last_name}}
+                <h3 class="text-center">Responsabilidad</h3>
+	              <div class="grid-container">
+	                <div class="grid-item">
+	                      Responsable: 
+	                </div>
+	                <div class="grid-item">
+	                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().first_name}} 
+	                      &nbsp;
+	                      {{=db(db.auth_user.id == vehiculo['mvh_responsable']).select().first().last_name}}
 
-                      {{ if vehiculo['mvh_responsable'] != vehiculo_original['vh_responsable']: }}
-                          <em>(<b>anteriormente</b>: 
-                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().first_name}}
-                            &nbsp;
-                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().last_name}})
-                        </em>
-                      {{pass}}
-                </div>
-                <div class="grid-item">
-                      Custodio: 
-                </div>
-                <div class="grid-item">
-                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().first_name}} 
-                      &nbsp;
-                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().last_name}}
+	                      {{ if vehiculo['mvh_responsable'] != vehiculo_original['vh_responsable']: }}
+	                          <em>(<b>anteriormente</b>: 
+	                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().first_name}}
+	                            &nbsp;
+	                            {{=db(db.auth_user.id == vehiculo_original['vh_responsable']).select().first().last_name}})
+	                        </em>
+	                      {{pass}}
+	                </div>
+	                {{ if vehiculo['mvh_telf_responsable']: }}
+	                <div class="grid-item">
+	                      Tlf. de Responsable:
+	                </div>
+	                <div class="grid-item">
+	                       {{=vehiculo['mvh_telf_responsable']}}
 
-                      {{ if vehiculo['mvh_custodio'] != vehiculo_original['vh_custodio']: }}
-                          <em>(<b>anteriormente</b>: 
-                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().first_name}}
-                            &nbsp;
-                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().last_name}})
-                        </em>
-                      {{pass}}
-                </div>
-                <div class="grid-item">
-                      Ubicación de Custodio:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['mvh_ubicacion_custodio']}}
+	                       {{ if vehiculo['mvh_telf_responsable'] != vehiculo_original['vh_telf_responsable']: }}
+	                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_responsable'] if vehiculo_original['vh_telf_responsable'] != None else "N/A" }})</em>
+	                        {{ pass }}
+	                </div>
+	                {{ pass }}
+	                {{ if vehiculo['mvh_extension_responsable']: }}
+	                <div class="grid-item">
+	                      Extensión responsable:
+	                </div>
+	                <div class="grid-item">
+	                        {{=vehiculo['mvh_extension_responsable']}}
 
-                       {{ if vehiculo['mvh_ubicacion_custodio'] != vehiculo_original['vh_ubicacion_custodio']: }}
-                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_ubicacion_custodio'] }})
-                        {{ pass }}
-                </div>
-                {{ if vehiculo['mvh_telf_responsable']: }}
-                <div class="grid-item">
-                      Tlf. de Responsable:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['mvh_telf_responsable']}}
+	                        {{ if vehiculo['mvh_extension_responsable'] != vehiculo_original['vh_extension_responsable']: }}
+	                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_responsable'] if vehiculo_original['vh_extension_responsable'] != None else "N/A" }})</em>
+	                        {{ pass }}
+	                </div>
+	                {{ pass }}                
+	                <div class="grid-item">
+	                      Custodio: 
+	                </div>
+	                <div class="grid-item">
+	                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().first_name}} 
+	                      &nbsp;
+	                      {{=db(db.auth_user.id == vehiculo['mvh_custodio']).select().first().last_name}}
 
-                       {{ if vehiculo['mvh_telf_responsable'] != vehiculo_original['vh_telf_responsable']: }}
-                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_responsable'] if vehiculo_original['vh_telf_responsable'] != None else "N/A" }})</em>
-                        {{ pass }}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['mvh_extension_responsable']: }}
-                <div class="grid-item">
-                      Extensión responsable:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['mvh_extension_responsable']}}
+	                      {{ if vehiculo['mvh_custodio'] != vehiculo_original['vh_custodio']: }}
+	                          <em>(<b>anteriormente</b>: 
+	                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().first_name}}
+	                            &nbsp;
+	                            {{=db(db.auth_user.id == vehiculo_original['vh_custodio']).select().first().last_name}})
+	                        </em>
+	                      {{pass}}
+	                </div>
+	                {{ if vehiculo['mvh_telf_custodio']: }}
+	                <div class="grid-item">
+	                      Tlf. de Custodio:
+	                </div>
+	                <div class="grid-item">
+	                       {{=vehiculo['mvh_telf_custodio']}}
 
-                        {{ if vehiculo['mvh_extension_responsable'] != vehiculo_original['vh_extension_responsable']: }}
-                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_responsable'] if vehiculo_original['vh_extension_responsable'] != None else "N/A" }})</em>
-                        {{ pass }}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['mvh_telf_custodio']: }}
-                <div class="grid-item">
-                      Tlf. de Custodio:
-                </div>
-                <div class="grid-item">
-                       {{=vehiculo['mvh_telf_custodio']}}
+	                       {{ if vehiculo['mvh_telf_custodio'] != vehiculo_original['vh_telf_custodio']: }}
+	                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_custodio'] if vehiculo_original['vh_telf_custodio'] != None else "N/A" }})</em>
+	                        {{ pass }}
+	                </div>
+	                {{ pass }}
+	                {{ if vehiculo['mvh_extension_custodio']: }}
+	                <div class="grid-item">
+	                      Extensión custodio:
+	                </div>
+	                <div class="grid-item">
+	                        {{=vehiculo['mvh_extension_custodio']}}
 
-                       {{ if vehiculo['mvh_telf_custodio'] != vehiculo_original['vh_telf_custodio']: }}
-                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_telf_custodio'] if vehiculo_original['vh_telf_custodio'] != None else "N/A" }})</em>
-                        {{ pass }}
-                </div>
-                {{ pass }}
-                {{ if vehiculo['mvh_extension_custodio']: }}
-                <div class="grid-item">
-                      Extensión custodio:
-                </div>
-                <div class="grid-item">
-                        {{=vehiculo['mvh_extension_custodio']}}
+	                        {{ if vehiculo['mvh_extension_custodio'] != vehiculo_original['vh_extension_custodio']: }}
+	                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_custodio'] if vehiculo_original['vh_extension_custodio'] != None else "N/A" }})</em>
+	                        {{ pass }}
+	                </div>
+	                {{ pass }}
+	                <div class="grid-item">
+	                      Ubicación de Custodio:
+	                </div>
+	                <div class="grid-item">
+	                       {{=vehiculo['mvh_ubicacion_custodio']}}
 
-                        {{ if vehiculo['mvh_extension_custodio'] != vehiculo_original['vh_extension_custodio']: }}
-                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_extension_custodio'] if vehiculo_original['vh_extension_custodio'] != None else "N/A" }})</em>
-                        {{ pass }}
-                </div>
-                {{ pass }}
-                <div class="grid-item">
-                    Ubicación de pernocta:
-                </div>
-                <div class="grid-item">
-                    {{=vehiculo['mvh_lugar_pernocta']}}
+	                       {{ if vehiculo['mvh_ubicacion_custodio'] != vehiculo_original['vh_ubicacion_custodio']: }}
+	                          <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_ubicacion_custodio'] }})
+	                        {{ pass }}
+	                </div> 
+	            </div>     
 
-                    {{ if vehiculo['mvh_lugar_pernocta'] != vehiculo_original['vh_lugar_pernocta']: }}
-                      <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_lugar_pernocta'] }})</em>
-                    {{ pass }}
-                </div>
-              </div>
-            </div>
+              <h3 class="text-center">Ubicación</h3>
+                <div class="grid-container">
+	                <div class="grid-item">
+	                      Sede:
+	                </div>
+	                <div class="grid-item">
+	                       {{=db(db.sedes.id == sede_id).select().first().nombre}}
+	                </div>
+	                <div class="grid-item">
+	                      Dependencia:
+	                </div>
+	                <div class="grid-item">
+	                  {{=db(db.dependencias.id == vehiculo['mvh_dependencia']).select().first().nombre}}
+	                </div>                
+	                <div class="grid-item">
+	                    Ubicación de pernocta:
+	                </div>
+	                <div class="grid-item">
+	                    {{=vehiculo['mvh_lugar_pernocta']}}
+
+	                    {{ if vehiculo['mvh_lugar_pernocta'] != vehiculo_original['vh_lugar_pernocta']: }}
+	                      <em>(<b>anteriormente</b>: {{= vehiculo_original['vh_lugar_pernocta'] }})</em>
+	                    {{ pass }}
+	                </div>
+              	</div>
+	        </div>
 
             <div id="tab-3"class="tab-content">
                 <div class="grid-container">
