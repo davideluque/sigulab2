@@ -422,10 +422,10 @@
 <!-- Modal para solicitar préstamo -->
 <div class="modal fade" id="prestamo" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <!-- Modal Header -->
         <div class="modal-header addHeader">
           <div class="row addRow" id="rowHeader">
@@ -443,7 +443,7 @@
                 text-align: left;
                 padding-top: 12px;
                 color: white;
-              ">Solicitar Préstamo<button type="button" class="close" data-dismiss="modal">&times;</button>
+              ">Solicitar Préstamo de Vehículo<button type="button" class="close" data-dismiss="modal">&times;</button>
               </h4>
             </div>
           </div>
@@ -454,7 +454,191 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <br/>Modal en desarrollo<br/>
+                <form id="formularioCarga" class="registration-form" method="post">
+
+                  <!-- Primer paso-->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body"> 
+                        <span class="step activePass">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información de la Solicitud</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>Solicitante*</label>
+                            <input type="text" class="form-control" id="solicitante" name="solicitante" placeholder="Solicitante*" title="Solicitante*" disabled value="{{= db(db.auth_user.id == auth.user.id).select().first().first_name}} {{= db(db.auth_user.id == auth.user.id).select().first().last_name }}">
+                            <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Vehículo*</label>
+                            <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Vehículo*" title="Vehículo*" disabled value="{{= vehiculo['vh_marca'] }} {{= vehiculo['vh_modelo'] }} {{= vehiculo['vh_placa'] }}">
+                            <div style="color: #d03e3e;" id="err_vehiculo" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de solicitud*</label>
+                            <input type="date" class="form-control campo_fecha_prestamo" id="fecha_solicitud" name="fecha_solicitud" placeholder="Fecha de solicitud*" title="Ingrese la fecha de solicitud" disabled>
+                            <div class="dr" id="error-fecha_solicitud" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha prevista de devolución*</label>
+                            <input type="date" class="form-control campo_fecha_prestamo" id="fecha_prevista_devolucion" name="fecha_prevista_devolucion" placeholder="Fecha de devolución*" title="Ingrese la fecha prevista de devolución" required>
+                            <div class="dr" id="error-fecha_prevista_devolucion" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </fieldset>
+
+                  <!-- Segundo paso-->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información de la Solicitud</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                          <div class="form-group">
+                              <label>Tiempo de uso previsto*</label>
+                              <input type="text" class="form-control" id="tiempo_previsto" name="tiempo_previsto" placeholder="Ingrese el tiempo de uso previsto*" title="Ingrese el tiempo de uso err_tiempo_previsto*" required>
+                              <div style="color: #d03e3e;" id="err_tiempo_previsto" hidden></div>
+                          </div>
+
+                          <div class="form-group">
+                              <label>Ruta prevista*</label>
+                              <input type="text" class="form-control" id="ruta" name="ruta" placeholder="Ingrese la ruta prevista*" title="Ingrese la ruta prevista*" required>
+                              <div style="color: #d03e3e;" id="err_ruta" hidden></div>
+                          </div>
+
+                          <div class="form-group">
+                              <label>Motivo de la solicitud de préstamo*</label>
+                              <input type="text" class="form-control" id="motivo_prestamo" name="motivo_prestamo" placeholder="Ingrese el motivo del préstamo*" title="Ingrese el motivo del préstamo" required>
+                              <div class="dr" id="error-motivo_prestamo" style="color: #d03e3e;"> </div>
+                          </div>
+
+                      </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Segundo Paso -->
+
+                  <!-- Tercer paso-->
+                  <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                        <span class="step">4</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información del Conductor</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                          <div class="form-group" tag="Formato:">
+                              <label>Nombre del conductor*</label>
+                              <input type="text" class="form-control" id="nombre_conductor" name="nombre_conductor" title="Ingrese el nombre del conductor" placeholder="Nombre del conductor*" required>
+                              <div class="dr" id="error-nombre_conductor" style="color: #d03e3e;"> </div>
+                          </div>
+
+                          <div class="form-group" tag="Formato:">
+                              <label>C.I. del conductor*</label>
+                              <input type="text" class="form-control campo_ci" id="ci_conductor" name="ci_conductor" title="Ingrese la C.I. del conductor" placeholder="C.I. del conductor*" required>
+                              <div class="dr" id="error-ci_conductor" style="color: #d03e3e;"> </div>
+                          </div>
+                          
+                          <div class="form-group" tag="Formato:">
+                              <label>Número de celular del conductor*</label>
+                              <input type="text" class="form-control campo_telf_obligatorio" id="nro_conductor" name="nro_conductor" title="Ingrese el número de celular del conductor" placeholder="Número de celular del conductor*" required>
+                              <div class="dr" id="error-nro_conductor" style="color: #d03e3e;"> </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label>Nº Licencia de Conducir*</label>
+                              <input type="text" class="form-control" id="licencia_conducir" name="licencia_conducir" placeholder="Ingrese el Nº de Licencia de Conducir*" title="Ingrese la Nº Licencia de Conducir*" required>
+                              <div style="color: #d03e3e;" id="err_licencia_conducir" hidden></div>
+                          </div>
+
+                          <div class="form-group">
+                              <label>Certificado Médico</label>
+                              <input type="text" class="form-control" id="certificado_medico" name="certificado_medico" placeholder="Ingrese el Nº de Certificado Médico*" title="Ingrese la Nº Certificado Médico*">
+                              <div style="color: #d03e3e;" id="err_certificado_medico" hidden></div>
+                          </div>
+
+                          <div class="form-group">
+                              <label>Certificado Psicológico</label>
+                              <input type="text" class="form-control" id="certificado_psicologico" name="certificado_psicologico" placeholder="Ingrese el Nº de Certificado Psicológico*" title="Ingrese la Nº Certificado Psicológico*">
+                              <div style="color: #d03e3e;" id="err_certificado_psicologico" hidden></div>
+                          </div>
+
+                      </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Tercer Paso -->
+
+                  <!-- Comienzo Cuarto Paso -->
+                  <fieldset class="formField">
+                      <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step activePass">4</span>
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                          <h4 class="titulosForm">Información del Usuario</h4>
+                          <label>Campos marcados con * son obligatorios.</label>
+                          <div class="form-group" tag="Formato:">
+                                <label>Nombre del usuario*</label>
+                                <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" title="Ingrese el nombre del usuario" placeholder="Nombre del usuario*" required>
+                                <div class="dr" id="error-nombre_usuario" style="color: #d03e3e;"> </div>
+                            </div>
+
+                            <div class="form-group" tag="Formato:">
+                                <label>C.I. del usuario*</label>
+                                <input type="text" class="form-control campo_ci" id="ci_usuario" name="ci_usuario" title="Ingrese la C.I. del usuario" placeholder="C.I. del usuario*" required>
+                                <div class="dr" id="error-ci_usuario" style="color: #d03e3e;"> </div>
+                            </div>
+                            
+                            <div class="form-group" tag="Formato:">
+                                <label>Número de celular del usuario*</label>
+                                <input type="text" class="form-control campo_telf_obligatorio" id="nro_usuario" name="nro_usuario" title="Ingrese el número de celular del usuario" placeholder="Número de celular del conductor*" required>
+                                <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
+                            </div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="prestamo" id="prestamo" value="True">
+                      <div style="position:fixed; bottom: 15px; right: 30px;">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                      </div>
+                  </fieldset>
+                  <!-- Fin Cuarto Paso -->
+                </form>
             </div>
           </div>
         </div>
@@ -586,7 +770,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body"> 
+                    <div class="col-sm-1 col1Body">
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
@@ -598,7 +782,7 @@
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <h4 class="titulosForm">Características del Vehículo</h4>
                       <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group" tag="Formato:">
                             <label>Serial de carrocería*</label>
@@ -929,7 +1113,7 @@
                     </div>
                     <div style="position:fixed; bottom: 15px; right: 30px;">
                       <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                     </div>
                 </fieldset>
                 <!-- Fin Quinto Paso -->
@@ -1105,7 +1289,7 @@
                 <!-- Fin Octavo Paso -->
               </form>
           </div>
-        </div>               
+        </div>
       </div>
     </div>
   </div>
@@ -1114,8 +1298,96 @@
 
 <!-- Fin Modal Agregar BM -->
 
-      
-      <!-- Fin Modal Agregar Mantenimiento -->
+<!-- Fin Modal Agregar Mantenimiento -->
+
+<!-- Scripts de préstamos-->
+<script type="text/javascript">
+  document.getElementById('fecha_solicitud').valueAsDate = new Date();
+
+  var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
+  var regexRIF = new RegExp("^[JGVEPC][-][0-9]{2}[.][0-9]{3}[.][0-9]{3}$");
+
+  // Máscara js para formato de teléfono
+  $(document).ready(function() {
+    $('.campo_telf_obligatorio').mask('(Y000) 000-0000', {
+      translation: {
+        "Y": {
+          pattern: /[0]/
+            }
+        }
+    });
+  });
+
+  // Máscara js para formato de RIF
+  $(document).ready(function() {
+    $('.campo_ci').mask('X-00.000.000', {
+      translation: {
+        "X": {
+          pattern: /[JGVEPC]/
+            }
+        }
+    });
+  });
+
+  $(".campo_telf_obligatorio").focusout(function() {
+    var tlf = $(this).val();
+
+    if (regexTlf.test(tlf)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: (0###) ###-####");
+    }
+  });
+
+  $(".campo_ci").focusout(function() {
+    var rif = $(this).val();
+
+    if (regexRIF.test(rif)) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Formato: X-00.000.000. Complete con 0 en caso de ser necesario");
+    }
+  });
+
+  // Valida la fecha del selector de fecha adquisición
+  $(document).ready(function() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var minimo = yyyy + "-" + mm + "-" + dd;
+
+    $(".campo_fecha_prestamo").attr('min', minimo);
+  });
+
+  // Verifica la fecha introducida
+  $(".campo_fecha_prestamo").change(function() {
+    var fecha = new Date($(this).val());
+    var minimo = new Date();
+
+    if  (minimo <= fecha) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha válida.");
+    }
+  });
+
+</script>
 
 <script type="text/javascript">
   var categorias_sudebip = {};
@@ -1143,7 +1415,7 @@
         ];
     {{ pass }}
   });
-  
+
   function isNum(str) {
     return !isNaN(str);
   }
@@ -1264,7 +1536,7 @@
 
     var subcat = $("#sudebip_subcategoria").children("option:selected").val();
     $("#grupo-catesp").show("fast");
-    $('#sudebip_categoria_especifica option:gt(0)').remove(); 
+    $('#sudebip_categoria_especifica option:gt(0)').remove();
 
     var longitud = categorias_sudebip[subcat].length;
     for (var i = 0; i < longitud; i++) {
@@ -1384,14 +1656,13 @@
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
+    } else{
+      if ((rif.length < 13) && (rif.length >= 0)) {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Formato: X-000000000-0. Complete con 0 en caso de ser necesario");
+      }
     }
-  else{
-    if ((rif.length < 13) && (rif.length >= 0)) {
-      $(this).css('border-color', '#d03e3e');
-      $(this).next().show();
-      $(this).next().text("Formato: X-000000000-0. Complete con 0 en caso de ser necesario");
-    }
-  }
   });
 
   // Máscara js para formato de RIF
@@ -1663,34 +1934,34 @@
 
   <script type="text/javascript">
     $('.tab-link').click( function() {
-        
+
         var tabID = $(this).attr('data-tab');
-        
+
         $(this).addClass('active').siblings().removeClass('active');
-        
+
         $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
     });
-      
+
       </script>
 
 <script>
 
         var filtros = false;
-      
+
         $(document).ready(function() {
             // Setup - add a text input to each footer cell
             $('#datatable tfoot th').each( function () {
                 var title = $(this).text();
                 $(this).html( '<input type="text" placeholder="Filtro" />' );
             } );
-         
+
             // DataTable
             var table = $('#datatable').DataTable();
-         
+
             // Apply the search
             table.columns().every( function () {
                 var that = this;
-         
+
                 $( 'input', this.footer() ).on( 'keyup change', function () {
                     if ( that.search() !== this.value ) {
                         that
