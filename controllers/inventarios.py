@@ -2566,7 +2566,6 @@ def detalles_vehiculo():
             session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
         redirect(URL('prestamos'))
 
-
     # Si mandamos eliminación
     if request.vars.eliminacion:
         # Si ya hay una eliminación pendiente, la rechazamos
@@ -3620,7 +3619,7 @@ def prestamos():
             solicitudes_recibidas.append(solicitud)
 
     c = 0
-    c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
+    c += len([x for x in solicitudes_realizadas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
     c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
 
     return dict(
