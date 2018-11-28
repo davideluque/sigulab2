@@ -6,6 +6,7 @@ vehículos y solicitudes de préstamos.
 
 # Importamos el diccionario con las categorias de los vehiculos.
 from info_inventarios import CATEGORIAS_VEHICULOS, CLASIFICACIONES_VEHICULOS
+from datetime import datetime
 
 # < -------- Funciones privadas de SMDYP ------------>
 
@@ -567,6 +568,43 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
+# Agrega una nueva solicitud de préstamos
+def __solicitar_prestamo_vh(
+        solicitante, vehiculo, fecha_solicitud, fecha_prevista_devolucion,
+        tiempo_previsto, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
+        nro_conductor, licencia_conducir, certificado_medico, certificado_psicologico,
+        nombre_usuario, ci_usuario, nro_usuario):
+        
+    usuario = db(db.auth_user.id == solicitante).select().first()
+    vh = db(db.vehiculo.id == vehiculo).select().first()
+
+    db.historial_prestamo_vh.insert(
+        hpvh_vh_id=vehiculo,
+        hpvh_fecha_solicitud=fecha_solicitud,
+        hpvh_fecha_prevista_devolucion=fecha_prevista_devolucion,
+        hpvh_solicitante=solicitante,
+        hpvh_motivo=motivo_prestamo,
+        hpvh_ruta=ruta,
+        hpvh_tiempo_estimado_uso=tiempo_previsto,
+        hpvh_conductor=nombre_conductor,
+        hpvh_ci_conductor=ci_conductor,
+        hpvh_nro_celular_conductor=nro_conductor,
+        hpvh_nro_licencia_conductor=licencia_conducir,
+        hpvh_certificado_psicologico=certificado_psicologico,
+        hpvh_certificado_medico=certificado_medico,
+        hpvh_usuario=nombre_usuario,
+        hpvh_nro_celular_usuario=nro_usuario,
+        hpvh_ci_usuario=ci_usuario
+    )
+
+    db.bitacora_general.insert(
+        f_accion="[préstamos] Creada solicitud de préstamos. Vehículo: {}. Solicitante: {}".format(
+            vh.vh_marca + " " + vh.vh_modelo + " " + vh.vh_placa,
+            usuario.first_name + " " + usuario.last_name
+        )
+    )
+
+    return True
 
 # Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo
@@ -2501,6 +2539,33 @@ def detalles_vehiculo():
     nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
     prestamos = __get_prestamos_vh(vehi['id'])
+
+    # Si recibimos una solicitud de préstamo
+    if request.vars.prestamo:
+        resultado = __solicitar_prestamo_vh(
+           solicitante=auth.user.id,
+            vehiculo=vehi['id'],
+            fecha_solicitud=datetime.now(),
+            fecha_prevista_devolucion=request.vars.fecha_prevista_devolucion,
+            tiempo_previsto=request.vars.tiempo_previsto,
+            ruta=request.vars.ruta,
+            motivo_prestamo=request.vars.motivo_prestamo,
+            nombre_conductor=request.vars.nombre_conductor,
+            ci_conductor=request.vars.ci_conductor,
+            nro_conductor=request.vars.nro_conductor,
+            licencia_conducir=request.vars.licencia_conducir,
+            certificado_medico=request.vars.certificado_medico,
+            certificado_psicologico=request.vars.certificado_psicologico,
+            nombre_usuario=request.vars.nombre_usuario,
+            ci_usuario=request.vars.ci_usuario,
+            nro_usuario=request.vars.nro_usuario
+        )
+
+        request.vars.modificacion = None
+        if resultado:
+            session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
+        redirect(URL('prestamos'))
+
 
     # Si mandamos eliminación
     if request.vars.eliminacion:
