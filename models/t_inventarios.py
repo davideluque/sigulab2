@@ -560,8 +560,8 @@ db.define_table(
 
     # Fechas
     Field('hpvh_fecha_solicitud', 'date', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_prevista_devolucion', 'date', notnull=True, label=T('Fecha prevista de devolución')),
     Field('hpvh_fecha_salida', 'date', label=T('Fecha de salida')),
-    Field('hpvh_fecha_prevista_devolucion', 'date', label=T('Fecha prevista de devolución')),
     Field('hpvh_fecha_devolucion', 'date',  default="", label=T('Fecha de devolución')),
 
     # Datos de solicitud
@@ -589,6 +589,7 @@ db.define_table(
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
 
     # Datos de salida
+    Field('hpvh_autoriza_salida', 'references auth_user', label=T('Autorizado por (salida)')),
     Field('hpvh_km_salida', 'integer', label=T('Kilometraje (salida)')),
     Field('hpvh_gasolina_salida', 'string', label=T('Gasolina (salida)')),
     Field('hpvh_aceite_motor_salida', 'string', label=T('Aceite del motor (salida)')),
@@ -605,6 +606,7 @@ db.define_table(
     Field('hpvh_listado_fluidos_salida', 'string', label=T('Listado de Fluidos (salida)')),
 
     # Datos de devolución
+    Field('hpvh_autoriza_devolucion', 'references auth_user', label=T('Autorizado por (devolucion)')),
     Field('hpvh_km_devolucion', 'integer', label=T('Kilometraje (devolucion)')),
     Field('hpvh_gasolina_devolucion', 'string', label=T('Gasolina (devolucion)')),
     Field('hpvh_aceite_motor_devolucion', 'string', label=T('Aceite del motor (devolucion)')),
