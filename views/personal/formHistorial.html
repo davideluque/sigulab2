@@ -1,459 +1,459 @@
 <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Historial laboral</h4>
+  <h4 class="titulosForm">Historial laboral</h4>
 
-                        <div class="form-group">
+  <div class="form-group">
 
-                          <div class="col-sm-12">
-                            <label>Período</label>
-                          </div>
-                          
-                          <div class="col-sm-6">
-                            <label>Desde:</label>
-                            {{if bool(historial['f_fecha_inicio_1']) :}}
-                            <input class="datepicker" value="{{=historial['f_fecha_inicio_1']}}"
-                            name = "fecha_inicio_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                            {{else:}}
-                            <input class="datepicker" value="{{''}}"
-                            name = "fecha_inicio_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                            {{pass}}
-                          </div>
+    <div class="col-sm-12">
+      <label>Período</label>
+    </div>
+    
+    <div class="col-sm-6">
+      <label>Desde:</label>
+      {{if bool(historial['f_fecha_inicio_1']) :}}
+      <input class="datepicker" value="{{=historial['f_fecha_inicio_1']}}"
+      name = "fecha_inicio_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      {{else:}}
+      <input class="datepicker" value="{{''}}"
+      name = "fecha_inicio_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      {{pass}}
+    </div>
 
-                          <div class="col-sm-6">
-                            <label>Hasta:</label>
-                            {{if bool(historial['f_fecha_final_1']) :}} 
-                            <input class="datepicker" value="{{=historial['f_fecha_final_1']}}" name = "fecha_final_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                            {{else:}}
-                            <input class="datepicker" value="{{''}}" name = "fecha_final_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                            {{pass}}
-                          </div>
+    <div class="col-sm-6">
+      <label>Hasta:</label>
+      {{if bool(historial['f_fecha_final_1']) :}} 
+      <input class="datepicker" value="{{=historial['f_fecha_final_1']}}" name = "fecha_final_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      {{else:}}
+      <input class="datepicker" value="{{''}}" name = "fecha_final_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+      {{pass}}
+    </div>
 
-                          <div class="col-sm-6">
-                            <br>
-                            <label>Dependencia</label>
-                            {{if bool(historial['f_dependencia_hist_1']) :}}
-                            <input value="{{=historial['f_dependencia_hist_1']}}" type="text" class="form-control" name="dependencia_hist_1_add" placeholder="Laboratorio" required
-                              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{else:}}
-                            <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_1_add" placeholder="Laboratorio" required
-                              data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{pass}}
-                          </div>
+    <div class="col-sm-6">
+      <br>
+      <label>Dependencia/Departamento</label>
+      {{if bool(historial['f_dependencia_hist_1']) :}}
+      <input value="{{=historial['f_dependencia_hist_1']}}" type="text" class="form-control" name="dependencia_hist_1_add" placeholder="Laboratorio" required
+        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{else:}}
+      <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_1_add" placeholder="Laboratorio" required
+        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{pass}}
+    </div>
 
-                          <div class="col-sm-6">
-                            <br>
+    <div class="col-sm-6">
+      <br>
 
-                            <label>Organizacion</label>
-                            {{if bool(historial['f_organizacion_1']) :}}
-                            <input value="{{=historial['f_organizacion_1']}}" type="text" class="form-control" name="organizacion_1_add" placeholder="Universidad Simón Bolívar" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font> 
-                            {{else:}}
-                            <input value="{{=''}}" type="text" class="form-control" name="organizacion_1_add" placeholder="Universidad Simón Bolívar" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{pass}}
-                          </div>
+      <label>Organizacion</label>
+      {{if bool(historial['f_organizacion_1']) :}}
+      <input value="{{=historial['f_organizacion_1']}}" type="text" class="form-control" name="organizacion_1_add" placeholder="Universidad Simón Bolívar" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font> 
+      {{else:}}
+      <input value="{{=''}}" type="text" class="form-control" name="organizacion_1_add" placeholder="Universidad Simón Bolívar" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{pass}}
+    </div>
 
-                          <div class="col-sm-6">
-                            <br>
-                            <label>Cargo</label>
-                            {{if bool(historial['f_cargo_hist_1']) :}}
-                            <input value="{{=historial['f_cargo_hist_1']}}" type="text" class="form-control" name="cargo_hist_1_add" placeholder="Analista de sistemas" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{else:}}
-                            <input value="{{''}}" type="text" class="form-control" name="cargo_hist_1_add" placeholder="Analista de sistemas" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{pass}}
-                          </div>
+    <div class="col-sm-6">
+      <br>
+      <label>Cargo</label>
+      {{if bool(historial['f_cargo_hist_1']) :}}
+      <input value="{{=historial['f_cargo_hist_1']}}" type="text" class="form-control" name="cargo_hist_1_add" placeholder="Analista de sistemas" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{else:}}
+      <input value="{{''}}" type="text" class="form-control" name="cargo_hist_1_add" placeholder="Analista de sistemas" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{pass}}
+    </div>
 
-                          <div class="col-sm-6">
-                            <br>
-                            <label>Rol</label>
-                            {{if bool(historial['f_rol_hist_1']) :}}
-                            <input value="{{=historial['f_rol_hist_1']}}" type="text" class="form-control" name="rol_hist_1_add" placeholder="Técnico" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{else:}}
-                            <input value="{{''}}" type="text" class="form-control" name="rol_hist_1_add" placeholder="Técnico" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                            <font color="red"><div id="err_celular" hidden></div></font>
-                            {{pass}}
-                          </div>
-
-
-                          <div class="col-sm-12">
-                            <p onclick="toggleTrabajo('trabajo2', 'texto2', 'texto3')" style="display: block;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto2">Agregar otro trabajo</p>
-                          </div>
-                        </div>
+    <div class="col-sm-6">
+      <br>
+      <label>Rol</label>
+      {{if bool(historial['f_rol_hist_1']) :}}
+      <input value="{{=historial['f_rol_hist_1']}}" type="text" class="form-control" name="rol_hist_1_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{else:}}
+      <input value="{{''}}" type="text" class="form-control" name="rol_hist_1_add" placeholder="Técnico" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+      <font color="red"><div id="err_celular" hidden></div></font>
+      {{pass}}
+    </div>
 
 
-
-
-                        <div style="display: none;" id = "trabajo2">
-                          
-                          <div class="form-group">
-                            <div class="col-sm-12" style="margin-top: 2rem;">
-                              <label>Período</label>
-                            </div>
-
-                            <div class="col-sm-6">
-                              <label>Desde:</label>
-                              {{if bool(historial['f_fecha_inicio_2']) :}}
-                              <input class="datepicker" value="{{=historial['f_fecha_inicio_2']}}"
-                              name = "fecha_inicio_2_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}"
-                              name = "fecha_inicio_2_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
-
-                            <div class="col-sm-6">
-                              <label>Hasta:</label>
-                              {{if bool(historial['f_fecha_final_2']) :}} 
-                              <input class="datepicker" value="{{=historial['f_fecha_final_2']}}" name = "fecha_final_2_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}" name = "fecha_final_2_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
-
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Dependencia</label>
-                              {{if bool(historial['f_dependencia_hist_2']) :}}
-                              <input value="{{=historial['f_dependencia_hist_2']}}" type="text" class="form-control" name="dependencia_hist_2_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_2_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-
-                            <div class="col-sm-6">
-                              <br>
-
-                              <label>Organizacion</label>
-                              {{if bool(historial['f_organizacion_2']) :}}
-                              <input value="{{=historial['f_organizacion_2']}}" type="text" class="form-control" name="organizacion_2_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font> 
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="organizacion_2_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Cargo</label>
-                              {{if bool(historial['f_cargo_hist_2']) :}}
-                              <input value="{{=historial['f_cargo_hist_2']}}" type="text" class="form-control" name="cargo_hist_2_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="cargo_hist_2_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Rol</label>
-                              {{if bool(historial['f_rol_hist_2']) :}}
-                              <input value="{{=historial['f_rol_hist_2']}}" type="text" class="form-control" name="rol_hist_2_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="rol_hist_2_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-
-                            
-                            <div class="col-sm-12">
-                              <p onclick="toggleTrabajo('trabajo3', 'texto3', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto3">Agregar otro trabajo</p>
-                            </div>
-                          </div>
-                        </div>
+    <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo2', 'texto2', 'texto3')" style="display: block;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto2">Agregar otro trabajo</p>
+    </div>
+  </div>
 
 
 
 
-                        <div style="display: none;" id = "trabajo3">
-                          
-                          <div class="form-group">
-                            <div class="col-sm-12" style="margin-top: 2rem;">
-                              <label>Período</label>
-                            </div>
+  <div style="display: none;" id = "trabajo2">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
 
-                            <div class="col-sm-6">
-                              <label>Desde:</label>
-                              {{if bool(historial['f_fecha_inicio_3']) :}}
-                              <input class="datepicker" value="{{=historial['f_fecha_inicio_3']}}"
-                              name = "fecha_inicio_3_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}"
-                              name = "fecha_inicio_3_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        {{if bool(historial['f_fecha_inicio_2']) :}}
+        <input class="datepicker" value="{{=historial['f_fecha_inicio_2']}}"
+        name = "fecha_inicio_2_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_2_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <label>Hasta:</label>
-                              {{if bool(historial['f_fecha_final_3']) :}} 
-                              <input class="datepicker" value="{{=historial['f_fecha_final_3']}}" name = "fecha_final_3_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}" name = "fecha_final_3_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <label>Hasta:</label>
+        {{if bool(historial['f_fecha_final_2']) :}} 
+        <input class="datepicker" value="{{=historial['f_fecha_final_2']}}" name = "fecha_final_2_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}" name = "fecha_final_2_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Dependencia</label>
-                              {{if bool(historial['f_dependencia_hist_3']) :}}
-                              <input value="{{=historial['f_dependencia_hist_3']}}" type="text" class="form-control" name="dependencia_hist_3_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_3_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia/Departamento</label>
+        {{if bool(historial['f_dependencia_hist_2']) :}}
+        <input value="{{=historial['f_dependencia_hist_2']}}" type="text" class="form-control" name="dependencia_hist_2_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_2_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
+      <div class="col-sm-6">
+        <br>
 
-                              <label>Organizacion</label>
-                              {{if bool(historial['f_organizacion_3']) :}}
-                              <input value="{{=historial['f_organizacion_3']}}" type="text" class="form-control" name="organizacion_3_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font> 
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="organizacion_3_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+        <label>Organizacion</label>
+        {{if bool(historial['f_organizacion_2']) :}}
+        <input value="{{=historial['f_organizacion_2']}}" type="text" class="form-control" name="organizacion_2_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font> 
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="organizacion_2_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Cargo</label>
-                              {{if bool(historial['f_cargo_hist_3']) :}}
-                              <input value="{{=historial['f_cargo_hist_3']}}" type="text" class="form-control" name="cargo_hist_3_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="cargo_hist_3_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        {{if bool(historial['f_cargo_hist_2']) :}}
+        <input value="{{=historial['f_cargo_hist_2']}}" type="text" class="form-control" name="cargo_hist_2_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_2_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Rol</label>
-                              {{if bool(historial['f_rol_hist_3']) :}}
-                              <input value="{{=historial['f_rol_hist_3']}}" type="text" class="form-control" name="rol_hist_3_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="rol_hist_3_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        {{if bool(historial['f_rol_hist_2']) :}}
+        <input value="{{=historial['f_rol_hist_2']}}" type="text" class="form-control" name="rol_hist_2_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_2_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-12">
-                              <p onclick="toggleTrabajo('trabajo4', 'texto4', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto4">Agregar otro trabajo</p>
-                            </div>
-                        </div>
+      
+      <div class="col-sm-12">
+        <p onclick="toggleTrabajo('trabajo3', 'texto3', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto3">Agregar otro trabajo</p>
+      </div>
+    </div>
+  </div>
 
 
 
 
-                        <div style="display: none;" id = "trabajo4">
-                          
-                          <div class="form-group">
-                            <div class="col-sm-12" style="margin-top: 2rem;">
-                              <label>Período</label>
-                            </div>
+  <div style="display: none;" id = "trabajo3">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
 
-                            <div class="col-sm-6">
-                              <label>Desde:</label>
-                              {{if bool(historial['f_fecha_inicio_4']) :}}
-                              <input class="datepicker" value="{{=historial['f_fecha_inicio_4']}}"
-                              name = "fecha_inicio_4_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}"
-                              name = "fecha_inicio_4_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        {{if bool(historial['f_fecha_inicio_3']) :}}
+        <input class="datepicker" value="{{=historial['f_fecha_inicio_3']}}"
+        name = "fecha_inicio_3_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_3_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <label>Hasta:</label>
-                              {{if bool(historial['f_fecha_final_4']) :}} 
-                              <input class="datepicker" value="{{=historial['f_fecha_final_4']}}" name = "fecha_final_4_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}" name = "fecha_final_4_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <label>Hasta:</label>
+        {{if bool(historial['f_fecha_final_3']) :}} 
+        <input class="datepicker" value="{{=historial['f_fecha_final_3']}}" name = "fecha_final_3_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}" name = "fecha_final_3_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Dependencia</label>
-                              {{if bool(historial['f_dependencia_hist_4']) :}}
-                              <input value="{{=historial['f_dependencia_hist_4']}}" type="text" class="form-control" name="dependencia_hist_4_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_4_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia/Departamento</label>
+        {{if bool(historial['f_dependencia_hist_3']) :}}
+        <input value="{{=historial['f_dependencia_hist_3']}}" type="text" class="form-control" name="dependencia_hist_3_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_3_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
+      <div class="col-sm-6">
+        <br>
 
-                              <label>Organizacion</label>
-                              {{if bool(historial['f_organizacion_4']) :}}
-                              <input value="{{=historial['f_organizacion_4']}}" type="text" class="form-control" name="organizacion_4_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font> 
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="organizacion_4_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+        <label>Organizacion</label>
+        {{if bool(historial['f_organizacion_3']) :}}
+        <input value="{{=historial['f_organizacion_3']}}" type="text" class="form-control" name="organizacion_3_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font> 
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="organizacion_3_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Cargo</label>
-                              {{if bool(historial['f_cargo_hist_4']) :}}
-                              <input value="{{=historial['f_cargo_hist_4']}}" type="text" class="form-control" name="cargo_hist_4_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="cargo_hist_4_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        {{if bool(historial['f_cargo_hist_3']) :}}
+        <input value="{{=historial['f_cargo_hist_3']}}" type="text" class="form-control" name="cargo_hist_3_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_3_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Rol</label>
-                              {{if bool(historial['f_rol_hist_4']) :}}
-                              <input value="{{=historial['f_rol_hist_4']}}" type="text" class="form-control" name="rol_hist_4_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="rol_hist_4_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-                            
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        {{if bool(historial['f_rol_hist_3']) :}}
+        <input value="{{=historial['f_rol_hist_3']}}" type="text" class="form-control" name="rol_hist_3_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_3_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-12">
-                              <p onclick="toggleTrabajo('trabajo5', 'texto5', '')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto5">Agregar otro trabajo</p>
-                            </div>
-                          </div>
-                        </div>
+      <div class="col-sm-12">
+        <p onclick="toggleTrabajo('trabajo4', 'texto4', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto4">Agregar otro trabajo</p>
+      </div>
+  </div>
 
-                        <div style="display: none;" id = "trabajo5">
-                          
-                          <div class="form-group">
-                            <div class="col-sm-12" style="margin-top: 2rem;">
-                              <label>Período</label>
-                            </div>
 
-                            <div class="col-sm-6">
-                              <label>Desde:</label>
-                              {{if bool(historial['f_fecha_inicio_5']) :}}
-                              <input class="datepicker" value="{{=historial['f_fecha_inicio_5']}}"
-                              name = "fecha_inicio_5_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}"
-                              name = "fecha_inicio_5_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
 
-                            <div class="col-sm-6">
-                              <label>Hasta:</label>
-                              {{if bool(historial['f_fecha_final_5']) :}} 
-                              <input class="datepicker" value="{{=historial['f_fecha_final_5']}}" name = "fecha_final_5_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{else:}}
-                              <input class="datepicker" value="{{''}}" name = "fecha_final_5_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-                              {{pass}}
-                            </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Dependencia</label>
-                              {{if bool(historial['f_dependencia_hist_5']) :}}
-                              <input value="{{=historial['f_dependencia_hist_5']}}" type="text" class="form-control" name="dependencia_hist_5_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_5_add" placeholder="Laboratorio" required
-                                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+  <div style="display: none;" id = "trabajo4">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        {{if bool(historial['f_fecha_inicio_4']) :}}
+        <input class="datepicker" value="{{=historial['f_fecha_inicio_4']}}"
+        name = "fecha_inicio_4_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_4_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                              <label>Organizacion</label>
-                              {{if bool(historial['f_organizacion_5']) :}}
-                              <input value="{{=historial['f_organizacion_5']}}" type="text" class="form-control" name="organizacion_5_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font> 
-                              {{else:}}
-                              <input value="{{=''}}" type="text" class="form-control" name="organizacion_5_add" placeholder="Universidad Simón Bolívar" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <label>Hasta:</label>
+        {{if bool(historial['f_fecha_final_4']) :}} 
+        <input class="datepicker" value="{{=historial['f_fecha_final_4']}}" name = "fecha_final_4_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}" name = "fecha_final_4_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Cargo</label>
-                              {{if bool(historial['f_cargo_hist_5']) :}}
-                              <input value="{{=historial['f_cargo_hist_5']}}" type="text" class="form-control" name="cargo_hist_5_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="cargo_hist_5_add" placeholder="Analista de sistemas" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia/Departamento</label>
+        {{if bool(historial['f_dependencia_hist_4']) :}}
+        <input value="{{=historial['f_dependencia_hist_4']}}" type="text" class="form-control" name="dependencia_hist_4_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_4_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
 
-                            <div class="col-sm-6">
-                              <br>
-                              <label>Rol</label>
-                              {{if bool(historial['f_rol_hist_5']) :}}
-                              <input value="{{=historial['f_rol_hist_5']}}" type="text" class="form-control" name="rol_hist_5_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{else:}}
-                              <input value="{{''}}" type="text" class="form-control" name="rol_hist_5_add" placeholder="Técnico" required
-                                  data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-                              <font color="red"><div id="err_celular" hidden></div></font>
-                              {{pass}}
-                            </div>
-                          </div>
-                        </div>
+      <div class="col-sm-6">
+        <br>
 
-                      </div>
+        <label>Organizacion</label>
+        {{if bool(historial['f_organizacion_4']) :}}
+        <input value="{{=historial['f_organizacion_4']}}" type="text" class="form-control" name="organizacion_4_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font> 
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="organizacion_4_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        {{if bool(historial['f_cargo_hist_4']) :}}
+        <input value="{{=historial['f_cargo_hist_4']}}" type="text" class="form-control" name="cargo_hist_4_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_4_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        {{if bool(historial['f_rol_hist_4']) :}}
+        <input value="{{=historial['f_rol_hist_4']}}" type="text" class="form-control" name="rol_hist_4_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_4_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+      
+
+      <div class="col-sm-12">
+        <p onclick="toggleTrabajo('trabajo5', 'texto5', '')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto5">Agregar otro trabajo</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: none;" id = "trabajo5">
+    
+    <div class="form-group">
+      <div class="col-sm-12" style="margin-top: 2rem;">
+        <label>Período</label>
+      </div>
+
+      <div class="col-sm-6">
+        <label>Desde:</label>
+        {{if bool(historial['f_fecha_inicio_5']) :}}
+        <input class="datepicker" value="{{=historial['f_fecha_inicio_5']}}"
+        name = "fecha_inicio_5_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}"
+        name = "fecha_inicio_5_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <label>Hasta:</label>
+        {{if bool(historial['f_fecha_final_5']) :}} 
+        <input class="datepicker" value="{{=historial['f_fecha_final_5']}}" name = "fecha_final_5_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{else:}}
+        <input class="datepicker" value="{{''}}" name = "fecha_final_5_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Dependencia/Departamento</label>
+        {{if bool(historial['f_dependencia_hist_5']) :}}
+        <input value="{{=historial['f_dependencia_hist_5']}}" type="text" class="form-control" name="dependencia_hist_5_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="dependencia_hist_5_add" placeholder="Laboratorio" required
+          data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+
+        <label>Organizacion</label>
+        {{if bool(historial['f_organizacion_5']) :}}
+        <input value="{{=historial['f_organizacion_5']}}" type="text" class="form-control" name="organizacion_5_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font> 
+        {{else:}}
+        <input value="{{=''}}" type="text" class="form-control" name="organizacion_5_add" placeholder="Universidad Simón Bolívar" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Cargo</label>
+        {{if bool(historial['f_cargo_hist_5']) :}}
+        <input value="{{=historial['f_cargo_hist_5']}}" type="text" class="form-control" name="cargo_hist_5_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="cargo_hist_5_add" placeholder="Analista de sistemas" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+
+      <div class="col-sm-6">
+        <br>
+        <label>Rol</label>
+        {{if bool(historial['f_rol_hist_5']) :}}
+        <input value="{{=historial['f_rol_hist_5']}}" type="text" class="form-control" name="rol_hist_5_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{else:}}
+        <input value="{{''}}" type="text" class="form-control" name="rol_hist_5_add" placeholder="Técnico" required
+            data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+        <font color="red"><div id="err_celular" hidden></div></font>
+        {{pass}}
+      </div>
+    </div>
+  </div>
+
+</div>
