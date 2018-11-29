@@ -3023,8 +3023,6 @@ def detalles_vehiculo():
         request.vars.ocultar = None
         vehi = db(db.vehiculo.vh_placa == vh).select()[0]
 
-    # PENDIENTE: Optimizar esto en una sola structura,
-    # iterar en caracteristica dict
     caracteristicas_list = [
         'Nº Bien Mueble',
         'Marca',
@@ -3082,6 +3080,8 @@ def detalles_vehiculo():
     depend = db(db.dependencias.id == vehi['vh_dependencia']).select().first()
     sede_id = int(depend.id_sede)
 
+    esta_autorizado = (auth.user.id == vehi['vh_responsable']) or (auth.user.id == vehi['vh_custodio']) or (auth.user.id == 1)
+
     # Si solo estoy cargando la vista
     return dict(
         vehiculo=vehi,
@@ -3093,7 +3093,8 @@ def detalles_vehiculo():
         localizacion=localizacion,
         clasificaciones=dict_clasificaciones,
         sede_id=sede_id,
-        historial_prestamos=prestamos
+        historial_prestamos=prestamos,
+        esta_autorizado=esta_autorizado
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
