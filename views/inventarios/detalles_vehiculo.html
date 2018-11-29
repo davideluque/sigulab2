@@ -1291,6 +1291,16 @@
           $(this).next().hide();
           $(this).css('border-color', '#ddd');
           $(this).css('color', '#888');
+
+          // Colocamos nuevo año mínimo en campos de fecha
+          var ano_adq = $("#ano").val();
+          var ano_minimo = parseInt(ano_adq) - 1;
+          var min_date = new Date(ano_minimo-1, 11, 31);
+          var dd_min = min_date.getDate();
+          var mm_min = min_date.getMonth()+1; //January is 0!
+          var yyyy_min = min_date.getFullYear();
+          var minimo = yyyy_min + "-" + mm_min + "-" + dd_min;
+          $(".campo_fecha").attr('min', minimo);
         } else {
           $(this).css('border-color', '#d03e3e');
           $(this).next().show();
@@ -1440,11 +1450,13 @@
     $(".campo_fecha").attr('max', maximo);
   });
 
-  // Verifica la fecha introducida
+  // Verifica la fecha introducida en factura y/o oficio
   $(".campo_fecha").change(function() {
+    var ano_adq = $("#ano").val();
     var fecha = new Date($(this).val());
     var maximo = new Date();
-    var minimo = new Date("1967-07-18");
+    var ano_minimo = parseInt(ano_adq) - 1;
+    var minimo = new Date(ano_minimo-1, 11, 31);
 
     if ((minimo <= fecha) && (fecha <= maximo)) {
       $(this).next().hide();
@@ -1454,7 +1466,7 @@
       $(this).css('border-color', '#d03e3e');
       $(this).css('color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce una fecha válida.");
+      $(this).next().text("Introduce una fecha en un rango válido.");
     }
   });
   
