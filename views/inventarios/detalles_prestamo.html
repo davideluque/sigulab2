@@ -1,0 +1,285 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+    <!-- Estilos de modales y listados -->
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+{{end}}
+
+{{block center}}
+
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
+  <a class="breadcrumb-item" href="{{=URL('prestamos')}}">Solicitudes</a>
+  <span class="breadcrumb-item active">Solicitud #{{=prestamo.id}}: {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} ({{=vehiculo['vh_placa']}})</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
+    <h3 class="dep-titulo text-center">AUTORIZACIÓN PENDIENTE</h3>
+    {{pass}}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+    <h3 class="dep-titulo text-center">SALIDA PENDIENTE</h3>
+    {{pass}}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+    <h3 class="dep-titulo text-center">DEVOLUCIÓN PENDIENTE</h3>
+    {{pass}}
+    <h3 class="dep-titulo text-center">Solicitud #{{=prestamo.id}}:  {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}}</h3>
+    <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
+    {{ if vehiculo['vh_num']: }} <h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>{{ pass }}
+    {{ if esta_autorizado: }}
+        <h4 class="text-center">DESCRIPCIÓN: {{= prestamo['hpvh_motivo'] }}</h4>
+    {{ pass }}
+
+    <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+{{pass}}
+
+
+<!-- Inicio Boton Modificar VEHICULO -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <!-- Botón para atrás -->
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
+                    <!-- Boton para aceptar el préstamo -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#aprobar"><i class="fas fa-check fa-1x"></i></button>
+
+                    <!-- Boton para rechazar la solicitud -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#rechazar"><i class="fas fa-times-circle fa-1x"></i></button>
+                {{ pass }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+                    <!-- Boton para autorizar salida -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#salida"><i class="fas fa-sign-in fa-1x"></i></button>
+                {{ pass }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+                    <!-- Boton para autorizar devolución -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#devolucion"><i class="fas fa-undo fa-1x"></i></button>
+                {{ pass }}
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{{ pass }}
+<!-- Fin Boton Agregar Sustancia -->
+
+<!-- Ficha vehiculo aqui esta la informacion del vehiculo -->
+<div class="wrapper">
+
+    <div class="tab-wrapper">
+        <ul class="tabs">
+                <li class="tab-link active" data-tab="1">INFORMACIÓN<br/>DE LA<br/>SOLICITUD</li>
+                <li class="tab-link" data-tab="2">CONDUCTOR<br/>Y<br/>USUARIO</li>
+            </ul>
+    </div>
+
+    <div class="content-wrapper">
+        <div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+                {{ for title in informacion_list: }}
+                    {{ if informacion_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{ if title == "Vehículo Solicitado": }}
+                        <a href="{{=URL('detalles_vehiculo', vars=dict(vh= db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()['vh_placa'] ))}}">
+                        {{ pass }}
+
+                        {{= informacion_dict.get(title)}}
+
+                        {{ if title == "Vehículo Solicitado": }}
+                        </a>
+                        {{ pass }}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+        </div>
+
+        <div id="tab-2" class="tab-content">
+            <h3 class="text-center">Conductor</h3>
+            <div class="grid-container">
+                {{ for title in conductor_list: }}
+                    {{ if conductor_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= conductor_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+
+            <h3 class="text-center">Usuario</h3>
+            <div class="grid-container">
+                {{ for title in usuario_list: }}
+                    {{ if usuario_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= usuario_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{ if esta_autorizado: }}
+<!--Modal para rechazar la solicitud -->
+<div class="modal fade" id="rechazar" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+          <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header" style="background-color: red;">
+              <div class="container">
+                  <i class="fas fa-times-circle fa-2x" style="
+                  display:block;
+                  margin-left: -16px;
+                  margin-top: 8px;
+                  color: white;
+                  "></i>
+              </div>
+            </div>
+            <div class="col-sm-11" id="col11Header" style="background-color: red;">
+              <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+              ">Rechazar Solicitud de Préstamo<button type="button" class="close" data-dismiss="modal">&times;</button>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- Fin Modal Header -->
+
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <br>
+            <form method="post" style="text-align: center;">
+                <div class="form-group">
+                    <label>Motivo de rechazo*</label>
+                    <input type="text" class="form-control" id="motivo_rechazo" name="motivo_rechazo" placeholder="Motivo de rechazo*" required>
+                    <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                </div>
+                <h4>¿Desea rechazar la solicitud de préstamo de {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} con placa {{=vehiculo['vh_placa']}}?</h4>
+                <br>
+                <button type="submit button" class="btn btn-next botondelete" name="rechazo" value="True" style="text-align:center">Si</button>
+                <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+            </form>
+            <br>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--Modal para aprobar la solicitud -->
+<div class="modal fade" id="aprobar" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+            <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+                <div class="container">
+                    <i class="fas fa-check fa-2x" style="
+                    display:block;
+                    margin-left: -16px;
+                    margin-top: 8px;
+                    color: white;
+                    "></i>
+                </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+                <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+                ">Aprobar Solicitud de Préstamo<button type="button" class="close" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+            </div>
+        </div>
+        <!-- Fin Modal Header -->
+
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <br>
+            <form method="post" style="text-align: center;">
+                <h4>¿Desea aprobar la solicitud de préstamo de {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} con placa {{=vehiculo['vh_placa']}}?</h4>
+                <br>
+                <input name="aprobado" value="True" hidden />
+                <button type="submit button" class="btn btn-next botonForm" name="aprobado" value="True" style="text-align:center">Si</button>
+                <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+            </form>
+            <br>
+        </div>
+        </div>
+    </div>
+</div>
+{{ pass }}
+
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+
+        var tabID = $(this).attr('data-tab');
+
+        $(this).addClass('active').siblings().removeClass('active');
+
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+</script>
+{{end}}

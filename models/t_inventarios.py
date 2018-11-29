@@ -552,3 +552,83 @@ db.define_table(
 # PENDIENTE: Verificar la siguiente restriccion
 db.historial_mantenimiento_vh.hmvh_id.requires = IS_IN_DB(db, db.vehiculo.id, '%(id)s')
 db.historial_mantenimiento_vh.hmvh_crea_mantenimiento.requires = IS_IN_DB(db, db.auth_user, '%(first_name)s %(last_name)s | %(email)s')
+
+db.define_table(
+    'historial_prestamo_vh',
+    # Vehículo
+    Field('hpvh_vh_id', 'references vehiculo', notnull=True, label=T('ID del vehículo')),
+
+    # Fechas
+    Field('hpvh_fecha_solicitud', 'date', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_prevista_devolucion', 'date', notnull=True, label=T('Fecha prevista de devolución')),
+    Field('hpvh_fecha_salida', 'date', label=T('Fecha de salida')),
+    Field('hpvh_fecha_devolucion', 'date',  default="", label=T('Fecha de devolución')),
+
+    # Datos de solicitud
+    Field('hpvh_solicitante', 'references auth_user', notnull=True, label=T('Solicitante (ID)')),
+    Field('hpvh_motivo', 'text', notnull=True, default="", label=T('Motivo del préstamo')),
+    Field('hpvh_ruta', 'text', notnull=True, default="", label=T('Ruta prevista')),
+    Field('hpvh_tiempo_estimado_uso', 'string', notnull=True, default="", label=T('Tiempo estimado de uso')),
+
+    # Datos de conductor
+    Field('hpvh_conductor', 'string', notnull=True, default="", label=T('Nombre del conductor')),
+    Field('hpvh_nro_celular_conductor', 'string', label=T('Nº Celular Conductor')),
+    Field('hpvh_ci_conductor', 'string', label=T('C.I. Conductor')),
+    Field('hpvh_nro_licencia_conductor', 'string', label=T('Nº Licencia Conducir Conductor')),
+    Field('hpvh_certificado_medico', 'string', label=T('Certificado médico conductor')),
+    Field('hpvh_certificado_psicologico', 'string',label=T('Certificado psicológico conductor')),
+
+    # Datos de usuario
+    Field('hpvh_usuario', 'string', notnull=True, default="", label=T('Nombre de Usuario')),
+    Field('hpvh_nro_celular_usuario', 'string', label=T('Nº Celular Usuario')),
+    Field('hpvh_ci_usuario', 'string', label=T('C.I. Usuario')),
+
+    # Estatus (@TODO: Cambiar estatus por código int)
+    Field('hpvh_autorizado_por', 'references auth_user', label=T('Autorizado por')),
+    Field('hpvh_estatus', 'string', notnull=True, default="Solicitud recibida", label=T('Estatus de solicitud'), requires=IS_IN_SET(["Solicitud recibida", "Solicitud aprobada: en espera", "Solicitud rechazada", "Solicitud aprobada: en tránsito", "Solicitud aprobada: vehículo devuelto"])),
+    Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
+
+    # Datos de salida
+    Field('hpvh_autoriza_salida', 'references auth_user', label=T('Autorizado por (salida)')),
+    Field('hpvh_km_salida', 'integer', label=T('Kilometraje (salida)')),
+    Field('hpvh_gasolina_salida', 'string', label=T('Gasolina (salida)')),
+    Field('hpvh_aceite_motor_salida', 'string', label=T('Aceite del motor (salida)')),
+    Field('hpvh_aceite_caja_salida', 'string', label=T('Aceite de caja (salida)')),
+    Field('hpvh_agua_ref_salida', 'string', label=T('Agua/refrigerante (salida)')),
+    Field('hpvh_bateria_salida', 'string', label=T('Batería (salida)')),
+    Field('hpvh_cauchos_salida', 'string', label=T('Cauchos (salida)')),
+    Field('hpvh_caucho_repuesto_salida', 'string', label=T('Caucho de repuesto (salida)')),
+    Field('hpvh_herramientas_seguridad_salida', 'string', label=T('Herramientas de seguridad (salida)')),
+    Field('hpvh_latoneria_salida', 'string', label=T('Latonería (salida)')),
+    Field('hpvh_pintura_salida', 'string', label=T('Pintura (salida)')),
+    Field('hpvh_accesorios_salida', 'string', label=T('Accesorios (salida)')),
+    Field('hpvh_cartel_uso_oficial_salida', 'string', label=T('Cartel de Uso Oficial (salida)')),
+    Field('hpvh_listado_fluidos_salida', 'string', label=T('Listado de Fluidos (salida)')),
+
+    # Datos de devolución
+    Field('hpvh_autoriza_devolucion', 'references auth_user', label=T('Autorizado por (devolucion)')),
+    Field('hpvh_km_devolucion', 'integer', label=T('Kilometraje (devolucion)')),
+    Field('hpvh_gasolina_devolucion', 'string', label=T('Gasolina (devolucion)')),
+    Field('hpvh_aceite_motor_devolucion', 'string', label=T('Aceite del motor (devolucion)')),
+    Field('hpvh_aceite_caja_devolucion', 'string', label=T('Aceite de caja (devolucion)')),
+    Field('hpvh_agua_ref_devolucion', 'string', label=T('Agua/refrigerante (devolucion)')),
+    Field('hpvh_bateria_devolucion', 'string', label=T('Batería (devolucion)')),
+    Field('hpvh_cauchos_devolucion', 'string', label=T('Cauchos (devolucion)')),
+    Field('hpvh_caucho_repuesto_devolucion', 'string', label=T('Caucho de repuesto (devolucion)')),
+    Field('hpvh_herramientas_seguridad_devolucion', 'string', label=T('Herramientas de seguridad (devolucion)')),
+    Field('hpvh_latoneria_devolucion', 'string', label=T('Latonería (devolucion)')),
+    Field('hpvh_pintura_devolucion', 'string', label=T('Pintura (devolucion)')),
+    Field('hpvh_accesorios_devolucion', 'string', label=T('Accesorios (devolucion)')),
+    Field('hpvh_cartel_uso_oficial_devolucion', 'string', label=T('Cartel de Uso Oficial (devolucion)')),
+    Field('hpvh_listado_fluidos_devolucion', 'string', label=T('Listado de Fluidos (devolucion)')),
+
+    # Documentos entregados
+    # -1 : campo no se llenó
+    # 0 : no entregado
+    # 1 : entregado
+    # 2 : devuelto
+    Field('hpvh_carnet_circulacion', 'integer', notnull=True, default=-1, label=T('Carnet de circulación entregado')),
+    Field('hpvh_poliza_seguri', 'integer', notnull=True, default=-1, label=T('Copia de póliza de seguro entregada')),
+    Field('hpvh_lista_telf_emerg', 'integer', notnull=True, default=-1, label=T('Lista de Teléfonos de Emergencia entregada')),
+    Field('hpvh_manual_uso_vehic', 'integer', notnull=True, default=-1, label=T('Manual de uso del vehículo entregado'))
+)
