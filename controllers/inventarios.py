@@ -3714,6 +3714,10 @@ def prestamos():
 
     solicitudes_realizadas = db(db.historial_prestamo_vh.hpvh_solicitante == user_id).select()
     solicitudes_recibidas_aux = db(db.historial_prestamo_vh.id).select()
+    todas = []
+
+    if auth.user.id == 1:
+        todas = db(db.historial_prestamo_vh.id).select()
 
     solicitudes_recibidas = []
     for solicitud in solicitudes_recibidas_aux:
@@ -3725,10 +3729,14 @@ def prestamos():
     c += len([x for x in solicitudes_realizadas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
     c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
 
+    if auth.user.id == 1:
+        c = len(todas)
+
     return dict(
         cant_prestamos=c,
         solicitudes_recibidas=solicitudes_recibidas,
         solicitudes_realizadas=solicitudes_realizadas,
+        todas_las_solicitudes=todas
     )
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del

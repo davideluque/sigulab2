@@ -72,16 +72,19 @@
         <ul class="tabs">
             <li class="tab-link active" data-tab="1">RECIBIDAS</li>
             <li class="tab-link" data-tab="2">REALIZADAS</li>
+            {{ if auth.user.id == 1: }}
+            <li class="tab-link" data-tab="3">TODAS</li>
+            {{ pass }}
         </ul>
 </div>
-<!-- Inicio de la seccion con la lista de validaciones para bienes muebles --> 
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles -->
 <div id="tab-1" class="container tab-content active">
     <div class="row">
             <br>
             <div id="buttons">
             </div>
             <br>
-    
+
         <div class="table-responsive no-padding no-margin">
           <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
@@ -177,11 +180,73 @@
                     <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
-    
+
           </table>
         </div>
     </div>
-</div> 
+</div>
+
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles -->
+<div id="tab-3" class="container tab-content">
+    <div class="row">
+            <br>
+            <div id="buttons3">
+            </div>
+            <br>
+
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable3" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{for solicitud in todas_las_solicitudes:}}
+                <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
+                                {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
+                        </a>
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
+                </tr>
+                {{ pass }}
+            </tbody>
+
+            <tfoot id="collapseFiltros">
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
 
 <!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
 
@@ -419,6 +484,103 @@
         
                 $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
                 $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+            
+                
+             }
+            });
+        </script>
+
+<script>
+
+        var filtros = false;
+    
+        $(document).ready(function() {
+                // Setup - add a text input to each footer cell
+                $('#datatable3 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Filtro" />' );
+                } );
+         
+                // DataTable
+                var table = $('#datatable3').DataTable();
+         
+                // Apply the search
+                table.columns().every( function () {
+                        var that = this;
+         
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                                if ( that.search() !== this.value ) {
+                                        that
+                                                .search( this.value )
+                                                .draw();
+                                }
+                        } );
+                } );
+    
+                $('#datatable3 tfoot tr').appendTo('#datatable3 thead');
+                $("#datatable3 thead tr").not("#titulosListado").css("display","none");
+        } );
+    
+        function mostrarFiltro2() {
+                if (filtros){
+                    $("#datatable3 thead tr").not("#titulosListado").css("display","none");
+                    filtros = false
+                }
+                else{
+                    $("#datatable3 thead tr").not("#titulosListado").css("display","table-row");
+                    filtros = true
+                }
+    
+        }
+    </script>
+     
+    <script language="javascript">
+        
+        var table = $('#datatable3').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            initComplete: function(){
+                var api = this.api();
+            
+                new $.fn.dataTable.Buttons(api, {
+                    buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro2()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+            
+                        {
+                            extend: 'collection',
+                            text: '<i class="fas fa-save"></i>',
+                            className: 'boton-sigulab',
+                            buttons: [
+                                { extend:'copy', text: 'Copiar' } ,
+                                'excel',
+                                'csv',
+                                'pdf'
+                            ]
+                        },
+                        { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                    ]
+                });
+            
+                $('#datatable3_filter').appendTo('#buttons3');
+        
+                api.buttons().container().appendTo('#buttons3');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('#buttons3').append('<br><br>');
+                $('#datatable3_info').addClass('pull-right');
+                $('#datatable3_filter').addClass('pull-left');
+        
+                $('#datatable3_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable3_next').html('<span class="fa fa-arrow-right" />');
             
                 
              }
