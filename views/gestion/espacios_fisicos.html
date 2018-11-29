@@ -27,25 +27,15 @@
 <script>
 
   function validarEspaciosFisicosExt(){
-    return [
-      '#espacios_fisicos_ext_USB',
-    ].map(i => $(i))
-    .map($this => {
-      const id = $this.attr('id')
-      const parent = $(`#${id}__row`)
-      const val = $this.val()
-      if (parent.hasClass('hidden')) {
-        return true
-      }
-      if (val.match(/^\d{4}$/)) {
-        $(`[name="${id}"]`).popover('hide')
-        return true;
-      } else {
-        $(`[name="${id}"]`).popover('show')
+      const $this = $('#espacios_fisicos_ext_USB')
+      if ($this.val() === '' || !$this.val().match(/^(\d{4}\/)*\d{4}$/)){
+        $('[name="espacios_fisicos_ext"]').popover('show');
         return false;
       }
-    })
-    .every(i => i)
+      else {
+        $('[name="espacios_fisicos_ext"]').popover('hide');
+        return true;
+      }
   }
 
   function validarEspaciosFisicosInt(){
