@@ -30,7 +30,6 @@
 <div id="main" class="container">
 
 
-    <h1>{{=filtros['categoria_busqueda']}}</h1>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<div class="panel">
 		<div class="panel-body-users-tab no-padding" style="background-color:#fafafa;">
@@ -44,7 +43,12 @@
 						<th class="gremio tableColumn">Gremio</th>
 						<th class="compnombre tableColumn">Competencia - Nombre</th>
 						<th class="compcategoria tableColumn">Competencia - Categoria</th>
-						<th class="anos tableColumn">años</th>
+						<th class="anios tableColumn">años</th>
+						<th class="cargo1 tableColumn">cargo1</th>
+						<th class="cargo2 tableColumn">cargo2</th>
+						<th class="cargo3 tableColumn">cargo3</th>
+						<th class="cargo4 tableColumn">cargo4</th>
+						<th class="cargo5 tableColumn">cargo5</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -57,7 +61,12 @@
                         <td>{{=item['gremio']}}</td>
                         <td>{{=item['competencia']}}</td>
                         <td>{{=", ".join(item['categorias'])}}</td>
-                        <td>{{=item['años-servicio']}}</td>
+                        <td>{{=item['anios-servicio']}}</td>
+                        <td>{{=item['cargo1']}}</td>
+                        <td>{{=item['cargo2']}}</td>
+                        <td>{{=item['cargo3']}}</td>
+                        <td>{{=item['cargo4']}}</td>
+                        <td>{{=item['cargo5']}}</td>
                     </tr>
                     {{pass}}
                 </tbody>
@@ -75,10 +84,10 @@
         language: {
         url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
-        rowsGroup: [0, 1,2],
+        rowsGroup: [0, 1, 2, 3, 4, 7],
         "columnDefs": [
             {
-                "targets": [],
+                "targets": [ 6, 7, 8, 9, 10, 11, 12],
                 "visible": false,
                 "searchable": true
             },
@@ -98,6 +107,14 @@
       // busqueda por Categorias
       table.columns('.compcategoria')
         .search('{{=filtros['categoria_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Años
+      table.columns('.anios')
+        .search('{{=filtros['anios_busqueda'] or ''}}')
+        .draw();
+      // Busqueda por Cargos
+      table.columns('.cargo1 .cargo2 .cargo3 .cargo4 .cargo5')
+        .search('{{=filtros['cargo_busqueda'] or ''}}')
         .draw();
     } );
 </script>

@@ -16,10 +16,19 @@ def busqueda():
 
 def resultados_busqueda():
     from gluon.serializers import json
-    from datetime import date
-    rows = db(db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal).select()
+    from datetime import date, datetime
+    rows = db((db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal)
+            & (db.t_Personal.id == db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal)).select()
     lista = []
     hoy = date.today()
+    aniversario_ulab = datetime.strptime('05-06', '%d-%m').date()
+    if request.post_vars['fecha_busqueda']:
+        aniversario_ulab=aniversario_ulab.replace(
+                year=int(request.post_vars['fecha_busqueda'][-4:]))
+    else:
+        aniversario_ulab=aniversario_ulab.replace(
+                year=hoy.year+1 if aniversario_ulab < hoy else hoy.year)
+
     for row in rows:
         ingreso = row.t_Personal.f_fecha_ingreso_ulab
         lista.append({
@@ -30,10 +39,14 @@ def resultados_busqueda():
             'gremio' : row.t_Personal.f_gremio,
             'competencia' : row.t_Competencias2.f_nombre,
             'categorias' : row.t_Competencias2.f_categorias,
-            'años-servicio': (hoy-ingreso).days/365
+            'anios-servicio': (aniversario_ulab-ingreso).days/365 if ingreso else 0,
+            'cargo1' : row.t_Historial_trabajo_nuevo.f_cargo_hist_1,
+            'cargo2' : row.t_Historial_trabajo_nuevo.f_cargo_hist_2,
+            'cargo3' : row.t_Historial_trabajo_nuevo.f_cargo_hist_3,
+            'cargo4' : row.t_Historial_trabajo_nuevo.f_cargo_hist_4,
+            'cargo5' : row.t_Historial_trabajo_nuevo.f_cargo_hist_5,
             })
-        da = hoy-ingreso
-    return dict(lista=lista, filtros=request.post_vars)
+    return dict(lista=lista, filtros=request.post_vars, ani=aniversario_ulab)
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
     tb=[]
@@ -815,6 +828,4 @@ def __get_competencias(request, personal):
     # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
     #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
     return fies
-
-
 
