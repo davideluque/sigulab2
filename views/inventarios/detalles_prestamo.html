@@ -46,8 +46,14 @@
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
 
-    {{ if esta_autorizado: }}
-    <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
+    <h3 class="dep-titulo text-center">AUTORIZACIÓN PENDIENTE</h3>
+    {{pass}}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+    <h3 class="dep-titulo text-center">SALIDA PENDIENTE</h3>
+    {{pass}}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+    <h3 class="dep-titulo text-center">DEVOLUCIÓN PENDIENTE</h3>
     {{pass}}
     <h3 class="dep-titulo text-center">Solicitud #{{=prestamo.id}}:  {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}}</h3>
     <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
@@ -74,24 +80,21 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
-              {{ if esta_autorizado: }}
-                {{ if request.vars.delete: }}
-                <form method="post">
-                    <!-- Boton para aceptar mod de bien mueble-->
-                    <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
-                    <!--Boton para rechazar el bien mueble-->
-                    <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
-                </form>
-                {{ pass }}
-              {{ pass }}
-                {{ if esta_autorizado: }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
                     <!-- Boton para aceptar el préstamo -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#aprobar"><i class="fas fa-check fa-1x"></i></button>
 
                     <!-- Boton para rechazar la solicitud -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#rechazar"><i class="fas fa-times-circle fa-1x"></i></button>
                 {{ pass }}
-              {{ pass }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+                    <!-- Boton para autorizar salida -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#salida"><i class="fas fa-sign-in fa-1x"></i></button>
+                {{ pass }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+                    <!-- Boton para autorizar devolución -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#devolucion"><i class="fas fa-undo fa-1x"></i></button>
+                {{ pass }}
             </div>
         </div>
     </div>
@@ -211,7 +214,7 @@
                 </div>
                 <h4>¿Desea rechazar la solicitud de préstamo de {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} con placa {{=vehiculo['vh_placa']}}?</h4>
                 <br>
-                <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                <button type="submit button" class="btn btn-next botondelete" name="rechazo" value="True" style="text-align:center">Si</button>
                 <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
             </form>
             <br>
