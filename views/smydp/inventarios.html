@@ -60,6 +60,7 @@
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
+  
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
 	<div class="container titulo ">
 	<h3 class="inicio-titulo">INVENTARIO DE SyM</h3>
@@ -128,6 +129,13 @@
 	{{pass}}
 	</div>
 
+	<div class="container">
+   
+		<a  href="{{=URL('sigulab2', 'smydp', 'generar_reporte')}}">
+		  <button class="btn btn-default">Generar Reporte</button>
+		</a>
+	  
+	</div>
 	<!-- 
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
