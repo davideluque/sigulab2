@@ -176,9 +176,20 @@ db.define_table(
 db.t_Extension._plural = 'Extensiones'
 db.t_Extension._singular = 'Extension'
 
-#t_Competencias: Tabla de Competencias.
 db.define_table(
     't_Competencias',
+    # Atributos
+    Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Competencia')),
+    Field('f_observaciones', 'string', length=150, label=T('Observaciones')),
+    Field('f_Competencia_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Competencias._plural = 'Competencias'
+db.t_Competencias._singular = 'Competencia'
+
+#t_Competencias: Tabla de Competencias.
+db.define_table(
+    't_Competencias2',
     # Atributos
     Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Competencia')),
     Field('f_observaciones', 'string', length=150, label=T('Observaciones')),
