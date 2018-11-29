@@ -1162,7 +1162,11 @@ def vehiculos():
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehículo.
-        dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
+        id_dep_real = int(request.vars.dependencia)
+        if id_dep_real is None:
+            id_dep_real = user_dep_id
+
+        dependencia_escogida = db(db.dependencias.id == id_dep_real).select()[0]
 
         if dependencia_escogida.id_sede == 1:
             sede_verbosa = "Sartenejas"
@@ -1508,7 +1512,10 @@ def vehiculos():
         if __puede_ver_vehiculo(id_usuario, vh['id']):
             inventario_visible.append(vh)
 
-    dep_id = db(db.dependencias.nombre == dep_nombre).select().first().id
+    try:
+        dep_id = db(db.dependencias.nombre == dep_nombre).select().first().id
+    except:
+        pass
 
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
