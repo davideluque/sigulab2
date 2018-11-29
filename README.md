@@ -37,6 +37,15 @@ Desarrolladores del Módulo de Gestión de Personal
 - Daniel Francis
 - German Robayo
 
+Desarrolladores de nuevas funcionalidades en el Módulo de Gestión de Personal
+- Constanza Abarca 13-10000
+- Rosana García 11-10365
+- Moisés Gonzalez 11-10406
+- Pedro Maldonado 13-10790
+- Denylson Romero 13-11270
+- Fabio Suárez 12-10578
+- Javier Vivas 12-11067
+
 Desarrolladores de la Gestión de Vehículos y Sistema de Préstamos
 - Andrés Ignacio Torres
 - María Gabriela Jaimes
