@@ -27,7 +27,11 @@ const inputs = [
     'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add',
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
-    'fecha_inicio_1_add',
+    'fecha_inicio_1_add', 'fecha_final_1_add', 'cargo_hist_1_add', 'dependencia_hist_1_add', 'organizacion_1_add',
+    'fecha_inicio_2_add', 'fecha_final_2_add', 'cargo_hist_2_add', 'dependencia_hist_2_add', 'organizacion_2_add',
+    'fecha_inicio_3_add', 'fecha_final_3_add', 'cargo_hist_3_add', 'dependencia_hist_3_add', 'organizacion_3_add',
+    'fecha_inicio_4_add', 'fecha_final_4_add', 'cargo_hist_4_add', 'dependencia_hist_4_add', 'organizacion_4_add',
+    'fecha_inicio_5_add', 'fecha_final_5_add', 'cargo_hist_5_add', 'dependencia_hist_5_add', 'organizacion_5_add',
     // Competencias
     'competencia1_nombre',
 ]
@@ -303,7 +307,7 @@ function validaFechaSalida(){
     const fecha_final = voltearFecha($this.val());
 
     if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isSameOrBefore(fecha_final)){
-        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta.");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -634,7 +638,7 @@ function validaFechaInicio1(){
     const $this = $('[name="fecha_inicio_1_add"]');
     if ($this.val() !== ""){
         if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
-            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy u hoy');
             $this.addClass('input-error');
             $this.attr("data-valido", 'false');
             $this.popover('show');
@@ -656,7 +660,7 @@ function validaFechaFin1(){
     const fecha_final = voltearFecha($this.val());
 
     if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
-        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta. No puede ser una fecha futura.");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');

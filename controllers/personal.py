@@ -5,8 +5,14 @@
 #-----------------------------------#
 
 def index():
-    redirect(URL('listado_estilo'))
     return dict()
+
+def busqueda():
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    return dict(
+        gremios=gremios,
+        competencias=competencias
+    )
 
 def resultados_busqueda():
     from gluon.serializers import json
