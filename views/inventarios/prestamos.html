@@ -63,7 +63,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-6">
         <button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'inventarios')}}';">
-            <i class="fas fa-arrow-left"></i>               
+            <i class="fas fa-arrow-left"></i>
         </button>
     </div>
 </div>
@@ -90,6 +90,7 @@
             <thead>
                 <tr id="titulosListado">
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
@@ -101,6 +102,7 @@
                 {{for solicitud in solicitudes_recibidas:}}
                 <tr>
                     <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
                     <td class="camposTabla">
                         <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
                                 {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
@@ -116,21 +118,22 @@
                 </tr>
                 {{ pass }}
             </tbody>
-    
+
             <tfoot id="collapseFiltros">
                 <tr>
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
                     <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
-    
+
           </table>
         </div>
     </div>
-</div> 
+</div>
 
 <!-- tabla de eliminacion -->
 <div id="tab-2" class="container tab-content">
@@ -144,6 +147,7 @@
             <thead>
                 <tr id="titulosListado">
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
@@ -155,6 +159,7 @@
                 {{for solicitud in solicitudes_realizadas:}}
                   <tr>
                     <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
                     <td class="camposTabla">
                         <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
                             {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
@@ -174,6 +179,7 @@
             <tfoot id="collapseFiltros">
                 <tr>
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
@@ -199,6 +205,7 @@
             <thead>
                 <tr id="titulosListado">
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
@@ -211,6 +218,7 @@
                 {{for solicitud in todas_las_solicitudes:}}
                 <tr>
                     <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
                     <td class="camposTabla">
                         <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
                                 {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
@@ -235,6 +243,7 @@
             <tfoot id="collapseFiltros">
                 <tr>
                     <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                     <th class="camposTabla linksNombres">NOMBRE</th>
                     <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
