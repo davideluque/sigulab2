@@ -3850,32 +3850,42 @@ def __get_inventario_espacio_materialesandconsumibles_eliminar(nombre, espacio):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def prestamos():
-    user_id = auth.user.id
-    personal = db(db.t_Personal.f_usuario == user_id).select().first()
-    dependencia_id = personal.f_dependencia
 
+    # Pequeña función booleana para saber si un vehículo ha acabado
+    # su flujo útil en préstamos
+    def __flujo_listo(x):
+        return "devuelto" in x['hpvh_estatus'] or "rechazada" in x['hpvh_estatus']
+
+    # Hallamos información del usuario
+    user_id = auth.user.id
+
+    # Hallamos las solicitudes realizadas pendientes
     solicitudes_realizadas = list(db(db.historial_prestamo_vh.hpvh_solicitante == user_id).select())
     solicitudes_realizadas.reverse()
+    solicitudes_realizadas = [x for x in solicitudes_realizadas if not __flujo_listo(x)]
+
+    # Hallamos en principio las solicitudes recibidas pendientes
     solicitudes_recibidas_aux = list(db(db.historial_prestamo_vh.id).select())
     solicitudes_recibidas_aux.reverse()
-    todas = []
-
-    if auth.user.id == 1:
-        todas = list(db(db.historial_prestamo_vh.id).select())
-        todas.reverse()
 
     solicitudes_recibidas = []
     for solicitud in solicitudes_recibidas_aux:
         vehiculo = db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()
         if vehiculo['vh_responsable'] == user_id or vehiculo['vh_custodio'] == user_id:
             solicitudes_recibidas.append(solicitud)
+    solicitudes_recibidas = [x for x in solicitudes_recibidas if not __flujo_listo(x)]
 
-    c = 0
-    c += len([x for x in solicitudes_realizadas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
-    c += len([x for x in solicitudes_recibidas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
-
+    # Para el superusuario, hallamos TODAS las solicitudes para la tabla especial
+    todas = []
     if auth.user.id == 1:
-        c = len([x for x in todas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
+        todas = list(db(db.historial_prestamo_vh.id).select())
+        todas.reverse()
+        todas = [x for x in todas if not __flujo_listo(x)]
+
+    # Contamos las solicitudes pendientes halladas
+    c = len(solicitudes_recibidas) + len(solicitudes_realizadas)
+    if auth.user.id == 1:
+        c = len(todas)
 
     return dict(
         cant_prestamos=c,
