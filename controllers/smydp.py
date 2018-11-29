@@ -11,7 +11,11 @@
 # * Controladores no poseen prefijos
 #
 #-----------------------------------------------------------------------------
-
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image
+from openpyxl.styles import Alignment, Font
+import unicodedata
+import calendar
 import datetime
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
@@ -630,7 +634,7 @@ def __agregar_registro(concepto):
         
         # Nueva cantidad total luego del consumo
         total_nuevo = total_viejo - cantidad
-        if total_nuevo < 0:
+        if total_nuevo <= 0:
             response.flash = "La cantidad total luego del consumo no puede ser "\
                              "negativa"
             redirect(URL(args=request.args, vars=request.get_vars, host=True))
@@ -1697,8 +1701,8 @@ def inventarios_desechos():
                 ####################
                 # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                 # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
@@ -1913,8 +1917,8 @@ def inventarios_desechos():
                     ####################
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                     
@@ -2192,8 +2196,8 @@ def inventarios_desechos():
                     ####################
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                     
@@ -2695,3 +2699,232 @@ def index():
 def sustancias():
     return locals()
 
+############################################################################
+############################################################################
+#       GENERACION DE REPORTES
+#############################################################################
+############################################################################
+
+def select_fecha():
+    now = datetime.datetime.now()
+    tablemes = SQLFORM.factory(Field('mes',requires=IS_IN_SET(['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']),
+            label=T('Seleccione mes')),
+        Field('year','integer',requires=IS_INT_IN_RANGE(1969,now.year+1,error_message='Debe introducir un año menor o igual al actual'),
+            label=T('Introduzca año'))
+        )
+    if tablemes.process().accepted:
+        if tablemes.vars.mes=="Enero":
+            x=1
+        elif tablemes.vars.mes=="Febrero":
+            x=2
+        elif tablemes.vars.mes=="Marzo":
+            x=3
+        elif tablemes.vars.mes=="Abril":
+            x=4
+        elif tablemes.vars.mes=="Mayo":
+            x=5
+        elif tablemes.vars.mes=="Junio":
+            x=6
+        elif tablemes.vars.mes=="Julio":
+            x=7
+        elif tablemes.vars.mes=="Agosto":
+            x=8
+        elif tablemes.vars.mes=="Septiembre":
+            x=9
+        elif tablemes.vars.mes=="Octubre":
+            x=10
+        elif tablemes.vars.mes=="Noviembre":
+            x=11
+        elif tablemes.vars.mes=="Diciembre":
+            x=12
+        redirect(URL('reportes','select_rl4',vars=dict(m=x,y=tablemes.vars.year)))
+    return locals()
+
+
+def generar_reporte():
+    wb = Workbook()
+    ws = wb.active
+    cen = Alignment(horizontal='center', vertical='distributed')
+    rig = Alignment(horizontal='right')
+    lef = Alignment(horizontal='left')
+    ft1 = Font(name='Arial', size=10, bold=True)
+    ft2 = Font(name='Arial', size=10, bold=False)
+    ft3 = Font(name='Arial', size=8)
+    ws.font = ft2
+    now = datetime.datetime.now()
+
+    ws1 = wb.create_sheet("Informe mensual")
+
+    #Encabezado
+    ws.title = "Informe mensual"
+    ws1.title = "Informe mensual"
+
+
+    #tamaño de las columnas
+    for i in ['A', 'D', 'E','F','G','J','K']:
+       ws.column_dimensions[i].width = 10
+       ws1.column_dimensions[i].width = 10
+    ws.column_dimensions['B'].width = 17
+    ws.column_dimensions['C'].width = 11
+    ws.column_dimensions['H'].width = 9
+    ws.column_dimensions['I'].width = 10
+    ws1.column_dimensions['B'].width = 17
+    ws1.column_dimensions['C'].width = 11
+    ws1.column_dimensions['H'].width = 9
+    ws1.column_dimensions['I'].width = 10
+
+        #tamaño de las filas
+    ws.row_dimensions[13].height = 40
+    ws1.row_dimensions[13].height = 40
+    for i in range(1,13):
+        ws.row_dimensions[i].height = 13
+        ws1.row_dimensions[i].height = 13
+    for i in range(14,29):
+        ws.row_dimensions[i].height = 12
+        ws1.row_dimensions[i].height = 12
+
+    #All Merges
+    ws.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    ws1.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws1.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    for i in range(13,28):
+        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
+        ws.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+        ws1.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
+        ws1.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+
+    for i in range(29,33):
+        ws.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+        ws1.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+
+    #titulos y datos
+    z = ['C5', 'J7', 'I9', 'J9', 'K9','B7','B8','B9','B10','B11','I10','J10','K10']
+    ws['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws['J7'] = 'FECHA'
+    ws['I9'] = 'DIA'
+    ws['J9'] = 'MES'
+    ws['K9'] = 'AÑO'
+    ws1['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws1['J7'] = 'FECHA'
+    ws1['I9'] = 'DIA'
+    ws1['J9'] = 'MES'
+    ws1['K9'] = 'AÑO'
+
+
+    for i in range(5):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = cen
+        ws1[z[i]].font = ft1
+        ws1[z[i]].alignment = cen
+
+    ws['B7'] = 'OPERADOR:'
+    ws['B8'] = 'LICENCIA:'
+    ws['B9'] = 'PERMISO DEL CICPC:'
+    ws['B10'] = 'RIF:'
+    ws['B11'] = 'MES-AÑO:'
+    ws1['B7'] = 'OPERADOR:'
+    ws1['B8'] = 'LICENCIA:'
+    ws1['B9'] = 'PERMISO DEL CICPC:'
+    ws1['B10'] = 'RIF:'
+    ws1['B11'] = 'MES-AÑO:'
+
+    for i in range(5,10):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = rig
+        ws1[z[i]].font = ft1
+        ws1[z[i]].alignment = rig
+
+    ws['I10'] = now.day
+    ws['J10'] = now.month
+    ws['K10'] = now.year
+    ws1['I10'] = now.day
+    ws1['J10'] = now.month
+    ws1['K10'] = now.year
+
+    for i in range(10,13):
+        ws[z[i]].font = ft2
+        ws[z[i]].alignment = cen
+        ws1[z[i]].font = ft2
+        ws1[z[i]].alignment = cen
+
+    ws['A28'] = 'Nota:'
+    ws['A28'].font = ft1
+    ws['A28'].alignment = lef
+    ws1['A28'] = 'Nota:'
+    ws1['A28'].font = ft1
+    ws1['A28'].alignment = lef
+
+    w = ['C7', 'C8', 'C9', 'C10', 'C11','A13','B13','D13','E13','F13','G13','H13','I13','J13']
+
+    for i in range(5):
+        ws[w[i]].font = ft2
+        ws1[w[i]].font = ft2
+
+    ws['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws['C8'] = '2014LIC0256'
+    ws['C9'] = 'No. 1311'
+    ws['C10'] = 'G-20000063-5'
+    ws['C11'] = str(now.month)+'/'+str(now.year)
+    ws['A13'] = 'N°'
+
+    ws['B13'] = 'Sustancia Química Controlada'
+
+    ws['D13'] = 'Código Arancelario'
+
+    ws['E13'] = 'Saldo Físico Inicial'
+
+    ws['F13'] = 'Total Entradas'
+
+    ws['G13'] = 'Total Salidas'
+
+    ws['H13'] = 'Saldo Físico Final'
+
+    ws['I13'] = 'Unidad de Medida'
+
+    ws['J13'] = 'Observaciones'
+
+    ws1['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws1['C8'] = '2014LIC0256'
+    ws1['C9'] = 'No. 1311'
+    ws1['C10'] = 'G-20000063-5'
+    ws1['C11'] = str(now.month)+'/'+str(now.year)
+    ws1['A13'] = 'N°'
+
+    ws1['B13'] = 'Sustancia Química Controlada'
+
+    ws1['D13'] = 'Código Arancelario'
+
+    ws1['E13'] = 'Saldo Físico Inicial'
+
+    ws1['F13'] = 'Total Entradas'
+
+    ws1['G13'] = 'Total Salidas'
+
+    ws1['H13'] = 'Saldo Físico Final'
+
+    ws1['I13'] = 'Unidad de Medida'
+
+    ws1['J13'] = 'Observaciones'
+
+
+    for i in range(5,14):
+        ws[w[i]].font = ft1
+        ws[w[i]].alignment = cen
+        ws1[w[i]].font = ft1
+        ws1[w[i]].alignment = cen
+
+
+    x = ['A14','A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26']
+    y = ['01','02','03','04','05','06','07','08','09','10','11','12','13']
+    for i in range(0,13):
+        ws[x[i]] = y[i]
+        ws[x[i]].font = ft3
+        ws[x[i]].alignment = cen
+        ws1[x[i]] = y[i]
+        ws1[x[i]].font = ft3
+        ws1[x[i]].alignment = cen
+    x = ['B14','B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26']
+    wb.save('Reporte Universidad Simon Bolivar.xlsx')
+    response.stream('Reporte Universidad Simon Bolivar.xlsx',attachment=True, filename='Reporte Universidad Simon Bolivar.xlsx')
+    return locals()
