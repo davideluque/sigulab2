@@ -115,7 +115,7 @@
                     <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
                 </ul>
         </div>
-    
+
         <div class="content-wrapper">
             <div id="tab-1" class="tab-content active">
                 <div class="grid-container">
@@ -130,13 +130,13 @@
                         {{ pass }}
                     {{ pass }}
                 </div>
-            </div>   
-   
+            </div>
+
             <div id="tab-2"class="tab-content">
               <h3 class="text-center">Responsabilidad</h3>
                 <div class="grid-container">
                   <div class="grid-item">
-                        Responsable: 
+                        Responsable:
                   </div>
                   <div class="grid-item">
                         {{=db(db.auth_user.id == vehiculo['vh_responsable']).select().first().first_name}} 
@@ -160,7 +160,7 @@
                   </div>
                   {{ pass }}
                   <div class="grid-item">
-                        Custodio: 
+                        Custodio:
                   </div>
                   <div class="grid-item">
                         {{=db(db.auth_user.id == vehiculo['vh_custodio']).select().first().first_name}} 
@@ -322,10 +322,10 @@
 <!--Modal para eliminar Vehiculo-->
 <div class="modal fade" id="confirmdelete" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <!-- Modal Header -->
         <div class="modal-header addHeader">
           <div class="row addRow" id="rowHeader">
@@ -350,7 +350,7 @@
           </div>
         </div>
         <!-- Fin Modal Header -->
-        
+
         <!-- Modal Body -->
         <div class="modal-body addBody">
             <br>
@@ -375,10 +375,10 @@
 <!--Modal para oculta BM-->
 <div class="modal fade" id="confirmhide" role="dialog">
         <div class="modal-dialog">
-      
+
           <!-- Modal content-->
           <div class="modal-content">
-      
+
             <!-- Modal Header -->
             <div class="modal-header addHeader">
               <div class="row addRow" id="rowHeader">
@@ -403,7 +403,7 @@
               </div>
             </div>
             <!-- Fin Modal Header -->
-            
+
             <!-- Modal Body -->
             <div class="modal-body addBody">
                 <br>
@@ -460,7 +460,7 @@
                   <fieldset class="formField">
                     <div class="form-bottom" data-step="1" data-title="Primer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> 
+                      <div class="col-sm-1 col1Body">
                         <span class="step activePass">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -564,7 +564,7 @@
                               <input type="text" class="form-control campo_ci" id="ci_conductor" name="ci_conductor" title="Ingrese la C.I. del conductor" placeholder="C.I. del conductor*" required>
                               <div class="dr" id="error-ci_conductor" style="color: #d03e3e;"> </div>
                           </div>
-                          
+
                           <div class="form-group" tag="Formato:">
                               <label>Número de celular del conductor*</label>
                               <input type="text" class="form-control campo_telf_obligatorio" id="nro_conductor" name="nro_conductor" title="Ingrese el número de celular del conductor" placeholder="Número de celular del conductor*" required>
@@ -623,7 +623,7 @@
                                 <input type="text" class="form-control campo_ci" id="ci_usuario" name="ci_usuario" title="Ingrese la C.I. del usuario" placeholder="C.I. del usuario*" required>
                                 <div class="dr" id="error-ci_usuario" style="color: #d03e3e;"> </div>
                             </div>
-                            
+
                             <div class="form-group" tag="Formato:">
                                 <label>Número de celular del usuario*</label>
                                 <input type="text" class="form-control campo_telf_obligatorio" id="nro_usuario" name="nro_usuario" title="Ingrese el número de celular del usuario" placeholder="Número de celular del conductor*" required>
@@ -678,7 +678,7 @@
         </div>
       </div>
       <!-- Fin Modal Header -->
-      
+
       <!-- Modal Body -->
       <div class="modal-body addBody">
         <div class="row addRow">
@@ -689,7 +689,7 @@
             <fieldset class="formField">
                 <div class="form-bottom" data-step="1" data-title="Primer Paso">
                   <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                  <div class="col-sm-1 col1Body"> 
+                  <div class="col-sm-1 col1Body">
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
@@ -701,7 +701,7 @@
                   </div>
                   <!-- Aqui va la informacion -->
                   <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Características del vehículo</h4>       
+                    <h4 class="titulosForm">Características del vehículo</h4>
                     <label>Campos marcados con * son obligatorios.</label>
                     <div class="form-group">
                         <label>Nº Bien Nacional*</label>
@@ -757,15 +757,15 @@
                         <label>Color</label>
                         <input type="text" class="form-control" id="color" name="color" title="Ingrese el color del vehículo" placeholder="Color" value="{{=vehiculo['vh_color']}}">
                         <div class="dr" id="error-color" style="color: #d03e3e;"> </div>
-                    </div>  
-                    
+                    </div>
+
                   </div>
                 </div>
                 <div style="position:fixed; bottom: 15px; right: 30px;">
                   <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                 </div>
               </fieldset>
-          
+
                 <!-- Segundo paso-->
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
@@ -2057,10 +2057,10 @@
             ],
             initComplete: function(){
                 var api = this.api();
-        
+
                 new $.fn.dataTable.Buttons(api, {
                 buttons: [
-        
+
                     {
                     text:'<i class="fa fa-filter"></i>',
                     action: function(){
@@ -2068,7 +2068,7 @@
                     },
                     className: 'boton-sigulabIzq'
                     },
-        
+
                     {
                         extend: 'collection',
                         text: '<i class="fas fa-save"></i>',
