@@ -1,0 +1,88 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+
+  <link rel="stylesheet" href="{{=URL('static','css/sigulab2servicios.css')}}">
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+    <script src="{{=URL('static', 'plugins/datatables2/dataTables.rowsGroup.js')}}"></script>
+
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <span class="breadcrumb-item active">Personal</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación -->
+
+<h1>{{#=lista}}</h1>
+<!-- Contenido principal de la página de gestión de servicios -->
+<div id="main" class="container">
+
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<div class="panel">
+		<div class="panel-body-users-tab no-padding" style="background-color:#fafafa;">
+			<table id="example" class="">
+				<thead class="bg-primary">
+					<tr>
+						<th class="nombre tableColumn">Nombre</th>
+						<th class="dependencia tableColumn">Dependencia</th>
+						<th class="correo tableColumn">Correo</th>
+						<th class="telefono tableColumn">Telefono</th>
+						<th class="gremio tableColumn">Gremio</th>
+						<th class="compnombre tableColumn">Competencia - Nombre</th>
+						<th class="compcategoria tableColumn">Competencia - Categoria</th>
+						<th class="anos tableColumn">años</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {{ for item in lista: }}
+                    <tr>
+                        <td>{{=item['nombre']}}</td>
+                        <td>{{=item['dependencia']}}</td>
+                        <td>{{=item['correo']}}</td>
+                        <td>{{=item['telefono']}}</td>
+                        <td>{{=item['gremio']}}</td>
+                        <td>{{=item['competencia']}}</td>
+                        <td>{{=", ".join(item['categorias'])}}</td>
+                        <td>{{=item['años-servicio']}}</td>
+                    </tr>
+                    {{pass}}
+                </tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Fin del contenido principal de la página de gestión de servicios -->
+<script charset="utf-8">
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+        language: {
+        url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+        rowsGroup: [0, 1,2],
+        "columnDefs": [
+            {
+                "targets": [   5, 6, 7 ],
+                "visible": false,
+                "searchable": true
+            },
+        ]
+        });
+
+      // busqueda por nombre competencias
+      //table.columns('.comp-nombre').search('analista').draw();
+      // busqueda por Categorias
+      //table.columns('.comp-nombre').search('analista').draw();
+    } );
+</script>
+{{end}}

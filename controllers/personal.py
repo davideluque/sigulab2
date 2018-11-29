@@ -8,6 +8,26 @@ def index():
     redirect(URL('listado_estilo'))
     return dict()
 
+def resultados_busqueda():
+    from gluon.serializers import json
+    from datetime import date
+    rows = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal).select()
+    lista = []
+    hoy = date.today()
+    for row in rows:
+        ingreso = row.t_Personal.f_fecha_ingreso_ulab
+        lista.append({
+            'nombre' : row.t_Personal.f_nombre+' '+row.t_Personal.f_apellido,
+            'correo' : row.t_Personal.f_email,
+            'telefono' : row.t_Personal.f_telefono,
+            'dependencia' : db.dependencias[row.t_Personal.f_dependencia].nombre,
+            'gremio' : row.t_Personal.f_gremio,
+            'competencia' : row.t_Competencias.f_nombre,
+            'categorias' : row.t_Competencias.f_categorias,
+            'años-servicio': (hoy-ingreso).days/365
+            })
+        da = hoy-ingreso
+    return dict(lista=lista)
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
     tb=[]
