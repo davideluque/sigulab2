@@ -31,6 +31,7 @@ def resultados_busqueda():
 
     for row in rows:
         ingreso = row.t_Personal.f_fecha_ingreso_ulab
+        
         lista.append({
             'nombre' : row.t_Personal.f_nombre+' '+row.t_Personal.f_apellido,
             'correo' : row.t_Personal.f_email,

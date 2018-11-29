@@ -2,13 +2,26 @@
 
 {{block head}}
   <!-- Hoja de estilos específica para la página de gestión de servicios -->
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
 
-  <link rel="stylesheet" href="{{=URL('static','css/sigulab2servicios.css')}}">
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
     <script src="{{=URL('static', 'plugins/datatables2/dataTables.rowsGroup.js')}}"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js "></script>
+
+
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+  	<link rel="stylesheet" href="{{=URL('static','css/sigulab2servicios.css')}}">
 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">	
+
 
 {{end}}
 
@@ -25,7 +38,33 @@
 
 <!-- Contenido principal de la página de gestión de servicios -->
 <div class="container titulo">
-    <h1>Titulo</h1>
+    <h2>Resultados búsqueda</h1>
+    <br>
+    <p>
+    {{if filtros['gremio_busqueda'] != None: }}
+    <b>Gremio: </b> {{=filtros['gremio_busqueda']}}
+    {{pass}}
+    {{if filtros['cargo_busqueda'] != "": }}
+    <br>
+    <b>Cargo: </b>{{=filtros['cargo_busqueda']}}
+    {{pass}}
+    {{if filtros['competencia_busqueda'] != "": }}
+    <br>
+    <b>Competencia: </b>{{=filtros['competencia_busqueda']}}
+    {{pass}}
+    {{if filtros['categoria_busqueda'] != None: }}
+    <br>
+    <b>Categoria: </b>{{=filtros['categoria_busqueda']}}
+    {{pass}}
+    {{if filtros['anios_busqueda'] != None: }}
+    <br>
+    <b>Años servicio ULAB: </b>{{=filtros['anios_busqueda'] +  " años"}}
+    {{pass}}
+
+    {{if filtros['fecha_busqueda'] != "": }}
+    {{="para la fecha " + filtros['fecha_busqueda']}}
+    {{pass}}
+    </p>
 </div>
 <div id="main" class="container">
 
@@ -83,7 +122,19 @@
         "info":     false,
         language: {
         url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
+    },	
+    	dom: 'Bfrtip',
+    	buttons: [
+           {
+            extend: 'pdf',
+            text: "Descargar reporte",
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        }
+        ],
+
         rowsGroup: [0, 1, 2, 3, 4, 7],
         "columnDefs": [
             {
