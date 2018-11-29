@@ -8,7 +8,12 @@ vehículos y solicitudes de préstamos.
 from info_inventarios import CATEGORIAS_VEHICULOS, CLASIFICACIONES_VEHICULOS
 from datetime import datetime
 
-# < -------- Funciones privadas de SMDYP ------------>
+# < -------- Funciones privadas de Inventarios ------------>
+
+# Función que envía un correo con los datos suministrados
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+    mail.send(destinatario, asunto, cuerpo)
 
 # Funcion que devuelve un diccionario, con las categorias y
 #subcategorias de los vehiculos
@@ -49,7 +54,7 @@ def __is_bool(bool_var):
 # None si no lo hace
 def __find_dep_id(nombre):
 
-    dep_id = db(db.dependencias.nombre == nombre).select()[0].id   
+    dep_id = db(db.dependencias.nombre == nombre).select()[0].id
     return dep_id
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
@@ -2541,6 +2546,68 @@ def detalles_prestamo():
     except:
         return "Solicitante inválido."
 
+    if request.vars.rechazo:
+        motivo = request.vars.motivo_rechazo
+
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_autorizado_por=auth.user.id,
+            hpvh_razon_rechazo=motivo,
+            hpvh_estatus="Solicitud rechazada"
+        )
+
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Rechazada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        asunto_rechazo = "[SIGULAB] Rechazo a la Solicitud de Préstamo #%s" % prestamo_id
+
+        # Enviamos notificación al responsable patrimonial
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_rechazo_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}. Como razón de rechazo, se especificó: {}").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now(),
+                                      motivo
+        )
+
+        __enviar_correo(
+            email_responsable,
+            asunto_rechazo,
+            mensaje_rechazo_responsable
+        )
+
+        # Enviamos notificación al solicitante
+        email_solicitante = solicitante.email
+        mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "en fecha {}. Como razón de rechazo, se especificó: {}").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now(),
+                                      motivo
+
+        # Manda correo rechazo a solicitante
+        __enviar_correo(
+            email_solicitante,
+            asunto_rechazo,
+            mensaje_rechazo_solicitante
+        )
+
+        session.flash = "Se ha rechazado la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
     informacion_dict = {
         "Vehículo Solicitado": "%s %s %s" % (
             vehiculo['vh_marca'],
@@ -2556,7 +2623,8 @@ def detalles_prestamo():
         "Motivo de Solicitud": prestamo['hpvh_motivo'],
         "Ruta Prevista": prestamo['hpvh_ruta'],
         "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
-        "Estatus": prestamo['hpvh_estatus']
+        "Estatus": prestamo['hpvh_estatus'],
+        "Razón de Rechazo": prestamo['hpvh_razon_rechazo']
     }
 
     informacion_list = [
@@ -2567,7 +2635,8 @@ def detalles_prestamo():
         "Motivo de Solicitud",
         "Ruta Prevista",
         "Tiempo Estimado de Uso",
-        "Estatus"
+        "Estatus",
+        "Razón de Rechazo"
     ]
 
     conductor_dict = {
@@ -2668,8 +2737,8 @@ def detalles_vehiculo():
 
         request.vars.modificacion = None
         if resultado:
-            session.flash = "Se ha agregado una solicitud de modificacion para el vehiculo."
-        redirect(URL('prestamos'))
+            session.flash = "Se ha agregado una solicitud de préstamo para el vehiculo."
+        return redirect(URL('prestamos'))
 
     # Si mandamos eliminación
     if request.vars.eliminacion:
@@ -3731,11 +3800,11 @@ def prestamos():
             solicitudes_recibidas.append(solicitud)
 
     c = 0
-    c += len([x for x in solicitudes_realizadas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
-    c += len([x for x in solicitudes_recibidas if ("aprobada" not in x['hpvh_estatus'] or "rechazada" not in x['hpvh_estatus'])])
+    c += len([x for x in solicitudes_realizadas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
+    c += len([x for x in solicitudes_recibidas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
 
     if auth.user.id == 1:
-        c = len(todas)
+        c = len([x for x in todas if ("devuelto" not in x['hpvh_estatus'] and "rechazada" not in x['hpvh_estatus'])])
 
     return dict(
         cant_prestamos=c,
@@ -4050,7 +4119,7 @@ def consumibles():
                     request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
                     request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
                     request.vars.capacidad, request.vars.unidad_cap,
-                        request.vars.unidad_mat, 
+                        request.vars.unidad_mat,
                     request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                     request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion,
                     request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads,
