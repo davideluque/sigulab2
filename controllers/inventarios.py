@@ -574,7 +574,7 @@ def __solicitar_prestamo_vh(
         tiempo_previsto, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
         nro_conductor, licencia_conducir, certificado_medico, certificado_psicologico,
         nombre_usuario, ci_usuario, nro_usuario):
-        
+
     usuario = db(db.auth_user.id == solicitante).select().first()
     vh = db(db.vehiculo.id == vehiculo).select().first()
 
@@ -2510,6 +2510,109 @@ def detalles_herramientas():
                 unidad_med = unidad_med,
                 presentacion = presentacion
                 )
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_prestamo():
+    """
+    GET: Muestra en pantalla los detalles de un préstamo o un error
+    si un préstamo no existe.
+
+    POST: Permite al custodio o responsable aprobar o rechazar una solicitud de
+    préstamo.
+    """
+
+    prestamo_id = request.vars['prestamo']
+
+    try:
+        prestamo = db(db.historial_prestamo_vh.id == prestamo_id).select().first()
+    except:
+        return "Préstamo inválido."
+
+    try:
+        vehiculo = db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()
+    except:
+        return "Vehículo inválido."
+
+    try:
+        solicitante = db(db.auth_user.id == prestamo['hpvh_solicitante']).select().first()
+    except:
+        return "Solicitante inválido."
+
+    informacion_dict = {
+        "Vehículo Solicitado": "%s %s %s" % (
+            vehiculo['vh_marca'],
+            vehiculo['vh_modelo'],
+            vehiculo['vh_placa']
+        ),
+        "Solicitante": "%s %s" % (
+            solicitante.first_name,
+            solicitante.last_name
+        ),
+        "Fecha de Solicitud": prestamo['hpvh_fecha_salida'],
+        "Fecha Prevista de Devolución": prestamo['hpvh_fecha_prevista_devolucion'],
+        "Motivo de Solicitud": prestamo['hpvh_motivo'],
+        "Ruta Prevista": prestamo['hpvh_ruta'],
+        "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
+        "Estatus": prestamo['hpvh_estatus']
+    }
+
+    informacion_list = [
+        "Vehículo Solicitado",
+        "Solicitante",
+        "Fecha de Solicitud",
+        "Fecha Prevista de Devolución",
+        "Motivo de Solicitud",
+        "Ruta Prevista",
+        "Tiempo Estimado de Uso",
+        "Estatus"
+    ]
+
+    conductor_dict = {
+        "Nombre": prestamo['hpvh_conductor'],
+        "C.I.": prestamo['hpvh_ci_conductor'],
+        "Nº Celular": prestamo['hpvh_nro_celular_conductor'],
+        "Nº Licencia de Conducir": prestamo['hpvh_nro_licencia_conductor'],
+        "Certificado Médico": prestamo['hpvh_certificado_medico'],
+        "Certificado Psicológico": prestamo['hpvh_certificado_psicologico']
+    }
+
+    conductor_list = [
+        "Nombre",
+        "C.I.",
+        "Nº Celular",
+        "Nº Licencia de Conducir",
+        "Certificado Médico",
+        "Certificado Psicológico"
+    ]
+
+    usuario_dict = {
+        "Nombre": prestamo['hpvh_usuario'],
+        "C.I.": prestamo['hpvh_ci_usuario'],
+        "Nº Celular": prestamo['hpvh_nro_celular_usuario']
+    }
+
+    usuario_list = [
+        "Nombre",
+        "C.I.",
+        "Nº Celular"
+    ]
+
+    esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    return dict(
+        vehiculo=vehiculo,
+        prestamo=prestamo,
+        informacion_dict=informacion_dict,
+        informacion_list=informacion_list,
+        conductor_dict=conductor_dict,
+        conductor_list=conductor_list,
+        usuario_dict=usuario_dict,
+        usuario_list=usuario_list,
+        esta_autorizado=esta_autorizado
+    )
+
+
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
