@@ -659,14 +659,19 @@ function validaFechaFin1(){
     const fecha_inicio = voltearFecha($('[name="fecha_inicio_1_add"]').val());
     const fecha_final = voltearFecha($this.val());
 
-    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+    if ( !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ){
         $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta. No puede ser una fecha futura.");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
-        return false
-    }
-    else{
+        return false;
+    } else if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final))){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta. No puede ser una fecha futura.");
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    } else {
         $this.removeClass('input-error');
         $this.popover('hide');
         return true;
@@ -1068,6 +1073,7 @@ $(document).ready(function () {
     $(inputSelectorsAll).on('focus change click', function(e){
         $(this).popover('hide');
         $(this).removeClass('input-error');
+
     })
 
     $('#formularioCarga').on('keyup keypress', function(e) {
@@ -1106,6 +1112,7 @@ $(document).ready(function () {
 
         console.log(enviar)
         if (enviar){
+
             $(this).attr("type", "submit");
         }
         else {
