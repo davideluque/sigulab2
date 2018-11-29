@@ -213,8 +213,7 @@ def __sumar_inventarios(espacios):
                 # Nuevas cantidades que hay que sumar al inventario general
                 nueva_exist = inv.f_existencia
                 nuevo_uso_interno = inv.f_uso_interno
-                nueva_unidad = unid.f_nombre
-                
+                nueva_unidad = unid.f_nombre                
                 s['f_existencia'] = __sumar_cantidad(nueva_exist,
                                                     existencia,
                                                     nueva_unidad,
@@ -538,8 +537,11 @@ def __agregar_registro(concepto):
     uso_interno_viejo = inv.f_uso_interno
 
     if concepto == 'Ingreso':
+
         tipo_ing = request.vars.tipo_ingreso
+
         fecha_sumi = request.vars.fecha_sumi
+
         # Nueva cantidad total y nueva cantidad para uso interno
         total_nuevo = total_viejo + cantidad
         uso_interno_nuevo = uso_interno_viejo + cantidad
@@ -618,6 +620,8 @@ def __agregar_registro(concepto):
                 f_sustancia=inv.sustancia,
                 f_fechaUso=fecha_compra)
 
+    # Si es un tipo Egreso 
+    
     else:
         tipo_eg = request.vars.tipo_egreso            
         fecha_uso= request.vars.fecha_uso
