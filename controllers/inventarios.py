@@ -64,8 +64,8 @@ def __get_mantenimiento_bm(bm_id=None):
 # Dado el id de un vehículo, retorna el historial de préstamo del vehículo
 def __get_prestamos_vh(vh_id=None):
 	prestamos = list(db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select())
-	historial_prestamos = prestamos.reverse()
-    return historial_prestamos
+	prestamos.reverse()
+    return prestamos
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -3715,11 +3715,14 @@ def prestamos():
     dependencia_id = personal.f_dependencia
 
     solicitudes_realizadas = list(db(db.historial_prestamo_vh.hpvh_solicitante == user_id).select())
-    solicitudes_recibidas_aux = (list(db(db.historial_prestamo_vh.id).select())).reverse()
+    solicitudes_realizadas.reverse()
+    solicitudes_recibidas_aux = list(db(db.historial_prestamo_vh.id).select())
+    solicitudes_recibidas_aux.reverse()
     todas = []
 
     if auth.user.id == 1:
         todas = list(db(db.historial_prestamo_vh.id).select())
+        todas.reverse()
 
     solicitudes_recibidas = []
     for solicitud in solicitudes_recibidas_aux:
@@ -3737,8 +3740,8 @@ def prestamos():
     return dict(
         cant_prestamos=c,
         solicitudes_recibidas=solicitudes_recibidas,
-        solicitudes_realizadas=solicitudes_realizadas.reverse(),
-        todas_las_solicitudes=todas.reverse()
+        solicitudes_realizadas=solicitudes_realizadas,
+        todas_las_solicitudes=todas
     )
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
