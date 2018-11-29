@@ -11,7 +11,7 @@ def index():
 def resultados_busqueda():
     from gluon.serializers import json
     from datetime import date
-    rows = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal).select()
+    rows = db(db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal).select()
     lista = []
     hoy = date.today()
     for row in rows:
@@ -22,8 +22,8 @@ def resultados_busqueda():
             'telefono' : row.t_Personal.f_telefono,
             'dependencia' : db.dependencias[row.t_Personal.f_dependencia].nombre,
             'gremio' : row.t_Personal.f_gremio,
-            'competencia' : row.t_Competencias.f_nombre,
-            'categorias' : row.t_Competencias.f_categorias,
+            'competencia' : row.t_Competencias2.f_nombre,
+            'categorias' : row.t_Competencias2.f_categorias,
             'años-servicio': (hoy-ingreso).days/365
             })
         da = hoy-ingreso
