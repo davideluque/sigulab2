@@ -3746,7 +3746,7 @@ def prestamos():
 def validaciones():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
-    user_id = auth.user.id # PENDIENTE: Revisar por qué no es user.id
+    user_id = auth.user.id
     user_dep_id = user.f_dependencia
     inventario = [[], [], []]
     inventario_eliminar = [[], [], []]
