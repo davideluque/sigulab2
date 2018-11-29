@@ -278,7 +278,7 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         diametro = None
 
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
-    inv_id = db.bien_mueble.insert(
+    db.bien_mueble.insert(
         bm_nombre=nombre,
         bm_num=no_bien,
         bm_placa=no_placa,
@@ -433,7 +433,7 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
                 descripcion, proveedor, fecha_inicio, fecha_fin, tiempo_ejec,
                 fecha_cert, observacion):
 
-    inv_id = db.historial_mantenimiento_bm.insert(
+    db.historial_mantenimiento_bm.insert(
             hmbm_nro=no_bien,
             hmbm_fecha_sol=fecha_sol,
             hmbm_codigo=codigo,
@@ -478,9 +478,9 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         diametro = None
 
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
-    inv_id = db.sin_bn.insert(
+    db.sin_bn.insert(
         sb_cantidad=cantidad,
-        sb_nombre=nombre,  
+        sb_nombre=nombre,
         sb_marca=marca,
         sb_modelo=modelo,
         sb_descripcion=descripcion,
@@ -506,7 +506,7 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         sb_crea_ficha=user,
     )
     db.bitacora_general.insert(
-        f_accion="[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: ".format(nombre, espacio_nombre)
+        f_accion="[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: {}".format(nombre, espacio_nombre)
     )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
