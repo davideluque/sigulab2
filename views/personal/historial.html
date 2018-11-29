@@ -1,145 +1,122 @@
+
 <br>
-<div class="tab-pane" id="tab2">
-  <div class="span8">
-    <div class="tabbable tabs-left">
-      <ul class="nav nav-tabs " id="myTab" role="tablist">
-        <li role="presentation" class="nav-item active">
-          <a href="#cargos_desempe" class="nav-link active " data-toggle="tab" role="tab" aria-controls="cargos_desempe"><b>Cargos Desempeñados</b></a>
-        </li>
+<table class="table contenidoFicha" id="tabla_historial_laboral">
+    <tbody>
 
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#comisiones_comites" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Comités / Comisiones</b></a>
-        </li>
+        <tr style="color: White;"> 
+          <th> Desde </th>
+          <th> Hasta </th>
+          <th> Dependencia/Departamento </th>
+          <th> Cargo </th>
+          <th> Organización </th>
+          <th> Rol </th>
+        </tr>
 
-      </ul>
-      <div class="tab-content">
-        <div class="tab-pane active" id="cargos_desempe">
-          <br>
-          <table class="table contenidoFicha" id="tabla_historial_laboral">
-              <tbody>
+        <tr>
+          {{if bool(historial['f_fecha_inicio_1']) :}}
+            <td id="field_desde">{{=historial['f_fecha_inicio_1']}}</td>
+          {{pass}}
+          {{if bool(historial['f_fecha_final_1']) :}}
+            <td id="field_hasta">{{=historial['f_fecha_final_1']}}</td>
+          {{pass}}
+          {{if bool(historial['f_dependencia_hist_1']) :}}
+            <td id="field_hasta">{{=historial['f_dependencia_hist_1']}}</td>
+          {{pass}}
+          {{if bool(historial['f_cargo_hist_1']) :}}
+            <td id="field_hasta">{{=historial['f_cargo_hist_1']}}</td>
+          {{pass}}
+          {{if bool(historial['f_organizacion_1']) :}}
+            <td id="field_hasta">{{=historial['f_organizacion_1']}}</td>
+          {{pass}}
+          {{if bool(historial['f_rol_hist_1']) :}}
+            <td id="field_hasta">{{=historial['f_rol_hist_1']}}</td>
+          {{pass}}
+        </tr>
 
-                  <tr style="color: White;"> 
-                    <th> Desde </th>
-                    <th> Hasta </th>
-                    <th> Dependencia/Departamento </th>
-                    <th> Cargo </th>
-                    <th> Organización </th>
-                    <th> Rol </th>
-                  </tr>
+        <tr>
+          {{if bool(historial['f_fecha_inicio_2']) :}}
+            <td id="field_desde">{{=historial['f_fecha_inicio_2']}}</td>
+          {{pass}}
+          {{if bool(historial['f_fecha_final_2']) :}}
+            <td id="field_hasta">{{=historial['f_fecha_final_2']}}</td>
+          {{pass}}
+          {{if bool(historial['f_dependencia_hist_2']) :}}
+            <td id="field_hasta">{{=historial['f_dependencia_hist_2']}}</td>
+          {{pass}}
+          {{if bool(historial['f_cargo_hist_2']) :}}
+            <td id="field_hasta">{{=historial['f_cargo_hist_2']}}</td>
+          {{pass}}
+          {{if bool(historial['f_organizacion_2']) :}}
+            <td id="field_hasta">{{=historial['f_organizacion_2']}}</td>
+          {{pass}}
+          {{if bool(historial['f_rol_hist_2']) :}}
+            <td id="field_hasta">{{=historial['f_rol_hist_2']}}</td>
+          {{pass}}
+        </tr>
 
-                  <tr>
-                    {{if bool(historial['f_fecha_inicio_1']) :}}
-                      <td id="field_desde">{{=historial['f_fecha_inicio_1']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_fecha_final_1']) :}}
-                      <td id="field_hasta">{{=historial['f_fecha_final_1']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_dependencia_hist_1']) :}}
-                      <td id="field_hasta">{{=historial['f_dependencia_hist_1']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_cargo_hist_1']) :}}
-                      <td id="field_hasta">{{=historial['f_cargo_hist_1']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_organizacion_1']) :}}
-                      <td id="field_hasta">{{=historial['f_organizacion_1']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_rol_hist_1']) :}}
-                      <td id="field_hasta">{{=historial['f_rol_hist_1']}}</td>
-                    {{pass}}
-                  </tr>
+        <tr>
+          {{if bool(historial['f_fecha_inicio_3']) :}}
+            <td id="field_desde">{{=historial['f_fecha_inicio_3']}}</td>
+          {{pass}}
+          {{if bool(historial['f_fecha_final_3']) :}}
+            <td id="field_hasta">{{=historial['f_fecha_final_3']}}</td>
+          {{pass}}
+          {{if bool(historial['f_dependencia_hist_3']) :}}
+            <td id="field_hasta">{{=historial['f_dependencia_hist_3']}}</td>
+          {{pass}}
+          {{if bool(historial['f_cargo_hist_3']) :}}
+            <td id="field_hasta">{{=historial['f_cargo_hist_3']}}</td>
+          {{pass}}
+          {{if bool(historial['f_organizacion_3']) :}}
+            <td id="field_hasta">{{=historial['f_organizacion_3']}}</td>
+          {{pass}}
+          {{if bool(historial['f_rol_hist_3']) :}}
+            <td id="field_hasta">{{=historial['f_rol_hist_3']}}</td>
+          {{pass}}
+        </tr>
 
-                  <tr>
-                    {{if bool(historial['f_fecha_inicio_2']) :}}
-                      <td id="field_desde">{{=historial['f_fecha_inicio_2']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_fecha_final_2']) :}}
-                      <td id="field_hasta">{{=historial['f_fecha_final_2']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_dependencia_hist_2']) :}}
-                      <td id="field_hasta">{{=historial['f_dependencia_hist_2']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_cargo_hist_2']) :}}
-                      <td id="field_hasta">{{=historial['f_cargo_hist_2']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_organizacion_2']) :}}
-                      <td id="field_hasta">{{=historial['f_organizacion_2']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_rol_hist_2']) :}}
-                      <td id="field_hasta">{{=historial['f_rol_hist_2']}}</td>
-                    {{pass}}
-                  </tr>
+        <tr>
+          {{if bool(historial['f_fecha_inicio_4']) :}}
+            <td id="field_desde">{{=historial['f_fecha_inicio_4']}}</td>
+          {{pass}}
+          {{if bool(historial['f_fecha_final_4']) :}}
+            <td id="field_hasta">{{=historial['f_fecha_final_4']}}</td>
+          {{pass}}
+          {{if bool(historial['f_dependencia_hist_4']) :}}
+            <td id="field_hasta">{{=historial['f_dependencia_hist_4']}}</td>
+          {{pass}}
+          {{if bool(historial['f_cargo_hist_4']) :}}
+            <td id="field_hasta">{{=historial['f_cargo_hist_4']}}</td>
+          {{pass}}
+          {{if bool(historial['f_organizacion_4']) :}}
+            <td id="field_hasta">{{=historial['f_organizacion_4']}}</td>
+          {{pass}}
+          {{if bool(historial['f_rol_hist_4']) :}}
+            <td id="field_hasta">{{=historial['f_rol_hist_4']}}</td>
+          {{pass}}
+        </tr>
 
-                  <tr>
-                    {{if bool(historial['f_fecha_inicio_3']) :}}
-                      <td id="field_desde">{{=historial['f_fecha_inicio_3']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_fecha_final_3']) :}}
-                      <td id="field_hasta">{{=historial['f_fecha_final_3']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_dependencia_hist_3']) :}}
-                      <td id="field_hasta">{{=historial['f_dependencia_hist_3']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_cargo_hist_3']) :}}
-                      <td id="field_hasta">{{=historial['f_cargo_hist_3']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_organizacion_3']) :}}
-                      <td id="field_hasta">{{=historial['f_organizacion_3']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_rol_hist_3']) :}}
-                      <td id="field_hasta">{{=historial['f_rol_hist_3']}}</td>
-                    {{pass}}
-                  </tr>
+        <tr>
+          {{if bool(historial['f_fecha_inicio_5']) :}}
+            <td id="field_desde">{{=historial['f_fecha_inicio_5']}}</td>
+          {{pass}}
+          {{if bool(historial['f_fecha_final_5']) :}}
+            <td id="field_hasta">{{=historial['f_fecha_final_5']}}</td>
+          {{pass}}
+          {{if bool(historial['f_dependencia_hist_5']) :}}
+            <td id="field_hasta">{{=historial['f_dependencia_hist_5']}}</td>
+          {{pass}}
+          {{if bool(historial['f_cargo_hist_5']) :}}
+            <td id="field_hasta">{{=historial['f_cargo_hist_5']}}</td>
+          {{pass}}
+          {{if bool(historial['f_organizacion_5']) :}}
+            <td id="field_hasta">{{=historial['f_organizacion_5']}}</td>
+          {{pass}}
+          {{if bool(historial['f_rol_hist_5']) :}}
+            <td id="field_hasta">{{=historial['f_rol_hist_5']}}</td>
+          {{pass}}
+        </tr>
+    </tbody>
 
-                  <tr>
-                    {{if bool(historial['f_fecha_inicio_4']) :}}
-                      <td id="field_desde">{{=historial['f_fecha_inicio_4']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_fecha_final_4']) :}}
-                      <td id="field_hasta">{{=historial['f_fecha_final_4']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_dependencia_hist_4']) :}}
-                      <td id="field_hasta">{{=historial['f_dependencia_hist_4']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_cargo_hist_4']) :}}
-                      <td id="field_hasta">{{=historial['f_cargo_hist_4']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_organizacion_4']) :}}
-                      <td id="field_hasta">{{=historial['f_organizacion_4']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_rol_hist_4']) :}}
-                      <td id="field_hasta">{{=historial['f_rol_hist_4']}}</td>
-                    {{pass}}
-                  </tr>
-
-                  <tr>
-                    {{if bool(historial['f_fecha_inicio_5']) :}}
-                      <td id="field_desde">{{=historial['f_fecha_inicio_5']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_fecha_final_5']) :}}
-                      <td id="field_hasta">{{=historial['f_fecha_final_5']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_dependencia_hist_5']) :}}
-                      <td id="field_hasta">{{=historial['f_dependencia_hist_5']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_cargo_hist_5']) :}}
-                      <td id="field_hasta">{{=historial['f_cargo_hist_5']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_organizacion_5']) :}}
-                      <td id="field_hasta">{{=historial['f_organizacion_5']}}</td>
-                    {{pass}}
-                    {{if bool(historial['f_rol_hist_5']) :}}
-                      <td id="field_hasta">{{=historial['f_rol_hist_5']}}</td>
-                    {{pass}}
-                  </tr>
-              </tbody>
-
-          </table>
-        </div>
-        <div class="tab-pane" id="comisiones_comites">
-          <p>Aqui van las comisiones</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</table>
 

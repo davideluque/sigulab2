@@ -463,19 +463,6 @@
 
                       {{include 'personal/formHistorial.html'}}
 
-<!-- Para agregar formularios de trabajos al hacer a "Agregar otro trabajo" -->
-<script type="text/javascript">
- function toggleTrabajo(id, idText, idText2) {
-  var trabajo = document.getElementById(id);
-  var texto = document.getElementById(idText);
-  if (idText2) {
-    var texto2 = document.getElementById(idText2);
-  }
-  trabajo.style.display = 'block';
-  texto.style.display = 'none';
-  texto2.style.display = 'block';
- }
-</script>
                         
                     <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
@@ -496,3 +483,17 @@
       </div>
     </div>
 </div>
+
+<!-- Para agregar formularios de trabajos al hacer a "Agregar otro trabajo" -->
+<script type="text/javascript">
+ function toggleTrabajo(id, idText, idText2) {
+  var trabajo = document.getElementById(id);
+  var texto = document.getElementById(idText);
+  if (idText2) {
+    var texto2 = document.getElementById(idText2);
+  }
+  trabajo.style.display = 'block';
+  texto.style.display = 'none';
+  texto2.style.display = 'block';
+ }
+</script>

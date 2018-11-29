@@ -19,7 +19,9 @@ def resultados_busqueda():
         gremio = request.post_vars.gremio_busqueda,
         cargo = request.post_vars.cargo_busqueda,
         competencia = request.post_vars.competencia_busqueda,
-        categoria = request.post_vars.categoria_busqueda
+        categoria = request.post_vars.categoria_busqueda,
+        anios = request.post_vars.anios_busqueda,
+        fecha = request.post_vars.fecha_busqueda,
     )
 
 #Enviar info a la tabla del listado
