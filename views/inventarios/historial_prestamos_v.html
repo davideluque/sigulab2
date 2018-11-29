@@ -21,11 +21,17 @@
                     <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
-    
+
             <tbody>
             {{for solicitud in historial_prestamos:}}
                 <tr>
-                    <td class="camposTabla"><div class="text-center">{{= solicitud['id'] }}</div></td>
+                    <td class="camposTabla">
+                        <div class="text-center">
+                            <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud['id']))}}">
+                                {{= solicitud['id'] }}
+                            </a>
+                        </div>
+                    </td>
                     <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
                     <td class="camposTabla">
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
@@ -35,9 +41,9 @@
                     <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
                     <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
                 </tr>
-            {{pass}}           
+            {{pass}}
             </tbody>
-    
+
             <tfoot id="collapseFiltros">
                 <th class="camposTabla linksNombres">ID</th>
                 <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>

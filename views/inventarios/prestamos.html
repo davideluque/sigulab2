@@ -93,13 +93,13 @@
                     <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
-    
+
             <tbody>
                 {{for solicitud in solicitudes_recibidas:}}
                 <tr>
                     <td class="camposTabla">{{= solicitud['id'] }}</td>
                     <td class="camposTabla">
-                        <a href="{{=URL('detalles_vehiculo', vars=dict(vh=db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']))}}">
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
                                 {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
                         </a>
                     </td>
@@ -153,9 +153,9 @@
                   <tr>
                     <td class="camposTabla">{{= solicitud['id'] }}</td>
                     <td class="camposTabla">
-                      <a href="{{=URL('detalles_vehiculo', vars=dict(vh=db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']))}}">
-                        {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
-                      </a>
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
+                            {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
+                        </a>
                     </td>
                     <td class="camposTabla">
                         {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().first_name }}
