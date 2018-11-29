@@ -327,7 +327,7 @@ db.modificacion_herramienta.mhr_num.requires = IS_EMPTY_OR(IS_NOT_IN_DB(db(db.he
 
 db.define_table(
     'historial_mantenimiento_bm',
-    Field('hmbm_nro', 'references bien_mueble', label = T('Numero de bien nacional')),
+    Field('hmbm_nro', 'reference bien_mueble', label = T('Numero de bien nacional')),
     Field('hmbm_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
     Field('hmbm_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmbm_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
@@ -346,8 +346,8 @@ db.historial_mantenimiento_bm.hmbm_nro.requires = IS_IN_DB(db, db.bien_mueble.id
 
 db.define_table(
     'historial_mantenimiento_sin_bn',
-    Field('hmsb_espacio_fisico', 'references espacios_fisicos', label = T('Espacio fisico')),
-    Field('hmsb_nombre', 'references sin_bn', label = T('Nombre del consumible o material de laboratorio')),
+    Field('hmsb_espacio_fisico', 'reference espacios_fisicos', label = T('Espacio fisico')),
+    Field('hmsb_nombre', 'reference sin_bn', label = T('Nombre del consumible o material de laboratorio')),
     Field('hmsb_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
     Field('hmsb_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmsb_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
@@ -532,7 +532,7 @@ db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias
 
 db.define_table(
     'historial_mantenimiento_vh',
-    Field('hmvh_id', 'references vehiculo', label = T('Placa del vehiculo')),
+    Field('hmvh_id', 'reference vehiculo', label = T('Placa del vehiculo')),
     Field('hmvh_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
     Field('hmvh_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmvh_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
@@ -556,7 +556,7 @@ db.historial_mantenimiento_vh.hmvh_crea_mantenimiento.requires = IS_IN_DB(db, db
 db.define_table(
     'historial_prestamo_vh',
     # Vehículo
-    Field('hpvh_vh_id', 'references vehiculo', notnull=True, label=T('ID del vehículo')),
+    Field('hpvh_vh_id', 'reference vehiculo', notnull=True, label=T('ID del vehículo')),
 
     # Fechas
     Field('hpvh_fecha_solicitud', 'date', notnull=True, label=T('Fecha de solicitud')),
@@ -565,7 +565,7 @@ db.define_table(
     Field('hpvh_fecha_devolucion', 'date',  default="", label=T('Fecha de devolución')),
 
     # Datos de solicitud
-    Field('hpvh_solicitante', 'references auth_user', notnull=True, label=T('Solicitante (ID)')),
+    Field('hpvh_solicitante', 'reference auth_user', notnull=True, label=T('Solicitante (ID)')),
     Field('hpvh_motivo', 'text', notnull=True, default="", label=T('Motivo del préstamo')),
     Field('hpvh_ruta', 'text', notnull=True, default="", label=T('Ruta prevista')),
     Field('hpvh_tiempo_estimado_uso', 'string', notnull=True, default="", label=T('Tiempo estimado de uso')),
@@ -584,12 +584,12 @@ db.define_table(
     Field('hpvh_ci_usuario', 'string', label=T('C.I. Usuario')),
 
     # Estatus (@TODO: Cambiar estatus por código int)
-    Field('hpvh_autorizado_por', 'references auth_user', label=T('Autorizado por')),
+    Field('hpvh_autorizado_por', 'reference auth_user', label=T('Autorizado por')),
     Field('hpvh_estatus', 'string', notnull=True, default="Solicitud recibida", label=T('Estatus de solicitud'), requires=IS_IN_SET(["Solicitud recibida", "Solicitud aprobada: en espera", "Solicitud rechazada", "Solicitud aprobada: en tránsito", "Solicitud aprobada: vehículo devuelto"])),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
 
     # Datos de salida
-    Field('hpvh_autoriza_salida', 'references auth_user', label=T('Autorizado por (salida)')),
+    Field('hpvh_autoriza_salida', 'reference auth_user', label=T('Autorizado por (salida)')),
     Field('hpvh_km_salida', 'integer', label=T('Kilometraje (salida)')),
     Field('hpvh_gasolina_salida', 'string', label=T('Gasolina (salida)')),
     Field('hpvh_aceite_motor_salida', 'string', label=T('Aceite del motor (salida)')),
@@ -606,7 +606,7 @@ db.define_table(
     Field('hpvh_listado_fluidos_salida', 'string', label=T('Listado de Fluidos (salida)')),
 
     # Datos de devolución
-    Field('hpvh_autoriza_devolucion', 'references auth_user', label=T('Autorizado por (devolucion)')),
+    Field('hpvh_autoriza_devolucion', 'reference auth_user', label=T('Autorizado por (devolucion)')),
     Field('hpvh_km_devolucion', 'integer', label=T('Kilometraje (devolucion)')),
     Field('hpvh_gasolina_devolucion', 'string', label=T('Gasolina (devolucion)')),
     Field('hpvh_aceite_motor_devolucion', 'string', label=T('Aceite del motor (devolucion)')),
