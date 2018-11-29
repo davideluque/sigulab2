@@ -575,8 +575,8 @@ db.define_table(
     Field('hpvh_nro_celular_conductor', 'string', label=T('Nº Celular Conductor')),
     Field('hpvh_ci_conductor', 'string', label=T('C.I. Conductor')),
     Field('hpvh_nro_licencia_conductor', 'string', label=T('Nº Licencia Conducir Conductor')),
-    Field('hpvh_certificado_psicologico', 'string',label=T('Certificado psicológico conductor')),
     Field('hpvh_certificado_medico', 'string', label=T('Certificado médico conductor')),
+    Field('hpvh_certificado_psicologico', 'string',label=T('Certificado psicológico conductor')),
 
     # Datos de usuario
     Field('hpvh_usuario', 'string', notnull=True, default="", label=T('Nombre de Usuario')),
