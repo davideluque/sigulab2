@@ -2653,7 +2653,6 @@ def detalles_prestamo():
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
-            hpvh_razon_rechazo=motivo,
             hpvh_estatus="Solicitud aprobada: en espera"
         )
 
