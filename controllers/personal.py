@@ -305,15 +305,15 @@ def add_form():
         # for ind, comp in enumerate(competencias):
         #     if request.post_vars['check-competencia-{0}'.format(ind)]:
         #         observaciones = request.post_vars['competencia-{0}'.format(ind)]
-        #         db.t_Competencias.update_or_insert(
-        #                 (db.t_Competencias.f_nombre==comp) &
-        #                 (db.t_Competencias.f_Competencia_Personal==personal_id),
+        #         db.t_Competencias2.update_or_insert(
+        #                 (db.t_Competencias2.f_nombre==comp) &
+        #                 (db.t_Competencias2.f_Competencia_Personal==personal_id),
         #                 f_nombre=comp,
         #                 f_observaciones=observaciones,
         #                 f_Competencia_Personal=personal_id
         #                 )
         #     else:
-        #         db((db.t_Competencias.f_nombre==comp) & (db.t_Competencias.f_Competencia_Personal==personal_id)).delete()
+        #         db((db.t_Competencias2.f_nombre==comp) & (db.t_Competencias2.f_Competencia_Personal==personal_id)).delete()
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
@@ -342,7 +342,7 @@ def add_form():
             mail.send(destinatario, asunto, cuerpo)
 
         personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
-        session.flash = BEAUTIFY(__get_competencias(request, personal))
+        __get_competencias(request, personal)
         redirect(URL('listado_estilo'))
 
 
@@ -700,8 +700,8 @@ def reporte_listado():
     return redirect(URL('listado_estilo'))
 
 def lista_competencias(personal):
-    query = db(db.t_Personal.id == db.t_Competencias.f_Competencia_Personal)
-    rows = query.select(db.t_Competencias.ALL, orderby=db.t_Competencias.f_numero)
+    query = db(db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal)
+    rows = query.select(db.t_Competencias2.ALL, orderby=db.t_Competencias2.f_numero)
     return rows
 
 def getDictHistorial(historial):
@@ -795,9 +795,9 @@ def __get_competencias(request, personal):
             if not(
                     (None or '') ==  params['f_nombre']
                     or (None or '') == params['f_categoria']):
-                db.t_Competencias.update_or_insert(
-                        (db.t_Competencias.f_numero==i)&
-                        (db.t_Competencias.f_Competencia_Personal==personal.id),
+                db.t_Competencias2.update_or_insert(
+                        (db.t_Competencias2.f_numero==i)&
+                        (db.t_Competencias2.f_Competencia_Personal==personal.id),
                         f_nombre=params['f_nombre'],
                         f_categorias=params['f_categoria'],
                         f_observaciones= params['f_observaciones'],
