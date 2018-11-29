@@ -343,6 +343,7 @@
       language: {
         url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
       },
+      order: [[ 0, "desc" ]],
         initComplete: function(){
             var api = this.api();
         
@@ -454,6 +455,7 @@
             language: {
             url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
             },
+            order: [[ 0, "desc" ]],
             initComplete: function(){
                 var api = this.api();
             
@@ -490,11 +492,10 @@
                 $('#buttons2').append('<br><br>');
                 $('#datatable2_info').addClass('pull-right');
                 $('#datatable2_filter').addClass('pull-left');
-        
+
                 $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
                 $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
-            
-                
+
              }
             });
         </script>
@@ -502,21 +503,21 @@
 <script>
 
         var filtros = false;
-    
+
         $(document).ready(function() {
                 // Setup - add a text input to each footer cell
                 $('#datatable3 tfoot th').each( function () {
                         var title = $(this).text();
                         $(this).html( '<input type="text" placeholder="Filtro" />' );
                 } );
-         
+
                 // DataTable
                 var table = $('#datatable3').DataTable();
-         
+
                 // Apply the search
                 table.columns().every( function () {
                         var that = this;
-         
+
                         $( 'input', this.footer() ).on( 'keyup change', function () {
                                 if ( that.search() !== this.value ) {
                                         that
@@ -551,6 +552,8 @@
             language: {
             url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
             },
+            order: [[ 0, "desc" ]],
+
             initComplete: function(){
                 var api = this.api();
             

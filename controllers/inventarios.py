@@ -63,8 +63,8 @@ def __get_mantenimiento_bm(bm_id=None):
 
 # Dado el id de un vehículo, retorna el historial de préstamo del vehículo
 def __get_prestamos_vh(vh_id=None):
-	prestamos = list(db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select())
-	prestamos.reverse()
+    prestamos = list(db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select())
+    prestamos.reverse()
     return prestamos
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
