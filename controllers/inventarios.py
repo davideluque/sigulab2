@@ -2546,15 +2546,87 @@ def detalles_prestamo():
     except:
         return "Solicitante inválido."
 
-    if request.vars.rechazo:
+    esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    # Si el usuario autorizado marcó que quería aprobar la solicitud
+    if esta_autorizado and request.vars.aprobado:
+        # Actualizamos la entrada en la base de datos
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_autorizado_por=auth.user.id,
+            hpvh_razon_rechazo=motivo,
+            hpvh_estatus="Solicitud aprobada: en espera"
+        )
+
+        # Colocamos un estatus especial al vehículo
+        db(db.vehiculo.id == vehiculo.id).update(
+            vh_estatus = "En préstamo"
+        )
+
+        # Guardamos información en bitácora
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Aceptada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        asunto_correo = "[SIGULAB] Solicitud de Préstamo #%s Aprobada" % prestamo_id
+
+        # Enviamos notificación al responsable
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        # Enviamos notificación al solicitante
+        email_solicitante = solicitante.email
+        mensaje_aprobacion_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "en fecha {}. Puede proceder a contactar al responsable del vehículo para retirar las llaves otros documentos.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        # Manda correo rechazo a solicitante
+        __enviar_correo(
+            email_solicitante,
+            asunto_correo,
+            mensaje_aprobacion_solicitante
+        )
+
+        session.flash = "Se ha aprobado la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
+    # Si el usuario autorizado ha rechazado la solicitud
+    if esta_autorizado and request.vars.rechazo:
         motivo = request.vars.motivo_rechazo
 
+        # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
             hpvh_razon_rechazo=motivo,
             hpvh_estatus="Solicitud rechazada"
         )
 
+        # Guardamos información en bitácora
         db.bitacora_general.insert(
             f_accion="[préstamos] Rechazada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
         )
@@ -2597,6 +2669,7 @@ def detalles_prestamo():
                                       vehiculo.vh_placa,
                                       datetime.now(),
                                       motivo
+        )
 
         # Manda correo rechazo a solicitante
         __enviar_correo(
@@ -2668,8 +2741,6 @@ def detalles_prestamo():
         "C.I.",
         "Nº Celular"
     ]
-
-    esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
 
     return dict(
         vehiculo=vehiculo,
