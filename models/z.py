@@ -897,15 +897,13 @@ if db(db.t_Sustancia).isempty():
 # Categorias de desechos
 
 if db(db.t_categoria_desechos).isempty():
-    CATEGORIAS_INICIALES = [
-        'Sales Inorgánicas',
-        'Ácidos',
-        'Bases',
-        'Alcoholes',
-        'Orgánicos halogenados',
-        'Orgánicos no halogenados',
-        'Oxidantes'
-    ]
+	categorias_iniciales = ['Sales Inorgánicas', 'Ácidos', 'Bases', 'Alcoholes', 'Orgánicos halogenados', 'Orgánicos no halogenados', 'Oxidantes']
 
-    for categoria in CATEGORIAS_INICIALES:
-        db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
+	for categoria in categorias_iniciales:
+		db.t_categoria_desechos.insert(categoria=categoria, descripcion=categoria)
+
+
+if db(db.espacios_fisicos).isempty():
+    db.espacios_fisicos.insert(codigo='ALT-001A', uso='SALA DE EQUIPOS DE INTERCONEXION A INTERNET', ext_USB= ''  ,ext_interna= '', dependencia=5)
+    db.espacios_fisicos.insert(codigo='ALT-002A', uso='SALA DE EQUIPOS DE INTERCONEXI', ext_USB= ''  ,ext_interna= '', dependencia=10)
+
