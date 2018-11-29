@@ -1,0 +1,60 @@
+<!-- Inicio Listado de sustancias -->
+<div class="container" style="margin-left: -150px">
+    <div class="row rowcito">
+
+        <br>
+
+        <div id="buttons2">
+        <!-- Filtrado -->
+        <!-- Filtrado -->
+        </div>
+        <br>
+
+        <div class="table-responsive no-padding no-margin">
+        <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {{for solicitud in historial_prestamos:}}
+                <tr>
+                    <td class="camposTabla">
+                        <div class="text-center">
+                            <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud['id']))}}">
+                                {{= solicitud['id'] }}
+                            </a>
+                        </div>
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
+                </tr>
+            {{pass}}
+            </tbody>
+
+            <tfoot id="collapseFiltros">
+                <th class="camposTabla linksNombres">ID</th>
+                <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                <th class="camposTabla linksNombres">SOLICITANTE</th>
+                <th class="camposTabla linksNombres">MOTIVO</th>
+                <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </tfoot>
+    
+        </table>
+        </div>
+    </div>
+    </div>  
+    <!-- Fin Listado de sustancias --> 
