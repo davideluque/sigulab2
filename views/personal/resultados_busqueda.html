@@ -8,6 +8,7 @@
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
     <script src="{{=URL('static', 'plugins/datatables2/dataTables.rowsGroup.js')}}"></script>
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
 
 {{end}}
 
@@ -22,11 +23,14 @@
 </nav>
 <!-- Fin del Breadcrum de navegación -->
 
-<h1>{{#=lista}}</h1>
 <!-- Contenido principal de la página de gestión de servicios -->
+<div class="container titulo">
+    <h1>Titulo</h1>
+</div>
 <div id="main" class="container">
 
 
+    <h1>{{=filtros['categoria_busqueda']}}</h1>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<div class="panel">
 		<div class="panel-body-users-tab no-padding" style="background-color:#fafafa;">
@@ -66,13 +70,15 @@
 <script charset="utf-8">
     $(document).ready(function() {
         var table = $('#example').DataTable({
+        "paging":   false,
+        "info":     false,
         language: {
         url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
     },
         rowsGroup: [0, 1,2],
         "columnDefs": [
             {
-                "targets": [   5, 6, 7 ],
+                "targets": [],
                 "visible": false,
                 "searchable": true
             },
@@ -81,8 +87,18 @@
 
       // busqueda por nombre competencias
       //table.columns('.comp-nombre').search('analista').draw();
+      // busqueda por gremio
+      table.columns('.gremio')
+        .search('{{=filtros['gremio_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Competencias
+      table.columns('.compnombre')
+        .search('{{=filtros['competencia_busqueda'] or ''}}')
+        .draw();
       // busqueda por Categorias
-      //table.columns('.comp-nombre').search('analista').draw();
+      table.columns('.compcategoria')
+        .search('{{=filtros['categoria_busqueda'] or ''}}')
+        .draw();
     } );
 </script>
 {{end}}

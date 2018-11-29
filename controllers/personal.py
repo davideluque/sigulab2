@@ -33,7 +33,7 @@ def resultados_busqueda():
             'años-servicio': (hoy-ingreso).days/365
             })
         da = hoy-ingreso
-    return dict(lista=lista)
+    return dict(lista=lista, filtros=request.post_vars)
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
     tb=[]
