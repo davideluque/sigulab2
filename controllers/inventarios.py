@@ -1508,6 +1508,8 @@ def vehiculos():
         if __puede_ver_vehiculo(id_usuario, vh['id']):
             inventario_visible.append(vh)
 
+    dep_id = db(db.dependencias.nombre == dep_nombre).select().first().id
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
