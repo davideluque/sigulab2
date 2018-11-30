@@ -666,7 +666,7 @@ def __solicitar_prestamo_vh(
     usuario = db(db.auth_user.id == solicitante).select().first()
     vh = db(db.vehiculo.id == vehiculo).select().first()
 
-    db.historial_prestamo_vh.insert(
+    prestamo_id = db.historial_prestamo_vh.insert(
         hpvh_vh_id=vehiculo,
         hpvh_fecha_solicitud=fecha_solicitud,
         hpvh_fecha_prevista_devolucion=fecha_prevista_devolucion,
@@ -690,6 +690,49 @@ def __solicitar_prestamo_vh(
             vh.vh_marca + " " + vh.vh_modelo + " " + vh.vh_placa,
             usuario.first_name + " " + usuario.last_name
         )
+    )
+
+    asunto_solicitud = "[SIGULAB] Solicitud #{} de Préstamo de Vehículos".format(prestamo_id)
+
+    # Enviamos notificación al responsable patrimonial
+    email_responsable = db(db.auth_user.id == vh.vh_responsable).select().first().email
+    mensaje_solicitud_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha SOLICITADO " + \
+                                    "un préstamo de código #{} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                    "en fecha {}. Para obtener más detalles del préstamo, ingrese a SIGULAB, módulo de " + \
+                                    "gestión de INVENTARIOS, sección SOLICITUDES.").format(
+                                    usuario.first_name,
+                                    usuario.last_name,
+                                    prestamo_id,
+                                    vh.vh_marca,
+                                    vh.vh_modelo,
+                                    vh.vh_placa,
+                                    datetime.now()
+    )
+
+    __enviar_correo(
+        email_responsable,
+        asunto_solicitud,
+        mensaje_solicitud_responsable
+    )
+
+    # Enviamos notificación al solicitante
+    email_solicitante = usuario.email
+    mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que usted ha SOLICITADO " + \
+                                    "un préstamo de código #{} al vehículo {} {} {}, " + \
+                                    "en fecha {}. Recibirá una notificación por correo electrónico al momento de que la " + \
+                                    "solicitud sea aprobada o rechazada por el personal autorizado.").format(
+                                    prestamo_id,
+                                    vh.vh_marca,
+                                    vh.vh_modelo,
+                                    vh.vh_placa,
+                                    datetime.now()
+    )
+
+    # Manda correo rechazo a solicitante
+    __enviar_correo(
+        email_solicitante,
+        asunto_solicitud,
+        mensaje_rechazo_solicitante
     )
 
     return True
@@ -2653,7 +2696,6 @@ def detalles_prestamo():
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
-            hpvh_razon_rechazo=motivo,
             hpvh_estatus="Solicitud aprobada: en espera"
         )
 
@@ -2685,6 +2727,7 @@ def detalles_prestamo():
                                       datetime.now()
         )
 
+        # Manda correo de aprobación al responsable
         __enviar_correo(
             email_responsable,
             asunto_correo,
@@ -2705,7 +2748,7 @@ def detalles_prestamo():
                                       datetime.now()
         )
 
-        # Manda correo rechazo a solicitante
+        # Manda correo aprobación a solicitante
         __enviar_correo(
             email_solicitante,
             asunto_correo,
