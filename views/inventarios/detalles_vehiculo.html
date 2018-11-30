@@ -1329,6 +1329,28 @@
     });
   });
 
+  // Validación de campos requeridos y no llenados
+  // (ignora el resto de campos especiales)
+  $("input[required]").focusout(function() {
+    var value = $(this).val();
+
+    if (   !$(this).is("#num") 
+        && !$(this).is("#serialCh")
+        && !$(this).is("#nro_puestos")
+        && !$(this).is("#ano")
+       ) {
+      if (value.length == 0) {
+        $(this).css('border-color', '#d03e3e');
+        $(this).next().show();
+        $(this).next().text("Este campo es obligatorio.");
+      } else {
+        $(this).next().hide();
+        $(this).css('border-color', '#ddd');
+        $(this).css('color', '#888');
+      }
+    }
+  });
+
   $(".campo_telf_obligatorio").focusout(function() {
     var tlf = $(this).val();
 
@@ -1720,29 +1742,6 @@
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Formato: ####");
-    }
-  });
-
-
-  // Validación de campos requeridos y no llenados
-  // (ignora el resto de campos especiales)
-  $("input[required]").focusout(function() {
-    var value = $(this).val();
-
-    if (   !$(this).is("#num") 
-        && !$(this).is("#serialCh")
-        && !$(this).is("#nro_puestos")
-        && !$(this).is("#ano")
-       ) {
-      if (value.length == 0) {
-        $(this).css('border-color', '#d03e3e');
-        $(this).next().show();
-        $(this).next().text("Este campo es obligatorio.");
-      } else {
-        $(this).next().hide();
-        $(this).css('border-color', '#ddd');
-        $(this).css('color', '#888');
-      }
     }
   });
 
