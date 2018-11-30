@@ -439,7 +439,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de carrocería \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_carroceria, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_chasis == serial_chasis).select():
@@ -447,7 +447,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de chasis \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_chasis, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_motor == serial_motor).select():
@@ -455,7 +455,15 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de motor \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_motor, nombre_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_intt == intt).select():
+        vh = db(db.vehiculo.vh_intt == intt).select()[0]
+
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
+        response.flash = "El vehiculo de número de autorización INTT \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_intt, nombre_dependencia)
         return False
 
     # Se agrega el nuevo vehiculo a la base de datos
