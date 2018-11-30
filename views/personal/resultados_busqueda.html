@@ -73,7 +73,19 @@
     {{if filtros['fecha_busqueda'] != "": }}
     {{="para la fecha " + filtros['fecha_busqueda']}}
     {{pass}}
+
+    {{if filtros['anios_admin'] != "": }}
+    <br>
+    <b>Años administración pública: </b>{{=filtros['anios_admin'] +  " años"}}
+    {{pass}}
+
+    {{if filtros['fecha_admin_busqueda'] != "": }}
+    {{="para la fecha " + filtros['fecha_admin_busqueda']}}
+    {{pass}}
+
+
     </p>
+
 </div>
 <div id="main" class="container">
 
