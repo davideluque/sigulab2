@@ -92,6 +92,7 @@
 						<th class="compnombre tableColumn">Competencia - Nombre</th>
 						<th class="compcategoria tableColumn">Competencia - Categoria</th>
 						<th class="anios tableColumn">años</th>
+            <th class="aniosAdmin tableColumn">años admin</th>
 						<th class="cargo1 tableColumn">cargo1</th>
 						<th class="cargo2 tableColumn">cargo2</th>
 						<th class="cargo3 tableColumn">cargo3</th>
@@ -110,6 +111,7 @@
                         <td>{{=item['competencia']}}</td>
                         <td>{{=", ".join(item['categorias'])}}</td>
                         <td>{{=item['anios-servicio']}}</td>
+                        <td>{{=item['anios-admin']}}</td>
                         <td>{{=item['cargo1']}}</td>
                         <td>{{=item['cargo2']}}</td>
                         <td>{{=item['cargo3']}}</td>
@@ -126,6 +128,7 @@
 <!-- Fin del contenido principal de la página de gestión de servicios -->
 <script charset="utf-8">
     $(document).ready(function() {
+        console.log('{{=filtros['anios_admin'] or ''}}');
         var table = $('#example').DataTable({
         "paging":   false,
         "info":     false,
@@ -147,7 +150,7 @@
         rowsGroup: [0, 1, 2, 3, 4, 7],
         "columnDefs": [
             {
-                "targets": [ 6, 7, 8, 9, 10, 11, 12],
+                "targets": [ 6, 7, 8, 9, 10, 11, 12,13],
                 "visible": false,
                 "searchable": true
             },
@@ -171,6 +174,10 @@
       // busqueda por Años
       table.columns('.anios')
         .search('{{=filtros['anios_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Años en Admin publica
+      table.columns('.aniosAdmin')
+        .search('{{=filtros['anios_admin'] or ''}}')
         .draw();
       // Busqueda por Cargos
       table.columns('.cargo1 .cargo2 .cargo3 .cargo4 .cargo5')

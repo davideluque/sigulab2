@@ -4,6 +4,7 @@
   <!-- Hoja de estilos específica para la página de gestión de servicios -->
   <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}"> 
   <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}"> 
+  <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
   <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
   <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
 	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -101,12 +102,17 @@
 						</div>
 					</div>
 
-					<!-- <div class="form-group">
+					<div class="form-group">
 						<div class="col-md-6 ">
 							<label for="AniosAdmin">Años en la Administración Pública</label> 
-							<input id="AniosAdmin" name="nios_admin" type="number" placeholder="Por ej.: 25" class="form-control input-md">
+							<input id="AniosAdmin" name="anios_admin" type="number" placeholder="Por ej.: 25" class="form-control input-md" min="0">
 						</div>
-					</div> -->
+
+						<div class="col-md-6 ">
+							<label for="fecha-admin">Para la fecha:</label> 
+							<input name="fecha_admin_busqueda" id="fecha-admin" class="datepicker" type="text" data-placement="center" data-trigger="manual" data-content="Seleccione una fecha">
+						</div>
+					</div>
 
 					<div class="text-right" style="padding-bottom: 3rem;">
 						<button type="submit">Buscar <i class="fa fa-search" title=""></i></button>

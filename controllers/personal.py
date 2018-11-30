@@ -31,6 +31,15 @@ def resultados_busqueda():
 
     for row in rows:
         ingreso = row.t_Personal.f_fecha_ingreso_ulab
+        aniosAdmin = row.t_Personal.f_fecha_ingreso_admin_publica
+        fechaAdmin = request.post_vars.fecha_admin_busqueda
+
+        if (fechaAdmin==""):
+            fechaAdmin = date.today()
+        else:
+            fechaAdmin = datetime.strptime(fechaAdmin, "%d-%m-%Y")
+            fechaAdmin = fechaAdmin.date()
+
         
         lista.append({
             'ci' : row.t_Personal.f_ci,
@@ -42,6 +51,7 @@ def resultados_busqueda():
             'competencia' : row.t_Competencias2.f_nombre,
             'categorias' : row.t_Competencias2.f_categorias,
             'anios-servicio': (aniversario_ulab-ingreso).days/365 if ingreso else 0,
+            'anios-admin': (fechaAdmin-aniosAdmin).days/365 if aniosAdmin else 0,
             'cargo1' : row.t_Historial_trabajo_nuevo.f_cargo_hist_1,
             'cargo2' : row.t_Historial_trabajo_nuevo.f_cargo_hist_2,
             'cargo3' : row.t_Historial_trabajo_nuevo.f_cargo_hist_3,
