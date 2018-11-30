@@ -11,7 +11,11 @@
 # * Controladores no poseen prefijos
 #
 #-----------------------------------------------------------------------------
-
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image
+from openpyxl.styles import Alignment, Font
+import unicodedata
+import calendar
 import datetime
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
@@ -213,8 +217,7 @@ def __sumar_inventarios(espacios):
                 # Nuevas cantidades que hay que sumar al inventario general
                 nueva_exist = inv.f_existencia
                 nuevo_uso_interno = inv.f_uso_interno
-                nueva_unidad = unid.f_nombre
-                
+                nueva_unidad = unid.f_nombre                
                 s['f_existencia'] = __sumar_cantidad(nueva_exist,
                                                     existencia,
                                                     nueva_unidad,
@@ -223,6 +226,41 @@ def __sumar_inventarios(espacios):
                                                      uso_interno,
                                                      nueva_unidad,
                                                      unidad)
+                    
+    return inventario_total
+
+
+# consulta los espacios que tienen cierta sustancia
+def __consultar_espacios(espacios, sustancia):
+
+    inventario_total = {}
+    i = 0
+    for esp_id in espacios:
+        # Recorriendo las entradas en el inventario que pertenecen al espacio "esp"
+        for row in db((db.t_Inventario.sustancia == db.t_Sustancia.id) &
+                      (db.t_Inventario.f_medida == db.t_Unidad_de_medida.id) & 
+                      (db.t_Inventario.espacio == esp_id)).select():
+
+            esp_actual = db(db.espacios_fisicos.id == esp_id).select().first()
+
+            sust = row['t_Sustancia']
+            inv = row['t_Inventario']
+            unid = row['t_Unidad_de_medida']
+
+            # Se agrega la sustancia al inventario final
+            if sust.f_nombre == sustancia:
+                
+                i += 1
+                inventario_total[int(i)] = {
+                                    'f_inv': inv.id,
+                                    'f_espacio': esp_actual.codigo,
+                                    'f_cas': sust.f_cas,
+                                    'f_pureza': sust.f_pureza,
+                                    'f_estado': sust.f_estado,
+                                    'f_existencia':inv.f_existencia,
+                                    'f_uso_interno': inv.f_uso_interno,
+                                    'f_unidad': unid.f_nombre
+                                             }
                     
     return inventario_total
 
@@ -240,6 +278,22 @@ def __get_inventario_dep(dep_id):
     inventario = __sumar_inventarios(espacios)
 
     return inventario
+
+
+# Dado el id de una dependencia, retorna una lista con el agregado de las sutancias
+# que existen en los espacios fisicos que pertenecen a esta. 
+def __solicitar_inventario_dep(dep_id, sustancia):
+
+    inventario = {}
+
+    # Obteniendo lista de espacios bajo la dependencia con id dep_id
+    espacios = __get_espacios(dep_id)
+
+    # Agrega los inventarios de los espacios en la lista "espacios"
+    inventario = __consultar_espacios(espacios, sustancia)
+
+    return inventario
+
 
 # Registra una nueva sustancia en el espacio fisico indicado. Si la sustancia ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo la
@@ -274,7 +328,8 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
                                 f_tipo_ingreso=tipo_ing,
                                 f_medida=unidad_id,
                                 f_inventario=inv_id,
-                                f_sustancia=sustancia_id)
+                                f_sustancia=sustancia_id,
+                                f_fechaUso=datetime.date.today())
 
     return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -393,6 +448,12 @@ def __get_descripcion(registro):
             descripcion = "Otorgado por la Sección \"{0}\" del \"{1}\" "\
                           "en calidad de \"{2}\"".format(seccion.nombre,
                           lab.nombre, respuesta.f_calidad[0])
+
+
+        elif registro.f_tipo_ingreso[0] == "Prestamo":
+            descripcion = "Ingreso por prestamo "
+
+
         elif registro.f_tipo_ingreso[0] == "Ingreso inicial":
             descripcion = "Ingreso inicial de la sustancia al inventario"
 
@@ -417,7 +478,12 @@ def __get_descripcion(registro):
             nombre = servicio.nombre
 
             descripcion = "Ejecución del servicio \"{0}\"".format(nombre)
-            
+
+
+        elif registro.f_tipo_egreso[0] == "Prestamo":
+           
+
+            descripcion = "prestamo a .."
         # Cuando es un egreso en respuesta a una solicitud
         else:
             
@@ -475,7 +541,10 @@ def __agregar_registro(concepto):
     uso_interno_viejo = inv.f_uso_interno
 
     if concepto == 'Ingreso':
+
         tipo_ing = request.vars.tipo_ingreso
+
+        fecha_sumi = request.vars.fecha_sumi
 
         # Nueva cantidad total y nueva cantidad para uso interno
         total_nuevo = total_viejo + cantidad
@@ -495,10 +564,33 @@ def __agregar_registro(concepto):
                 f_cantidad_total=total_nuevo,
                 f_concepto=concepto,
                 f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
                 f_medida=inv.f_medida,
                 f_inventario=inv.id,
                 f_sustancia=inv.sustancia,
                 f_almacen=almacen)
+
+        elif  tipo_ing == 'Prestamo':
+            db.t_Bitacora.insert(
+                f_cantidad=cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto=concepto,
+                f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
+                f_medida=inv.f_medida,
+                f_inventario=inv.id,
+                f_sustancia=inv.sustancia)
+
+        elif tipo_ing == 'Cesion':
+             db.t_Bitacora.insert(
+                f_cantidad=cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto=concepto,
+                f_tipo_ingreso=tipo_ing,
+                f_fechaUso=fecha_sumi,
+                f_medida=inv.f_medida,
+                f_inventario=inv.id,
+                f_sustancia=inv.sustancia)
 
         # Tipo ingreso es compra
         else:
@@ -529,14 +621,20 @@ def __agregar_registro(concepto):
                 f_medida=inv.f_medida,
                 f_compra=compra_id,
                 f_inventario=inv.id,
-                f_sustancia=inv.sustancia)
+                f_sustancia=inv.sustancia,
+                f_fechaUso=fecha_compra)
 
+    # Si es un tipo Egreso 
+    
     else:
         tipo_eg = request.vars.tipo_egreso            
+        fecha_uso= request.vars.fecha_uso
+       
+
         
         # Nueva cantidad total luego del consumo
         total_nuevo = total_viejo - cantidad
-        if total_nuevo < 0:
+        if total_nuevo <= 0:
             response.flash = "La cantidad total luego del consumo no puede ser "\
                              "negativa"
             redirect(URL(args=request.args, vars=request.get_vars, host=True))
@@ -555,6 +653,7 @@ def __agregar_registro(concepto):
         db.t_Bitacora.insert(
             f_cantidad=cantidad,
             f_cantidad_total=total_nuevo,
+            f_fechaUso= fecha_uso,         
             f_concepto=concepto,
             f_tipo_egreso=tipo_eg,
             f_medida=inv.f_medida,
@@ -576,11 +675,11 @@ def bitacora():
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
-    tipos_egreso = ['Docencia','Investigación','Extensión']
+    tipos_egreso = ['Docencia','Investigación','Extensión','Prestamo','Cesion']
 
     # Tipos de ingresos
     #tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
-    tipos_ingreso = ['Compra','Almacén']
+    tipos_ingreso = ['Compra','Almacén','Prestamo','Cesion']
 
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
@@ -658,6 +757,317 @@ def bitacora():
                 unidades_de_medida=unidades_de_medida,
                 almacenes=almacenes,
                 servicios=servicios)
+
+# Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
+# a cargo
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def sustancia():
+
+    # Inicializando listas de espacios fisicos y dependencias
+
+    # OJO: Espacios debe ser [] siempre que no se este visitando un espacio fisico
+    espacios = []
+    dependencias = []
+    dep_nombre = ""
+    dep_padre_id = ""
+    dep_padre_nombre = ""
+
+    # Lista de sustancias en el inventario de un espacio fisico o que componen 
+    # el inventario agregado de una dependencia
+    inventario = []
+    
+    sust = request.vars.sust
+
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    # Esta variable es enviada a la vista para que cuando el usuario seleccione 
+    # un espacio fisico, se pase por GET es_espacio = "True". No quiere decir
+    # que la dependencia seleccionada sea un espacio, sino que la siguiente
+    # dependencia visitada sera un espacio fisico
+    es_espacio = False
+
+    # Permite saber si actualmente se esta visitando un espacio fisico (True)
+    # o una dependencia (False)
+    espacio_visitado = False
+
+    # Indica si se debe seguir mostrando la flecha para seguir retrocediendo 
+    retroceder = True
+    
+    es_tecnico = auth.has_membership("TÉCNICO")
+    direccion_id = __find_dep_id('DIRECCIÓN')
+
+    # Obteniendo la entrada en t_Personal del usuario conectado
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_id = user.id
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        # Si el tecnico ha seleccionado un espacio fisico
+        if request.vars.dependencia:
+            if request.vars.es_espacio == "True":
+                # Evaluando la correctitud de los parametros del GET 
+                if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                        __is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+
+                # Determinando si el usuario tiene privilegios suficientes para
+                # consultar la dependencia en request.vars.dependencia
+                if not __acceso_permitido(user, 
+                                    int(request.vars.dependencia), 
+                                        request.vars.es_espacio):
+                    redirect(URL('inventarios'))
+
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.codigo
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = espacio.dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+
+                espacio_visitado = True
+
+                # Busca el inventario del espacio
+                inventario = __consultar_espacios(espacio_id, sust)
+
+                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+                # Si se esta agregando una nueva sustancia, se registra en la DB
+                if request.vars.sustancia:
+                    __agregar_sustancia(espacio,
+                                        request.vars.sustancia, 
+                                        request.vars.total,
+                                        request.vars.uso_interno,
+                                        request.vars.unidad)
+            else:
+                # Espacios a cargo del usuario user_id que pertenecen a la seccion
+                # en request.vars.dependencia
+                espacios = [row.espacios_fisicos for row in db(
+                    (db.es_encargado.espacio_fisico == db.espacios_fisicos.id) & 
+                    (db.espacios_fisicos.dependencia == int(request.vars.dependencia)) & 
+                    (db.es_encargado.tecnico == user_id)).select()]
+
+                espacios_ids = [e.id for e in espacios]
+
+                dep_id = int(request.vars.dependencia)
+                dep_nombre = db(db.dependencias.id == dep_id).select()[0].nombre
+
+                dep_padre_nombre = "Secciones"
+
+                # Se suman los inventarios de los espacios que tiene a cargo el usuario en la
+                # seccion actual
+                inventario = __consultar_espacios(espacios_ids, sust)
+
+                es_espacio = True
+
+        # Si el tecnico o jefe no ha seleccionado un espacio sino que acaba de 
+        # entrar a la opcion de inventarios
+        else:
+            # Se buscan las secciones a las que pertenecen los espacios que
+            # tiene a cargo el usuario
+            espacios_a_cargo = db(
+                (db.es_encargado.tecnico == user_id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
+
+            secciones_ids = {e.espacios_fisicos.dependencia for e in espacios_a_cargo}
+
+            dependencias = map(lambda x: db(db.dependencias.id == x).select()[0], 
+                               secciones_ids)
+
+            dep_nombre = "Secciones"
+
+            espacios_ids = [e.espacios_fisicos.id for e in espacios_a_cargo]
+
+            inventario = __consultar_espacios(espacios_ids, sust)
+
+    elif auth.has_membership("JEFE DE SECCIÓN"):
+        # Si el jefe de seccion ha seleccionado un espacio fisico
+        if request.vars.es_espacio == 'True':
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not __acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+
+            # Evaluando la correctitud de los parametros del GET 
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios'))
+
+
+            espacio_id = request.vars.dependencia
+            espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+            dep_nombre = db(db.espacios_fisicos.id == request.vars.dependencia
+                           ).select().first().codigo
+
+            # Guardando el ID y nombre de la dependencia a la que pertenece el 
+            # espacio fisico visitado
+            dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                             ).select().first().dependencia
+            dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                 ).select().first().nombre
+
+            espacio_visitado = True
+                            # Se muestra la lista de sustancias que tiene en inventario
+            inventario = __consultar_espacios(espacio_id, sust)
+
+            sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+            # Si se esta agregando una nueva sustancia, se registra en la DB
+            if request.vars.sustancia:
+                __agregar_sustancia(espacio,
+                                    request.vars.sustancia, 
+                                    request.vars.total,
+                                    request.vars.uso_interno,
+                                    request.vars.unidad)
+
+
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # regresar a la vista inicial de inventarios
+        elif request.vars.es_espacio == 'False':
+            if not (__is_valid_id(request.vars.dependencia, db.espacios_fisicos) and
+                    __is_bool(request.vars.es_espacio)):
+                    redirect(URL('inventarios'))
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not __acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+            espacios = list(db(
+                              db.espacios_fisicos.dependencia == user_dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            dep_nombre = db(db.dependencias.id == user_dep_id
+                           ).select().first().nombre
+
+            es_espacio = True                        
+        # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de 
+        # entrar a la vista inicial de inventarios
+        else:
+            espacios = list(db(
+                              db.espacios_fisicos.dependencia == user_dep_id
+                              ).select(db.espacios_fisicos.ALL))
+            dep_nombre = db(db.dependencias.id == user_dep_id
+                           ).select().first().nombre
+
+            es_espacio = True
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la seccion del jefe
+            inventario = __consultar_espacios(user_dep_id, sust)
+
+    # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
+    # pues la jerarquia de dependencias esta almacenada en la misma tabla
+    # con una lista de adyacencias
+    else:
+        # Si el usuario ha seleccionado una dependencia o un espacio fisico
+        if request.vars.dependencia:
+
+            # Evaluando la correctitud de los parametros del GET 
+            if not (__is_valid_id(request.vars.dependencia, db.dependencias) and
+                    __is_bool(request.vars.es_espacio)):
+                redirect(URL('inventarios'))
+
+            # Determinando si el usuario tiene privilegios suficientes para
+            # consultar la dependencia en request.vars.dependencia
+            if not __acceso_permitido(user, 
+                                int(request.vars.dependencia), 
+                                    request.vars.es_espacio):
+                redirect(URL('inventarios'))
+
+            if request.vars.es_espacio == "True":
+        
+                # Se muestra el inventario del espacio
+                espacio_id = request.vars.dependencia
+                espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
+                dep_nombre = espacio.codigo
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.espacios_fisicos.id == request.vars.dependencia
+                                    ).select().first().dependencia
+                dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                    ).select().first().nombre
+
+                espacio_visitado = True
+
+                # Se muestra la lista de sustancias que tiene en inventario
+                inventario = __consultar_espacios(espacio_id, sust)
+
+                sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+                # Si se esta agregando una nueva sustancia, se registra en la DB
+                if request.vars.sustancia:
+                    __agregar_sustancia(espacio,
+                                        request.vars.sustancia, 
+                                        request.vars.total,
+                                        request.vars.uso_interno,
+                                        request.vars.unidad)
+
+            else:
+                # Se muestran las dependencias que componen a esta dependencia padre
+                # y se lista el inventario agregado
+                dep_id = request.vars.dependencia
+                dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+                dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
+                                      ).select(db.dependencias.ALL))
+                # Si la lista de dependencias es vacia, entonces la dependencia no 
+                # tiene otras dependencias por debajo (podria tener espacios fisicos
+                # o estar vacia)
+                if len(dependencias) == 0:
+                    # Buscando espacios fisicos que apunten a la dependencia escogida
+                    espacios = list(db(db.espacios_fisicos.dependencia == dep_id
+                                      ).select(db.espacios_fisicos.ALL))
+                    es_espacio = True
+
+                # Guardando el ID y nombre de la dependencia padre para el link 
+                # de navegacion de retorno
+                dep_padre_id = db(db.dependencias.id == request.vars.dependencia
+                                 ).select().first().unidad_de_adscripcion
+                # Si dep_padre_id es None, se ha llegado al tope de la jerarquia
+                # y no hay un padre de este nodo
+                if dep_padre_id:
+                    dep_padre_nombre = db(db.dependencias.id == dep_padre_id
+                                         ).select().first().nombre
+                # Se muestra como inventario el egregado de los inventarios que
+                # pertenecen a la dependencia del usuario
+                inventario = __solicitar_inventario_dep(dep_id, sust)
+
+        else:
+            # Dependencia a la que pertenece el usuario o que tiene a cargo
+            dep_id = user.f_dependencia
+            dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
+
+            # Se muestran las dependencias que componen a la dependencia que
+            # tiene a cargo el usuario y el inventario agregado de esta
+            dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
+                                  ).select(db.dependencias.ALL))
+
+            # Se muestra como inventario el egregado de los inventarios que
+            # pertenecen a la dependencia del usuario
+            inventario = __solicitar_inventario_dep(dep_id, sust)
+
+    return dict(dep_nombre=dep_nombre, 
+                dependencias=dependencias, 
+                espacios=espacios, 
+                es_espacio=es_espacio,
+                espacio_visitado=espacio_visitado,
+                dep_padre_id=dep_padre_id,
+                dep_padre_nombre=dep_padre_nombre,
+                direccion_id=direccion_id,
+                es_tecnico=es_tecnico,
+                inventario=inventario,
+                unidades_de_medida=unidades_de_medida,
+                retroceder=retroceder
+                )
+
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
 # a cargo
@@ -1291,8 +1701,8 @@ def inventarios_desechos():
                 ####################
                 # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                 # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
@@ -1507,8 +1917,8 @@ def inventarios_desechos():
                     ####################
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                     
@@ -1786,8 +2196,8 @@ def inventarios_desechos():
                     ####################
                     # Cuando se va a subir el sistema a produccion, descomentar la linea que dice "t_bitacora_desecho" y comentar la que dice "t_Bitacora_desecho"
                     # Analogamente, comentar la línea correcta cuando se está en ambiente de desarrollo
-                    # envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
-                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
+                    envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_Bitacora_desechos" entrada);', as_dict = True))
+                    #envases = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ' and e.id not in (select entrada.envase from "t_bitacora_desechos" entrada);', as_dict = True))
 
                     envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                     
@@ -2289,3 +2699,232 @@ def index():
 def sustancias():
     return locals()
 
+############################################################################
+############################################################################
+#       GENERACION DE REPORTES
+#############################################################################
+############################################################################
+
+def select_fecha():
+    now = datetime.datetime.now()
+    tablemes = SQLFORM.factory(Field('mes',requires=IS_IN_SET(['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']),
+            label=T('Seleccione mes')),
+        Field('year','integer',requires=IS_INT_IN_RANGE(1969,now.year+1,error_message='Debe introducir un año menor o igual al actual'),
+            label=T('Introduzca año'))
+        )
+    if tablemes.process().accepted:
+        if tablemes.vars.mes=="Enero":
+            x=1
+        elif tablemes.vars.mes=="Febrero":
+            x=2
+        elif tablemes.vars.mes=="Marzo":
+            x=3
+        elif tablemes.vars.mes=="Abril":
+            x=4
+        elif tablemes.vars.mes=="Mayo":
+            x=5
+        elif tablemes.vars.mes=="Junio":
+            x=6
+        elif tablemes.vars.mes=="Julio":
+            x=7
+        elif tablemes.vars.mes=="Agosto":
+            x=8
+        elif tablemes.vars.mes=="Septiembre":
+            x=9
+        elif tablemes.vars.mes=="Octubre":
+            x=10
+        elif tablemes.vars.mes=="Noviembre":
+            x=11
+        elif tablemes.vars.mes=="Diciembre":
+            x=12
+        redirect(URL('reportes','select_rl4',vars=dict(m=x,y=tablemes.vars.year)))
+    return locals()
+
+
+def generar_reporte():
+    wb = Workbook()
+    ws = wb.active
+    cen = Alignment(horizontal='center', vertical='distributed')
+    rig = Alignment(horizontal='right')
+    lef = Alignment(horizontal='left')
+    ft1 = Font(name='Arial', size=10, bold=True)
+    ft2 = Font(name='Arial', size=10, bold=False)
+    ft3 = Font(name='Arial', size=8)
+    ws.font = ft2
+    now = datetime.datetime.now()
+
+    ws1 = wb.create_sheet("Informe mensual")
+
+    #Encabezado
+    ws.title = "Informe mensual"
+    ws1.title = "Informe mensual"
+
+
+    #tamaño de las columnas
+    for i in ['A', 'D', 'E','F','G','J','K']:
+       ws.column_dimensions[i].width = 10
+       ws1.column_dimensions[i].width = 10
+    ws.column_dimensions['B'].width = 17
+    ws.column_dimensions['C'].width = 11
+    ws.column_dimensions['H'].width = 9
+    ws.column_dimensions['I'].width = 10
+    ws1.column_dimensions['B'].width = 17
+    ws1.column_dimensions['C'].width = 11
+    ws1.column_dimensions['H'].width = 9
+    ws1.column_dimensions['I'].width = 10
+
+        #tamaño de las filas
+    ws.row_dimensions[13].height = 40
+    ws1.row_dimensions[13].height = 40
+    for i in range(1,13):
+        ws.row_dimensions[i].height = 13
+        ws1.row_dimensions[i].height = 13
+    for i in range(14,29):
+        ws.row_dimensions[i].height = 12
+        ws1.row_dimensions[i].height = 12
+
+    #All Merges
+    ws.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    ws1.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws1.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    for i in range(13,28):
+        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
+        ws.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+        ws1.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
+        ws1.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+
+    for i in range(29,33):
+        ws.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+        ws1.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+
+    #titulos y datos
+    z = ['C5', 'J7', 'I9', 'J9', 'K9','B7','B8','B9','B10','B11','I10','J10','K10']
+    ws['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws['J7'] = 'FECHA'
+    ws['I9'] = 'DIA'
+    ws['J9'] = 'MES'
+    ws['K9'] = 'AÑO'
+    ws1['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws1['J7'] = 'FECHA'
+    ws1['I9'] = 'DIA'
+    ws1['J9'] = 'MES'
+    ws1['K9'] = 'AÑO'
+
+
+    for i in range(5):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = cen
+        ws1[z[i]].font = ft1
+        ws1[z[i]].alignment = cen
+
+    ws['B7'] = 'OPERADOR:'
+    ws['B8'] = 'LICENCIA:'
+    ws['B9'] = 'PERMISO DEL CICPC:'
+    ws['B10'] = 'RIF:'
+    ws['B11'] = 'MES-AÑO:'
+    ws1['B7'] = 'OPERADOR:'
+    ws1['B8'] = 'LICENCIA:'
+    ws1['B9'] = 'PERMISO DEL CICPC:'
+    ws1['B10'] = 'RIF:'
+    ws1['B11'] = 'MES-AÑO:'
+
+    for i in range(5,10):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = rig
+        ws1[z[i]].font = ft1
+        ws1[z[i]].alignment = rig
+
+    ws['I10'] = now.day
+    ws['J10'] = now.month
+    ws['K10'] = now.year
+    ws1['I10'] = now.day
+    ws1['J10'] = now.month
+    ws1['K10'] = now.year
+
+    for i in range(10,13):
+        ws[z[i]].font = ft2
+        ws[z[i]].alignment = cen
+        ws1[z[i]].font = ft2
+        ws1[z[i]].alignment = cen
+
+    ws['A28'] = 'Nota:'
+    ws['A28'].font = ft1
+    ws['A28'].alignment = lef
+    ws1['A28'] = 'Nota:'
+    ws1['A28'].font = ft1
+    ws1['A28'].alignment = lef
+
+    w = ['C7', 'C8', 'C9', 'C10', 'C11','A13','B13','D13','E13','F13','G13','H13','I13','J13']
+
+    for i in range(5):
+        ws[w[i]].font = ft2
+        ws1[w[i]].font = ft2
+
+    ws['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws['C8'] = '2014LIC0256'
+    ws['C9'] = 'No. 1311'
+    ws['C10'] = 'G-20000063-5'
+    ws['C11'] = str(now.month)+'/'+str(now.year)
+    ws['A13'] = 'N°'
+
+    ws['B13'] = 'Sustancia Química Controlada'
+
+    ws['D13'] = 'Código Arancelario'
+
+    ws['E13'] = 'Saldo Físico Inicial'
+
+    ws['F13'] = 'Total Entradas'
+
+    ws['G13'] = 'Total Salidas'
+
+    ws['H13'] = 'Saldo Físico Final'
+
+    ws['I13'] = 'Unidad de Medida'
+
+    ws['J13'] = 'Observaciones'
+
+    ws1['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws1['C8'] = '2014LIC0256'
+    ws1['C9'] = 'No. 1311'
+    ws1['C10'] = 'G-20000063-5'
+    ws1['C11'] = str(now.month)+'/'+str(now.year)
+    ws1['A13'] = 'N°'
+
+    ws1['B13'] = 'Sustancia Química Controlada'
+
+    ws1['D13'] = 'Código Arancelario'
+
+    ws1['E13'] = 'Saldo Físico Inicial'
+
+    ws1['F13'] = 'Total Entradas'
+
+    ws1['G13'] = 'Total Salidas'
+
+    ws1['H13'] = 'Saldo Físico Final'
+
+    ws1['I13'] = 'Unidad de Medida'
+
+    ws1['J13'] = 'Observaciones'
+
+
+    for i in range(5,14):
+        ws[w[i]].font = ft1
+        ws[w[i]].alignment = cen
+        ws1[w[i]].font = ft1
+        ws1[w[i]].alignment = cen
+
+
+    x = ['A14','A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26']
+    y = ['01','02','03','04','05','06','07','08','09','10','11','12','13']
+    for i in range(0,13):
+        ws[x[i]] = y[i]
+        ws[x[i]].font = ft3
+        ws[x[i]].alignment = cen
+        ws1[x[i]] = y[i]
+        ws1[x[i]].font = ft3
+        ws1[x[i]].alignment = cen
+    x = ['B14','B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26']
+    wb.save('Reporte Universidad Simon Bolivar.xlsx')
+    response.stream('Reporte Universidad Simon Bolivar.xlsx',attachment=True, filename='Reporte Universidad Simon Bolivar.xlsx')
+    return locals()

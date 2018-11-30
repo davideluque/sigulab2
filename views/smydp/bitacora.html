@@ -33,7 +33,7 @@
     <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
     <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios')}}">Inventarios</a>
     <a class="breadcrumb-item active" href="{{=URL('..', 'sigulab2', 'smydp/inventarios', vars=dict(dependencia=espacio_id, es_espacio='True'))}}">{{=espacio_nombre}}</a>
-    <span class="breadcrumb-item active">Bitácora</span>
+    <span class="breadcrumb-item active">Balance</span>
   </div>
 </nav>
 <!-- Fin del Breadcrumb de navegación --> 
@@ -42,8 +42,9 @@
 <div id="inventario-dependencia" class="container">
 <div class="row">
   <div>
-    <h3 id="titulo" class="titulos"> Bitácora</h3>
-    <h3 id="subtitulo" class="titulos"> {{=sust_nombre}} ({{=espacio_nombre}})</h3>
+    <h3 id="titulo" class="titulos"> BALANCE</h3>
+    <h3 id="subtitulo" class="titulos"> {{=sust_nombre}}</h3>
+    <h3 id="subtitulo" class="titulos"> ({{=espacio_nombre}})</h3>
   </div>
   <!-- Inicio Boton Agregar Sustancia -->
   <div class="container" id="containerAgregar">
@@ -71,8 +72,9 @@
       <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
         <thead>
             <tr id="titulosListado">
-                <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Hora</th>
+                <th class="camposTabla linksNombres">Fecha Uso</th>
+                <th class="camposTabla linksNombres">Hora Carga</th>
+                <th class="camposTabla linksNombres">Fecha Carga</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Ingreso ({{=unidad_medida.f_abreviatura}})</th>
                 <th class="camposTabla linksNombres">Consumo ({{=unidad_medida.f_abreviatura}})</th>
@@ -87,8 +89,10 @@
             {{usuario = registro['t_Personal']}}
             {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
             <tr>
-                <td class="camposTabla">{{=fecha[0]}}</td>
+                <td class="camposTabla">{{=reg['f_fechaUso']}}</td>
                 <td class="camposTabla">{{=fecha[1]}}</td>
+                <td class="camposTabla">{{=fecha[0]}}</td>
+                
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
@@ -99,8 +103,9 @@
 
         <tfoot id="collapseFiltros">
             <tr>
-                <th class="camposTabla linksNombres">Fecha</th>
-                <th class="camposTabla linksNombres">Hora</th>
+                <th class="camposTabla linksNombres">Fecha Carga</th>
+                <th class="camposTabla linksNombres">Hora Carga</th>
+                <th class="camposTabla linksNombres">Fecha Uso</th>
                 <th class="camposTabla linksNombres">Descripción</th>
                 <th class="camposTabla linksNombres">Ingreso</th>
                 <th class="camposTabla linksNombres">Consumo</th>

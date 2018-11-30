@@ -7,6 +7,15 @@
   	<link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
 
  	<!-- DataTables -->
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+ 
+	<style type="text/css">
+		div.dt-buttons {
+		  float: right;
+		}
+		
+	</style>
  	<link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
  	<link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />	
@@ -17,7 +26,13 @@
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
  	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
- 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	  
+ 	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	 
+
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+  	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+ 	<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+ 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+ 	<script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script> 
  	<script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
  	<!-- Web2py JS - Especialmente para AJAX -->
  	<script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -45,28 +60,33 @@
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
+  
 <!-- Inicio de la seccion de cajas de dependencias y espacios fisicos --> 
-	<div class="container titulo">
-	
+	<div class="container titulo ">
+	<h3 class="inicio-titulo">INVENTARIO DE SyM</h3>
+	{{ if dep_padre_nombre == 'DIRECCIÓN': }}
+		{{ dep_padre_nombre = 'ULAB'}}
+	{{ pass }}
 	{{if es_tecnico:}}
 		<!-- Si el usuario es tecnico y se encuentra en la vista de los espacios fisicos
 		de alguna seccion que tiene "a cargo" o consultando el inventario de un espacio
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
-		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}">
-	    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-			</a>
+		<div class="col-xs-2">
+			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}')">
+				<i class="fas fa-arrow-left"></i>	    		
+			</button>
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="inicio-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="inicio-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si el usuario es tecnico y se encuentra en una seccion o un espacio -->
 		{{else:}}
 		<div class="col-xs-12">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		{{pass}}
 
@@ -74,85 +94,86 @@
 		<!-- Si el usuario no es tecnico y hay un nivel superior en la jerarquia, se retrocede al
 		siguiente nivel superior de jerarquia -->
 		{{if dep_padre_id:}}
-		<div class="col-xs-2 boton-retorno">
-			<p class="padre dep-titulo"> {{=dep_padre_nombre}} </p>
-				<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
-				los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
-				request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
-				en el controlador-->
-				{{if dep_padre_id == direccion_id:}}
-	    		<a class="boton" href="{{=URL('inventarios')}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-	    		</a>
-	    		{{else:}}
-    			<a class="boton" href="{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}">
-		    		<img class="icono_regresar" src="{{=URL('static', 'images/regresar.png')}}">
-	    		</a>
-	    		{{pass}}
+		<div class="col-xs-2">
+			<!-- Si la flecha debe regresar al inventario de la direccion (en caso de que se tengan
+			los permisos) simplemente se redirije a 'inventarios', pues de no hacerlo, se enviaran
+			request.vars.dependencia != None lo cual rompe con el flujo de ejecucion programado
+			en el controlador-->
+			{{if dep_padre_id == direccion_id:}}
+			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('inventarios')}}')">
+				<i class="fas fa-arrow-left"></i>	
+			</button>
+			{{else:}}
+			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False'))}}')">
+				<i class="fas fa-arrow-left"></i>	    		
+			</button>
+			{{pass}}
 		</div>
 		<div class="col-xs-8">
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
+			<h3 class="dep-titulo">{{=dep_padre_nombre}}</h3>
+			<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
 		</div>
 		<div class="col-xs-2"> </div>
 		<!-- Si no es tecnico y no hay mas niveles superiores en la jerarquia, se muestra como titulo
 		el nombre de la dependecia a la que pertenece el usuario -->
 		{{else:}}
 		<div class="col-xs-12">
-			{{if dep_nombre == 'DIRECCIÓN':}}
-			<h3 class="dep-titulo"> ULAB </h3>
-			{{else:}}
-			<h3 class="dep-titulo"> {{=dep_nombre}} </h3>
-			{{pass}}
+			<h3 class="dep-titulo"> {{=dep_padre_nombre}} </h3>
+			{{ if dep_nombre == 'DIRECCIÓN': }}
+				<h3 class="dep-titulo"> ULAB</h3>
+			{{ else: }}
+				<h4 class="dep-titulo"> {{=dep_nombre}} </h4>
+			{{ pass }}
 		</div>
 		{{pass}}
 	{{pass}}
 	</div>
 
 	<div class="container">
-		<div id="fila1" class="row">
-		</div>
-		<!-- 
+   
+		<a  href="{{=URL('sigulab2', 'smydp', 'generar_reporte')}}">
+		  <button class="btn btn-default">Generar Reporte</button>
+		</a>
+	  
+	</div>
+	<!-- 
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
-		-->
+	-->
+	<div class="container">
+		<div id="fila1" class="row">
+		</div>
 		{{ if espacios: }}
+			{{ title = "Espacio Físico" }}
 			{{dependencias = espacios}}
-		{{pass}}
-		{{ n = len(dependencias) }}
-		{{ filas = n//4 if n%4 == 0 else n//4+1 }}
-		{{ k = 0 }}
-		{{ while k < filas:}}
-			<div id="fila2" class="row">
-				<div class="col-xs-3 col-sm-1"></div>
-				<div class="col-xs-6 col-sm-10">
-					<!-- El primer elemento siempre va a ir, pues si existe su fila es porque tiene al menos un elemento -->
-					<div class="col-sm-3 columnas">
-						<a href="{{=URL('inventarios',vars=dict(dependencia=dependencias[4*k].id, es_espacio=es_espacio))}}" class="dependencia">
-						{{if espacios:}}
-							{{=dependencias[4*k].codigo}}</a>
-						{{else:}}
-							{{=dependencias[4*k].nombre}}</a>
-						{{pass}}
-					</div>
-					{{ for i in range(1,4): }}
-						{{ if 4*k+i < n: }}
-							<div class="col-sm-3 columnas">
-								<a href="{{=URL('inventarios',vars=dict(dependencia=dependencias[4*k+i].id, es_espacio=es_espacio))}}" class="dependencia">
-									{{if espacios:}}
-										{{=dependencias[4*k+i].codigo}}</a>
-									{{else:}}
-										{{=dependencias[4*k+i].nombre}}</a>
-									{{pass}}
-								</a>
-							</div>
-						{{ pass }}
-					{{ pass }}
-				</div>
-				<div class="col-xs-3 col-sm-1"></div>
+		{{ elif dep_nombre.find("DIRECCIÓN") != -1: }}
+			{{ title = "Dependencia" }}
+		{{else: }}
+			{{ title = "Secciones" }}
+		{{ pass }}
+		{{ if len(dependencias) > 0: }}
+				<button onclick="show_seccion()">
+					Seleccionar: {{=title}}
+					<span class="caret"></span>
+				</button>
+		{{ pass }}
+		{{ if espacios: }}
+			<div class="grid-container-ef" id="secciones" style="display: none">
+		{{ else: }}
+			<div class="grid-container" id="secciones" style="display: true">
+		{{ pass }}	
+			{{ for espacio in dependencias: }}
+			<div class="grid-item" onclick="redirect('{{=URL('inventarios',vars=dict(dependencia=espacio.id, es_espacio=es_espacio))}}');">
+				{{if espacios:}}
+					{{ =espacio.codigo }}
+				{{else:}}
+					{{ =espacio.nombre }}
+				{{pass}}
 			</div>
-			{{k=k+1}}
-		{{pass}}
+			{{ pass }}
+		</div>
 	</div>
+	
 
 <!-- Fin de la seccion de cajas de dependencias y espacios fisicos --> 
 
@@ -168,11 +189,82 @@
 
 <!-- Fin de la seccion con la lista de sustancias en el inventario --> 
 
-<script>
-  // Set blue bar below INICIO text.
-  document.getElementById("smydp").className += " active";
-  }
+
+<script type="text/javascript">
+	// Funcion para que mostrar el grid de espacios fisicos
+	function grid_ef(){
+		var grid = document.getElementById("secciones");
+		grid.classList.remove("grid-container");
+		grid.classList.add("grid-container-ef");
+	}
 </script>
+<script type="text/javascript">
+	function redirect(dir){
+		window.location.href = dir;
+	}
+	
+	function show_seccion() {
+		var x = document.getElementById("secciones");
+		if (x.style.display === "none") {
+			x.style.display = "grid";
+			x.style.webkitAnimation = "fadein 2s";
+			x.style.marginTop = "20px";
+		} else {
+			x.style.webkitAnimation = "fadeOut 1s";
+			setTimeout(function () {
+				x.style.display = "none";
+			}, 500);
+		}
+	}
+
+	function hide_seccion(){
+		var x = document.getElementById("secciones");
+		x.style.display = "none";
+	}
+</script>
+<script>
+
+	var filtros = false;
+  
+	$(document).ready(function() {
+		// Setup - add a text input to each footer cell
+		$('#datatable tfoot th').each( function () {
+			var title = $(this).text();
+			$(this).html( '<input type="text" placeholder="Filtro" />' );
+		} );
+	 
+		// DataTable
+		var table = $('#datatable').DataTable();
+		
+		// Apply the search
+		table.columns().every( function () {
+			var that = this;
+	 
+			$( 'input', this.footer() ).on( 'keyup change', function () {
+				if ( that.search() !== this.value ) {
+					that
+						.search( this.value )
+						.draw();
+				}
+			} );
+		} );
+  
+		$('#datatable tfoot tr').appendTo('#datatable thead');
+		$("#datatable thead tr").not("#titulosListado").css("display","none");
+	} );
+  
+	function mostrarFiltro() {
+		if (filtros){
+		  $("#datatable thead tr").not("#titulosListado").css("display","none");
+		  filtros = false
+		}
+		else{
+		  $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+		  filtros = true
+		}
+  
+	}
+ </script>
 
 
 <!-- Datatables-->
@@ -236,22 +328,68 @@
   }
 </script>
  
-<script language="javascript">
-  var table = $('#datatable').DataTable({
-    language: {
-      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },
-   initComplete: function(){
-      var api = this.api();
+ <script language="javascript">
+  
+	var table = $('#datatable').DataTable({
+	  'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+	  //dom: 'Bfrtip',
+	  language: {
+		url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  },
+	  "columnDefs": [
+		{ "width": "30%", "targets": 0 , className: 'dt-body-left'},
+		{ "width": "10%", "targets": [1,2,3] }
+	  ],
+	 initComplete: function(){
+		var api = this.api();
+  
+		new $.fn.dataTable.Buttons(api, {
+		  buttons: [
 
-      new $.fn.dataTable.Buttons(api, {
-         buttons: [
-            'copy', 'pdf', 'excel', 'csv', 'print'
-         ]
-      });
-      api.buttons().container().appendTo('#buttons');  
-   }
-  });
+			{
+			text:'<i class="fa fa-filter"></i>',
+			action: function(){
+				mostrarFiltro()
+			},
+			className: 'boton-sigulabIzq'
+			},
+  
+			  {
+				  extend: 'collection',
+				  text: '<i class="fas fa-save"></i>',
+				  className: 'boton-sigulab',
+				  buttons: [
+					  { extend:'copy', text: 'Copiar' } ,
+					  'excel',
+					  'csv',
+					  'pdf'
+				  ]
+			  },
+			  { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+		  ]
+		});
+		//$('#botonModal').addClass('pull-left')
+		$('#filtrar').addClass('pull-left');
+		$('#espacioBuscar').addClass('pull-left');
+  
+  
+		$('.dataTables_filter').appendTo('#buttons');
+  
+		api.buttons().container().appendTo('#buttons');
+		//$('.dt-buttons').append($('#botonModal'));
+		$('.dt-buttons').append($('#filtrar'));
+		$('#buttons').append('<br><br>');
+		$('.dataTables_info').addClass('pull-right');
+		$('.dataTables_filter').addClass('pull-left');
 
-</script>
+		$('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+		$('#datatable_next').html('<span class="fa fa-arrow-right" />');
+  
+		
+	 }
+	});
+
+
+
+  </script>
 {{end}}

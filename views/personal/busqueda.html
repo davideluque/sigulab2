@@ -43,7 +43,7 @@
 						<div class="col-md-12">
 	                        <label>Gremio</label>
 							<select class="form-control" id="sel2" name="gremio_busqueda">
-								<option disabled selected value value=""> -- Selecciona una opción -- </option>
+								<option enabled selected value=""> -- Selecciona una opción -- </option>
 							  {{for gremio in gremios:}}
 							  <option value="{{=gremio}}">{{=gremio}}</option>
 							  {{pass}}
@@ -67,7 +67,7 @@
 					  <div class="col-md-6 ">
 						  <label for="Categoria">Categoria de la Competencia:</label>  
 						  <select id="Categoria" class="form-control" id="sel2" name="categoria_busqueda">
-								<option disabled selected value value=""> -- Selecciona una opción -- </option>
+								<option enabled selected value=""> -- Selecciona una opción -- </option>
 							  {{for categoria in competencias:}}
 							  <option value="{{=categoria}}">{{=categoria}}</option>
 							  {{pass}}
@@ -81,7 +81,7 @@
 							por años de servicio en administracion publica -->
 							<label for="Anios">Años de Servicio en la ULAB:</label>  
 							<select name="anios_busqueda" id="Anios" class="form-control" id="sel2">
-								<option disabled selected value value=""> -- </option>
+								<option enabled selected value=""> -- </option>
 								<option value="10">10</option>
 								<option value="15">15</option>
 								<option value="20">20</option>

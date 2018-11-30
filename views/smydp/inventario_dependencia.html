@@ -3,10 +3,7 @@
 <!-- Inicio Listado de sustancias -->
 <div id="inventario-dependencia" class="container">
 <div class="row">
-    <div id="buttons">
-      <!-- Filtrado -->
-        <button type="button" id="filtrar" onclick="mostrarFiltro()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
-      <!-- Filtrado -->    
+    <div id="buttons"> 
     </div>
     <br>
 
@@ -27,7 +24,9 @@
         <tbody>
           {{for id_,sust in inventario.iteritems():}}
             <tr>
-                <td class="camposTabla">{{=sust['f_nombre']}}</td>
+                <td class="camposTabla">
+                    <a href="{{=URL('sustancia',vars=dict(sust=sust['f_nombre']))}}">{{=sust['f_nombre']}}</a>
+                </td>
                 <!-- *!* Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust['f_cas'] if sust['f_estado'] else ''}}</td>
                 <td class="camposTabla">{{=sust['f_estado'][0] if sust['f_estado'] else ''}}</td>

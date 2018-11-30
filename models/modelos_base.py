@@ -193,12 +193,10 @@ db.define_table(
     
     Field('ext_USB', 'string', label=T('Extension Telefonica USB')),
 
+    
     Field('ext_USB_1', 'string', default = "", label=T('Extension USB 1')),
-
     Field('ext_USB_2', 'string', default = "", label=T('Extension USB 2')),
-
     Field('ext_USB_3', 'string', default = "", label=T('Extension USB 3')),
-
     Field('ext_USB_4', 'string', default = "", label=T('Extension USB 4')),
 
     Field('ext_interna', 'string', label=T('Extension Interna')),

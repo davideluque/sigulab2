@@ -6,8 +6,14 @@ vehículos y solicitudes de préstamos.
 
 # Importamos el diccionario con las categorias de los vehiculos.
 from info_inventarios import CATEGORIAS_VEHICULOS, CLASIFICACIONES_VEHICULOS
+from datetime import datetime
 
-# < -------- Funciones privadas de SMDYP ------------>
+# < -------- Funciones privadas de Inventarios ------------>
+
+# Función que envía un correo con los datos suministrados
+def __enviar_correo(destinatario, asunto, cuerpo):
+    mail = auth.settings.mailer
+    mail.send(destinatario, asunto, cuerpo)
 
 # Funcion que devuelve un diccionario, con las categorias y
 #subcategorias de los vehiculos
@@ -48,7 +54,7 @@ def __is_bool(bool_var):
 # None si no lo hace
 def __find_dep_id(nombre):
 
-    dep_id = db(db.dependencias.nombre == nombre).select()[0].id   
+    dep_id = db(db.dependencias.nombre == nombre).select()[0].id
     return dep_id
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
@@ -59,6 +65,12 @@ def __get_inventario_espacio(espacio_id=None):
 # Dado el id de un bien mueble, retorna las fichas de mantenimiento del bien.
 def __get_mantenimiento_bm(bm_id=None):
     return db(db.historial_mantenimiento_bm.hmbm_nro == bm_id).select()
+
+# Dado el id de un vehículo, retorna el historial de préstamo del vehículo
+def __get_prestamos_vh(vh_id=None):
+    prestamos = list(db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select())
+    prestamos.reverse()
+    return prestamos
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -232,6 +244,87 @@ def __get_inventario_herramientas_dep(dep_id):
 
     return inventario
 
+# Dado el id de un usuario, determina los ids de las dependencias de las cuales es jefe
+def __es_jefe_de(user_id):
+    dependencias = db(db.dependencias.id).select()
+
+    lista_ids = set()
+    for dep in dependencias:
+        if dep['id_jefe_dependencia'] == user_id:
+            lista_ids.add(dep['id'])
+
+    return lista_ids
+
+# Determina la cadena jerárquica de dependencias
+def __ids_dependencias_jefe(dep_id):
+    try:
+        dependencia = db(db.dependencias.id == dep_id).select().first()
+    except:
+        return set()
+
+    ids_validos = set()
+    ids_validos.add(dep_id)
+
+    while dep_id != 1:
+        dep_id = dependencia['unidad_de_adscripcion']
+        ids_validos.add(dep_id)
+        try:
+            dependencia = db(db.dependencias.id == dep_id).select().first()
+        except:
+            return ids_validos
+
+    return ids_validos
+
+# Dado el id de un usuario y el id de un vehículo, determina si el usuario puede
+# ver el vehícuo dada su visibilidad
+def __puede_ver_vehiculo(user_id, vh_id):
+    try:
+        vehiculo = db(db.vehiculo.id == vh_id).select().first()
+    except:
+        return False
+
+    # Los que son visibles los puede ver todo el mundo
+    if vehiculo['vh_oculto'] == 0:
+        return True
+
+    # El super-usuario puede ver todos los vehículos
+    if auth.user.id == 1:
+        return True
+
+    # El responsable siempre puede ver su vehiculo
+    if vehiculo['vh_responsable'] == user_id:
+        return True
+
+    # El custodio siempre puede ver su vehiculo
+    if vehiculo['vh_custodio'] == user_id:
+        return True
+
+    # El personal de la misma dependencia siempre puede ver su vehiculo
+    try:
+        personal = db(db.t_Personal.f_usuario == user_id).select()[0]
+        dependencia_id = personal.f_dependencia
+    except:
+        return False
+
+    if vehiculo['vh_dependencia'] == dependencia_id:
+        return True
+
+    # Por último revisamos cadenas de jefes
+    dep_es_jefe_usuario = __es_jefe_de(user_id)
+    dep_jefes_autorizados = __ids_dependencias_jefe(vehiculo['vh_dependencia'])
+
+    # Intersección entre los departamentos que el usuario es jefe
+    # y los departamenos autorizados
+    inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
+
+    # Si alguno coincide, puede ver
+    if len(inter) is not 0:
+        return True
+
+    # Si ningún criterio se cumple, impedimos la visibilidad
+    return False
+
+
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
 def __get_vh_dep(dep_id=None):
@@ -273,7 +366,7 @@ def __agregar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
         diametro = None
 
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
-    inv_id = db.bien_mueble.insert(
+    db.bien_mueble.insert(
         bm_nombre=nombre,
         bm_num=no_bien,
         bm_placa=no_placa,
@@ -428,7 +521,7 @@ def __agregar_mantenimiento_bm(no_bien, fecha_sol, codigo, tipo, servicio, accio
                 descripcion, proveedor, fecha_inicio, fecha_fin, tiempo_ejec,
                 fecha_cert, observacion):
 
-    inv_id = db.historial_mantenimiento_bm.insert(
+    db.historial_mantenimiento_bm.insert(
             hmbm_nro=no_bien,
             hmbm_fecha_sol=fecha_sol,
             hmbm_codigo=codigo,
@@ -473,9 +566,9 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         diametro = None
 
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
-    inv_id = db.sin_bn.insert(
+    db.sin_bn.insert(
         sb_cantidad=cantidad,
-        sb_nombre=nombre,  
+        sb_nombre=nombre,
         sb_marca=marca,
         sb_modelo=modelo,
         sb_descripcion=descripcion,
@@ -501,7 +594,7 @@ def __agregar_material(nombre, marca, modelo, cantidad, espacio, ubicacion,
         sb_crea_ficha=user,
     )
     db.bitacora_general.insert(
-        f_accion="[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: ".format(nombre, espacio_nombre)
+        f_accion="[inventarios] Añadido material de laboratorio. Nombre: {} Espacio físico: {}".format(nombre, espacio_nombre)
     )
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
@@ -563,6 +656,43 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
     return True
     #return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
+# Agrega una nueva solicitud de préstamos
+def __solicitar_prestamo_vh(
+        solicitante, vehiculo, fecha_solicitud, fecha_prevista_devolucion,
+        tiempo_previsto, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
+        nro_conductor, licencia_conducir, certificado_medico, certificado_psicologico,
+        nombre_usuario, ci_usuario, nro_usuario):
+
+    usuario = db(db.auth_user.id == solicitante).select().first()
+    vh = db(db.vehiculo.id == vehiculo).select().first()
+
+    db.historial_prestamo_vh.insert(
+        hpvh_vh_id=vehiculo,
+        hpvh_fecha_solicitud=fecha_solicitud,
+        hpvh_fecha_prevista_devolucion=fecha_prevista_devolucion,
+        hpvh_solicitante=solicitante,
+        hpvh_motivo=motivo_prestamo,
+        hpvh_ruta=ruta,
+        hpvh_tiempo_estimado_uso=tiempo_previsto,
+        hpvh_conductor=nombre_conductor,
+        hpvh_ci_conductor=ci_conductor,
+        hpvh_nro_celular_conductor=nro_conductor,
+        hpvh_nro_licencia_conductor=licencia_conducir,
+        hpvh_certificado_psicologico=certificado_psicologico,
+        hpvh_certificado_medico=certificado_medico,
+        hpvh_usuario=nombre_usuario,
+        hpvh_nro_celular_usuario=nro_usuario,
+        hpvh_ci_usuario=ci_usuario
+    )
+
+    db.bitacora_general.insert(
+        f_accion="[préstamos] Creada solicitud de préstamos. Vehículo: {}. Solicitante: {}".format(
+            vh.vh_marca + " " + vh.vh_modelo + " " + vh.vh_placa,
+            usuario.first_name + " " + usuario.last_name
+        )
+    )
+
+    return True
 
 # Registra un nueva material/consumible en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo
@@ -988,9 +1118,8 @@ def __agregar_modificar_bm(nombre, no_bien, no_placa, marca, modelo, serial,
 # < ------- Vistas del modulo de inventario -------->
 def index():
     validaciones_pendientes = validaciones()
-    prestamos_pendientes = prestamos()['prestamos']
+    prestamos_pendientes = prestamos()['cant_prestamos']
     numero_validaciones = 0
-    numero_prestamos = 0
     if (
         len(validaciones_pendientes['inventario'][0]) != 0 or \
         len(validaciones_pendientes['inventario'][1]) != 0 or \
@@ -1009,13 +1138,10 @@ def index():
         len(validaciones_pendientes['inventario_eliminar'][2]) + \
         len(validaciones_pendientes['inventario_vehiculos']) + \
         len(validaciones_pendientes['inventario_eliminar_vehiculos'])
-    
-    if len(prestamos_pendientes) > 0:
-        numero_prestamos = len(prestamos_pendientes)
- 
+
     return dict(
         numero_validaciones=numero_validaciones,
-        numero_prestamos=numero_prestamos
+        numero_prestamos=prestamos_pendientes
     )
 
 @auth.requires(lambda: __check_role())
@@ -1081,7 +1207,11 @@ def vehiculos():
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehículo.
-        dependencia_escogida = db(db.dependencias.id == int(request.vars.dependencia)).select()[0]
+        id_dep_real = int(request.vars.dependencia)
+        if id_dep_real is None:
+            id_dep_real = user_dep_id
+
+        dependencia_escogida = db(db.dependencias.id == id_dep_real).select()[0]
 
         if dependencia_escogida.id_sede == 1:
             sede_verbosa = "Sartenejas"
@@ -1272,7 +1402,7 @@ def vehiculos():
             dep_nombre = db(db.dependencias.id == user_dep_id
                            ).select().first().nombre
 
-            es_espacio = True               
+            es_espacio = True
         # Si el jefe de seccion no ha seleccionado un espacio sino que acaba de
         # entrar a la vista inicial de inventarios
         else:
@@ -1311,7 +1441,7 @@ def vehiculos():
                         __is_bool(request.vars.es_espacio)):
                     redirect(URL('vehiculos'))
 
-                try: 
+                try:
                     # Se muestra el inventario del espacio
                     espacio_id = request.vars.dependencia
                     espacio = db(db.espacios_fisicos.id == espacio_id).select()[0]
@@ -1335,7 +1465,7 @@ def vehiculos():
 
                 espacio_visitado = True
 
-                
+
             else:
                 if not (__is_valid_id(request.vars.dependencia, db.dependencias)  and
                         __is_bool(request.vars.es_espacio)):
@@ -1420,6 +1550,18 @@ def vehiculos():
     else:
         dep_id = 1
 
+    # Ocultamos inventario acorde a lo requerido
+    inventario_visible = []
+    id_usuario = auth.user.id
+    for vh in inventario:
+        if __puede_ver_vehiculo(id_usuario, vh['id']):
+            inventario_visible.append(vh)
+
+    try:
+        dep_id = db(db.dependencias.nombre == dep_nombre).select().first().id
+    except:
+        pass
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1429,7 +1571,7 @@ def vehiculos():
                 dep_padre_nombre=dep_padre_nombre,
                 direccion_id=direccion_id,
                 es_tecnico=es_tecnico,
-                inventario=inventario,
+                inventario=inventario_visible,
                 retroceder=retroceder,
                 categorias=dict_categorias,
                 clasificaciones=dict_clasificaciones,
@@ -1759,6 +1901,7 @@ def detalles_mod_vehiculo():
     }
 
     mantenimiento = __get_mantenimiento_vh(vehiculo_original['id'])
+    prestamos = __get_prestamos_vh(vehiculo_original['id'])
 
     if request.vars.si:
         db(db.vehiculo.id == vh_id).select().first().update_record(
@@ -1823,15 +1966,15 @@ def detalles_mod_vehiculo():
 
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -1843,20 +1986,21 @@ def detalles_mod_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehiculo['mvh_num'],
-        'Propietario': vehiculo['mvh_propietario'],
-        'Placa': vehiculo['mvh_placa'],
         'Marca': vehiculo['mvh_marca'],
         'Modelo / Código': vehiculo['mvh_modelo'],
         'Año': vehiculo['mvh_ano'],
+        'Color': vehiculo['mvh_color'],
+        'Placa': vehiculo['mvh_placa'].upper(),
+        'Propietario': vehiculo['mvh_propietario'],
         'Serial de carroceria': vehiculo['mvh_serial_carroceria'],
         'Serial de motor': vehiculo['mvh_serial_motor'],
         'Serial de chasis': vehiculo['mvh_serial_chasis'],
-        'Color': vehiculo['mvh_color'],
         'Clase': vehiculo['mvh_clase'],
         'Tipo': vehiculo['mvh_tipo'],
         'Clasificación': vehiculo['mvh_clasificacion'],
@@ -1868,13 +2012,14 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo['mvh_capacidad_carga']) + " " + vehiculo['mvh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo['mvh_intt'],
         'Rines': vehiculo['mvh_rines'],
+        'Visibilidad': None if vehiculo['mvh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo['mvh_observaciones'],
     }
 
     caracteristicas_originales_dict = {
         'Nº Bien Mueble': vehiculo_original['vh_num'],
         'Propietario': vehiculo_original['vh_propietario'],
-        'Placa': vehiculo_original['vh_placa'],
+        'Placa': vehiculo_original['vh_placa'].upper(),
         'Marca': vehiculo_original['vh_marca'],
         'Modelo / Código': vehiculo_original['vh_modelo'],
         'Año': vehiculo_original['vh_ano'],
@@ -1893,6 +2038,7 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo_original['vh_capacidad_carga']) + " " + vehiculo_original['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo_original['vh_intt'],
         'Rines': vehiculo_original['vh_rines'],
+        'Visibilidad': None if vehiculo_original['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo_original['vh_observaciones'],
     }
 
@@ -1908,7 +2054,8 @@ def detalles_mod_vehiculo():
         caracteristicas_dict=caracteristicas_dict,
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
-        sede_id=sede_id
+        sede_id=sede_id,
+        historial_prestamos=prestamos
     )
 
 @auth.requires(lambda: __check_role())
@@ -2473,6 +2620,244 @@ def detalles_herramientas():
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_prestamo():
+    """
+    GET: Muestra en pantalla los detalles de un préstamo o un error
+    si un préstamo no existe.
+
+    POST: Permite al custodio o responsable aprobar o rechazar una solicitud de
+    préstamo.
+    """
+
+    prestamo_id = request.vars['prestamo']
+
+    try:
+        prestamo = db(db.historial_prestamo_vh.id == prestamo_id).select().first()
+    except:
+        return "Préstamo inválido."
+
+    try:
+        vehiculo = db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()
+    except:
+        return "Vehículo inválido."
+
+    try:
+        solicitante = db(db.auth_user.id == prestamo['hpvh_solicitante']).select().first()
+    except:
+        return "Solicitante inválido."
+
+    esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    # Si el usuario autorizado marcó que quería aprobar la solicitud
+    if esta_autorizado and request.vars.aprobado:
+        # Actualizamos la entrada en la base de datos
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_autorizado_por=auth.user.id,
+            hpvh_razon_rechazo=motivo,
+            hpvh_estatus="Solicitud aprobada: en espera"
+        )
+
+        # Colocamos un estatus especial al vehículo
+        db(db.vehiculo.id == vehiculo.id).update(
+            vh_estatus = "En préstamo"
+        )
+
+        # Guardamos información en bitácora
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Aceptada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        asunto_correo = "[SIGULAB] Solicitud de Préstamo #%s Aprobada" % prestamo_id
+
+        # Enviamos notificación al responsable
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        # Enviamos notificación al solicitante
+        email_solicitante = solicitante.email
+        mensaje_aprobacion_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "en fecha {}. Puede proceder a contactar al responsable del vehículo para retirar las llaves otros documentos.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        # Manda correo rechazo a solicitante
+        __enviar_correo(
+            email_solicitante,
+            asunto_correo,
+            mensaje_aprobacion_solicitante
+        )
+
+        session.flash = "Se ha aprobado la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
+    # Si el usuario autorizado ha rechazado la solicitud
+    if esta_autorizado and request.vars.rechazo:
+        motivo = request.vars.motivo_rechazo
+
+        # Actualizamos la entrada en la base de datos
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_autorizado_por=auth.user.id,
+            hpvh_razon_rechazo=motivo,
+            hpvh_estatus="Solicitud rechazada"
+        )
+
+        # Guardamos información en bitácora
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Rechazada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        asunto_rechazo = "[SIGULAB] Rechazo a la Solicitud de Préstamo #%s" % prestamo_id
+
+        # Enviamos notificación al responsable patrimonial
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_rechazo_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}. Como razón de rechazo, se especificó: {}").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now(),
+                                      motivo
+        )
+
+        __enviar_correo(
+            email_responsable,
+            asunto_rechazo,
+            mensaje_rechazo_responsable
+        )
+
+        # Enviamos notificación al solicitante
+        email_solicitante = solicitante.email
+        mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
+                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "en fecha {}. Como razón de rechazo, se especificó: {}").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      prestamo_id,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now(),
+                                      motivo
+        )
+
+        # Manda correo rechazo a solicitante
+        __enviar_correo(
+            email_solicitante,
+            asunto_rechazo,
+            mensaje_rechazo_solicitante
+        )
+
+        session.flash = "Se ha rechazado la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
+    informacion_dict = {
+        "Vehículo Solicitado": "%s %s %s" % (
+            vehiculo['vh_marca'],
+            vehiculo['vh_modelo'],
+            vehiculo['vh_placa']
+        ),
+        "Solicitante": "%s %s" % (
+            solicitante.first_name,
+            solicitante.last_name
+        ),
+        "Fecha de Solicitud": prestamo['hpvh_fecha_salida'],
+        "Fecha Prevista de Devolución": prestamo['hpvh_fecha_prevista_devolucion'],
+        "Motivo de Solicitud": prestamo['hpvh_motivo'],
+        "Ruta Prevista": prestamo['hpvh_ruta'],
+        "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
+        "Estatus": prestamo['hpvh_estatus'],
+        "Razón de Rechazo": prestamo['hpvh_razon_rechazo']
+    }
+
+    informacion_list = [
+        "Vehículo Solicitado",
+        "Solicitante",
+        "Fecha de Solicitud",
+        "Fecha Prevista de Devolución",
+        "Motivo de Solicitud",
+        "Ruta Prevista",
+        "Tiempo Estimado de Uso",
+        "Estatus",
+        "Razón de Rechazo"
+    ]
+
+    conductor_dict = {
+        "Nombre": prestamo['hpvh_conductor'],
+        "C.I.": prestamo['hpvh_ci_conductor'],
+        "Nº Celular": prestamo['hpvh_nro_celular_conductor'],
+        "Nº Licencia de Conducir": prestamo['hpvh_nro_licencia_conductor'],
+        "Certificado Médico": prestamo['hpvh_certificado_medico'],
+        "Certificado Psicológico": prestamo['hpvh_certificado_psicologico']
+    }
+
+    conductor_list = [
+        "Nombre",
+        "C.I.",
+        "Nº Celular",
+        "Nº Licencia de Conducir",
+        "Certificado Médico",
+        "Certificado Psicológico"
+    ]
+
+    usuario_dict = {
+        "Nombre": prestamo['hpvh_usuario'],
+        "C.I.": prestamo['hpvh_ci_usuario'],
+        "Nº Celular": prestamo['hpvh_nro_celular_usuario']
+    }
+
+    usuario_list = [
+        "Nombre",
+        "C.I.",
+        "Nº Celular"
+    ]
+
+    return dict(
+        vehiculo=vehiculo,
+        prestamo=prestamo,
+        informacion_dict=informacion_dict,
+        informacion_list=informacion_list,
+        conductor_dict=conductor_dict,
+        conductor_list=conductor_list,
+        usuario_dict=usuario_dict,
+        usuario_list=usuario_list,
+        esta_autorizado=esta_autorizado
+    )
+
+
+
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_vehiculo():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
@@ -2498,6 +2883,33 @@ def detalles_vehiculo():
 
     nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
+    prestamos = __get_prestamos_vh(vehi['id'])
+
+    # Si recibimos una solicitud de préstamo
+    if request.vars.prestamo:
+        resultado = __solicitar_prestamo_vh(
+           solicitante=auth.user.id,
+            vehiculo=vehi['id'],
+            fecha_solicitud=datetime.now(),
+            fecha_prevista_devolucion=request.vars.fecha_prevista_devolucion,
+            tiempo_previsto=request.vars.tiempo_previsto,
+            ruta=request.vars.ruta,
+            motivo_prestamo=request.vars.motivo_prestamo,
+            nombre_conductor=request.vars.nombre_conductor,
+            ci_conductor=request.vars.ci_conductor,
+            nro_conductor=request.vars.nro_conductor,
+            licencia_conducir=request.vars.licencia_conducir,
+            certificado_medico=request.vars.certificado_medico,
+            certificado_psicologico=request.vars.certificado_psicologico,
+            nombre_usuario=request.vars.nombre_usuario,
+            ci_usuario=request.vars.ci_usuario,
+            nro_usuario=request.vars.nro_usuario
+        )
+
+        request.vars.modificacion = None
+        if resultado:
+            session.flash = "Se ha agregado una solicitud de préstamo para el vehiculo."
+        return redirect(URL('prestamos'))
 
     # Si mandamos eliminación
     if request.vars.eliminacion:
@@ -2602,27 +3014,26 @@ def detalles_vehiculo():
         redirect(URL('validaciones'))
 
     if request.vars.ocultar:
-        if vehi.vh_oculto == 1:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto =1)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
+        if vehi['vh_oculto'] == 1:
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=0)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
         else:
-            db(db.vehiculo.id == vehi['vh_oculto']).select().first().update_record(vh_oculto=0)
-            response.flash = "Ahora el vehiculo de placa" + str(vehi['vh_placa']) + " se encuentra visible en las consultas."
+            db(db.vehiculo.id == vehi['id']).select().first().update_record(vh_oculto=1)
+            response.flash = "Ahora el vehiculo de placa " + str(vehi['vh_placa']) + " se encuentra oculto en las consultas."
         request.vars.ocultar = None
+        vehi = db(db.vehiculo.vh_placa == vh).select()[0]
 
-    # PENDIENTE: Optimizar esto en una sola structura,
-    # iterar en caracteristica dict
     caracteristicas_list = [
         'Nº Bien Mueble',
-        'Propietario',
-        'Placa',
-        'Serial de carroceria',
-        'Serial de motor',
-        'Serial de chasis',
         'Marca',
         'Modelo / Código',
         'Año',
         'Color',
+        'Placa',
+        'Propietario',
+        'Serial de carroceria',
+        'Serial de motor',
+        'Serial de chasis',
         'Clase',
         'Tipo',
         'Clasificación',
@@ -2634,20 +3045,21 @@ def detalles_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Visibilidad',
         'Observaciones',
     ]
 
     caracteristicas_dict = {
         'Nº Bien Mueble': vehi['vh_num'],
-        'Propietario': vehi['vh_propietario'],
-        'Placa': vehi['vh_placa'],
         'Marca': vehi['vh_marca'],
         'Modelo / Código': vehi['vh_modelo'],
         'Año': vehi['vh_ano'],
+        'Color': vehi['vh_color'],
+        'Placa': vehi['vh_placa'].upper(),
+        'Propietario': vehi['vh_propietario'],
         'Serial de carroceria': vehi['vh_serial_carroceria'],
         'Serial de motor': vehi['vh_serial_motor'],
         'Serial de chasis': vehi['vh_serial_chasis'],
-        'Color': vehi['vh_color'],
         'Clase': vehi['vh_clase'],
         'Tipo': vehi['vh_tipo'],
         'Clasificación': vehi['vh_clasificacion'],
@@ -2659,6 +3071,7 @@ def detalles_vehiculo():
         'Capacidad de carga': str(vehi['vh_capacidad_carga']) + " " + vehi['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehi['vh_intt'],
         'Rines': vehi['vh_rines'],
+        'Visibilidad': None if vehi['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehi['vh_observaciones'],
     }
 
@@ -2666,6 +3079,8 @@ def detalles_vehiculo():
     dict_clasificaciones = __obtener_clasificaciones()
     depend = db(db.dependencias.id == vehi['vh_dependencia']).select().first()
     sede_id = int(depend.id_sede)
+
+    esta_autorizado = (auth.user.id == vehi['vh_responsable']) or (auth.user.id == vehi['vh_custodio']) or (auth.user.id == 1)
 
     # Si solo estoy cargando la vista
     return dict(
@@ -2677,7 +3092,9 @@ def detalles_vehiculo():
         cod_localizacion=cod_localizacion,
         localizacion=localizacion,
         clasificaciones=dict_clasificaciones,
-        sede_id=sede_id
+        sede_id=sede_id,
+        historial_prestamos=prestamos,
+        esta_autorizado=esta_autorizado
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
@@ -3537,14 +3954,48 @@ def __get_inventario_espacio_materialesandconsumibles_eliminar(nombre, espacio):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def prestamos():
-    user_id = auth.user.id
-    personal = db(db.t_Personal.f_usuario == user_id).select().first()
-    dependencia_id = personal.f_dependencia
 
-    # TODO (PENDIENTE): Contar las solicitudes de préstamo de la persona
-    
+    # Pequeña función booleana para saber si un vehículo ha acabado
+    # su flujo útil en préstamos
+    def __flujo_listo(x):
+        return "devuelto" in x['hpvh_estatus'] or "rechazada" in x['hpvh_estatus']
+
+    # Hallamos información del usuario
+    user_id = auth.user.id
+
+    # Hallamos las solicitudes realizadas pendientes
+    solicitudes_realizadas = list(db(db.historial_prestamo_vh.hpvh_solicitante == user_id).select())
+    solicitudes_realizadas.reverse()
+    solicitudes_realizadas = [x for x in solicitudes_realizadas if not __flujo_listo(x)]
+
+    # Hallamos en principio las solicitudes recibidas pendientes
+    solicitudes_recibidas_aux = list(db(db.historial_prestamo_vh.id).select())
+    solicitudes_recibidas_aux.reverse()
+
+    solicitudes_recibidas = []
+    for solicitud in solicitudes_recibidas_aux:
+        vehiculo = db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()
+        if vehiculo['vh_responsable'] == user_id or vehiculo['vh_custodio'] == user_id:
+            solicitudes_recibidas.append(solicitud)
+    solicitudes_recibidas = [x for x in solicitudes_recibidas if not __flujo_listo(x)]
+
+    # Para el superusuario, hallamos TODAS las solicitudes para la tabla especial
+    todas = []
+    if auth.user.id == 1:
+        todas = list(db(db.historial_prestamo_vh.id).select())
+        todas.reverse()
+        todas = [x for x in todas if not __flujo_listo(x)]
+
+    # Contamos las solicitudes pendientes halladas
+    c = len(solicitudes_recibidas) + len(solicitudes_realizadas)
+    if auth.user.id == 1:
+        c = len(todas)
+
     return dict(
-        prestamos=[1, 2, 3] # Aca se retorna el arreglo con los prestamos pendientes
+        cant_prestamos=c,
+        solicitudes_recibidas=solicitudes_recibidas,
+        solicitudes_realizadas=solicitudes_realizadas,
+        todas_las_solicitudes=todas
     )
 
 # Muestra las solicitudes de modificacion y eliminacion de acuerdo al cargo del
@@ -3554,8 +4005,11 @@ def prestamos():
 def validaciones():
     # Obteniendo la entrada en t_Personal del usuario conectado
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
-    user_id = auth.user.id # PENDIENTE: Revisar por qué no es user.id
-    user_dep_id = user.f_dependencia
+    user_id = auth.user.id
+    try:
+        user_dep_id = user.f_dependencia
+    except:
+        user_dep_id = 0
     inventario = [[], [], []]
     inventario_eliminar = [[], [], []]
 
@@ -3578,7 +4032,11 @@ def validaciones():
 
     # Obtenemos todos los vehículos
     vehiculos_responsable = db(db.vehiculo.vh_responsable == user_id).select()
-    vehiculos_custodio = db(db.vehiculo.vh_custodio == user_id).select()
+
+    vehiculos_superusuario = []
+    if auth.user.id == 1:
+        vehiculos_superusuario = db(db.vehiculo.id).select()
+
 
     vehics = []
     lista_ids = set()
@@ -3586,7 +4044,7 @@ def validaciones():
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
-    for vh in vehiculos_custodio:
+    for vh in vehiculos_superusuario:
         if vh['id'] not in lista_ids:
             lista_ids.add(vh['id'])
             vehics.append(vh)
@@ -3618,7 +4076,7 @@ def validaciones():
         if auto['id'] not in lista_ids:
             lista_ids.add(auto['id'])
             inventario_vehiculos.append(auto)
-    
+
     lista_ids = set()
     for auto in inventario_eliminar_vehiculos_aux:
         if auto['id'] not in lista_ids:
@@ -3849,7 +4307,7 @@ def consumibles():
                     request.vars.marca_mat, request.vars.modelo_mat, request.vars.cantidad_mat, espacio, request.vars.ubicacion_int ,
                     request.vars.descripcion_mat, request.vars.aforado, request.vars.calibracion_mat,
                     request.vars.capacidad, request.vars.unidad_cap,
-                        request.vars.unidad_mat, 
+                        request.vars.unidad_mat,
                     request.vars.ancho_mat, request.vars.largo_mat, request.vars.alto_mat,
                     request.vars.diametro_mat, request.vars.material_mat, request.vars.material_sec, request.vars.presentacion,
                     request.vars.unidades, request.vars.total_mat, dep_padre_unid_ads,
