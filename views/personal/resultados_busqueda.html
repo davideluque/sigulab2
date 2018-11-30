@@ -149,9 +149,30 @@
     },	
     	dom: 'Bfrtip',
     	buttons: [
+
            {
+            extend: 'csv',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
+            extend: 'excel',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
             extend: 'pdf',
-            text: "Descargar reporte",
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
+            extend: 'print',
             title: "Resultados búsqueda",
             exportOptions: {
                     columns: ':visible'
