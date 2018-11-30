@@ -103,7 +103,7 @@
 				<tbody>
                     {{ for item in lista: }}
                     <tr>
-                        <td>{{=item['nombre']}}</td>
+                        <td><a href="/sigulab2/personal/ficha/{{=item['ci']}}">{{=item['nombre']}}</a></td>
                         <td>{{=item['dependencia']}}</td>
                         <td>{{=item['correo']}}</td>
                         <td>{{=item['telefono']}}</td>
