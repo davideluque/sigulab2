@@ -34,6 +34,15 @@ const inputs = [
     'fecha_inicio_5_add', 'fecha_final_5_add', 'cargo_hist_5_add', 'dependencia_hist_5_add', 'organizacion_5_add',
     // Competencias
     'competencia1_nombre',
+    'competencia2_nombre',
+    'competencia3_nombre',
+    'competencia4_nombre',
+    'competencia5_nombre',
+    'competencia6_nombre',
+    'competencia7_nombre',
+    'competencia8_nombre',
+    'competencia9_nombre',
+    'competencia10_nombre',
 ]
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
@@ -659,19 +668,15 @@ function validaFechaFin1(){
     const fecha_inicio = voltearFecha($('[name="fecha_inicio_1_add"]').val());
     const fecha_final = voltearFecha($this.val());
 
-    if ( !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ){
-        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta. No puede ser una fecha futura.");
+
+    if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
-        return false;
-    } else if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final))){
-        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta. No puede ser una fecha futura.");
-        $this.addClass('input-error');
-        $this.attr("data-valido", 'false');
-        $this.popover('show');
-        return false;
-    } else {
+        return false
+    }
+    else{
         $this.removeClass('input-error');
         $this.popover('hide');
         return true;
@@ -854,31 +859,36 @@ const validadoresQuintoPaso = [
 
 function validaCompetencia(){
     var valid=true;
-    const nombre = $('#competencia1_nombre');
-    const chosenval = $('#competencia1_categoria').trigger("chosen-updated").val().length;
-    chosen_container = $('#competencia1_categoria_chosen');
-    if (chosenval == 0){
-        chosen_container.attr("data-content", requiredFieldMessage);
-        chosen_container.addClass('input-error');
-        chosen_container.attr("data-valido", 'false');
-        chosen_container.popover('show');
-        valid = valid && false
-    }
-    else {
-        chosen_container.removeClass('input-error');
-        chosen_container.popover('hide');
-        valid = valid && true;
-    }
-    if (nombre.val()==='') {
-        nombre.attr("data-content", requiredFieldMessage);
-        nombre.popover('show');
-        nombre.addClass('input-error');
-        valid = valid && false;
-    }
-    else {
-        nombre.removeClass('input-error');
-        nombre.popover('hide');
-        valid = valid && true;
+    for(var i=1; i<11;i++){
+        if($('#competencia-container'+i).is(':hidden'))
+            continue;
+
+        var nombre = $('#competencia'+i+'_nombre');
+        var chosenval = $('#competencia'+i+'_categoria').trigger("chosen-updated").val().length;
+        chosen_container = $('#competencia'+i+'_categoria_chosen');
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = valid && false
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+            valid = valid && true;
+        }
+        if (nombre.val()==='') {
+            nombre.attr("data-content", requiredFieldMessage);
+            nombre.popover('show');
+            nombre.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            nombre.removeClass('input-error');
+            nombre.popover('hide');
+            valid = valid && true;
+        }
     }
     return valid
 
