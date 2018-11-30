@@ -1305,7 +1305,7 @@
   document.getElementById('fecha_solicitud').valueAsDate = new Date();
 
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
-  var regexRIF = new RegExp("^[JGVEPC][-][0-9]{2}[.][0-9]{3}[.][0-9]{3}$");
+  var regexCI = new RegExp("^[VEve][-][0-9]{2}[.][0-9]{3}[.][0-9]{3}$");
 
   // Máscara js para formato de teléfono
   $(document).ready(function() {
@@ -1323,7 +1323,7 @@
     $('.campo_ci').mask('X-00.000.000', {
       translation: {
         "X": {
-          pattern: /[JGVEPC]/
+          pattern: /[VEve]/
             }
         }
     });
@@ -1367,9 +1367,9 @@
   });
 
   $(".campo_ci").focusout(function() {
-    var rif = $(this).val();
+    var CI = $(this).val();
 
-    if (regexRIF.test(rif)) {
+    if (regexCI.test(CI)) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
