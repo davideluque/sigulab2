@@ -47,22 +47,25 @@
     <h2>Resultados búsqueda</h1>
     <br>
     <p>
-    {{if filtros['gremio_busqueda'] != None: }}
+    {{if filtros['gremio_busqueda'] != "": }}
     <b>Gremio: </b> {{=filtros['gremio_busqueda']}}
     {{pass}}
     {{if filtros['cargo_busqueda'] != "": }}
     <br>
     <b>Cargo: </b>{{=filtros['cargo_busqueda']}}
     {{pass}}
+
     {{if filtros['competencia_busqueda'] != "": }}
     <br>
     <b>Competencia: </b>{{=filtros['competencia_busqueda']}}
     {{pass}}
-    {{if filtros['categoria_busqueda'] != None: }}
+
+    {{if filtros['categoria_busqueda'] != "": }}
     <br>
     <b>Categoria: </b>{{=filtros['categoria_busqueda']}}
     {{pass}}
-    {{if filtros['anios_busqueda'] != None: }}
+
+    {{if filtros['anios_busqueda'] != "": }}
     <br>
     <b>Años servicio ULAB: </b>{{=filtros['anios_busqueda'] +  " años"}}
     {{pass}}

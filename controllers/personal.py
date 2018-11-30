@@ -33,6 +33,7 @@ def resultados_busqueda():
         ingreso = row.t_Personal.f_fecha_ingreso_ulab
         
         lista.append({
+            'ci' : row.t_Personal.f_ci,
             'nombre' : row.t_Personal.f_nombre+' '+row.t_Personal.f_apellido,
             'correo' : row.t_Personal.f_email,
             'telefono' : row.t_Personal.f_telefono,
@@ -462,7 +463,7 @@ def listado():
         usuario=usuario,
         empleados = empleados,
         competencias=competencias,
-        comp_list=lista_competencias(usuario),
+        comp_list=lista_competencias(usuario.f_ci),
         historial = getDictHistorial(historial_rows)
 
         )
@@ -588,7 +589,7 @@ def ficha():
         usuario_logged=usuario_logged,
         usuario=usuario,
         competencias=competencias,
-        comp_list=lista_competencias(personal),
+        comp_list=lista_competencias(personal['ci']),
         historial=getDictHistorial(historial_rows)
 
     )
@@ -719,8 +720,9 @@ def reporte_listado():
         db.bitacora_general.insert(f_accion = accion)
     return redirect(URL('listado_estilo'))
 
-def lista_competencias(personal):
-    query = db(db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal)
+def lista_competencias(ci):
+    query = db((db.t_Personal.id == db.t_Competencias2.f_Competencia_Personal)
+            & (db.t_Personal.f_ci == ci))
     rows = query.select(db.t_Competencias2.ALL, orderby=db.t_Competencias2.f_numero)
     return rows
 
