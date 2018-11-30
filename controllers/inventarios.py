@@ -2824,6 +2824,13 @@ def detalles_prestamo():
         session.flash = "Se ha rechazado la Solicitud de Préstamo #%s." % prestamo_id
         return redirect(URL('prestamos'))
 
+    try:
+        autorizado_por = db(db.auth_user.id == prestamo['hpvh_autorizado_por']).select().first()
+        nombre_autorizado = "%s %s" % (autorizado_por.first_name, autorizado_por.last_name)
+    except Exception as e:
+        autorizado_por = -1
+        nombre_autorizado = ""
+
     informacion_dict = {
         "Vehículo Solicitado": "%s %s %s" % (
             vehiculo['vh_marca'],
@@ -2840,7 +2847,9 @@ def detalles_prestamo():
         "Ruta Prevista": prestamo['hpvh_ruta'],
         "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
         "Estatus": prestamo['hpvh_estatus'],
-        "Razón de Rechazo": prestamo['hpvh_razon_rechazo']
+        "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
+        "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
+        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None
     }
 
     informacion_list = [
@@ -2852,7 +2861,9 @@ def detalles_prestamo():
         "Ruta Prevista",
         "Tiempo Estimado de Uso",
         "Estatus",
-        "Razón de Rechazo"
+        "Razón de Rechazo",
+        "Rechazada por",
+        "Aprobada por"
     ]
 
     conductor_dict = {
