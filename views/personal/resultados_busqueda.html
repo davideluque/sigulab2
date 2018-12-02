@@ -16,6 +16,7 @@
 	<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
 	<script src="{{=URL('static', 'plugins/datatables/jspdf.min.js')}}"></script>
 	<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+    <script src="{{=URL('static', 'plugins/datatables2/dataTables.rowsGroup.js')}}"></script>
 
 	 <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -171,8 +172,7 @@
                 }
         }
         ],
-
-        rowsGroup: [0, 1, 2, 3, 4, 7],
+        rowsGroup: [0, 1, 2, 3, 4, 7, 5],
         "columnDefs": [
             {
                 "targets": [ 6, 8, 9],
