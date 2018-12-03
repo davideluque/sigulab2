@@ -481,6 +481,7 @@ def listado():
         empleados = empleados,
         competencias=competencias,
         comp_list=lista_competencias(usuario.f_ci),
+        admin_list=lista_administrativas(usuario.f_ci),
         historial = getDictHistorial(historial_rows)
 
         )
@@ -607,6 +608,7 @@ def ficha():
         usuario=usuario,
         competencias=competencias,
         comp_list=lista_competencias(personal['ci']),
+        admin_list=lista_administrativas(personal['ci']),
         historial=getDictHistorial(historial_rows)
 
     )
@@ -743,6 +745,12 @@ def lista_competencias(ci):
     rows = query.select(db.t_Competencias2.ALL, orderby=db.t_Competencias2.f_numero)
     return rows
 
+def lista_administrativas(ci):
+    query = db((db.t_Personal.id == db.t_Administrativas.f_Administrativas_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Administrativas.ALL, orderby=db.t_Administrativas.f_numero)
+    return rows
+
 def getDictHistorial(historial):
     dic = {}
     if (historial != None):
@@ -813,15 +821,7 @@ def getDictHistorial(historial):
 
 def __get_competencias(request, personal):
     params = {}
-    # params = {
-    #         'f_nombre1': request.post_vars.competencia1_nombre,
-    #         'f_categorias1':request.post_vars.competencia1_categoria,
-    #         'f_observaciones1': request.post_vars.competencia1_observaciones,
-    #         'f_nombre2': request.post_vars.competencia2_nombre,
-    #         'f_categorias2':request.post_vars.competencia2_categoria,
-    #         'f_observaciones2': request.post_vars.competencia2_observaciones
-    #         }
-    fies = []
+    competencias = []
     for i in range(1,11):
         if 'competencia{0}_nombre'.format(i) in request.post_vars:
             params = {
@@ -843,9 +843,40 @@ def __get_competencias(request, personal):
                         f_numero= params['f_numero'],
                         f_Competencia_Personal= params['f_Competencia_Personal'],
                         )
-                fies.append(params)
+                competencias.append(params)
 
     # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
     #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
-    return fies
+    return competencias
 
+def __get_administrativas(request, personal):
+    params = {}
+    administrativas = []
+    for i in range(1, 6):
+        if 'administrativa{0}_cargo'.format(i) in request.post_vars:
+
+            params = {
+                    'f_fecha_inicio': transformar_fecha_formato_original(request.post_vars['administrativa{0}_desde'.format(i)]),
+                    'f_fecha_final': transformar_fecha_formato_original(request.post_vars['administrativa{0}_hasta'.format(i)]),
+                    'f_cargo': request.post_vars['administrativa{0}_cargo'.format(i)],
+                    'f_institucion': request.post_vars['administrativa{0}_institucion'.format(i)],
+                    'f_numero': i,
+                    'f_Administrativas_Personal': personal.id
+                    }
+            if not( (None or '') in  params):
+                try:
+                    db.t_Administrativas.update_or_insert(
+                            (db.t_Administrativas.f_numero==i)
+                            & (db.t_Administrativas.f_Administrativas_Personal==personal.id),
+                            f_fecha_inicio=params['f_fecha_inicio'],
+                            f_fecha_final=params['f_fecha_final'],
+                            f_institucion=params['f_institucion'],
+                            f_cargo=params['f_cargo'],
+                            f_numero=params['f_numero'],
+                            f_Administrativas_Personal=params['f_Administrativas_Personal'],
+                            )
+                except Exception as e:
+                    print('mal')
+            administrativas.append(params)
+    return BEAUTIFY(administrativas)
+    # return administrativas

@@ -242,3 +242,19 @@ db.define_table(
 
 db.t_Historial_trabajo_nuevo._plural = 'Historial de trabajo'
 db.t_Historial_trabajo_nuevo._singular = 'Historial de trabajo'
+
+
+db.define_table(
+    't_Administrativas',
+    # Atributos
+    Field('f_fecha_inicio', 'date', label=T('Fecha de inicio'), requires=IS_NOT_EMPTY()),
+    Field('f_fecha_final', 'date', label=T('Fecha de fin'), requires=IS_NOT_EMPTY()),
+    Field('f_cargo', 'string', length=150,label=T('Cargo'), requires=IS_NOT_EMPTY()),
+    Field('f_institucion', 'string', length=150, label=T('Institución'), requires=IS_NOT_EMPTY()),
+    Field('f_numero', 'integer'),
+    Field('f_Administrativas_Personal', 'reference t_Personal',
+        requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Administrativas._plural = 'Actividades administrativas'
+db.t_Administrativas._singular = 'Actividad administrativa'
