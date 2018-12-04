@@ -381,6 +381,7 @@ def add_form():
 
         personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
         __get_competencias(request, personal)
+        __get_administrativas(request, personal)
         redirect(URL('listado_estilo'))
 
 
