@@ -382,6 +382,7 @@ def add_form():
         personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
         __get_competencias(request, personal)
         __get_administrativas(request, personal)
+        __get_extension(request, personal)
         redirect(URL('listado_estilo'))
 
 
@@ -483,6 +484,7 @@ def listado():
         competencias=competencias,
         comp_list=lista_competencias(usuario.f_ci),
         admin_list=lista_administrativas(usuario.f_ci),
+        ext_list=lista_extension(usuario.f_ci),
         historial = getDictHistorial(historial_rows)
 
         )
@@ -609,6 +611,7 @@ def ficha():
         usuario=usuario,
         competencias=competencias,
         comp_list=lista_competencias(personal['ci']),
+        ext_list=lista_extension(personal['ci']),
         admin_list=lista_administrativas(personal['ci']),
         historial=getDictHistorial(historial_rows)
 
@@ -752,6 +755,12 @@ def lista_administrativas(ci):
     rows = query.select(db.t_Administrativas.ALL, orderby=db.t_Administrativas.f_numero)
     return rows
 
+def lista_extension(ci):
+    query = db((db.t_Personal.id == db.t_Extension2.f_Extension_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Extension2.ALL, orderby=db.t_Extension2.f_numero)
+    return rows
+
 def getDictHistorial(historial):
     dic = {}
     if (historial != None):
@@ -877,7 +886,45 @@ def __get_administrativas(request, personal):
                             f_Administrativas_Personal=params['f_Administrativas_Personal'],
                             )
                 except Exception as e:
-                    print('mal')
+                    pass
             administrativas.append(params)
     return BEAUTIFY(administrativas)
+    # return administrativas
+
+def __get_extension(request, personal):
+    params = {}
+    extension = []
+    for i in range(1, 6):
+        if 'extension{0}_nombre'.format(i) in request.post_vars:
+
+            params = {
+                    'f_fecha_inicio': transformar_fecha_formato_original(
+                        request.post_vars['extension{0}_desde'.format(i)]),
+                    'f_fecha_final': transformar_fecha_formato_original(
+                        request.post_vars['extension{0}_hasta'.format(i)]),
+                    'f_nombre': request.post_vars['extension{0}_nombre'.format(i)],
+                    'f_institucion': request.post_vars['extension{0}_institucion'.format(i)],
+                    'f_descripcion': request.post_vars['extension{0}_descripcion'.format(i)],
+                    'f_categoria': request.post_vars['extension{0}_categoria'.format(i)],
+                    'f_numero': i,
+                    'f_Extension_Personal': personal.id
+                    }
+            if not( (None or '') in  params):
+                try:
+                    db.t_Extension2.update_or_insert(
+                            (db.t_Extension2.f_numero==i)
+                            & (db.t_Extension2.f_Extension_Personal==personal.id),
+                            f_fecha_inicio=params['f_fecha_inicio'],
+                            f_fecha_final=params['f_fecha_final'],
+                            f_institucion=params['f_institucion'],
+                            f_nombre=params['f_nombre'],
+                            f_descripcion=params['f_descripcion'],
+                            f_categoria=params['f_categoria'],
+                            f_numero=params['f_numero'],
+                            f_Extension_Personal=params['f_Extension_Personal'],
+                            )
+                except Exception as e:
+                    print(e)
+            extension.append(params)
+    return BEAUTIFY(extension)
     # return administrativas

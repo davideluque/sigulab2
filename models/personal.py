@@ -258,3 +258,20 @@ db.define_table(
     )
 db.t_Administrativas._plural = 'Actividades administrativas'
 db.t_Administrativas._singular = 'Actividad administrativa'
+
+db.define_table(
+    't_Extension2',
+    # Atributos
+    Field('f_categoria', 'list:string', default='', label=T('Categorías')),
+    Field('f_fecha_inicio', 'date', label=T('Fecha de inicio'), requires=IS_NOT_EMPTY()),
+    Field('f_fecha_final', 'date', label=T('Fecha de fin'), requires=IS_NOT_EMPTY()),
+    Field('f_nombre', 'string', label=T('Nombre'), requires=IS_NOT_EMPTY()),
+    Field('f_descripcion', 'string', label=T('Descripción'), requires=IS_NOT_EMPTY()),
+    Field('f_institucion', 'string', label=T('Institución'), requires=IS_NOT_EMPTY()),
+    Field('f_numero', 'integer'),
+    Field('f_Extension_Personal', 'reference t_Personal',
+        requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Extension2._plural = 'Actividades de extensión'
+db.t_Extension2._singular = 'Actividad de extensión'
