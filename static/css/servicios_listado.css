@@ -39,13 +39,15 @@ th {
 }
 
 .botonesListado {
-	background-color: #0300d7; 
-	border-color: #0300d7;
-	color: white;
+	background-color: #337ab7; 
+	border-color: #337ab7;
+	color: white !important;
+	border-radius:50%;
 }
 
 .botonesListado:hover {
 	color: white;
+	border-radius: 50%;
 }
 
 #containerAgregar{
