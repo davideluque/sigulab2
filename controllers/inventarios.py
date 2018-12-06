@@ -439,7 +439,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de carrocería \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_carroceria, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_chasis == serial_chasis).select():
@@ -447,7 +447,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de chasis \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_chasis, nombre_dependencia)
         return False
 
     if db(db.vehiculo.vh_serial_motor == serial_motor).select():
@@ -455,7 +455,15 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
         response.flash = "El vehiculo de serial de motor \"{0}\" ya ha sido ingresado anteriormente \
-                          a la dependencia \"{1}\".".format(vh.vh_num, nombre_dependencia)
+                          a la dependencia \"{1}\".".format(vh.vh_serial_motor, nombre_dependencia)
+        return False
+
+    if db(db.vehiculo.vh_intt == intt).select():
+        vh = db(db.vehiculo.vh_intt == intt).select()[0]
+
+        nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
+        response.flash = "El vehiculo de número de autorización INTT \"{0}\" ya ha sido ingresado anteriormente \
+                          a la dependencia \"{1}\".".format(vh.vh_intt, nombre_dependencia)
         return False
 
     # Se agrega el nuevo vehiculo a la base de datos
@@ -2825,6 +2833,13 @@ def detalles_prestamo():
         session.flash = "Se ha rechazado la Solicitud de Préstamo #%s." % prestamo_id
         return redirect(URL('prestamos'))
 
+    try:
+        autorizado_por = db(db.auth_user.id == prestamo['hpvh_autorizado_por']).select().first()
+        nombre_autorizado = "%s %s" % (autorizado_por.first_name, autorizado_por.last_name)
+    except Exception as e:
+        autorizado_por = -1
+        nombre_autorizado = ""
+
     informacion_dict = {
         "Vehículo Solicitado": "%s %s %s" % (
             vehiculo['vh_marca'],
@@ -2841,7 +2856,9 @@ def detalles_prestamo():
         "Ruta Prevista": prestamo['hpvh_ruta'],
         "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
         "Estatus": prestamo['hpvh_estatus'],
-        "Razón de Rechazo": prestamo['hpvh_razon_rechazo']
+        "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
+        "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
+        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None
     }
 
     informacion_list = [
@@ -2853,7 +2870,9 @@ def detalles_prestamo():
         "Ruta Prevista",
         "Tiempo Estimado de Uso",
         "Estatus",
-        "Razón de Rechazo"
+        "Razón de Rechazo",
+        "Rechazada por",
+        "Aprobada por"
     ]
 
     conductor_dict = {
