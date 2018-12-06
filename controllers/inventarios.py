@@ -1250,8 +1250,9 @@ def vehiculos():
 
     # Si se esta agregando un nuevo vehiculo, se registra en la DB
     if request.vars.modelo: # Verifico si me pasan como argumento el modelo del vehículo.
-        id_dep_real = int(request.vars.dependencia)
-        if id_dep_real is None:
+        try:
+            id_dep_real = int(request.vars.dependencia)
+        except:
             id_dep_real = user_dep_id
 
         dependencia_escogida = db(db.dependencias.id == id_dep_real).select()[0]
@@ -1306,7 +1307,7 @@ def vehiculos():
             proveedor_rif=request.vars.proveedor_rif,
             donante=request.vars.donante,
             contacto_donante=request.vars.contacto_donante,
-            dependencia=request.vars.dependencia,
+            dependencia=id_dep_real,
             user=user,
             oculto=0
         )
