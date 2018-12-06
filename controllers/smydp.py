@@ -17,6 +17,7 @@ from openpyxl.styles import Alignment, Font
 import unicodedata
 import calendar
 import datetime
+from sustancias_libreria import *
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -2692,7 +2693,123 @@ def catalogo():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-    return locals()
+
+    sustancia_solicitud = None
+
+    # Lista de sustancias en el catalogo para el modal de agregar sustancia
+    # al alcanzar el nivel de espacios fisicos
+    sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    #----- AGREGAR SOLICITUDES -----#
+    if request.post_vars.numRegistro:
+
+        id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
+
+        solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
+            request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
+            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
+
+        solicitud_nueva.insertar()
+
+        # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD
+        solicitud_nueva.correoHacerSolicitud()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- AGREGAR SOLICITUD DESDE Sustancia -----#
+    if request.post_vars.idSustancia:
+        sustancia_solicitud = Sustancia(db)
+        sustancia_solicitud.instanciar(int(request.vars.idSustancia))
+
+    #----- FIN AGREGAR SOLICITUD DESDE Sustancia -----#
+
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
+        solicitud_a_cambiar.correoCambioEstadoSolicitud()
+        solicitud_a_cambiar.correoSolicitudFinalizada()
+
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
+
+            #solicitud_a_cambiar.elaborar_certificacion()
+
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
+    #----- DATOS DE SOLICITANTE -----#
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    if auth.has_membership(group_id="CLIENTE INTERNO"):
+        registro = "FUSB"
+    else:
+        registro = dependencia_usuario.codigo_registro
+
+    num_registro = validador_registro_solicitudes(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
+
+    #----- GENERACION DE LISTADOS -----#
+    listado_de_solicitudes_generadas = ListaSolicitudes(db, auth, "Solicitante")
+
+    listado_de_solicitudes_recibidas = ListaSolicitudes(db, auth, "Ejecutante")
+
+
+    return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,
+                solicitudes_recibidas=listado_de_solicitudes_recibidas.filas,
+                datos_solicitud=datos_solicitud,
+                sustancias=sustancias,
+                unidades_de_medida=unidades_de_medida,
+                sustancia_solicitud=sustancia_solicitud)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
