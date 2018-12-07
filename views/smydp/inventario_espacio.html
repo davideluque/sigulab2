@@ -8,8 +8,9 @@
 	        <div class="col-sm-6"></div>
 	        <div class="col-sm-6">
 	            <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia">Agregar Sustancia</button>
-	        </div>
+	            <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#addsustancia"><i class="fa fa-plus"></i></button>
+
+            </div>
         </div>
     </div>
 </div>
@@ -29,6 +30,7 @@
             <tr id="titulosListado">
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">CONTROL</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>
@@ -48,6 +50,7 @@
                 </td>
                 <!-- Colocar anchor a la entrada de la sustancia en el catalogo de sustancias -->
                 <td class="camposTabla">{{=sust.f_cas if sust.f_estado else ''}}</td>
+                <td class="camposTabla">{{=sust.f_control[0]}}</td>
                 <td class="camposTabla">{{=sust.f_estado[0] if sust.f_estado else ''}}</td>
                 <td class="camposTabla">{{=inv.f_uso_interno}}</td>
                 <td class="camposTabla">{{=float(inv.f_existencia) - float(inv.f_uso_interno)}}</td>
@@ -61,6 +64,7 @@
             <tr>
                 <th class="camposTabla linksNombres">Nombre</th>
                 <th class="camposTabla linksNombres">CAS</th>
+                <th class="camposTabla linksNombres">CONTROL</th>
                 <th class="camposTabla linksNombres">Estado</th>
                 <th class="camposTabla linksNombres">Uso interno</th>
                 <th class="camposTabla linksNombres">Excedente</th>

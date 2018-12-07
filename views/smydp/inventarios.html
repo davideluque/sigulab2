@@ -73,7 +73,7 @@
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2">
-			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}')">
+			<button id="boton-retorno" class="btn boton-sigulab buton-retorno" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}')">
 				<i class="fas fa-arrow-left"></i>	    		
 			</button>
 		</div>
@@ -131,9 +131,10 @@
 
 	<div class="container">
    
-		<a  href="{{=URL('sigulab2', 'smydp', 'generar_reporte')}}">
-		  <button class="btn btn-default">Generar Reporte</button>
-		</a>
+
+		<a  href="{{=URL( 'generar_reporte')}}">
+			<button class="btn btn-default">Generar Reporte RL4</button>
+		  </a>
 	  
 	</div>
 	<!-- 
@@ -198,6 +199,8 @@
 		grid.classList.add("grid-container-ef");
 	}
 </script>
+
+
 <script type="text/javascript">
 	function redirect(dir){
 		window.location.href = dir;

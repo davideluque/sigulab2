@@ -1,1 +1,541 @@
-<!-- Futura vista de las solicitudes de sustancias -->
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- DataTables -->
+  <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <!-- Estilo del listado de Solicitudes de Sustancias -->
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_listado.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+  <!-- Web2py JS - Especialmente para AJAX -->
+  <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+  <style>
+    .row{
+      margin-right:0px!important;
+    }
+  </style>
+{{end}}
+
+{{block center}}
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+    <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+  <span class="breadcrumb-item active">Solicitudes de Sustancias</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+<!-- Boton que lleva al modal de Solicitud de un Sustancia -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+          <button type="button" id="botonAgregar" class="btn botonesListado" data-toggle="modal" data-target="#modalServiceRequest">Solicitar Sustancia</button>
+        </div>
+    </div>
+</div>
+<!-- Fin del boton que lleva al modal de Solicitud de un Sustancia -->
+
+<!-- Inicio Listado Solicitudes para ejecutante-->
+<div class="container">
+  <div class="row">
+    <h3 onclick="change_status_list('#solic-recibidas')" title="Ocultar/Mostrar"> Solicitudes Recibidas <i class="fa fa-caret-up" id="solic-recibidas-caret"></i> </h3>
+
+    <div id="solic-recibidas">
+    <div id="buttons2">
+      <!-- Filtrado -->
+       <button type="button" id="filtrar" onclick="mostrarFiltro2()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for solicitud in solicitudes_recibidas:}}
+              <tr>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Ejecutante');" >{{=solicitud.registro.decode('utf-8').upper()}}</a></th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_sustancia.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </tfoot>
+
+       </form>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Fin Listado Solicitudes para ejecutante-->
+
+<!-- Inicio Listado Solicitudes para solicitante -->
+<div class="container">
+  <div class="row">
+    <h3 onclick="change_status_list('#solic-generadas')" title="Ocultar/Mostrar"> Solicitudes Generadas <i class="fa fa-caret-up" id="solic-generadas-caret"></i> </h3>
+
+    <div id="solic-generadas">
+    <div id="buttons1">
+      <!-- Filtrado -->
+        <button type="button" id="filtrar" onclick="mostrarFiltro1()" class="btn btn-default buttons-pdf buttons-html5">Filtrado</button>
+      <!-- Filtrado -->   
+    </div>
+
+    <div class="table-responsive no-padding no-margin" >
+      <table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+       <form>
+          <!-- Titulos Tabla Solicitudes -->
+          <thead>
+            <tr id="titulosListado">
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </thead>
+
+          <!-- Contenido Tabla Solicitudes -->
+          <tbody>
+            {{for solicitud in solicitudes_generadas:}}
+              <tr>
+                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Solicitante');" >{{=solicitud.registro}}</a></th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.nombre_sustancia.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
+                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+              </tr>
+            {{pass}}
+          </tbody>
+          <tfoot id="collapseFiltros">
+            <tr>
+              <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
+              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
+              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Estado</th>
+            </tr>
+          </tfoot>
+
+       </form>
+      </table>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- Fin Listado Solicitudes para Solicitante-->
+
+<!-- Inicio Modal Solicitar Sustancia -->
+<div class="modal fade" id="modalServiceRequest" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoSustancia">Solicitud de Sustancia de Laboratorio</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <!-- Inicio Form -->
+            <form id="formularioEdit" class="registration-form" method="post">
+
+              <!-- Primer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>                
+                      
+                      <!-- Numero Registro -->
+                      <div class="mover">
+                      <label class="form-group" id="numRegistro" style="margin-bottom: 0px">Registro</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="numRegistro" id="numRegistro" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
+                      </div>
+                      </div>
+
+                      <!-- Dependencia Solicitante -->
+                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
+                      </div>
+
+                      <!-- Jefe Dependencia Solicitante -->
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
+                      </div>
+
+                      <!-- Responsable Solicitud -->
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
+                      </div>                         
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm">Siguiente</button>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+              
+              <!-- Segundo Paso -->
+              <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="sustancia" name="sustancia" required>
+                              <option value="" selected hidden >Sustancia*</option>
+                              {{for sustancia in sustancias:}}
+                              <option value="{{=sustancia.id}}">{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})</option>
+                              {{pass}}
+                            </select>
+                            <div class="field-error"> <p id="error-sustancia"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="total" placeholder="Cantidad total*" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+                                                    
+                          <div class="form-group" style="padding-bottom: 50px">
+                            <select class="form-control" type="select" id="unidad" name="unidad" required>
+                              <option value="" selected hidden >Unidad de medida*</option>
+                              {{for u in unidades_de_medida:}}
+                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+                      </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm">Anterior</button>
+                  <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm">Agregar</button> 
+              </fieldset>
+              <!-- Fin Segundo Paso -->
+            </form>
+            <!-- Fin Form -->
+          </div>
+        </div>               
+      </div>
+      <!-- Fin Modal Body -->
+    </div>
+    <!-- Fin Modal content-->
+  </div>
+</div>
+<!-- Fin Modal Solicitar Sustancia Seleccionado-->
+
+
+<script>
+    $(document).ready(function(){
+        document.getElementById("solicito").click();
+    });
+
+</script>
+
+<!-- Ajax abrirFicha -->
+<input type="hidden" id="solicitud" name="solicitud" value="">
+<input type="hidden" id="tipoSolicitud" name="tipoSolicitud" value="">
+
+<!-- Inicio Modal ficha de Sustancia -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div id="ficha" class="modal-content">
+      </div>
+
+    </div>
+  </div>
+<!-- Fin Modal ficha de sustancia -->
+
+<!-- Ajax obtenerSustancia -->
+<input type="hidden" id="envioCategoria" name="categoria" value="">
+<input type="hidden" id="envioTipo" name="tipo" value="">
+
+<!-- Ajax obtener proposito sustancia -->
+<input type="hidden" id="envioNombreSustancia" name="idSustancia" value="">
+
+<!-- Ajax obtener datos sustancia -->
+<input type="hidden" id="envioNombreSustancia2" name="idSustancia2" value="">
+
+<!-- Ajax JavaScript-->
+<script type="text/javascript">
+
+  function abrirFicha(solicitud, tipo_solicitud) {
+    var x = document.getElementById("solicitud");
+      x.value = solicitud;
+
+    var y = document.getElementById("tipoSolicitud");
+      y.value = tipo_solicitud;
+
+    ajax('ajax_ficha_solicitud', ['solicitud', 'tipoSolicitud'], "ficha");
+  }
+
+
+  function getDatosDepenEjecutora(){
+    var opcion_sustancia = document.getElementById("sel3");
+    var sustancia_seleccionado = opcion_sustancia.options[opcion_sustancia.selectedIndex].value;
+
+    var x = document.getElementById("envioNombreSustancia2");
+    x.value = sustancia_seleccionado;
+
+    ajax('ajax_obtener_datos_depen_ejecutora', ['idSustancia2'], "obtenerDependenciaEjecutora")
+  }
+
+  st_solic_generadas = 1;
+  st_solic_recibidas = 1;
+  function change_status_list(list){
+    if (list == '#solic-generadas'){
+      if (st_solic_generadas == 1){
+          $('#solic-generadas').hide();
+          st_solic_generadas = 0;
+          $('#solic-generadas-caret').removeClass('fa-caret-up');
+          $('#solic-generadas-caret').addClass('fa-caret-down');
+        }
+      else {
+        $('#solic-generadas').show();
+        st_solic_generadas = 1;
+        $('#solic-generadas-caret').removeClass('fa-caret-down');
+        $('#solic-generadas-caret').addClass('fa-caret-up');
+      }
+    }
+    else if (list == '#solic-recibidas'){
+      if (st_solic_recibidas == 1){
+        $('#solic-recibidas').hide();
+        st_solic_recibidas = 0;
+          $('#solic-recibidas-caret').removeClass('fa-caret-up');
+          $('#solic-recibidas-caret').addClass('fa-caret-down');
+
+      }
+      else{
+        $('#solic-recibidas').show();
+        st_solic_recibidas = 1;
+        $('#solic-recibidas-caret').removeClass('fa-caret-down');
+        $('#solic-recibidas-caret').addClass('fa-caret-up');
+      }
+    }
+  }
+</script>
+
+<!-- Validador de inputs del modal de Solicitud de un Sustancia -->
+<script src="{{=URL('static', 'js/servicios_template_modal.js')}}"></script>
+
+<!-- Datatables-->
+<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+
+
+
+<!-- Datatable init js -->
+<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+
+<!-- Script Datatable Solicitudes Generadas-->
+<script>
+
+  var filtros1 = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable1 tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable1').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
+      $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro1() {
+      if (filtros1){
+        $("#datatable1 thead tr").not("#titulosListado").css("display","none");
+        filtros1 = false
+      }
+      else{
+        $("#datatable1 thead tr").not("#titulosListado").css("display","table-row");
+        filtros1 = true
+      }
+
+  }
+
+  var table = $('#datatable1').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons1');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+</script>
+
+<!-- Fin Script Datatable Solicitudes Generadas-->
+
+<!-- Script Datatable Solicitudes Recibidas-->
+<script>
+
+  var filtros2 = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable2 tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable2').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+      $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro2() {
+      if (filtros2){
+        $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+        filtros2 = false
+      }
+      else{
+        $("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
+        filtros2 = true
+      }
+
+  }
+
+  var table = $('#datatable2').DataTable({
+    language: {
+      url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },
+   initComplete: function(){
+      var api = this.api();
+
+      new $.fn.dataTable.Buttons(api, {
+         buttons: [
+            'copy', 'pdf', 'excel', 'csv', 'print'
+         ]
+      });
+      api.buttons().container().appendTo('#buttons2');  
+   }
+  });
+
+  var w2p_ajax_confirm_message =
+        "{{=T('')}}";
+</script>
+
+<!-- Fin Script Datatable Solicitudes Recibidas-->
+
+
+{{end}}

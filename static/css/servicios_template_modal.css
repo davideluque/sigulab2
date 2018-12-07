@@ -184,7 +184,11 @@ h3 {
     background-color:#337ab7;
     color:#fff;
 }
-
+.boton-sigulabIzq{
+	border-radius: 50%;
+	background-color: #337ab7;
+	color: #fff;
+}
 
 .btn-link-1 .botonForm{
     display: inline-block;
