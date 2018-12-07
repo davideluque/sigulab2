@@ -74,7 +74,7 @@ def tabla_categoria(tipo):
     if tipo =="listado":
         tb = db(db.t_Personal.f_es_supervisor == False)(db.t_Personal.f_oculto == False).select(db.t_Personal.ALL)
 
-    Buscamos la tabla general de empleados por validar
+    #Buscamos la tabla general de empleados por validar
     elif tipo == "validacion" :
         usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
         if(len(usuario)>1): usuario = usuario[1]
