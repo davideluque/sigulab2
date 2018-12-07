@@ -74,21 +74,21 @@ def tabla_categoria(tipo):
     if tipo =="listado":
         tb = db(db.t_Personal.f_es_supervisor == False)(db.t_Personal.f_oculto == False).select(db.t_Personal.ALL)
 
-    #Buscamos la tabla general de empleados por validar
-    # elif tipo == "validacion" :
-    #     usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
-    #     if(len(usuario)>1): usuario = usuario[1]
-    #     else: usuario = usuario.first()
-    #     es_supervisor = usuario.f_es_supervisor
-    #     dependencia = None
-    #     if es_supervisor:
-    #         if(auth.user.email == "sigulabusb@gmail.com" or auth.user.email =="asis-ulab@usb.ve"):
-    #             tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
+    Buscamos la tabla general de empleados por validar
+    elif tipo == "validacion" :
+        usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)
+        if(len(usuario)>1): usuario = usuario[1]
+        else: usuario = usuario.first()
+        es_supervisor = usuario.f_es_supervisor
+        dependencia = None
+        if es_supervisor:
+            if(auth.user.email == "sigulabusb@gmail.com" or auth.user.email =="asis-ulab@usb.ve"):
+                tb = db((db.t_Personal.f_por_validar == True)).select(db.t_Personal.ALL)
 
-    #         else:
-    #             dependencia = str(usuario.f_dependencia)
-    #             tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)&(db.t_Personal.f_oculto == False)
-    #                           ).select(db.t_Personal.ALL)
+            else:
+                dependencia = str(usuario.f_dependencia)
+                tb = db((db.t_Personal.f_dependencia == dependencia)&(db.t_Personal.f_es_supervisor == False)&(db.t_Personal.f_por_validar == True)&(db.t_Personal.f_oculto == False)
+                              ).select(db.t_Personal.ALL)
 
 
     #Creamos una lista para enviar a la vista
