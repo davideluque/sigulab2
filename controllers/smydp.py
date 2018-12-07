@@ -641,9 +641,16 @@ def __agregar_registro(concepto):
     
     else:
         tipo_eg = request.vars.tipo_egreso            
-        fecha_uso= request.vars.fecha_uso
-       
+        fecha_uso=request.vars.fecha_uso.split("-")
+        fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
+        fechaHoy = datetime.datetime.now()
+        if fechaHoy < fecha_u:
+            print(fechaHoy < fecha_u)
+            response.flash = "La fecha no puede ser mayor a la fecha actual "\
+                             "negativa"
+            redirect(URL(args=request.args, vars=request.get_vars, host=True))
+        
         
         # Nueva cantidad total luego del consumo
         total_nuevo = total_viejo - cantidad
@@ -2837,16 +2844,6 @@ def sustancias():
 
 
 
-
-
-####################################################################################
-####################################################################################
-##############     GENERACION DE REPORTES 
-####################################################################################
-####################################################################################
-
-
-
 ####################################################################################
 ##############     GENERACION DE REPORTES  LR4 Y LR7 
 ####################################################################################
@@ -3280,7 +3277,71 @@ def generar_reporte():
             ws2[x[i]].font = ft2
             ws2[x[i]].alignment = cen
         
+ 
         x = ['B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26','B27','B28','B29','B30','B31','B32','B33','B34']
+        
+        fechasImdiv={}
+        sufeAux=[]
+        consumoIndiv={}
+        consAux=[]
+        ingresoIndiv={}
+        ingAux=[]
+        totalInd={}
+        auxTotal=[]
+        
+        for suFe in sustBit:
+            if (int(neId)== int(suFe['f_sustancia'])): 
+                sufeAux.append(suFe['f_fechaUso'])
+
+                if ( suFe['f_concepto']==['Ingreso']):
+                    ingAux.append(float(suFe['f_cantidad']))
+                    consAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+                elif ( suFe['f_concepto']==['Consumo']):
+                    consAux.append(float(suFe['f_cantidad']))
+                    ingAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+        
+        fechasImdiv[str(neId)] = sufeAux
+        ingresoIndiv[str(neId)]= ingAux
+        consumoIndiv[str(neId)]= consAux 
+        totalInd[str(neId)]=auxTotal
+        print(fechasImdiv)
+        print(ingresoIndiv)
+        print(consumoIndiv)
+        print(totalInd)
+
+        h=0
+        for i in fechasImdiv[str(neId)]:
+            ws2[x[h]] = str(i)
+            ws2[x[h]].font = ft2
+            ws2[x[h]].alignment = cen
+            h+=1
+
+
+        y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
+        h1=0
+        for i in ingresoIndiv[str(neId)]:
+            ws2[y[h1]] = str(i)
+            ws2[y[h1]].font = ft2
+            ws2[y[h1]].alignment = cen
+            h1+=1
+
+        z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
+        h2=0
+        for i in consumoIndiv[str(neId)]:
+            ws2[z[h2]] = str(i)
+            ws2[z[h2]].font = ft2
+            ws2[z[h2]].alignment = cen
+            h2+=1
+
+        w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
+        h3=0
+        for i in totalInd[str(neId)]:
+            ws2[w[h3]] = str(i)
+            ws2[w[h3]].font = ft2
+            ws2[w[h3]].alignment = cen
+            h3+=1
         
 
 
