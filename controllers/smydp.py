@@ -2704,8 +2704,7 @@ def solicitudes():
         id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
 
         solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
-            request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
-            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
+            request.now, request.post_vars.nombreSustancia, None)
 
         solicitud_nueva.insertar()
 
