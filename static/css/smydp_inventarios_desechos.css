@@ -22,8 +22,8 @@ a.boton-retorno {
 	margin-top: 20px;
 	padding: 9.5px 12px;
 	background-color: #337ab7;
-	border-radius: 100%;	
-	font-size: 20px;
+	border-radius: 50%;
+		font-size: 20px;
 }
 
 a.boton-retorno2 {
@@ -31,7 +31,7 @@ a.boton-retorno2 {
 	color: white;
 	padding: 9.5px 12px;
 	background-color: #337ab7;
-	border-radius: 100%;	
+	border-radius: 50%;	
 	font-size: 20px;
 	float:left;
 	margin-top:0px;
@@ -126,12 +126,15 @@ h3{
 	text-align: center;
 	border-color: #464646;
 	margin: -7px auto;
+	border-radius: 50%;
+
 }
 
 .boton-retorno2{
 	text-align: center;
 	border-color: #464646;
 	margin: 22px auto;
+	border-radius: 50%;
 }
 
 .columnas {

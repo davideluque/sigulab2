@@ -73,7 +73,7 @@
 		debe poder regresar al nivel superior de la jerarquia -->
 		{{if espacios or es_espacio or espacio_visitado:}}
 		<div class="col-xs-2">
-			<button id="boton-retorno" class="btn boton-sigulab" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}')">
+			<button id="boton-retorno" class="btn boton-sigulab buton-retorno" onclick="redirect('{{=URL('inventarios', vars=dict(dependencia=dep_padre_id, es_espacio='False', retroceder=retroceder))}}')">
 				<i class="fas fa-arrow-left"></i>	    		
 			</button>
 		</div>
@@ -128,14 +128,73 @@
 		{{pass}}
 	{{pass}}
 	</div>
+	<div class="container">
+		<form nanme="ejemplomonth" action="generar_reporte" method="POST">
+			<select class="form-reporte" type="select" id="mes" name="mes" required>
+				<option value="" selected hidden >Mes*</option>
+				{{meses = [('Enero',1),('Febrero',2),
+				('Marzo',3),('Abril',4),('Mayo',5),('Junio',6),('Julio',7),
+				('Agosto',8),('Septiembre',9),('Octubre',10),('Noviembre',11),('Diciembre',12)]}}
+				{{for c in meses:}}
+				<option value="{{=c}}">{{=c[0]}}</option>
+				{{pass}}
+			  </select>
+			<select class="form-reporte" type="select" id="ayo" name="ayo" required>
+				<option value="" selected hidden >Año*</option>
+				{{ ayos= ['2017','2018','2019']}}
+				{{for c in ayos:}}
+				<option value="{{=c}}">{{=c}}</option>
+				{{pass}}
+			</select>			
+			<input type="submit" name="enviar" value="Generar Reporte RL4 Y RL7 ">
+		</form>
+	</div>
 
 	<div class="container">
-   
-		<a  href="{{=URL('sigulab2', 'smydp', 'generar_reporte')}}">
-		  <button class="btn btn-default">Generar Reporte</button>
-		</a>
-	  
+		<form nanme="ejemplomonth" action="generar_reporte_rl7" method="POST">
+			<select class="form-reporte" type="select" id="mesR7" name="mesR7" required>
+				<option value="" selected hidden >Mes*</option>
+				{{meses = [('Enero',1),('Febrero',2),
+				('Marzo',3),('Abril',4),('Mayo',5),('Junio',6),('Julio',7),
+				('Agosto',8),('Septiembre',9),('Octubre',10),('Noviembre',11),('Diciembre',12)]}}
+				{{for c in meses:}}
+				<option value="{{=c}}">{{=c[0]}}</option>
+				{{pass}}
+			  </select>
+			<select class="form-reporte" type="select" id="ayoR7" name="ayoR7" required>
+				<option value="" selected hidden >Año*</option>
+				{{ ayos= ['2017','2018','2019']}}
+				{{for c in ayos:}}
+				<option value="{{=c}}">{{=c}}</option>
+				{{pass}}
+			</select>			
+			<input type="submit" name="enviar" value="Generar Reporte RL7">
+		</form>
 	</div>
+
+	<div class="container">
+		<form nanme="ejemplomonth" action="generar_reporte_rl4" method="POST">
+			<select class="form-reporte" type="select" id="mesR4" name="mesR4" required>
+				<option value="" selected hidden >Mes*</option>
+				{{meses = [('Enero',1),('Febrero',2),
+				('Marzo',3),('Abril',4),('Mayo',5),('Junio',6),('Julio',7),
+				('Agosto',8),('Septiembre',9),('Octubre',10),('Noviembre',11),('Diciembre',12)]}}
+				{{for c in meses:}}
+				<option value="{{=c}}">{{=c[0]}}</option>
+				{{pass}}
+			  </select>
+			<select class="form-reporte" type="select" id="ayoR4" name="ayoR4" required>
+				<option value="" selected hidden >Año*</option>
+				{{ ayos= ['2017','2018','2019']}}
+				{{for c in ayos:}}
+				<option value="{{=c}}">{{=c}}</option>
+				{{pass}}
+			</select>			
+			<input type="submit" name="enviar" value="Generar Reporte RL4">
+		</form>
+	</div>
+
+
 	<!-- 
 		Si se estan consultando los espacios fisicos de una seccion, la variable espacios 
 		sera utilizada en lugar de la variable dependencias 
@@ -198,6 +257,8 @@
 		grid.classList.add("grid-container-ef");
 	}
 </script>
+
+
 <script type="text/javascript">
 	function redirect(dir){
 		window.location.href = dir;

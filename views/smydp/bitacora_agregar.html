@@ -16,6 +16,7 @@
   } );
 </script>
 
+
   <div class="modal fade" id="addregister" role="dialog">
     <div class="modal-dialog">
 
@@ -234,7 +235,7 @@ del concepto y tipo de ingreso o egreso -->
       almacen_div.style.display = "none";
       fecha_sumi_div.style.display="block";
 
-    }else if (valor == "Cesion"){
+    }else if (valor == "Cesión"){
       nro_factura_div.style.display = "none";
       institucion_div.style.display = "none";
       rif_div.style.display = "none";
@@ -257,6 +258,9 @@ del concepto y tipo de ingreso o egreso -->
     // En cualquier caso, se activa el div servicio_div y se
     // desactivan los demas
     if (valor== 'Prestamo'){
+      servicio_div.style.display = "none";
+      fecha_uso_div.style.display = "block";
+    }else if (valor == "Cesión"){
       servicio_div.style.display = "none";
       fecha_uso_div.style.display = "block";
     }else{
