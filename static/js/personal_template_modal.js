@@ -516,6 +516,7 @@ function validaTrabajo1() {
                     arreglo[j].attr("data-valido", "false");
                     arreglo[j].popover('show');
                     validacion = false;
+                    break;
                 } else {
                     arreglo[j].removeClass('input-error');
                     arreglo[j].popover('hide');

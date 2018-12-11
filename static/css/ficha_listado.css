@@ -44,10 +44,12 @@ th {
 	background-color: #337ab7; 
 	border-color: #337ab7;
 	color: white;
+	border-radius: 50%;
 }
 
 .botonesListado:hover {
 	color: white;
+	border-radius: 50%;
 }
 
 #containerAgregar{

@@ -17,6 +17,8 @@ from openpyxl.styles import Alignment, Font
 import unicodedata
 import calendar
 import datetime
+from sustancias_libreria import *
+
 
 # Verifica si el usuario que intenta acceder al controlador tiene alguno de los
 # roles necesarios
@@ -25,6 +27,12 @@ def __check_role():
     roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
                         'JEFE DE LABORATORIO', 'JEFE DE SECCIÓN', 'TÉCNICO', 
                         'GESTOR DE SMyDP', 'PERSONAL INTERNO']
+    return True in map(lambda x: auth.has_membership(x), roles_permitidos)
+
+def __check_role_report():
+
+    roles_permitidos = ['WEBMASTER', 'DIRECTOR', 'ASISTENTE DEL DIRECTOR', 
+                                'GESTOR DE SMyDP']
     return True in map(lambda x: auth.has_membership(x), roles_permitidos)
 
 # Determina si el id de la dependencia es valido. Retorna False si el id no existe
@@ -484,6 +492,10 @@ def __get_descripcion(registro):
            
 
             descripcion = "prestamo a .."
+
+        elif registro.f_tipo_egreso[0] == "Cesión":
+        
+            descripcion = "cesion a .."
         # Cuando es un egreso en respuesta a una solicitud
         else:
             
@@ -545,6 +557,7 @@ def __agregar_registro(concepto):
         tipo_ing = request.vars.tipo_ingreso
 
         fecha_sumi = request.vars.fecha_sumi
+        
 
         # Nueva cantidad total y nueva cantidad para uso interno
         total_nuevo = total_viejo + cantidad
@@ -581,7 +594,7 @@ def __agregar_registro(concepto):
                 f_inventario=inv.id,
                 f_sustancia=inv.sustancia)
 
-        elif tipo_ing == 'Cesion':
+        elif tipo_ing == 'Cesión':
              db.t_Bitacora.insert(
                 f_cantidad=cantidad,
                 f_cantidad_total=total_nuevo,
@@ -628,9 +641,16 @@ def __agregar_registro(concepto):
     
     else:
         tipo_eg = request.vars.tipo_egreso            
-        fecha_uso= request.vars.fecha_uso
-       
+        fecha_uso=request.vars.fecha_uso.split("-")
+        fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
+        fechaHoy = datetime.datetime.now()
+        if fechaHoy < fecha_u:
+            print(fechaHoy < fecha_u)
+            response.flash = "La fecha no puede ser mayor a la fecha actual "\
+                             "negativa"
+            redirect(URL(args=request.args, vars=request.get_vars, host=True))
+        
         
         # Nueva cantidad total luego del consumo
         total_nuevo = total_viejo - cantidad
@@ -668,18 +688,17 @@ def __agregar_registro(concepto):
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def bitacora():
-
     # INICIO Datos del modal de agregar un registro
     # Conceptos
     conceptos = ['Ingreso','Consumo']
 
     # Tipos de consumos
     #tipos_egreso = db.t_Bitacora.f_tipo_egreso.requires.other.theset
-    tipos_egreso = ['Docencia','Investigación','Extensión','Prestamo','Cesion']
+    tipos_egreso = ['Docencia','Investigación','Extensión','Prestamo','Cesión']
 
     # Tipos de ingresos
     #tipos_ingreso = db.t_Bitacora.f_tipo_ingreso.requires.other.theset
-    tipos_ingreso = ['Compra','Almacén','Prestamo','Cesion']
+    tipos_ingreso = ['Compra','Almacén','Prestamo','Cesión']
 
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
@@ -1707,19 +1726,19 @@ def inventarios_desechos():
                 envases_totales = list(db.executesql('SELECT * from t_envases e where e.espacio_fisico = ' + espacio_id + ';', as_dict = True))
                 
                 # Se quiere eliminar un desecho
-                print request.vars
+               # print request.vars
                 if request.vars.view and request.vars.borrar_desecho:
                     marcado_para_borrar = False
-                    print request.vars
+                    ##print request.vars
                     if request.vars.borrar_desecho == 'True':
-                        print "marcado para borrar = true"
+                       # print "marcado para borrar = true"
                         marcado_para_borrar = True
 
                     # Verifica si el elemento fue marcado para ser borrado
                     if marcado_para_borrar:
-                        print "se va a borrar"
+                       # print "se va a borrar"
                         response.flash = __eliminar_desecho(int(request.vars.view))
-                        print "ya se tuvo que haber borrado"
+                       # print "ya se tuvo que haber borrado"
                         session.flash = response.flash
                         return redirect(URL('..', 'sigulab2', 'smydp/inventarios_desechos', vars=dict(dependencia=request.vars.dependencia, es_espacio="True"))) 
 
@@ -2687,7 +2706,123 @@ def catalogo():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-    return locals()
+
+    sustancia_solicitud = None
+
+    # Lista de sustancias en el catalogo para el modal de agregar sustancia
+    # al alcanzar el nivel de espacios fisicos
+    sustancias = list(db(db.t_Sustancia.id > 0).select(db.t_Sustancia.ALL))
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    #----- AGREGAR SOLICITUDES -----#
+    if request.post_vars.numRegistro:
+
+        id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
+
+        solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
+            request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
+            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
+
+        solicitud_nueva.insertar()
+
+        # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD
+        solicitud_nueva.correoHacerSolicitud()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE AGREGAR SOLICITUDES -----#
+
+    #----- AGREGAR SOLICITUD DESDE Sustancia -----#
+    if request.post_vars.idSustancia:
+        sustancia_solicitud = Sustancia(db)
+        sustancia_solicitud.instanciar(int(request.vars.idSustancia))
+
+    #----- FIN AGREGAR SOLICITUD DESDE Sustancia -----#
+
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+
+        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
+        solicitud_a_cambiar.correoCambioEstadoSolicitud()
+        solicitud_a_cambiar.correoSolicitudFinalizada()
+
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
+
+            #solicitud_a_cambiar.elaborar_certificacion()
+
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
+    #----- DATOS DE SOLICITANTE -----#
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    if auth.has_membership(group_id="CLIENTE INTERNO"):
+        registro = "FUSB"
+    else:
+        registro = dependencia_usuario.codigo_registro
+
+    num_registro = validador_registro_solicitudes(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
+
+    #----- GENERACION DE LISTADOS -----#
+    listado_de_solicitudes_generadas = ListaSolicitudes(db, auth, "Solicitante")
+
+    listado_de_solicitudes_recibidas = ListaSolicitudes(db, auth, "Ejecutante")
+
+
+    return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,
+                solicitudes_recibidas=listado_de_solicitudes_recibidas.filas,
+                datos_solicitud=datos_solicitud,
+                sustancias=sustancias,
+                unidades_de_medida=unidades_de_medida,
+                sustancia_solicitud=sustancia_solicitud)
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -2705,43 +2840,19 @@ def sustancias():
 #############################################################################
 ############################################################################
 
-def select_fecha():
-    now = datetime.datetime.now()
-    tablemes = SQLFORM.factory(Field('mes',requires=IS_IN_SET(['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']),
-            label=T('Seleccione mes')),
-        Field('year','integer',requires=IS_INT_IN_RANGE(1969,now.year+1,error_message='Debe introducir un año menor o igual al actual'),
-            label=T('Introduzca año'))
-        )
-    if tablemes.process().accepted:
-        if tablemes.vars.mes=="Enero":
-            x=1
-        elif tablemes.vars.mes=="Febrero":
-            x=2
-        elif tablemes.vars.mes=="Marzo":
-            x=3
-        elif tablemes.vars.mes=="Abril":
-            x=4
-        elif tablemes.vars.mes=="Mayo":
-            x=5
-        elif tablemes.vars.mes=="Junio":
-            x=6
-        elif tablemes.vars.mes=="Julio":
-            x=7
-        elif tablemes.vars.mes=="Agosto":
-            x=8
-        elif tablemes.vars.mes=="Septiembre":
-            x=9
-        elif tablemes.vars.mes=="Octubre":
-            x=10
-        elif tablemes.vars.mes=="Noviembre":
-            x=11
-        elif tablemes.vars.mes=="Diciembre":
-            x=12
-        redirect(URL('reportes','select_rl4',vars=dict(m=x,y=tablemes.vars.year)))
-    return locals()
 
+
+
+
+####################################################################################
+##############     GENERACION DE REPORTES  LR4 Y LR7 
+####################################################################################
+@auth.requires(lambda: __check_role_report())
+
+@auth.requires_login()
 
 def generar_reporte():
+    
     wb = Workbook()
     ws = wb.active
     cen = Alignment(horizontal='center', vertical='distributed')
@@ -2753,50 +2864,40 @@ def generar_reporte():
     ws.font = ft2
     now = datetime.datetime.now()
 
-    ws1 = wb.create_sheet("Informe mensual")
-
+    #mes = '12'
+    #year= '2018'
+    mes = ((((request.vars.mes).replace('(','')).replace(')','')).split(',')[1]).replace(' ','')
+    year= request.vars.ayo
     #Encabezado
     ws.title = "Informe mensual"
-    ws1.title = "Informe mensual"
-
+    #img = Image("gob.jpg")
+    #ws.add_image(img, 'A1')
+   
 
     #tamaño de las columnas
     for i in ['A', 'D', 'E','F','G','J','K']:
        ws.column_dimensions[i].width = 10
-       ws1.column_dimensions[i].width = 10
     ws.column_dimensions['B'].width = 17
     ws.column_dimensions['C'].width = 11
     ws.column_dimensions['H'].width = 9
     ws.column_dimensions['I'].width = 10
-    ws1.column_dimensions['B'].width = 17
-    ws1.column_dimensions['C'].width = 11
-    ws1.column_dimensions['H'].width = 9
-    ws1.column_dimensions['I'].width = 10
-
-        #tamaño de las filas
+    
+    #tamaño de las filas
     ws.row_dimensions[13].height = 40
-    ws1.row_dimensions[13].height = 40
     for i in range(1,13):
         ws.row_dimensions[i].height = 13
-        ws1.row_dimensions[i].height = 13
     for i in range(14,29):
         ws.row_dimensions[i].height = 12
-        ws1.row_dimensions[i].height = 12
 
     #All Merges
     ws.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
     ws.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
-    ws1.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
-    ws1.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
     for i in range(13,28):
-        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
+        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=4)
         ws.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
-        ws1.merge_cells(start_row=i,start_column=2,end_row=i,end_column=3)
-        ws1.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
-
+        
     for i in range(29,33):
         ws.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
-        ws1.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
 
     #titulos y datos
     z = ['C5', 'J7', 'I9', 'J9', 'K9','B7','B8','B9','B10','B11','I10','J10','K10']
@@ -2805,72 +2906,57 @@ def generar_reporte():
     ws['I9'] = 'DIA'
     ws['J9'] = 'MES'
     ws['K9'] = 'AÑO'
-    ws1['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
-    ws1['J7'] = 'FECHA'
-    ws1['I9'] = 'DIA'
-    ws1['J9'] = 'MES'
-    ws1['K9'] = 'AÑO'
+
 
 
     for i in range(5):
         ws[z[i]].font = ft1
         ws[z[i]].alignment = cen
-        ws1[z[i]].font = ft1
-        ws1[z[i]].alignment = cen
 
     ws['B7'] = 'OPERADOR:'
     ws['B8'] = 'LICENCIA:'
     ws['B9'] = 'PERMISO DEL CICPC:'
     ws['B10'] = 'RIF:'
     ws['B11'] = 'MES-AÑO:'
-    ws1['B7'] = 'OPERADOR:'
-    ws1['B8'] = 'LICENCIA:'
-    ws1['B9'] = 'PERMISO DEL CICPC:'
-    ws1['B10'] = 'RIF:'
-    ws1['B11'] = 'MES-AÑO:'
+   
 
     for i in range(5,10):
         ws[z[i]].font = ft1
         ws[z[i]].alignment = rig
-        ws1[z[i]].font = ft1
-        ws1[z[i]].alignment = rig
+        
 
     ws['I10'] = now.day
     ws['J10'] = now.month
     ws['K10'] = now.year
-    ws1['I10'] = now.day
-    ws1['J10'] = now.month
-    ws1['K10'] = now.year
+    
 
     for i in range(10,13):
         ws[z[i]].font = ft2
         ws[z[i]].alignment = cen
-        ws1[z[i]].font = ft2
-        ws1[z[i]].alignment = cen
+       
 
     ws['A28'] = 'Nota:'
     ws['A28'].font = ft1
     ws['A28'].alignment = lef
-    ws1['A28'] = 'Nota:'
-    ws1['A28'].font = ft1
-    ws1['A28'].alignment = lef
-
+    
+    #mes = request.vars['m']
+    #year= request.vars['y']
+    
     w = ['C7', 'C8', 'C9', 'C10', 'C11','A13','B13','D13','E13','F13','G13','H13','I13','J13']
 
     for i in range(5):
         ws[w[i]].font = ft2
-        ws1[w[i]].font = ft2
 
     ws['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
     ws['C8'] = '2014LIC0256'
     ws['C9'] = 'No. 1311'
     ws['C10'] = 'G-20000063-5'
-    ws['C11'] = str(now.month)+'/'+str(now.year)
+    ws['C11'] = mes+'/'+year
     ws['A13'] = 'N°'
 
     ws['B13'] = 'Sustancia Química Controlada'
 
-    ws['D13'] = 'Código Arancelario'
+  
 
     ws['E13'] = 'Saldo Físico Inicial'
 
@@ -2884,35 +2970,13 @@ def generar_reporte():
 
     ws['J13'] = 'Observaciones'
 
-    ws1['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
-    ws1['C8'] = '2014LIC0256'
-    ws1['C9'] = 'No. 1311'
-    ws1['C10'] = 'G-20000063-5'
-    ws1['C11'] = str(now.month)+'/'+str(now.year)
-    ws1['A13'] = 'N°'
 
-    ws1['B13'] = 'Sustancia Química Controlada'
-
-    ws1['D13'] = 'Código Arancelario'
-
-    ws1['E13'] = 'Saldo Físico Inicial'
-
-    ws1['F13'] = 'Total Entradas'
-
-    ws1['G13'] = 'Total Salidas'
-
-    ws1['H13'] = 'Saldo Físico Final'
-
-    ws1['I13'] = 'Unidad de Medida'
-
-    ws1['J13'] = 'Observaciones'
 
 
     for i in range(5,14):
         ws[w[i]].font = ft1
         ws[w[i]].alignment = cen
-        ws1[w[i]].font = ft1
-        ws1[w[i]].alignment = cen
+        
 
 
     x = ['A14','A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26']
@@ -2921,10 +2985,1417 @@ def generar_reporte():
         ws[x[i]] = y[i]
         ws[x[i]].font = ft3
         ws[x[i]].alignment = cen
-        ws1[x[i]] = y[i]
-        ws1[x[i]].font = ft3
-        ws1[x[i]].alignment = cen
+       
     x = ['B14','B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26']
+    
+    ####################################################################
+    ######### FIN DEL ENCABEZADO
+    ####################################################################
+    
+    # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
+    # EN EL SISTAMA 
+    sustContl7= db((db.t_Sustancia.f_control=="RL4 y RL7")).select()
+    sustBit=db((db.t_Bitacora.f_fechaUso.year()==int(year))&(db.t_Bitacora.f_fechaUso.month()==int(mes))).select()
+    medidas={}
+    ids={}
+    entradas = {}
+    salidas = {}
+    totalIni={}
+    totalFin={}
+    
+    for suCo in sustContl7:
+        aux=False
+        auxEnt=0
+        auxSal=0
+        auxFecIn=31
+        auxFecFi=1 
+
+        for suFe in sustBit:
+            if (suCo.id== suFe['f_sustancia'] and not(aux)):
+                ids[str(suCo.id)]=suCo.f_nombre
+                medidas[str(suCo.id)]= suFe['f_medida']
+                aux=True
+                salidas[str(suCo.id)]=0
+                entradas[str(suCo.id)]= 0
+            if (suCo.id== suFe['f_sustancia']): 
+                if ( suFe['f_concepto']==['Ingreso']):
+                    auxEnt+= float(suFe['f_cantidad'])
+                    entradas[str(suCo.id)]= auxEnt
+                elif ( suFe['f_concepto']==['Consumo']):
+                    auxSal+=float(suFe['f_cantidad'])
+                    salidas[str(suCo.id)]= auxSal 
+
+                    
+                if (int(str(suFe['f_fechaUso']).split('-')[2])<=auxFecIn):
+                    totalIni[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecIn=int(str(suFe['f_fechaUso']).split('-')[2] )
+
+                if (int(str(suFe['f_fechaUso']).split('-')[2])>=auxFecFi):
+                    totalFin[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecFi=int(str(suFe['f_fechaUso']).split('-')[2] )        
+                   # print(str(suFe['f_cantidad_total']))
+    
+    ## CALCULANDO LA CANTIDAD DE TRANSACCIONES SE REALIZARON DE LA SUSTANCIA
+   
+   
+    
+    y=0;
+    # CARGANDO LOS NOMBRES AL EXCEL
+    for i,names in ids.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+            
+    x = ['E14','E15','E16','E17','E18','E19','E20','E21','E22','E23','E24','E25','E26']
+
+    ##
+   ## SALDO FISICO INICIAL
+
+    y=0;
+    for i,names in totalIni.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+
+
+
+    ###
+    ### TOTAL DE ENTRADAS
+
+    x = ['F14','F15','F16','F17','F18','F19','F20','F21','F22','F23','F24','F25','F26']
+    y=0;
+    for i,names in entradas.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+        
+    ###
+    ### TOTAL DE SALIDAS
+
+    f = ['G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26']
+    y=0;
+    for i,names in salidas.items():
+        if y<13:
+            ws[f[y]] = names
+            ws[f[y]].font = ft3
+            y=y+1
+
+    ###
+    ### TOTAL DE SALIDAS
+
+    x = ['H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26']
+
+    y=0;
+    for i,names in totalFin.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+    
+
+    #####################################
+    # RELLENANDO LA UNIDAD DE MEDIDA 
+    #####################################
+
+    x = ['I14','I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26']
+
+    y=0;
+    for i,medi in medidas.items():
+        query=db((db.t_Unidad_de_medida.id==int(medi))).select(db.t_Unidad_de_medida.f_abreviatura)
+        if y<13:
+            if query[0].f_abreviatura=="ml":
+                ws[x[y]] = "l"
+            if query[0].f_abreviatura=="g":
+                ws[x[y]] = "kg"
+            else:
+                ws[x[y]] = str((query[0].f_abreviatura))
+            ws[x[y]].font = ft3
+
+            y=y+1
+
+    
+       
+
+    #Pie de Pagina
+    ws['A29'] = '1. Los saldos serán reportados en:'
+    ws['A30'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+    ws['A31'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+    ws['A32'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+  
+
+
+    ###########################################################################
+    ###########################################################################
+    #           REPORTES INDIVIDUALES 
+    ##########################################################################
+    ##########################################################################
+    namesList = {}
+    bitacora=[]
+    for suCo in sustContl7:
+        suAux= db((db.t_Bitacora.f_sustancia==suCo.id)).select()
+        aux=0;
+        nameBol=False
+        for j in suAux:
+            
+            if(j.f_fechaUso.month==int(mes) and j.f_fechaUso.year==int(year)):
+                aux=aux+1
+        for i,n in ids.items():
+            if (suCo.f_nombre==n):
+                namesList[suCo.id]= aux 
+        bitacora.append(aux)  
+
+    contador=0
+        
+    for neId,n in ids.items():
+        while ( len(n)>=31):
+            h=n.split(' ')
+            h.pop()
+            n=' '.join(map(str,h))
+        try:
+            n=unicode(n,"utf-8")
+        except:
+            pass
+        ws2 = wb.create_sheet(n)
+        # Encabezado 
+
+        ws2.title = n
+        #img = Image('gob.jpg')
+        #ws2.add_image(img, 'A1')
+
+        #tamaño de las columnas
+        for i in ['A', 'D', 'K','G','H','I']:
+            ws2.column_dimensions[i].width = 9
+        ws2.column_dimensions['B'].width = 9
+        ws2.column_dimensions['C'].width = 17.5
+        ws2.column_dimensions['E'].width = 17.5
+        ws2.column_dimensions['F'].width = 17.5
+        ws2.column_dimensions['J'].width = 17.5
+
+
+        #tamaño de las filas
+        ws2.row_dimensions[14].height = 40
+        for i in range(1,14):
+            ws2.row_dimensions[i].height = 13
+        for i in range(15,42):
+            ws2.row_dimensions[i].height = 13
+
+  
+
+        #All Merges
+        ws2.merge_cells(start_row=5,start_column=2,end_row=5,end_column=7)
+        ws2.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+
+        #titulos y datos
+        z = ['B5', 'G7', 'F8', 'G8', 'H8','B7','B8','B9','B10','B11','B12','F9','G9','H9']
+        ws2['B5'] = 'INFORME DE REPORTE DIARIO DE SUSTANCIAS QUIMICAS CONTROLADAS'
+        ws2['G7'] = 'FECHA'
+        ws2['F8'] = 'DIA'
+        ws2['G8'] = 'MES'
+        ws2['H8'] = 'AÑO'
+
+
+        for i in range(5):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = cen
+
+
+        ws2['B7'] = 'OPERADOR:'
+        ws2['B8'] = 'LICENCIA:'
+        ws2['B9'] = 'RIF:'
+        ws2['B10'] = 'SUSTANCIA:'
+        ws2['B11'] = 'UNIDAD DE MEDIDA:'
+        ws2['B12'] = 'MES-AÑO:'
+
+
+
+        for i in range(5,11):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = rig
+
+        ws2['F9'] = now.day
+        ws2['G9'] = now.month
+        ws2['H9'] = now.year
+
+
+        for i in range(11,14):
+            ws2[z[i]].font = ft2
+            ws2[z[i]].alignment = cen
+
+
+        ws2['A36'] = 'Nota:'
+        ws2['A36'].font = ft1
+        ws2['A36'].alignment = lef
+
+
+        w = ['C7', 'C8', 'C9', 'C10', 'C11','C12','A14','B14','C14','D14','E14','F14','G14','H14','I14','J14',]
+
+        for i in range(6):
+            ws2[w[i]].font = ft2
+
+        ws2['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+        ws2['C8'] = '2014LIC0256'
+        ws2['C9'] = 'G-20000063-5'
+        ws2['C10'] =  n.upper()
+        ws2['C11'] = 'med' #aqui va la unidad de medida 
+        ws2['C12'] = mes+'-'+year 
+        #query=db((db.t_Unidad_de_medida.id==medidas[str(i)])).select(db.t_Unidad_de_medida.f_abreviatura)
+        ws2['C11'] =' '
+
+
+
+        ws2['A14'] = 'Asiento'
+
+        ws2['B14'] = 'Fecha'
+
+        ws2['C14'] = 'Documento Nro'
+
+        ws2['D14'] = 'RIF o Cédula de identidad'
+
+        ws2['E14'] = 'Nombre de la persona natural o juridica '
+
+        ws2['F14'] = 'Descripción (de acuerdo a su actividad)'
+
+        ws2['G14'] = 'Entrada'
+
+        ws2['H14'] = 'Salida'
+
+        ws2['I14'] = 'Saldo'
+
+        ws2['J14'] = 'Observaciones'
+
+        for i in range(5,16):
+            ws2[w[i]].font = ft1
+            ws2[w[i]].alignment = cen
+
+        x = ['A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26','A27','A28','A29','A30','A31','A32','A33','A34']
+        y = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20']
+        for i in range(0,20):
+            ws2[x[i]] = y[i]
+            ws2[x[i]].font = ft2
+            ws2[x[i]].alignment = cen
+        
+ 
+        x = ['B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26','B27','B28','B29','B30','B31','B32','B33','B34']
+        
+        fechasImdiv={}
+        sufeAux=[]
+        consumoIndiv={}
+        consAux=[]
+        ingresoIndiv={}
+        ingAux=[]
+        totalInd={}
+        auxTotal=[]
+        
+        for suFe in sustBit:
+            if (int(neId)== int(suFe['f_sustancia'])): 
+                sufeAux.append(suFe['f_fechaUso'])
+
+                if ( suFe['f_concepto']==['Ingreso']):
+                    ingAux.append(float(suFe['f_cantidad']))
+                    consAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+                elif ( suFe['f_concepto']==['Consumo']):
+                    consAux.append(float(suFe['f_cantidad']))
+                    ingAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+        
+        fechasImdiv[str(neId)] = sufeAux
+        ingresoIndiv[str(neId)]= ingAux
+        consumoIndiv[str(neId)]= consAux 
+        totalInd[str(neId)]=auxTotal
+        print(fechasImdiv)
+        print(ingresoIndiv)
+        print(consumoIndiv)
+        print(totalInd)
+
+        h=0
+        for i in fechasImdiv[str(neId)]:
+            ws2[x[h]] = str(i)
+            ws2[x[h]].font = ft2
+            ws2[x[h]].alignment = cen
+            h+=1
+
+
+        y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
+        h1=0
+        for i in ingresoIndiv[str(neId)]:
+            ws2[y[h1]] = str(i)
+            ws2[y[h1]].font = ft2
+            ws2[y[h1]].alignment = cen
+            h1+=1
+
+        z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
+        h2=0
+        for i in consumoIndiv[str(neId)]:
+            ws2[z[h2]] = str(i)
+            ws2[z[h2]].font = ft2
+            ws2[z[h2]].alignment = cen
+            h2+=1
+
+        w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
+        h3=0
+        for i in totalInd[str(neId)]:
+            ws2[w[h3]] = str(i)
+            ws2[w[h3]].font = ft2
+            ws2[w[h3]].alignment = cen
+            h3+=1
+        
+
+
+
+    #Pie de Pagina
+        ws2['A37'] = '1. Los saldos serán reportados en:'
+        ws2['A38'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+        ws2['A39'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+        ws2['A40'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+
+
+
+
+
+
+
+
+ 
     wb.save('Reporte Universidad Simon Bolivar.xlsx')
     response.stream('Reporte Universidad Simon Bolivar.xlsx',attachment=True, filename='Reporte Universidad Simon Bolivar.xlsx')
+    return locals()
+
+
+
+
+  
+####################################################################################
+##############     GENERACION DE REPORTES   LR7 
+####################################################################################
+@auth.requires(lambda: __check_role_report())
+
+@auth.requires_login()
+
+def generar_reporte_rl7():
+
+    wb = Workbook()
+    ws = wb.active
+    cen = Alignment(horizontal='center', vertical='distributed')
+    rig = Alignment(horizontal='right')
+    lef = Alignment(horizontal='left')
+    ft1 = Font(name='Arial', size=10, bold=True)
+    ft2 = Font(name='Arial', size=10, bold=False)
+    ft3 = Font(name='Arial', size=8)
+    ws.font = ft2
+    now = datetime.datetime.now()
+
+    #mes = '12'
+    #year= '2018'
+    mes = ((((request.vars.mesR7).replace('(','')).replace(')','')).split(',')[1]).replace(' ','')
+    year= request.vars.ayoR7
+    #Encabezado
+    ws.title = "Informe mensual"
+    #img = Image("gob.jpg")
+    #ws.add_image(img, 'A1')
+   
+
+    #tamaño de las columnas
+    for i in ['A', 'D', 'E','F','G','J','K']:
+       ws.column_dimensions[i].width = 10
+    ws.column_dimensions['B'].width = 17
+    ws.column_dimensions['C'].width = 11
+    ws.column_dimensions['H'].width = 9
+    ws.column_dimensions['I'].width = 10
+    
+    #tamaño de las filas
+    ws.row_dimensions[13].height = 40
+    for i in range(1,13):
+        ws.row_dimensions[i].height = 13
+    for i in range(14,29):
+        ws.row_dimensions[i].height = 12
+
+    #All Merges
+    ws.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    for i in range(13,28):
+        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=4)
+        ws.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+        
+    for i in range(29,33):
+        ws.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+
+    #titulos y datos
+    z = ['C5', 'J7', 'I9', 'J9', 'K9','B7','B8','B9','B10','B11','I10','J10','K10']
+    ws['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws['J7'] = 'FECHA'
+    ws['I9'] = 'DIA'
+    ws['J9'] = 'MES'
+    ws['K9'] = 'AÑO'
+
+
+
+    for i in range(5):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = cen
+
+    ws['B7'] = 'OPERADOR:'
+    ws['B8'] = 'LICENCIA:'
+    ws['B9'] = 'PERMISO DEL CICPC:'
+    ws['B10'] = 'RIF:'
+    ws['B11'] = 'MES-AÑO:'
+   
+
+    for i in range(5,10):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = rig
+        
+
+    ws['I10'] = now.day
+    ws['J10'] = now.month
+    ws['K10'] = now.year
+    
+
+    for i in range(10,13):
+        ws[z[i]].font = ft2
+        ws[z[i]].alignment = cen
+       
+
+    ws['A28'] = 'Nota:'
+    ws['A28'].font = ft1
+    ws['A28'].alignment = lef
+    
+    #mes = request.vars['m']
+    #year= request.vars['y']
+    
+    w = ['C7', 'C8', 'C9', 'C10', 'C11','A13','B13','D13','E13','F13','G13','H13','I13','J13']
+
+    for i in range(5):
+        ws[w[i]].font = ft2
+
+    ws['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws['C8'] = '2014LIC0256'
+    ws['C9'] = 'No. 1311'
+    ws['C10'] = 'G-20000063-5'
+    ws['C11'] = mes+'/'+year
+    ws['A13'] = 'N°'
+
+    ws['B13'] = 'Sustancia Química Controlada'
+
+  
+
+    ws['E13'] = 'Saldo Físico Inicial'
+
+    ws['F13'] = 'Total Entradas'
+
+    ws['G13'] = 'Total Salidas'
+
+    ws['H13'] = 'Saldo Físico Final'
+
+    ws['I13'] = 'Unidad de Medida'
+
+    ws['J13'] = 'Observaciones'
+
+
+
+
+    for i in range(5,14):
+        ws[w[i]].font = ft1
+        ws[w[i]].alignment = cen
+        
+
+
+    x = ['A14','A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26']
+    y = ['01','02','03','04','05','06','07','08','09','10','11','12','13']
+    for i in range(0,13):
+        ws[x[i]] = y[i]
+        ws[x[i]].font = ft3
+        ws[x[i]].alignment = cen
+       
+    x = ['B14','B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26']
+    
+    ####################################################################
+    ######### FIN DEL ENCABEZADO
+    ####################################################################
+    
+    # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
+    # EN EL SISTAMA 
+    sustContl7= db((db.t_Sustancia.f_control=="RL7")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
+    sustBit=db((db.t_Bitacora.f_fechaUso.year()==int(year))&(db.t_Bitacora.f_fechaUso.month()==int(mes))).select()
+    medidas={}
+    ids={}
+    entradas = {}
+    salidas = {}
+    totalIni={}
+    totalFin={}
+    
+    for suCo in sustContl7:
+        aux=False
+        auxEnt=0
+        auxSal=0
+        auxFecIn=31
+        auxFecFi=1 
+
+        for suFe in sustBit:
+            if (suCo.id== suFe['f_sustancia'] and not(aux)):
+                ids[str(suCo.id)]=suCo.f_nombre
+                medidas[str(suCo.id)]= suFe['f_medida']
+                aux=True
+                salidas[str(suCo.id)]=0
+                entradas[str(suCo.id)]= 0
+            if (suCo.id== suFe['f_sustancia']): 
+                if ( suFe['f_concepto']==['Ingreso']):
+                    auxEnt+= float(suFe['f_cantidad'])
+                    entradas[str(suCo.id)]= auxEnt
+                elif ( suFe['f_concepto']==['Consumo']):
+                    auxSal+=float(suFe['f_cantidad'])
+                    salidas[str(suCo.id)]= auxSal 
+
+                    
+                if (int(str(suFe['f_fechaUso']).split('-')[2])<=auxFecIn):
+                    totalIni[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecIn=int(str(suFe['f_fechaUso']).split('-')[2] )
+
+                if (int(str(suFe['f_fechaUso']).split('-')[2])>=auxFecFi):
+                    totalFin[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecFi=int(str(suFe['f_fechaUso']).split('-')[2] )        
+                   # print(str(suFe['f_cantidad_total']))
+    
+    ## CALCULANDO LA CANTIDAD DE TRANSACCIONES SE REALIZARON DE LA SUSTANCIA
+   
+   
+    
+    y=0;
+    # CARGANDO LOS NOMBRES AL EXCEL
+    for i,names in ids.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+            
+    x = ['E14','E15','E16','E17','E18','E19','E20','E21','E22','E23','E24','E25','E26']
+
+    ##
+   ## SALDO FISICO INICIAL
+
+    y=0;
+    for i,names in totalIni.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+
+
+
+    ###
+    ### TOTAL DE ENTRADAS
+
+    x = ['F14','F15','F16','F17','F18','F19','F20','F21','F22','F23','F24','F25','F26']
+    y=0;
+    for i,names in entradas.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+        
+    ###
+    ### TOTAL DE SALIDAS
+
+    f = ['G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26']
+    y=0;
+    for i,names in salidas.items():
+        if y<13:
+            ws[f[y]] = names
+            ws[f[y]].font = ft3
+            y=y+1
+
+    ###
+    ### TOTAL DE SALIDAS
+
+    x = ['H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26']
+
+    y=0;
+    for i,names in totalFin.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+    
+
+    #####################################
+    # RELLENANDO LA UNIDAD DE MEDIDA 
+    #####################################
+
+    x = ['I14','I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26']
+
+    y=0;
+    for i,medi in medidas.items():
+        query=db((db.t_Unidad_de_medida.id==int(medi))).select(db.t_Unidad_de_medida.f_abreviatura)
+        if y<13:
+            if query[0].f_abreviatura=="ml":
+                ws[x[y]] = "l"
+            if query[0].f_abreviatura=="g":
+                ws[x[y]] = "kg"
+            else:
+                ws[x[y]] = str((query[0].f_abreviatura))
+            ws[x[y]].font = ft3
+
+            y=y+1
+
+    
+       
+
+    #Pie de Pagina
+    ws['A29'] = '1. Los saldos serán reportados en:'
+    ws['A30'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+    ws['A31'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+    ws['A32'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+  
+
+
+    ###########################################################################
+    ###########################################################################
+    #           REPORTES INDIVIDUALES 
+    ##########################################################################
+    ##########################################################################
+    namesList = {}
+    bitacora=[]
+    for suCo in sustContl7:
+        suAux= db((db.t_Bitacora.f_sustancia==suCo.id)).select()
+        aux=0;
+        nameBol=False
+        for j in suAux:
+            
+            if(j.f_fechaUso.month==int(mes) and j.f_fechaUso.year==int(year)):
+                aux=aux+1
+        for i,n in ids.items():
+            if (suCo.f_nombre==n):
+                namesList[suCo.id]= aux 
+        bitacora.append(aux)  
+
+    contador=0
+        
+    for neId,n in ids.items():
+        while ( len(n)>=31):
+            h=n.split(' ')
+            h.pop()
+            n=' '.join(map(str,h))
+        try:
+            n=unicode(n,"utf-8")
+        except:
+            pass
+        ws2 = wb.create_sheet(n)
+        # Encabezado 
+
+        ws2.title = n
+        #img = Image('gob.jpg')
+        #ws2.add_image(img, 'A1')
+
+        #tamaño de las columnas
+        for i in ['A', 'D', 'K','G','H','I']:
+            ws2.column_dimensions[i].width = 9
+        ws2.column_dimensions['B'].width = 9
+        ws2.column_dimensions['C'].width = 17.5
+        ws2.column_dimensions['E'].width = 17.5
+        ws2.column_dimensions['F'].width = 17.5
+        ws2.column_dimensions['J'].width = 17.5
+
+
+        #tamaño de las filas
+        ws2.row_dimensions[14].height = 40
+        for i in range(1,14):
+            ws2.row_dimensions[i].height = 13
+        for i in range(15,42):
+            ws2.row_dimensions[i].height = 13
+
+  
+
+        #All Merges
+        ws2.merge_cells(start_row=5,start_column=2,end_row=5,end_column=7)
+        ws2.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+
+        #titulos y datos
+        z = ['B5', 'G7', 'F8', 'G8', 'H8','B7','B8','B9','B10','B11','B12','F9','G9','H9']
+        ws2['B5'] = 'INFORME DE REPORTE DIARIO DE SUSTANCIAS QUIMICAS CONTROLADAS'
+        ws2['G7'] = 'FECHA'
+        ws2['F8'] = 'DIA'
+        ws2['G8'] = 'MES'
+        ws2['H8'] = 'AÑO'
+
+
+        for i in range(5):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = cen
+
+
+        ws2['B7'] = 'OPERADOR:'
+        ws2['B8'] = 'LICENCIA:'
+        ws2['B9'] = 'RIF:'
+        ws2['B10'] = 'SUSTANCIA:'
+        ws2['B11'] = 'UNIDAD DE MEDIDA:'
+        ws2['B12'] = 'MES-AÑO:'
+
+
+
+        for i in range(5,11):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = rig
+
+        ws2['F9'] = now.day
+        ws2['G9'] = now.month
+        ws2['H9'] = now.year
+
+
+        for i in range(11,14):
+            ws2[z[i]].font = ft2
+            ws2[z[i]].alignment = cen
+
+
+        ws2['A36'] = 'Nota:'
+        ws2['A36'].font = ft1
+        ws2['A36'].alignment = lef
+
+
+        w = ['C7', 'C8', 'C9', 'C10', 'C11','C12','A14','B14','C14','D14','E14','F14','G14','H14','I14','J14',]
+
+        for i in range(6):
+            ws2[w[i]].font = ft2
+
+        ws2['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+        ws2['C8'] = '2014LIC0256'
+        ws2['C9'] = 'G-20000063-5'
+        ws2['C10'] =  n.upper()
+        ws2['C11'] = 'med' #aqui va la unidad de medida 
+        ws2['C12'] = mes+'-'+year 
+        #query=db((db.t_Unidad_de_medida.id==medidas[str(i)])).select(db.t_Unidad_de_medida.f_abreviatura)
+        ws2['C11'] =' '
+
+
+
+        ws2['A14'] = 'Asiento'
+
+        ws2['B14'] = 'Fecha'
+
+        ws2['C14'] = 'Documento Nro'
+
+        ws2['D14'] = 'RIF o Cédula de identidad'
+
+        ws2['E14'] = 'Nombre de la persona natural o juridica '
+
+        ws2['F14'] = 'Descripción (de acuerdo a su actividad)'
+
+        ws2['G14'] = 'Entrada'
+
+        ws2['H14'] = 'Salida'
+
+        ws2['I14'] = 'Saldo'
+
+        ws2['J14'] = 'Observaciones'
+
+        for i in range(5,16):
+            ws2[w[i]].font = ft1
+            ws2[w[i]].alignment = cen
+
+        x = ['A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26','A27','A28','A29','A30','A31','A32','A33','A34']
+        y = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20']
+        for i in range(0,20):
+            ws2[x[i]] = y[i]
+            ws2[x[i]].font = ft2
+            ws2[x[i]].alignment = cen
+        
+        x = ['B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26','B27','B28','B29','B30','B31','B32','B33','B34']
+        
+        fechasImdiv={}
+        sufeAux=[]
+        consumoIndiv={}
+        consAux=[]
+        ingresoIndiv={}
+        ingAux=[]
+        totalInd={}
+        auxTotal=[]
+        
+        for suFe in sustBit:
+            if (int(neId)== int(suFe['f_sustancia'])): 
+                sufeAux.append(suFe['f_fechaUso'])
+            if ( suFe['f_concepto']==['Ingreso']):
+                ingAux.append(float(suFe['f_cantidad']))
+                #consAux.append(0)
+                auxTotal.append(float(suFe['f_cantidad_total']))
+            elif ( suFe['f_concepto']==['Consumo']):
+                consAux.append(float(suFe['f_cantidad']))
+                #ingAux.append(0)
+                auxTotal.append(float(suFe['f_cantidad_total']))
+        
+        fechasImdiv[str(neId)] = sufeAux
+        ingresoIndiv[str(neId)]= ingAux
+        consumoIndiv[str(neId)]= consAux 
+        totalInd[str(neId)]=auxTotal
+        h=0
+        for i in fechasImdiv[str(neId)]:
+            ws2[x[h]] = str(i)
+            ws2[x[h]].font = ft2
+            ws2[x[h]].alignment = cen
+            h+=1
+
+
+        y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
+        h1=0
+        for i in ingresoIndiv[str(neId)]:
+            ws2[y[h1]] = str(i)
+            ws2[y[h1]].font = ft2
+            ws2[y[h1]].alignment = cen
+            h1+=1
+
+        z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
+        h2=0
+        for i in consumoIndiv[str(neId)]:
+            ws2[z[h2]] = str(i)
+            ws2[z[h2]].font = ft2
+            ws2[z[h2]].alignment = cen
+            h2+=1
+
+        w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
+        h3=0
+        for i in totalInd[str(neId)]:
+            ws2[w[h3]] = str(i)
+            ws2[w[h3]].font = ft2
+            ws2[w[h3]].alignment = cen
+            h3+=1
+
+
+    #Pie de Pagina
+        ws2['A37'] = '1. Los saldos serán reportados en:'
+        ws2['A38'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+        ws2['A39'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+        ws2['A40'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+
+
+
+
+
+
+
+
+ 
+    wb.save('Reporte Universidad Simon Bolivar_l7.xlsx')
+    response.stream('Reporte Universidad Simon Bolivar_l7.xlsx',attachment=True, filename='Reporte Universidad Simon Bolivar.xlsx')
+    return locals()
+
+
+  
+####################################################################################
+##############     GENERACION DE REPORTES   LR4
+####################################################################################
+@auth.requires(lambda: __check_role_report())
+
+@auth.requires_login()
+
+def generar_reporte_rl4():
+
+    
+    wb = Workbook()
+    ws = wb.active
+    cen = Alignment(horizontal='center', vertical='distributed')
+    rig = Alignment(horizontal='right')
+    lef = Alignment(horizontal='left')
+    ft1 = Font(name='Arial', size=10, bold=True)
+    ft2 = Font(name='Arial', size=10, bold=False)
+    ft3 = Font(name='Arial', size=8)
+    ws.font = ft2
+    now = datetime.datetime.now()
+
+    #mes = '12'
+    #year= '2018'
+    mes = ((((request.vars.mesR4).replace('(','')).replace(')','')).split(',')[1]).replace(' ','')
+    year= request.vars.ayoR4
+    #Encabezado
+    ws.title = "Informe mensual"
+    #img = Image("gob.jpg")
+    #ws.add_image(img, 'A1')
+   
+
+    #tamaño de las columnas
+    for i in ['A', 'D', 'E','F','G','J','K']:
+       ws.column_dimensions[i].width = 10
+    ws.column_dimensions['B'].width = 17
+    ws.column_dimensions['C'].width = 11
+    ws.column_dimensions['H'].width = 9
+    ws.column_dimensions['I'].width = 10
+    
+    #tamaño de las filas
+    ws.row_dimensions[13].height = 40
+    for i in range(1,13):
+        ws.row_dimensions[i].height = 13
+    for i in range(14,29):
+        ws.row_dimensions[i].height = 12
+
+    #All Merges
+    ws.merge_cells(start_row=5,start_column=3,end_row=5,end_column=10)
+    ws.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+    for i in range(13,28):
+        ws.merge_cells(start_row=i,start_column=2,end_row=i,end_column=4)
+        ws.merge_cells(start_row=i,start_column=10,end_row=i,end_column=11)
+        
+    for i in range(29,33):
+        ws.merge_cells(start_row=i,start_column=1,end_row=i,end_column=10)
+
+    #titulos y datos
+    z = ['C5', 'J7', 'I9', 'J9', 'K9','B7','B8','B9','B10','B11','I10','J10','K10']
+    ws['C5'] = 'INFORME MENSUAL DE SUSTANCIAS QUIMICAS CONTROLADAS'
+    ws['J7'] = 'FECHA'
+    ws['I9'] = 'DIA'
+    ws['J9'] = 'MES'
+    ws['K9'] = 'AÑO'
+
+
+
+    for i in range(5):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = cen
+
+    ws['B7'] = 'OPERADOR:'
+    ws['B8'] = 'LICENCIA:'
+    ws['B9'] = 'PERMISO DEL CICPC:'
+    ws['B10'] = 'RIF:'
+    ws['B11'] = 'MES-AÑO:'
+   
+
+    for i in range(5,10):
+        ws[z[i]].font = ft1
+        ws[z[i]].alignment = rig
+        
+
+    ws['I10'] = now.day
+    ws['J10'] = now.month
+    ws['K10'] = now.year
+    
+
+    for i in range(10,13):
+        ws[z[i]].font = ft2
+        ws[z[i]].alignment = cen
+       
+
+    ws['A28'] = 'Nota:'
+    ws['A28'].font = ft1
+    ws['A28'].alignment = lef
+    
+    #mes = request.vars['m']
+    #year= request.vars['y']
+    
+    w = ['C7', 'C8', 'C9', 'C10', 'C11','A13','B13','D13','E13','F13','G13','H13','I13','J13']
+
+    for i in range(5):
+        ws[w[i]].font = ft2
+
+    ws['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+    ws['C8'] = '2014LIC0256'
+    ws['C9'] = 'No. 1311'
+    ws['C10'] = 'G-20000063-5'
+    ws['C11'] = mes+'/'+year
+    ws['A13'] = 'N°'
+
+    ws['B13'] = 'Sustancia Química Controlada'
+
+  
+
+    ws['E13'] = 'Saldo Físico Inicial'
+
+    ws['F13'] = 'Total Entradas'
+
+    ws['G13'] = 'Total Salidas'
+
+    ws['H13'] = 'Saldo Físico Final'
+
+    ws['I13'] = 'Unidad de Medida'
+
+    ws['J13'] = 'Observaciones'
+
+
+
+
+    for i in range(5,14):
+        ws[w[i]].font = ft1
+        ws[w[i]].alignment = cen
+        
+
+
+    x = ['A14','A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26']
+    y = ['01','02','03','04','05','06','07','08','09','10','11','12','13']
+    for i in range(0,13):
+        ws[x[i]] = y[i]
+        ws[x[i]].font = ft3
+        ws[x[i]].alignment = cen
+       
+    x = ['B14','B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26']
+    
+    ####################################################################
+    ######### FIN DEL ENCABEZADO
+    ####################################################################
+    
+    # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
+    # EN EL SISTAMA 
+    sustContl7= db((db.t_Sustancia.f_control=="RL4")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
+    sustBit=db((db.t_Bitacora.f_fechaUso.year()==int(year))&(db.t_Bitacora.f_fechaUso.month()==int(mes))).select()
+    medidas={}
+    ids={}
+    entradas = {}
+    salidas = {}
+    totalIni={}
+    totalFin={}
+    
+    for suCo in sustContl7:
+        aux=False
+        auxEnt=0
+        auxSal=0
+        auxFecIn=31
+        auxFecFi=1 
+
+        for suFe in sustBit:
+            if (suCo.id== suFe['f_sustancia'] and not(aux)):
+                ids[str(suCo.id)]=suCo.f_nombre
+                medidas[str(suCo.id)]= suFe['f_medida']
+                aux=True
+                salidas[str(suCo.id)]=0
+                entradas[str(suCo.id)]= 0
+            if (suCo.id== suFe['f_sustancia']): 
+                if ( suFe['f_concepto']==['Ingreso']):
+                    auxEnt+= float(suFe['f_cantidad'])
+                    entradas[str(suCo.id)]= auxEnt
+                elif ( suFe['f_concepto']==['Consumo']):
+                    auxSal+=float(suFe['f_cantidad'])
+                    salidas[str(suCo.id)]= auxSal 
+
+                    
+                if (int(str(suFe['f_fechaUso']).split('-')[2])<=auxFecIn):
+                    totalIni[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecIn=int(str(suFe['f_fechaUso']).split('-')[2] )
+
+                if (int(str(suFe['f_fechaUso']).split('-')[2])>=auxFecFi):
+                    totalFin[str(suCo.id)]=float(suFe['f_cantidad_total'])
+                    auxFecFi=int(str(suFe['f_fechaUso']).split('-')[2] )        
+                   # print(str(suFe['f_cantidad_total']))
+    
+    ## CALCULANDO LA CANTIDAD DE TRANSACCIONES SE REALIZARON DE LA SUSTANCIA
+   
+   
+    
+    y=0;
+    # CARGANDO LOS NOMBRES AL EXCEL
+    for i,names in ids.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+            
+    x = ['E14','E15','E16','E17','E18','E19','E20','E21','E22','E23','E24','E25','E26']
+
+    ##
+   ## SALDO FISICO INICIAL
+
+    y=0;
+    for i,names in totalIni.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+
+
+
+    ###
+    ### TOTAL DE ENTRADAS
+
+    x = ['F14','F15','F16','F17','F18','F19','F20','F21','F22','F23','F24','F25','F26']
+    y=0;
+    for i,names in entradas.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+        
+    ###
+    ### TOTAL DE SALIDAS
+
+    f = ['G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26']
+    y=0;
+    for i,names in salidas.items():
+        if y<13:
+            ws[f[y]] = names
+            ws[f[y]].font = ft3
+            y=y+1
+
+    ###
+    ### TOTAL DE SALIDAS
+
+    x = ['H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26']
+
+    y=0;
+    for i,names in totalFin.items():
+        if y<13:
+            ws[x[y]] = names
+            ws[x[y]].font = ft3
+            y=y+1
+    
+
+    #####################################
+    # RELLENANDO LA UNIDAD DE MEDIDA 
+    #####################################
+
+    x = ['I14','I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26']
+
+    y=0;
+    for i,medi in medidas.items():
+        query=db((db.t_Unidad_de_medida.id==int(medi))).select(db.t_Unidad_de_medida.f_abreviatura)
+        if y<13:
+            if query[0].f_abreviatura=="ml":
+                ws[x[y]] = "l"
+            if query[0].f_abreviatura=="g":
+                ws[x[y]] = "kg"
+            else:
+                ws[x[y]] = str((query[0].f_abreviatura))
+            ws[x[y]].font = ft3
+
+            y=y+1
+
+    
+       
+
+    #Pie de Pagina
+    ws['A29'] = '1. Los saldos serán reportados en:'
+    ws['A30'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+    ws['A31'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+    ws['A32'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+  
+
+
+    ###########################################################################
+    ###########################################################################
+    #           REPORTES INDIVIDUALES 
+    ##########################################################################
+    ##########################################################################
+    namesList = {}
+    bitacora=[]
+    for suCo in sustContl7:
+        suAux= db((db.t_Bitacora.f_sustancia==suCo.id)).select()
+        aux=0;
+        nameBol=False
+        for j in suAux:
+            
+            if(j.f_fechaUso.month==int(mes) and j.f_fechaUso.year==int(year)):
+                aux=aux+1
+        for i,n in ids.items():
+            if (suCo.f_nombre==n):
+                namesList[suCo.id]= aux 
+        bitacora.append(aux)  
+
+    contador=0
+        
+    for neId,n in ids.items():
+
+        while ( len(n)>=31):
+            h=n.split(' ')
+            h.pop()
+            n=' '.join(map(str,h))
+        try:
+            n=unicode(n,"utf-8")
+        except:
+            pass
+        ws2 = wb.create_sheet(n)
+        # Encabezado 
+
+        ws2.title = n
+        #img = Image('gob.jpg')
+        #ws2.add_image(img, 'A1')
+
+        #tamaño de las columnas
+        for i in ['A', 'D', 'K','G','H','I']:
+            ws2.column_dimensions[i].width = 9
+        ws2.column_dimensions['B'].width = 9
+        ws2.column_dimensions['C'].width = 17.5
+        ws2.column_dimensions['E'].width = 17.5
+        ws2.column_dimensions['F'].width = 17.5
+        ws2.column_dimensions['J'].width = 17.5
+
+
+        #tamaño de las filas
+        ws2.row_dimensions[14].height = 40
+        for i in range(1,14):
+            ws2.row_dimensions[i].height = 13
+        for i in range(15,42):
+            ws2.row_dimensions[i].height = 13
+
+  
+
+        #All Merges
+        ws2.merge_cells(start_row=5,start_column=2,end_row=5,end_column=7)
+        ws2.merge_cells(start_row=7,start_column=3,end_row=7,end_column=5)
+
+        #titulos y datos
+        z = ['B5', 'G7', 'F8', 'G8', 'H8','B7','B8','B9','B10','B11','B12','F9','G9','H9']
+        ws2['B5'] = 'INFORME DE REPORTE DIARIO DE SUSTANCIAS QUIMICAS CONTROLADAS'
+        ws2['G7'] = 'FECHA'
+        ws2['F8'] = 'DIA'
+        ws2['G8'] = 'MES'
+        ws2['H8'] = 'AÑO'
+
+
+        for i in range(5):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = cen
+
+
+        ws2['B7'] = 'OPERADOR:'
+        ws2['B8'] = 'LICENCIA:'
+        ws2['B9'] = 'RIF:'
+        ws2['B10'] = 'SUSTANCIA:'
+        ws2['B11'] = 'UNIDAD DE MEDIDA:'
+        ws2['B12'] = 'MES-AÑO:'
+
+
+
+        for i in range(5,11):
+            ws2[z[i]].font = ft1
+            ws2[z[i]].alignment = rig
+
+        ws2['F9'] = now.day
+        ws2['G9'] = now.month
+        ws2['H9'] = now.year
+
+
+        for i in range(11,14):
+            ws2[z[i]].font = ft2
+            ws2[z[i]].alignment = cen
+
+
+        ws2['A36'] = 'Nota:'
+        ws2['A36'].font = ft1
+        ws2['A36'].alignment = lef
+
+
+        w = ['C7', 'C8', 'C9', 'C10', 'C11','C12','A14','B14','C14','D14','E14','F14','G14','H14','I14','J14',]
+
+        for i in range(6):
+            ws2[w[i]].font = ft2
+
+        ws2['C7'] = 'UNIVERSIDAD SIMON BOLIVAR'
+        ws2['C8'] = '2014LIC0256'
+        ws2['C9'] = 'G-20000063-5'
+        ws2['C10'] =  n.upper()
+        ws2['C11'] = 'med' #aqui va la unidad de medida 
+        ws2['C12'] = mes+'-'+year 
+        #query=db((db.t_Unidad_de_medida.id==medidas[str(i)])).select(db.t_Unidad_de_medida.f_abreviatura)
+        ws2['C11'] =' '
+
+
+
+        ws2['A14'] = 'Asiento'
+
+        ws2['B14'] = 'Fecha'
+
+        ws2['C14'] = 'Documento Nro'
+
+        ws2['D14'] = 'RIF o Cédula de identidad'
+
+        ws2['E14'] = 'Nombre de la persona natural o juridica '
+
+        ws2['F14'] = 'Descripción (de acuerdo a su actividad)'
+
+        ws2['G14'] = 'Entrada'
+
+        ws2['H14'] = 'Salida'
+
+        ws2['I14'] = 'Saldo'
+
+        ws2['J14'] = 'Observaciones'
+
+        for i in range(5,16):
+            ws2[w[i]].font = ft1
+            ws2[w[i]].alignment = cen
+
+        x = ['A15','A16','A17','A18','A19','A20','A21','A22','A23','A24','A25','A26','A27','A28','A29','A30','A31','A32','A33','A34']
+        y = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20']
+        for i in range(0,20):
+            ws2[x[i]] = y[i]
+            ws2[x[i]].font = ft2
+            ws2[x[i]].alignment = cen
+        
+        x = ['B15','B16','B17','B18','B19','B20','B21','B22','B23','B24','B25','B26','B27','B28','B29','B30','B31','B32','B33','B34']
+        
+        fechasImdiv={}
+        sufeAux=[]
+        consumoIndiv={}
+        consAux=[]
+        ingresoIndiv={}
+        ingAux=[]
+        totalInd={}
+        auxTotal=[]
+        
+        for suFe in sustBit:
+            if (int(neId)== int(suFe['f_sustancia'])): 
+                sufeAux.append(suFe['f_fechaUso'])
+
+                if ( suFe['f_concepto']==['Ingreso']):
+                    ingAux.append(float(suFe['f_cantidad']))
+                    consAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+                elif ( suFe['f_concepto']==['Consumo']):
+                    consAux.append(float(suFe['f_cantidad']))
+                    ingAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+        
+        fechasImdiv[str(neId)] = sufeAux
+        ingresoIndiv[str(neId)]= ingAux
+        consumoIndiv[str(neId)]= consAux 
+        totalInd[str(neId)]=auxTotal
+        print(fechasImdiv)
+        print(ingresoIndiv)
+        print(consumoIndiv)
+        print(totalInd)
+
+        h=0
+        for i in fechasImdiv[str(neId)]:
+            ws2[x[h]] = str(i)
+            ws2[x[h]].font = ft2
+            ws2[x[h]].alignment = cen
+            h+=1
+
+
+        y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
+        h1=0
+        for i in ingresoIndiv[str(neId)]:
+            ws2[y[h1]] = str(i)
+            ws2[y[h1]].font = ft2
+            ws2[y[h1]].alignment = cen
+            h1+=1
+
+        z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
+        h2=0
+        for i in consumoIndiv[str(neId)]:
+            ws2[z[h2]] = str(i)
+            ws2[z[h2]].font = ft2
+            ws2[z[h2]].alignment = cen
+            h2+=1
+
+        w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
+        h3=0
+        for i in totalInd[str(neId)]:
+            ws2[w[h3]] = str(i)
+            ws2[w[h3]].font = ft2
+            ws2[w[h3]].alignment = cen
+            h3+=1
+
+
+    #Pie de Pagina
+        ws2['A37'] = '1. Los saldos serán reportados en:'
+        ws2['A38'] = 'Kgs. Para sustancias en estado sólido ó Lts. Para sustancias en estado líquido, especificando la densidad de la sustancia en el último caso.'
+        ws2['A39'] = '2. El reporte mensual será llevado por cada sustancia química controlada'
+        ws2['A40'] = '3. El reporte mensual deberá ser entregado dentro de los primeros 7 días hábiles de cada mes'
+
+
+
+
+
+
+
+
+ 
+    wb.save('Reporte Universidad Simon Bolivar_l7.xlsx')
+    response.stream('Reporte Universidad Simon Bolivar_l7.xlsx',attachment=True, filename='Reporte Universidad Simon Bolivar.xlsx')
     return locals()

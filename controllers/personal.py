@@ -338,21 +338,6 @@ def add_form():
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
 
-        # personal_id = personal.select()[0].id
-        # competencias = dropdowns()[-1]
-        # for ind, comp in enumerate(competencias):
-        #     if request.post_vars['check-competencia-{0}'.format(ind)]:
-        #         observaciones = request.post_vars['competencia-{0}'.format(ind)]
-        #         db.t_Competencias2.update_or_insert(
-        #                 (db.t_Competencias2.f_nombre==comp) &
-        #                 (db.t_Competencias2.f_Competencia_Personal==personal_id),
-        #                 f_nombre=comp,
-        #                 f_observaciones=observaciones,
-        #                 f_Competencia_Personal=personal_id
-        #                 )
-        #     else:
-        #         db((db.t_Competencias2.f_nombre==comp) & (db.t_Competencias2.f_Competencia_Personal==personal_id)).delete()
-
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
         if len(named) > 0:
@@ -702,15 +687,19 @@ def contar_notificaciones(correo):
     return notif
 
 def buscarJefe(dependencia_trabajador):
-    unidad_adscripcion = db(db.dependencias.nombre == dependencia_trabajador).select(db.dependencias.id)[0].id
+    unidad_adscripcion = db(db.dependencias.nombre == dependencia_trabajador).select(db.dependencias.id).first()
 
     if unidad_adscripcion:
-        idJefe = db(db.dependencias.id == unidad_adscripcion).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
+        idJefe = db(db.dependencias.id == unidad_adscripcion.id).select(db.dependencias.id_jefe_dependencia).first().id_jefe_dependencia
     else:
         idGestor = db(db.auth_group.role == "DIRECTOR").select(db.auth_group.id).first().id
         idJefe = db(db.auth_membership.group_id == idGestor).select(db.auth_membership.user_id).first().user_id
 
-    correo = db(db.auth_user.id == idJefe).select(db.auth_user.email)[0].email
+    correo = db(db.auth_user.id == idJefe).select(db.auth_user.email).first()
+    if correo:
+        correo = correo.email
+    else:
+        correo = None
     return correo
 
 #Funcion para ocultar
