@@ -832,18 +832,19 @@ def getDictHistorial(historial):
 def __get_competencias(request, personal):
     params = {}
     competencias = []
+def __get_competencias(request, personal):
+    params = {}
+    competencias = []
     for i in range(1,11):
-        if 'competencia{0}_nombre'.format(i) in request.post_vars:
-            params = {
-                    'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
-                    'f_categoria' : request.post_vars['competencia{}_categoria'.format(i)],
-                    'f_observaciones' : request.post_vars['competencia{}_observaciones'.format(i)],
-                    'f_numero': i,
-                    'f_Competencia_Personal': personal.id
-                    }
-            if not(
-                    (None or '') ==  params['f_nombre']
-                    or (None or '') == params['f_categoria']):
+        params = {
+                'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
+                'f_categoria' : request.post_vars['competencia{}_categoria'.format(i)],
+                'f_observaciones' : request.post_vars['competencia{}_observaciones'.format(i)],
+                'f_numero': i,
+                'f_Competencia_Personal': personal.id
+                }
+        if ( params['f_nombre'] and params['f_categoria'] ):
+            try:
                 db.t_Competencias2.update_or_insert(
                         (db.t_Competencias2.f_numero==i)&
                         (db.t_Competencias2.f_Competencia_Personal==personal.id),
@@ -853,10 +854,16 @@ def __get_competencias(request, personal):
                         f_numero= params['f_numero'],
                         f_Competencia_Personal= params['f_Competencia_Personal'],
                         )
-                competencias.append(params)
+            except Exception as e:
+                print(e)
 
-    # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
-    #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
+        else:
+            try:
+                db( (db.t_Competencias2.f_Competencia_Personal == personal.id)
+                    & (db.t_Competencias2.f_numero == i)).delete()
+            except:
+                print(e)
+
     return competencias
 
 def __get_administrativas(request, personal):
