@@ -71,8 +71,8 @@ def bitacora_general():
             'id': elm.id,
             'accion': elm.f_accion,
             'fecha': elm.created_on,
-            'responsable': responsable.first_name + " " + responsable.last_name
+            'responsable': responsable.first_name + " " + responsable.last_name if responsable else ''
         })
         
     return locals()
-
+    
