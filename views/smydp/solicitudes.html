@@ -264,7 +264,7 @@
                             <div class="field-error"> <p id="error-total"> </p> </div>
                           </div>
                                                     
-                          <div class="form-group" style="padding-bottom: 50px">
+                          <div class="form-group">
                             <select class="form-control" type="select" id="unidad" name="unidad" required>
                               <option value="" selected hidden >Unidad de medida*</option>
                               {{for u in unidades_de_medida:}}
@@ -272,7 +272,27 @@
                               {{pass}}
                             </select>
                           </div>
-                          <div class="field-error"> <p id="error-unidad"> </p> </div>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="espacio" name="espacio" required>
+                              <option value="" selected hidden >Espacio Fisico*</option>
+                              {{for esp in espacios:}}
+                              <option value="{{=esp.id}}">{{=esp.codigo}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="justificacion" placeholder="Justificacion" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+
+                          <div id="fecha_uso_div" class="form-group esconder">
+                            <p>Fecha de caducidad de solicitud: <input name = "fecha_caducidad" type="date"  data-date-format="YYYY MM DD"></p>
+                            <font color="red"><div id="err_fecha_uso" hidden></div></font>
+                          </div>
+
+                          <div class="field-error" style="padding-bottom: 50px"> <p id="error-unidad"> </p> </div>
                       </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm">Anterior</button>

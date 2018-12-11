@@ -2716,19 +2716,40 @@ def solicitudes():
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
 
+
+    solicitud = db(
+                (db.t_Solicitud_smydp.id == db.auth_user.id)).select()
+
+    print(solicitud)
+
+    # Espacios a cargo del usuario actual
+    espacios_a_cargo = db(
+                (db.es_encargado.tecnico == db.auth_user.id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
+
+    espacios = [e.espacios_fisicos for e in espacios_a_cargo]
+
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
 
-        id_responsable = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0].id
+        cantidad = float(request.vars.total)
+        unidad = request.vars.unidad
+        sustancia = request.vars.sustancia
+        uso = request.vars.uso
+        justificacion = request.vars.justificacion
+        fecha_caducidad = request.vars.fecha_caducidad
+        espacio = request.vars.espacio
 
-        solicitud_nueva = Solicitud(db, auth, request.post_vars.numRegistro, id_responsable,
-            request.now, request.post_vars.nombreServicio, request.post_vars.propositoServicio,
-            request.post_vars.propositoDescripcion, None, request.post_vars.descripcionSolicitud, "", 0)
-
-        solicitud_nueva.insertar()
-
-        # ENVIAR CORREO AL RESPONSABLE DE LA SOLICITUD Y AL JEFE DE LA DEPENDENCIA PARA NOTIFICARLE QUE SE HIZO UNA SOLICITUD
-        solicitud_nueva.correoHacerSolicitud()
+        inv_id = db.t_Solicitud_smydp.insert(f_cantidad=cantidad, 
+                                      f_cantidad_conseguida=0,
+                                      f_estatus='En espera',
+                                      f_uso=uso,
+                                      f_justificacion=justificacion,
+                                      f_fecha_caducidad=fecha_caducidad,
+                                      f_medida=unidad,
+                                      f_espacio=espacio,
+                                      f_sustancia=sustancia)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -2820,6 +2841,7 @@ def solicitudes():
     return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,
                 solicitudes_recibidas=listado_de_solicitudes_recibidas.filas,
                 datos_solicitud=datos_solicitud,
+                espacios=espacios,
                 sustancias=sustancias,
                 unidades_de_medida=unidades_de_medida,
                 sustancia_solicitud=sustancia_solicitud)
