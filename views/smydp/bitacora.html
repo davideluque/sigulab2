@@ -92,7 +92,7 @@
         <tbody>
           {{for registro in bitacora:}}
             {{auth_user = registro['auth_user']}}
-            {{reg = registro['t_Bitacora']}}
+            {{reg = registro['t_Balance']}}
             {{usuario = registro['t_Personal']}}
             {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
             <tr>
