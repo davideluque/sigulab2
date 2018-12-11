@@ -1,0 +1,54 @@
+<h4 class="titulosForm">Competencias (Máximo 10)</h4>
+<h5>Los campos con * son obligatorios</h5>
+{{ for i in range(1,11): }}
+<div class="competencia-container" id="competencia-container{{=i}}"{{if len(comp_list)<i and 1!=i:}}hidden{{pass}}>
+<h5>Competencia {{=i}}</h5>
+    <div class="form-group">
+        <label for="competencia{{=i}}_categoria">Categoría: *</label>
+      <select {{if len(comp_list)<i and 1!=i:}} disabled {{pass}}
+             class="form-control seleccion-competencia"
+             type="select" name="competencia{{=i}}_categoria" id="competencia{{=i}}_categoria" multiple required
+              data-placeholder="Seleccione las categorías que apliquen">
+        <option value""> Seleccione una opcion</option>
+        {{ for comp in competencias: }}
+        <option
+            {{ if len(comp_list)>=i and (comp in (comp_list[i-1].f_categorias or ['Arte'])):}}
+            selected
+            {{pass}}
+        value"{{=comp}}">{{=comp}}</option>
+        {{pass}}
+      </select>
+    </div>
+
+    <div class="form-group">
+        <label for="nombre">Competencia: *</label>
+        <input {{if len(comp_list)<i and 1!=i:}} disabled {{pass}}
+               value="{{='' if len(comp_list)<i else comp_list[i-1].f_nombre}}"
+               type="text" class="competencia_nombre" name="competencia{{=i}}_nombre" id="competencia{{=i}}_nombre" placeholder="Introduzca el nombre" required/>
+    </div>
+    <div class="form-group">
+        <label for="observaciones">Observaciones:</label>
+        <input {{if len(comp_list)<i and 1!=i:}} disabled {{pass}}
+               value="{{='' if len(comp_list)<i else comp_list[i-1].f_observaciones}}"
+               type="text" class="competencia_observaciones" name="competencia{{=i}}_observaciones" id="competencia{{=i}}_observaciones" placeholder="Introduzca sus observaciones"/>
+    </div>
+</div>
+{{ pass }}
+<a href="#" id="add_field" onclick="add_field()">Agregar Competencia</a>
+
+
+<script charset="utf-8">
+    var num = 2
+    function add_field(){
+        if(num < 11){
+            $('#competencia-container'+num).show();
+            $('#competencia'+num+'_categoria').prop('disabled', false).trigger("chosen:updated");
+            $('#competencia'+num+'_nombre').prop('disabled', false);
+            $('#competencia'+num+'_observaciones').prop('disabled', false);
+        num = num+1;
+        if (num >10){
+            $('#add_field').remove();
+            }
+        }
+    }
+</script>

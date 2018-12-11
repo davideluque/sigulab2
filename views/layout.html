@@ -21,7 +21,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{{=URL('static', 'favicon.ico')}}">
   <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','css/servicios.css')}}">
-  <link rel="stylesheet" href="{{=URL('static', 'css/chosen.min.css')}}"
+  <link rel="stylesheet" href="{{=URL('static', 'css/chosen.min.css')}}">
   <link rel="stylesheet" href="{{=URL('static','font-awesome-4.7.0/css/font-awesome.min.css')}}">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -97,6 +97,8 @@
               <ul class=" dropdown-menu">
                 <li><a href="{{=URL('personal','index')}}">Página Principal</a></li>
                 {{_personal = db(db.t_Personal.f_usuario == auth.user.id).select(db.t_Personal.ALL).first()}}
+                <li><a href="{{=URL('personal','listado_estilo')}}">Listado General</a></li>
+                <li><a href="{{=URL('personal','busqueda')}}">Búsqueda</a></li>
               </ul>
             </li>
             

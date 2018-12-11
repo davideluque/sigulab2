@@ -27,7 +27,22 @@ const inputs = [
     'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add',
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
-    'fecha_inicio_1_add',
+    'fecha_inicio_1_add', 'fecha_final_1_add', 'cargo_hist_1_add', 'dependencia_hist_1_add', 'organizacion_1_add',
+    'fecha_inicio_2_add', 'fecha_final_2_add', 'cargo_hist_2_add', 'dependencia_hist_2_add', 'organizacion_2_add',
+    'fecha_inicio_3_add', 'fecha_final_3_add', 'cargo_hist_3_add', 'dependencia_hist_3_add', 'organizacion_3_add',
+    'fecha_inicio_4_add', 'fecha_final_4_add', 'cargo_hist_4_add', 'dependencia_hist_4_add', 'organizacion_4_add',
+    'fecha_inicio_5_add', 'fecha_final_5_add', 'cargo_hist_5_add', 'dependencia_hist_5_add', 'organizacion_5_add',
+    // Competencias
+    'competencia1_nombre',
+    'competencia2_nombre',
+    'competencia3_nombre',
+    'competencia4_nombre',
+    'competencia5_nombre',
+    'competencia6_nombre',
+    'competencia7_nombre',
+    'competencia8_nombre',
+    'competencia9_nombre',
+    'competencia10_nombre',
 ]
 
 const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
@@ -301,7 +316,7 @@ function validaFechaSalida(){
     const fecha_final = voltearFecha($this.val());
 
     if (fecha_inicio !== "" && fecha_final !== "" && !moment(fecha_inicio).isSameOrBefore(fecha_final)){
-        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
+        $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta.");
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
@@ -501,6 +516,7 @@ function validaTrabajo1() {
                     arreglo[j].attr("data-valido", "false");
                     arreglo[j].popover('show');
                     validacion = false;
+                    break;
                 } else {
                     arreglo[j].removeClass('input-error');
                     arreglo[j].popover('hide');
@@ -632,7 +648,7 @@ function validaFechaInicio1(){
     const $this = $('[name="fecha_inicio_1_add"]');
     if ($this.val() !== ""){
         if (!moment(voltearFecha($this.val())).isSameOrBefore(moment().format("YYYY-MM-DD"))){
-            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy');
+            $this.attr("data-content", 'La fecha tiene que ser antes de la fecha de hoy u hoy');
             $this.addClass('input-error');
             $this.attr("data-valido", 'false');
             $this.popover('show');
@@ -652,6 +668,7 @@ function validaFechaFin1(){
     const $this = $('[name="fecha_final_1_add"]');
     const fecha_inicio = voltearFecha($('[name="fecha_inicio_1_add"]').val());
     const fecha_final = voltearFecha($this.val());
+
 
     if (fecha_inicio !== "" && fecha_final !== "" && (!moment(fecha_inicio).isSameOrBefore(fecha_final) || !moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD")) ) ){
         $this.attr("data-content", "La fecha de egreso tiene que ser despues que la fecha de ingreso o igual a esta");
@@ -841,7 +858,45 @@ const validadoresQuintoPaso = [
     validaFechaFin5
 ]
 
+function validaCompetencia(){
+    var valid=true;
+    for(var i=1; i<11;i++){
+        if($('#competencia-container'+i).is(':hidden'))
+            continue;
 
+        var nombre = $('#competencia'+i+'_nombre');
+        var chosenval = $('#competencia'+i+'_categoria').trigger("chosen-updated").val().length;
+        chosen_container = $('#competencia'+i+'_categoria_chosen');
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = valid && false
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+            valid = valid && true;
+        }
+        if (nombre.val()==='') {
+            nombre.attr("data-content", requiredFieldMessage);
+            nombre.popover('show');
+            nombre.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            nombre.removeClass('input-error');
+            nombre.popover('hide');
+            valid = valid && true;
+        }
+    }
+    return valid
+
+}
+const validadoresCuartoPaso = [
+    validaCompetencia
+]
 
 // ESCRIBE AQUI TUS FUNCIONES
 
@@ -889,6 +944,7 @@ function validacionTiempoReal(){
     $('[name="pagina_web_add"]').on('change', validaPaginaWeb)
 
     $('[name="direccion_add"]').on('change', validaDireccionHab)
+
 
     //$('[name="fecha_inicio_1_add"]').on('change', validaFechaInicio)
 }
@@ -972,6 +1028,9 @@ $(document).ready(function () {
             next_step = validadoresCorrectos(validadoresTercerPaso)
         }
 
+        else if (parent_fieldset.attr('id') === 'p4'){
+            next_step = validadoresCorrectos(validadoresCuartoPaso)
+        }
 
 
 
@@ -1025,6 +1084,7 @@ $(document).ready(function () {
     $(inputSelectorsAll).on('focus change click', function(e){
         $(this).popover('hide');
         $(this).removeClass('input-error');
+
     })
 
     $('#formularioCarga').on('keyup keypress', function(e) {
@@ -1063,6 +1123,7 @@ $(document).ready(function () {
 
         console.log(enviar)
         if (enviar){
+
             $(this).attr("type", "submit");
         }
         else {

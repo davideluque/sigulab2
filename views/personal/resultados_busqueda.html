@@ -1,0 +1,219 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+
+    <script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/jspdf.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables2/dataTables.rowsGroup.js')}}"></script>
+
+	 <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{=URL('static', 'css/pdf_personal.css')}}" rel="stylesheet" type="text/css" />
+
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+  	<link rel="stylesheet" href="{{=URL('static','css/sigulab2servicios.css')}}">
+	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+	
+
+
+{{end}}
+
+{{block center}}
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <span class="breadcrumb-item active">Personal</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación -->
+
+<!-- Contenido principal de la página de gestión de servicios -->
+<div class="container titulo">
+    <h2>Resultados búsqueda</h2>
+    <br>
+    <p>
+    {{if filtros['gremio_busqueda'] != "": }}
+    <b>Gremio: </b> {{=filtros['gremio_busqueda']}}
+    {{pass}}
+    {{if filtros['cargo_busqueda'] != "": }}
+    <br>
+    <b>Cargo: </b>{{=filtros['cargo_busqueda']}}
+    {{pass}}
+
+    {{if filtros['competencia_busqueda'] != "": }}
+    <br>
+    <b>Competencia: </b>{{=filtros['competencia_busqueda']}}
+    {{pass}}
+
+    {{if filtros['categoria_busqueda'] != "": }}
+    <br>
+    <b>Categoria: </b>{{=filtros['categoria_busqueda']}}
+    {{pass}}
+
+    {{if filtros['anios_busqueda'] != "": }}
+    <br>
+    <b>Años servicio ULAB: </b>{{=filtros['anios_busqueda'] +  " años"}}
+    {{pass}}
+
+    {{if filtros['fecha_busqueda'] != "": }}
+    {{="para la fecha " + filtros['fecha_busqueda']}}
+    {{pass}}
+
+    {{if filtros['anios_admin'] != "": }}
+    <br>
+    <b>Años administración pública: </b>{{=filtros['anios_admin'] +  " años"}}
+    {{pass}}
+
+    {{if filtros['fecha_admin_busqueda'] != "": }}
+    {{="para la fecha " + filtros['fecha_admin_busqueda']}}
+    {{pass}}
+
+
+    </p>
+
+</div>
+<div id="main" class="container">
+
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<div class="panel">
+		<div class="panel-body-users-tab no-padding" style="background-color:#fafafa;">
+			<table id="example" class="">
+				<thead class="bg-primary">
+					<tr>
+						<th class="nombre tableColumn">Nombre</th>
+						<th class="dependencia tableColumn">Dependencia</th>
+						<th class="correo tableColumn">Correo</th>
+						<th class="telefono tableColumn">Telefono</th>
+						<th class="gremio tableColumn">Gremio</th>
+						<th class="compnombre tableColumn">Competencia - Nombre</th>
+						<th class="compcategoria tableColumn">Competencia - Categoria</th>
+						<th class="anios tableColumn">Años Servicio ULAB</th>
+            <th class="aniosAdmin tableColumn">años admin</th>
+						<th class="cargo tableColumn">cargo</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {{ for item in lista: }}
+                    <tr>
+                        <td><a href="/sigulab2/personal/ficha/{{=item['ci']}}">{{=item['nombre']}}</a></td>
+                        <td>{{=item['dependencia']}}</td>
+                        <td>{{=item['correo']}}</td>
+                        <td>{{=item['telefono']}}</td>
+                        <td>{{=item['gremio']}}</td>
+                        <td>{{=item['competencia']}}</td>
+                        <td>{{=", ".join(item['categorias'])}}</td>
+                        <td>{{=item['anios-servicio']}}</td>
+                        <td>{{=item['anios-admin']}}</td>
+                        <td>{{=item['cargo' or '']}}</td>
+                    </tr>
+                    {{pass}}
+                </tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<!-- Fin del contenido principal de la página de gestión de servicios -->
+<script charset="utf-8">
+    $(document).ready(function() {
+        console.log('{{=filtros['anios_admin'] or ''}}');
+        var table = $('#example').DataTable({
+        "paging":   false,
+        "info":     false,
+        language: {
+        url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+    },	
+    	dom: 'Bfrtip',
+    	buttons: [
+
+           {
+            extend: 'csv',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
+            extend: 'excel',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
+            extend: 'pdf',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        },
+        {
+            extend: 'print',
+            title: "Resultados búsqueda",
+            exportOptions: {
+                    columns: ':visible'
+                }
+        }
+        ],
+
+        rowsGroup: [0, 1, 2, 3, 4, 7],
+        "columnDefs": [
+            {
+                "targets": [ 6, 8, 9],
+                "visible": false,
+                "searchable": true
+            },
+        ]
+        });
+
+      // busqueda por nombre competencias
+      //table.columns('.comp-nombre').search('analista').draw();
+      // busqueda por gremio
+      table.columns('.gremio')
+        .search('{{=filtros['gremio_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Competencias
+      table.columns('.compnombre')
+        .search('{{=filtros['competencia_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Categorias
+      table.columns('.compcategoria')
+        .search('{{=filtros['categoria_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Años
+      table.columns('.anios')
+        .search('{{=filtros['anios_busqueda'] or ''}}')
+        .draw();
+      // busqueda por Años en Admin publica
+      table.columns('.aniosAdmin')
+        .search('{{=filtros['anios_admin'] or ''}}')
+        .draw();
+
+      // Busqueda por Cargos
+      table.columns('.cargo')
+        .search('True')
+        .draw();
+
+        // HACER ESTO EN LA VISTA Y QUE SEA LA MISMA VISTA LA QUE DEVUELVA EL RESULTADO
+
+
+    } );
+</script>
+{{end}}

@@ -1,0 +1,601 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+    <meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
+    <!--DATATABLES-->
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+    <style type="text/css">
+        div.dt-buttons {
+          float: right;
+        }
+    </style>
+    
+     <!-- Estilos de modales y listados -->
+     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/bienes_muebles.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">    
+        <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+        <link rel="stylesheet" href="{{=URL('static', 'css/servicios_ficha.css')}}"/>
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+{{end}}
+
+
+
+{{block center}}
+
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
+  <span class="breadcrumb-item active">Solicitudes</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<div class="container titulo">
+    <h3 class="dep-titulo">SOLICITUDES PENDIENTES</h3>
+</div>
+
+<!-- Botón para atrás -->
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+        <button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'inventarios')}}';">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+    </div>
+</div>
+
+<div class="tab-wrapper">
+        <ul class="tabs">
+            <li class="tab-link active" data-tab="1">RECIBIDAS</li>
+            <li class="tab-link" data-tab="2">REALIZADAS</li>
+            {{ if auth.user.id == 1: }}
+            <li class="tab-link" data-tab="3">TODAS</li>
+            {{ pass }}
+        </ul>
+</div>
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles -->
+<div id="tab-1" class="container tab-content active">
+    <div class="row">
+            <br>
+            <div id="buttons">
+            </div>
+            <br>
+
+        <div class="table-responsive no-padding no-margin">
+          <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{for solicitud in solicitudes_recibidas:}}
+                <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
+                                {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
+                        </a>
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
+                </tr>
+                {{ pass }}
+            </tbody>
+
+            <tfoot id="collapseFiltros">
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </tfoot>
+
+          </table>
+        </div>
+    </div>
+</div>
+
+<!-- tabla de eliminacion -->
+<div id="tab-2" class="container tab-content">
+    <div class="row">
+        <br>
+        <div id="buttons2">
+        </div>
+        <br>
+        <div class="table-responsive no-padding no-margin">
+          <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {{for solicitud in solicitudes_realizadas:}}
+                  <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
+                            {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
+                        </a>
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
+                  </tr>
+                {{ pass }}
+            </tbody>
+
+            <tfoot id="collapseFiltros">
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </tfoot>
+
+          </table>
+        </div>
+    </div>
+</div>
+
+<!-- Inicio de la seccion con la lista de validaciones para bienes muebles -->
+<div id="tab-3" class="container tab-content">
+    <div class="row">
+            <br>
+            <div id="buttons3">
+            </div>
+            <br>
+
+        <div class="table-responsive no-padding no-margin">
+            <table id="datatable3" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+            <thead>
+                <tr id="titulosListado">
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{for solicitud in todas_las_solicitudes:}}
+                <tr>
+                    <td class="camposTabla">{{= solicitud['id'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">
+                        <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud.id))}}">
+                                {{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_marca']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_modelo']}}&nbsp;{{= db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_placa']}}
+                        </a>
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id ==db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_responsable']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
+                        &nbsp;
+                        {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
+                    </td>
+                    <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
+                </tr>
+                {{ pass }}
+            </tbody>
+
+            <tfoot id="collapseFiltros">
+                <tr>
+                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">NOMBRE</th>
+                    <th class="camposTabla linksNombres">RESPONSABLE PATRIMONIAL</th>
+                    <th class="camposTabla linksNombres">SOLICITANTE</th>
+                    <th class="camposTabla linksNombres">MOTIVO</th>
+                    <th class="camposTabla linksNombres">ESTATUS</th>
+                </tr>
+            </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Fin de la seccion lista de validaciones para bienes muebles  --> 
+
+<script type="text/javascript">
+    // Funcion para que mostrar el grid de espacios fisicos
+    function grid_ef(){
+        var grid = document.getElementById("secciones");
+        grid.classList.remove("grid-container");
+        grid.classList.add("grid-container-ef");
+    }
+</script>
+<script type="text/javascript">
+    function redirect(dir){
+        window.location.href = dir;
+    }
+    
+    function show_seccion() {
+        var x = document.getElementById("secciones");
+        if (x.style.display === "none") {
+            x.style.display = "grid";
+            x.style.webkitAnimation = "fadein 2s";
+            x.style.marginTop = "20px";
+        } else {
+            x.style.webkitAnimation = "fadeOut 1s";
+            setTimeout(function () {
+                x.style.display = "none";
+            }, 500);
+        }
+    }
+
+    function hide_seccion(){
+        var x = document.getElementById("secciones");
+        x.style.display = "none";
+    }
+</script>
+<script>
+
+  var filtros = false;
+
+  $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#datatable tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Filtro" />' );
+      } );
+   
+      // DataTable
+      var table = $('#datatable').DataTable();
+   
+      // Apply the search
+      table.columns().every( function () {
+          var that = this;
+   
+          $( 'input', this.footer() ).on( 'keyup change', function () {
+              if ( that.search() !== this.value ) {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+
+      $('#datatable tfoot tr').appendTo('#datatable thead');
+      $("#datatable thead tr").not("#titulosListado").css("display","none");
+  } );
+
+  function mostrarFiltro() {
+      if (filtros){
+        $("#datatable thead tr").not("#titulosListado").css("display","none");
+        filtros = false
+      }
+      else{
+        $("#datatable thead tr").not("#titulosListado").css("display","table-row");
+        filtros = true
+      }
+
+  }
+</script>
+ 
+<script language="javascript">
+  
+    var table = $('#datatable').DataTable({
+      'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+      //dom: 'Bfrtip',
+      language: {
+        url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+      },
+      order: [[ 0, "desc" ]],
+        initComplete: function(){
+            var api = this.api();
+        
+            new $.fn.dataTable.Buttons(api, {
+                buttons: [
+    
+                {
+                text:'<i class="fa fa-filter"></i>',
+                action: function(){
+                    mostrarFiltro()
+                },
+                className: 'boton-sigulabIzq'
+                },
+        
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-save"></i>',
+                        className: 'boton-sigulab',
+                        buttons: [
+                            { extend:'copy', text: 'Copiar' } ,
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]
+                    },
+                    { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                ]
+            });
+            //$('#botonModal').addClass('pull-left')
+            $('#filtrar').addClass('pull-left');
+            $('#espacioBuscar').addClass('pull-left');
+        
+        
+            $('.dataTables_filter').appendTo('#buttons');
+        
+            api.buttons().container().appendTo('#buttons');
+            //$('.dt-buttons').append($('#botonModal'));
+            $('#buttons').append('<br><br>');
+            $('.dataTables_info').addClass('pull-right');
+            $('.dataTables_filter').addClass('pull-left');
+    
+            $('#datatable_previous').html('<span class="fa fa-arrow-left"/>');
+            $('#datatable_next').html('<span class="fa fa-arrow-right" />');
+        
+            
+         }
+        });
+    </script>
+    <script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+    </script>
+    <script>
+
+        var filtros = false;
+    
+        $(document).ready(function() {
+                // Setup - add a text input to each footer cell
+                $('#datatable2 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Filtro" />' );
+                } );
+         
+                // DataTable
+                var table = $('#datatable2').DataTable();
+         
+                // Apply the search
+                table.columns().every( function () {
+                        var that = this;
+         
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                                if ( that.search() !== this.value ) {
+                                        that
+                                                .search( this.value )
+                                                .draw();
+                                }
+                        } );
+                } );
+    
+                $('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+                $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+        } );
+    
+        function mostrarFiltro2() {
+                if (filtros){
+                    $("#datatable2 thead tr").not("#titulosListado").css("display","none");
+                    filtros = false
+                }
+                else{
+                    $("#datatable2 thead tr").not("#titulosListado").css("display","table-row");
+                    filtros = true
+                }
+    
+        }
+    </script>
+     
+    <script language="javascript">
+        
+        var table = $('#datatable2').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            order: [[ 0, "desc" ]],
+            initComplete: function(){
+                var api = this.api();
+            
+                new $.fn.dataTable.Buttons(api, {
+                    buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro2()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+            
+                        {
+                            extend: 'collection',
+                            text: '<i class="fas fa-save"></i>',
+                            className: 'boton-sigulab',
+                            buttons: [
+                                { extend:'copy', text: 'Copiar' } ,
+                                'excel',
+                                'csv',
+                                'pdf'
+                            ]
+                        },
+                        { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                    ]
+                });
+            
+                $('#datatable2_filter').appendTo('#buttons2');
+        
+                api.buttons().container().appendTo('#buttons2');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('#buttons2').append('<br><br>');
+                $('#datatable2_info').addClass('pull-right');
+                $('#datatable2_filter').addClass('pull-left');
+
+                $('#datatable2_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable2_next').html('<span class="fa fa-arrow-right" />');
+
+             }
+            });
+        </script>
+
+<script>
+
+        var filtros = false;
+
+        $(document).ready(function() {
+                // Setup - add a text input to each footer cell
+                $('#datatable3 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Filtro" />' );
+                } );
+
+                // DataTable
+                var table = $('#datatable3').DataTable();
+
+                // Apply the search
+                table.columns().every( function () {
+                        var that = this;
+
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                                if ( that.search() !== this.value ) {
+                                        that
+                                                .search( this.value )
+                                                .draw();
+                                }
+                        } );
+                } );
+    
+                $('#datatable3 tfoot tr').appendTo('#datatable3 thead');
+                $("#datatable3 thead tr").not("#titulosListado").css("display","none");
+        } );
+    
+        function mostrarFiltro2() {
+                if (filtros){
+                    $("#datatable3 thead tr").not("#titulosListado").css("display","none");
+                    filtros = false
+                }
+                else{
+                    $("#datatable3 thead tr").not("#titulosListado").css("display","table-row");
+                    filtros = true
+                }
+    
+        }
+    </script>
+     
+    <script language="javascript">
+        
+        var table = $('#datatable3').DataTable({
+            'sDom' : "<'row'f <'buttons'>>"+"<'row'<'col-md-6'l><'col-md-6'i>>"+"<'row'rt>"+"<'row'<'col-md-12'p>>",
+            //dom: 'Bfrtip',
+            language: {
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+            },
+            order: [[ 0, "desc" ]],
+
+            initComplete: function(){
+                var api = this.api();
+            
+                new $.fn.dataTable.Buttons(api, {
+                    buttons: [
+        
+                    {
+                    text:'<i class="fa fa-filter"></i>',
+                    action: function(){
+                        mostrarFiltro2()
+                    },
+                    className: 'boton-sigulabIzq'
+                    },
+            
+                        {
+                            extend: 'collection',
+                            text: '<i class="fas fa-save"></i>',
+                            className: 'boton-sigulab',
+                            buttons: [
+                                { extend:'copy', text: 'Copiar' } ,
+                                'excel',
+                                'csv',
+                                'pdf'
+                            ]
+                        },
+                        { extend:'print', text: '<i class="fas fa-print"></i>', className: 'boton-sigulabDer'}
+                    ]
+                });
+            
+                $('#datatable3_filter').appendTo('#buttons3');
+        
+                api.buttons().container().appendTo('#buttons3');
+                //$('.dt-buttons').append($('#botonModal'));
+                $('#buttons3').append('<br><br>');
+                $('#datatable3_info').addClass('pull-right');
+                $('#datatable3_filter').addClass('pull-left');
+        
+                $('#datatable3_previous').html('<span class="fa fa-arrow-left"/>');
+                $('#datatable3_next').html('<span class="fa fa-arrow-right" />');
+            
+                
+             }
+            });
+        </script>
+{{end}}
