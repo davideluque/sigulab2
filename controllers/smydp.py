@@ -316,6 +316,10 @@ def __agregar_sustancia(espacio, sustancia_id, total, uso_interno, unidad_id):
         response.flash = "La sustancia \"{0}\" ya ha sido ingresada anteriormente \
                           al espacio \"{1}\".".format(sust.f_nombre, espacio.codigo)
         return False
+    elif(int(total)-int(uso_interno)<0):
+        response.flash = "No puede haber mas sustancia en uso que en total"
+        return False 
+
     # Si no, se agrega al inventario del espacio fisico la nueva sustancia
     else:
         cantidad = float(total)
@@ -378,6 +382,7 @@ def __acceso_permitido(user, dep_id, es_espacio):
                                 db.dependencias.nombre,
                                 db.dependencias.id,
                                 db.dependencias.unidad_de_adscripcion)
+        
 
         # Creando lista de adyacencias
         lista_adyacencias = {dep.id: dep.unidad_de_adscripcion for dep in dependencias}
@@ -548,27 +553,53 @@ def __agregar_registro(concepto):
     # el inventario de la sustancia
     cantidad = __transformar_cantidad(cantidad, unidad, unidad_inventario)
 
+
+    inventario_id = int(request.vars.inv)
+
+    bitacora = db((db.t_Balance.f_inventario == inventario_id) &
+                  (db.t_Balance.created_by == db.auth_user.id) &
+                  (db.auth_user.id == db.t_Personal.f_usuario) &
+                  (db.t_Balance.f_medida == db.t_Unidad_de_medida.id)).select()
+    auxIng=0
+    auxEgr=0
+
+    for reg in bitacora:
+        if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+            auxIng+=int(reg['t_Balance']['f_cantidad'])
+        elif(reg['t_Balance']['f_concepto']==['Consumo']):
+            auxEgr+=int(reg['t_Balance']['f_cantidad'])
+            
+        
+        
     # Cantidades total y de uso interno antes del ingreso o consumo
+    
     total_viejo = inv.f_existencia
     uso_interno_viejo = inv.f_uso_interno
 
+    # Nueva cantidad total y nueva cantidad para uso interno
+
+
     if concepto == 'Ingreso':
-
-        tipo_ing = request.vars.tipo_ingreso
-
-        fecha_sumi = request.vars.fecha_sumi
-        
-
-        # Nueva cantidad total y nueva cantidad para uso interno
         total_nuevo = total_viejo + cantidad
         uso_interno_nuevo = uso_interno_viejo + cantidad
 
-        # Actualizando cantidad total con la nueva 
         inv.update_record(
-            f_existencia=total_nuevo,
-            f_uso_interno=uso_interno_nuevo)
+                f_existencia=total_nuevo,
+                f_uso_interno=uso_interno_nuevo)
 
+        tipo_ing = request.vars.tipo_ingreso
+        # Actualizando cantidad total con la nueva 
         if tipo_ing == 'Almacén':
+
+            fechaS=request.vars.fecha_sumi.split("-")
+            fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+
+
+            fechaHoy = datetime.datetime.now()
+            if  fechaHoy < fecha_sumi:
+                response.flash = "Fecha de ingreso no puede ser mayor a la actual"
+                return False
+            
 
             almacen = int(request.vars.almacen)
 
@@ -584,6 +615,17 @@ def __agregar_registro(concepto):
                 f_almacen=almacen)
 
         elif  tipo_ing == 'Prestamo':
+
+
+            fechaS=request.vars.fecha_sumi.split("-")
+            fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+
+
+            fechaHoy = datetime.datetime.now()
+            if  fechaHoy < fecha_sumi:
+                response.flash = "Fecha de ingreso no puede ser mayor a la actual"
+                return False
+
             db.t_Balance.insert(
                 f_cantidad=cantidad,
                 f_cantidad_total=total_nuevo,
@@ -595,7 +637,18 @@ def __agregar_registro(concepto):
                 f_sustancia=inv.sustancia)
 
         elif tipo_ing == 'Cesión':
-             db.t_Balance.insert(
+
+
+            fechaS=request.vars.fecha_sumi.split("-")
+            fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+
+
+            fechaHoy = datetime.datetime.now()
+            if  fechaHoy < fecha_sumi:
+                response.flash = "Fecha de ingreso no puede ser mayor a la actual"
+                return False
+
+            db.t_Balance.insert(
                 f_cantidad=cantidad,
                 f_cantidad_total=total_nuevo,
                 f_concepto=concepto,
@@ -613,8 +666,13 @@ def __agregar_registro(concepto):
             institucion = request.vars.institucion
             rif = request.vars.rif
 
-            # Fecha de la compra en formato "%m/%d/%Y"
-            fecha_compra = request.vars.fecha_compra
+            fechaC=request.vars.fecha_compra.split("-")
+            fecha_compra=datetime.datetime(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
+
+            fechaHoy = datetime.datetime.now()
+            if fechaHoy < fecha_compra:
+                response.flash = "Fecha de compra no puede ser mayor a la actual"
+                return False 
             
             # Se registra la nueva compra en la tabla t_Compra
             compra_id = db.t_Compra.insert(
@@ -640,16 +698,15 @@ def __agregar_registro(concepto):
     # Si es un tipo Egreso 
     
     else:
+
         tipo_eg = request.vars.tipo_egreso            
         fecha_uso=request.vars.fecha_uso.split("-")
         fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
         fechaHoy = datetime.datetime.now()
         if fechaHoy < fecha_u:
-            print(fechaHoy < fecha_u)
-            response.flash = "La fecha no puede ser mayor a la fecha actual "\
-                             "negativa"
-            redirect(URL(args=request.args, vars=request.get_vars, host=True))
+            response.flash = "Fecha de consumo no puede ser mayor a la actual"
+            return False 
         
         
         # Nueva cantidad total luego del consumo
@@ -657,8 +714,7 @@ def __agregar_registro(concepto):
         if total_nuevo <= 0:
             response.flash = "La cantidad total luego del consumo no puede ser "\
                              "negativa"
-            redirect(URL(args=request.args, vars=request.get_vars, host=True))
-        
+            return False        
         # Nueva cantidad de uso interno nueva puede ser maximo lo que era antes
         # (si hay material suficiente) o el nuevo total
         uso_interno_nuevo = min(uso_interno_viejo, total_nuevo)
@@ -1971,11 +2027,11 @@ def inventarios_desechos():
                     dep_id = request.vars.dependencia
                     dep_nombre = db.dependencias(db.dependencias.id == dep_id).nombre
                     dependencias = list(db(db.dependencias.unidad_de_adscripcion == dep_id
-                                        ).select(db.dependencias.ALL))
+                                        ).select(db.dependencias.ALL))                                                                                                                                                                              
                     # Si la lista de dependencias es vacia, entonces la dependencia no 
-                    # tiene otras dependencias por debajo (podria tener espacios fisicos
+                    # tiene otras dependencias por debajo (podria tener espacios fisicos                                                        
                     # o estar vacia)
-                    
+
                     if len(dependencias) == 0:
                         # Buscando espacios fisicos que apunten a la dependencia escogida
                         espacios = list(db(db.espacios_fisicos.dependencia == dep_id
@@ -2856,6 +2912,7 @@ def index():
 def sustancias():
     return locals()
 
+
 ############################################################################
 ############################################################################
 #       GENERACION DE REPORTES
@@ -3074,9 +3131,19 @@ def generar_reporte_rl7():
     y=0;
     for i,names in totalIni.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1 
+            else:
+                ws[x[y]] = float(names)
+                ws[x[y]].font = ft3
+                y=y+1 
+
+         
 
 
 
@@ -3087,9 +3154,19 @@ def generar_reporte_rl7():
     y=0;
     for i,names in entradas.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1 
+            else:
+                ws[x[y]] = float(names)
+                ws[x[y]].font = ft3
+                y=y+1 
+
+            
         
     ###
     ### TOTAL DE SALIDAS
@@ -3098,9 +3175,18 @@ def generar_reporte_rl7():
     y=0;
     for i,names in salidas.items():
         if y<13:
-            ws[f[y]] = names
-            ws[f[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[f[y]] = auxP
+                ws[f[y]].font = ft3
+                y=y+1 
+            else:
+                ws[f[y]] = float(names)
+                ws[f[y]].font = ft3
+                y=y+1 
+         
 
     ###
     ### TOTAL DE SALIDAS
@@ -3110,9 +3196,17 @@ def generar_reporte_rl7():
     y=0;
     for i,names in totalFin.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1 
+            else:
+                ws[x[y]] = float(names)
+                ws[x[y]].font = ft3
+                y=y+1 
     
 
     #####################################
@@ -3125,9 +3219,9 @@ def generar_reporte_rl7():
     for i,medi in medidas.items():
         query=db((db.t_Unidad_de_medida.id==int(medi))).select(db.t_Unidad_de_medida.f_abreviatura)
         if y<13:
-            if query[0].f_abreviatura=="ml":
+            if str(query[0].f_abreviatura)=="ml":
                 ws[x[y]] = "l"
-            if query[0].f_abreviatura=="g":
+            elif str(query[0].f_abreviatura)=="g":
                 ws[x[y]] = "kg"
             else:
                 ws[x[y]] = str((query[0].f_abreviatura))
@@ -3310,14 +3404,15 @@ def generar_reporte_rl7():
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
                 sufeAux.append(suFe['f_fechaUso'])
-            if ( suFe['f_concepto']==['Ingreso']):
-                ingAux.append(float(suFe['f_cantidad']))
-                #consAux.append(0)
-                auxTotal.append(float(suFe['f_cantidad_total']))
-            elif ( suFe['f_concepto']==['Consumo']):
-                consAux.append(float(suFe['f_cantidad']))
-                #ingAux.append(0)
-                auxTotal.append(float(suFe['f_cantidad_total']))
+                medida = suFe['f_medida']
+                if ( suFe['f_concepto']==['Ingreso']):
+                    ingAux.append(float(suFe['f_cantidad']))
+                    #consAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
+                elif ( suFe['f_concepto']==['Consumo']):
+                    consAux.append(float(suFe['f_cantidad']))
+                    #ingAux.append(0)
+                    auxTotal.append(float(suFe['f_cantidad_total']))
         
         fechasImdiv[str(neId)] = sufeAux
         ingresoIndiv[str(neId)]= ingAux
@@ -3334,26 +3429,53 @@ def generar_reporte_rl7():
         y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
         h1=0
         for i in ingresoIndiv[str(neId)]:
-            ws2[y[h1]] = str(i)
-            ws2[y[h1]].font = ft2
-            ws2[y[h1]].alignment = cen
-            h1+=1
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[y[h1]] = float(i)/1000
+                ws2[y[h1]].font = ft2
+                ws2[y[h1]].alignment = cen
+                h1+=1
+            else:
+                ws2[y[h1]] = str(i)
+                ws2[y[h1]].font = ft2
+                ws2[y[h1]].alignment = cen
+                h1+=1
 
+           
         z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
         h2=0
         for i in consumoIndiv[str(neId)]:
-            ws2[z[h2]] = str(i)
-            ws2[z[h2]].font = ft2
-            ws2[z[h2]].alignment = cen
-            h2+=1
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[z[h2]] = float(i)/1000
+                ws2[z[h2]].font = ft2
+                ws2[z[h2]].alignment = cen
+                h2+=1
+
+            else:
+                ws2[z[h2]] = str(i)
+                ws2[z[h2]].font = ft2
+                ws2[z[h2]].alignment = cen
+                h2+=1
+
 
         w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
         h3=0
         for i in totalInd[str(neId)]:
-            ws2[w[h3]] = str(i)
-            ws2[w[h3]].font = ft2
-            ws2[w[h3]].alignment = cen
-            h3+=1
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[w[h3]] = float(i)/1000
+                ws2[w[h3]].font = ft2
+                ws2[w[h3]].alignment = cen
+                h3+=1
+
+            else:
+                ws2[w[h3]] = str(i)
+                ws2[w[h3]].font = ft2
+                ws2[w[h3]].alignment = cen
+                h3+=1
+
+           
 
 
     #Pie de Pagina
@@ -3588,10 +3710,19 @@ def generar_reporte_rl4():
     y=0;
     for i,names in totalIni.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
-
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1
+            else:
+                ws[x[y]].font = ft3
+                auxP=float(names) 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1    
 
 
     ###
@@ -3601,9 +3732,20 @@ def generar_reporte_rl4():
     y=0;
     for i,names in entradas.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1
+            else:
+                ws[x[y]].font = ft3
+                auxP=float(names) 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1    
+            
         
     ###
     ### TOTAL DE SALIDAS
@@ -3612,9 +3754,20 @@ def generar_reporte_rl4():
     y=0;
     for i,names in salidas.items():
         if y<13:
-            ws[f[y]] = names
-            ws[f[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[f[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[f[y]] = auxP
+                ws[f[y]].font = ft3
+                y=y+1
+            else:
+                ws[f[y]].font = ft3
+                auxP=float(names) 
+                ws[f[y]] = auxP
+                ws[f[y]].font = ft3
+                y=y+1    
+           
 
     ###
     ### TOTAL DE SALIDAS
@@ -3624,9 +3777,19 @@ def generar_reporte_rl4():
     y=0;
     for i,names in totalFin.items():
         if y<13:
-            ws[x[y]] = names
-            ws[x[y]].font = ft3
-            y=y+1
+            query=db((db.t_Unidad_de_medida.id==int(medidas[str(i)]))).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws[x[y]].font = ft3
+                auxP=float(names)/1000 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1
+            else:
+                ws[x[y]].font = ft3
+                auxP=float(names) 
+                ws[x[y]] = auxP
+                ws[x[y]].font = ft3
+                y=y+1    
     
 
     #####################################
@@ -3639,9 +3802,9 @@ def generar_reporte_rl4():
     for i,medi in medidas.items():
         query=db((db.t_Unidad_de_medida.id==int(medi))).select(db.t_Unidad_de_medida.f_abreviatura)
         if y<13:
-            if query[0].f_abreviatura=="ml":
+            if str(query[0].f_abreviatura)=='ml':
                 ws[x[y]] = "l"
-            if query[0].f_abreviatura=="g":
+            elif str(query[0].f_abreviatura)=='g':
                 ws[x[y]] = "kg"
             else:
                 ws[x[y]] = str((query[0].f_abreviatura))
@@ -3825,7 +3988,7 @@ def generar_reporte_rl4():
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
                 sufeAux.append(suFe['f_fechaUso'])
-
+                medida = suFe['f_medida']
                 if ( suFe['f_concepto']==['Ingreso']):
                     ingAux.append(float(suFe['f_cantidad']))
                     consAux.append(0)
@@ -3839,10 +4002,6 @@ def generar_reporte_rl4():
         ingresoIndiv[str(neId)]= ingAux
         consumoIndiv[str(neId)]= consAux 
         totalInd[str(neId)]=auxTotal
-        print(fechasImdiv)
-        print(ingresoIndiv)
-        print(consumoIndiv)
-        print(totalInd)
 
         h=0
         for i in fechasImdiv[str(neId)]:
@@ -3855,26 +4014,52 @@ def generar_reporte_rl4():
         y = ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
         h1=0
         for i in ingresoIndiv[str(neId)]:
-            ws2[y[h1]] = str(i)
-            ws2[y[h1]].font = ft2
-            ws2[y[h1]].alignment = cen
-            h1+=1
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[y[h1]] = float(i)/1000
+                ws2[y[h1]].font = ft2
+                ws2[y[h1]].alignment = cen
+                h1+=1
+            else:
+                ws2[y[h1]] = str(i)
+                ws2[y[h1]].font = ft2
+                ws2[y[h1]].alignment = cen
+                h1+=1
+
+            
 
         z = ['H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
         h2=0
         for i in consumoIndiv[str(neId)]:
-            ws2[z[h2]] = str(i)
-            ws2[z[h2]].font = ft2
-            ws2[z[h2]].alignment = cen
-            h2+=1
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[z[h2]] = float(i)/1000
+                ws2[z[h2]].font = ft2
+                ws2[z[h2]].alignment = cen
+                h2+=1
+            else:
+                ws2[z[h2]] = str(i)
+                ws2[z[h2]].font = ft2
+                ws2[z[h2]].alignment = cen
+                h2+=1
+            
 
         w = ['I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
         h3=0
         for i in totalInd[str(neId)]:
-            ws2[w[h3]] = str(i)
-            ws2[w[h3]].font = ft2
-            ws2[w[h3]].alignment = cen
-            h3+=1
+
+            query=db(db.t_Unidad_de_medida.id==int(medida)).select(db.t_Unidad_de_medida.f_abreviatura)
+            if ((str(query[0].f_abreviatura)=='ml') or (str(query[0].f_abreviatura)=='g')):
+                ws2[w[h3]] = float(i)/1000
+                ws2[w[h3]].font = ft2
+                ws2[w[h3]].alignment = cen
+                h3+=1
+            else:
+                ws2[w[h3]] = str(i)
+                ws2[w[h3]].font = ft2
+                ws2[w[h3]].alignment = cen
+                h3+=1
+            
 
 
     #Pie de Pagina

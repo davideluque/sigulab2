@@ -291,7 +291,7 @@ db.define_table(
 
     # Concepto del ingreso, egreso o cambio en el inventario *!* COnsumo x egreso
     Field('f_concepto', 'list:string', label=T('Calidad'),
-          requires=IS_IN_SET(['Ingreso','Egreso']), 
+          requires=IS_IN_SET(['Ingreso','Consumo']), 
           widget=SQLFORM.widgets.options.widget),
     
     # Tipo de ingreso de la sustancia (Null si f_concepto no es Ingreso) *!*
