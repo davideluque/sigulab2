@@ -273,13 +273,13 @@ db.t_Inventario._singular='Inventario'
 db.t_Inventario._plural='Inventario'
 
 
-# *!* Ver not nulls y constraints de t_Bitacora
+# *!* Ver not nulls y constraints de t_Balance
 
-#t_Bitacora: Tabla de la bitacora de los movimientos en los inventarios de todos 
+#t_Balance: Tabla de la bitacora de los movimientos en los inventarios de todos 
 # los espacios fisicos
 db.define_table(
     #Nombre de la entidad
-    't_Bitacora',
+    't_Balance',
 
     #Atributos;
 

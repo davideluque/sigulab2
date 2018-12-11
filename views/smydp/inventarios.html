@@ -128,27 +128,7 @@
 		{{pass}}
 	{{pass}}
 	</div>
-	<div class="container">
-		<form nanme="ejemplomonth" action="generar_reporte" method="POST">
-			<select class="form-reporte" type="select" id="mes" name="mes" required>
-				<option value="" selected hidden >Mes*</option>
-				{{meses = [('Enero',1),('Febrero',2),
-				('Marzo',3),('Abril',4),('Mayo',5),('Junio',6),('Julio',7),
-				('Agosto',8),('Septiembre',9),('Octubre',10),('Noviembre',11),('Diciembre',12)]}}
-				{{for c in meses:}}
-				<option value="{{=c}}">{{=c[0]}}</option>
-				{{pass}}
-			  </select>
-			<select class="form-reporte" type="select" id="ayo" name="ayo" required>
-				<option value="" selected hidden >Año*</option>
-				{{ ayos= ['2017','2018','2019']}}
-				{{for c in ayos:}}
-				<option value="{{=c}}">{{=c}}</option>
-				{{pass}}
-			</select>			
-			<input type="submit" name="enviar" value="Generar Reporte RL4 Y RL7 ">
-		</form>
-	</div>
+
 
 	<div class="container">
 		<form nanme="ejemplomonth" action="generar_reporte_rl7" method="POST">

@@ -222,7 +222,7 @@ del concepto y tipo de ingreso o egreso -->
       return false;
     }
     // La cantidad de sustancia para uso interno no puede ser mayor al total
-    if (uso_interno > total) {
+    if (int(uso_interno) >= int(total)) {
       error_uso_interno.innerText = mensaje_error_uso_interno;
       return false;
     }

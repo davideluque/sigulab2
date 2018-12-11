@@ -852,4 +852,3 @@ def __get_competencias(request, personal):
     # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
     #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
     return fies
-
