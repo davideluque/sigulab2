@@ -18,6 +18,10 @@
         </li>
 
         <li class="nav-item ">
+          <a class="nav-link  " id="tab_datos_personales" href="#comisiones_comites" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Comités / Comisiones</b></a>
+        </li>
+
+        <li class="nav-item ">
           <a class="nav-link  " id="tab_datos_personales" href="#reconoc_lab" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Reconocimientos</b></a>
         </li>
 
@@ -97,25 +101,27 @@
             <br>
             <tbody>
               <tr style="color: White;">
-                <th><b>Categoría</b></th>
+                <th><b>Competencia</b></th>
+                <th><b>Categorías</b></th>
                 <th><b>Observaciones</b></th>
               </tr>
               {{for comp in comp_list:}}
               <tr>
-                <td>{{=comp}}</td>
-                <td>{{=comp_list[comp]}}</td>
+                <td>{{=BEAUTIFY(comp.f_nombre)}}</td>
+                <td>{{=BEAUTIFY(", ".join(comp.f_categorias))}}</td>
+                <td>{{=BEAUTIFY(comp.f_observaciones)}}</td>
               </tr>
               {{pass}}
             </tbody>
           </table>
         </div>
 
-        <div class="tab-pane" id="reconoc_lab">
-          <p>Aqui van los reconocimientos</p>
+        <div class="tab-pane" id="comisiones_comites">
+          <p>Aqui van las comisiones</p>
         </div>
 
-        <div class="tab-pane" id="comisiones">
-          <p>Aqui van las comisiones y comites</p>
+        <div class="tab-pane" id="reconoc_lab">
+          <p>Aqui van los reconocimientos</p>
         </div>
 
       </div>

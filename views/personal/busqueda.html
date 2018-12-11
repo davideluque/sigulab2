@@ -1,0 +1,127 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+  <!-- Hoja de estilos específica para la página de gestión de servicios -->
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_index.css')}}"> 
+  <link rel="stylesheet" href="{{=URL('static','css/servicios_modulos.css')}}"> 
+  <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+  <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+  <script src="{{=URL('static', 'js/personal/index.js')}}"></script>
+	<script language="javascript" src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+
+{{end}}
+
+{{block center}}
+
+<style type="text/css">
+	.separador {
+		height: 100px;
+	}
+</style>
+
+<!-- Breadcrumb de navegación -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <span class="breadcrumb-item active">Personal</span>
+  </div>
+</nav>
+<!-- Fin del Breadcrum de navegación --> 
+
+<!-- Contenido principal de la página de filtrado de busqueda-->
+<div  class="container">
+    <div class="row">
+		<div class="col-sm-12 ">
+			<h2 id="tituloBienvenida">Búsqueda de Personal</h2>
+	  		<hr>
+		</div>
+
+    	<div class="col-sm-6 col-sm-offset-3 ">
+			<form class="form-horizontal" method="post" action="{{=URL('personal', 'resultados_busqueda')}}">
+
+				<fieldset>
+
+					<div class="form-group">
+						<div class="col-md-12">
+	                        <label>Gremio</label>
+							<select class="form-control" id="sel2" name="gremio_busqueda">
+								<option enabled selected value=""> -- Selecciona una opción -- </option>
+							  {{for gremio in gremios:}}
+							  <option value="{{=gremio}}">{{=gremio}}</option>
+							  {{pass}}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+					  <div class="col-md-12 ">
+						  <label for="Cargo">Cargo desempeñado:</label>  
+						  <input id="Cargo" name="cargo_busqueda" type="text" placeholder="Por ej.: Analista de Sistemas" class="form-control input-md">
+					  </div>
+					</div>
+
+					<div class="form-group">
+					  <div class="col-md-6 ">
+						  <label for="Competencia">Competencia:</label>  
+						  <input id="Competencia" name="competencia_busqueda" type="text" placeholder="Por ej.: Analisis de Aguas Dulces" class="form-control input-md">
+					  </div>
+
+					  <div class="col-md-6 ">
+						  <label for="Categoria">Categoria de la Competencia:</label>  
+						  <select id="Categoria" class="form-control" id="sel2" name="categoria_busqueda">
+								<option enabled selected value=""> -- Selecciona una opción -- </option>
+							  {{for categoria in competencias:}}
+							  <option value="{{=categoria}}">{{=categoria}}</option>
+							  {{pass}}
+							</select>
+					  </div> 
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-6 ">
+							<!-- Dos opciones de busqueda: por años de servicio en la ULAB o
+							por años de servicio en administracion publica -->
+							<label for="Anios">Años de Servicio en la ULAB:</label>  
+							<select name="anios_busqueda" id="Anios" class="form-control" id="sel2">
+								<option enabled selected value=""> -- </option>
+								<option value="10">10</option>
+								<option value="15">15</option>
+								<option value="20">20</option>
+								<option value="25">25</option>
+							</select>
+						</div>
+
+						<div class="col-md-6 ">
+							<label for="fecha">Para la fecha:</label> 
+							<input name="fecha_busqueda" id="fecha" class="datepicker" type="text" data-placement="center" data-trigger="manual" data-content="Seleccione una fecha">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-6 ">
+							<label for="AniosAdmin">Años en la Administración Pública</label> 
+							<input id="AniosAdmin" name="anios_admin" type="number" placeholder="Por ej.: 25" class="form-control input-md" min="0">
+						</div>
+
+						<div class="col-md-6 ">
+							<label for="fecha-admin">Para la fecha:</label> 
+							<input name="fecha_admin_busqueda" id="fecha-admin" class="datepicker" type="text" data-placement="center" data-trigger="manual" data-content="Seleccione una fecha">
+						</div>
+					</div>
+
+					<div class="text-right" style="padding-bottom: 3rem;">
+						<button type="submit">Buscar <i class="fa fa-search" title=""></i></button>
+					</div>
+				</fieldset>
+
+			</form>
+
+	  	</div>
+
+	</div>
+</div>
+
+
+
+{{end}}

@@ -55,9 +55,9 @@ db.define_table(
     #Nombre de la entidad
     't_Historial_trabajo', 
     #Atributos;
-    Field('f_periodo',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Periodo')),
-    Field('f_organizacion',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Organización')),
-    Field('f_cargo',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Cargo')),
+    Field('f_periodo',          'string', requires=IS_NOT_EMPTY(), default='',notnull=True, label=T('Periodo')),
+    Field('f_organizacion',          'string', requires=IS_NOT_EMPTY(), default='',notnull=True, label=T('Organización')),
+    Field('f_cargo',          'string', requires=IS_NOT_EMPTY(), default='',notnull=True, label=T('Cargo')),
     #Referencia (Revisar si el label es asistio o organizo)
     Field('f_Historial_trabajo_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Posee')),
     )
@@ -176,12 +176,25 @@ db.define_table(
 db.t_Extension._plural = 'Extensiones'
 db.t_Extension._singular = 'Extension'
 
-#t_Competencias: Tabla de Competencias.
 db.define_table(
     't_Competencias',
     # Atributos
     Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Competencia')),
     Field('f_observaciones', 'string', length=150, label=T('Observaciones')),
+    Field('f_Competencia_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Competencias._plural = 'Competencias'
+db.t_Competencias._singular = 'Competencia'
+
+#t_Competencias: Tabla de Competencias.
+db.define_table(
+    't_Competencias2',
+    # Atributos
+    Field('f_nombre', 'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Competencia')),
+    Field('f_observaciones', 'string', length=150, label=T('Observaciones')),
+    Field('f_categorias', 'list:string', default='', label=T('Categorías')),
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
     Field('f_Competencia_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
     migrate=True
     )
