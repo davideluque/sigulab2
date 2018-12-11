@@ -338,21 +338,6 @@ def add_form():
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
 
-        personal_id = personal.select()[0].id
-        competencias = dropdowns()[-1]
-        for ind, comp in enumerate(competencias):
-            if request.post_vars['check-competencia-{0}'.format(ind)]:
-                observaciones = request.post_vars['competencia-{0}'.format(ind)]
-                db.t_Competencias2.update_or_insert(
-                        (db.t_Competencias2.f_nombre==comp) &
-                        (db.t_Competencias2.f_Competencia_Personal==personal_id),
-                        f_nombre=comp,
-                        f_observaciones=observaciones,
-                        f_Competencia_Personal=personal_id
-                        )
-            else:
-                db((db.t_Competencias2.f_nombre==comp) & (db.t_Competencias2.f_Competencia_Personal==personal_id)).delete()
-
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
         if len(named) > 0:
