@@ -533,7 +533,7 @@ db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias
 db.define_table(
     'historial_mantenimiento_vh',
     Field('hmvh_id', 'reference vehiculo', label = T('Placa del vehiculo')),
-    Field('hmvh_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
+    Field('hmvh_fecha_solicitud', 'datetime', notnull=True, label = T('Fecha de solicitud')),
     Field('hmvh_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmvh_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
     Field('hmvh_servicio', 'string', notnull=True, label = T('Servicio Ejecutado'),requires = IS_IN_SET(['Ajuste', 'Calibración', 'Inspección', 'Limpieza', 'Reparación', 'Sustitución de Partes', 'Verificación', 'Otro'])),
