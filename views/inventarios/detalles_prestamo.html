@@ -109,7 +109,7 @@
     <div class="tab-wrapper">
         <ul class="tabs">
                 <li class="tab-link active" data-tab="1">INFORMACIÓN<br/>DE LA<br/>SOLICITUD</li>
-                <li class="tab-link" data-tab="2">CONDUCTOR<br/>Y<br/>USUARIO</li>
+                <li class="tab-link" data-tab="2">USUARIO<br/>Y<br/>CONDUCTOR</li>
             </ul>
     </div>
 
@@ -138,20 +138,6 @@
         </div>
 
         <div id="tab-2" class="tab-content">
-            <h3 class="text-center">Conductor</h3>
-            <div class="grid-container">
-                {{ for title in conductor_list: }}
-                    {{ if conductor_dict.get(title): }}
-                    <div class="grid-item">
-                        {{= title}}:
-                    </div>
-                    <div class="grid-item">
-                        {{= conductor_dict.get(title)}}
-                    </div>
-                    {{ pass }}
-                {{ pass }}
-            </div>
-
             <h3 class="text-center">Usuario</h3>
             <div class="grid-container">
                 {{ for title in usuario_list: }}
@@ -161,6 +147,20 @@
                     </div>
                     <div class="grid-item">
                         {{= usuario_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+
+            <h3 class="text-center">Conductor</h3>
+            <div class="grid-container">
+                {{ for title in conductor_list: }}
+                    {{ if conductor_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= conductor_dict.get(title)}}
                     </div>
                     {{ pass }}
                 {{ pass }}
