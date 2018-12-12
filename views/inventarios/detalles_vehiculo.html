@@ -276,7 +276,7 @@
                         {{ pass }}
                     </div>
                     <div class="grid-item">
-                        {{=vehiculo['vh_fecha_adquisicion']}}
+                        {{=vehiculo['vh_fecha_adquisicion'].strftime("%d/%m/%y") }}
                     </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
                         <div class="grid-item">
