@@ -96,7 +96,13 @@ def __get_mantenimiento_bm(bm_id=None):
 def __get_prestamos_vh(vh_id=None):
     prestamos = list(db(db.historial_prestamo_vh.hpvh_vh_id == vh_id).select())
     prestamos.reverse()
-    return prestamos
+
+    prestamos_final = list()
+    for prestamo in prestamos:
+        if "Vehículo devuelto" == prestamo.hpvh_estatus or "Denegada" == prestamo.hpvh_estatus:
+            prestamos_final.append(prestamo)
+
+    return prestamos_final
 
 # Dado el id de un espacio fisico, retorna las sustancias que componen el inventario
 # de ese espacio.
@@ -2934,7 +2940,7 @@ def detalles_prestamo():
             hpvh_autorizado_por=auth.user.id,
             hpvh_razon_rechazo=motivo,
             hpvh_fecha_autorizacion=datetime.now(),
-            hpvh_estatus="Solicitud rechazada"
+            hpvh_estatus="Denegada"
         )
 
         # Guardamos información en bitácora
@@ -4272,7 +4278,7 @@ def prestamos():
     # Pequeña función booleana para saber si un vehículo ha acabado
     # su flujo útil en préstamos
     def __flujo_listo(x):
-        return "devuelto" in x['hpvh_estatus'] or "rechazada" in x['hpvh_estatus']
+        return "Vehículo devuelto" == x['hpvh_estatus'] or "Denegada" == x['hpvh_estatus']
 
     # Hallamos información del usuario
     user_id = auth.user.id

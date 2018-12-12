@@ -16,9 +16,10 @@
                 <tr id="titulosListado">
                     <th class="camposTabla linksNombres">REGISTRO</th>
                     <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">FECHA DE SALIDA</th>
+                    <th class="camposTabla linksNombres">FECHA DE DEVOLUCIÓN</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
-                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
 
@@ -32,14 +33,15 @@
                             </a>
                         </div>
                     </td>
-                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'].strftime("%d/%m/%y %I:%M %p") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_salida'] is None else solicitud['hpvh_fecha_salida'].strftime("%d/%m/%y %I:%M %p") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_devolucion'] is None else solicitud['hpvh_fecha_devolucion'].strftime("%d/%m/%y %I:%M %p") }}</td>
                     <td class="camposTabla">
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
                         &nbsp;
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
                     </td>
                     <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
-                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
                 </tr>
             {{pass}}
             </tbody>
@@ -47,14 +49,15 @@
             <tfoot id="collapseFiltros">
                 <th class="camposTabla linksNombres">ID</th>
                 <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                <th class="camposTabla linksNombres">FECHA DE SALIDA</th>
+                <th class="camposTabla linksNombres">FECHA DE DEVOLUCIÓN</th>
                 <th class="camposTabla linksNombres">SOLICITANTE</th>
                 <th class="camposTabla linksNombres">MOTIVO</th>
-                <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
-    
+
         </table>
         </div>
     </div>
-    </div>  
-    <!-- Fin Listado de sustancias --> 
+    </div>
+    <!-- Fin Listado de sustancias -->
