@@ -7,7 +7,10 @@
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     usuario = db(db.t_Personal.f_email==auth.user.registration_id).select().first()
-    return dict(usuario=usuario, ci=usuario.f_ci)
+    if usuario:
+        return dict(usuario=usuario, ci=usuario.f_ci)
+    else:
+        return dict(usuario=usuario)
 
 def busqueda():
     gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
