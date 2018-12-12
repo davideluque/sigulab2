@@ -2706,6 +2706,7 @@ def detalles_prestamo():
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
+            hpvh_fecha_autorizacion=datetime.now(),
             hpvh_estatus="Solicitud aprobada: en espera"
         )
 
@@ -2776,6 +2777,7 @@ def detalles_prestamo():
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
             hpvh_razon_rechazo=motivo,
+            hpvh_fecha_autorizacion=datetime.now(),
             hpvh_estatus="Solicitud rechazada"
         )
 
@@ -2860,7 +2862,9 @@ def detalles_prestamo():
         "Estatus": prestamo['hpvh_estatus'],
         "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
         "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
-        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None
+        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None,
+        "Fecha de Aprobación": prestamo['hpvh_fecha_autorizacion'] if "rechazada" in prestamo['hpvh_estatus'] else None,
+        "Fecha de Rechazo": prestamo['hpvh_fecha_autorizacion'] if "aprobada" in prestamo['hpvh_estatus'] else None
     }
 
     informacion_list = [
@@ -2875,7 +2879,9 @@ def detalles_prestamo():
         "Estatus",
         "Razón de Rechazo",
         "Rechazada por",
-        "Aprobada por"
+        "Aprobada por",
+        "Fecha de Aprobación",
+        "Fecha de Rechazo"
     ]
 
     conductor_dict = {
