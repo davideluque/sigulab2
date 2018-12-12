@@ -15,6 +15,14 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
 
+# Función que parsea como entero y retorna None en caso de no poder
+def __safe_int(n):
+    try:
+        return int(n)
+    except:
+        return -2
+
+
 # Función que determina el estado de un documento secundario de vehículo como string,
 # de acuerdo a su estado actual y la ficha que se revisa
 def __get_estado_documento_vh(estado_actual, ficha="salida"):
@@ -2740,10 +2748,10 @@ def detalles_prestamo():
             hpvh_accesorios_salida=request.vars.accesorios_salida,
             hpvh_cartel_uso_oficial_salida=request.vars.cartel_uso_oficial_salida,
             hpvh_listado_fluidos_salida=request.vars.listado_fluidos_salida,
-            hpvh_carnet_circulacion=request.vars.carnet_circulacion_salida,
-            hpvh_poliza_seguridad=request.vars.poliza_seguridad_salida,
-            hpvh_lista_telf_emerg=request.vars.lista_telf_emerg_salida,
-            hpvh_manual_uso_vehic=request.vars.manual_uso_vehic_salida
+            hpvh_carnet_circulacion=int(request.vars.carnet_circulacion_salida),
+            hpvh_poliza_seguridad=int(request.vars.poliza_seguridad_salida),
+            hpvh_lista_telf_emerg=int(request.vars.lista_telf_emerg_salida),
+            hpvh_manual_uso_vehic=int(request.vars.manual_uso_vehic_salida)
         )
 
         # Colocamos un estatus especial al vehículo
@@ -2785,6 +2793,7 @@ def detalles_prestamo():
 
     # Si el usuario autorizado marcó que quería registrar la devolución del vehículo
     if esta_autorizado and request.vars.devolucion:
+
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_estatus="Solicitud aprobada: vehículo devuelto",
@@ -2804,10 +2813,10 @@ def detalles_prestamo():
             hpvh_accesorios_devolucion=request.vars.accesorios_devolucion,
             hpvh_cartel_uso_oficial_devolucion=request.vars.cartel_uso_oficial_devolucion,
             hpvh_listado_fluidos_devolucion=request.vars.listado_fluidos_devolucion,
-            hpvh_carnet_circulacion=request.vars.carnet_circulacion_devolucion if request.vars.carnet_circulacion_devolucion != None else prestamo['hpvh_carnet_circulacion'],
-            hpvh_poliza_seguridad=request.vars.poliza_seguridad_devolucion if request.vars.poliza_seguridad_devolucion != None else prestamo['hpvh_poliza_seguridad'],
-            hpvh_lista_telf_emerg=request.vars.lista_telf_emerg_devolucion if request.vars.lista_telf_emerg_devolucion != None else prestamo['hpvh_lista_telf_emerg'],
-            hpvh_manual_uso_vehic=request.vars.manual_uso_vehic_devolucion if request.vars.manual_uso_vehic_devolucion != None else prestamo['hpvh_manual_uso_vehic']
+            hpvh_carnet_circulacion= prestamo['hpvh_carnet_circulacion'] if request.vars.carnet_circulacion_devolucion is None else __safe_int(request.vars.carnet_circulacion_devolucion),
+            hpvh_poliza_seguridad=prestamo['hpvh_poliza_seguridad'] if request.vars.poliza_seguridad_devolucion is None else __safe_int(request.vars.poliza_seguridad_devolucion),
+            hpvh_lista_telf_emerg=prestamo['hpvh_lista_telf_emerg'] if request.vars.lista_telf_emerg_devolucion is None else __safe_int(request.vars.lista_telf_emerg_devolucion),
+            hpvh_manual_uso_vehic=prestamo['hpvh_manual_uso_vehic'] if request.vars.manual_uso_vehic_devolucion is None else __safe_int(request.vars.manual_uso_vehic_devolucion)
         )
 
         # Retornamos el vehículo a su estatus por defecto
