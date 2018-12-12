@@ -547,7 +547,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         f_accion="[inventarios] Añadido el vehiculo de placa : {}".format(placa)
     )
 
-    response.flash = "El vehículo ha sido agregado satisfactoriamente."
+    session.flash = "El vehículo ha sido agregado satisfactoriamente."
     return redirect(URL(args=request.args, vars=request.get_vars, host=True))
 
 # Registra un nuevo mantenimiento a un bm indicado.
@@ -693,7 +693,7 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
 # Agrega una nueva solicitud de préstamos
 def __solicitar_prestamo_vh(
         solicitante, vehiculo, fecha_solicitud, fecha_prevista_salida, fecha_prevista_devolucion,
-        tiempo_previsto, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
+        tiempo_previsto, tiempo_previsto_md, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
         nro_conductor, licencia_conducir, certificado_medico, certificado_psicologico,
         nombre_usuario, ci_usuario, nro_usuario):
 
@@ -709,6 +709,7 @@ def __solicitar_prestamo_vh(
         hpvh_motivo=motivo_prestamo,
         hpvh_ruta=ruta,
         hpvh_tiempo_estimado_uso=tiempo_previsto,
+        hpvh_tiempo_estimado_uso_md=tiempo_previsto_md,
         hpvh_conductor=nombre_conductor,
         hpvh_ci_conductor=ci_conductor,
         hpvh_nro_celular_conductor=nro_conductor,
@@ -3013,7 +3014,7 @@ def detalles_prestamo():
         "Fecha Prevista de Devolución": prestamo['hpvh_fecha_prevista_devolucion'].strftime("%d/%m/%y"),
         "Motivo de Solicitud": prestamo['hpvh_motivo'],
         "Ruta Prevista": prestamo['hpvh_ruta'],
-        "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
+        "Tiempo Estimado de Uso": "%s %s" % (prestamo['hpvh_tiempo_estimado_uso'], prestamo['hpvh_tiempo_estimado_uso_md']),
         "Estatus": prestamo['hpvh_estatus'],
         "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
         "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
@@ -3202,7 +3203,8 @@ def detalles_vehiculo():
             fecha_solicitud=datetime.now(),
             fecha_prevista_salida=request.vars.fecha_prevista_salida,
             fecha_prevista_devolucion=request.vars.fecha_prevista_devolucion,
-            tiempo_previsto=request.vars.tiempo_previsto,
+            tiempo_previsto=int(request.vars.tiempo_previsto),
+            tiempo_previsto_md=request.vars.tiempo_previsto_md,
             ruta=request.vars.ruta,
             motivo_prestamo=request.vars.motivo_prestamo,
             nombre_conductor=request.vars.nombre_conductor,

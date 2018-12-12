@@ -569,7 +569,8 @@ db.define_table(
     Field('hpvh_solicitante', 'reference auth_user', notnull=True, label=T('Solicitante (ID)')),
     Field('hpvh_motivo', 'text', notnull=True, default="", label=T('Motivo del préstamo')),
     Field('hpvh_ruta', 'text', notnull=True, default="", label=T('Ruta prevista')),
-    Field('hpvh_tiempo_estimado_uso', 'string', notnull=True, default="", label=T('Tiempo estimado de uso')),
+    Field('hpvh_tiempo_estimado_uso', 'integer', notnull=True, default=1, label=T('Tiempo estimado de uso')),
+    Field('hpvh_tiempo_estimado_uso_md', 'string', notnull=True, default="días", label=T('Tiempo estimado de uso (md)')),
 
     # Datos de conductor
     Field('hpvh_conductor', 'string', notnull=True, default="", label=T('Nombre del conductor')),
