@@ -2999,11 +2999,11 @@ def detalles_prestamo():
         nombre_autorizado = ""
 
     informacion_dict = {
-        "Vehículo Solicitado": "%s %s %s" % (
+        "Vehículo Solicitado": "%s %s" % (
             vehiculo['vh_marca'],
-            vehiculo['vh_modelo'],
-            vehiculo['vh_placa']
+            vehiculo['vh_modelo']
         ),
+        "Placa": vehiculo['vh_placa'],
         "Solicitante": "%s %s" % (
             solicitante.first_name,
             solicitante.last_name
@@ -3024,6 +3024,7 @@ def detalles_prestamo():
 
     informacion_list = [
         "Vehículo Solicitado",
+        "Placa",
         "Solicitante",
         "Fecha de Solicitud",
         "Fecha Prevista de Salida",
