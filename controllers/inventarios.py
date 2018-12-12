@@ -437,7 +437,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
-                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
+                 proveedor, proveedor_rif, num, tipo, clasificacion, rines,
                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
                  donante, contacto_donante, oculto=0):
 
@@ -540,7 +540,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_contacto_donante=contacto_donante,
         vh_oculto=oculto,
         vh_dependencia=dependencia,
-        vh_crea_ficha=user
+        vh_crea_ficha=auth.user.id
         )
 
     db.bitacora_general.insert(
@@ -1343,7 +1343,6 @@ def vehiculos():
             donante=request.vars.donante,
             contacto_donante=request.vars.contacto_donante,
             dependencia=id_dep_real,
-            user=user,
             oculto=0
         )
         session.flash = "El vehículo de placa %s ha sido agregado." % request.vars.placa
