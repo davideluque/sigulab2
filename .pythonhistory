@@ -86,3 +86,44 @@ idUser
 historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == idUser).select().first()
 historial_rows
 exit()
+db(db.auth_user).select().first()
+for i in db(db.auth_user).select().first():
+  print(i)
+for i,j in db(db.auth_user).select().first():
+  print(i,j)
+for i in db(db.auth_user).select().first():
+  print(i,db.auth_user[i])
+db(db.auth_user).select().first()
+for i in db(db.auth_user).select().first():
+  print(i)
+db(db.auth_user).select().first().t_Personal
+db(db.t_Personal==1).select().first()
+db(db.t_Personal==1).select()
+db(db.t_Personal=1).select()
+db(db.t_Personal).select()
+db(db.t_Personal == 1)
+db(db.t_Personal == 2)
+db(db.t_Personal == 3)
+db(db.t_Personal == 4)
+db(db.t_Personal)
+db(db.t_Personal).select()
+db(db.t_Personal==1)
+db(db.t_Personal==2)
+db(db.t_Personal).first()
+db(db.t_Personal).select().first()
+db(db.t_Personal).select().first().id
+db(db.t_Personal == 1L).select().first().id
+db(db.t_Personal == 1L)
+db(db.t_Personal == "1L")
+db(db.t_Personal.id == "1L")
+db(db.t_Personal.id == 1)
+db(db.t_Personal.id == 1).select()
+db(db.t_Personal.id == 1).select().first()
+db(db.t_Personal.id == 2).select().first()
+db(db.t_Personal.id == 2).select().first().f_oculto
+db(db.t_Personal.id == 2).select().first().f_Oculto
+db(db.t_Personal.id == 2).select().first().f_es_supervisor
+db(db.t_Personal.id == 1).select().first().f_es_supervisor
+db(db.t_Personal.id == 19).select().first().f_es_supervisor
+db(db.t_Personal.id == 18).select().first().f_es_supervisor
+exit()

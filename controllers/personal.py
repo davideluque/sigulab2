@@ -4,8 +4,13 @@
 #                                   #
 #-----------------------------------#
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
-    return dict()
+    usuario = db(db.t_Personal.f_email==auth.user.registration_id).select().first()
+    if usuario:
+        return dict(usuario=usuario, ci=usuario.f_ci)
+    else:
+        return dict(usuario=usuario)
 
 def busqueda():
     gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
@@ -66,6 +71,10 @@ def resultados_busqueda():
             'cargo' : encontrado
             })
     return dict(lista=lista, filtros=request.post_vars, ani=aniversario_ulab)
+
+def miFicha():
+    return ficha()
+
 #Enviar info a la tabla del listado
 def tabla_categoria(tipo):
     tb=[]
@@ -337,21 +346,6 @@ def add_form():
             ubicaciones
         ))
         db.es_encargado.bulk_insert(ubicaciones_a_insertar)
-
-        personal_id = personal.select()[0].id
-        competencias = dropdowns()[-1]
-        for ind, comp in enumerate(competencias):
-            if request.post_vars['check-competencia-{0}'.format(ind)]:
-                observaciones = request.post_vars['competencia-{0}'.format(ind)]
-                db.t_Competencias2.update_or_insert(
-                        (db.t_Competencias2.f_nombre==comp) &
-                        (db.t_Competencias2.f_Competencia_Personal==personal_id),
-                        f_nombre=comp,
-                        f_observaciones=observaciones,
-                        f_Competencia_Personal=personal_id
-                        )
-            else:
-                db((db.t_Competencias2.f_nombre==comp) & (db.t_Competencias2.f_Competencia_Personal==personal_id)).delete()
 
         personal = personal.select().first()
         named = db(db.dependencias.id == personal.f_dependencia).select(db.dependencias.ALL)
