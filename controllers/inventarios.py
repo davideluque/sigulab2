@@ -2783,6 +2783,71 @@ def detalles_prestamo():
         session.flash = "Se ha registrado la salida del vehículo en la Solicitud de Préstamo #%s." % prestamo_id
         return redirect(URL('prestamos'))
 
+    # Si el usuario autorizado marcó que quería registrar la devolución del vehículo
+    if esta_autorizado and request.vars.devolucion:
+        # Actualizamos la entrada en la base de datos
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_estatus="Solicitud aprobada: vehículo devuelto",
+            hpvh_autoriza_devolucion=auth.user.id,
+            hpvh_fecha_devolucion=datetime.now(),
+            hpvh_km_devolucion=request.vars.km_devolucion,
+            hpvh_gasolina_devolucion=request.vars.gasolina_devolucion,
+            hpvh_aceite_motor_devolucion=request.vars.aceite_motor_devolucion,
+            hpvh_aceite_caja_devolucion=request.vars.aceite_caja_devolucion,
+            hpvh_agua_ref_devolucion=request.vars.agua_ref_devolucion,
+            hpvh_bateria_devolucion=request.vars.bateria_devolucion,
+            hpvh_cauchos_devolucion=request.vars.cauchos_devolucion,
+            hpvh_caucho_repuesto_devolucion=request.vars.caucho_repuesto_devolucion,
+            hpvh_herramientas_seguridad_devolucion=request.vars.herramientas_seguridad_devolucion,
+            hpvh_latoneria_devolucion=request.vars.latoneria_devolucion,
+            hpvh_pintura_devolucion=request.vars.pintura_devolucion,
+            hpvh_accesorios_devolucion=request.vars.accesorios_devolucion,
+            hpvh_cartel_uso_oficial_devolucion=request.vars.cartel_uso_oficial_devolucion,
+            hpvh_listado_fluidos_devolucion=request.vars.listado_fluidos_devolucion,
+            hpvh_carnet_circulacion=request.vars.carnet_circulacion_devolucion if request.vars.carnet_circulacion_devolucion != None else prestamo['hpvh_carnet_circulacion'],
+            hpvh_poliza_seguridad=request.vars.poliza_seguridad_devolucion if request.vars.poliza_seguridad_devolucion != None else prestamo['hpvh_poliza_seguridad'],
+            hpvh_lista_telf_emerg=request.vars.lista_telf_emerg_devolucion if request.vars.lista_telf_emerg_devolucion != None else prestamo['hpvh_lista_telf_emerg'],
+            hpvh_manual_uso_vehic=request.vars.manual_uso_vehic_devolucion if request.vars.manual_uso_vehic_devolucion != None else prestamo['hpvh_manual_uso_vehic']
+        )
+
+        # Retornamos el vehículo a su estatus por defecto
+        db(db.vehiculo.id == vehiculo.id).update(
+            vh_estatus = "Disponible"
+        )
+
+        # Guardamos información en bitácora
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Registrada la devolución del vehículo en préstamo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        # Enviamos notificación al responsable
+        asunto_correo = "[SIGULAB] Devolución de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
+                                      "LA DEVOLUCIÓN del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      datetime.now()
+        )
+
+        # Manda correo de aprobación al responsable
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        session.flash = "Se ha registrado la devolución del vehículo en la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
+
     # Si el usuario autorizado marcó que quería aprobar la solicitud
     if esta_autorizado and request.vars.aprobado:
         # Actualizamos la entrada en la base de datos
@@ -3024,6 +3089,34 @@ def detalles_prestamo():
         "Manual de Uso del Vehículo": __get_estado_documento_vh(prestamo['hpvh_manual_uso_vehic'], "salida")
     }
 
+    try:
+        usuario_devolucion = db(db.auth_user.id == prestamo['hpvh_autoriza_devolucion']).select().first()
+        nombre_devolucion = "%s %s" % (usuario_devolucion.first_name, usuario_devolucion.last_name)
+    except:
+        nombre_devolucion = None
+
+    info_devolucion_dict = {
+        "Autorizado por": nombre_devolucion,
+        "Kilometraje": prestamo['hpvh_km_devolucion'],
+        "Nivel de gasolina": prestamo['hpvh_gasolina_devolucion'],
+        "Nivel de aceite de motor": prestamo['hpvh_aceite_motor_devolucion'],
+        "Nivel de aceite de caja": prestamo['hpvh_aceite_caja_devolucion'],
+        "Nivel de agua/refrigerante": prestamo['hpvh_agua_ref_devolucion'],
+        "Batería": prestamo['hpvh_bateria_devolucion'],
+        "Estado de los Cauchos": prestamo['hpvh_cauchos_devolucion'],
+        "Caucho de Repuesto": prestamo['hpvh_caucho_repuesto_devolucion'],
+        "Herramientas de Seguridad": prestamo['hpvh_herramientas_seguridad_devolucion'],
+        "Estado de la Latonería": prestamo['hpvh_latoneria_devolucion'],
+        "Estado de la Pintura": prestamo['hpvh_pintura_devolucion'],
+        "Estado de los Accesorios": prestamo['hpvh_accesorios_devolucion'],
+        "Cartel de Uso Oficial": prestamo['hpvh_cartel_uso_oficial_devolucion'],
+        "Listado de fluidos y especificaciones de repuestos frecuentes utilizados": prestamo['hpvh_listado_fluidos_devolucion'],
+        "Carnet de Circulación del Vehículo": __get_estado_documento_vh(prestamo['hpvh_carnet_circulacion'], "devolucion"),
+        "Póliza de Seguridad del Vehículo": __get_estado_documento_vh(prestamo['hpvh_poliza_seguridad'], "devolucion"),
+        "Lista de Teléfonos de Emerg.": __get_estado_documento_vh(prestamo['hpvh_lista_telf_emerg'], "devolucion"),
+        "Manual de Uso del Vehículo": __get_estado_documento_vh(prestamo['hpvh_manual_uso_vehic'], "devolucion")
+    }
+
     info_transito_list = [
         "Autorizado por",
         "Kilometraje",
@@ -3057,6 +3150,7 @@ def detalles_prestamo():
         usuario_list=usuario_list,
         info_transito_list=info_transito_list,
         info_salida_dict=info_salida_dict,
+        info_devolucion_dict=info_devolucion_dict,
         esta_autorizado=esta_autorizado
     )
 
