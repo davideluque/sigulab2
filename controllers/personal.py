@@ -859,31 +859,36 @@ def __get_administrativas(request, personal):
     params = {}
     administrativas = []
     for i in range(1, 6):
-        if 'administrativa{0}_cargo'.format(i) in request.post_vars:
+        params = {
+                'f_fecha_inicio': transformar_fecha_formato_original(request.post_vars['administrativa{0}_desde'.format(i)]),
+                'f_fecha_final': transformar_fecha_formato_original(request.post_vars['administrativa{0}_hasta'.format(i)]),
+                'f_cargo': request.post_vars['administrativa{0}_cargo'.format(i)],
+                'f_institucion': request.post_vars['administrativa{0}_institucion'.format(i)],
+                'f_numero': i,
+                'f_Administrativas_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Administrativas.update_or_insert(
+                        (db.t_Administrativas.f_numero==i)
+                        & (db.t_Administrativas.f_Administrativas_Personal==personal.id),
+                        f_fecha_inicio=params['f_fecha_inicio'],
+                        f_fecha_final=params['f_fecha_final'],
+                        f_institucion=params['f_institucion'],
+                        f_cargo=params['f_cargo'],
+                        f_numero=params['f_numero'],
+                        f_Administrativas_Personal=params['f_Administrativas_Personal'],
+                        )
+                administrativas.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Administrativas.f_Administrativas_Personal == personal.id)
+                    & (db.t_Administrativas.f_numero == i)).delete()
+            except:
+                print(e)
 
-            params = {
-                    'f_fecha_inicio': transformar_fecha_formato_original(request.post_vars['administrativa{0}_desde'.format(i)]),
-                    'f_fecha_final': transformar_fecha_formato_original(request.post_vars['administrativa{0}_hasta'.format(i)]),
-                    'f_cargo': request.post_vars['administrativa{0}_cargo'.format(i)],
-                    'f_institucion': request.post_vars['administrativa{0}_institucion'.format(i)],
-                    'f_numero': i,
-                    'f_Administrativas_Personal': personal.id
-                    }
-            if not( (None or '') in  params):
-                try:
-                    db.t_Administrativas.update_or_insert(
-                            (db.t_Administrativas.f_numero==i)
-                            & (db.t_Administrativas.f_Administrativas_Personal==personal.id),
-                            f_fecha_inicio=params['f_fecha_inicio'],
-                            f_fecha_final=params['f_fecha_final'],
-                            f_institucion=params['f_institucion'],
-                            f_cargo=params['f_cargo'],
-                            f_numero=params['f_numero'],
-                            f_Administrativas_Personal=params['f_Administrativas_Personal'],
-                            )
-                except Exception as e:
-                    pass
-            administrativas.append(params)
     return BEAUTIFY(administrativas)
     # return administrativas
 
@@ -891,36 +896,39 @@ def __get_extension(request, personal):
     params = {}
     extension = []
     for i in range(1, 6):
-        if 'extension{0}_nombre'.format(i) in request.post_vars:
-
-            params = {
-                    'f_fecha_inicio': transformar_fecha_formato_original(
-                        request.post_vars['extension{0}_desde'.format(i)]),
-                    'f_fecha_final': transformar_fecha_formato_original(
-                        request.post_vars['extension{0}_hasta'.format(i)]),
-                    'f_nombre': request.post_vars['extension{0}_nombre'.format(i)],
-                    'f_institucion': request.post_vars['extension{0}_institucion'.format(i)],
-                    'f_descripcion': request.post_vars['extension{0}_descripcion'.format(i)],
-                    'f_categoria': request.post_vars['extension{0}_categoria'.format(i)],
-                    'f_numero': i,
-                    'f_Extension_Personal': personal.id
-                    }
-            if not( (None or '') in  params):
-                try:
-                    db.t_Extension2.update_or_insert(
-                            (db.t_Extension2.f_numero==i)
-                            & (db.t_Extension2.f_Extension_Personal==personal.id),
-                            f_fecha_inicio=params['f_fecha_inicio'],
-                            f_fecha_final=params['f_fecha_final'],
-                            f_institucion=params['f_institucion'],
-                            f_nombre=params['f_nombre'],
-                            f_descripcion=params['f_descripcion'],
-                            f_categoria=params['f_categoria'],
-                            f_numero=params['f_numero'],
-                            f_Extension_Personal=params['f_Extension_Personal'],
-                            )
-                except Exception as e:
-                    print(e)
-            extension.append(params)
+        params = {
+                'f_fecha_inicio': transformar_fecha_formato_original(
+                    request.post_vars['extension{0}_desde'.format(i)]),
+                'f_fecha_final': transformar_fecha_formato_original(
+                    request.post_vars['extension{0}_hasta'.format(i)]),
+                'f_nombre': request.post_vars['extension{0}_nombre'.format(i)],
+                'f_institucion': request.post_vars['extension{0}_institucion'.format(i)],
+                'f_descripcion': request.post_vars['extension{0}_descripcion'.format(i)],
+                'f_categoria': request.post_vars['extension{0}_categoria'.format(i)],
+                'f_numero': i,
+                'f_Extension_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Extension2.update_or_insert(
+                        (db.t_Extension2.f_numero==i)
+                        & (db.t_Extension2.f_Extension_Personal==personal.id),
+                        f_fecha_inicio=params['f_fecha_inicio'],
+                        f_fecha_final=params['f_fecha_final'],
+                        f_institucion=params['f_institucion'],
+                        f_nombre=params['f_nombre'],
+                        f_descripcion=params['f_descripcion'],
+                        f_categoria=params['f_categoria'],
+                        f_numero=params['f_numero'],
+                        f_Extension_Personal=params['f_Extension_Personal'],
+                        )
+                extension.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Extension2.f_Extension_Personal == personal.id)
+                    & (db.t_Extension2.f_numero == i)).delete()
+            except:
+                print(e)
     return BEAUTIFY(extension)
-    # return administrativas

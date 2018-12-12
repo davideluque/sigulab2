@@ -3,15 +3,14 @@
 <h5>Los campos con * son obligatorios</h5>
 
 {{for i in range(1,6):}}
-<div class="administrativas-container" id="administrativa{{=i}}_container"
+<div class="administrativas-container" id="administrativa{{=i}}-container"
     {{if len(admin_list)<i and 1!=i:}} hidden {{pass}}>
     <h4>Actividad ({{=i}})</h4>
     <div class="form-row">
         <div class="col-sm-6">
             <div class="form-group">
                 <label for="administrativa{{=i}}-desde">Desde: *</label>
-                <input {{if len(admin_list)<i and 1!=i:}}
-                       disabled {{pass}}
+                <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
                        class="datepicker"
                        name="administrativa{{=i}}_desde" type="text" 
@@ -25,8 +24,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label>Hasta: *</label>
-                <input {{if len(admin_list)<i and 1!=i:}}
-                       disabled {{pass}}
+                <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_final.strftime('%d-%m-%Y')}}"
                        class="datepicker"
                        name="administrativa{{=i}}_hasta" type="text"
@@ -43,8 +41,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label>Cargo: *</label>
-                <input {{if len(admin_list)<i and 1!=i:}}
-                       disabled {{pass}}
+                <input 
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_cargo}}"
                        type="text" class="form-control"
                        name="administrativa{{=i}}_cargo"
@@ -58,8 +55,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label>Institucion: *</label>
-                <input {{if len(admin_list)<i and 1!=i:}}
-                       disabled {{pass}}
+                <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_institucion}}"
                        type="text" class="form-control"
                        name="administrativa{{=i}}_institucion"
@@ -74,22 +70,29 @@
 </div>
 {{pass}}
 
-<a href="#" id="add_field_admin" onclick="add_field_admin()">Agregar Actividad</a>
+<a href="#" class="btn btn-primary btn-sm" id="add_admin" onclick="add_admin()">Agregar Actividad</a>
+<a href="#" class="btn btn-primary btn-sm" id="remove_admin" onclick="remove_admin()">Quitar Actividad</a>
 
 
 <script charset="utf-8">
-    var num = 2
-    function add_field_admin(){
-        if(num < 11){
-            $('#administrativa'+num+'_container').show();
-            $('#administrativa'+num+'_desde').prop('disabled', false);
-            $('#administrativa'+num+'_hasta').prop('disabled', false);
-            $('#administrativa'+num+'_cargo').prop('disabled', false);
-            $('#administrativa'+num+'_institucion').prop('disabled', false);
-        num = num+1;
-        if (num >10){
-            $('#add_field_admin').remove();
+var num_admin = {{=len(admin_list) or 1}}
+    function add_admin(){
+        if(num_admin < 11){
+            num_admin++;
+            $('#administrativa'+num_admin+'-container').show();
+        if (num_admin >10){
+            $('#add_admin').remove();
             }
+        }
+    }
+    function remove_admin(){
+        if(num_admin > 1){
+            $('#administrativa'+num_admin+'-container').hide();
+              $('#administrativa'+num_admin+'_desde').val('');
+              $('#administrativa'+num_admin+'_hasta').val('');
+              $('#administrativa'+num_admin+'_cargo').val('');
+              $('#administrativa'+num_admin+'_institucion').val('');
+            num_admin--;
         }
     }
 </script>
