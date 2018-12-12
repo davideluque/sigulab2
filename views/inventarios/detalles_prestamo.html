@@ -58,9 +58,6 @@
     <h3 class="dep-titulo text-center">Solicitud #{{=prestamo.id}}:  {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}}</h3>
     <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
     {{ if vehiculo['vh_num']: }} <h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>{{ pass }}
-    {{ if esta_autorizado: }}
-        <h4 class="text-center">DESCRIPCIÓN: {{= prestamo['hpvh_motivo'] }}</h4>
-    {{ pass }}
 
     <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{pass}}
