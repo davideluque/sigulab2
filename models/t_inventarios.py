@@ -629,8 +629,9 @@ db.define_table(
     # 0 : no entregado
     # 1 : entregado
     # 2 : devuelto
+    # 3 : no devuelto
     Field('hpvh_carnet_circulacion', 'integer', notnull=True, default=-1, label=T('Carnet de circulación entregado')),
-    Field('hpvh_poliza_seguri', 'integer', notnull=True, default=-1, label=T('Copia de póliza de seguro entregada')),
+    Field('hpvh_poliza_seguridad', 'integer', notnull=True, default=-1, label=T('Copia de póliza de seguro entregada')),
     Field('hpvh_lista_telf_emerg', 'integer', notnull=True, default=-1, label=T('Lista de Teléfonos de Emergencia entregada')),
     Field('hpvh_manual_uso_vehic', 'integer', notnull=True, default=-1, label=T('Manual de uso del vehículo entregado'))
 )

@@ -15,6 +15,24 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
 
+# Función que determina el estado de un documento secundario de vehículo como string,
+# de acuerdo a su estado actual y la ficha que se revisa
+def __get_estado_documento_vh(estado_actual, ficha="salida"):
+
+    if ficha == "salida":
+        if estado_actual == 0:
+            return "No entregado"
+        if estado_actual in [1, 2, 3]:
+            return "Entregado"
+    else:
+        if estado_actual == 2:
+            return "Devuelto"
+        if estado_actual == 3:
+            return "No devuelto"
+
+    return None
+
+
 # Funcion que devuelve un diccionario, con las categorias y
 #subcategorias de los vehiculos
 def __obtener_categorias():
@@ -2701,6 +2719,70 @@ def detalles_prestamo():
 
     esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
 
+    # Si el usuario autorizado marcó que quería registrar la salida del vehículo
+    if esta_autorizado and request.vars.salida:
+        # Actualizamos la entrada en la base de datos
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_estatus="Solicitud aprobada: en tránsito",
+            hpvh_autoriza_salida=auth.user.id,
+            hpvh_fecha_salida=datetime.now(),
+            hpvh_km_salida=request.vars.km_salida,
+            hpvh_gasolina_salida=request.vars.gasolina_salida,
+            hpvh_aceite_motor_salida=request.vars.aceite_motor_salida,
+            hpvh_aceite_caja_salida=request.vars.aceite_caja_salida,
+            hpvh_agua_ref_salida=request.vars.agua_ref_salida,
+            hpvh_bateria_salida=request.vars.bateria_salida,
+            hpvh_cauchos_salida=request.vars.cauchos_salida,
+            hpvh_caucho_repuesto_salida=request.vars.caucho_repuesto_salida,
+            hpvh_herramientas_seguridad_salida=request.vars.herramientas_seguridad_salida,
+            hpvh_latoneria_salida=request.vars.latoneria_salida,
+            hpvh_pintura_salida=request.vars.pintura_salida,
+            hpvh_accesorios_salida=request.vars.accesorios_salida,
+            hpvh_cartel_uso_oficial_salida=request.vars.cartel_uso_oficial_salida,
+            hpvh_listado_fluidos_salida=request.vars.listado_fluidos_salida,
+            hpvh_carnet_circulacion=request.vars.carnet_circulacion_salida,
+            hpvh_poliza_seguridad=request.vars.poliza_seguridad_salida,
+            hpvh_lista_telf_emerg=request.vars.lista_telf_emerg_salida,
+            hpvh_manual_uso_vehic=request.vars.manual_uso_vehic_salida
+        )
+
+        # Colocamos un estatus especial al vehículo
+        db(db.vehiculo.id == vehiculo.id).update(
+            vh_estatus = "En tránsito"
+        )
+
+        # Guardamos información en bitácora
+        db.bitacora_general.insert(
+            f_accion="[préstamos] Registrada la salida en préstamo del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+        )
+
+        # Enviamos notificación al responsable
+        asunto_correo = "[SIGULAB] Salida de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
+                                      "LA SALIDA del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      prestamo_id,
+                                      solicitante.first_name,
+                                      solicitante.last_name,
+                                      datetime.now()
+        )
+
+        # Manda correo de aprobación al responsable
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        session.flash = "Se ha registrado la salida del vehículo en la Solicitud de Préstamo #%s." % prestamo_id
+        return redirect(URL('prestamos'))
+
     # Si el usuario autorizado marcó que quería aprobar la solicitud
     if esta_autorizado and request.vars.aprobado:
         # Actualizamos la entrada en la base de datos
@@ -2914,6 +2996,56 @@ def detalles_prestamo():
         "Nº Celular"
     ]
 
+    try:
+        usuario_salida = db(db.auth_user.id == prestamo['hpvh_autoriza_salida']).select().first()
+        nombre_salida = "%s %s" % (usuario_salida.first_name, usuario_salida.last_name)
+    except:
+        nombre_salida = None
+
+    info_salida_dict = {
+        "Autorizado por": nombre_salida,
+        "Kilometraje": prestamo['hpvh_km_salida'],
+        "Nivel de gasolina": prestamo['hpvh_gasolina_salida'],
+        "Nivel de aceite de motor": prestamo['hpvh_aceite_motor_salida'],
+        "Nivel de aceite de caja": prestamo['hpvh_aceite_caja_salida'],
+        "Nivel de agua/refrigerante": prestamo['hpvh_agua_ref_salida'],
+        "Batería": prestamo['hpvh_bateria_salida'],
+        "Estado de los Cauchos": prestamo['hpvh_cauchos_salida'],
+        "Caucho de Repuesto": prestamo['hpvh_caucho_repuesto_salida'],
+        "Herramientas de Seguridad": prestamo['hpvh_herramientas_seguridad_salida'],
+        "Estado de la Latonería": prestamo['hpvh_latoneria_salida'],
+        "Estado de la Pintura": prestamo['hpvh_pintura_salida'],
+        "Estado de los Accesorios": prestamo['hpvh_accesorios_salida'],
+        "Cartel de Uso Oficial": prestamo['hpvh_cartel_uso_oficial_salida'],
+        "Listado de fluidos y especificaciones de repuestos frecuentes utilizados": prestamo['hpvh_listado_fluidos_salida'],
+        "Carnet de Circulación del Vehículo": __get_estado_documento_vh(prestamo['hpvh_carnet_circulacion'], "salida"),
+        "Póliza de Seguridad del Vehículo": __get_estado_documento_vh(prestamo['hpvh_poliza_seguridad'], "salida"),
+        "Lista de Teléfonos de Emerg.": __get_estado_documento_vh(prestamo['hpvh_lista_telf_emerg'], "salida"),
+        "Manual de Uso del Vehículo": __get_estado_documento_vh(prestamo['hpvh_manual_uso_vehic'], "salida")
+    }
+
+    info_transito_list = [
+        "Autorizado por",
+        "Kilometraje",
+        "Nivel de gasolina",
+        "Nivel de aceite de motor",
+        "Nivel de aceite de caja",
+        "Nivel de agua/refrigerante",
+        "Batería",
+        "Estado de los Cauchos",
+        "Caucho de Repuesto",
+        "Herramientas de Seguridad",
+        "Estado de la Latonería",
+        "Estado de la Pintura",
+        "Estado de los Accesorios",
+        "Cartel de Uso Oficial",
+        "Listado de fluidos y especificaciones de repuestos frecuentes utilizados",
+        "Carnet de Circulación del Vehículo",
+        "Póliza de Seguridad del Vehículo",
+        "Lista de Teléfonos de Emerg.",
+        "Manual de Uso del Vehículo"
+    ]
+
     return dict(
         vehiculo=vehiculo,
         prestamo=prestamo,
@@ -2923,6 +3055,8 @@ def detalles_prestamo():
         conductor_list=conductor_list,
         usuario_dict=usuario_dict,
         usuario_list=usuario_list,
+        info_transito_list=info_transito_list,
+        info_salida_dict=info_salida_dict,
         esta_autorizado=esta_autorizado
     )
 
