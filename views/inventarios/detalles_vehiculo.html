@@ -638,11 +638,17 @@
                                 <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
                             </div>
                         </div>
+
+                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running" style="font-size:2em; display:none;">
+                          Cargando, por favor espere
+                          <div class="ld ld-ring ld-spin-fast"></div>
+                        </div>
+
                       </div>
                       <input type="hidden" name="prestamo" id="prestamo" value="True">
                       <div style="position:fixed; bottom: 15px; right: 30px;">
                         <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                        <button type="submit button" form="formularioCarga" id="submitPrestamo" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
                       </div>
                   </fieldset>
                   <!-- Fin Cuarto Paso -->
@@ -1426,6 +1432,10 @@
   var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
+  $("#submitPrestamo").click(function() {
+    $("#loaderPrestamo").show();
+    $("#submitPrestamo").attr('disabled', 'true');
+  });
 
   // Carga las categorias de sudebip
   $(document).ready(function() {
