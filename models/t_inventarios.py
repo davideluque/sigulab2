@@ -587,7 +587,7 @@ db.define_table(
     # Estatus (@TODO: Cambiar estatus por código int)
     Field('hpvh_autorizado_por', 'reference auth_user', label=T('Autorizado por')),
     Field('hpvh_fecha_autorizacion', 'datetime', label=T('Fecha de autorización')),
-    Field('hpvh_estatus', 'string', notnull=True, default="Solicitud recibida", label=T('Estatus de solicitud'), requires=IS_IN_SET(["Solicitud recibida", "Solicitud aprobada: en espera", "Solicitud rechazada", "Solicitud aprobada: en tránsito", "Solicitud aprobada: vehículo devuelto"])),
+    Field('hpvh_estatus', 'string', notnull=True, default="En espera de respuesta", label=T('Estatus de solicitud')),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
 
     # Datos de salida

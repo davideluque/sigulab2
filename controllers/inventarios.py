@@ -2730,7 +2730,7 @@ def detalles_prestamo():
     if esta_autorizado and request.vars.salida:
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
-            hpvh_estatus="Solicitud aprobada: en tránsito",
+            hpvh_estatus="Vehículo en uso",
             hpvh_autoriza_salida=auth.user.id,
             hpvh_fecha_salida=datetime.now(),
             hpvh_km_salida=request.vars.km_salida,
@@ -2755,7 +2755,7 @@ def detalles_prestamo():
 
         # Colocamos un estatus especial al vehículo
         db(db.vehiculo.id == vehiculo.id).update(
-            vh_estatus = "En tránsito"
+            vh_estatus = "En uso"
         )
 
         # Guardamos información en bitácora
@@ -2795,7 +2795,7 @@ def detalles_prestamo():
 
         # Actualizamos la entrada en la base de datos
         db(db.historial_prestamo_vh.id == prestamo_id).update(
-            hpvh_estatus="Solicitud aprobada: vehículo devuelto",
+            hpvh_estatus="Vehículo devuelto",
             hpvh_autoriza_devolucion=auth.user.id,
             hpvh_fecha_devolucion=datetime.now(),
             hpvh_km_devolucion=request.vars.km_devolucion,
@@ -2862,7 +2862,7 @@ def detalles_prestamo():
         db(db.historial_prestamo_vh.id == prestamo_id).update(
             hpvh_autorizado_por=auth.user.id,
             hpvh_fecha_autorizacion=datetime.now(),
-            hpvh_estatus="Solicitud aprobada: en espera"
+            hpvh_estatus="Aprobada"
         )
 
         # Colocamos un estatus especial al vehículo

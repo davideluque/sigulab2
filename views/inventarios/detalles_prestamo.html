@@ -46,13 +46,13 @@
 <!-- Fin del bloque de navegación secundaria (breadcrumb) -->
 
 
-    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "En espera de respuesta": }}
     <h3 class="dep-titulo text-center">AUTORIZACIÓN PENDIENTE</h3>
     {{pass}}
-    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Aprobada": }}
     <h3 class="dep-titulo text-center">SALIDA PENDIENTE</h3>
     {{pass}}
-    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+    {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Vehículo en uso": }}
     <h3 class="dep-titulo text-center">DEVOLUCIÓN PENDIENTE</h3>
     {{pass}}
     <h3 class="dep-titulo text-center">Solicitud #{{=prestamo.id}}:  {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}}</h3>
@@ -77,18 +77,18 @@
         <div id="columnBotonAgregar" class="col-sm-6">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
-                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud recibida": }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "En espera de respuesta": }}
                     <!-- Boton para aceptar el préstamo -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#aprobar"><i class="fas fa-check fa-1x"></i></button>
 
                     <!-- Boton para rechazar la solicitud -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#rechazar"><i class="fas fa-times-circle fa-1x"></i></button>
                 {{ pass }}
-                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en espera": }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Aprobada": }}
                     <!-- Boton para autorizar salida -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#salida"><i class="fas fa-share-square fa-1x"></i></button>
                 {{ pass }}
-                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Solicitud aprobada: en tránsito": }}
+                {{ if esta_autorizado and prestamo['hpvh_estatus'] == "Vehículo en uso": }}
                     <!-- Boton para autorizar devolución -->
                     <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#devolucion"><i class="fas fa-undo fa-1x"></i></button>
                 {{ pass }}
