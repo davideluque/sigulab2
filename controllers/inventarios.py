@@ -666,7 +666,7 @@ def __agregar_material_modificar(nombre, marca, modelo, cantidad, espacio, ubica
 
 # Agrega una nueva solicitud de préstamos
 def __solicitar_prestamo_vh(
-        solicitante, vehiculo, fecha_solicitud, fecha_prevista_devolucion,
+        solicitante, vehiculo, fecha_solicitud, fecha_prevista_salida, fecha_prevista_devolucion,
         tiempo_previsto, ruta, motivo_prestamo, nombre_conductor, ci_conductor,
         nro_conductor, licencia_conducir, certificado_medico, certificado_psicologico,
         nombre_usuario, ci_usuario, nro_usuario):
@@ -677,6 +677,7 @@ def __solicitar_prestamo_vh(
     prestamo_id = db.historial_prestamo_vh.insert(
         hpvh_vh_id=vehiculo,
         hpvh_fecha_solicitud=fecha_solicitud,
+        hpvh_fecha_prevista_salida=fecha_prevista_salida,
         hpvh_fecha_prevista_devolucion=fecha_prevista_devolucion,
         hpvh_solicitante=solicitante,
         hpvh_motivo=motivo_prestamo,
@@ -2850,8 +2851,9 @@ def detalles_prestamo():
             solicitante.first_name,
             solicitante.last_name
         ),
-        "Fecha de Solicitud": prestamo['hpvh_fecha_salida'],
-        "Fecha Prevista de Devolución": prestamo['hpvh_fecha_prevista_devolucion'],
+        "Fecha de Solicitud": prestamo['hpvh_fecha_solicitud'].strftime("%d/%m/%y %I:%M %p"),
+        "Fecha Prevista de Salida": prestamo['hpvh_fecha_prevista_salida'].strftime("%d/%m/%y"),
+        "Fecha Prevista de Devolución": prestamo['hpvh_fecha_prevista_devolucion'].strftime("%d/%m/%y"),
         "Motivo de Solicitud": prestamo['hpvh_motivo'],
         "Ruta Prevista": prestamo['hpvh_ruta'],
         "Tiempo Estimado de Uso": prestamo['hpvh_tiempo_estimado_uso'],
@@ -2865,6 +2867,7 @@ def detalles_prestamo():
         "Vehículo Solicitado",
         "Solicitante",
         "Fecha de Solicitud",
+        "Fecha Prevista de Salida",
         "Fecha Prevista de Devolución",
         "Motivo de Solicitud",
         "Ruta Prevista",
@@ -2954,6 +2957,7 @@ def detalles_vehiculo():
            solicitante=auth.user.id,
             vehiculo=vehi['id'],
             fecha_solicitud=datetime.now(),
+            fecha_prevista_salida=request.vars.fecha_prevista_salida,
             fecha_prevista_devolucion=request.vars.fecha_prevista_devolucion,
             tiempo_previsto=request.vars.tiempo_previsto,
             ruta=request.vars.ruta,

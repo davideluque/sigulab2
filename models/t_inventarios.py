@@ -559,7 +559,8 @@ db.define_table(
     Field('hpvh_vh_id', 'reference vehiculo', notnull=True, label=T('ID del vehículo')),
 
     # Fechas
-    Field('hpvh_fecha_solicitud', 'date', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_solicitud', 'datetime', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_prevista_salida', 'date', notnull=True, label=T('Fecha prevista de salida')),
     Field('hpvh_fecha_prevista_devolucion', 'date', notnull=True, label=T('Fecha prevista de devolución')),
     Field('hpvh_fecha_salida', 'date', label=T('Fecha de salida')),
     Field('hpvh_fecha_devolucion', 'date',  default="", label=T('Fecha de devolución')),
