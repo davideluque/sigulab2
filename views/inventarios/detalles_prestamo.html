@@ -119,6 +119,12 @@
     <div class="content-wrapper">
         <div id="tab-1" class="tab-content active">
             <div class="grid-container">
+                <div class="grid-item">
+                    Registro:
+                </div>
+                <div class="grid-item">
+                    SIG-{{= db(db.dependencias.id == db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()['vh_dependencia']).select().first()['codigo_registro']  }}/{{= str(prestamo['hpvh_fecha_solicitud'].year)[2:] }}-{{= str(prestamo['id']).zfill(3) }}
+                </div>
                 {{ for title in informacion_list: }}
                     {{ if informacion_dict.get(title): }}
                     <div class="grid-item">
