@@ -63,10 +63,9 @@
           <thead>
             <tr id="titulosListado">
               <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Sustancia</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Espacio Solicitante</th>
+              <th class="camposTabla linksNombres">Cantidad Solicitada</th>
+              <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
               <th class="camposTabla linksNombres">Estado</th>
             </tr>
           </thead>
@@ -75,12 +74,11 @@
           <tbody>
             {{for solicitud in solicitudes_recibidas:}}
               <tr>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Ejecutante');" >{{=solicitud.registro.decode('utf-8').upper()}}</a></th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_sustancia.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.id}}</th>
+                <th class="camposTabla">{{=solicitud.f_espacio}}</th>
+                <th class="camposTabla">{{=solicitud.f_cantidad}}</th>
+                <th class="camposTabla">{{=solicitud.f_fecha_caducidad}}</th>
+                <th class="camposTabla">{{=solicitud.f_estatus}}</th>
               </tr>
             {{pass}}
           </tbody>
@@ -88,10 +86,9 @@
           <tfoot id="collapseFiltros">
             <tr>
               <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Sustancia</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Espacio Solicitante</th>
+              <th class="camposTabla linksNombres">Cantidad Solicitada</th>
+              <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
               <th class="camposTabla linksNombres">Estado</th>
             </tr>
           </tfoot>
@@ -123,10 +120,9 @@
           <thead>
             <tr id="titulosListado">
               <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Sustancia</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Espacio Solicitante</th>
+              <th class="camposTabla linksNombres">Cantidad Solicitada</th>
+              <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
               <th class="camposTabla linksNombres">Estado</th>
             </tr>
           </thead>
@@ -135,22 +131,20 @@
           <tbody>
             {{for solicitud in solicitudes_generadas:}}
               <tr>
-                <th class="camposTabla"><a data-toggle="modal" data-target="#myModal" onclick="abrirFicha({{=solicitud.id}}, 'Solicitante');" >{{=solicitud.registro}}</a></th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_solicitante.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_dependencia_ejecutora.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.nombre_sustancia.decode('utf-8').upper()}}</th>
-                <th class="camposTabla">{{=solicitud.fecha_solicitud}}</th>
-                <th class="camposTabla">{{=solicitud.estado_solicitud_str.decode('utf-8').upper()}}</th>
+                <th class="camposTabla">{{=solicitud.id}}</th>
+                <th class="camposTabla">{{=solicitud.f_espacio}}</th>
+                <th class="camposTabla">{{=solicitud.f_cantidad}}</th>
+                <th class="camposTabla">{{=solicitud.f_fecha_caducidad}}</th>
+                <th class="camposTabla">{{=solicitud.f_estatus}}</th>
               </tr>
             {{pass}}
           </tbody>
           <tfoot id="collapseFiltros">
             <tr>
               <th class="camposTabla linksNombres">Número de Registro</th>
-              <th class="camposTabla linksNombres">Dependencia Solicitante</th>
-              <th class="camposTabla linksNombres">Dependencia Ejecutora</th>
-              <th class="camposTabla linksNombres">Sustancia</th>
-              <th class="camposTabla linksNombres">Fecha de Solicitud</th>
+              <th class="camposTabla linksNombres">Espacio Solicitante</th>
+              <th class="camposTabla linksNombres">Cantidad Solicitada</th>
+              <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
               <th class="camposTabla linksNombres">Estado</th>
             </tr>
           </tfoot>
