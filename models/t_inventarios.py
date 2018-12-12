@@ -533,7 +533,7 @@ db.modificacion_vehiculo.mvh_dependencia.requires = IS_IN_DB(db, db.dependencias
 db.define_table(
     'historial_mantenimiento_vh',
     Field('hmvh_id', 'reference vehiculo', label = T('Placa del vehiculo')),
-    Field('hmvh_fecha_sol', 'date', notnull=True, label = T('Fecha de solicitud')),
+    Field('hmvh_fecha_solicitud', 'datetime', notnull=True, label = T('Fecha de solicitud')),
     Field('hmvh_codigo', 'string', label = T('Codigo de Solicitud')),
     Field('hmvh_tipo', 'string', notnull=True, label = T('Tipo de Mantenimiento'), requires = IS_IN_SET(['Correctivo', 'Predictivo', 'Preventivo'])),
     Field('hmvh_servicio', 'string', notnull=True, label = T('Servicio Ejecutado'),requires = IS_IN_SET(['Ajuste', 'Calibración', 'Inspección', 'Limpieza', 'Reparación', 'Sustitución de Partes', 'Verificación', 'Otro'])),
@@ -559,7 +559,8 @@ db.define_table(
     Field('hpvh_vh_id', 'reference vehiculo', notnull=True, label=T('ID del vehículo')),
 
     # Fechas
-    Field('hpvh_fecha_solicitud', 'date', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_solicitud', 'datetime', notnull=True, label=T('Fecha de solicitud')),
+    Field('hpvh_fecha_prevista_salida', 'date', notnull=True, label=T('Fecha prevista de salida')),
     Field('hpvh_fecha_prevista_devolucion', 'date', notnull=True, label=T('Fecha prevista de devolución')),
     Field('hpvh_fecha_salida', 'date', label=T('Fecha de salida')),
     Field('hpvh_fecha_devolucion', 'date',  default="", label=T('Fecha de devolución')),
@@ -585,6 +586,7 @@ db.define_table(
 
     # Estatus (@TODO: Cambiar estatus por código int)
     Field('hpvh_autorizado_por', 'reference auth_user', label=T('Autorizado por')),
+    Field('hpvh_fecha_autorizacion', 'datetime', label=T('Fecha de autorización')),
     Field('hpvh_estatus', 'string', notnull=True, default="Solicitud recibida", label=T('Estatus de solicitud'), requires=IS_IN_SET(["Solicitud recibida", "Solicitud aprobada: en espera", "Solicitud rechazada", "Solicitud aprobada: en tránsito", "Solicitud aprobada: vehículo devuelto"])),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
 
@@ -627,8 +629,9 @@ db.define_table(
     # 0 : no entregado
     # 1 : entregado
     # 2 : devuelto
+    # 3 : no devuelto
     Field('hpvh_carnet_circulacion', 'integer', notnull=True, default=-1, label=T('Carnet de circulación entregado')),
-    Field('hpvh_poliza_seguri', 'integer', notnull=True, default=-1, label=T('Copia de póliza de seguro entregada')),
+    Field('hpvh_poliza_seguridad', 'integer', notnull=True, default=-1, label=T('Copia de póliza de seguro entregada')),
     Field('hpvh_lista_telf_emerg', 'integer', notnull=True, default=-1, label=T('Lista de Teléfonos de Emergencia entregada')),
     Field('hpvh_manual_uso_vehic', 'integer', notnull=True, default=-1, label=T('Manual de uso del vehículo entregado'))
 )

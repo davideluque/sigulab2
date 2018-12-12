@@ -109,7 +109,13 @@
     <div class="tab-wrapper">
         <ul class="tabs">
                 <li class="tab-link active" data-tab="1">INFORMACIÓN<br/>DE LA<br/>SOLICITUD</li>
-                <li class="tab-link" data-tab="2">CONDUCTOR<br/>Y<br/>USUARIO</li>
+                <li class="tab-link" data-tab="2">USUARIO<br/>Y<br/>CONDUCTOR</li>
+                {{ if prestamo['hpvh_autoriza_salida'] != None: }}
+                    <li class="tab-link" data-tab="3">INFORMACIÓN<br/>DE<br/>SALIDA</li>
+                        {{ if prestamo['hpvh_autoriza_devolucion'] != None: }}
+                            <li class="tab-link" data-tab="4">INFORMACIÓN<br/>DE<br/>DEVOLUCIÓN</li>
+                        {{ pass }}
+                {{ pass }}
             </ul>
     </div>
 
@@ -123,7 +129,7 @@
                     </div>
                     <div class="grid-item">
                         {{ if title == "Vehículo Solicitado": }}
-                        <a href="{{=URL('detalles_vehiculo', vars=dict(vh= db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()['vh_placa'] ))}}">
+                        <a href="{{=URL('detalles_vehiculo', vars=dict(vh= vehiculo['vh_placa'] ))}}">
                         {{ pass }}
 
                         {{= informacion_dict.get(title)}}
@@ -138,20 +144,6 @@
         </div>
 
         <div id="tab-2" class="tab-content">
-            <h3 class="text-center">Conductor</h3>
-            <div class="grid-container">
-                {{ for title in conductor_list: }}
-                    {{ if conductor_dict.get(title): }}
-                    <div class="grid-item">
-                        {{= title}}:
-                    </div>
-                    <div class="grid-item">
-                        {{= conductor_dict.get(title)}}
-                    </div>
-                    {{ pass }}
-                {{ pass }}
-            </div>
-
             <h3 class="text-center">Usuario</h3>
             <div class="grid-container">
                 {{ for title in usuario_list: }}
@@ -165,12 +157,642 @@
                     {{ pass }}
                 {{ pass }}
             </div>
+
+            <h3 class="text-center">Conductor</h3>
+            <div class="grid-container">
+                {{ for title in conductor_list: }}
+                    {{ if conductor_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= conductor_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
         </div>
+
+        {{ if prestamo['hpvh_autoriza_salida'] != None: }}
+        <div id="tab-3" class="tab-content">
+            <div class="grid-container">
+                {{ for title in info_transito_list: }}
+                    {{ if info_salida_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= info_salida_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+        </div>
+
+            {{ if prestamo['hpvh_autoriza_devolucion'] != None: }}
+            <div id="tab-4" class="tab-content">
+                <div class="grid-container">
+                    {{ for title in info_transito_list: }}
+                        {{ if info_devolucion_dict.get(title): }}
+                        <div class="grid-item">
+                            {{= title}}:
+                        </div>
+                        <div class="grid-item">
+                            {{= info_devolucion_dict.get(title)}}
+                        </div>
+                        {{ pass }}
+                    {{ pass }}
+                </div>
+            </div>
+            {{ pass }}
+        {{ pass }}
 
     </div>
 </div>
 
 {{ if esta_autorizado: }}
+<!-- Modal para marcar la salida del vehículo -->
+<div class="modal fade" id="salida" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+                <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                    <div class="container">
+                        <i class="fas fa-share-square fa-2x" style="
+                        display:block;
+                        margin-left: -16px;
+                        margin-top: 8px;
+                        "></i>
+                    </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                    <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                    ">Registrar Salida<button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </h4>
+                </div>
+                </div>
+            </div>
+            <!-- Fin Modal Header -->
+
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <div class="row addRow">
+                    <div class="col-md-12 form-box">
+                        <form id="formularioCarga" class="registration-form" method="post">
+                            <!-- Primer paso-->
+                            <fieldset class="formField">
+                                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                    <div class="col-sm-1 col1Body">
+                                        <span class="step activePass">1</span>
+                                        <span class="step">2</span>
+                                        <span class="step">3</span>
+                                    </div>
+                                    <!-- Aqui va la informacion -->
+                                    <div class="col-sm-11 col11Body">
+                                        <h4 class="titulosForm">Condiciones del vehículo</h4>
+                                        <label>Campos marcados con * son obligatorios.</label>
+
+                                        <div class="form-group">
+                                            <label>Kilometraje*</label>
+                                            <input type="text" class="form-control" id="km_salida" name="km_salida" placeholder="Kilometraje de salida*" title="Formato: numérico" required>
+                                            <div style="color: #d03e3e;" id="err_km_salida" hidden></div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de gasolina</label>
+                                            <select class="form-control" type="select" id="gasolina_salida" name="gasolina_salida" placeholder="Ingrese la gasolina de salida del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Lleno">Lleno</option>
+                                                <option value="3/4">3/4</option>
+                                                <option value="1/2">1/2</option>
+                                                <option value="1/4">1/4</option>
+                                            </select>
+                                            <div class="dr" id="error-gasolina_salida" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de aceite de motor</label>
+                                            <select class="form-control" type="select" id="aceite_motor_salida" name="aceite_motor_salida" placeholder="Ingrese el nivel de aceite de motor del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-aceite_motor_salida" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de aceite de caja</label>
+                                            <select class="form-control" type="select" id="aceite_caja_salida" name="aceite_caja_salida" placeholder="Ingrese el nivel de aceite de caja del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-aceite_caja_salida" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de agua/refrigerante</label>
+                                            <select class="form-control" type="select" id="agua_ref_salida" name="agua_ref_salida" placeholder="Ingrese el nivel de agua/refrigerante del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-agua_ref_salida" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Batería</label>
+                                            <select class="form-control" type="select" id="bateria_salida" name="bateria_salida">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Disponible">Disponible</option>
+                                                <option value="Ausente">Ausente</option>
+                                            </select>
+                                            <div class="dr" id="error-bateria_salida" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div style="position:fixed; bottom: 15px; right: 30px;">
+                                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </fieldset>
+
+                            <!-- Segundo paso-->
+                            <fieldset class="formField">
+                            <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                                <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                <div class="col-sm-1 col1Body">
+                                <span class="step">1</span>
+                                <span class="step activePass">2</span>
+                                <span class="step">3</span>
+                                </div>
+                                <!-- Aqui va la informacion -->
+                                <div class="col-sm-11 col11Body">
+                                <h4 class="titulosForm">Condiciones del Vehículo</h4>
+                                <label>Campos marcados con * son obligatorios.</label>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Estado de los cauchos</label>
+                                        <select class="form-control" type="select" id="cauchos_salida" name="cauchos_salida">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Nuevos">Nuevos</option>
+                                            <option value="Poco desgastados">Poco desgastados</option>
+                                            <option value="Muy desgastados">Muy desgastados</option>
+                                        </select>
+                                        <div class="dr" id="error-cauchos_salida" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Caucho de repuesto</label>
+                                        <select class="form-control" type="select" id="caucho_repuesto_salida" name="caucho_repuesto_salida">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-caucho_repuesto_salida" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Herramientas de Seguridad</label>
+                                        <select class="form-control" type="select" id="herramientas_seguridad_salida" name="herramientas_seguridad_salida">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponibles</option>
+                                            <option value="Ausente">Ausentes</option>
+                                        </select>
+                                        <div class="dr" id="error-herramientas_seguridad_salida" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Cartel de Uso Oficial</label>
+                                        <select class="form-control" type="select" id="cartel_uso_oficial_salida" name="cartel_uso_oficial_salida">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-cartel_uso_oficial_salida" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Listado de fluidos y especificaciones de repuestos frecuentes utilizados</label>
+                                        <select class="form-control" type="select" id="listado_fluidos_salida" name="listado_fluidos_salida">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-listado_fluidos_salida" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="position:fixed; bottom: 15px; right: 30px;">
+                                <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                                <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                            </fieldset>
+                            <!-- Fin Segundo Paso -->
+
+                            <!-- Tercer paso-->
+                            <fieldset class="formField">
+                            <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                                <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                <div class="col-sm-1 col1Body">
+                                <span class="step">1</span>
+                                <span class="step">2</span>
+                                <span class="step activePass">3</span>
+                                </div>
+                                <!-- Aqui va la informacion -->
+                                <div class="col-sm-11 col11Body">
+                                <h4 class="titulosForm">Condiciones del Vehículo</h4>
+                                <label>Campos marcados con * son obligatorios.</label>
+
+                                <div class="form-group">
+                                    <label>Estado de la Latonería</label>
+                                    <input type="text" class="form-control" id="latoneria_salida" name="latoneria_salida" placeholder="Estado de la Latonería">
+                                    <div style="color: #d03e3e;" id="err_latoneria_salida" hidden></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Estado de la Pintura</label>
+                                            <input type="text" class="form-control" id="pintura_salida" name="pintura_salida" placeholder="Estado de la Pintura">
+                                            <div style="color: #d03e3e;" id="err_pintura_salida" hidden></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Estado de los Accesorios</label>
+                                            <input type="text" class="form-control" id="accesorios_salida" name="accesorios_salida" placeholder="Estado de los Accesorios">
+                                            <div style="color: #d03e3e;" id="err_accesorios_salida" hidden></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" tag="Formato:">
+                                    <label>Carnet de Circulación</label>
+                                    <select class="form-control" type="select" id="carnet_circulacion_salida" name="carnet_circulacion_salida">
+                                        <option value="-1">Seleccione una opción</option>
+                                        <option value="0">No Entregado</option>
+                                        <option value="1">Entregado</option>
+                                    </select>
+                                    <div class="dr" id="error-carnet_circulacion_salida" style="color: #d03e3e;"> </div>
+                                </div>
+
+                                <div class="form-group" tag="Formato:">
+                                    <label>Poliza de Seguridad</label>
+                                    <select class="form-control" type="select" id="poliza_seguridad_salida" name="poliza_seguridad_salida">
+                                        <option value="-1">Seleccione una opción</option>
+                                        <option value="0">No Entregado</option>
+                                        <option value="1">Entregado</option>
+                                    </select>
+                                    <div class="dr" id="error-poliza_seguridad_salida" style="color: #d03e3e;"> </div>
+                                </div>
+
+                                <div class="form-group" tag="Formato:">
+                                    <label>Lista de Teléfonos de Emergencia</label>
+                                    <select class="form-control" type="select" id="lista_telf_emerg_salida" name="lista_telf_emerg_salida">
+                                        <option value="-1">Seleccione una opción</option>
+                                        <option value="0">No Entregado</option>
+                                        <option value="1">Entregado</option>
+                                    </select>
+                                    <div class="dr" id="error-lista_telf_emerg_salida" style="color: #d03e3e;"> </div>
+                                </div>
+
+                                <div class="form-group" tag="Formato:">
+                                    <label>Manual de Uso del Vehículo</label>
+                                    <select class="form-control" type="select" id="manual_uso_vehic_salida" name="manual_uso_vehic_salida">
+                                        <option value="-1">Seleccione una opción</option>
+                                        <option value="0">No Entregado</option>
+                                        <option value="1">Entregado</option>
+                                    </select>
+                                    <div class="dr" id="error-manual_uso_vehic_salida" style="color: #d03e3e;"> </div>
+                                </div>
+
+                                </div>
+                            </div>
+                            <input type="hidden" name="salida" id="salida" value="True">
+                                <div style="position:fixed; bottom: 15px; right: 30px;">
+                                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                                </div>
+                            </fieldset>
+                            <!-- Fin Tercer Paso -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal para marcar la devolucion del vehículo -->
+<div class="modal fade" id="devolucion" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+                <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header">
+                    <div class="container">
+                        <i class="fas fa-undo fa-2x" style="
+                        display:block;
+                        margin-left: -16px;
+                        margin-top: 8px;
+                        "></i>
+                    </div>
+                </div>
+                <div class="col-sm-11" id="col11Header">
+                    <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                    ">Registrar Devolución<button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </h4>
+                </div>
+                </div>
+            </div>
+            <!-- Fin Modal Header -->
+
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <div class="row addRow">
+                    <div class="col-md-12 form-box">
+                        <form id="formularioDevolucion" class="registration-form" method="post">
+                            <!-- Primer paso-->
+                            <fieldset class="formField">
+                                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                    <div class="col-sm-1 col1Body">
+                                        <span class="step activePass">1</span>
+                                        <span class="step">2</span>
+                                        <span class="step">3</span>
+                                    </div>
+                                    <!-- Aqui va la informacion -->
+                                    <div class="col-sm-11 col11Body">
+                                        <h4 class="titulosForm">Condiciones del vehículo</h4>
+                                        <label>Campos marcados con * son obligatorios.</label>
+
+                                        <div class="form-group">
+                                            <label>Kilometraje*</label>
+                                            <input type="text" class="form-control" id="km_devolucion" name="km_devolucion" placeholder="Kilometraje de devolución*" title="Formato: numérico" required>
+                                            <div style="color: #d03e3e;" id="err_km_devolucion" hidden></div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de gasolina</label>
+                                            <select class="form-control" type="select" id="gasolina_devolucion" name="gasolina_devolucion" placeholder="Ingrese la gasolina de salida del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Lleno">Lleno</option>
+                                                <option value="3/4">3/4</option>
+                                                <option value="1/2">1/2</option>
+                                                <option value="1/4">1/4</option>
+                                            </select>
+                                            <div class="dr" id="error-gasolina_devolucion" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de aceite de motor</label>
+                                            <select class="form-control" type="select" id="aceite_motor_devolucion" name="aceite_motor_devolucion" placeholder="Ingrese el nivel de aceite de motor del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-aceite_motor_devolucion" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de aceite de caja</label>
+                                            <select class="form-control" type="select" id="aceite_caja_devolucion" name="aceite_caja_devolucion" placeholder="Ingrese el nivel de aceite de caja del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-aceite_caja_devolucion" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Nivel de agua/refrigerante</label>
+                                            <select class="form-control" type="select" id="agua_ref_devolucion" name="agua_ref_devolucion" placeholder="Ingrese el nivel de agua/refrigerante del vehículo">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Alto">Alto</option>
+                                                <option value="Medio">Medio</option>
+                                                <option value="Bajo">Bajo</option>
+                                            </select>
+                                            <div class="dr" id="error-agua_ref_devolucion" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                        <div class="form-group" tag="Formato:">
+                                            <label>Batería</label>
+                                            <select class="form-control" type="select" id="bateria_devolucion" name="bateria_devolucion">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Disponible">Disponible</option>
+                                                <option value="Ausente">Ausente</option>
+                                            </select>
+                                            <div class="dr" id="error-bateria_devolucion" style="color: #d03e3e;"> </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div style="position:fixed; bottom: 15px; right: 30px;">
+                                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </fieldset>
+
+                            <!-- Segundo paso-->
+                            <fieldset class="formField">
+                            <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                                <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                <div class="col-sm-1 col1Body">
+                                <span class="step">1</span>
+                                <span class="step activePass">2</span>
+                                <span class="step">3</span>
+                                </div>
+                                <!-- Aqui va la informacion -->
+                                <div class="col-sm-11 col11Body">
+                                <h4 class="titulosForm">Condiciones del Vehículo</h4>
+                                <label>Campos marcados con * son obligatorios.</label>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Estado de los cauchos</label>
+                                        <select class="form-control" type="select" id="cauchos_devolucion" name="cauchos_devolucion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Nuevos">Nuevos</option>
+                                            <option value="Poco desgastados">Poco desgastados</option>
+                                            <option value="Muy desgastados">Muy desgastados</option>
+                                        </select>
+                                        <div class="dr" id="error-cauchos_devolucion" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Caucho de repuesto</label>
+                                        <select class="form-control" type="select" id="caucho_repuesto_devolucion" name="caucho_repuesto_devolucion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-caucho_repuesto_devolucion" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Herramientas de Seguridad</label>
+                                        <select class="form-control" type="select" id="herramientas_seguridad_devolucion" name="herramientas_seguridad_devolucion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponibles</option>
+                                            <option value="Ausente">Ausentes</option>
+                                        </select>
+                                        <div class="dr" id="error-herramientas_seguridad_devolucion" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Cartel de Uso Oficial</label>
+                                        <select class="form-control" type="select" id="cartel_uso_oficial_devolucion" name="cartel_uso_oficial_devolucion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-cartel_uso_oficial_devolucion" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                    <div class="form-group" tag="Formato:">
+                                        <label>Listado de fluidos y especificaciones de repuestos frecuentes utilizados</label>
+                                        <select class="form-control" type="select" id="listado_fluidos_devolucion" name="listado_fluidos_devolucion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Disponible">Disponible</option>
+                                            <option value="Ausente">Ausente</option>
+                                        </select>
+                                        <div class="dr" id="error-listado_fluidos_devolucion" style="color: #d03e3e;"> </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="position:fixed; bottom: 15px; right: 30px;">
+                                <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                                <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                            </fieldset>
+                            <!-- Fin Segundo Paso -->
+
+                            <!-- Tercer paso-->
+                            <fieldset class="formField">
+                            <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                                <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                                <div class="col-sm-1 col1Body">
+                                <span class="step">1</span>
+                                <span class="step">2</span>
+                                <span class="step activePass">3</span>
+                                </div>
+                                <!-- Aqui va la informacion -->
+                                <div class="col-sm-11 col11Body">
+                                <h4 class="titulosForm">Condiciones del Vehículo</h4>
+                                <label>Campos marcados con * son obligatorios.</label>
+
+                                <div class="form-group">
+                                    <label>Estado de la Latonería</label>
+                                    <input type="text" class="form-control" id="latoneria_devolucion" name="latoneria_devolucion" placeholder="Estado de la Latonería">
+                                    <div style="color: #d03e3e;" id="err_latoneria_devolucion" hidden></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Estado de la Pintura</label>
+                                            <input type="text" class="form-control" id="pintura_devolucion" name="pintura_devolucion" placeholder="Estado de la Pintura">
+                                            <div style="color: #d03e3e;" id="err_pintura_devolucion" hidden></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Estado de los Accesorios</label>
+                                            <input type="text" class="form-control" id="accesorios_devolucion" name="accesorios_devolucion" placeholder="Estado de los Accesorios">
+                                            <div style="color: #d03e3e;" id="err_accesorios_devolucion" hidden></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{ if prestamo['hpvh_carnet_circulacion'] == 1: }}
+                                <div class="form-group" tag="Formato:">
+                                    <label>Carnet de Circulación</label>
+                                    <select class="form-control" type="select" id="carnet_circulacion_devolucion" name="carnet_circulacion_devolucion">
+                                        <option value="1">Seleccione una opción</option>
+                                        <option value="3">No Devuelto</option>
+                                        <option value="2">Devuelto</option>
+                                    </select>
+                                    <div class="dr" id="error-carnet_circulacion_devolucion" style="color: #d03e3e;"> </div>
+                                </div>
+                                {{ pass }}
+
+                                {{ if prestamo['hpvh_poliza_seguridad'] == 1: }}
+                                <div class="form-group" tag="Formato:">
+                                    <label>Poliza de Seguridad</label>
+                                    <select class="form-control" type="select" id="poliza_seguridad_devolucion" name="poliza_seguridad_devolucion">
+                                        <option value="1">Seleccione una opción</option>
+                                        <option value="3">No Devuelto</option>
+                                        <option value="2">Devuelto</option>
+                                    </select>
+                                    <div class="dr" id="error-poliza_seguridad_devolucion" style="color: #d03e3e;"> </div>
+                                </div>
+                                {{ pass }}
+
+                                {{ if prestamo['hpvh_lista_telf_emerg'] == 1: }}
+                                <div class="form-group" tag="Formato:">
+                                    <label>Lista de Teléfonos de Emergencia</label>
+                                    <select class="form-control" type="select" id="lista_telf_emerg_devolucion" name="lista_telf_emerg_devolucion">
+                                        <option value="1">Seleccione una opción</option>
+                                        <option value="3">No Devuelto</option>
+                                        <option value="2">Devuelto</option>
+                                    </select>
+                                    <div class="dr" id="error-lista_telf_emerg_devolucion" style="color: #d03e3e;"> </div>
+                                </div>
+                                {{ pass }}
+
+                                {{ if prestamo['hpvh_manual_uso_vehic'] == 1: }}
+                                <div class="form-group" tag="Formato:">
+                                    <label>Manual de Uso del Vehículo</label>
+                                    <select class="form-control" type="select" id="manual_uso_vehic_devolucion" name="manual_uso_vehic_devolucion">
+                                        <option value="1">Seleccione una opción</option>
+                                        <option value="3">No Devuelto</option>
+                                        <option value="2">Devuelto</option>
+                                    </select>
+                                    <div class="dr" id="error-manual_uso_vehic_devolucion" style="color: #d03e3e;"> </div>
+                                </div>
+                                {{ pass }}
+
+                                </div>
+                            </div>
+                            <input type="hidden" name="devolucion" id="devolucion" value="True">
+                                <div style="position:fixed; bottom: 15px; right: 30px;">
+                                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                                    <button type="submit button" form="formularioDevolucion" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                                </div>
+                            </fieldset>
+                            <!-- Fin Tercer Paso -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!--Modal para rechazar la solicitud -->
 <div class="modal fade" id="rechazar" role="dialog">
     <div class="modal-dialog">
@@ -271,6 +893,62 @@
     </div>
 </div>
 {{ pass }}
+
+<script type="text/javascript">
+    // Validación de campos requeridos y no llenados
+    // (ignora el resto de campos especiales)
+    $("input[required]").focusout(function() {
+        var value = $(this).val();
+
+        if (   !$(this).is("#km_salida")
+            &&  !$(this).is("#km_devolucion")
+        ) {
+        if (value.length == 0) {
+            $(this).css('border-color', '#d03e3e');
+            $(this).next().show();
+            $(this).next().text("Este campo es obligatorio.");
+        } else {
+            $(this).next().hide();
+            $(this).css('border-color', '#ddd');
+            $(this).css('color', '#888');
+        }
+        }
+    });
+
+    function isNum(str) {
+        return !isNaN(str);
+    }
+
+    // Validación de kilometrajes
+    $("#km_salida").focusout(function() {
+        var km_salida = $(this).val();
+        if (isNum(km_salida) && km_salida.length > 0) {
+            $(this).next().hide();
+            $(this).css('border-color', '#ddd');
+            $(this).css('color', '#888');
+        }
+        else {
+            $(this).css('border-color', '#d03e3e');
+            $(this).next().show();
+            $(this).next().text("Introduce un número mayor que 0 (en Km).");
+        }
+    });
+
+    // Validación de kilometrajes
+    $("#km_devolucion").focusout(function() {
+        var km_devolucion = $(this).val();
+        if (isNum(km_devolucion) && km_devolucion.length > 0) {
+            $(this).next().hide();
+            $(this).css('border-color', '#ddd');
+            $(this).css('color', '#888');
+        }
+        else {
+            $(this).css('border-color', '#d03e3e');
+            $(this).next().show();
+            $(this).next().text("Introduce un número mayor que 0 (en Km).");
+        }
+    });
+</script>
 
 <script type="text/javascript">
     $('.tab-link').click( function() {
