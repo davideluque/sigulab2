@@ -75,7 +75,7 @@
           <tbody>
             {{for id_,solicitud in solicitudes_recibidas.iteritems():}}
               <tr>
-                <th class="camposTabla">{{=solicitud['f_cod_registro']}}</th>
+                <th class="camposTabla"><a href="{{=URL('detalles_solicitud', vars=dict(registro=solicitud['f_cod_registro']) )}}"> {{=solicitud['f_cod_registro']}}</a></th>
                 <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
                 <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
                 <th class="camposTabla">{{=solicitud['f_cantidad']}}</th>
@@ -135,7 +135,7 @@
           <tbody>
             {{for id_,solicitud in solicitudes_generadas.iteritems():}}
               <tr>
-                <th class="camposTabla">{{=solicitud['f_cod_registro']}}</th>
+                <th class="camposTabla"><a href="{{=URL('detalles_solicitud', vars=dict(registro=solicitud['f_cod_registro']) )}}"> {{=solicitud['f_cod_registro']}}</a></th>
                 <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
                 <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
                 <th class="camposTabla">{{=solicitud['f_cantidad']}}</th>

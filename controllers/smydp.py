@@ -2900,6 +2900,47 @@ def catalogo():
                                     paginate=10)
     return locals()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_solicitudes():
+
+    solicitudes = db((db.t_Solicitud_smydp.id == request.vars.registro)).select()
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    i = 0
+
+    if auth.has_membership("TÉCNICO"):
+        
+        for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
+
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id == esp.id:
+
+                    i += 1
+                    solicitudesHechas[int(i)] = {
+                                        'f_cod_registro': sol.f_cod_registro,
+                                        'f_sustancia': sustancia.f_nombre,
+                                        'f_espacio': sol.f_espacio,
+                                        'f_cantidad': sol.f_cantidad,
+                                        'f_fecha': sol.f_fecha_caducidad,
+                                        'f_estatus':sol.f_estatus
+                                        }
+
+    return dict(bien = bien,
+                material_pred = material_pred,
+                caracteristicas_list = caracteristicas_list,
+                caracteristicas_dict = caracteristicas_dict,
+                unidad_med = unidad_med,
+                presentacion = presentacion
+                )
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():

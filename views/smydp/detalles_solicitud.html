@@ -1,0 +1,478 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    <!-- Estilos de modales y listados -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
+{{end}}
+
+{{block center}}
+  {{ if request.vars.delete: }}
+  <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+  {{pass}}
+    <h3 class="dep-titulo text-center">{{=bien['hr_nombre']}}</h3>
+    {{ if request.vars.delete: }}
+    <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['hr_desc_eliminar'].upper()}}</h4>
+    {{ pass }}
+{{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+
+<!-- Inicio Boton Modificar BM -->
+<div class="container" id="containerAgregar">
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div id="columnBotonAgregar" class="col-sm-6">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    {{ if request.vars.delete: }}
+                    <form method="post">
+                        <!-- Boton para aceptar mod de bien mueble-->
+                        <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
+                        <!--Boton para rechazar el bien mueble-->
+                        <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
+                    </form>
+                    {{ else: }}
+                    <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                    <!-- Boton para eliminar el sb-->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+                    {{ pass }}
+                  </div>
+            </div>
+        </div>
+    </div>
+<!-- Fin Boton Agregar Sustancia -->
+<br>
+<div class="wrapper">
+		
+	<div class="tab-wrapper">
+		<ul class="tabs">
+				<li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
+                <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
+            </ul>
+	</div>
+
+	<div class="content-wrapper">
+		<div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+                {{ for title in caracteristicas_list: }}
+                    {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
+                        <div class="grid-item">
+                            {{=title.upper()}}
+                        </div>
+                        <div class="grid-item">
+                            {{= caracteristicas_dict.get(title)}}
+                        </div>
+                    {{pass}}
+                {{ pass }}
+                {{if bien['hr_ancho'] != None or bien['hr_largo'] != None or bien['hr_alto'] != None or bien['hr_diametro'] != None:}}
+                    <div class="grid-item">
+                        {{ if bien['hr_unidad'] == 'm':}}
+                            Dimensiones (metros):
+                        {{else:}}
+                            Dimensiones (centímetros):
+                        {{pass}}
+                    </div>
+                    <div class="grid-item">                        
+                        {{if bien['hr_ancho'] != None:}}
+                            Ancho: {{=bien['hr_ancho']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['hr_largo'] != None:}}
+                            Largo: {{=bien['hr_largo']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['hr_alto'] != None:}}
+                            Alto: {{=bien['hr_alto']}}
+                            <br>
+                        {{pass}}
+                        {{if bien['hr_diametro'] != None:}}
+                            Diámetro: {{=bien['hr_diametro']}}
+                            <br>
+                        {{pass}}
+                    </div>
+                {{pass}}
+            </div>
+        </div>
+        <div id="tab-2"class="tab-content">
+            <div class="grid-container">
+                <div class="grid-item">
+                    Espacio físico:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.espacios_fisicos.id == bien['hr_espacio_fisico']).select().first().codigo}}
+                </div>
+                <div class="grid-item">
+                    Unidad de Adscripción:
+                </div>
+                <div class="grid-item">
+                    {{=db(db.dependencias.id == bien['hr_unidad_de_adscripcion']).select().first().nombre}}
+                </div>
+                <div class="grid-item">
+                    Dependencia:
+                </div>
+                <div class=grid-item>
+                    {{=db(db.dependencias.id == bien['hr_depedencia']).select().first().nombre}}
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+
+<!--Modal de eliminar material-->
+<div class="modal fade" id="confirmdelete" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header addHeader">
+              <div class="row addRow" id="rowHeader">
+                <div class="col-sm-1" id="col1Header" style="background-color: red;">
+                  <div class="container">
+                      <i class="fas fa-trash fa-2x" style="
+                      display:block;
+                      margin-left: -16px;
+                      margin-top: 8px;
+                      color: white;
+                      "></i>
+                  </div>
+                </div>
+                <div class="col-sm-11" id="col11Header" style="background-color: red;">
+                  <h4 class="modal-title" id="nuevaBien" style="
+                    text-align: left;
+                    padding-top: 12px;
+                    color: white;
+                  ">Confirmar eliminación<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body addBody">
+                <br>
+                <form method="post" style="text-align: center;">
+                    <div class="form-group">
+                        <label>Descripción de eliminación*</label>
+                        <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
+                        <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
+                    </div>
+                    <h4>¿Desea solicitar la eliminación de {{=bien['hr_nombre']}}?</h4>
+                    <br>
+                    <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
+                    <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
+                </form>
+                <br>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+        // Funcion para seleccionar valores de los select
+        function select_values(){
+            // selecciono valor del select de material 1
+            var material = document.getElementById("material_mat");
+            var otro_material = document.getElementById("otro_material1")
+            var value = "{{=bien['hr_material']}}"
+            var material_bool = "{{=bien['hr_material'] in material_pred}}"
+            if ( material_bool == "True"){
+                material.value = value;
+            }else{
+                material.removeAttribute("name");
+                otro_material.setAttribute("name","material_mat");
+                material.value = "Otro"
+            }
+        }
+
+    // dada una cantidad selecciona la unidad
+    function seleccionar_unidad(value){
+        var unidad = document.getElementById("unidad_cap");
+        if (value){
+        unidad.required = true;
+        }else{
+        unidad.required = false;
+        }
+    }
+
+    // Agregar campo de otro material
+    function agregar_otro(id, name, otro_id){
+        var id = document.getElementById(id)
+        var otro_id = document.getElementById(otro_id)
+        if ( id.value === "Otro" ){
+        id.removeAttribute("name");
+        otro_id.setAttribute("name", name);
+        otro_id.type =  "text";
+        otro_id.required = true;
+        }else{
+        otro_id.removeAttribute("name");
+        otro_id.type = "hidden";
+        id.setAttribute("name",name);
+        }
+    }
+
+  // Funcion para mostrar campos dependendiendo de la categoria
+  function elegir_campos(){
+    var selecion = document.getElementById("clasificacion");
+    if (selecion.value == "Material de Laboratorio"){
+      document.getElementById("unidades").type = 'hidden';
+      document.getElementById("unidades").removeAttribute("required", "");
+      document.getElementById("total_mat").type = 'hidden';
+      document.getElementById("total_mat").removeAttribute("required", "");
+      document.getElementById("grupo-presentacion").style.display = 'none';
+      document.getElementById("presentacion").removeAttribute("required", "");
+      document.getElementById("grupo-aforado").style.display = 'block';
+      document.getElementById("grupo-material").style.display = 'block';
+      document.getElementById("grupo-material2").style.display = 'block';
+      document.getElementById("grupo-unidad").style.display = 'block';
+      document.getElementById("calibracion_mat").style.display = 'block';
+      document.getElementById("grupo-cap").style.display = 'block';
+      document.getElementById("aforado").setAttribute("required", "");
+      document.getElementById("calibracion_mat").setAttribute("required", "");
+      document.getElementById("material_mat").setAttribute("required", "");
+      document.getElementById("grupo-capacidad").style.display = 'block';
+      document.getElementById("capacidad").type = 'text';
+      document.getElementById("grupo-total").style.display = 'none';
+
+    }
+    else{
+      document.getElementById("grupo-total").style.display = 'block';
+      document.getElementById("grupo-cap").style.display = 'none';
+      document.getElementById("grupo-capacidad").style.display = 'none';
+      document.getElementById("capacidad").type = 'hidden';
+      document.getElementById("grupo-presentacion").style.display = 'block';
+      document.getElementById("presentacion").setAttribute("required", "");
+      document.getElementById("unidades").type = 'text';
+      document.getElementById("unidades").setAttribute("required", "");
+      document.getElementById("total_mat").type = 'text';
+      document.getElementById("total_mat").setAttribute("required", "");
+      document.getElementById("grupo-aforado").style.display = 'none';
+      document.getElementById("aforado").removeAttribute("required", "");
+      document.getElementById("grupo-material").style.display = 'none';
+      document.getElementById("grupo-material2").style.display = 'none';
+      document.getElementById("grupo-unidad").style.display = 'none';
+      document.getElementById("material_mat").removeAttribute("required", "");
+      document.getElementById("calibracion_mat").style.display = 'none';
+      document.getElementById("calibracion_mat").removeAttribute("required", "");
+    }
+  }
+
+    // Mostrar fecha de calibracion
+    function display_piezas(value){
+    if ( value == "Conjunto" ){
+      document.getElementById("numpiezas_her").setAttribute("required", "");
+      document.getElementById("contenido_her").setAttribute("required", "");
+      document.getElementById("descripcion_her").setAttribute("required", "");
+      $('#grupo-piezas').show()
+      $('#grupo-contenido').show()
+      $('#grupo-descripcion').show()
+    }else{
+      document.getElementById("numpiezas_her").removeAttribute("required", "");
+      document.getElementById("contenido_her").removeAttribute("required", "");
+      document.getElementById("descripcion_her").removeAttribute("required", "");
+      $('#grupo-piezas').hide()
+      $('#grupo-contenido').hide()
+      $('#grupo-descripcion').hide()
+    }
+  }
+  // Mostrar unidades
+  function display_units(value){
+    if ( value == '' ){
+      //document.getElementById("unidad_mat").type = 'hidden';
+      document.getElementById("ancho_her").type = 'hidden';
+      document.getElementById("largo_her").type = 'hidden';
+      document.getElementById("alto_her").type = 'hidden';
+      document.getElementById("diametro_her").type = 'hidden';
+      $('#grupo-ancho').hide()
+      $('#grupo-largo').hide()
+      $('#grupo-alto').hide()
+      $('#grupo-diametro').hide()
+    }else{
+      //document.getElementById("unidad_mat").type = 'text';
+      document.getElementById("ancho_her").type = 'text';
+      document.getElementById("largo_her").type = 'text';
+      document.getElementById("alto_her").type = 'text';
+      document.getElementById("diametro_her").type = 'text';
+      $('#grupo-ancho').show()
+      $('#grupo-largo').show()
+      $('#grupo-alto').show()
+      $('#grupo-diametro').show()
+    }
+  }
+  // Valida los campos de la forma en el modal "addbm"
+  function validar_campos(){
+    // Buscando divs para ingresar mensajes de error
+    var error_total = document.getElementById("error-total");
+    var error_uso_interno = document.getElementById("error-uso-interno");
+    // Limpiando los mensajes anteriores de validadores
+    if (error_total.innerText != ''){
+      error_total.innerText = '';
+    }
+    if (error_uso_interno.innerText != ''){
+      error_uso_interno.innerText = '';
+    }
+     
+    // Buscando los valores ingresados por el usuario en cada campo
+    var total = document.forms['formularioCarga']['total'].value;
+    var uso_interno = document.forms['formularioCarga']['uso_interno'].value;
+    // Mensajes de error
+    var mensaje_error_tipo = "Por favor ingrese un valor numérico. Por ejemplo \"2.5\"";
+    var mensaje_error_negativo = "Por favor ingrese un valor no negativo.";
+    var mensaje_error_nulo = "Por favor ingrese un valor mayor a cero.";
+    var mensaje_error_uso_interno = "Por favor ingrese un valor inferior o igual a la cantidad en existencia.";
+    /* Validando el campo total (cantidad total de la sustancia en el inventario) */
+    if (!is_number(total)) {
+      error_total.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(total)) {
+      error_total.innerText = mensaje_error_negativo;
+      return false;
+    }
+    if (is_zero(total)) {
+      error_total.innerText = mensaje_error_nulo;
+      return false;
+    }
+    /* Validando el campo uso_interno */
+    if (!is_number(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_tipo;
+      return false;
+    }
+    
+    if (is_negative(uso_interno)) {
+      error_uso_interno.innerText = mensaje_error_negativo;
+      return false;
+    }
+    // La cantidad de sustancia para uso interno no puede ser mayor al total
+    if (uso_interno > total) {
+      error_uso_interno.innerText = mensaje_error_uso_interno;
+      return false;
+    }
+  }
+  // True si "n" es un numero
+  function is_number(n){
+    return !isNaN(n);
+  }
+  // True si "n" es negativo
+  function is_negative(n){
+    return (n < 0)
+  }
+  // True si "n" es cero
+  function is_zero(n){
+    return (n == 0)
+  }
+  function placeholder_total(value){
+    var x = document.getElementById("unidades");
+    var y = document.getElementById("cantidad_mat");
+    var z = document.getElementById("total_mat");
+    z.placeholder=y.value*x.value
+    z.value=y.value*x.value
+  }
+  function colocar_subcategoria(value){
+    var dict = {
+        'Maquinaria Construcción':
+            ["Maquinaria y equipos de construcción y mantenimiento",
+            "Maquinarias y equipos para mantenimiento de automotores",
+            "Maquinarias y equipos agrícolas y pecuarios",
+            "Maquinarias y equipos de artes gráficas y reproducción",
+            "Maquinarias y equipos industriales y de taller",
+            "Maquinarias y equipos de energía",
+            "Maquinarias y equipos de riego y acueductos",
+            "Equipos de almacen",
+            "Otras maquinarias y demás equipos de construcción, campo, industria y taller"],
+        "Equipo Transporte":
+            ["Vehículos automotores terrestres",
+            "Equipos ferroviarios y de cables aéreos",
+            "Equipos marítimos de transporte",
+            "Equipos aéreos de transporte",
+            "Vehículos de tracción no motorizados",
+            "Equipos auxiliares de transporte",
+            "Otros equipos de transporte, tracción y elevación"],
+        "Equipo Comunicaciones":
+            ["Equipos de telecomunicaciones",
+            "Equipos de señalamiento",
+            "Equipos de control de tráfico aéreo",
+            "Equipos de correo",
+            "Otros equipos de comunicaciones y de señalamiento"],
+        "Equipo Médico":
+            ["Equipos médicos - quirúrgicos, dentales y veterinarios",
+            "Otros Equipos médicos - quirúrgicos, dentales y veterinarios"],
+        "Equipo Científico Religioso":
+            ["Equipos científicos y de laboratorio",
+            "Equipos de enseñanza, deporte y recreación",
+            "Obras de arte",
+            "Libros y revistas",
+            "Equipos religiosos",
+            "Instrumentos musicales",
+            "Otros equipos científicos, religiosos, de enseñanza y recreación"],
+        "Equipo Oficina" : 
+            ["Mobiliario y equipos de oficina",
+            "Equipos de procesamiento de datos",
+            "Mobiliario y equipos de alojamiento",
+            "Otras máquinas, muebles y demás equipos de oficina y de alojamiento"]};
+  var n = 1;
+  var x;
+  var y = document.getElementById("numRegistro2");
+  if (value != ""){
+    for (var i in dict[value]){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      x.innerText = dict[value][i];
+      x.style.display= "block";
+      $('#Opcion'.concat(n.toString())).html(dict[value][i]);
+      $('#Opcion'.concat(n.toString())).show();
+      x.value = dict[value][i];
+      n = n + 1;  
+    }
+    while (n <= 9){
+      x = document.getElementById("Opcion".concat(n.toString()));
+      //x.innerText = "";
+      //x.style.display = "none";
+      $('#Opcion'.concat(n.toString())).hide();
+      $('#Opcion'.concat(n.toString())).html("");
+      x.value = "";
+      n = n +1;
+      
+    }
+    
+  }
+}
+</script>
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+        
+        var tabID = $(this).attr('data-tab');
+        
+        $(this).addClass('active').siblings().removeClass('active');
+        
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+      
+</script>
