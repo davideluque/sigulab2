@@ -371,6 +371,7 @@ def add_form():
         __get_extension(request, personal)
         __get_proyectos(request, personal)
         __get_trabajos(request, personal)
+        __get_cursos(request, personal)
         redirect(URL('listado_estilo'))
 
 
@@ -477,7 +478,7 @@ def listado():
         historial = getDictHistorial(historial_rows),
         proy_list = lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(usuario.f_ci),
-
+        evento_list=lista_cursos(usuario.f_ci),
         )
 
 def transformar_fecha(fecha):
@@ -608,6 +609,7 @@ def ficha():
         historial=getDictHistorial(historial_rows),
         proy_list=lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(personal['ci']),
+        evento_list=lista_cursos(personal['ci'])
     )
 
 def cambiar_validacion(validacion, personal):
@@ -768,6 +770,12 @@ def lista_trabajo(ci):
     query = db((db.t_Personal.id == db.t_Trabajos_dirigidos.f_Trabajo_Personal)
             & (db.t_Personal.f_ci == ci))
     rows = query.select(db.t_Trabajos_dirigidos.ALL, orderby=db.t_Trabajos_dirigidos.f_numero)
+    return rows
+
+def lista_cursos(ci):
+    query = db((db.t_Personal.id == db.t_Cursos.f_Cursos_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Cursos.ALL, orderby=db.t_Cursos.f_numero)
     return rows
 
 def getDictHistorial(historial):
@@ -1031,3 +1039,40 @@ def __get_trabajos(request, personal):
                 print(e)
 
     return trabajos
+
+def __get_cursos(request, personal):
+    params = {}
+    cursos = []
+    for i in range(1,11):
+        params = {
+                'f_categorias' : request.post_vars['evento{0}_categoria'.format(i)],
+                'f_anio' : request.post_vars['evento{0}_anio'.format(i)],
+                'f_formacion' : request.post_vars['evento{0}_formacion'.format(i)],
+                'f_horas' : request.post_vars['evento{0}_horas'.format(i)],
+                'f_dictadoPor' : request.post_vars['evento{0}_dictadoPor'.format(i)],
+                'f_numero': i,
+                'f_Cursos_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Cursos.update_or_insert(
+                    (db.t_Cursos.f_numero==i)
+                    & (db.t_Cursos.f_Cursos_Personal==personal.id),
+                    f_categorias=params['f_categorias'],
+                    f_anio=params['f_anio'],
+                    f_formacion= params['f_formacion'],
+                    f_horas= params['f_horas'],
+                    f_dictadoPor= params['f_dictadoPor'],
+                    f_numero= params['f_numero'],
+                    f_Cursos_Personal= params['f_Cursos_Personal'],)
+                cursos.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Cursos.f_Cursos_Personal == personal.id)
+                    & (db.t_Cursos.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return BEAUTIFY(cursos)
+
