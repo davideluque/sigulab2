@@ -299,7 +299,7 @@ form.registration-form fieldset {
 }
 
 .contenidoPestania {
-    
+    border-top: none !important;
     margin: 0 auto;
 }
 
@@ -311,9 +311,11 @@ tr.border_bottom td {
 }
 
 .fieldPersonal {
+    border-top: none !important;
     width: 30%;
 }
 
 td {
+    border-top: none !important;
     white-space:nowrap;
 }
