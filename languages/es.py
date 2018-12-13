@@ -406,6 +406,7 @@
 'Languages': 'Lenguajes',
 'languages updated': 'lenguajes actualizados',
 'Largo': 'Largo',
+'Las horas no pueden ser negativas': 'Las horas no pueden ser negativas',
 'Last name': 'Apellido',
 'Last saved on:': 'Guardado en:',
 'Layout': 'Diseño de página',

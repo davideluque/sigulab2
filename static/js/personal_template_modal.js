@@ -861,7 +861,7 @@ const validadoresQuintoPaso = [
 function validaCompetencia(){
     var valid=true;
     for(var i=1; i<11;i++){
-        if($('#competencia-container'+i).is(':hidden'))
+        if($('#competencia'+i+'-container').is(':hidden'))
             continue;
 
         var nombre = $('#competencia'+i+'_nombre');

@@ -1,0 +1,20 @@
+ <table class="table contenidoFicha" id="tab_cursos">
+                <tbody>
+                  <tr style="color: White;">
+                    <th> Categorías </th>
+                    <th> Año </th>
+                    <th> Curso de Formación </th>
+                    <th> Dictado Por </th>
+                    <th> Horas </th>
+                  </tr>
+                  {{for curso in evento_list:}}
+                  <tr>
+                    <td>{{=BEAUTIFY(", ".join(curso.f_categorias))}}</td>
+                    <td>{{=BEAUTIFY(curso.f_anio)}}</td>
+                    <td>{{=BEAUTIFY(curso.f_formacion)}}</td>
+                    <td>{{=BEAUTIFY(curso.f_dictadoPor)}}</td>
+                    <td>{{=BEAUTIFY(curso.f_horas)}}</td>
+                  </tr>
+                  {{pass}}
+              </tbody>
+</table>

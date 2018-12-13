@@ -13,7 +13,7 @@ def index():
         return dict(usuario=usuario)
 
 def busqueda():
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel= dropdowns()
     return dict(
         gremios=gremios,
         competencias=competencias
@@ -29,7 +29,7 @@ def resultados_busqueda():
     lista = []
     hoy = date.today()
     aniversario_ulab = datetime.strptime('05-06', '%d-%m').date()
-    
+
     if request.post_vars['fecha_busqueda']:
         aniversario_ulab=aniversario_ulab.replace(
                 year=int(request.post_vars['fecha_busqueda'][-4:]))
@@ -56,7 +56,7 @@ def resultados_busqueda():
             if (request.post_vars.cargo_busqueda.lower() in cargo.lower()):
                 encontrado = "True"
                 break
-        
+
         lista.append({
             'ci' : row.t_Personal.f_ci,
             'nombre' : row.t_Personal.f_nombre+' '+row.t_Personal.f_apellido,
@@ -195,14 +195,15 @@ def dropdowns():
             "Química", "Recreación", "Salud Laboral", "Seguridad", "Tecnología", "Urbanismo",
             ]
 
+    nivel = ["Bachillerato", "Técnico Medio", "TSU", "Licenciatura", "Especialización", "Maestría", "Doctorado", "Post-Doctorado"]
 
-    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias)
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias, nivel)
 
 # Esta funcion toma la fecha desde el front que tiene
 # el formato dd-mm-yyyy y la transforma en el formato
 # yyyy-mm-dd
 def transformar_fecha_formato_original(fecha):
-    if fecha != '':
+    if fecha:
         dia = fecha[:2]
         mes = fecha[3:5]
         anio = fecha[6:]
@@ -375,6 +376,12 @@ def add_form():
 
         personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
         __get_competencias(request, personal)
+        __get_administrativas(request, personal)
+        __get_extension(request, personal)
+        __get_proyectos(request, personal)
+        __get_trabajos(request, personal)
+        __get_cursos(request, personal)
+        __get__materias(request,personal)
         redirect(URL('listado_estilo'))
 
 
@@ -454,7 +461,7 @@ def listado():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel= dropdowns()
 
     empleados = validacion_estilo()['empleados']
     idUser = db(db.t_Personal.f_ci == usuario.f_ci).select().first().id
@@ -474,9 +481,15 @@ def listado():
         usuario=usuario,
         empleados = empleados,
         competencias=competencias,
+        nivel=nivel,
         comp_list=lista_competencias(usuario.f_ci),
-        historial = getDictHistorial(historial_rows)
-
+        admin_list=lista_administrativas(usuario.f_ci),
+        ext_list=lista_extension(usuario.f_ci),
+        historial = getDictHistorial(historial_rows),
+        proy_list = lista_proyectos(usuario.f_ci),
+        trabajo_list=lista_trabajo(usuario.f_ci),
+        evento_list=lista_cursos(usuario.f_ci),
+        materia_list=lista_materias(usuario.f_ci)
         )
 
 def transformar_fecha(fecha):
@@ -583,7 +596,7 @@ def ficha():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel = dropdowns()
 
     historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == elm.id).select().first()
 
@@ -600,9 +613,15 @@ def ficha():
         usuario_logged=usuario_logged,
         usuario=usuario,
         competencias=competencias,
+        nivel=nivel,
         comp_list=lista_competencias(personal['ci']),
-        historial=getDictHistorial(historial_rows)
-
+        ext_list=lista_extension(personal['ci']),
+        admin_list=lista_administrativas(personal['ci']),
+        historial=getDictHistorial(historial_rows),
+        proy_list=lista_proyectos(usuario.f_ci),
+        trabajo_list=lista_trabajo(personal['ci']),
+        evento_list=lista_cursos(personal['ci']),
+        materia_list=lista_materias(personal['ci'])
     )
 
 def cambiar_validacion(validacion, personal):
@@ -741,6 +760,41 @@ def lista_competencias(ci):
     rows = query.select(db.t_Competencias2.ALL, orderby=db.t_Competencias2.f_numero)
     return rows
 
+def lista_administrativas(ci):
+    query = db((db.t_Personal.id == db.t_Administrativas.f_Administrativas_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Administrativas.ALL, orderby=db.t_Administrativas.f_numero)
+    return rows
+
+def lista_extension(ci):
+    query = db((db.t_Personal.id == db.t_Extension2.f_Extension_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Extension2.ALL, orderby=db.t_Extension2.f_numero)
+    return rows
+
+def lista_proyectos(ci):
+    query = db((db.t_Personal.id == db.t_Proyecto.f_proyecto_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Proyecto.ALL, orderby=db.t_Proyecto.f_numero)
+    return rows
+
+def lista_trabajo(ci):
+    query = db((db.t_Personal.id == db.t_Trabajos_dirigidos.f_Trabajo_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Trabajos_dirigidos.ALL, orderby=db.t_Trabajos_dirigidos.f_numero)
+    return rows
+
+def lista_cursos(ci):
+    query = db((db.t_Personal.id == db.t_Cursos.f_Cursos_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Cursos.ALL, orderby=db.t_Cursos.f_numero)
+    return rows
+
+def lista_materias(ci):
+    query = db((db.t_Personal.f_ci == ci) & (db.t_Personal.id == db.t_Materia2.f_Materia_Personal))
+    rows = query.select(db.t_Materia2.ALL, orderby=db.t_Materia2.f_area)
+    return rows
+
 def getDictHistorial(historial):
     dic = {}
     if (historial != None):
@@ -811,27 +865,17 @@ def getDictHistorial(historial):
 
 def __get_competencias(request, personal):
     params = {}
-    # params = {
-    #         'f_nombre1': request.post_vars.competencia1_nombre,
-    #         'f_categorias1':request.post_vars.competencia1_categoria,
-    #         'f_observaciones1': request.post_vars.competencia1_observaciones,
-    #         'f_nombre2': request.post_vars.competencia2_nombre,
-    #         'f_categorias2':request.post_vars.competencia2_categoria,
-    #         'f_observaciones2': request.post_vars.competencia2_observaciones
-    #         }
-    fies = []
+    competencias = []
     for i in range(1,11):
-        if 'competencia{0}_nombre'.format(i) in request.post_vars:
-            params = {
-                    'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
-                    'f_categoria' : request.post_vars['competencia{}_categoria'.format(i)],
-                    'f_observaciones' : request.post_vars['competencia{}_observaciones'.format(i)],
-                    'f_numero': i,
-                    'f_Competencia_Personal': personal.id
-                    }
-            if not(
-                    (None or '') ==  params['f_nombre']
-                    or (None or '') == params['f_categoria']):
+        params = {
+                'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
+                'f_categoria' : request.post_vars['competencia{}_categoria'.format(i)],
+                'f_observaciones' : request.post_vars['competencia{}_observaciones'.format(i)],
+                'f_numero': i,
+                'f_Competencia_Personal': personal.id
+                }
+        if ( params['f_nombre'] and params['f_categoria'] ):
+            try:
                 db.t_Competencias2.update_or_insert(
                         (db.t_Competencias2.f_numero==i)&
                         (db.t_Competencias2.f_Competencia_Personal==personal.id),
@@ -841,8 +885,246 @@ def __get_competencias(request, personal):
                         f_numero= params['f_numero'],
                         f_Competencia_Personal= params['f_Competencia_Personal'],
                         )
-                fies.append(params)
+            except Exception as e:
+                print(e)
 
-    # if 'competencia{0}._nombre'.format(i) in request.post_vars.keys():
-    #     params['f_nombre{0}'.format(i)] = request.post_vars('competencias')
-    return fies
+        else:
+            try:
+                db( (db.t_Competencias2.f_Competencia_Personal == personal.id)
+                    & (db.t_Competencias2.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+
+    return competencias
+
+def __get_administrativas(request, personal):
+    params = {}
+    administrativas = []
+    for i in range(1, 6):
+        params = {
+                'f_fecha_inicio': transformar_fecha_formato_original(request.post_vars['administrativa{0}_desde'.format(i)]),
+                'f_fecha_final': transformar_fecha_formato_original(request.post_vars['administrativa{0}_hasta'.format(i)]),
+                'f_cargo': request.post_vars['administrativa{0}_cargo'.format(i)],
+                'f_institucion': request.post_vars['administrativa{0}_institucion'.format(i)],
+                'f_numero': i,
+                'f_Administrativas_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Administrativas.update_or_insert(
+                        (db.t_Administrativas.f_numero==i)
+                        & (db.t_Administrativas.f_Administrativas_Personal==personal.id),
+                        f_fecha_inicio=params['f_fecha_inicio'],
+                        f_fecha_final=params['f_fecha_final'],
+                        f_institucion=params['f_institucion'],
+                        f_cargo=params['f_cargo'],
+                        f_numero=params['f_numero'],
+                        f_Administrativas_Personal=params['f_Administrativas_Personal'],
+                        )
+                administrativas.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Administrativas.f_Administrativas_Personal == personal.id)
+                    & (db.t_Administrativas.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+
+    return BEAUTIFY(administrativas)
+    # return administrativas
+
+def __get_extension(request, personal):
+    params = {}
+    extension = []
+    for i in range(1, 6):
+        params = {
+                'f_fecha_inicio': transformar_fecha_formato_original(
+                    request.post_vars['extension{0}_desde'.format(i)]),
+                'f_fecha_final': transformar_fecha_formato_original(
+                    request.post_vars['extension{0}_hasta'.format(i)]),
+                'f_nombre': request.post_vars['extension{0}_nombre'.format(i)],
+                'f_institucion': request.post_vars['extension{0}_institucion'.format(i)],
+                'f_descripcion': request.post_vars['extension{0}_descripcion'.format(i)],
+                'f_categoria': request.post_vars['extension{0}_categoria'.format(i)],
+                'f_numero': i,
+                'f_Extension_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Extension2.update_or_insert(
+                        (db.t_Extension2.f_numero==i)
+                        & (db.t_Extension2.f_Extension_Personal==personal.id),
+                        f_fecha_inicio=params['f_fecha_inicio'],
+                        f_fecha_final=params['f_fecha_final'],
+                        f_institucion=params['f_institucion'],
+                        f_nombre=params['f_nombre'],
+                        f_descripcion=params['f_descripcion'],
+                        f_categoria=params['f_categoria'],
+                        f_numero=params['f_numero'],
+                        f_Extension_Personal=params['f_Extension_Personal'],
+                        )
+                extension.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Extension2.f_Extension_Personal == personal.id)
+                    & (db.t_Extension2.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return BEAUTIFY(extension)
+
+def __get_proyectos(request, personal):
+    params = {}
+    proyecto = []
+    for i in range(1, 11):
+        params = {
+                'f_categoria': request.post_vars['proyecto{0}_categoria'.format(i)],
+                'f_fecha_inicio': transformar_fecha_formato_original(
+                    request.post_vars['proyecto{0}_desde'.format(i)]),
+                'f_fecha_fin': transformar_fecha_formato_original(
+                    request.post_vars['proyecto{0}_hasta'.format(i)]),
+                'f_titulo': request.post_vars['proyecto{0}_titulo'.format(i)],
+                'f_responsabilidad': request.post_vars['proyecto{0}_responsabilidad'.format(i)],
+                'f_resultados': request.post_vars['proyecto{0}_resultados'.format(i)],
+                'f_institucion': request.post_vars['proyecto{0}_institucion'.format(i)],
+                'f_numero': i,
+                'f_proyecto_Personal': personal.id
+                }
+        if not( None in params.values() or '' in  params.values()):
+            try:
+                db.t_Proyecto.update_or_insert(
+                        (db.t_Proyecto.f_numero==i)
+                        & (db.t_Proyecto.f_proyecto_Personal==personal.id),
+                        f_categoria=params['f_categoria'],
+                        f_fecha_inicio=params['f_fecha_inicio'],
+                        f_fecha_fin=params['f_fecha_fin'],
+                        f_titulo=params['f_titulo'],
+                        f_responsabilidad=params['f_responsabilidad'],
+                        f_resultados=params['f_resultados'],
+                        f_institucion=params['f_institucion'],
+                        f_numero=params['f_numero'],
+                        f_proyecto_Personal=params['f_proyecto_Personal'],
+                        )
+                proyecto.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Proyecto.f_proyecto_Personal == personal.id)
+                    & (db.t_Proyecto.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return proyecto
+
+
+def __get_trabajos(request, personal):
+    params = {}
+    trabajos = []
+    for i in range(1,6):
+        params = {
+                'f_titulo_trabajo' : request.post_vars['trabajo{}_titulo_trabajo'.format(i)],
+                'f_nivel' : request.post_vars['trabajo{}_nivel'.format(i)],
+                'f_anio' : request.post_vars['trabajo{}_anio'.format(i)],
+                'f_estudiantes' : request.post_vars['trabajo{}_estudiantes'.format(i)],
+                'f_institucion' : request.post_vars['trabajo{}_institucion'.format(i)],
+                'f_numero': i,
+                'f_Trabajo_Personal': personal.id
+                }
+        if not(None in params.values() or '' in params.values()):
+            try:
+                db.t_Trabajos_dirigidos.update_or_insert(
+                        (db.t_Trabajos_dirigidos.f_numero==i)&
+                        (db.t_Trabajos_dirigidos.f_Trabajo_Personal==personal.id),
+                        f_titulo_trabajo=params['f_titulo_trabajo'],
+                        f_nivel=params['f_nivel'],
+                        f_anio= params['f_anio'],
+                        f_estudiantes= params['f_estudiantes'],
+                        f_institucion= params['f_institucion'],
+                        f_numero= params['f_numero'],
+                        f_Trabajo_Personal= params['f_Trabajo_Personal'],
+                        )
+                trabajos.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Trabajos_dirigidos.f_Trabajo_Personal == personal.id)
+                    & (db.t_Trabajos_dirigidos.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+
+    return trabajos
+
+def __get_cursos(request, personal):
+    params = {}
+    cursos = []
+    for i in range(1,11):
+        params = {
+                'f_categorias' : request.post_vars['evento{0}_categoria'.format(i)],
+                'f_anio' : request.post_vars['evento{0}_anio'.format(i)],
+                'f_formacion' : request.post_vars['evento{0}_formacion'.format(i)],
+                'f_horas' : request.post_vars['evento{0}_horas'.format(i)],
+                'f_dictadoPor' : request.post_vars['evento{0}_dictadoPor'.format(i)],
+                'f_numero': i,
+                'f_Cursos_Personal': personal.id
+                }
+        if not( None in params.values() or '' in params.values()):
+            try:
+                db.t_Cursos.update_or_insert(
+                    (db.t_Cursos.f_numero==i)
+                    & (db.t_Cursos.f_Cursos_Personal==personal.id),
+                    f_categorias=params['f_categorias'],
+                    f_anio=params['f_anio'],
+                    f_formacion= params['f_formacion'],
+                    f_horas= params['f_horas'],
+                    f_dictadoPor= params['f_dictadoPor'],
+                    f_numero= params['f_numero'],
+                    f_Cursos_Personal= params['f_Cursos_Personal'],)
+                cursos.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Cursos.f_Cursos_Personal == personal.id)
+                    & (db.t_Cursos.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return BEAUTIFY(cursos)
+
+def __get__materias(request, personal):
+    params = {}
+    materia = []
+    for i in range(1,6):
+        params = {
+            'f_area' : request.post_vars['materia{}_area'.format(i)],
+            'f_codigo' : request.post_vars['materia{}_codigo'.format(i)],
+            'f_nombre_materia' : request.post_vars['materia{}_nombre_materia'.format(i)],
+            'f_fecha_inicio_materia' : transformar_fecha_formato_original(request.post_vars['materia{}_fecha_inicio_materia'.format(i)]),
+            'f_fecha_final_materia' : transformar_fecha_formato_original(request.post_vars['materia{}_fecha_final_materia'.format(i)]),
+            'f_numero' : i,
+            'f_Materia_Personal' : personal.id
+        }
+        if not ( None in params.values() or '' in params.values()):
+            try:
+                db.t_Materia2.update_or_insert(
+                    (db.t_Materia2.f_numero == i) & (db.t_Materia2.f_Materia_Personal == personal.id),
+                    f_area = params['f_area'],
+                    f_codigo = params['f_codigo'],
+                    f_nombre_materia = params['f_nombre_materia'],
+                    f_fecha_inicio_materia = params['f_fecha_inicio_materia'],
+                    f_fecha_final_materia = params['f_fecha_final_materia'],
+                    f_numero= params['f_numero'],
+                    f_Materia_Personal= params['f_Materia_Personal'],
+                    )
+                materia.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Materia2.f_Materia_Personal == personal.id)
+                    & (db.t_Materia2.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return materia
