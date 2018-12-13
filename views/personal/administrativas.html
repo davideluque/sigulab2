@@ -13,10 +13,23 @@
 
         <tr>
             {{for admin in admin_list:}}
-            <td>{{=admin.f_fecha_inicio}}</td>
-            <td>{{=admin.f_fecha_final}}</td>
-            <td>{{=admin.f_cargo}}</td>
-            <td>{{=admin.f_institucion}}</td>
+
+              {{if bool(admin.f_fecha_inicio) :}}
+              <td>{{=admin.f_fecha_inicio}}</td>
+              {{pass}}
+
+              {{if bool(admin.f_fecha_final) :}}
+              <td>{{=admin.f_fecha_final}}</td>
+              {{pass}}
+
+              {{if bool(admin.f_cargo) :}}
+              <td>{{=admin.f_cargo}}</td>
+              {{pass}}
+
+              {{if bool(admin.f_institucion) :}}
+              <td>{{=admin.f_institucion}}</td>
+              {{pass}}
+            
             {{pass}}
         </tr>
       </tbody>
