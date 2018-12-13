@@ -3106,7 +3106,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
                                         'f_cantidad': sol.f_cantidad,
-                                        'f_fecha': sol.f_fecha_caducidad,
+                                        'f_fecha': sol.created_on,
                                         'f_estatus':sol.f_estatus
                                         }
 
@@ -3128,7 +3128,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
                                         'f_cantidad': sol.f_cantidad,
-                                        'f_fecha': sol.f_fecha_caducidad,
+                                        'f_fecha': sol.created_on,
                                         'f_estatus':sol.f_estatus
                                         }
 
@@ -3138,7 +3138,6 @@ def ListaSolicitudesHechas(db, datos, espacios):
     else:
         
         for sol in solicitudes:
-
             sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
@@ -3153,7 +3152,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
                                         'f_cantidad': sol.f_cantidad,
-                                        'f_fecha': sol.f_fecha_caducidad,
+                                        'f_fecha': sol.created_on,
                                         'f_estatus': sol.f_estatus
                                         }
 
@@ -3192,7 +3191,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                             'f_sustancia': sustancia.f_nombre,
                                             'f_espacio': sol.f_espacio,
                                             'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.f_fecha_caducidad,
+                                            'f_fecha': sol.created_on,
                                             'f_estatus':sol.f_estatus
                                             }
 
@@ -3217,7 +3216,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                             'f_sustancia': sustancia.f_nombre,
                                             'f_espacio': sol.f_espacio,
                                             'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.f_fecha_caducidad,
+                                            'f_fecha': sol.created_on,
                                             'f_estatus':sol.f_estatus
                                             }
 
@@ -3245,7 +3244,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                             'f_sustancia': sustancia.f_nombre,
                                             'f_espacio': sol.f_espacio,
                                             'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.f_fecha_caducidad,
+                                            'f_fecha': sol.created_on,
                                             'f_estatus':sol.f_estatus
                                             }
 
