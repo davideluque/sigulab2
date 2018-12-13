@@ -2913,15 +2913,10 @@ def solicitudes():
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
 
-
-    solicitud = db(
-                (db.t_Solicitud_smydp.id == db.auth_user.id)).select()
-
-    print(solicitud)
-
     # Espacios a cargo del usuario actual
     espacios_a_cargo = db(
-                (db.es_encargado.tecnico == db.auth_user.id) & 
+                (db.t_Personal.f_usuario == auth.user.id) &
+                (db.es_encargado.tecnico == db.t_Personal.id) & 
                 (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
                                  ).select()
 
@@ -2952,23 +2947,12 @@ def solicitudes():
 
     #----- FIN DE AGREGAR SOLICITUDES -----#
 
-    #----- AGREGAR SOLICITUD DESDE Sustancia -----#
-    if request.post_vars.idSustancia:
-        sustancia_solicitud = Sustancia(db)
-        sustancia_solicitud.instanciar(int(request.vars.idSustancia))
-
-    #----- FIN AGREGAR SOLICITUD DESDE Sustancia -----#
-
     #----- CAMBIO DE ESTADO DE SOLICITUD -----#
     if request.post_vars.idFicha:
         solicitud_a_cambiar = Solicitud(db, auth)
         solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
         solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
         solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
-
-        # ENVIAR CORREO A SOLICITANTE PARA AVISAR EL CAMBIO DE ESTADO DE SU SOLICITUD
-        solicitud_a_cambiar.correoCambioEstadoSolicitud()
-        solicitud_a_cambiar.correoSolicitudFinalizada()
 
         # if request.post_vars.estado == "1":
         #     solicitud_a_cambiar.fecha_aprobacion = request.now
@@ -3018,7 +3002,7 @@ def solicitudes():
 
     id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
 
-    usuario_jefe = db(id_jefe_dependencia == db.auth_user.id).select(db.auth_user.ALL)[0]
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
 
     nombre_jefe = usuario_jefe.first_name
     apellido_jefe = usuario_jefe.last_name
@@ -3030,13 +3014,13 @@ def solicitudes():
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_registro]
 
     #----- GENERACION DE LISTADOS -----#
-    listado_de_solicitudes_generadas = ListaSolicitudes(db, auth, "Solicitante")
+    listado_de_solicitudes_generadas = ListaSolicitudesHechas(db, datos_solicitud, espacios)
 
-    listado_de_solicitudes_recibidas = ListaSolicitudes(db, auth, "Ejecutante")
+    listado_de_solicitudes_recibidas = ListaSolicitudesRecibidas(db, datos_solicitud, espacios)
 
 
-    return dict(solicitudes_generadas=listado_de_solicitudes_generadas.filas,
-                solicitudes_recibidas=listado_de_solicitudes_recibidas.filas,
+    return dict(solicitudes_generadas=listado_de_solicitudes_generadas,
+                solicitudes_recibidas=listado_de_solicitudes_recibidas,
                 datos_solicitud=datos_solicitud,
                 espacios=espacios,
                 sustancias=sustancias,
@@ -3052,6 +3036,119 @@ def index():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def sustancias():
     return locals()
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ListaSolicitudesHechas(db, datos, espacios):
+
+    solicitudes = db((db.t_Solicitud_smydp.id > 0)).select()
+    solicitudesHechas = []
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id == esp.id:
+                    solicitudesHechas.append(sol)
+
+    elif auth.has_membership("JEFE DE SECCIÓN"):
+
+        espacios = __get_espacios(user_dep_id)
+
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id == esp:
+                    solicitudesHechas.append(sol)
+
+    # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
+    # pues la jerarquia de dependencias esta almacenada en la misma tabla
+    # con una lista de adyacencias
+    else:
+        espacios = __get_espacios(user_dep_id)
+
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id == esp:
+                    solicitudesHechas.append(sol)
+
+    return solicitudesHechas
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def ListaSolicitudesRecibidas(db, datos, espacios):
+
+    solicitudes = db((db.t_Solicitud_smydp.id > 0)).select()
+    solicitudesRecibidas = []
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id != esp.id:
+
+                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                  (db.t_Inventario.espacio == esp.id) &
+                                  (db.t_Inventario.f_existencia > 0)).select():
+
+                        solicitudesRecibidas.append(sol)
+
+    elif auth.has_membership("JEFE DE SECCIÓN"):
+
+        espacios = __get_espacios(user_dep_id)
+
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id != esp:
+
+                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                  (db.t_Inventario.espacio == esp)).select():
+
+                        solicitudesRecibidas.append(sol)
+
+    # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
+    # pues la jerarquia de dependencias esta almacenada en la misma tabla
+    # con una lista de adyacencias
+    else:
+        espacios = __get_espacios(user_dep_id)
+
+        for sol in solicitudes:
+            espacio = db(
+                            (db.espacios_fisicos.id == sol.f_espacio)
+                                 ).select()[0]
+
+            for esp in espacios:
+                if espacio.id != esp:
+
+                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                  (db.t_Inventario.espacio == esp)).select():
+
+                        solicitudesRecibidas.append(sol)
+
+    return solicitudesRecibidas
 
 
 ############################################################################
