@@ -22,8 +22,13 @@
         margin-right:0px!important;
     }
      </style>
+
+
 <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
-<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">	  
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/fselect.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">	  
 {{end}}
 
 {{block center}}
@@ -37,6 +42,15 @@
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
+<!-- Botón para atrás -->
+<div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'smydp/solicitudes')}}';">
+                <i class="fas fa-arrow-left"></i>               
+            </button>
+        </div>
+    </div>
 <h3 class="dep-titulo text-center">{{=solicitud.f_cod_registro}} </h3>
 <h4 class="dep-titulo text-center">{{=sustancia.f_nombre}}</h4>
 
