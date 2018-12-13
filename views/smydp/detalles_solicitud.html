@@ -1,0 +1,116 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    <!-- Estilos de modales y listados -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/fselect.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">	  
+{{end}}
+
+{{block center}}
+  {{ if request.vars.delete: }}
+  <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
+  {{pass}}
+    {{ if request.vars.delete: }}
+    {{ pass }}
+{{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<!-- Botón para atrás -->
+<div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'smydp/solicitudes')}}';">
+                <i class="fas fa-arrow-left"></i>               
+            </button>
+        </div>
+    </div>
+<h3 class="dep-titulo text-center">{{=solicitud.f_cod_registro}} </h3>
+<h4 class="dep-titulo text-center">{{=sustancia.f_nombre}}</h4>
+
+<br>
+<div class="wrapper">
+		
+	<div class="content-wrapper">
+		<div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+
+
+                <div class="grid-item">
+                    Cantidad de sustancia solicitada:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_cantidad}}
+                </div>
+                <div class="grid-item">
+                    Cantidad de sustancia conseguida:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_cantidad_conseguida}}
+                </div>
+                <div class="grid-item">
+                    Estado actual de sustancia solicitada:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_estatus[0]}}
+                </div>
+                <div class="grid-item">
+                    Espacio Solicitante:
+                </div>
+                <div class="grid-item">
+                    {{=espacio.codigo}}
+                </div>
+                <div class="grid-item">
+                    Responsable de la solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=respondable.f_email}}
+                </div>
+                <div class="grid-item">
+                    Justificacion:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_justificacion}}
+                </div>
+                <div class="grid-item">
+                    Fecha de caducidad de solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_fecha_caducidad}}
+                </div>
+                <div class="grid-item">
+                    Fecha de creacion de solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.created_on}}
+                </div>
+            </div>
+        </div>
+	</div>
+</div>

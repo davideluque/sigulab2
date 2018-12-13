@@ -1,0 +1,336 @@
+{{extend 'layout.html'}}
+  
+{{block head}}
+<meta charset="UTF-8">
+
+<!-- Para los mensajes con flash -->
+  <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+
+ <!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+<style type="text/css">
+  div.dt-buttons {
+    float: right;
+  }
+  
+</style>
+ 
+ <!-- Estilos de modales y listados -->
+ <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/smydp_modal.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+ <link rel="stylesheet" href="{{=URL('static', 'css/smydp_listado.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/smydp_template_modal.css')}}">	 
+
+
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">	   
+ <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script> 
+ <script src="{{=URL('static', 'js/smydp_template_modal.js')}}"></script>	
+ <!-- Web2py JS - Especialmente para AJAX -->
+ <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+
+ <link href="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
+ <link href="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ <link href="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+ <link href="{{=URL('static', 'css/pdf_personal.css')}}" rel="stylesheet" type="text/css" />
+
+   <link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+   <script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+
+ 
+ <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/servicios_modal.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-datepicker3.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/fselect.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+ <link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">
+
+ <script src="{{=URL('static', 'js/moment.min.js')}}"></script>
+ <script src="{{=URL('static', 'js/cleave.js')}}"></script>
+ <script src="{{=URL('static', 'js/bootstrap-datepicker.min.js')}}"></script>
+ <style>
+   .row{
+     margin-right:0px!important;
+   }
+ </style>
+ <style>
+    .dataTables_filter{
+      float: left;
+    }
+  </style>
+{{end}}
+
+
+{{block center}}
+
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+		<a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+		<a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+		<a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+		<span class="breadcrumb-item active">Respuestas a Solicitudes</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+
+<div class="container titulo">
+	<h3 class="dep-titulo">RESPUESTAS PENDIENTES</h3>
+</div>
+
+<!-- Botón para atrás -->
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-6">
+		<button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'smydp/sustancias')}}';">
+		    <i class="fas fa-arrow-left"></i>               
+		</button>
+	</div>
+</div>
+
+
+	  
+		<!-- Inicio lista de validacion -->
+		<div class = "container">
+		  <div class="row">
+			<h3 onclick="change_status_list('#lista-por-validar')" title="Ocultar/Mostrar" class="text-left"> Respuestas Enviadas <i class="fa fa-caret-up" id="lista-por-validar-caret"></i></h3>
+			<div id="lista-por-validar">
+		  
+				<div class="table-responsive no-padding no-margin">
+				  <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+					<thead>
+						<tr id="titulosListado2">
+							<th class="camposTabla linksNombres">NOMBRE</th>
+							<th class="camposTabla linksNombres">CORREO</th>
+							<th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+							<th class="camposTabla linksNombres">EXTENSIÓN</th>
+							<th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+						</tr>
+					</thead>
+			
+					<tbody>
+					 
+					</tbody>
+					  <tfoot id="collapseFiltros2">
+						<tr>
+						  <th class="camposTabla linksNombres">NOMBRE</th>
+						  <th class="camposTabla linksNombres">CORREO</th>
+						  <th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+						  <th class="camposTabla linksNombres">EXTENSIÓN</th>
+						  <th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+						</tr>
+					</tfoot>
+			
+				  </table>
+				</div>
+			</div>
+		  </div>
+		</div>    
+		{{pass}}
+		<!-- Fin lista validacion -->    
+	
+		<div class="container">
+	
+		<div class="row" >
+		<h3 onclick="change_status_list('#lista-validados')" title="Ocultar/Mostrar" class="text-left"> Respuestas Recibidas <i class="fa fa-caret-up" id="lista-validados-caret"></i></h3>
+		<div class="row" id="lista-validados">
+		  <div class="table-responsive no-padding no-margin">
+			<table id="datatable1" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
+			  <thead>
+				  <tr id="titulosListado1">
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">CORREO</th>
+					<th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+					<th class="camposTabla linksNombres">EXTENSIÓN</th>
+					<th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+				  </tr>
+			  </thead>
+	
+	
+				<tfoot id="collapseFiltros">
+				  <tr>
+					<th class="camposTabla linksNombres">NOMBRE</th>
+					<th class="camposTabla linksNombres">CORREO</th>
+					<th class="camposTabla linksNombres">UNIDAD DE ADSCRIPCIÓN</th>
+					<th class="camposTabla linksNombres">EXTENSIÓN</th>
+					<th class="camposTabla linksNombres">EXTENSIÓN INTERNA</th>
+				  </tr>
+			  </tfoot>
+	
+			</table>
+		  </div>
+		</div>
+	
+	  
+	  
+	  
+		
+	  </div>
+	  </div>
+	</div>
+	</div>
+	
+	
+	
+	<!-- Datatables-->
+	
+	
+	<script src="{{=URL('static', 'plugins/datatables/jquery.dataTables.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.bootstrap.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.buttons.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/jszip.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/pdfmake.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/vfs_fonts.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.html5.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/buttons.print.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/dataTables.responsive.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+	<script src="{{=URL('static', 'plugins/datatables/jspdf.min.js')}}"></script>
+	<script src="{{=URL('static', 'js/personal/html2pdf.bundle.min.js')}}"></script>
+	<script>const url = '{{=URL("reporte_listado")}}'</script>
+	<script src="{{=URL('static', 'js/personal/generar_pdf.js')}}"></script>
+	
+	
+	
+	<!-- Datatable init js -->
+	<script src="{{=URL('static', 'plugins/datatables/datatables.init.js')}}"></script>
+	
+	<!-- Datatable1 init - Listado Personal -->
+	<script>
+	
+	  var filtros = false;
+	  const langDT = "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
+	  $(document).ready(function() {
+		  // Setup - add a text input to each footer cell
+		  $('#datatable1 tfoot th').each( function () {
+			  var title = $(this).text();
+			  $(this).html( '<input type="text" placeholder="Filtro" />' );
+		  } );
+	   
+		  // DataTable
+		  var table = $('#datatable1').DataTable();
+	   
+		  // Apply the search
+		  table.columns().every( function () {
+			  var that = this;
+	   
+			  $( 'input', this.footer() ).on( 'keyup change', function () {
+				  if ( that.search() !== this.value ) {
+					  that
+						  .search( this.value )
+						  .draw();
+				  }
+			  } );
+		  } );
+	
+		  $('#datatable1 tfoot tr').appendTo('#datatable1 thead');
+		  $("#datatable1 thead tr").not("#titulosListado1").css("display","none");
+	  } );
+	
+	  function mostrarFiltro1() {
+		  if (filtros){
+			$("#datatable1 thead tr").not("#titulosListado1").css("display","none");
+			filtros = false
+		  }
+		  else{
+			$("#datatable1 thead tr").not("#titulosListado1").css("display","table-row");
+			filtros = true
+		  }
+	
+	  }
+	</script>
+	<script>
+	
+	  var filtros2 = false;
+	  $(document).ready(function() {
+		  // Setup - add a text input to each footer cell
+		  $('#datatable2 tfoot th').each( function () {
+			  var title = $(this).text();
+			  $(this).html( '<input type="text" placeholder="Filtro" />' );
+		  } );
+	   
+		  // DataTable
+		  var table = $('#datatable2').DataTable();
+	   
+		  // Apply the search
+		  table.columns().every( function () {
+			  var that = this;
+	   
+			  $( 'input', this.footer() ).on( 'keyup change', function () {
+				  if ( that.search() !== this.value ) {
+					  that
+						  .search( this.value )
+						  .draw();
+				  }
+			  } );
+		  } );
+	
+		  $('#datatable2 tfoot tr').appendTo('#datatable2 thead');
+		  $("#datatable2 thead tr").not("#titulosListado2").css("display","none");
+	  } );
+	
+	  function mostrarFiltro2() {
+		  if (filtros2){
+			$("#datatable2 thead tr").not("#titulosListado2").css("display","none");
+			filtros2 = false
+		  }
+		  else{
+			$("#datatable2 thead tr").not("#titulosListado2").css("display","table-row");
+			filtros2 = true
+		  }
+	
+	  }
+	</script>
+	
+	
+	<script language = "javascript">
+	  mostrar_lista = 1;
+	  mostrar_validados = 1;
+	
+	  function change_status_list(list){
+		  if (list == '#lista-por-validar'){
+			if (mostrar_lista == 1){
+				$('#lista-por-validar').hide();
+				mostrar_lista = 0;
+				$('#lista-por-validar-caret').removeClass('fa-caret-up');
+				$('#lista-por-validar-caret').addClass('fa-caret-down');
+			  }
+			else {
+			  $('#lista-por-validar').show();
+			  mostrar_lista = 1;
+			  $('#lista-por-validar-caret').removeClass('fa-caret-down');
+			  $('#lista-por-validar-caret').addClass('fa-caret-up');
+			}
+		  }
+		  if (list == '#lista-validados'){
+			if (mostrar_validados == 1){
+				$('#lista-validados').hide();
+				mostrar_validados = 0;
+				$('#lista-validados-caret').removeClass('fa-caret-up');
+				$('#lista-validados-caret').addClass('fa-caret-down');
+			  }
+			else {
+			  $('#lista-validados').show();
+			  mostrar_validados = 1;
+			  $('#lista-validados-caret').removeClass('fa-caret-down');
+			  $('#lista-validados-caret').addClass('fa-caret-up');
+			}
+		  }
+	  }
+		
+	
+	</script>
+	
+	<!-- Datatable1 init - Fichas Por Validar -->
+	 <script language="javascript" src="{{=URL('static', 'js/botones_dataTable.js')}}"></script>
+	 <script src="{{=URL('static', 'js/personal/competencias.js')}}"></script>
+	
+{{end}}
+	

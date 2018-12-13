@@ -276,7 +276,7 @@
                         {{ pass }}
                     </div>
                     <div class="grid-item">
-                        {{=vehiculo['vh_fecha_adquisicion']}}
+                        {{=vehiculo['vh_fecha_adquisicion'].strftime("%d/%m/%y") }}
                     </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
                         <div class="grid-item">
@@ -457,7 +457,7 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioDevolucion" class="presta-form registration-form" method="post">
 
                   <!-- Primer paso-->
                   <fieldset class="formField">
@@ -489,6 +489,11 @@
                             <div class="dr" id="error-fecha_solicitud" style="color: #d03e3e;"> </div>
                         </div>
                         <div class="form-group">
+                            <label>Fecha prevista de salida*</label>
+                            <input type="date" class="form-control campo_fecha_prestamo" id="fecha_prevista_salida" name="fecha_prevista_salida" placeholder="Fecha de devolución*" title="Ingrese la fecha prevista de devolución" required>
+                            <div class="dr" id="error-fecha_prevista_salida" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
                             <label>Fecha prevista de devolución*</label>
                             <input type="date" class="form-control campo_fecha_prestamo" id="fecha_prevista_devolucion" name="fecha_prevista_devolucion" placeholder="Fecha de devolución*" title="Ingrese la fecha prevista de devolución" required>
                             <div class="dr" id="error-fecha_prevista_devolucion" style="color: #d03e3e;"> </div>
@@ -515,11 +520,26 @@
                         <h4 class="titulosForm">Información de la Solicitud</h4>
                         <label>Campos marcados con * son obligatorios.</label>
 
-                          <div class="form-group">
-                              <label>Tiempo de uso previsto*</label>
-                              <input type="text" class="form-control" id="tiempo_previsto" name="tiempo_previsto" placeholder="Ingrese el tiempo de uso previsto*" title="Ingrese el tiempo de uso err_tiempo_previsto*" required>
-                              <div style="color: #d03e3e;" id="err_tiempo_previsto" hidden></div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tiempo de uso previsto*</label>
+                                <input type="text" class="form-control" id="tiempo_previsto" name="tiempo_previsto" placeholder="Ingrese el tiempo de uso previsto*" title="Ingrese el tiempo de uso err_tiempo_previsto*" required>
+                                <div style="color: #d03e3e;" id="err_tiempo_previsto" hidden></div>
+                            </div>
                           </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Tiempo de uso previsto (md)*</label>
+                                  <select class="form-control" type="select" id="tiempo_previsto_md" name="tiempo_previsto_md" placeholder="tiempo_previsto_md*" required>
+                                      <option value="">Seleccione una opción</option>
+                                      <option value="días">Días</option>
+                                      <option value="horas">Horas</option>
+                                  </select>
+                                  <div class="dr" id="err_tiempo_previsto_md" style="color: #d03e3e;"> </div>
+                              </div>
+                            </div>
+                        </div>
 
                           <div class="form-group">
                               <label>Ruta prevista*</label>
@@ -633,11 +653,17 @@
                                 <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
                             </div>
                         </div>
+
+                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running" style="font-size:2em; display:none;">
+                          Cargando, por favor espere
+                          <div class="ld ld-ring ld-spin-fast"></div>
+                        </div>
+
                       </div>
                       <input type="hidden" name="prestamo" id="prestamo" value="True">
                       <div style="position:fixed; bottom: 15px; right: 30px;">
                         <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                        <button type="submit button" form="formularioDevolucion" id="submitPrestamo" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
                       </div>
                   </fieldset>
                   <!-- Fin Cuarto Paso -->
@@ -842,7 +868,7 @@
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <h4 class="titulosForm">Características del Vehículo</h4>
                       <label>Campos marcados con * son obligatorios.</label>
                       <div class="form-group" tag="Formato:">
                           <label>Clase*</label>
@@ -1308,7 +1334,7 @@
   document.getElementById('fecha_solicitud').valueAsDate = new Date();
 
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
-  var regexCI = new RegExp("^[VEve][-][0-9]{2}[.][0-9]{3}[.][0-9]{3}$");
+  var regexCI = new RegExp("^[VEve][-][0-9]{6,8}$");
 
   // Máscara js para formato de teléfono
   $(document).ready(function() {
@@ -1323,7 +1349,7 @@
 
   // Máscara js para formato de RIF
   $(document).ready(function() {
-    $('.campo_ci').mask('X-00.000.000', {
+    $('.campo_ci').mask('X-00000000', {
       translation: {
         "X": {
           pattern: /[VEve]/
@@ -1337,10 +1363,11 @@
   $("input[required]").focusout(function() {
     var value = $(this).val();
 
-    if (   !$(this).is("#num") 
+    if (   !$(this).is("#num")
         && !$(this).is("#serialCh")
         && !$(this).is("#nro_puestos")
         && !$(this).is("#ano")
+        && !$(this).is("#tiempo_previsto")
        ) {
       if (value.length == 0) {
         $(this).css('border-color', '#d03e3e');
@@ -1379,7 +1406,7 @@
     } else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Formato: X-00.000.000. Complete con 0 en caso de ser necesario");
+      $(this).next().text("Formato: X-00000000. Complete con 0 en caso de ser necesario");
     }
   });
 
@@ -1421,6 +1448,12 @@
   var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
+  $("#submitPrestamo").click(function() {
+    $("#loaderPrestamo").show();
+    $("#submitPrestamo").attr('disabled', 'true');
+    $("#formularioDevolucion").submit();
+    return true;
+  });
 
   // Carga las categorias de sudebip
   $(document).ready(function() {
@@ -1591,6 +1624,21 @@
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
       $(this).next().text("Introduce un número de 6 dígitos");
+    }
+  });
+
+  // Validación de bien mueble
+  $("#tiempo_previsto").focusout(function() {
+    var tiempo_previsto = $(this).val();
+    if (isNum(tiempo_previsto) && tiempo_previsto.length > 0) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce un número positivo");
     }
   });
 
