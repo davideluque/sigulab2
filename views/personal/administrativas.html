@@ -12,15 +12,13 @@
         </tr>
 
         <tr>
+            {{for admin in admin_list:}}
+            <td>{{=admin.f_fecha_inicio}}</td>
+            <td>{{=admin.f_fecha_final}}</td>
+            <td>{{=admin.f_cargo}}</td>
+            <td>{{=admin.f_institucion}}</td>
+            {{pass}}
         </tr>
-
-        <tr></tr>
-
-        <tr></tr>
-
-        <tr></tr>
-
-        <tr></tr>
       </tbody>
 
     </table>
