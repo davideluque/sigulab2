@@ -30,9 +30,7 @@
   {{ if request.vars.delete: }}
   <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
   {{pass}}
-    <h3 class="dep-titulo text-center">{{=bien['hr_nombre']}}</h3>
     {{ if request.vars.delete: }}
-    <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=bien['hr_desc_eliminar'].upper()}}</h4>
     {{ pass }}
 {{pass}}
 
@@ -40,102 +38,67 @@
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 
-<!-- Inicio Boton Modificar BM -->
-<div class="container" id="containerAgregar">
-        <div class="row">
-            <div class="col-sm-6"></div>
-            <div id="columnBotonAgregar" class="col-sm-6">
-                <div class="col-sm-6"></div>
-                <div class="col-sm-6">
-                    {{ if request.vars.delete: }}
-                    <form method="post">
-                        <!-- Boton para aceptar mod de bien mueble-->
-                        <button type="button submit" name="si" value="True"><i class="fas fa-check fa-1x"></i></button>
-                        <!--Boton para rechazar el bien mueble-->
-                        <button type="button submit" name="no" value="True"><i class="fas fa-times fa-1x"></i></button>
-                    </form>
-                    {{ else: }}
-                    <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm" onclick="select_values()"><i class="fas fa-pencil-alt fa-1x"></i></button>
-                    <!-- Boton para eliminar el sb-->
-                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
-                    {{ pass }}
-                  </div>
-            </div>
-        </div>
-    </div>
-<!-- Fin Boton Agregar Sustancia -->
+
 <br>
 <div class="wrapper">
 		
-	<div class="tab-wrapper">
-		<ul class="tabs">
-				<li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
-                <li class="tab-link" data-tab="2"><br>UBICACIÓN</li>
-            </ul>
-	</div>
-
 	<div class="content-wrapper">
 		<div id="tab-1" class="tab-content active">
             <div class="grid-container">
-                {{ for title in caracteristicas_list: }}
-                    {{ if caracteristicas_dict.get(title) != "" and caracteristicas_dict.get(title) != None: }}
-                        <div class="grid-item">
-                            {{=title.upper()}}
-                        </div>
-                        <div class="grid-item">
-                            {{= caracteristicas_dict.get(title)}}
-                        </div>
-                    {{pass}}
-                {{ pass }}
-                {{if bien['hr_ancho'] != None or bien['hr_largo'] != None or bien['hr_alto'] != None or bien['hr_diametro'] != None:}}
-                    <div class="grid-item">
-                        {{ if bien['hr_unidad'] == 'm':}}
-                            Dimensiones (metros):
-                        {{else:}}
-                            Dimensiones (centímetros):
-                        {{pass}}
-                    </div>
-                    <div class="grid-item">                        
-                        {{if bien['hr_ancho'] != None:}}
-                            Ancho: {{=bien['hr_ancho']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['hr_largo'] != None:}}
-                            Largo: {{=bien['hr_largo']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['hr_alto'] != None:}}
-                            Alto: {{=bien['hr_alto']}}
-                            <br>
-                        {{pass}}
-                        {{if bien['hr_diametro'] != None:}}
-                            Diámetro: {{=bien['hr_diametro']}}
-                            <br>
-                        {{pass}}
-                    </div>
-                {{pass}}
-            </div>
-        </div>
-        <div id="tab-2"class="tab-content">
-            <div class="grid-container">
+
                 <div class="grid-item">
-                    Espacio físico:
+                    Codigo del registro:
                 </div>
                 <div class="grid-item">
-                    {{=db(db.espacios_fisicos.id == bien['hr_espacio_fisico']).select().first().codigo}}
+                    {{=solicitud.f_cod_registro}}
                 </div>
                 <div class="grid-item">
-                    Unidad de Adscripción:
+                    Cantidad de sustancia solicitada:
                 </div>
                 <div class="grid-item">
-                    {{=db(db.dependencias.id == bien['hr_unidad_de_adscripcion']).select().first().nombre}}
+                    {{=sustancia.f_nombre}}
                 </div>
                 <div class="grid-item">
-                    Dependencia:
+                    Cantidad de sustancia solicitada:
                 </div>
-                <div class=grid-item>
-                    {{=db(db.dependencias.id == bien['hr_depedencia']).select().first().nombre}}
+                <div class="grid-item">
+                    {{=solicitud.f_cantidad}}
+                </div>
+                <div class="grid-item">
+                    Cantidad de sustancia conseguida:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_cantidad_conseguida}}
+                </div>
+                <div class="grid-item">
+                    Estado actual de sustancia solicitada:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_estatus[0]}}
+                </div>
+                <div class="grid-item">
+                    Espacio Solicitante:
+                </div>
+                <div class="grid-item">
+                    {{=espacio.codigo}}
+                </div>
+                <div class="grid-item">
+                    Responsable de la solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=respondable.f_email}}
+                </div>
+                <div class="grid-item">
+                    Justificacion:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_justificacion}}
+                </div>
+                <div class="grid-item">
+                    Fecha de caducidad de solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=solicitud.f_fecha_caducidad}}
                 </div>
             </div>
         </div>
@@ -183,7 +146,6 @@
                         <input type="text" class="form-control" id="descripcion_eliminacion" name="descripcion_eliminacion" placeholder="Descripción de eliminación" required>
                         <div class="field-error"> <p id="error-est-eliminacion"> </p> </div>
                     </div>
-                    <h4>¿Desea solicitar la eliminación de {{=bien['hr_nombre']}}?</h4>
                     <br>
                     <button type="submit button" class="btn btn-next botondelete" name="eliminacion" value="True" style="text-align:center">Si</button>
                     <button type="button" class="btn btn-next botonForm" style="text-align:center" data-dismiss="modal">No</button>
@@ -201,8 +163,6 @@
             // selecciono valor del select de material 1
             var material = document.getElementById("material_mat");
             var otro_material = document.getElementById("otro_material1")
-            var value = "{{=bien['hr_material']}}"
-            var material_bool = "{{=bien['hr_material'] in material_pred}}"
             if ( material_bool == "True"){
                 material.value = value;
             }else{
