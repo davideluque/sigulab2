@@ -372,6 +372,7 @@ def add_form():
         __get_proyectos(request, personal)
         __get_trabajos(request, personal)
         __get_cursos(request, personal)
+        __get__materias(request,personal)
         redirect(URL('listado_estilo'))
 
 
@@ -479,6 +480,7 @@ def listado():
         proy_list = lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(usuario.f_ci),
         evento_list=lista_cursos(usuario.f_ci),
+        materia_list=lista_materias(usuario.f_ci)
         )
 
 def transformar_fecha(fecha):
@@ -609,7 +611,8 @@ def ficha():
         historial=getDictHistorial(historial_rows),
         proy_list=lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(personal['ci']),
-        evento_list=lista_cursos(personal['ci'])
+        evento_list=lista_cursos(personal['ci']),
+        materia_list=lista_materias(personal['ci'])
     )
 
 def cambiar_validacion(validacion, personal):
@@ -776,6 +779,11 @@ def lista_cursos(ci):
     query = db((db.t_Personal.id == db.t_Cursos.f_Cursos_Personal)
             & (db.t_Personal.f_ci == ci))
     rows = query.select(db.t_Cursos.ALL, orderby=db.t_Cursos.f_numero)
+    return rows
+
+def lista_materias(ci):
+    query = db((db.t_Personal.f_ci == ci) & (db.t_Personal.id == db.t_Materia2.f_Materia_Personal))
+    rows = query.select(db.t_Materia2.ALL, orderby=db.t_Materia2.f_area)
     return rows
 
 def getDictHistorial(historial):
@@ -1076,3 +1084,38 @@ def __get_cursos(request, personal):
                 print(e)
     return BEAUTIFY(cursos)
 
+def __get__materias(request, personal):
+    params = {}
+    materia = []
+    for i in range(1,6):
+        params = {
+            'f_area' : request.post_vars['materia{}_area'.format(i)],
+            'f_codigo' : request.post_vars['materia{}_codigo'.format(i)],
+            'f_nombre_materia' : request.post_vars['materia{}_nombre_materia'.format(i)],
+            'f_fecha_inicio_materia' : transformar_fecha_formato_original(request.post_vars['materia{}_fecha_inicio_materia'.format(i)]),
+            'f_fecha_final_materia' : transformar_fecha_formato_original(request.post_vars['materia{}_fecha_final_materia'.format(i)]),
+            'f_numero' : i,
+            'f_Materia_Personal' : personal.id
+        }
+        if not ( None in params.values() or '' in params.values()):
+            try:
+                db.t_Materia2.update_or_insert(
+                    (db.t_Materia2.f_numero == i) & (db.t_Materia2.f_Materia_Personal == personal.id),
+                    f_area = params['f_area'],
+                    f_codigo = params['f_codigo'],
+                    f_nombre_materia = params['f_nombre_materia'],
+                    f_fecha_inicio_materia = params['f_fecha_inicio_materia'],
+                    f_fecha_final_materia = params['f_fecha_final_materia'],
+                    f_numero= params['f_numero'],
+                    f_Materia_Personal= params['f_Materia_Personal'],
+                    )
+                materia.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Materia2.f_Materia_Personal == personal.id)
+                    & (db.t_Materia2.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+    return materia
