@@ -466,6 +466,9 @@ def __get_descripcion(registro):
         elif registro.f_tipo_ingreso[0] == "Prestamo":
             descripcion = "Ingreso por prestamo "
 
+        elif registro.f_tipo_ingreso[0] == "Cesión":
+            descripcion = "Ingreso por Cesión "
+
 
         elif registro.f_tipo_ingreso[0] == "Ingreso inicial":
             descripcion = "Ingreso inicial de la sustancia al inventario"
@@ -495,12 +498,11 @@ def __get_descripcion(registro):
 
         elif registro.f_tipo_egreso[0] == "Prestamo":
            
-
-            descripcion = "prestamo a .."
+            descripcion = "Prestamo a .. "
 
         elif registro.f_tipo_egreso[0] == "Cesión":
         
-            descripcion = "cesion a .."
+            descripcion = "Cesión a... "
         # Cuando es un egreso en respuesta a una solicitud
         else:
             
@@ -563,11 +565,6 @@ def __agregar_registro(concepto):
     auxIng=0
     auxEgr=0
 
-    #for reg in bitacora:
-    #    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-    #        auxIng+=int(reg['t_Balance']['f_cantidad'])
-    #    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-    #        auxEgr+=int(reg['t_Balance']['f_cantidad'])
             
         
         
@@ -2900,6 +2897,23 @@ def catalogo():
                                     paginate=10)
     return locals()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_solicitud():
+
+    solicitud = db((db.t_Solicitud_smydp.f_cod_registro == request.vars.registro)).select()[0]
+
+    sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
+    espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
+
+    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+
+    return dict(solicitud = solicitud,
+                sustancia = sustancia,
+                espacio = espacio,
+                respondable = respondable
+                )
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
@@ -2913,14 +2927,32 @@ def solicitudes():
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
 
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
     # Espacios a cargo del usuario actual
-    espacios_a_cargo = db(
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        
+        espacios_a_cargo = db(
                 (db.t_Personal.f_usuario == auth.user.id) &
                 (db.es_encargado.tecnico == db.t_Personal.id) & 
                 (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
                                  ).select()
 
-    espacios = [e.espacios_fisicos for e in espacios_a_cargo]
+        espacios = [e.espacios_fisicos for e in espacios_a_cargo]
+
+    else:
+        espacios_a_cargo = __get_espacios(user_dep_id)
+
+        for esp in espacios_a_cargo:
+                esp_aux = db(
+                    (db.espacios_fisicos.id == esp)
+                                     ).select()[0]
+                espacios.append(esp_aux)
+    
 
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
@@ -2932,16 +2964,18 @@ def solicitudes():
         justificacion = request.vars.justificacion
         fecha_caducidad = request.vars.fecha_caducidad
         espacio = request.vars.espacio
-
+        numRegistro = request.post_vars.numRegistro
+        solicitante = request.post_vars.respSolicitud
         inv_id = db.t_Solicitud_smydp.insert(f_cantidad=cantidad, 
-                                      f_cantidad_conseguida=0,
-                                      f_estatus='En espera',
-                                      f_uso=uso,
-                                      f_justificacion=justificacion,
-                                      f_fecha_caducidad=fecha_caducidad,
-                                      f_medida=unidad,
-                                      f_espacio=espacio,
-                                      f_sustancia=sustancia)
+                                            f_responsable_solicitud= personal_usuario.id,
+                                            f_cod_registro=numRegistro, 
+                                            f_cantidad_conseguida=0,
+                                            f_estatus='En espera',
+                                            f_justificacion=justificacion,
+                                            f_fecha_caducidad=fecha_caducidad,
+                                            f_medida=unidad,
+                                            f_espacio=espacio,
+                                            f_sustancia=sustancia)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -2987,8 +3021,7 @@ def solicitudes():
     #----- FIN DE ELIMINAR SOLICITUD -----#
 
     #----- DATOS DE SOLICITANTE -----#
-    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
-
+    
     dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
 
     if auth.has_membership(group_id="CLIENTE INTERNO"):
@@ -3027,63 +3060,159 @@ def solicitudes():
                 unidades_de_medida=unidades_de_medida,
                 sustancia_solicitud=sustancia_solicitud)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def respuestas():
+    return locals()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return locals()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def listado_respuestas_recibidas(db, datos, espacios):
+    respuestas = db((db.t_Respuesta.id > 0)).select()
+    respuestasRecibidas = {}
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    i = 0
+
+    for sol in respuestas:
+
+        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+
+        espacio = db(
+                        (db.espacios_fisicos.id == sol.f_espacio)
+                                ).select()[0]
+
+        for esp in espacios:
+            if espacio.id != esp.id:
+
+                i += 1
+                respuestasRecibidas[int(i)] = {
+                                    'f_cod_registro': sol.f_cod_registro,
+                                    'f_solicitud': solicitud.f_cod_registro,
+                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
+                                    'f_cantidad': sol.f_cantidad,
+                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
+                                    'f_estatus':sol.f_estatus
+                                    }
+    return respuestasRecibidas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def sustancias():
-    return locals()
+def listado_respuestas_enviadas(db, datos, espacios):
+    respuestas = db((db.t_Respuesta.id > 0)).select()
+    respuestasEnviadas = {}
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    i = 0
+
+    for sol in respuestas:
+
+        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+
+        espacio = db(
+                        (db.espacios_fisicos.id == sol.f_espacio)
+                                ).select()[0]
+
+        for esp in espacios:
+            if espacio.id == esp.id:
+
+                i += 1
+                respuestasEnviadas[int(i)] = {
+                                    'f_cod_registro': sol.f_cod_registro,
+                                    'f_solicitud': solicitud.f_cod_registro,
+                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
+                                    'f_cantidad': sol.f_cantidad,
+                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
+                                    'f_estatus':sol.f_estatus
+                                    }
+    return respuestasEnviadas
+
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ListaSolicitudesHechas(db, datos, espacios):
 
     solicitudes = db((db.t_Solicitud_smydp.id > 0)).select()
-    solicitudesHechas = []
+    solicitudesHechas = {}
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
 
+    i = 0
+
     if auth.has_membership("TÉCNICO"):
         
         for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
+
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
 
             for esp in espacios:
                 if espacio.id == esp.id:
-                    solicitudesHechas.append(sol)
+
+                    i += 1
+                    solicitudesHechas[int(i)] = {
+                                        'f_cod_registro': sol.f_cod_registro,
+                                        'f_sustancia': sustancia.f_nombre,
+                                        'f_espacio': sol.f_espacio,
+                                        'f_cantidad': sol.f_cantidad,
+                                        'f_fecha': sol.created_on,
+                                        'f_estatus':sol.f_estatus
+                                        }
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
 
-        espacios = __get_espacios(user_dep_id)
-
         for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
 
             for esp in espacios:
-                if espacio.id == esp:
-                    solicitudesHechas.append(sol)
+                if espacio.id == esp.id:
+
+                    i += 1
+                    solicitudesHechas[int(i)] = {
+                                        'f_cod_registro': sol.f_cod_registro,
+                                        'f_sustancia': sustancia.f_nombre,
+                                        'f_espacio': sol.f_espacio,
+                                        'f_cantidad': sol.f_cantidad,
+                                        'f_fecha': sol.created_on,
+                                        'f_estatus':sol.f_estatus
+                                        }
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
     # con una lista de adyacencias
     else:
-        espacios = __get_espacios(user_dep_id)
-
+        
         for sol in solicitudes:
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
 
             for esp in espacios:
-                if espacio.id == esp:
-                    solicitudesHechas.append(sol)
+                if espacio.id == esp.id:
+
+                    i += 1
+                    solicitudesHechas[int(i)] = {
+                                        'f_cod_registro': sol.f_cod_registro,
+                                        'f_sustancia': sustancia.f_nombre,
+                                        'f_espacio': sol.f_espacio,
+                                        'f_cantidad': sol.f_cantidad,
+                                        'f_fecha': sol.created_on,
+                                        'f_estatus': sol.f_estatus
+                                        }
 
     return solicitudesHechas
 
@@ -3091,14 +3220,18 @@ def ListaSolicitudesHechas(db, datos, espacios):
 def ListaSolicitudesRecibidas(db, datos, espacios):
 
     solicitudes = db((db.t_Solicitud_smydp.id > 0)).select()
-    solicitudesRecibidas = []
+    solicitudesRecibidas = {}
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
 
+    i = 0
+
     if auth.has_membership("TÉCNICO"):
         
         for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
@@ -3110,45 +3243,89 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                   (db.t_Inventario.espacio == esp.id) &
                                   (db.t_Inventario.f_existencia > 0)).select():
 
-                        solicitudesRecibidas.append(sol)
+                        i += 1
+                        solicitudesRecibidas[int(i)] = {
+                                            'f_cod_registro': sol.f_cod_registro,
+                                            'f_sustancia': sustancia.f_nombre,
+                                            'f_espacio': sol.f_espacio,
+                                            'f_cantidad': sol.f_cantidad,
+                                            'f_fecha': sol.created_on,
+                                            'f_estatus':sol.f_estatus
+                                            }
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
 
-        espacios = __get_espacios(user_dep_id)
-
         for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
 
             for esp in espacios:
-                if espacio.id != esp:
+                if espacio.id != esp.id:
 
                     for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
                                   (db.t_Inventario.espacio == esp)).select():
 
-                        solicitudesRecibidas.append(sol)
+                        i += 1
+                        solicitudesRecibidas[int(i)] = {
+                                            'f_cod_registro': sol.f_cod_registro,
+                                            'f_sustancia': sustancia.f_nombre,
+                                            'f_espacio': sol.f_espacio,
+                                            'f_cantidad': sol.f_cantidad,
+                                            'f_fecha': sol.created_on,
+                                            'f_estatus':sol.f_estatus
+                                            }
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
     # con una lista de adyacencias
     else:
-        espacios = __get_espacios(user_dep_id)
 
         for sol in solicitudes:
+
+            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
             espacio = db(
                             (db.espacios_fisicos.id == sol.f_espacio)
                                  ).select()[0]
 
             for esp in espacios:
-                if espacio.id != esp:
+                if espacio.id != esp.id:
 
                     for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
-                                  (db.t_Inventario.espacio == esp)).select():
+                                  (db.t_Inventario.espacio == esp.id)).select():
 
-                        solicitudesRecibidas.append(sol)
+                        i += 1
+                        solicitudesRecibidas[int(i)] = {
+                                            'f_cod_registro': sol.f_cod_registro,
+                                            'f_sustancia': sustancia.f_nombre,
+                                            'f_espacio': sol.f_espacio,
+                                            'f_cantidad': sol.f_cantidad,
+                                            'f_fecha': sol.created_on,
+                                            'f_estatus':sol.f_estatus
+                                            }
 
     return solicitudesRecibidas
+
+
+def validador_registro_solicitudes(request, db, registro, contador=0):
+    anio = str(request.now)[2:4]
+    contador = 1 + contador
+    digits = (3 - len(str(contador))) * '0' + str(contador)
+
+    registronum = 'SIG-' + registro + "-" + anio + '/' + digits
+
+    check = db(db.t_Solicitud_smydp.f_cod_registro == registronum).count()
+
+    if check != 0:
+        return validador_registro_solicitudes(request, db, registro, contador)
+    else:
+        return registronum
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def sustancias():
+    return locals()
 
 
 ############################################################################
