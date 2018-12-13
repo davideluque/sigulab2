@@ -8,7 +8,7 @@ def index():
     return dict()
 
 def busqueda():
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel= dropdowns()
     return dict(
         gremios=gremios,
         competencias=competencias
@@ -186,8 +186,9 @@ def dropdowns():
             "Química", "Recreación", "Salud Laboral", "Seguridad", "Tecnología", "Urbanismo",
             ]
 
+    nivel = ["Bachillerato", "Técnico Medio", "TSU", "Licenciatura", "Especialización", "Maestría", "Doctorado", "Post-Doctorado"]
 
-    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias)
+    return (gremio,departamento,estatus,categoria,condiciones,roles,operadores, competencias, nivel)
 
 # Esta funcion toma la fecha desde el front que tiene
 # el formato dd-mm-yyyy y la transforma en el formato
@@ -369,6 +370,7 @@ def add_form():
         __get_administrativas(request, personal)
         __get_extension(request, personal)
         __get_proyectos(request, personal)
+        __get_trabajos(request, personal)
         redirect(URL('listado_estilo'))
 
 
@@ -448,7 +450,7 @@ def listado():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias= dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel= dropdowns()
 
     empleados = validacion_estilo()['empleados']
     idUser = db(db.t_Personal.f_ci == usuario.f_ci).select().first().id
@@ -468,11 +470,13 @@ def listado():
         usuario=usuario,
         empleados = empleados,
         competencias=competencias,
+        nivel=nivel,
         comp_list=lista_competencias(usuario.f_ci),
         admin_list=lista_administrativas(usuario.f_ci),
         ext_list=lista_extension(usuario.f_ci),
         historial = getDictHistorial(historial_rows),
-        proy_list = lista_proyectos(usuario.f_ci)
+        proy_list = lista_proyectos(usuario.f_ci),
+        trabajo_list=lista_trabajo(usuario.f_ci),
 
         )
 
@@ -580,7 +584,7 @@ def ficha():
     idDependencia = db(db.dependencias.nombre == usuario.f_dependencia).select(db.dependencias.id)[0]
     ubicaciones= list(db(db.espacios_fisicos.dependencia == idDependencia).select(db.espacios_fisicos.ALL))
     #Obtenemos los elementos de los dropdowns
-    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias = dropdowns()
+    gremios, dependencias, estados, categorias, condiciones, roles, operadores, competencias, nivel = dropdowns()
 
     historial_rows = db(db.t_Historial_trabajo_nuevo.f_Historial_trabajo_Personal == elm.id).select().first()
 
@@ -597,11 +601,13 @@ def ficha():
         usuario_logged=usuario_logged,
         usuario=usuario,
         competencias=competencias,
+        nivel=nivel,
         comp_list=lista_competencias(personal['ci']),
         ext_list=lista_extension(personal['ci']),
         admin_list=lista_administrativas(personal['ci']),
         historial=getDictHistorial(historial_rows),
-        proy_list=lista_proyectos(usuario.f_ci)
+        proy_list=lista_proyectos(usuario.f_ci),
+        trabajo_list=lista_trabajo(personal['ci']),
     )
 
 def cambiar_validacion(validacion, personal):
@@ -758,6 +764,12 @@ def lista_proyectos(ci):
     rows = query.select(db.t_Proyecto.ALL, orderby=db.t_Proyecto.f_numero)
     return rows
 
+def lista_trabajo(ci):
+    query = db((db.t_Personal.id == db.t_Trabajos_dirigidos.f_Trabajo_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Trabajos_dirigidos.ALL, orderby=db.t_Trabajos_dirigidos.f_numero)
+    return rows
+
 def getDictHistorial(historial):
     dic = {}
     if (historial != None):
@@ -829,9 +841,6 @@ def getDictHistorial(historial):
 def __get_competencias(request, personal):
     params = {}
     competencias = []
-def __get_competencias(request, personal):
-    params = {}
-    competencias = []
     for i in range(1,11):
         params = {
                 'f_nombre' : request.post_vars['competencia{}_nombre'.format(i)],
@@ -858,7 +867,7 @@ def __get_competencias(request, personal):
             try:
                 db( (db.t_Competencias2.f_Competencia_Personal == personal.id)
                     & (db.t_Competencias2.f_numero == i)).delete()
-            except:
+            except Exception as e:
                 print(e)
 
     return competencias
@@ -894,7 +903,7 @@ def __get_administrativas(request, personal):
             try:
                 db( (db.t_Administrativas.f_Administrativas_Personal == personal.id)
                     & (db.t_Administrativas.f_numero == i)).delete()
-            except:
+            except Exception as e:
                 print(e)
 
     return BEAUTIFY(administrativas)
@@ -937,7 +946,7 @@ def __get_extension(request, personal):
             try:
                 db( (db.t_Extension2.f_Extension_Personal == personal.id)
                     & (db.t_Extension2.f_numero == i)).delete()
-            except:
+            except Exception as e:
                 print(e)
     return BEAUTIFY(extension)
 
@@ -980,6 +989,45 @@ def __get_proyectos(request, personal):
             try:
                 db( (db.t_Proyecto.f_proyecto_Personal == personal.id)
                     & (db.t_Proyecto.f_numero == i)).delete()
-            except:
+            except Exception as e:
                 print(e)
     return proyecto
+
+
+def __get_trabajos(request, personal):
+    params = {}
+    trabajos = []
+    for i in range(1,6):
+        params = {
+                'f_titulo_trabajo' : request.post_vars['trabajo{}_titulo_trabajo'.format(i)],
+                'f_nivel' : request.post_vars['trabajo{}_nivel'.format(i)],
+                'f_anio' : request.post_vars['trabajo{}_anio'.format(i)],
+                'f_estudiantes' : request.post_vars['trabajo{}_estudiantes'.format(i)],
+                'f_institucion' : request.post_vars['trabajo{}_institucion'.format(i)],
+                'f_numero': i,
+                'f_Trabajo_Personal': personal.id
+                }
+        if not(None in params.values() or '' in params.values()):
+            try:
+                db.t_Trabajos_dirigidos.update_or_insert(
+                        (db.t_Trabajos_dirigidos.f_numero==i)&
+                        (db.t_Trabajos_dirigidos.f_Trabajo_Personal==personal.id),
+                        f_titulo_trabajo=params['f_titulo_trabajo'],
+                        f_nivel=params['f_nivel'],
+                        f_anio= params['f_anio'],
+                        f_estudiantes= params['f_estudiantes'],
+                        f_institucion= params['f_institucion'],
+                        f_numero= params['f_numero'],
+                        f_Trabajo_Personal= params['f_Trabajo_Personal'],
+                        )
+                trabajos.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Trabajos_dirigidos.f_Trabajo_Personal == personal.id)
+                    & (db.t_Trabajos_dirigidos.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+
+    return trabajos

@@ -294,3 +294,21 @@ db.define_table(
 
 db.t_Proyecto._plural = 'Proyectos'
 db.t_Proyecto._singular = 'Proyecto'
+
+#t_Personal: Tabla de Trabajos dirigidos
+db.define_table(
+    #Nombre de la entidad
+    't_Trabajos_dirigidos', 
+    #Atributos;
+    Field('f_anio',          'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año')),
+    Field('f_estudiantes', 'list:string', default='', label=T('Estudiantes')),
+    Field('f_titulo_trabajo',          'string', label=T('Titulo')),
+    Field('f_nivel',  'list:string', default='', label=T('Nivel')),
+    Field('f_institucion',          'string', label=T('Institución')),
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
+    Field('f_Trabajo_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+
+db.t_Trabajos_dirigidos._plural = 'Trabajos'
+db.t_Trabajos_dirigidos._singular = 'Trabajo'
