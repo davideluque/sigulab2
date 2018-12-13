@@ -466,6 +466,9 @@ def __get_descripcion(registro):
         elif registro.f_tipo_ingreso[0] == "Prestamo":
             descripcion = "Ingreso por prestamo "
 
+        elif registro.f_tipo_ingreso[0] == "Cesión":
+            descripcion = "Ingreso por Cesión "
+
 
         elif registro.f_tipo_ingreso[0] == "Ingreso inicial":
             descripcion = "Ingreso inicial de la sustancia al inventario"
@@ -495,12 +498,11 @@ def __get_descripcion(registro):
 
         elif registro.f_tipo_egreso[0] == "Prestamo":
            
-
-            descripcion = "prestamo a .."
+            descripcion = "Prestamo a .. "
 
         elif registro.f_tipo_egreso[0] == "Cesión":
         
-            descripcion = "cesion a .."
+            descripcion = "Cesión a... "
         # Cuando es un egreso en respuesta a una solicitud
         else:
             
@@ -563,11 +565,6 @@ def __agregar_registro(concepto):
     auxIng=0
     auxEgr=0
 
-    #for reg in bitacora:
-    #    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-    #        auxIng+=int(reg['t_Balance']['f_cantidad'])
-    #    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-    #        auxEgr+=int(reg['t_Balance']['f_cantidad'])
             
         
         
@@ -3071,10 +3068,71 @@ def respuestas():
 def index():
     return locals()
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def listado_respuestas_recibidas(db, datos, espacios):
+    respuestas = db((db.t_Respuesta.id > 0)).select()
+    respuestasRecibidas = {}
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    i = 0
+
+    for sol in respuestas:
+
+        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+
+        espacio = db(
+                        (db.espacios_fisicos.id == sol.f_espacio)
+                                ).select()[0]
+
+        for esp in espacios:
+            if espacio.id != esp.id:
+
+                i += 1
+                respuestasRecibidas[int(i)] = {
+                                    'f_cod_registro': sol.f_cod_registro,
+                                    'f_solicitud': solicitud.f_cod_registro,
+                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
+                                    'f_cantidad': sol.f_cantidad,
+                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
+                                    'f_estatus':sol.f_estatus
+                                    }
+    return respuestasRecibidas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def sustancias():
-    return locals()
+def listado_respuestas_enviadas(db, datos, espacios):
+    respuestas = db((db.t_Respuesta.id > 0)).select()
+    respuestasEnviadas = {}
+
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    i = 0
+
+    for sol in respuestas:
+
+        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+
+        espacio = db(
+                        (db.espacios_fisicos.id == sol.f_espacio)
+                                ).select()[0]
+
+        for esp in espacios:
+            if espacio.id == esp.id:
+
+                i += 1
+                respuestasEnviadas[int(i)] = {
+                                    'f_cod_registro': sol.f_cod_registro,
+                                    'f_solicitud': solicitud.f_cod_registro,
+                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
+                                    'f_cantidad': sol.f_cantidad,
+                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
+                                    'f_estatus':sol.f_estatus
+                                    }
+    return respuestasEnviadas
+
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ListaSolicitudesHechas(db, datos, espacios):
@@ -3265,6 +3323,9 @@ def validador_registro_solicitudes(request, db, registro, contador=0):
     else:
         return registronum
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def sustancias():
+    return locals()
 
 
 ############################################################################
