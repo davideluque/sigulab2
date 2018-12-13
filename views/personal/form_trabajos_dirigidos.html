@@ -55,7 +55,7 @@
                       <option value=""> Seleccione una opcion</option>
                       {{ for niv in nivel: }}
                       <option
-                              {{ if len(comp_list)>=i and (niv in (trabajo_list[i-1].f_nivel)):}}
+                              {{ if len(trabajo_list)>=i and (niv in (trabajo_list[i-1].f_nivel)):}}
                               selected
                               {{pass}}
                           value="{{=niv}}">{{=niv}}</option>
