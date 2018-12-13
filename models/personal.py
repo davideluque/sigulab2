@@ -275,3 +275,22 @@ db.define_table(
     )
 db.t_Extension2._plural = 'Actividades de extensión'
 db.t_Extension2._singular = 'Actividad de extensión'
+
+db.define_table(
+    #Nombre de la entidad
+    't_Proyecto', 
+    #Atributos;
+    Field('f_categoria', 'list:string', default='', label=T('Categoría')),
+    Field('f_fecha_inicio', 'date',label=T('Desde')),
+    Field('f_fecha_fin', 'date',label=T('Hasta')),
+    Field('f_titulo', 'string', label=T('Título')),
+    Field('f_responsabilidad', 'string', label=T('Responsabilidad')),
+    Field('f_resultados', 'string', label=T('Resultados')),
+    Field('f_institucion', 'string', label=T('Institución')),
+    Field('f_numero', 'integer'),
+    #Referencia
+    Field('f_proyecto_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Participante')),
+    )
+
+db.t_Proyecto._plural = 'Proyectos'
+db.t_Proyecto._singular = 'Proyecto'

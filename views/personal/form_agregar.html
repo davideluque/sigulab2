@@ -451,7 +451,7 @@
 
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body" >
-                          {{ include 'personal/form-administrativas.html' }}
+                        {{include 'personal/formHistorial.html'}}
                         </div>
 
                       </div>
@@ -478,7 +478,7 @@
 
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body" >
-                          {{ include 'personal/form-extension.html' }}
+                          {{ include 'personal/form-administrativas.html' }}
                         </div>
 
                       </div>
@@ -505,16 +505,60 @@
 
                       <!-- Aqui va la informacion -->
                       <!--  Formulario para agregar historial laboral en el menu modal -->
-                      {{include 'personal/formHistorial.html'}}
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-extension.html' }}
+                      </div>
+
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                    <!-- Fin Septimo Paso -->
+
+                    <!-- Octavo Paso -->
+                    <!-- Estudios Formales -->
+                    <!-- Fin Octavo Paso -->
+                    <!-- Noveno Paso -->
+                    <!-- Cursos -->
+                    <!-- Fin Noveno Paso -->
+                    <!-- Decimo Paso -->
+                    <!-- Materias Impartidas -->
+                    <!-- Fin Decimo Paso -->
+                    <!-- Undecimo Paso -->
+                    <!-- Trabajos Dirigidos -->
+                    <!-- Fin Undecimo Paso -->
+                    <!-- Undecimo Paso -->
+                    <!-- Proyectos -->
+                    <fieldset class="formField" id="p11">
+                    <div class="form-bottom" data-step="11" data-title="Septimo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step activePass">11</span>
+                      </div>
+
+                      <!-- Aqui va la informacion -->
+                      <!--  Formulario para agregar historial laboral en el menu modal -->
+                      <div class="col-sm-11 col11Body" >
+                          {{ include 'personal/formInvestigacion.html' }}
+                      </div>
 
                     <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                         <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
                     </div>
                   </fieldset>
-                    <!-- Fin Septimo Paso -->
-
-
+                  <!-- Fin Undecimo Paso -->
 
 
                 </form>
