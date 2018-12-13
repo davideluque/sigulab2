@@ -3046,6 +3046,9 @@ def solicitudes():
                 unidades_de_medida=unidades_de_medida,
                 sustancia_solicitud=sustancia_solicitud)
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def respuestas():
+    return locals()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
