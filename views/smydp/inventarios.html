@@ -131,6 +131,8 @@
 
 
 	<div class="container">
+		{{ if auth.has_membership("DIRECTOR") or auth.has_membership("GESTOR DE SMyDP") \
+		or auth.has_membership("WEBMASTER") or auth.has_membership("ASISTENTE DEL DIRECTOR") : }}
 		<form nanme="ejemplomonth" action="generar_reporte_rl7" method="POST">
 			<select class="form-reporte" type="select" id="mesR7" name="mesR7" required>
 				<option value="" selected hidden >Mes*</option>
@@ -150,9 +152,12 @@
 			</select>			
 			<input type="submit" name="enviar" value="Generar Reporte RL7">
 		</form>
+		{{pass}}
 	</div>
 
 	<div class="container">
+		{{ if auth.has_membership("DIRECTOR") or auth.has_membership("GESTOR DE SMyDP") \
+		or auth.has_membership("WEBMASTER") or auth.has_membership("ASISTENTE DEL DIRECTOR") : }}
 		<form nanme="ejemplomonth" action="generar_reporte_rl4" method="POST">
 			<select class="form-reporte" type="select" id="mesR4" name="mesR4" required>
 				<option value="" selected hidden >Mes*</option>
@@ -172,6 +177,8 @@
 			</select>			
 			<input type="submit" name="enviar" value="Generar Reporte RL4">
 		</form>
+		{{pass}}
+
 	</div>
 
 

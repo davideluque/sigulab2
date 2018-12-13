@@ -559,15 +559,15 @@ def __agregar_registro(concepto):
     bitacora = db((db.t_Balance.f_inventario == inventario_id) &
                   (db.t_Balance.created_by == db.auth_user.id) &
                   (db.auth_user.id == db.t_Personal.f_usuario) &
-                  (db.t_Balance.f_medida == db.t_Unidad_de_medida.id)).select()
+                  (db.t_Balance.f_medida == db.t_Unidad_de_medida.id)).select(orderby=~db.t_Balance.f_fechaUso)
     auxIng=0
     auxEgr=0
 
-    for reg in bitacora:
-        if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-            auxIng+=int(reg['t_Balance']['f_cantidad'])
-        elif(reg['t_Balance']['f_concepto']==['Consumo']):
-            auxEgr+=int(reg['t_Balance']['f_cantidad'])
+    #for reg in bitacora:
+    #    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+    #        auxIng+=int(reg['t_Balance']['f_cantidad'])
+    #    elif(reg['t_Balance']['f_concepto']==['Consumo']):
+    #        auxEgr+=int(reg['t_Balance']['f_cantidad'])
             
         
         
@@ -593,12 +593,46 @@ def __agregar_registro(concepto):
 
             fechaS=request.vars.fecha_sumi.split("-")
             fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+            fechaComp=datetime.date(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
 
-
+            
             fechaHoy = datetime.datetime.now()
             if  fechaHoy < fecha_sumi:
                 response.flash = "Fecha de ingreso no puede ser mayor a la actual"
                 return False
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month == fechaHoy.month and\
+                    fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
+                response.flash = "Fecha de ingreso no puede menor a una semana"
+                return False           
+            ##  Faltaria validar si estoy en los primeros 6 dias del mes
+            # 
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        auxIng+=float(reg['t_Balance']['f_cantidad'])
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
+                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
+
+            total_nuevo=(auxIng-auxEgr)+cantidad
+            total_nuevoAux=total_nuevo
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] > fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
+                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+
+
+            #############################################################
+            #############################################################
+            # Si hay registros con fechas siguientes a la que estoy ingresando 
+            # se debe hacer un recalculo de los totales de los registros en esas fechas
+            #  
             
 
             almacen = int(request.vars.almacen)
@@ -619,12 +653,37 @@ def __agregar_registro(concepto):
 
             fechaS=request.vars.fecha_sumi.split("-")
             fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+            fechaComp=datetime.date(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
 
 
             fechaHoy = datetime.datetime.now()
             if  fechaHoy < fecha_sumi:
                 response.flash = "Fecha de ingreso no puede ser mayor a la actual"
                 return False
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month == fechaHoy.month and\
+                    fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
+                response.flash = "Fecha de ingreso no puede menor a una semana"
+                return False
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        auxIng+=float(reg['t_Balance']['f_cantidad'])
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
+                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
+
+            total_nuevo=(auxIng-auxEgr)+cantidad
+            total_nuevoAux=total_nuevo
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] > fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
+                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
 
             db.t_Balance.insert(
                 f_cantidad=cantidad,
@@ -641,12 +700,41 @@ def __agregar_registro(concepto):
 
             fechaS=request.vars.fecha_sumi.split("-")
             fecha_sumi=datetime.datetime(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
+            fechaComp=datetime.date(int(fechaS[0]),int(fechaS[1]),int(fechaS[2]))
 
 
             fechaHoy = datetime.datetime.now()
             if  fechaHoy < fecha_sumi:
                 response.flash = "Fecha de ingreso no puede ser mayor a la actual"
                 return False
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month == fechaHoy.month and\
+                    fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
+                response.flash = "Fecha de ingreso no puede menor a una semana"
+                return False
+
+
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        auxIng+=float(reg['t_Balance']['f_cantidad'])
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
+                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
+
+            total_nuevo=(auxIng-auxEgr)+cantidad
+            total_nuevoAux=total_nuevo
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] > fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
+                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+
 
             db.t_Balance.insert(
                 f_cantidad=cantidad,
@@ -668,11 +756,39 @@ def __agregar_registro(concepto):
 
             fechaC=request.vars.fecha_compra.split("-")
             fecha_compra=datetime.datetime(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
+            fechaComp=datetime.date(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
+
 
             fechaHoy = datetime.datetime.now()
             if fechaHoy < fecha_compra:
                 response.flash = "Fecha de compra no puede ser mayor a la actual"
                 return False 
+            elif (fecha_compra.year==fechaHoy.year and fecha_compra.month == fechaHoy.month and\
+                    fechaHoy.day-6 > 0 and fecha_compra.day < (fechaHoy.day-6)):
+                response.flash = "Fecha de Compra no puede menor a una semana"
+                return False
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        auxIng+=float(reg['t_Balance']['f_cantidad'])
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
+                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
+
+            total_nuevo=(auxIng-auxEgr)+cantidad
+            total_nuevoAux=total_nuevo
+
+
+            for reg in bitacora:
+                if reg['t_Balance']['f_fechaUso'] > fechaComp:
+                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
+                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
+                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+
             
             # Se registra la nueva compra en la tabla t_Compra
             compra_id = db.t_Compra.insert(
@@ -706,11 +822,36 @@ def __agregar_registro(concepto):
         fechaHoy = datetime.datetime.now()
         if fechaHoy < fecha_u:
             response.flash = "Fecha de consumo no puede ser mayor a la actual"
-            return False 
+            return False
+        elif (fecha_u.year==fechaHoy.year and fecha_u.month == fechaHoy.month and\
+                    fechaHoy.day-6 > 0 and fecha_u.day < (fechaHoy.day-6)):
+                response.flash = "Fecha de Consumo no puede menor a una semana"
+                return False 
         
-        
+        fechaComp=datetime.date(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
+
+
+        for reg in bitacora:
+            if reg['t_Balance']['f_fechaUso'] <= fechaComp:
+                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                    auxIng+=float(reg['t_Balance']['f_cantidad'])
+                elif(reg['t_Balance']['f_concepto']==['Consumo']):
+                    auxEgr+=float(reg['t_Balance']['f_cantidad'])
+
+        total_nuevo=(auxIng-auxEgr)-cantidad
+        total_nuevoAux=total_nuevo
+
+
+        for reg in bitacora:
+            if reg['t_Balance']['f_fechaUso'] > fechaComp:
+                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
+                    total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
+                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+                elif(reg['t_Balance']['f_concepto']==['Consumo']):  
+                    total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
+                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
+
         # Nueva cantidad total luego del consumo
-        total_nuevo = total_viejo - cantidad
         if total_nuevo <= 0:
             response.flash = "La cantidad total luego del consumo no puede ser "\
                              "negativa"
@@ -2929,6 +3070,8 @@ def sustancias():
 
 def generar_reporte_rl7():
 
+   
+
     wb = Workbook()
     ws = wb.active
     cen = Alignment(horizontal='center', vertical='distributed')
@@ -2946,8 +3089,8 @@ def generar_reporte_rl7():
     year= request.vars.ayoR7
     #Encabezado
     ws.title = "Informe mensual"
-    #img = Image("gob.jpg")
-    #ws.add_image(img, 'A1')
+    img = Image("applications/sigulab2/static/images/Logo_ULab.jpg")
+    ws.add_image(img, 'A1')
    
 
     #tamaño de las columnas
@@ -3275,8 +3418,8 @@ def generar_reporte_rl7():
         # Encabezado 
 
         ws2.title = n
-        #img = Image('gob.jpg')
-        #ws2.add_image(img, 'A1')
+        img = Image("applications/sigulab2/static/images/Logo_ULab.jpg")
+        ws2.add_image(img, 'A1')
 
         #tamaño de las columnas
         for i in ['A', 'D', 'K','G','H','I']:
@@ -3525,8 +3668,8 @@ def generar_reporte_rl4():
     year= request.vars.ayoR4
     #Encabezado
     ws.title = "Informe mensual"
-    #img = Image("gob.jpg")
-    #ws.add_image(img, 'A1')
+    img = Image("applications/sigulab2/static/images/gob.jpg")
+    ws.add_image(img, 'A1')
    
 
     #tamaño de las columnas
@@ -3859,8 +4002,9 @@ def generar_reporte_rl4():
         # Encabezado 
 
         ws2.title = n
-        #img = Image('gob.jpg')
-        #ws2.add_image(img, 'A1')
+        
+        img = Image("applications/sigulab2/static/images/gob.jpg")
+        ws2.add_image(img, 'A1')
 
         #tamaño de las columnas
         for i in ['A', 'D', 'K','G','H','I']:
