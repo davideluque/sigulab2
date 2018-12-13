@@ -336,8 +336,8 @@ db.define_table(
     #Nombre de la entidad
     't_Materia2', 
     #Atributos;
-    Field('f_area',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Área')),
-    Field('f_codigo',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Código')),
+	Field('f_area', 'list:string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Área')),
+    Field('f_codigo','string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Código')),
     Field('f_nombre_materia',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Materia')),
     Field('f_fecha_inicio_materia', 'date', label=T('Desde')),
     Field('f_fecha_final_materia', 'date', label=T('Hasta')),
