@@ -122,6 +122,9 @@ db.define_table(
     # Cantidad de sustancia solicitada
     Field('f_cantidad', 'double', requires=IS_NOT_EMPTY(), label=T('Cantidad')),
 
+    # Codigo del registro
+    Field('f_cod_registro', 'string', label=T('Codigo del registro')),
+
     # Cantidad de sustancia que ya ha sido prometida por otros espacios al aceptar
     # la solicitud
     Field('f_cantidad_conseguida', 'double', label=T('Cantidad conseguida')),
@@ -135,10 +138,6 @@ db.define_table(
           widget=SQLFORM.widgets.options.widget, label=T('Uso de la sustancia')),
     
     Field('f_justificacion', 'string', label=T('Justificación')),
-
-    # Modalidad o condicion de la entrega de la sustancia
-    Field('f_preferencia', 'list:string',requires=IS_IN_SET(['Cesión','Préstamo']), 
-          widget=SQLFORM.widgets.options.widget, label=T('Preferencia')),
     
     Field('f_fecha_caducidad', 'datetime', requires=IS_DATE(format=T('%d/%m/%Y'), 
           error_message='Debe tener el siguiente formato: dd/mm/yyyy'), notnull=True, 
@@ -160,6 +159,10 @@ db.define_table(
     Field('f_sustancia', 'reference t_Sustancia',
           requires=IS_IN_DB(db, db.t_Sustancia.id, '%(f_nombre)s', zero=None), 
           label=T('Sustancia'), notnull=True),
+
+    # Responsable que entrega la sustancia
+    Field('f_responsable_solicitud', 'reference t_Personal', 
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.t_Personal.id, '%(f_email)s', zero=None))),
     
     auth.signature
     )

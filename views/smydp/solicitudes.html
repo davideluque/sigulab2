@@ -63,6 +63,7 @@
           <thead>
             <tr id="titulosListado">
               <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
               <th class="camposTabla linksNombres">Espacio Solicitante</th>
               <th class="camposTabla linksNombres">Cantidad Solicitada</th>
               <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
@@ -72,13 +73,14 @@
 
           <!-- Contenido Tabla Solicitudes -->
           <tbody>
-            {{for solicitud in solicitudes_recibidas:}}
+            {{for id_,solicitud in solicitudes_recibidas.iteritems():}}
               <tr>
-                <th class="camposTabla">{{=solicitud.id}}</th>
-                <th class="camposTabla">{{=solicitud.f_espacio}}</th>
-                <th class="camposTabla">{{=solicitud.f_cantidad}}</th>
-                <th class="camposTabla">{{=solicitud.f_fecha_caducidad}}</th>
-                <th class="camposTabla">{{=solicitud.f_estatus}}</th>
+                <th class="camposTabla">{{=solicitud['f_cod_registro']}}</th>
+                <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
+                <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
+                <th class="camposTabla">{{=solicitud['f_cantidad']}}</th>
+                <th class="camposTabla">{{=solicitud['f_fecha_caducidad']}}</th>
+                <th class="camposTabla">{{=solicitud['f_estatus']}}</th>
               </tr>
             {{pass}}
           </tbody>
@@ -86,6 +88,7 @@
           <tfoot id="collapseFiltros">
             <tr>
               <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
               <th class="camposTabla linksNombres">Espacio Solicitante</th>
               <th class="camposTabla linksNombres">Cantidad Solicitada</th>
               <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
@@ -120,6 +123,7 @@
           <thead>
             <tr id="titulosListado">
               <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
               <th class="camposTabla linksNombres">Espacio Solicitante</th>
               <th class="camposTabla linksNombres">Cantidad Solicitada</th>
               <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
@@ -129,19 +133,21 @@
 
           <!-- Contenido Tabla Solicitudes -->
           <tbody>
-            {{for solicitud in solicitudes_generadas:}}
+            {{for id_,solicitud in solicitudes_generadas.iteritems():}}
               <tr>
-                <th class="camposTabla">{{=solicitud.id}}</th>
-                <th class="camposTabla">{{=solicitud.f_espacio}}</th>
-                <th class="camposTabla">{{=solicitud.f_cantidad}}</th>
-                <th class="camposTabla">{{=solicitud.f_fecha_caducidad}}</th>
-                <th class="camposTabla">{{=solicitud.f_estatus}}</th>
+                <th class="camposTabla">{{=solicitud['f_cod_registro']}}</th>
+                <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
+                <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
+                <th class="camposTabla">{{=solicitud['f_cantidad']}}</th>
+                <th class="camposTabla">{{=solicitud['f_fecha']}}</th>
+                <th class="camposTabla">{{=solicitud['f_estatus']}}</th>
               </tr>
             {{pass}}
           </tbody>
           <tfoot id="collapseFiltros">
             <tr>
               <th class="camposTabla linksNombres">Número de Registro</th>
+              <th class="camposTabla linksNombres">Sustancia</th>
               <th class="camposTabla linksNombres">Espacio Solicitante</th>
               <th class="camposTabla linksNombres">Cantidad Solicitada</th>
               <th class="camposTabla linksNombres">Fecha de Expiracion de Solicitud</th>
@@ -282,7 +288,7 @@
                           </div>
 
                           <div id="fecha_uso_div" class="form-group esconder">
-                            <p>Fecha de caducidad de solicitud: <input name = "fecha_caducidad" type="date"  data-date-format="YYYY MM DD"></p>
+                            <p>Fecha de envio de solicitud: <input name = "fecha_caducidad" type="date"  data-date-format="YYYY MM DD"></p>
                             <font color="red"><div id="err_fecha_uso" hidden></div></font>
                           </div>
 
