@@ -72,7 +72,9 @@
 
 	}
 
-	#formularioCarga input, #formularioDevolucion input {
+	#formularioCarga input,
+	#formularioDevolucion input,
+	#formularioMantenimientoV input {
 		border-top: 0px !important;
 		border-left: 300px !important;
 		border-right: 0px !important;
@@ -82,7 +84,9 @@
 		background-color: transparent;
 	}
 
-	#formularioCarga select, #formularioDevolucion select {
+	#formularioCarga select,
+	#formularioDevolucion select,
+	#formularioMantenimientoV select {
 		border-top: 0px;
 		border-left: 0px;
 		border-right: 0px;
