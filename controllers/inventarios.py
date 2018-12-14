@@ -20,8 +20,7 @@ def __safe_int(n):
     try:
         return int(n)
     except:
-        return -2
-
+        return None
 
 # Función que determina el estado de un documento secundario de vehículo como string,
 # de acuerdo a su estado actual y la ficha que se revisa
@@ -39,7 +38,6 @@ def __get_estado_documento_vh(estado_actual, ficha="salida"):
             return "No devuelto"
 
     return None
-
 
 # Funcion que devuelve un diccionario, con las categorias y
 #subcategorias de los vehiculos
@@ -91,6 +89,7 @@ def __get_inventario_espacio(espacio_id=None):
 # Dado el id de un bien mueble, retorna las fichas de mantenimiento del bien.
 def __get_mantenimiento_bm(bm_id=None):
     return db(db.historial_mantenimiento_bm.hmbm_nro == bm_id).select()
+
 
 # Dado el id de un vehículo, retorna el historial de préstamo del vehículo
 def __get_prestamos_vh(vh_id=None):
@@ -356,6 +355,28 @@ def __puede_ver_vehiculo(user_id, vh_id):
     # Si ningún criterio se cumple, impedimos la visibilidad
     return False
 
+def __es_jefe_dep_vh(user_id, vh_id):
+
+    # Obtenemos el vehículo
+    try:
+        vehiculo = db(db.vehiculo.id == vh_id).select().first()
+    except KeyError:
+        return False
+
+    # Revisamos cadenas de jefes
+    dep_es_jefe_usuario = __es_jefe_de(user_id)
+    dep_jefes_autorizados = __ids_dependencias_jefe(vehiculo['vh_dependencia'])
+
+    # Intersección entre los departamentos que el usuario es jefe
+    # y los departamenos autorizados
+    inter = dep_es_jefe_usuario.intersection(dep_jefes_autorizados)
+
+    # Si alguno coincide, puede ver
+    if len(inter) is not 0:
+        return True
+
+    # Si ningún criterio se cumple, impedimos la visibilidad
+    return False
 
 # Dado el id de una dependencia, retorna los vehiculos que pertenecen
 # a esa dependencia.
@@ -372,7 +393,77 @@ def __get_vh_dep(dep_id=None):
 
 # Dada la placa de un vehiculo, retorna las fichas de mantenimiento del vehiculo.
 def __get_mantenimiento_vh(vh_id=None):
-    return db(db.historial_mantenimiento_vh.hmvh_id == vh_id).select()
+    mantenimiento = db(db.historial_mantenimiento_vh.hmvh_vh_id == vh_id).select()
+    mantenimiento_ordenado = sorted(
+        mantenimiento,
+        key=lambda x: (x.hmvh_fecha_solicitud-datetime(1970,1,1)).total_seconds()
+    )
+    return mantenimiento_ordenado
+
+# Registra una nueva entrada de mantenimiento para el vehículo dado
+def __registrar_mantenimiento_vh(vehiculo, fecha_solicitud, nro_registro, proveedor, contacto,
+                                 telf_contacto, motivo, tipo, descripcion, fecha_inicio, fecha_fin,
+                                 piezas_reparadas, piezas_sustituidas, accion, observaciones,
+                                 mant_id=None, modificacion=False):
+
+    # Si ya está guardada esa orden de servicio y queremos agregarla
+    if not modificacion and db(db.historial_mantenimiento_vh.hmvh_nro_registro == nro_registro).select():
+        session.flash = "El Nº Registro (O/S) %s ya ha sido ingresado anteriormente." % nro_registro
+        return False
+    
+    # Agregamos el registro nuevo
+    if not modificacion:
+        nuevo_id = db.historial_mantenimiento_vh.insert(
+            hmvh_vh_id=vehiculo,
+            hmvh_fecha_solicitud=fecha_solicitud,
+            hmvh_nro_registro=nro_registro,
+            hmvh_proveedor=proveedor,
+            hmvh_contacto=contacto,
+            hmvh_telf_contacto=telf_contacto,
+            hmvh_motivo=motivo,
+            hmvh_tipo=tipo,
+            hmvh_descripcion=descripcion,
+            hmvh_fecha_inicio=fecha_inicio,
+            hmvh_fecha_fin=fecha_fin,
+            hmvh_piezas_reparadas=piezas_reparadas,
+            hmvh_piezas_sustituidas=piezas_sustituidas,
+            hmvh_accion=accion,
+            hmvh_observaciones=observaciones,
+            hmvh_crea_mantenimiento=auth.user.id
+        )
+
+        db.bitacora_general.insert(
+            f_accion="[inventarios] Creado historial de mantenimiento de vehículo con O/S {}".format(nro_registro)
+        )
+
+        return nuevo_id
+    elif modificacion and mant_id is not None:
+        id_mod = db(db.historial_mantenimiento_vh.id == mant_id).update(
+            hmvh_vh_id=vehiculo,
+            hmvh_fecha_solicitud=fecha_solicitud,
+            hmvh_nro_registro=nro_registro,
+            hmvh_proveedor=proveedor,
+            hmvh_contacto=contacto,
+            hmvh_telf_contacto=telf_contacto,
+            hmvh_motivo=motivo,
+            hmvh_tipo=tipo,
+            hmvh_descripcion=descripcion,
+            hmvh_fecha_inicio=fecha_inicio,
+            hmvh_fecha_fin=fecha_fin,
+            hmvh_piezas_reparadas=piezas_reparadas,
+            hmvh_piezas_sustituidas=piezas_sustituidas,
+            hmvh_accion=accion,
+            hmvh_observaciones=observaciones,
+            hmvh_crea_mantenimiento=auth.user.id
+        )
+
+        db.bitacora_general.insert(
+            f_accion="[inventarios] Modificado historial de mantenimiento de vehículo con O/S {}".format(nro_registro)
+        )
+
+        return id_mod
+    
+    return False
 
 # Registra un nueva bm en el espacio fisico indicado. Si el bm ya
 # existe en el inventario, genera un mensaje con flash y no anade de nuevo
@@ -1822,7 +1913,7 @@ def detalles_mod_mat():
             sb_unidad_dim = bien['msb_unidad_dim']
         )
         db.bitacora_general.insert(
-        f_accion="[inventarios] Modificada la información del material de laboratorio {} del espacio físico {}".format( bien['msb_nombre'], espacio_nombre)
+            f_accion="[inventarios] Modificada la información del material de laboratorio {} del espacio físico {}".format( bien['msb_nombre'], espacio_nombre)
         )
         db( (db.modificacion_sin_bn.msb_espacio == espacio) & (db.modificacion_sin_bn.msb_nombre == name) ).delete()
         session.flash = "La información del material de laboratorio ha sido modificada"
@@ -3170,7 +3261,109 @@ def detalles_prestamo():
         esta_autorizado=esta_autorizado
     )
 
+@auth.requires(lambda: __check_role())
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_mantenimiento_vh():
+    mant_id = int(request.vars['mantenimiento'])
 
+    # Obtenemos datos de mantenimiento
+    try:
+        mantenimiento = db(db.historial_mantenimiento_vh.id == mant_id).select()[0]
+    except IndexError:
+        return "ID de mantenimiento erróneo"
+    
+    # Obtenemos datos de vehículo asociado
+    try:
+        vehiculo = db(db.vehiculo.id == mantenimiento.hmvh_vh_id).select()[0]
+    except IndexError:
+        return "El vehiculo asociado al mantenimiento no existe."
+    
+    if request.vars.edicion:
+        resultado = __registrar_mantenimiento_vh(
+            vehiculo=vehiculo['id'],
+            fecha_solicitud=request.vars.fecha_solicitud_mant,
+            nro_registro=request.vars.nro_registro,
+            proveedor=request.vars.proveedor,
+            contacto=request.vars.persona_contacto,
+            telf_contacto=request.vars.telf_contacto,
+            motivo=request.vars.motivo,
+            tipo=request.vars.tipo_mant,
+            descripcion=request.vars.descripcion,
+            fecha_inicio=request.vars.fecha_inicio_mant,
+            fecha_fin=request.vars.fecha_culminacion_mant,
+            piezas_reparadas=request.vars.piezas_reparadas,
+            piezas_sustituidas=request.vars.piezas_sustituidas,
+            accion=request.vars.accion,
+            observaciones=request.vars.observaciones,
+            modificacion=True,
+            mant_id=mant_id
+        )
+
+        request.vars.mantenimiento = None
+        mantenimiento = db(db.historial_mantenimiento_vh.id == mant_id).select()[0]
+
+        if resultado:
+            session.flash = "Se ha editado el registro de mantenimiento de O/S %s para el vehiculo." % request.vars.nro_registro
+            return redirect(URL('detalles_mantenimiento_vh', vars=dict(mantenimiento=mant_id)))
+
+    # Obtenemos nivel de autorización del usuario
+    esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    # Obtenemos datos de la solicitud
+    datos_solicitud_list = [
+        "Fecha de Solicitud",
+        "Nº Registro (O/S)",
+        "Proveedor",
+        "Persona de Contacto",
+        "Telf. de Contacto",
+        "Tipo de Servicio",
+        "Motivo"
+    ]
+
+    datos_solicitud_dict = {
+        "Fecha de Solicitud": mantenimiento['hmvh_fecha_solicitud'].strftime("%d/%m/%y"),
+        "Nº Registro (O/S)": mantenimiento['hmvh_nro_registro'],
+        "Proveedor": mantenimiento['hmvh_proveedor'],
+        "Persona de Contacto": mantenimiento['hmvh_contacto'],
+        "Telf. de Contacto": mantenimiento['hmvh_telf_contacto'],
+        "Tipo de Servicio": mantenimiento['hmvh_tipo'],
+        "Motivo": mantenimiento['hmvh_motivo']
+    }
+
+    # Obtenemos datos del servicio
+    datos_servicio_list = [
+        "Iniciado",
+        "Culminado",
+        "Fecha de Inicio",
+        "Fecha de Culminación",
+        "Descripción",
+        "Acción",
+        "Piezas o partes reparadas",
+        "Piezas o partes sustituidas",
+        "Observaciones"
+    ]
+
+    datos_servicio_dict = {
+        "Iniciado": "Sí" if mantenimiento['hmvh_fecha_inicio'] is not None else "No",
+        "Culminado": ("Sí" if mantenimiento['hmvh_fecha_fin'] is not None else "No") if mantenimiento['hmvh_fecha_inicio'] is not None else None,
+        "Fecha de Inicio": None if mantenimiento['hmvh_fecha_inicio'] is None else mantenimiento['hmvh_fecha_inicio'].strftime("%d/%m/%y"),
+        "Fecha de Culminación": None if mantenimiento['hmvh_fecha_fin'] is None else mantenimiento['hmvh_fecha_fin'].strftime("%d/%m/%y"),
+        "Descripción": mantenimiento['hmvh_descripcion'],
+        "Acción": mantenimiento['hmvh_accion'],
+        "Piezas o partes reparadas": mantenimiento['hmvh_piezas_reparadas'],
+        "Piezas o partes sustituidas": mantenimiento['hmvh_piezas_sustituidas'],
+        "Observaciones del Servicio": mantenimiento['hmvh_observaciones']
+    }
+
+    return dict(
+        vehiculo=vehiculo,
+        mantenimiento=mantenimiento,
+        esta_autorizado=esta_autorizado,
+        datos_solicitud_list=datos_solicitud_list,
+        datos_solicitud_dict=datos_solicitud_dict,
+        datos_servicio_list=datos_servicio_list,
+        datos_servicio_dict=datos_servicio_dict
+    )
 
 @auth.requires(lambda: __check_role())
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -3200,6 +3393,32 @@ def detalles_vehiculo():
     nombre_dependencia = db(db.dependencias.id == vehi['vh_dependencia']).select().first().nombre
     mantenimiento = __get_mantenimiento_vh(vehi['id'])
     prestamos = __get_prestamos_vh(vehi['id'])
+
+    # Si recibimos un registro de mantenimiento
+    if request.vars.mantenimiento:
+        resultado = __registrar_mantenimiento_vh(
+            vehiculo=vehi['id'],
+            fecha_solicitud=request.vars.fecha_solicitud_mant,
+            nro_registro=request.vars.nro_registro,
+            proveedor=request.vars.proveedor,
+            contacto=request.vars.persona_contacto,
+            telf_contacto=request.vars.telf_contacto,
+            motivo=request.vars.motivo,
+            tipo=request.vars.tipo_mant,
+            descripcion=request.vars.descripcion,
+            fecha_inicio=request.vars.fecha_inicio_mant,
+            fecha_fin=request.vars.fecha_culminacion_mant,
+            piezas_reparadas=request.vars.piezas_reparadas,
+            piezas_sustituidas=request.vars.piezas_sustituidas,
+            accion=request.vars.accion,
+            observaciones=request.vars.observaciones
+        )
+
+        request.vars.mantenimiento = None
+
+        if resultado:
+            session.flash = "Se ha agregado un registro de mantenimiento de O/S %s para el vehiculo." % request.vars.nro_registro
+            return redirect(URL('detalles_vehiculo', vars=dict(vh=vh)))
 
     # Si recibimos una solicitud de préstamo
     if request.vars.prestamo:
@@ -3401,6 +3620,7 @@ def detalles_vehiculo():
     sede_id = int(depend.id_sede)
 
     esta_autorizado = (auth.user.id == vehi['vh_responsable']) or (auth.user.id == vehi['vh_custodio']) or (auth.user.id == 1)
+    puede_ver_historial_mantenimiento = esta_autorizado or __es_jefe_dep_vh(auth.user.id, vehi['id'])
 
     # Si solo estoy cargando la vista
     return dict(
@@ -3414,7 +3634,8 @@ def detalles_vehiculo():
         clasificaciones=dict_clasificaciones,
         sede_id=sede_id,
         historial_prestamos=prestamos,
-        esta_autorizado=esta_autorizado
+        esta_autorizado=esta_autorizado,
+        puede_ver_historial_mantenimiento=puede_ver_historial_mantenimiento
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
