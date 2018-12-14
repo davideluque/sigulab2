@@ -34,8 +34,8 @@
                         </div>
                     </td>
                     <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'].strftime("%d/%m/%y %I:%M %p") }}</td>
-                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_salida'] is None else solicitud['hpvh_fecha_salida'].strftime("%d/%m/%y %I:%M %p") }}</td>
-                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_devolucion'] is None else solicitud['hpvh_fecha_devolucion'].strftime("%d/%m/%y %I:%M %p") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_salida'] is None else solicitud['hpvh_fecha_salida'].strftime("%d/%m/%y") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_devolucion'] is None else solicitud['hpvh_fecha_devolucion'].strftime("%d/%m/%y") }}</td>
                     <td class="camposTabla">
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
                         &nbsp;
