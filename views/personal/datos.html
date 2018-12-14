@@ -15,59 +15,59 @@
         </li>
 
       </ul>
-
+      <br>
       <div class="tab-content">
         <div class="tab-pane active " id="datos_basicos" role="tabpanel">
-          <table class="table contenidoFicha" id="tabla_datos_basicos">
+          <table class="table contenidoPestania" id="tabla_datos_basicos">
             <tbody>
                 {{if bool(personal['nombre']) :}}
-              <tr>
-                <td>Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Nombre:</td><td id="field_nombre">{{=personal['nombre']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['apellido']) :}}
-              <tr>
-                <td>Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Apellido:</td><td id="field_apellido">{{=personal['apellido']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['email']) :}}
-              <tr>
-                <td>Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Correo Electrónico:</td><td id="field_email" value={{=personal['email']}}>{{=personal['email']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['extension_USB']) :}}
-              <tr>
-                <td>Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Extensión USB:</td><td id="field_extension_USB">{{=personal['extension_USB']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['extension_interna']) :}}
-              <tr>
-                <td>Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Extensión Interna:</td><td id="field_extension_interna">{{=personal['extension_interna']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['pagina_web']) :}}
-              <tr>
-                <td>Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Página Web:</td><td id="field_pagina_web">{{=personal['pagina_web']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['rol']) :}}
-              <tr>
-                <td>Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Rol:</td><td id="field_rol">{{=personal['rol']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['dependencia']) :}}
-              <tr>
-                <td>Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">Dependencia:</td><td id="field_dependencia">{{=personal['dependencia']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['unidad_jerarquica_superior']) :}}
-              <tr>
-                  <td>Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
+              <tr class="border_bottom">
+                  <td class="fieldPersonal">Unidad de Adscripción: </td><td id="field_unidad_jerarquica_superior">{{=personal['unidad_jerarquica_superior']}}</td>
               </tr>
                 {{pass}}
                 {{if bool(personal['ubicaciones']) :}}
-                <tr>
-                    <td>Ubicación(es):</td><td id="field_ubicacion">
+                <tr class="border_bottom">
+                    <td class="fieldPersonal">Ubicación(es):</td><td id="field_ubicacion">
                       <ul>
                         {{for ubicacion in personal['ubicaciones']:}}
                         <li>{{=ubicacion.codigo}}</li>
@@ -84,24 +84,24 @@
         <div class="tab-pane" id="datos_personales" role="tabpanel">
           <table class="table contenidoFicha" id="tabla_datos_personales">
             <tbody>
-                <tr>
-                  <td>Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
+                <tr class="border_bottom">
+                  <td class="fieldPersonal">Cédula:</td><td id="field_ci">{{=personal['ci']}}</td>
                 </tr>
                 {{pass}}
-                <tr>
-                  <td>Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
+                <tr class="border_bottom">
+                  <td class="fieldPersonal">Correo Alternativo:</td><td id="field_email_alt">{{=personal['email_alt']}}</td>
                 </tr>
                 {{pass}}
-                <tr>
-                  <td>Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
+                <tr class="border_bottom">
+                  <td class="fieldPersonal">Celular:</td><td id="field_celular">{{=personal['celular']}}</td>
                 </tr>
                 {{pass}}
-                <tr>
-                    <td>Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
+                <tr class="border_bottom">
+                    <td class="fieldPersonal">Teléfono de Habitación:</td><td id="field_telefono">{{=personal['telefono']}}</td>
                 </tr>
                 {{pass}}
-                <tr>
-                  <td>Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
+                <tr class="border_bottom">
+                  <td class="fieldPersonal">Dirección de Habitación:</td><td id="field_direccion">{{=personal['direccion']}}</td>
                 </tr>
                 {{pass}}
               </tbody>
@@ -111,11 +111,11 @@
                 
              <table class="table contenidoFicha">
                  <tbody>
-                <tr>
+                <tr class="border_bottom">
                   <td >Contacto:</td><td id="field_persona_contacto">{{=personal['persona_contacto']}}</td>
                 </tr>
-                <tr >
-                  <td>Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
+                <tr class="border_bottom" >
+                  <td class="fieldPersonal">Número de telefono:</td><td id="field_contacto_emergencia" >{{=personal['contacto_emergencia']}}</td>
                 </tr>
             </tbody>
           </table>

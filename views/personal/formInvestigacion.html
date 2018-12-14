@@ -1,11 +1,11 @@
 <h3>Proyectos de Investigación (Máximo 10)</h3>
-<h5>Los campos con * son obligatorios</h5>
+
 {{ for i in range(1,11): }}
 <div class="proyecto-container" id="proyecto{{=i}}_cointaner"{{if len(proy_list)<i and 1!=i: }}hidden{{pass}}>
     <h5>Proyecto {{=i}}</h5>
     <div class="form-row">
         <div class="form-group">
-            <label for="proyecto{{=i}}_categoria">Categoría: *</label>
+            <label for="proyecto{{=i}}_categoria">Categoría:</label>
             <select class="form-control seleccion-competencia"
                     type="select" name="proyecto{{=i}}_categoria"
                     id="proyecto{{=i}}_categoria" multiple required
@@ -25,7 +25,7 @@
     <div class="form-row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="proyecto{{=i}}_desde">Desde: *</label>
+                <label for="proyecto{{=i}}_desde">Desde:</label>
                 <input 
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
                        class="datepicker"
@@ -40,7 +40,7 @@
 
     <div class="col-sm-6">
             <div class="form-group">
-                <label>Hasta: *</label>
+                <label>Hasta:</label>
                 <input 
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_fin.strftime('%d-%m-%Y')}}"
                        class="datepicker"
@@ -56,7 +56,7 @@
  <div class="form-row">
     <div class="col-sm-6">
         <div class="form-group">
-        <label>Titulo: *</label>
+        <label>Titulo:</label>
          <input
                 value="{{='' if len(proy_list)<i else proy_list[i-1].f_titulo}}"
                 type="text" class="form-control"
@@ -70,7 +70,7 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-        <label>Responsabilidad: *</label>
+        <label>Responsabilidad:</label>
          <input
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_responsabilidad}}"
                        type="text" class="form-control"
@@ -100,7 +100,7 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-        <label>Institución: *</label>
+        <label>Institución:</label>
          <input
                 value="{{='' if len(proy_list)<i else proy_list[i-1].f_institucion}}"
                 type="text" class="form-control"

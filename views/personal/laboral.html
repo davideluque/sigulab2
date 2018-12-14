@@ -17,75 +17,76 @@
           <a class="nav-link  " id="tab_datos_personales" href="#competencias" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Competencias</b></a>
         </li>
 
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#comisiones_comites" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Comités / Comisiones</b></a>
+        <li class="nav-item disabled">
+          <a href="#comisiones_comites"><b>Comités / Comisiones</b></a>
         </li>
 
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#reconoc_lab" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Reconocimientos</b></a>
+        <li class="nav-item disabled">
+          <a href="#reconoc_lab"><b>Reconocimientos</b></a>
         </li>
 
       </ul>
 
+      <br>
       <div class="tab-content">
 
         <div class="tab-pane active" id="datos_laborales" role="tabpanel">
-              <table class="table contenidoFicha" id="tabla_datos_laborales">
+              <table class="table contenidoFicha contenidoPestania" id="tabla_datos_laborales">
                 <tbody>
                     {{if bool(personal['cargo']) :}}
-                    <tr>
-                      <td>Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Cargo:</td><td id="field_cargo">{{=personal['cargo']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['gremio']) :}}
 
-                    <tr>
-                      <td>Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Gremio:</td><td id="field_gremio">{{=personal['gremio']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['estatus']) :}}
-                    <tr>
-                      <td>Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Estatus:</td><td id="field_estatus">{{=personal['estatus']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['condicion']) :}}
-                    <tr>
-                      <td>Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Condicion:</td><td id="field_condicion">{{=personal['condicion']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['categoria']) :}}
-                    <tr>
-                      <td>Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Categoria:</td><td id="field_categoria">{{=personal['categoria']}}</td>
                     </tr>
                     {{pass}}
 
                     {{if bool(personal['fecha_ingreso']) :}}
-                    <tr>
-                      <td>Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Fecha Ingreso:</td><td id="field_fecha_ingreso">{{=personal['fecha_ingreso']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['fecha_salida']) :}}
                     <tr >
-                      <td>Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
+                      <td class="fieldPersonal">Fecha Salida:</td><td id="field_fecha_salida">{{=personal['fecha_salida']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['fecha_ingreso_usb']) :}}
-                    <tr>
-                      <td>Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Fecha Ingreso USB:</td><td id="field_fecha_ingreso_usb">{{=personal['fecha_ingreso_usb']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['fecha_ingreso_ulab']) :}}
-                    <tr>
-                      <td>Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Fecha Ingreso ULAB:</td><td id="field_fecha_ingreso_ulab">{{=personal['fecha_ingreso_ulab']}}</td>
                     </tr>
                     {{pass}}
                     {{if bool(personal['fecha_ingreso_admin_publica']) :}}
-                    <tr>
-                      <td>Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
+                    <tr class="border_bottom">
+                      <td class="fieldPersonal">Fecha Ingreso Administracion Publica:</td><td id="field_fecha_ingreso_admin_publica">{{=personal['fecha_ingreso_admin_publica']}}</td>
                     </tr>
                     {{pass}}
                     
-                    <tr>
+                    <tr class="border_bottom">
                       <td hidden></td><td hidden id = "field_jefe" >{{=personal['jefe']}}</td>
                     </tr>
                 </tbody>
@@ -106,10 +107,10 @@
                 <th><b>Observaciones</b></th>
               </tr>
               {{for comp in comp_list:}}
-              <tr>
-                <td>{{=BEAUTIFY(comp.f_nombre)}}</td>
-                <td>{{=BEAUTIFY(", ".join(comp.f_categorias))}}</td>
-                <td>{{=BEAUTIFY(comp.f_observaciones)}}</td>
+              <tr class="border_bottom">
+                <td class="fieldPersonal">{{=BEAUTIFY(comp.f_nombre)}}</td>
+                <td class="fieldPersonal">{{=BEAUTIFY(", ".join(comp.f_categorias))}}</td>
+                <td class="fieldPersonal">{{=BEAUTIFY(comp.f_observaciones)}}</td>
               </tr>
               {{pass}}
             </tbody>
