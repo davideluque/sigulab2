@@ -25,9 +25,27 @@
 
 	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
-  	<link rel="stylesheet" href="{{=URL('static','css/sigulab2servicios.css')}}">
-	<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios_desechos.css')}}"> 
+  	<link rel="stylesheet" href="{{=URL('static','css/ficha_listado.css')}}">
 
+
+    <style>
+    .row {
+      margin-right: 0 !important;
+    }
+
+    .boton-sigulab, .buttons-print {
+
+        background: #337ab7 !important;
+        border: 1px solid transparent;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+
+
+    }
+    .fa-print, .fa-save {
+        color: white;
+    }
+  </style>
 
 
 {{end}}
@@ -45,47 +63,49 @@
 
 <!-- Contenido principal de la página de gestión de servicios -->
 <div class="container titulo">
+    <div class="text-center">
     <h2>Resultados búsqueda</h2>
     <br>
-    <p>
+    <p style="font-size: 18px;">
     {{if filtros['gremio_busqueda'] != "": }}
-    <b>Gremio: </b> {{=filtros['gremio_busqueda']}}
+    <b>Gremio: </b> {{=filtros['gremio_busqueda'].upper()}}
     {{pass}}
     {{if filtros['cargo_busqueda'] != "": }}
     <br>
-    <b>Cargo: </b>{{=filtros['cargo_busqueda']}}
+    <b>Cargo: </b>{{=filtros['cargo_busqueda'].upper()}}
     {{pass}}
 
     {{if filtros['competencia_busqueda'] != "": }}
     <br>
-    <b>Competencia: </b>{{=filtros['competencia_busqueda']}}
+    <b>Competencia: </b>{{=filtros['competencia_busqueda'].upper()}}
     {{pass}}
 
     {{if filtros['categoria_busqueda'] != "": }}
     <br>
-    <b>Categoria: </b>{{=filtros['categoria_busqueda']}}
+    <b>Categoria: </b>{{=filtros['categoria_busqueda'].upper()}}
     {{pass}}
 
     {{if filtros['anios_busqueda'] != "": }}
     <br>
-    <b>Años servicio ULAB: </b>{{=filtros['anios_busqueda'] +  " años"}}
+    <b>Años servicio ULAB: </b>{{=filtros['anios_busqueda'].upper() +  " AÑOS"}}
     {{pass}}
 
     {{if filtros['fecha_busqueda'] != "": }}
-    {{="para la fecha " + filtros['fecha_busqueda']}}
+    {{="PARA LA FECHA " + filtros['fecha_busqueda'].upper()}}
     {{pass}}
 
     {{if filtros['anios_admin'] != "": }}
     <br>
-    <b>Años administración pública: </b>{{=filtros['anios_admin'] +  " años"}}
+    <b>Años administración pública: </b>{{=filtros['anios_admin'].upper() +  " AÑOS"}}
     {{pass}}
 
     {{if filtros['fecha_admin_busqueda'] != "": }}
-    {{="para la fecha " + filtros['fecha_admin_busqueda']}}
+    {{="PARA LA FECHA " + filtros['fecha_admin_busqueda'].upper()}}
     {{pass}}
 
 
     </p>
+</div>
 
 </div>
 <div id="main" class="container">
@@ -97,16 +117,16 @@
 			<table id="example" class="">
 				<thead class="bg-primary">
 					<tr>
-						<th class="nombre tableColumn">Nombre</th>
-						<th class="dependencia tableColumn">Dependencia</th>
-						<th class="correo tableColumn">Correo</th>
-						<th class="telefono tableColumn">Telefono</th>
-						<th class="gremio tableColumn">Gremio</th>
-						<th class="compnombre tableColumn">Competencia - Nombre</th>
-						<th class="compcategoria tableColumn">Competencia - Categoria</th>
-						<th class="anios tableColumn">Años Servicio ULAB</th>
-            <th class="aniosAdmin tableColumn">años admin</th>
-						<th class="cargo tableColumn">cargo</th>
+						<th class="camposTabla linksNombres nombre tableColumn">NOMBRE</th>
+						<th class="camposTabla linksNombres dependencia tableColumn">DEPENDENCIA</th>
+						<th class="camposTabla linksNombres correo tableColumn">CORREO</th>
+						<th class="camposTabla linksNombres telefono tableColumn">TELEFONO</th>
+						<th class="camposTabla linksNombres gremio tableColumn">GREMIO</th>
+						<th class="camposTabla linksNombres compnombre tableColumn">COMPETENCIA - Nombre</th>
+						<th class="camposTabla linksNombres compcategoria tableColumn">COMPETENCIA - Categoria</th>
+						<th class="camposTabla linksNombres anios tableColumn">AÑOS SERVICIO ULAB</th>
+            <th class="camposTabla linksNombres aniosAdmin tableColumn">AÑOS ADMIN.</th>
+						<th class="camposTabla linksNombres cargo tableColumn">CARGO</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -135,37 +155,30 @@
     $(document).ready(function() {
         console.log('{{=filtros['anios_admin'] or ''}}');
         var table = $('#example').DataTable({
-        "paging":   false,
+        "paging": true,
         "info":     false,
         language: {
-        url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}"
-    },	
+            url: "{{=URL('static', 'plugins/datatables/l18n/es-ES.json')}}",
+            
+        },	
     	dom: 'Bfrtip',
     	buttons: [
 
-           {
-            extend: 'csv',
-            title: "Resultados búsqueda",
-            exportOptions: {
-                    columns: ':visible'
-                }
-        },
         {
-            extend: 'excel',
-            title: "Resultados búsqueda",
-            exportOptions: {
-                    columns: ':visible'
-                }
-        },
-        {
-            extend: 'pdf',
-            title: "Resultados búsqueda",
-            exportOptions: {
-                    columns: ':visible'
-                }
+            extend: 'collection',
+            text: '<i class="fa fa-save"></i>',
+            className: 'boton-sigulab dropDown',
+            background:false,
+            fade:true,
+            buttons:[
+              {extend:'copy', text:"Copiar"},
+               'pdf',
+               'excel'
+            ]
         },
         {
             extend: 'print',
+            text: '<i class="fa fa-print"></i>',
             title: "Resultados búsqueda",
             exportOptions: {
                     columns: ':visible'
@@ -180,7 +193,12 @@
                 "searchable": true
             },
         ]
+        
         });
+    
+
+        $('#example_next').html('<span class="fa fa-arrow-right" />');
+        $("#example_previous").html('<span class="fa fa-arrow-left"/>');
 
       // busqueda por nombre competencias
       //table.columns('.comp-nombre').search('analista').draw();
@@ -212,7 +230,13 @@
 
         // HACER ESTO EN LA VISTA Y QUE SEA LA MISMA VISTA LA QUE DEVUELVA EL RESULTADO
 
-
     } );
+window.onclick = function(event) {
+  if (!event.target.matches('.dropDown')) {
+    $(".dt-button-collection").hide();
+  }
+
+}
 </script>
+ <script language="javascript" src="{{=URL('static', 'js/botones_dataTable_busqueda.js')}}"></script>
 {{end}}
