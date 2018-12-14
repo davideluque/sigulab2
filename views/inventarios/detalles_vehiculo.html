@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
-     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <style>
@@ -106,14 +106,16 @@
 
 <!-- Ficha vehiculo aqui esta la infromacion del vehiculo -->
 <div class="wrapper">
-		
+
         <div class="tab-wrapper">
             <ul class="tabs">
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
                     <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
                     <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
                     <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
-                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    {{ if puede_ver_historial_mantenimiento: }}
+                      <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    {{ pass }}
                     <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
                 </ul>
         </div>
@@ -309,7 +311,7 @@
             </div>
 
             <div id="tab-5"class="tab-content">
-                {{include 'inventarios/mantenimiento.html'}}
+                {{include 'inventarios/mantenimiento_v.html'}}
             </div>
             <div id="tab-6"class="tab-content">
                 {{include 'inventarios/historial_prestamos_v.html'}}
@@ -654,7 +656,7 @@
                             </div>
                         </div>
 
-                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running" style="font-size:2em; display:none;">
+                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
                           Cargando, por favor espere
                           <div class="ld ld-ring ld-spin-fast"></div>
                         </div>
@@ -677,6 +679,211 @@
 
 
 {{ if esta_autorizado: }}
+<!-- Modal para registrar mantenimiento -->
+<div class="modal fade" id="mantenimiento" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container">
+                <i class="fas fa-cog fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Registrar Ficha de Mantenimiento<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioMantenimiento" class="presta-form registration-form" method="post">
+
+                <!-- Primer paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Información de la Solicitud</h4>
+                      <label>Campos marcados con * son obligatorios.</label>
+                      <div class="form-group">
+                          <label>Vehículo*</label>
+                          <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Vehículo*" title="Vehículo*" disabled value="{{= vehiculo['vh_marca'] }} {{= vehiculo['vh_modelo'] }} {{= vehiculo['vh_placa'] }}">
+                          <div style="color: #d03e3e;" id="err_vehiculo" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Fecha de solicitud*</label>
+                          <input type="date" class="form-control fecha_mantenimiento" id="fecha_solicitud_mant" name="fecha_solicitud_mant" placeholder="Fecha de solicitud*" title="Ingrese la fecha de solicitud" required>
+                          <div class="dr" id="error-fecha_solicitud_mant" style="color: #d03e3e;"> </div>
+                      </div>
+                      <div class="form-group">
+                          <label>Nº Registro u Orden de Servicio (O/S)*</label>
+                          <input type="text" class="form-control" id="nro_registro" name="nro_registro" placeholder="Número de registro*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Proveedor*</label>
+                          <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Persona de Contacto*</label>
+                          <input type="text" class="form-control" id="persona_contacto" name="persona_contacto" placeholder="Persona de Contacto*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Telf. de Contacto</label>
+                          <input type="text" class="form-control campo_telf" id="telf_contacto" name="telf_contacto" placeholder="Telf. de Contacto" >
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+
+                <!-- Segundo paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Información de la Solicitud y Servicio</h4>
+                      <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                            <label>Tipo*</label>
+                            <select class="form-control" type="select" id="tipo_mant" name="tipo_mant" placeholder="Tipo*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Preventivo">Preventivo</option>
+                                <option value="Correctivo">Correctivo</option>
+                                <option value="Diagnóstico">Diagnóstico</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                            <div class="dr" id="error-tipo_mant" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Motivo*</label>
+                            <input type="text" class="form-control" id="motivo" name="motivo" placeholder="Ingrese el motivo de la solicitud*" title="Ingrese el motivo de la solicitud*" required>
+                            <div style="color: #d03e3e;" id="err_motivo" hidden></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descripción*</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion de la solicitud*" title="Ingrese la decripcion de la solicitud*" required>
+                            <div style="color: #d03e3e;" id="err_descripcion" hidden></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha de inicio</label>
+                            <input type="date" class="form-control fecha_mantenimiento" id="fecha_inicio_mant" name="fecha_inicio_mant" placeholder="Fecha de inicio" title="Ingrese la fecha de inicio">
+                            <div class="dr" id="error-fecha_inicio_mant" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Fecha de culminación</label>
+                          <input type="date" class="form-control fecha_mantenimiento" id="fecha_culminacion_mant" name="fecha_culminacion_mant" placeholder="Fecha de culminación" title="Ingrese la fecha de culminación">
+                          <div class="dr" id="error-fecha_culminacion_mant" style="color: #d03e3e;"> </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Comienzo Tercer Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información del Servicio</h4>
+                        <label>Campos opcionales.</label>
+                        <div class="form-group" tag="Formato:">
+                            <label>Piezas reparadas</label>
+                            <input type="text" class="form-control" id="piezas_reparadas" name="piezas_reparadas" title="Ingrese las piezas reparadas" placeholder="Piezas reparadas">
+                            <div class="dr" id="error-piezas_reparadas" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Piezas sustituidas</label>
+                            <input type="text" class="form-control" id="piezas_sustituidas" name="piezas_sustituidas" title="Ingrese las piezas sustituidas" placeholder="Piezas sustituidas">
+                            <div class="dr" id="error-piezas_sustituidas" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Acción</label>
+                          <select class="form-control" type="select" id="accion" name="accion" placeholder="Acción">
+                              <option value="">Seleccione una opción</option>
+                              <option value="Periódica">Periódica</option>
+                              <option value="Extraordinaria">Extraordinaria</option>
+                              <option value="Urgente">Urgente</option>
+                          </select>
+                          <div class="dr" id="error-accion" style="color: #d03e3e;"> </div>
+                      </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Observaciones del servicio</label>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones" title="Ingrese las observaciones" placeholder="Observaciones">
+                            <div class="dr" id="error-observaciones" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <input type="hidden" name="mantenimiento" id="mantenimiento" value="True">
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioMantenimiento" id="submitMantenimiento" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                    </div>
+                </fieldset>
+                <!-- Fin Tercer Paso -->
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal editar vehículo -->
 <div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
@@ -1420,6 +1627,30 @@
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
+  });
+
+  // Fecha de mantenimiento
+  $(document).ready(function() {
+    var minimo = "{{= vehiculo['vh_ano'] - 1 }}-01-01";
+
+    $(".fecha_mantenimiento").attr('min', minimo);
+  });
+
+  // Fecha de mantenimien
+  $(".fecha_mantenimiento").change(function() {
+    var fecha = new Date($(this).val());
+    var minimo = new Date("{{= vehiculo['vh_ano'] - 1 }}-01-01");
+
+    if  (minimo <= fecha) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha mayor al 01/01/{{= vehiculo['vh_ano'] - 1 }}.");
+    }
   });
 
   // Verifica la fecha introducida
