@@ -242,3 +242,107 @@ db.define_table(
 
 db.t_Historial_trabajo_nuevo._plural = 'Historial de trabajo'
 db.t_Historial_trabajo_nuevo._singular = 'Historial de trabajo'
+
+
+db.define_table(
+    't_Administrativas',
+    # Atributos
+    Field('f_fecha_inicio', 'date', label=T('Fecha de inicio'), requires=IS_NOT_EMPTY()),
+    Field('f_fecha_final', 'date', label=T('Fecha de fin'), requires=IS_NOT_EMPTY()),
+    Field('f_cargo', 'string', length=150,label=T('Cargo'), requires=IS_NOT_EMPTY()),
+    Field('f_institucion', 'string', length=150, label=T('Institución'), requires=IS_NOT_EMPTY()),
+    Field('f_numero', 'integer'),
+    Field('f_Administrativas_Personal', 'reference t_Personal',
+        requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Administrativas._plural = 'Actividades administrativas'
+db.t_Administrativas._singular = 'Actividad administrativa'
+
+db.define_table(
+    't_Extension2',
+    # Atributos
+    Field('f_categoria', 'list:string', default='', label=T('Categorías')),
+    Field('f_fecha_inicio', 'date', label=T('Fecha de inicio'), requires=IS_NOT_EMPTY()),
+    Field('f_fecha_final', 'date', label=T('Fecha de fin'), requires=IS_NOT_EMPTY()),
+    Field('f_nombre', 'string', label=T('Nombre'), requires=IS_NOT_EMPTY()),
+    Field('f_descripcion', 'string', label=T('Descripción'), requires=IS_NOT_EMPTY()),
+    Field('f_institucion', 'string', label=T('Institución'), requires=IS_NOT_EMPTY()),
+    Field('f_numero', 'integer'),
+    Field('f_Extension_Personal', 'reference t_Personal',
+        requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+db.t_Extension2._plural = 'Actividades de extensión'
+db.t_Extension2._singular = 'Actividad de extensión'
+
+db.define_table(
+    #Nombre de la entidad
+    't_Proyecto', 
+    #Atributos;
+    Field('f_categoria', 'list:string', default='', label=T('Categoría')),
+    Field('f_fecha_inicio', 'date',label=T('Desde')),
+    Field('f_fecha_fin', 'date',label=T('Hasta')),
+    Field('f_titulo', 'string', label=T('Título')),
+    Field('f_responsabilidad', 'string', label=T('Responsabilidad')),
+    Field('f_resultados', 'string', label=T('Resultados')),
+    Field('f_institucion', 'string', label=T('Institución')),
+    Field('f_numero', 'integer'),
+    #Referencia
+    Field('f_proyecto_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Participante')),
+    )
+
+db.t_Proyecto._plural = 'Proyectos'
+db.t_Proyecto._singular = 'Proyecto'
+
+#t_Personal: Tabla de Trabajos dirigidos
+db.define_table(
+    #Nombre de la entidad
+    't_Trabajos_dirigidos', 
+    #Atributos;
+    Field('f_anio',          'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año')),
+    Field('f_estudiantes', 'string', default='', label=T('Estudiantes')),
+    Field('f_titulo_trabajo',          'string', label=T('Titulo')),
+    Field('f_nivel',  'list:string', default='', label=T('Nivel')),
+    Field('f_institucion',          'string', label=T('Institución')),
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
+    Field('f_Trabajo_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
+
+db.t_Trabajos_dirigidos._plural = 'Trabajos'
+db.t_Trabajos_dirigidos._singular = 'Trabajo'
+
+#t_Personal: Tabla de Cursos2.
+db.define_table(
+    #Nombre de la entidad
+    't_Cursos', 
+    #Atributos;
+    Field('f_anio',          'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año')),
+    Field('f_horas',          'integer', requires=IS_INT_IN_RANGE(minimum=1, error_message='Las horas no pueden ser negativas'), notnull=True, label=T('Horas')),
+    Field('f_categorias', 'list:string', default='', label=T('Categorías')),
+    Field('f_formacion',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Formacion')),
+    Field('f_dictadoPor',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('DictadoPor')),
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
+    Field('f_Cursos_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True 
+    )
+
+db.t_Curso._plural = 'Cursos'
+db.t_Curso._singular = 'Curso'
+
+#t_Personal: Tabla de Materias.
+db.define_table(
+    #Nombre de la entidad
+    't_Materia2', 
+    #Atributos;
+	Field('f_area', 'list:string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Área')),
+    Field('f_codigo','string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Código')),
+    Field('f_nombre_materia',          'string', requires=IS_NOT_EMPTY(), notnull=True, label=T('Materia')),
+    Field('f_fecha_inicio_materia', 'date', label=T('Desde')),
+    Field('f_fecha_final_materia', 'date', label=T('Hasta')),
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
+    #Referencia (Revisar si el label es asistio o organizo)
+    Field('f_Materia_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Dirigió')),
+    migrate=True
+    )

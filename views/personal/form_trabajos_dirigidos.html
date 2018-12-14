@@ -1,0 +1,95 @@
+<h4 class="titulosForm">Docencia - Trabajos Dirigidos (Máximo 5)</h4>
+
+{{ for i in range(1,6): }}
+<div class="trabajo-container" id="trabajo-container{{=i}}"{{if len(trabajo_list)<i and 1!=i:}}hidden{{pass}}>
+  <h5>Trabajo {{=i}}</h5>
+  <div class="col-sm-11 col11Body">
+
+      <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="anio">Año:</label>
+                    <input value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_anio}}"
+                           type="text" class="form-control" name="trabajo{{=i}}_anio" id="trabajo{{=i}}_anio" placeholder="Ingrese año del trabajo"/>
+                </div>
+            </div>
+          
+          <div class="col-sm-6">
+              <div class="form-group">
+              <label>Título del trabajo:</label>
+              <input
+                     value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_titulo_trabajo}}"
+                     type="text" class="form-control" name="trabajo{{=i}}_titulo_trabajo" id="trabajo{{=i}}_titulo_trabajo" placeholder="Ingrese titulo del trabajo"/>
+          </div>
+          </div>
+          
+          
+      </div>
+
+      <div class="form-row">
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label for="estudiantes">Estudiantes:</label>
+                  <input
+                      value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_estudiantes}}"
+                      type="text" class="form-control" name="trabajo{{=i}}_estudiantes" id="trabajo{{=i}}_estudiantes" placeholder="Ingrese los estudiantes"/>
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label for="institucion">Institución:</label>
+                  <input
+                      value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_institucion}}"
+                      type="text" class="form-control" name="trabajo{{=i}}_institucion" id="trabajo{{=i}}_institucion" placeholder="Ingrese nombre de la institución"/>
+              </div>
+          </div>
+      </div>
+      <div class="form-row">
+          <div class="col-sm-12">
+              <div class="form-group">
+                  <label for="trabajo{{=i}}_nivel">Nivel:</label>
+                  <select
+                      class="form-control seleccion-competencia"
+                      type="select" name="trabajo{{=i}}_nivel" id="trabajo{{=i}}_nivel"
+                      data-placeholder="Seleccione nivel de educación">
+                      <option value=""> Seleccione una opcion</option>
+                      {{ for niv in nivel: }}
+                      <option
+                              {{ if len(trabajo_list)>=i and (niv in (trabajo_list[i-1].f_nivel)):}}
+                              selected
+                              {{pass}}
+                          value="{{=niv}}">{{=niv}}</option>
+                      {{pass}}
+                  </select>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+{{ pass }}
+
+<a href="#"  id="add_tdir" onclick="add_tdir()">Agregar Trabajo</a>
+<a href="#"  id="remove_tdir" onclick="remove_tdir()">Quitar Trabajo</a>
+<script charset="utf-8">
+    var num_tdir = {{=len(trabajo_list) or 1}}
+    function add_tdir(){
+        if(num_tdir < 6){
+            num_tdir++;
+            $('#trabajo-container'+num_tdir).show();
+        }
+    }
+    function remove_tdir() {
+        if(num_tdir > 1){
+            $('#trabajo-container'+num_tdir).hide();
+            $('#trabajo'+num_tdir+'_nivel').val(['']).trigger("chosen:updated");
+            $('#trabajo'+num_tdir+'_anio').val('');
+            $('#trabajo'+num_tdir+'_titulo_trabajo').val('');
+            $('#trabajo'+num_tdir+'_estudiantes').val('');
+            $('#trabajo'+num_tdir+'_institucion').val('');
+            num_tdir--;
+        }
+    }
+</script>

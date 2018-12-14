@@ -1,0 +1,100 @@
+<h4 class="titulosForm">Cursos/Eventos de Formación (Máximo 10)</h4>
+
+{{ for i in range(1,11): }}
+<div class="evento-container" id="evento-container{{=i}}"
+     {{if len(evento_list)<i and 1!=i:}}hidden{{pass}}>
+<h4>Curso {{=i}}</h4>
+    <div class="form-row">
+        <div class="col-sm-11">
+            <div class="form-group">
+            <label for="evento{{=i}}_categoria">Categoría:</label>
+            <select class="form-control seleccion-competencia" type="select"
+                    name="evento{{=i}}_categoria" id="evento{{=i}}_categoria" multiple required
+                    data-placeholder="Seleccione las categorías que apliquen" data-toggle="popover"
+                    placeholder="Introduzca el años" data-placement="bottom"
+                    data-trigger="manual" data-content="Este campo es requerido"required/>
+                    <option value""> Seleccione al menos una opcion</option>
+                    {{ for comp in competencias: }}
+                    <option 
+                            {{ if i<=len(evento_list):}}
+                            {{= 'selected' if comp in evento_list[i-1].f_categorias else '' }}
+                            {{pass}}
+                            value"{{=comp}}">{{=comp}}</option>
+                    {{pass}}
+            </select>
+        </div>
+    </div>
+</div>
+
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="anio">Año:</label>
+                <input
+                    value="{{='' if len(evento_list)<i else evento_list[i-1].f_anio}}"
+                    type="number" class="form-control" name="evento{{=i}}_anio" id="evento{{=i}}_anio" data-toggle="popover" placeholder="Introduzca el años" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido"required/> 
+                    <span class="help-block"></span> 
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="horas">Horas:</label>
+                <input
+                value="{{='' if len(evento_list)<i else evento_list[i-1].f_horas}}"
+                type="number" class="form-control" name="evento{{=i}}_horas" id="evento{{=i}}_horas" data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" placeholder="Introduzca el número de horas" data-content="Este campo es requerido" required/>
+                <span class="help-block"></span>
+            </div>
+        </div> 
+    </div>
+
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="dictadoPor">Dictado por:</label>
+                <input
+                value="{{='' if len(evento_list)<i else evento_list[i-1].f_dictadoPor}}"
+                type="text" class="form-control" name="evento{{=i}}_dictadoPor" id="evento{{=i}}_dictadoPor" data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" placeholder="Introduzca el nombre de la persona que dictó el curso" data-content="Este campo es requerido" required/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="formacion">Evento de Formación:</label>
+                <input
+                value="{{='' if len(evento_list)<i else evento_list[i-1].f_formacion}}"
+                type="text" class="form-control" name="evento{{=i}}_formacion" id="evento{{=i}}_formacion" data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" placeholder="Introduzca el texto" data-content="Este campo es requerido" required/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+</div>
+{{ pass }}
+
+<a href="#"  id="add_curso" onclick="add_curso()">Agregar Curso</a>
+<a href="#"  id="add_curso" onclick="remove_curso()">Quitar Curso</a>
+
+<script charset="utf-8">
+    var num_curso = {{=len(evento_list) or 1}}
+    function add_curso() {
+        if(num_curso < 11){
+            num_curso++;
+            $('#evento-container'+num_curso).show();
+        }
+    }
+    function remove_curso() {
+        if (num_curso > 1)
+            $('#evento'+num_curso+'_categoria').val(['']).trigger("chosen:updated");
+            $('#evento'+num_curso+'_anio').val('');
+            $('#evento'+num_curso+'_formacion').val('');
+            $('#evento'+num_curso+'_dictadoPor').val('');
+            $('#evento'+num_curso+'_horas').val('');
+            $('#evento-container'+num_curso).hide();
+    }
+
+</script>
+

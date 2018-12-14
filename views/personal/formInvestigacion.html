@@ -1,152 +1,145 @@
-<div class="col-sm-11 col11Body">
-    <h4 class="titulosForm"> Investigación </h4>
-    <h4>Publicaciones Arbitradas</h4>               
-    <div class="form-group">
-        <div class="col-sm-12">
-            <label>Categoría</label>
-                <select class="form-control" id="sel_categoria_publicacion" name="categoria_publicacion_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                {{for competencia in competencias:}}
-                <option value="{{=competencia}}">{{=competencia}}</option>
-                {{pass}}
-                </select>
-        </div>
-        
-        <div class="col-sm-12">
-            <br>
-            <label>Año</label>
-             <input value="{{''}}" type="text" class="form-control" name="anio_publicacion_1_add" placeholder="Formato aaaa" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
- 
- 
+<h3>Proyectos de Investigación (Máximo 10)</h3>
 
-        <div class="col-sm-12">
-            <br>
-            <label>Título del Trabajo</label>
-             <input value="{{''}}" type="text" class="form-control" name="titulo_publicacion_1_add" placeholder="Título" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
-        
-        <div class="col-sm-12">
-            <br>
-            <label>Autores</label>
-            <!-- MAXIMO 5-->
-            <input value="{{''}}" type="text" class="form-control" name="autores_publicacion_1_add" placeholder="Autores (Máximo 5)" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
-
-        <div class="col-sm-12">
-        <br>    
-        <label>Referencia</label>
-        <input value="{{''}}" type="text" class="form-control" name="referencia_publicacion_1_add" placeholder="Referencia" required
-                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        <br>
-        </div>
-    </div>
-    <br>
-    <h4>Publicaciones No Arbitradas</h4>               
-    <div class="form-group">
-        <div class="col-sm-12">
-            <label>Categoría</label>
-                <select class="form-control" id="sel_categoria_publicacion" name="categoria_publicacion_na_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                {{for competencia in competencias:}}
-                <option value="{{=competencia}}">{{=competencia}}</option>
-                {{pass}}
-                </select>
-        </div>
-        
-        <div class="col-sm-12">
-            <br>
-            <label>Año</label>
-             <input value="{{''}}" type="text" class="form-control" name="anio_publicacion_na_1_add" placeholder="Formato aaaa" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
- 
-
-        <div class="col-sm-12">
-            <br>
-            <label>Título del Trabajo</label>
-             <input value="{{''}}" type="text" class="form-control" name="titulo_publicacion_na_1_add" placeholder="Título" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
-        
-        <div class="col-sm-12">
-            <br>
-            <label>Autores</label>
-            <!-- MAXIMO 5-->
-            <input value="{{''}}" type="text" class="form-control" name="autores_publicacion_na_1_add" placeholder="Autores (Máximo 5)" required
-                    data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        </div>
-
-        <div class="col-sm-12">
-        <br>    
-        <label>Referencia</label>
-        <input value="{{''}}" type="text" class="form-control" name="referencia_publicacion_na_1_add" placeholder="Referencia" required
-                data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
-        <br>
-        </div>
-        
-    </div>
-
-    <br>
-    <h4>Proyectos de Investigación</h4>
-
+{{ for i in range(1,11): }}
+<div class="proyecto-container" id="proyecto{{=i}}_cointaner"{{if len(proy_list)<i and 1!=i: }}hidden{{pass}}>
+    <h5>Proyecto {{=i}}</h5>
+    <div class="form-row">
         <div class="form-group">
-            <div class="col-sm-12">
-                <label>Categoría</label>
-                <select class="form-control" id="sel_categoria_proyecto" name="categoria_proyecto_add" data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido">
-                {{for competencia in competencias:}}
-                <option value="{{=competencia}}">{{=competencia}}</option>
-                {{pass}}
-                </select>
-                <br>
+            <label for="proyecto{{=i}}_categoria">Categoría:</label>
+            <select class="form-control seleccion-competencia"
+                    type="select" name="proyecto{{=i}}_categoria"
+                    id="proyecto{{=i}}_categoria" multiple required
+                    data-placeholder="Seleccione las categorías que apliquen">
+                    <option value""> Seleccione una opcion</option>
+                    {{ for comp in competencias: }}
+                    <option
+                        {{ if i<=len(proy_list):}}
+                        {{= 'selected' if comp in proy_list[i-1].f_categoria else '' }}
+                        {{pass}}
+                    value"{{=comp}}">{{=comp}}</option>
+                    {{pass}}
+            </select>
+        </div>
+</div>
+
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="proyecto{{=i}}_desde">Desde:</label>
+                <input 
+                       value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
+                       class="datepicker"
+                       name="proyecto{{=i}}_desde" type="text"
+                       id="proyecto{{=i}}_desde"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha"/>
+                <span class="help-block"></span>
             </div>
+    </div>
 
-            <div class="col-sm-12">
-                <label>Período</label>
+
+    <div class="col-sm-6">
+            <div class="form-group">
+                <label>Hasta:</label>
+                <input 
+                       value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_fin.strftime('%d-%m-%Y')}}"
+                       class="datepicker"
+                       name="proyecto{{=i}}_hasta" type="text"
+                       id="proyecto{{=i}}_hasta"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha">
+                <span class="help-block"></span>
             </div>
+    </div>
+</div>
 
-
-            <div class="col-sm-6">
-                <br>
-                <label>Desde:</label>
-                <input class="datepicker" value="{{''}}" name = "fecha_inicio_proyecto_1_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
+ <div class="form-row">
+    <div class="col-sm-6">
+        <div class="form-group">
+        <label>Titulo:</label>
+         <input
+                value="{{='' if len(proy_list)<i else proy_list[i-1].f_titulo}}"
+                type="text" class="form-control"
+                name="proyecto{{=i}}_titulo"
+                id="proyecto{{=i}}_titulo"
+                data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
             </div>
-            <div class="col-sm-6">
-                <br>
-                <label>Hasta:</label> 
-                <input class="datepicker" value="{{''}}" name = "fecha_final_proyecto_1_add" type="text" id="input-egreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
-            </div>             
+        </div>
 
-            <div class="col-sm-12">
-                <br>
-                <label>Título del Proyecto</label>
-                <input value="{{''}}" type="text" class="form-control" name="titulo_proyecto_1_add" placeholder="Título" required
-                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+    <div class="col-sm-6">
+        <div class="form-group">
+        <label>Responsabilidad:</label>
+         <input
+                       value="{{='' if len(proy_list)<i else proy_list[i-1].f_responsabilidad}}"
+                       type="text" class="form-control"
+                       name="proyecto{{=i}}_responsabilidad"
+                       id="proyecto{{=i}}_responsabilidad"
+                       data-toggle="popover" data-placement="bottom"
+                       data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
             </div>
+        </div>
+ </div>
 
-            <div class="col-sm-12">
-                <br>
-                <label>Responsabilidad</label>
-                <input value="{{''}}" type="text" class="form-control" name="responsabilidad_proyecto_1_add" placeholder="Responsabilidad" required
-                        data-toggle="popover" data-placement="bottom" data-trigger="manual"  data-content="Este campo es requerido" data-valido="true">
-            </div>                
-   
-            <div class="col-sm-12">
-                <br>
-                <label>Resultados</label>
-                <input value="{{''}}" type="text" class="form-control" name="resultados_proyecto_1_add" placeholder="Resultados"
-                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-valido="true">
+  <div class="form-row">
+    <div class="col-sm-6">
+        <div class="form-group">
+        <label>Resultados: </label>
+         <input
+                value="{{='' if len(proy_list)<i else proy_list[i-1].f_resultados}}"
+                type="text" class="form-control"
+                name="proyecto{{=i}}_resultados"
+                id="proyecto{{=i}}_resultados"
+                data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
             </div>
+        </div>
 
-            <div class="col-sm-12">
-                <br>
-                <label>Institutción</label>
-                <input value="{{''}}" type="text" class="form-control" name="institucion_proyecto_1_add" placeholder="Institución" required
-                        data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
+    <div class="col-sm-6">
+        <div class="form-group">
+        <label>Institución:</label>
+         <input
+                value="{{='' if len(proy_list)<i else proy_list[i-1].f_institucion}}"
+                type="text" class="form-control"
+                name="proyecto{{=i}}_institucion"
+                id="proyecto{{=i}}_institucion"
+                data-toggle="popover" data-placement="bottom"
+                data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
             </div>
-    </div>    
-</div>        
+        </div>
+    </div>
+</div>
+{{pass}}
 
+<a href="#"  id="add_proy" onclick="add_proy()">Agregar proyetencia</a>
+<a href="#"  id="remove_proy" onclick="remove_proy()">Quitar proyetencia</a>
 
-
+<script charset="utf-8">
+    var nump = {{=len(proy_list) or 1}};
+    function add_proy(){
+        if(nump < 11){
+            nump++;
+            $('#proyecto'+nump+'_cointaner').show();
+        if (nump >10){
+            $('#add_field_p').remove();
+            }
+        }
+    }
+    function remove_proy(){
+        if(nump > 1){
+            $('#proyecto'+nump+'_categoria').val(['']).trigger("chosen:updated");
+            $('#proyecto'+nump+'_desde').val('');
+            $('#proyecto'+nump+'_hasta').val('');
+            $('#proyecto'+nump+'_titulo').val('');
+            $('#proyecto'+nump+'_responsabilidad').val('');
+            $('#proyecto'+nump+'_resultados').val('');
+            $('#proyecto'+nump+'_institucion').val('');
+            $('#proyecto'+nump+'_cointaner').hide();
+            nump--;
+        }
+    }
+</script>

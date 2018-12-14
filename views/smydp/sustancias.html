@@ -19,39 +19,51 @@
 
 
 	<div class="container">
+		
 		<div id="fila1" class="row">
 		</div>
-
+		
 		<div id="fila2" class="row">
 			<div class="col-sm-2">
 			</div>
-
+			
 			<div class="col-sm-8">
 				<!-- Link al listado de sustancias -->
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-3 columnas">
 					<a href="{{=URL('sigulab2', 'smydp', 'catalogo')}}">
-					  <img class="iconos" src="{{=URL('static', 'images/clipboard2.png')}}">
+						<img class="iconos" src="{{=URL('static', 'images/clipboard2.png')}}">
 					  <h3 class="opciones">Catálogo de sustancias</h3>
 					</a>
 				</div>
 				<!-- Link al los inventarios -->
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-3 columnas">
 					<a href="{{=URL('sigulab2', 'smydp', 'inventarios')}}">
-					  <img class="iconos" src="{{=URL('static', 'images/inventario.png')}}">
+						<img class="iconos" src="{{=URL('static', 'images/inventario.png')}}">
 					  <h3 class="opciones">Inventarios</h3>
 					</a>
 				</div>
-
+				
 				<!-- Link al las solicitudes -->
-				<div class="col-sm-4 columnas">
+				<div class="col-sm-3 columnas">
 					<a href="{{=URL('sigulab2', 'smydp', 'solicitudes')}}">
-					  <img class="iconos" src="{{=URL('static', 'images/solicitudes.png')}}">
+						<img class="iconos" src="{{=URL('static', 'images/solicitudes.png')}}">
 					  <h3 class="opciones">Solicitudes</h3>
 					</a>
 				</div>
+				
+				{{ if auth.has_membership("JEFE DE SECCIÓN")  \
+				or auth.has_membership("WEBMASTER") : }}
+				<div class="col-sm-3 columnas">
+					<a href="{{=URL('sigulab2', 'smydp', 'respuestas')}}">
+						<img class="iconos" src="{{=URL('static', 'images/checklist-512.png')}}">
+						<h3 class="opciones">Respuestas a Solicitudes</h3>
+					</a>
+				</div>
+				{{pass}}
+				
 			</div>
 	  </div>	
-  </div>
+	</div>
 <script>
   // Set blue bar below INICIO text.
   document.getElementById("smydp").className += " active";

@@ -1,0 +1,97 @@
+
+<h3>Actividades administrativas</h3>
+
+{{for i in range(1,6):}}
+<div class="administrativas-container" id="administrativa{{=i}}-container"
+    {{if len(admin_list)<i and 1!=i:}} hidden {{pass}}>
+    <h4>Actividad ({{=i}})</h4>
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="administrativa{{=i}}-desde">Desde:</label>
+                <input
+                       value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
+                       class="datepicker"
+                       name="administrativa{{=i}}_desde" type="text" 
+                       id="administrativa{{=i}}_desde"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha"/>
+                <span class="help-block"></span>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Hasta:</label>
+                <input
+                       value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_final.strftime('%d-%m-%Y')}}"
+                       class="datepicker"
+                       name="administrativa{{=i}}_hasta" type="text"
+                       id="administrativa{{=i}}_hasta"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Cargo:</label>
+                <input 
+                       value="{{='' if len(admin_list)<i else admin_list[i-1].f_cargo}}"
+                       type="text" class="form-control"
+                       name="administrativa{{=i}}_cargo"
+                       id="administrativa{{=i}}_cargo"
+                       data-toggle="popover" data-placement="bottom"
+                       data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Institucion:</label>
+                <input
+                       value="{{='' if len(admin_list)<i else admin_list[i-1].f_institucion}}"
+                       type="text" class="form-control"
+                       name="administrativa{{=i}}_institucion"
+                       id="administrativa{{=i}}_institucion"
+                       placeholder="Institucion" data-toggle="popover"
+                       data-placement="bottom" data-trigger="manual">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{pass}}
+
+<a href="#"  id="add_admin" onclick="add_admin()">Agregar Actividad</a>
+<a href="#"  id="remove_admin" onclick="remove_admin()">Quitar Actividad</a>
+
+
+<script charset="utf-8">
+var num_admin = {{=len(admin_list) or 1}}
+    function add_admin(){
+        if(num_admin < 11){
+            num_admin++;
+            $('#administrativa'+num_admin+'-container').show();
+        if (num_admin >10){
+            $('#add_admin').remove();
+            }
+        }
+    }
+    function remove_admin(){
+        if(num_admin > 1){
+            $('#administrativa'+num_admin+'-container').hide();
+              $('#administrativa'+num_admin+'_desde').val('');
+              $('#administrativa'+num_admin+'_hasta').val('');
+              $('#administrativa'+num_admin+'_cargo').val('');
+              $('#administrativa'+num_admin+'_institucion').val('');
+            num_admin--;
+        }
+    }
+</script>

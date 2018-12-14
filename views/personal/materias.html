@@ -1,0 +1,21 @@
+<br>
+<table class="table contenidoFicha">
+    <tbody>
+        <tr style="color: White;">
+            <th> Área </th>
+            <th> Desde </th>
+            <th> Hasta </th>
+            <th> Codigo</th>
+            <th> Nombre </th>
+        </tr>
+{{ for materia in materia_list: }}
+<tr>
+    <td>{{=BEAUTIFY(materia.f_area)}}</td>
+    <td>{{=materia.f_fecha_inicio_materia}}</td>
+    <td>{{=materia.f_fecha_final_materia}}</td>
+    <td>{{=BEAUTIFY(materia.f_codigo)}}</td>
+    <td>{{=BEAUTIFY(materia.f_nombre_materia)}}</td>
+</tr>
+        {{pass}}
+    </tbody>
+</table>

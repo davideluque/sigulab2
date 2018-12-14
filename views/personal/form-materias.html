@@ -1,0 +1,114 @@
+<h3>Materias impartidas (Máximo 5)</h3>
+
+{{ for i in range(1,6): }}
+<div class="materia-container" id="materia-container{{=i}}"{{if len(materia_list)<i and 1!=i: }}hidden{{pass}}>
+<h4>Materia {{=i}}</h4>
+    <div class="form-row">
+        <div class="form-group">
+            <div class="col-sm-11">
+                <label for="materia{{=i}}_area">Área:</label>
+                <select
+                        class="form-control seleccion-competencia"
+                        type="select" name="materia{{=i}}_area"
+                        id="materia{{=i}}_area" multiple required
+                        data-placeholder="Seleccione las categorías que apliquen">
+                        <option value""> Seleccione una opcion</option>
+                        {{ for comp in competencias: }}
+                        <option
+                            {{ if i<=len(materia_list):}}
+                            {{= 'selected' if comp in materia_list[i-1].f_area else '' }}
+                            {{pass}}
+                        value"{{=comp}}">{{=comp}}</option>
+                        {{pass}}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="materia{{=i}}_fecha_inicio_materia">Desde:</label>
+                <input
+                        value="{{='' if len(materia_list)<i else materia_list[i-1].f_fecha_inicio_materia.strftime('%d-%m-%Y')}}"
+                        class="form-control datepicker"
+                        name="materia{{=i}}_fecha_inicio_materia" type="text"
+                        id="materia{{=i}}_fecha_inicio_materia"
+                        data-placement="bottom" data-trigger="manual"
+                        data-content="Seleccione una fecha"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Hasta:</label>
+            <input
+                    value="{{='' if len(materia_list)<i else materia_list[i-1].f_fecha_final_materia.strftime('%d-%m-%Y')}}"
+                    class="fcrm-control datepicker"
+                    name="materia{{=i}}_fecha_final_materia" type="text"
+                    id="materia{{=i}}_fecha_final_materia"
+                    data-placement="bottom" data-trigger="manual"
+                    data-content="Seleccione una fecha">
+            <span class="help-block"></span>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="materia{{=i}}_codigo">Código:</label>
+                <input
+                   value="{{='' if len(materia_list)<i else materia_list[i-1].f_codigo}}"
+                   type="text" class="form-control"
+                   name="materia{{=i}}_codigo"
+                   id="materia{{=i}}_codigo"
+                   data-toggle="popover" data-placement="bottom"
+                   data-trigger="manual" data-content="Este campo es requerido">
+                   <span class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="materia{{=i}}_nombre_materia">Materia:</label>
+                <input
+                      value="{{='' if len(materia_list)<i else materia_list[i-1].f_nombre_materia}}"
+                      type="text" class="form-control"
+                      name="materia{{=i}}_nombre_materia"
+                      id="materia{{=i}}_nombre_materia"
+                      data-toggle="popover" data-placement="bottom"
+                      data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+  {{pass}}
+
+
+<a href="#"  id="add_materia" onclick="add_materia()">Agregar Materia</a>
+<a href="#"  id="remove_materia" onclick="remove_materia()">Quitar Materia</a>
+
+<script charset="utf-8">
+var num_materia = {{=len(materia_list) or 1}}
+    function add_materia(){
+        if(num_materia < 6){
+        num_materia++;
+        $('#materia-container'+num_materia).show();
+        }
+    }
+    function remove_materia() {
+        if (num_materia > 1){
+            $('#materia-container'+num_materia).hide();
+            $('#materia'+num_materia+'_area').val(['']).trigger("chosen:updated");
+            $('#materia'+num_materia+'_fecha_inicio_materia').val('');
+            $('#materia'+num_materia+'_fecha_final_materia').val('');
+            $('#materia'+num_materia+'_codigo').val('');
+            $('#materia'+num_materia+'_nombre_materia').val('');
+            num_materia--;
+        }
+    }
+
+</script>

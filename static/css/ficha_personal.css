@@ -298,3 +298,24 @@ form.registration-form fieldset {
     display: none;
 }
 
+.contenidoPestania {
+    border-top: none !important;
+    margin: 0 auto;
+}
+
+tr.border_bottom td {
+    font-size: 16px;
+    padding: 3px !important;
+    text-align: left;   
+    border-bottom:1px solid grey;
+}
+
+.fieldPersonal {
+    border-top: none !important;
+    width: 30%;
+}
+
+td {
+    border-top: none !important;
+    white-space:nowrap;
+}

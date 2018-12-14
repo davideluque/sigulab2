@@ -1,0 +1,133 @@
+
+<h3>Extensión - Servicios</h3>
+
+{{for i in range(1,6):}}
+<div class="extension-container" id="extension{{=i}}-container"
+    {{if len(ext_list)<i and 1!=i:}} hidden {{pass}}>
+    <h4>Actividad ({{=i}})</h4>
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="extension{{=i}}-desde">Desde: </label>
+                <input
+                       value="{{='' if len(ext_list)<i else ext_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
+                       class="form-control datepicker"
+                       name="extension{{=i}}_desde" type="text" 
+                       id="extension{{=i}}_desde"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha"/>
+                <span class="help-block"></span>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Hasta: </label>
+                <input 
+                       value="{{='' if len(ext_list)<i else ext_list[i-1].f_fecha_final.strftime('%d-%m-%Y')}}"
+                       class="form-control datepicker"
+                       name="extension{{=i}}_hasta" type="text"
+                       id="extension{{=i}}_hasta"
+                       data-placement="bottom" data-trigger="manual"
+                       data-content="Seleccione una fecha">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Nombre: </label>
+                <input 
+                       value="{{='' if len(ext_list)<i else ext_list[i-1].f_nombre}}"
+                       type="text" class="form-control"
+                       name="extension{{=i}}_nombre"
+                       id="extension{{=i}}_nombre"
+                       data-toggle="popover" data-placement="bottom"
+                       data-trigger="manual" data-content="Este campo es requerido">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Institucion: </label>
+                <input 
+                       value="{{='' if len(ext_list)<i else ext_list[i-1].f_institucion}}"
+                       type="text" class="form-control"
+                       name="extension{{=i}}_institucion"
+                       id="extension{{=i}}_institucion"
+                       placeholder="Nombre de la institucion" data-toggle="popover"
+                       data-placement="bottom" data-trigger="manual">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label>Descripción: </label>
+                <input 
+                       value="{{='' if len(ext_list)<i else ext_list[i-1].f_descripcion}}"
+                       type="text" class="form-control"
+                       name="extension{{=i}}_descripcion"
+                       id="extension{{=i}}_descripcion"
+                       placeholder="Introduzca una descripción" data-toggle="popover"
+                       data-placement="bottom" data-trigger="manual">
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="extension{{=i}}_categoria">Categoría: </label>
+            <select
+                    class="form-control seleccion-competencia"
+                    type="select" name="extension{{=i}}_categoria"
+                    id="extension{{=i}}_categoria" multiple required
+                    data-placeholder="Seleccione las categorías que apliquen">
+                    <option value""> Seleccione una opcion</option>
+                    {{ for comp in competencias: }}
+                    <option
+                        {{ if i<=len(ext_list):}}
+                        {{= 'selected' if comp in ext_list[i-1].f_categoria else '' }}
+                        {{pass}}
+                    value"{{=comp}}">{{=comp}}</option>
+                    {{pass}}
+            </select>
+        </div>
+    </div>
+</div>
+{{pass}}
+
+<a href="#"  id="add_ext" onclick="add_ext()">Agregar Actividad</a>
+<a href="#"  id="remove_ext" onclick="remove_ext()">Quitar Actividad</a>
+
+
+<script charset="utf-8">
+var num_ext = {{=len(ext_list) or 1}}
+    function add_ext(){
+        if(num_ext < 11){
+            num_ext++;
+            $('#extension'+num_ext+'-container').show();
+        if (num_ext >10){
+            $('#extension').hide();
+            }
+        }
+    }
+    function remove_ext(){
+        if(num_ext > 1){
+            $('#extension'+num_ext+'-container').hide();
+              $('#extension'+num_ext+'_desde').val('');
+              $('#extension'+num_ext+'_hasta').val('');
+              $('#extension'+num_ext+'_nombre').val('');
+              $('#extension'+num_ext+'_institucion').val('');
+              $('#extension'+num_ext+'_descripcion').val('');
+              $('#extension'+num_ext+'_categoria').val(['']).trigger("chosen:updated");
+            num_ext--;
+        }
+    }
+</script>

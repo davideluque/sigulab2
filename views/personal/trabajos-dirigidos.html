@@ -1,0 +1,21 @@
+<br>
+<table class="table contenidoFicha">
+    <tbody>
+        <tr style="color: White;">
+            <th> Año </th>
+            <th> Titulo </th>
+            <th> Estudiantes </th>
+            <th> Nivel</th>
+            <th> Institución </th>
+        </tr>
+        {{ for trabajo in trabajo_list: }}
+        <tr>
+            <td>{{=BEAUTIFY(trabajo.f_anio)}}</td>
+            <td>{{=BEAUTIFY(trabajo.f_titulo_trabajo)}}</td>
+            <td>{{=BEAUTIFY(trabajo.f_estudiantes)}}</td>
+            <td>{{=BEAUTIFY(trabajo.f_nivel)}}</td>
+            <td>{{=BEAUTIFY(trabajo.f_institucion)}}</td>
+        </tr>
+        {{pass}}
+    </tbody>
+</table>
