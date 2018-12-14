@@ -1,6 +1,5 @@
 
 <h3>Actividades administrativas</h3>
-<h5>Los campos con * son obligatorios</h5>
 
 {{for i in range(1,6):}}
 <div class="administrativas-container" id="administrativa{{=i}}-container"
@@ -9,7 +8,7 @@
     <div class="form-row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="administrativa{{=i}}-desde">Desde: *</label>
+                <label for="administrativa{{=i}}-desde">Desde:</label>
                 <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
                        class="datepicker"
@@ -23,7 +22,7 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label>Hasta: *</label>
+                <label>Hasta:</label>
                 <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_fecha_final.strftime('%d-%m-%Y')}}"
                        class="datepicker"
@@ -40,7 +39,7 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label>Cargo: *</label>
+                <label>Cargo:</label>
                 <input 
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_cargo}}"
                        type="text" class="form-control"
@@ -54,7 +53,7 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label>Institucion: *</label>
+                <label>Institucion:</label>
                 <input
                        value="{{='' if len(admin_list)<i else admin_list[i-1].f_institucion}}"
                        type="text" class="form-control"

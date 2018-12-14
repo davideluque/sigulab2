@@ -1,5 +1,4 @@
 <h4 class="titulosForm">Cursos/Eventos de Formación (Máximo 10)</h4>
-<h5>Los campos con * son obligatorios</h5>
 
 {{ for i in range(1,11): }}
 <div class="evento-container" id="evento-container{{=i}}"
@@ -8,7 +7,7 @@
     <div class="form-row">
         <div class="col-sm-11">
             <div class="form-group">
-            <label for="evento{{=i}}_categoria">Categoría: *</label>
+            <label for="evento{{=i}}_categoria">Categoría:</label>
             <select class="form-control seleccion-competencia" type="select"
                     name="evento{{=i}}_categoria" id="evento{{=i}}_categoria" multiple required
                     data-placeholder="Seleccione las categorías que apliquen" data-toggle="popover"
@@ -30,7 +29,7 @@
     <div class="form-row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="anio">Año: *</label>
+                <label for="anio">Año:</label>
                 <input
                     value="{{='' if len(evento_list)<i else evento_list[i-1].f_anio}}"
                     type="number" class="form-control" name="evento{{=i}}_anio" id="evento{{=i}}_anio" data-toggle="popover" placeholder="Introduzca el años" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido"required/> 
@@ -40,7 +39,7 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="horas">Horas: *</label>
+                <label for="horas">Horas:</label>
                 <input
                 value="{{='' if len(evento_list)<i else evento_list[i-1].f_horas}}"
                 type="number" class="form-control" name="evento{{=i}}_horas" id="evento{{=i}}_horas" data-toggle="popover" data-placement="bottom"
@@ -53,7 +52,7 @@
     <div class="form-row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="dictadoPor">Dictado por: *</label>
+                <label for="dictadoPor">Dictado por:</label>
                 <input
                 value="{{='' if len(evento_list)<i else evento_list[i-1].f_dictadoPor}}"
                 type="text" class="form-control" name="evento{{=i}}_dictadoPor" id="evento{{=i}}_dictadoPor" data-toggle="popover" data-placement="bottom"
@@ -64,7 +63,7 @@
 
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="formacion">Evento de Formación: *</label>
+                <label for="formacion">Evento de Formación:</label>
                 <input
                 value="{{='' if len(evento_list)<i else evento_list[i-1].f_formacion}}"
                 type="text" class="form-control" name="evento{{=i}}_formacion" id="evento{{=i}}_formacion" data-toggle="popover" data-placement="bottom"

@@ -1,5 +1,4 @@
 <h3>Materias impartidas (Máximo 5)</h3>
-<h5>Los campos con * son obligatorios</h5>
 
 {{ for i in range(1,6): }}
 <div class="materia-container" id="materia-container{{=i}}"{{if len(materia_list)<i and 1!=i: }}hidden{{pass}}>
@@ -7,7 +6,7 @@
     <div class="form-row">
         <div class="form-group">
             <div class="col-sm-11">
-                <label for="materia{{=i}}_area">Área: *</label>
+                <label for="materia{{=i}}_area">Área:</label>
                 <select
                         class="form-control seleccion-competencia"
                         type="select" name="materia{{=i}}_area"
