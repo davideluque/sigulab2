@@ -154,6 +154,8 @@ db.define_table(
     Field('f_fecha_ingreso_admin_publica', 'date', label=T('Fecha de Ingreso a la Administracion Pública')),
     Field('f_condicion', requires=IS_IN_SET(['En Funciones', 'Año Sabatico', 'Reposo', 'Permiso PreNatal', 'Permiso PostNatal','Otro'], error_message='Por favor introduzca un valor'), label=T('Condición')),
     Field('f_rol','string', label=T('Rol')),
+    ##Campo nuevo
+    Field('f_fecha_nacimiento', 'date', label=T('Fecha de Nacimiento')),
 
     # #Referencias
      Field('f_usuario', 'reference auth_user',

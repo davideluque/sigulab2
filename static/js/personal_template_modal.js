@@ -24,7 +24,7 @@ COLOCA EN INPUTS TODOS TUS CAMPOS
 const inputs = [
     'nombre_add', 'apellido_add', 'ci_add', 'email_add', 'email_alt_add', 'telefono_add',
     'pagina_web_add', 'categoria_add', 'cargo_add', 'fecha_ingreso_add', 'fecha_salida_add',
-    'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add',
+    'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add', 'fecha_nacimiento_add',
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
     'fecha_inicio_1_add', 'fecha_final_1_add', 'cargo_hist_1_add', 'dependencia_hist_1_add', 'organizacion_1_add',
@@ -217,6 +217,22 @@ function validaContactoEmergencia () {
     }
 }
 
+function validaFechaNac(){
+    const $this = $('[name="fecha_nacimiento_add"]');
+    if ($this.val() === ""){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
 const validadoresPrimerPaso = [
     validaPaginaWeb,
     validaEmailAlternativo,
@@ -225,7 +241,8 @@ const validadoresPrimerPaso = [
     validaDireccionHab,
     validaTelefonoResidencial,
     validaPersonaContacto,
-    validaContactoEmergencia
+    validaContactoEmergencia,
+    validaFechaNac
 ]
 
 // Funciones que validan la segunda pagina 

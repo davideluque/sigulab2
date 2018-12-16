@@ -142,6 +142,8 @@ def tabla_categoria(tipo):
             "email_alt" : elm.f_email_alt,
             "telefono" : elm.f_telefono,
             "pagina_web" : elm.f_pagina_web,
+            ##Campo nuevo
+            "fecha_nacimiento" : elm.f_fecha_nacimiento,
             "categoria" : elm.f_categoria,
             "cargo" : elm.f_cargo,
             "fecha_ingreso" : elm.f_fecha_ingreso,
@@ -220,6 +222,7 @@ def add_form():
             "email_alt" : request.post_vars.email_alt_add,
             "telefono" : request.post_vars.telefono_add,
             "pagina_web" : request.post_vars.pagina_web_add,
+            "fecha_nacimiento" : request.post_vars.fecha_nacimiento_add,
             "categoria" : request.post_vars.categoria_add,
             "cargo" : request.post_vars.cargo_add,
             "fecha_ingreso" : transformar_fecha_formato_original(request.post_vars.fecha_ingreso_add),
@@ -292,6 +295,7 @@ def add_form():
             f_persona_contacto = dic['persona_contacto'],
             f_contacto_emergencia= dic["contacto_emergencia"],
             f_direccion= dic["direccion"],
+            f_fecha_nacimiento= dic["fecha_nacimiento"],
             f_gremio= dic["gremio"],
             f_fecha_ingreso_usb= dic["fecha_ingreso_usb"],
             f_fecha_ingreso_ulab= dic["fecha_ingreso_ulab"],
@@ -399,6 +403,7 @@ class Usuario(object):
         self.f_ci = usuario.f_ci
         self.f_email = usuario.f_email
         self.f_email_alt = usuario.f_email_alt
+        self.f_fecha_nacimiento = transformar_fecha(usuario.f_fecha_nacimiento)
         dependencia = usuario.f_dependencia
         dependencia = db(db.dependencias.id == dependencia).select().first()
         self.f_dependencia = dependencia.nombre
@@ -560,6 +565,7 @@ def ficha():
         "email_alt" : elm.f_email_alt,
         "telefono" : elm.f_telefono,
         "pagina_web" : elm.f_pagina_web,
+        "fecha_nacimiento" : elm.f_fecha_nacimiento,
         "categoria" : elm.f_categoria,
         "cargo" : elm.f_cargo,
         "fecha_ingreso" : transformar_fecha(elm.f_fecha_ingreso),
