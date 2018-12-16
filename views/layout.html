@@ -99,6 +99,10 @@
               <ul class=" dropdown-menu">
                 <li><a href="{{=URL('personal','index')}}">Página Principal</a></li>
                 {{_personal = db(db.t_Personal.f_usuario == auth.user.id).select(db.t_Personal.ALL).first()}}
+                {{ _usuario = db(db.t_Personal.f_email==auth.user.registration_id).select().first() }}
+                {{if _usuario: }}
+                <li><a href="/sigulab2/personal/ficha/{{=_usuario.f_ci}}">Mi Ficha</a></li>
+                {{ pass }}
                 <li><a href="{{=URL('personal','listado_estilo')}}">Listado General</a></li>
                 <li><a href="{{=URL('personal','busqueda')}}">Búsqueda</a></li>
               </ul>
