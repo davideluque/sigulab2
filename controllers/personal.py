@@ -376,7 +376,7 @@ def add_form():
 
         personal = db(db.t_Personal.f_email == dic['email'] ).select().first()
         __get_competencias(request, personal)
-        __get_actvidades_administrativas(request, personal)
+        __get_actividades_administrativas(request, personal)
         __get_extension(request, personal)
         __get_proyectos(request, personal)
         __get_trabajos(request, personal)
@@ -761,9 +761,9 @@ def lista_competencias(ci):
     return rows
 
 def lista_administrativas(ci):
-    query = db((db.t_Personal.id == db.t_Actvidades_Administrativas.f_Administrativas_Personal)
+    query = db((db.t_Personal.id == db.t_Actividades_Administrativas.f_Administrativas_Personal)
             & (db.t_Personal.f_ci == ci))
-    rows = query.select(db.t_Actvidades_Administrativas.ALL, orderby=db.t_Actvidades_Administrativas.f_numero)
+    rows = query.select(db.t_Actividades_Administrativas.ALL, orderby=db.t_Actividades_Administrativas.f_numero)
     return rows
 
 def lista_extension(ci):
@@ -897,7 +897,7 @@ def __get_competencias(request, personal):
 
     return competencias
 
-def __get_actvidades_administrativas(request, personal):
+def __get_actividades_administrativas(request, personal):
     params = {}
     administrativas = []
     for i in range(1, 6):
@@ -911,9 +911,9 @@ def __get_actvidades_administrativas(request, personal):
                 }
         if not( None in params.values() or '' in params.values()):
             try:
-                db.t_Actvidades_Administrativas.update_or_insert(
-                        (db.t_Actvidades_Administrativas.f_numero==i)
-                        & (db.t_Actvidades_Administrativas.f_Administrativas_Personal==personal.id),
+                db.t_Actividades_Administrativas.update_or_insert(
+                        (db.t_Actividades_Administrativas.f_numero==i)
+                        & (db.t_Actividades_Administrativas.f_Administrativas_Personal==personal.id),
                         f_fecha_inicio=params['f_fecha_inicio'],
                         f_fecha_final=params['f_fecha_final'],
                         f_institucion=params['f_institucion'],
@@ -926,8 +926,8 @@ def __get_actvidades_administrativas(request, personal):
                 print(e)
         else:
             try:
-                db( (db.t_Actvidades_Administrativas.f_Administrativas_Personal == personal.id)
-                    & (db.t_Actvidades_Administrativas.f_numero == i)).delete()
+                db( (db.t_Actividades_Administrativas.f_Administrativas_Personal == personal.id)
+                    & (db.t_Actividades_Administrativas.f_numero == i)).delete()
             except Exception as e:
                 print(e)
 

@@ -184,8 +184,8 @@ db.define_table(
     migrate=True 
     )
 
-db.t_Curso._plural = 'Cursos'
-db.t_Curso._singular = 'Curso'
+db.t_Cursos._plural = 'Cursos'
+db.t_Cursos._singular = 'Curso'
 
 #####################################################################
 #                                                                   #
@@ -209,8 +209,8 @@ db.define_table(
     migrate=True
     )
 
-db.t_Curso._plural = 'Materias'
-db.t_Curso._singular = 'Materia'
+db.t_Materia._plural = 'Materias'
+db.t_Materia._singular = 'Materia'
 
 
 '''
