@@ -171,6 +171,14 @@
                             </div>
                           </div>
 
+                          <div class="col-sm-6">
+                                  <label>Fecha de Nacimiento:</label>
+                                  <input class="datepicker" value="{{=usuario.f_fecha_nacimiento or ''}}"
+                                  name = "fecha_nacimiento_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"
+                                  placeholder="Fecha de Nacimiento" required>
+                                  <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
 
 
                         </div>
@@ -448,10 +456,9 @@
                         </div>
 
                       </div>
-                      <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                      
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                         <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
-                      </div>
                     </fieldset>
                     <!-- Fin Cuarto Paso -->
 
@@ -467,11 +474,11 @@
                           <span class="step activePass">5</span>
                           <span class="step">6</span>
                           <span class="step">7</span>
-                        <span class="step">8</span>
-                        <span class="step">9</span>
-                        <span class="step">10</span>
-                        <span class="step">11</span>
-                        <span class="step">12</span>
+                          <span class="step">8</span>
+                          <span class="step">9</span>
+                          <span class="step">10</span>
+                          <span class="step">11</span>
+                          <span class="step">12</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -480,10 +487,9 @@
                         </div>
 
                       </div>
-                      <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                         <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
-                      </div>
+                      
                     </fieldset>
                     <!-- Fin Quinto Paso -->
 
@@ -668,8 +674,9 @@
                       </div>
 
                     <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <div class="loader" id ="loader" style="display: none;"></div> 
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                        <button type="button" onclick="return toggleLoader();" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar" /></button>
                     </div>
                   </fieldset>
                   <!-- Fin Duodecimo Paso -->
@@ -694,5 +701,8 @@
   trabajo.style.display = 'block';
   texto.style.display = 'none';
   texto2.style.display = 'block';
+ }
+ function toggleLoader() {
+  document.getElementById('loader').style.display = 'inline-block';
  }
 </script>
