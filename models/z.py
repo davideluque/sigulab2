@@ -396,7 +396,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Super", f_apellido="", f_gremio="Administrativo", f_cargo="Super Usuario",
         f_ci="0", f_telefono="0", f_celular="0", f_contacto_emergencia=None,
-        f_email="sigulabusb@gmail.com", f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email="sigulabusb@gmail.com", f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -406,7 +406,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Funindes", f_apellido="", f_gremio="Administrativo", f_cargo="Cliente Interno",
         f_ci="1", f_telefono="1", f_celular="1", f_contacto_emergencia=None,
-        f_email='funindes@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='funindes@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -417,7 +417,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Asistente Dirección", f_apellido="", f_gremio="Administrativo", f_cargo="Cliente Interno",
         f_ci="2", f_telefono="2", f_celular="2", f_contacto_emergencia=None,
-        f_email='asis-ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='asis-ulab@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -429,7 +429,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Gestor de Sustancias", f_apellido="", f_gremio="Administrativo", f_cargo="Gestor de Sustancias",
         f_ci="3", f_telefono="3", f_celular="3", f_contacto_emergencia=None,
-        f_email='ulab-smdp@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-smdp@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -440,7 +440,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Gestor de Personal", f_apellido="", f_gremio="Administrativo", f_cargo="Gestor de Personal",
         f_ci="3", f_telefono="3", f_celular="3", f_contacto_emergencia=None,
-        f_email='asis-ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='asis-ulab@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -451,7 +451,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Director", f_apellido="", f_gremio="Administrativo", f_cargo="Director",
         f_ci="4", f_telefono="4", f_celular="4", f_contacto_emergencia=None,
-        f_email='ulab@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -465,7 +465,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Coordinador de Adquisiciones", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
         f_ci="5", f_telefono="5", f_celular="5", f_contacto_emergencia=None,
-        f_email='ulab-adquisicion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-adquisicion@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -477,7 +477,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Coordinador de Calidad", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
         f_ci="6", f_telefono="6", f_celular="6", f_contacto_emergencia=None,
-        f_email='ulab-calidad@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-calidad@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -490,7 +490,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Coordinador de Importaciones", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
         f_ci="7", f_telefono="7", f_celular="7", f_contacto_emergencia=None,
-        f_email='ulab-importaciones@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-importaciones@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -504,7 +504,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Unidad de Administración", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
         f_ci="8", f_telefono="8", f_celular="8", f_contacto_emergencia=None,
-        f_email='ulab-administracion@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-administracion@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -515,7 +515,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Encargado de la Oficina de Proteccion Radiológica", f_apellido="", f_gremio="Administrativo", f_cargo="Coordinador",
         f_ci="9", f_telefono="9", f_celular="9", f_contacto_emergencia=None,
-        f_email='ulab-pradiologica@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='ulab-pradiologica@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -530,7 +530,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio A", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="10", f_telefono="10", f_celular="10", f_contacto_emergencia=None,
-        f_email='usb-laba@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-laba@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -542,7 +542,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio B", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="11", f_telefono="11", f_celular="11", f_contacto_emergencia=None,
-        f_email='usb-labb@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labb@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -554,7 +554,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio C", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="12", f_telefono="12", f_celular="12", f_contacto_emergencia=None,
-        f_email='usb-labc@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labc@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -566,7 +566,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio D", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="13", f_telefono="13", f_celular="13", f_contacto_emergencia=None,
-        f_email='usb-labd@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labd@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -578,7 +578,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio E", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="14", f_telefono="14", f_celular="14", f_contacto_emergencia=None,
-        f_email='usb-labe@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labe@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -590,7 +590,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio F", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="15", f_telefono="15", f_celular="15", f_contacto_emergencia=None,
-        f_email='usb-labf@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labf@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
@@ -602,7 +602,7 @@ if db(db.t_Personal).isempty():
     db.t_Personal.insert(
         f_nombre="Jefe del Laboratorio G", f_apellido="", f_gremio="Administrativo", f_cargo="Jefe de Laboratorio",
         f_ci="16", f_telefono="16", f_celular="16", f_contacto_emergencia=None,
-        f_email='usb-labg@usb.ve', f_direccion=None, f_ubicacion=None, f_pagina_web=None,
+        f_email='usb-labg@usb.ve', f_direccion=None, f_pagina_web=None,
         f_estatus=None, f_categoria=None, f_fecha_ingreso=None, f_fecha_salida=None,
         f_fecha_ingreso_usb=None, f_fecha_ingreso_ulab=None, f_fecha_ingreso_admin_publica=None,
         f_condicion=None, f_rol=rol, f_usuario=user, f_dependencia=dep, f_validado=True, f_es_supervisor=True
