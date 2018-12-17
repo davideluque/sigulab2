@@ -3659,6 +3659,9 @@ def detalles_vehiculo():
     esta_autorizado = (auth.user.id == vehi['vh_responsable']) or (auth.user.id == vehi['vh_custodio']) or (auth.user.id == 1)
     puede_ver_historial_mantenimiento = esta_autorizado or __es_jefe_dep_vh(auth.user.id, vehi['id'])
 
+    # Obtenemos valores únicos para el formulario
+    valores_unicos = __obtener_valores_unicos_vh()
+
     # Si solo estoy cargando la vista
     return dict(
         vehiculo=vehi,
@@ -3672,7 +3675,8 @@ def detalles_vehiculo():
         sede_id=sede_id,
         historial_prestamos=prestamos,
         esta_autorizado=esta_autorizado,
-        puede_ver_historial_mantenimiento=puede_ver_historial_mantenimiento
+        puede_ver_historial_mantenimiento=puede_ver_historial_mantenimiento,
+        valores_unicos=valores_unicos
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene

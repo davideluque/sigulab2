@@ -52,7 +52,7 @@
     <h3 class="dep-titulo text-center">{{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} </h3>
     <h4 class="dep-titulo text-center">Año: {{=vehiculo['vh_ano']}}</h4>
     <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
-    {{ vehiculo['vh_num']: }}<h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>{{ pass }}
+    {{ if vehiculo['vh_num']: }}<h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>{{ pass }}
     {{ if request.vars.delete: }}
         <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vehiculo['vh_desc_eliminar'].upper()}}</h4>
     {{ pass }}
@@ -1675,6 +1675,7 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
+  var valores_unicos = {};
   var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
   var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
@@ -1702,6 +1703,17 @@
           "{{=clasif}}",
         {{ pass }}
         ];
+    {{ pass }}
+  });
+
+  // Carga los valores únicos
+  $(document).ready(function() {
+    {{ for tipo in valores_unicos: }}
+      valores_unicos['{{=tipo}}'] = [
+        {{ for valor in valores_unicos[tipo]: }}
+        "{{=valor}}",
+        {{pass}}
+      ] 
     {{ pass }}
   });
 

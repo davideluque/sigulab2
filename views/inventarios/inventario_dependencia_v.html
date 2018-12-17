@@ -685,6 +685,7 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
+  var valores_unicos = {};
   var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
   var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
@@ -911,6 +912,17 @@
           "{{=clasif}}",
         {{ pass }}
         ];
+    {{ pass }}
+  });
+
+  // Carga los valores únicos
+  $(document).ready(function() {
+    {{ for tipo in valores_unicos: }}
+      valores_unicos['{{=tipo}}'] = [
+        {{ for valor in valores_unicos[tipo]: }}
+        "{{=valor}}",
+        {{pass}}
+      ] 
     {{ pass }}
   });
 
