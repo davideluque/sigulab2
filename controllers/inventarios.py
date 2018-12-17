@@ -15,6 +15,33 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
 
+# Función que retorna los valores ya existentes de datos únicos de la 
+# tabla de vehículos
+def __obtener_valores_unicos_vh():
+    vehiculos = db(db.vehiculo.id).select()
+
+    serial_carroceria, serial_motor, serial_chasis = set(), set(), set()
+    placa, num, intt = set(), set(), set()
+
+    for vehiculo in vehiculos:
+        serial_carroceria.add(vehiculo['vh_serial_carroceria'])
+        serial_motor.add(vehiculo['vh_serial_motor'])
+        intt.add(vehiculo['vh_intt'])
+        serial_chasis.add(vehiculo['vh_serial_chasis'])
+        num.add(vehiculo['vh_num'])
+        placa.add(vehiculo['vh_placa'])
+    
+    valores_unicos = {
+        'serial_carroceria': serial_carroceria,
+        'serial_chasis': serial_chasis,
+        'serial_motor': serial_motor,
+        'intt': intt,
+        'num': num,
+        'placa': placa,
+    }
+
+    return valores_unicos
+
 # Función que parsea como entero y retorna None en caso de no poder
 def __safe_int(n):
     try:
@@ -1744,6 +1771,9 @@ def vehiculos():
     except:
         pass
 
+    # Obtenemos valores únicos para el formulario
+    valores_unicos = __obtener_valores_unicos_vh()
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1761,7 +1791,8 @@ def vehiculos():
                 localizacion=localizacion,
                 sede_id=sede_id,
                 dep_id=dep_id,
-                acceso_direccion=acceso_direccion
+                acceso_direccion=acceso_direccion,
+                valores_unicos=valores_unicos
                )
 
 @auth.requires(lambda: __check_role())
