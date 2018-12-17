@@ -346,15 +346,15 @@ td {
 }
 
 .btn-previous {
-    position:absolute;
-    bottom: 5%; 
-    right:18%;
+    position:absolute !important;
+    bottom: 5% !important; 
+    right:18% !important;
     width: 50px !important; 
    
 }
 .btn-submit, .btn-next {
     position:absolute;
-    bottom: 5%;
-    right:8%;
+    bottom: 5% !important;
+    right:8% !important;
     width: 50px !important;
 }
