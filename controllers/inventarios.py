@@ -548,7 +548,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         return False
 
     # Si ya existe el numero de VH:
-    if db(db.vehiculo.vh_num == int(num)).select():
+    if num != None and db(db.vehiculo.vh_num == int(num)).select():
         vh = db(db.vehiculo.vh_num == int(num)).select()[0]
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
@@ -589,9 +589,12 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                           a la dependencia \"{1}\".".format(vh.vh_intt, nombre_dependencia)
         return False
 
+    if num is not None:
+        num = int(num)
+
     # Se agrega el nuevo vehiculo a la base de datos
     db.vehiculo.insert(
-        vh_num=int(num),
+        vh_num=num,
         vh_marca=marca,
         vh_modelo=modelo,
         vh_ano=ano,
@@ -1009,6 +1012,9 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
+
+    if num is not None:
+        num = int(num)
 
     db.modificacion_vehiculo.insert(
         mvh_id_vehiculo=id_vh,
@@ -2126,7 +2132,7 @@ def detalles_mod_vehiculo():
         )
 
         db.bitacora_general.insert(
-            f_accion="[inventarios] Modificada la información del vehículo num {}".format(vehiculo['mvh_num'])
+            f_accion="[inventarios] Modificada la información del vehículo placa {}".format(vehiculo['mvh_placa'])
         )
         db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
         session.flash = "La información sobre el vehículo ha sido modificada"
@@ -2134,7 +2140,7 @@ def detalles_mod_vehiculo():
 
     if request.vars.no:
         db.bitacora_general.insert(
-            f_accion="[inventarios] Rechazada modificación de la información del vehículo num {}".format(vehiculo['mvh_num'])
+            f_accion="[inventarios] Rechazada modificación de la información del vehículo placa {}".format(vehiculo['mvh_placa'])
         )
         db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
         session.flash = "La información sobre el vehículo no ha sido modificada"

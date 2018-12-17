@@ -369,7 +369,7 @@ db.historial_mantenimiento_sin_bn.hmsb_nombre.requires = IS_IN_DB(db, db.sin_bn.
 db.define_table(
     'vehiculo',
     # Datos de identificación
-    Field('vh_num', 'string', notnull=True, unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
+    Field('vh_num', 'string', unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
     Field('vh_propietario', 'string', notnull=True, label=T('Nombre del propietario'), requires=IS_NOT_EMPTY()),
     Field('vh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('vh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),
@@ -452,7 +452,7 @@ db.vehiculo.vh_dependencia.requires = IS_IN_DB(db, db.dependencias.id, '%(nombre
 db.define_table(
     'modificacion_vehiculo',
     # Datos de identificación
-    Field('mvh_num', 'string', notnull=True, unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
+    Field('mvh_num', 'string', unique=True, requires=IS_MATCH('^[0-9]{6}'), label=T('Número Bien Nacional')),
     Field('mvh_id_vehiculo', 'reference vehiculo', notnull=True, unique=True, label=T('ID del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_marca', 'string', notnull=True, label=T('Marca del Vehículo'), requires=IS_NOT_EMPTY()),
     Field('mvh_modelo', 'string', notnull=True, label=T('Modelo del Vehículo'), requires=IS_NOT_EMPTY()),

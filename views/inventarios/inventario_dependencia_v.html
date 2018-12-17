@@ -120,7 +120,7 @@
                     <label>Campos marcados con * son obligatorios.</label>
                     <div class="form-group">
                         <label>Nº Bien Nacional*</label>
-                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" required>
+                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)">
                         <div style="color: #d03e3e;" id="err_num" hidden></div>
                     </div>
                     <div class="form-group" tag="Formato:">
@@ -696,7 +696,7 @@
   // Validación de bien mueble
   $("#num").focusout(function() {
     var num = $(this).val();
-    if (isNum(num) && num.length == 6) {
+    if ((isNum(num) && num.length == 6) || num.length == 0 ) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
