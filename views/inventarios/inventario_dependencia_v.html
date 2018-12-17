@@ -697,7 +697,8 @@
   // Validación de bien mueble
   $("#num").focusout(function() {
     var num = $(this).val();
-    if ((isNum(num) && num.length == 6) || num.length == 0 ) {
+    var esta_repetido = valores_unicos['num'].includes(num);
+    if ((isNum(num) && num.length == 6 && !esta_repetido) || num.length == 0 ) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -705,14 +706,42 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce un número de 6 dígitos");
+      if (esta_repetido) {
+        $(this).next().text("El número introducido ya ha sido registrado");
+      }
+      else {
+        $(this).next().text("Introduce un número de 6 dígitos");
+      }
+    }
+  });
+
+  // Validación de serial de chasis (17 dígitos)
+  $("#serialCh").focusout(function() {
+    var serial = $(this).val();
+    var esta_repetido = valores_unicos['serial_chasis'].includes(serial);
+    if (serial.length == 17 && !esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado");
+      } else {
+        $(this).next().text("Introduce un serial de 17 dígitos");
+      }
     }
   });
 
   // Validación de serial de carrocería (17 dígitos)
-  $("#serialCh").focusout(function() {
+  $("#serialC").focusout(function() {
     var serial = $(this).val();
-    if (serial.length == 17) {
+
+    var esta_repetido = valores_unicos['serial_carroceria'].includes(serial);
+
+    if (!esta_repetido) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -720,7 +749,77 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce un serial de 17 dígitos");
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de serial de motor (17 dígitos)
+  $("#serialM").focusout(function() {
+    var serial = $(this).val();
+
+    var esta_repetido = valores_unicos['serial_motor'].includes(serial);
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de placa
+  $("#placa").focusout(function() {
+    var placa = $(this).val();
+
+    var esta_repetido = valores_unicos['placa'].includes(placa);
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("La placa introducida ya está registrada");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de INTT
+  $("#intt").focusout(function() {
+    var intt = $(this).val();
+
+    var esta_repetido = valores_unicos['intt'].includes(intt);
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El número de INTT introducido ya está registrado");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
     }
   });
 
@@ -881,6 +980,10 @@
 
     if (   !$(this).is("#num") 
         && !$(this).is("#serialCh")
+        && !$(this).is("#serialC")
+        && !$(this).is("#serialM")
+        && !$(this).is("#intt")
+        && !$(this).is("#placa")
         && !$(this).is("#nro_puestos")
         && !$(this).is("#ano")
        ) {
