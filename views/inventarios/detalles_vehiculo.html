@@ -535,8 +535,8 @@
                                   <label>Tiempo de uso previsto (md)*</label>
                                   <select class="form-control" type="select" id="tiempo_previsto_md" name="tiempo_previsto_md" placeholder="tiempo_previsto_md*" required>
                                       <option value="">Seleccione una opción</option>
-                                      <option value="días">Días</option>
-                                      <option value="horas">Horas</option>
+                                      <option value="días">días</option>
+                                      <option value="horas">horas</option>
                                   </select>
                                   <div class="dr" id="err_tiempo_previsto_md" style="color: #d03e3e;"> </div>
                               </div>
@@ -1631,6 +1631,47 @@
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
+  });
+
+  // Valida que la fecha de devolución sea posterior a la de salida
+  $("#fecha_prevista_salida").change(function() {
+    var fecha = new Date($(this).val());
+
+    var dd = fecha.getDate();
+    var mm = fecha.getMonth() + 1;
+    var yyyy = fecha.getFullYear();
+
+    var minimo = yyyy + "-" + mm + "-" + dd;
+
+    $("#fecha_prevista_devolucion").attr('min', minimo);
+    $("#fecha_prevista_devolucion").val("");
+  });
+
+  const MS_AL_DIA = 1000 * 60 * 60 * 24;
+
+  function diferenciaEntreFechasEnDias(a, b) {
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / MS_AL_DIA);
+  }
+
+
+  // Configura el tiempo previsto por defecto
+  $("#fecha_prevista_devolucion").change(function() {
+    var fecha_salida = new Date($("#fecha_prevista_salida").val());
+    var fecha_devolucion = new Date($("#fecha_prevista_devolucion").val());
+
+    var diferencia = diferenciaEntreFechasEnDias(fecha_salida, fecha_devolucion);
+
+    if (diferencia > 0) {
+      $("#tiempo_previsto").val(diferencia);
+      $('#tiempo_previsto_md option[value="días"]').attr("selected", "selected");
+    } else {
+      $("#tiempo_previsto").val("");
+      $('#tiempo_previsto_md option[value=""]').attr("selected", "selected");
+    }
+
   });
 
   // Fecha de mantenimiento
