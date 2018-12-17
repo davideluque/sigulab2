@@ -81,81 +81,106 @@
     <!-- Filtros de busqueda seleccionados -->
     <div class="text-center">
     
-        <h2>Resultados búsqueda</h2>
+        <h2>Resultados Búsqueda</h2>
         <br>
 
         <div>
         
             {{if filtros['gremio_busqueda'] != "": }}
-                <div style="display: inline-block;" id="type_dinamic_pre">
+                <div id="type_dinamic_pre" style="display: none;"><b>Gremio: </b> </div>
+                <div id="type_dinamic" style="display: none;">{{=filtros['gremio_busqueda'].upper()}}</div>
+
+                <div style="display: inline-block;">
                     <h4><b>Gremio:</b></h4>
                 </div>
 
-                <div style="display: inline-block;" id="type_dinamic">
+                <div style="display: inline-block;">
                     <h4>{{=filtros['gremio_busqueda'].upper()}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['cargo_busqueda'] != "": }}
-                <div id="type_dinamic_pre2" style="display: inline-block;">
+                <div id="type_dinamic_pre2" style="display: none;"><b> Cargo:</b></div>
+                <div id="type_dinamic2" style="display: none;">{{=filtros['cargo_busqueda'].upper()}}</div>
+                
+                
+                <div style="display: inline-block;">
                     <h4><b>&ensp;Cargo:</b></h4>
                 </div>
 
-                <div style="display: inline-block;" id="type_dinamic2">
+                <div style="display: inline-block;">
                     <h4>{{=filtros['cargo_busqueda'].upper()}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['competencia_busqueda'] != "": }}
+                <div id="type_dinamic_pre3" style="display: none;"><b>Competencia:</b></div>
+                <div id="type_dinamic3" style="display: none;">{{=filtros['competencia_busqueda'].upper()}}</div>
+                
                 <br>
 
-                <div id="type_dinamic_pre3" style="display: inline-block;">
+                <div style="display: inline-block;">
                     <h4><b>Competencia:</b></h4>
                 </div>
 
-                <div id="type_dinamic3" style="display: inline-block;">
+                <div style="display: inline-block;">
                     <h4>{{=filtros['competencia_busqueda'].upper()}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['categoria_busqueda'] != "": }}
-                <div id="type_dinamic_pre4" style="display: inline-block;">
+                <div id="type_dinamic_pre4" style="display: none;"><b>Categoria:</b></div>
+                <div id="type_dinamic4" style="display: none;">{{=filtros['categoria_busqueda'].upper()}}</div>
+                
+                
+                <div style="display: inline-block;">
                     <h4><b>&ensp;Categoria:</b></h4>
                 </div>
-                <div id="type_dinamic4" style="display: inline-block;">
+                <div style="display: inline-block;">
                     <h4>{{=filtros['categoria_busqueda'].upper()}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['anios_busqueda'] != "": }}
+                <div id="type_dinamic_pre5" style="display: none;"><b>Años Servicio ULAB:</b> </div>
+                <div id="type_dinamic5" style="display: none;">{{=filtros['anios_busqueda'].upper() +  " AÑOS"}}</div>
+                
+                
                 <br>
 
-                <div id="type_dinamic_pre5" style="display: inline-block;">
-                    <h4><b>Años servicio ULAB:</b></h4>
+                <div style="display: inline-block;">
+                    <h4><b>Años Servicio ULAB:</b></h4>
                 </div>
 
-                <div id="type_dinamic5" style="display: inline-block;">
+                <div style="display: inline-block;">
                     <h4>{{=filtros['anios_busqueda'].upper() +  " AÑOS"}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['fecha_busqueda'] != "": }}
+                <div id="type_dinamic_post" style="display: none;">{{="PARA LA FECHA " + filtros['fecha_busqueda'].upper()}}</div> 
+
+
                 <div style="display: inline-block;">
                     <h4>{{="PARA LA FECHA " + filtros['fecha_busqueda'].upper()}}</h4>
                 </div>
             {{pass}}
 
             {{if filtros['anios_admin'] != "": }}
+                <div id="type_dinamic_pre6" style="display: none;"><b>Años Administración pública: </b></div>
+                <div id="type_dinamic6" style="display: none;">{{=filtros['anios_admin'].upper() +  " AÑOS"}}</div>
                 <br>
 
-                <div id="type_dinamic_pre6" style="display: inline-block;">
-                    <h4><b>Años administración pública: </b></h4>
+                <div style="display: inline-block;">
+                    <h4><b>Años Administración Pública: </b></h4>
                 </div>
 
-                <div id="type_dinamic6" style="display: inline-block;"><h4>{{=filtros['anios_admin'].upper() +  " AÑOS"}}</h4></div>
+                <div style="display: inline-block;"><h4>{{=filtros['anios_admin'].upper() +  " AÑOS"}}</h4></div>
             {{pass}}
 
             {{if filtros['fecha_admin_busqueda'] != "": }}
+                <div id="type_dinamic_post2" style="display: none;">{{="PARA LA FECHA " + filtros['fecha_admin_busqueda'].upper()}}</div> 
+
                 <div style="display: inline-block;">
                     <h4>{{="PARA LA FECHA " + filtros['fecha_admin_busqueda'].upper()}}</h4>
                 </div>
@@ -290,6 +315,12 @@
                     }else{
                         filtro5="";
                     }
+                    var filtro7 = document.getElementById("type_dinamic_post");
+                    if(filtro7!=null){
+                        filtro7 = filtro7.innerHTML;
+                    }else{
+                        filtro7="";
+                    }
                     var filtro6 = document.getElementById("type_dinamic6");
                     if(filtro6!=null){
                         filtro6 = filtro6.innerHTML;
@@ -298,8 +329,14 @@
                     }else{
                         filtro6="";
                     }
+                    var filtro8 = document.getElementById("type_dinamic_post2");
+                    if(filtro8!=null){
+                        filtro8 = filtro8.innerHTML;
+                    }else{
+                        filtro8="";
+                    }
 
-                    var total = filtro+", "+filtro2+", "+filtro3+", "+filtro4+", "+filtro5+", "+filtro6
+                    var total = filtro+", "+filtro2+", "+filtro3+", "+filtro4+", "+filtro5+", "+filtro7+", "+filtro6+", "+filtro8
                     //var total =  filtro+filtro2+filtro3+filtro4+filtro5
                     console.log(filtro);
                     doc.content[1].margin = [0, 0, 150, 0 ];
@@ -347,14 +384,14 @@
                         {
                             alignment: 'center',
                             fontsize: 12,
-                            text: [{text: filtro5}],
+                            text: [{text: filtro5}, ' ', {text: filtro7}],
                             margin: [50, 0, 50, 10]
                             
                         },
                         {
                             alignment: 'center',
                             fontsize: 12,
-                            text: [{text: filtro6}],
+                            text: [{text: filtro6}, ' ', {text: filtro8}],
                             margin: [50, 0, 50, 10]
                             
                         },
