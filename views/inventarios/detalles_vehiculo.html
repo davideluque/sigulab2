@@ -113,7 +113,9 @@
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
                     <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
                     <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
-                    <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
+                    {{ if vehiculo['vh_origen'] in ["Compra", "Donación"]: }}
+                      <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
+                    {{ pass }}
                     {{ if puede_ver_historial_mantenimiento: }}
                       <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
                     {{ pass }}
@@ -253,6 +255,7 @@
                 </div>
             </div>
 
+          {{ if vehiculo['vh_origen'] in ["Compra", "Donación"]: }}
             <div id="tab-4"class="tab-content">
                 <div class="grid-container">
                     <div class="grid-item">
@@ -271,6 +274,7 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_nro_adquisicion']}}
                     </div>
+                    {{ if vehiculo['vh_fecha_adquisicion']: }}
                     <div class="grid-item">
                         {{ if vehiculo['vh_origen'] == 'Compra': }}
                             Fecha Factura:
@@ -281,6 +285,7 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_fecha_adquisicion'].strftime("%d/%m/%y") }}
                     </div>
+                    {{ pass }}
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
                         <div class="grid-item">
                             Proveedor:
@@ -310,6 +315,7 @@
                     {{ pass }}
                 </div>
             </div>
+          {{ pass }}
 
             <div id="tab-5"class="tab-content">
                 {{include 'inventarios/mantenimiento_v.html'}}
