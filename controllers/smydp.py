@@ -708,7 +708,7 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_compra.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de Compra no puede menor a una semana"
                 return False
-            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+            elif (fecha_compra.year==fechaHoy.year and fecha_compra.month != fechaHoy.month):
                 response.flash = "Los registros se cierran mensualmente"
                 return False   
 
@@ -752,6 +752,9 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_u.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de Consumo no puede menor a una semana"
                 return False 
+        elif (fecha_u.year==fechaHoy.year and fecha_u.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False  
         
         fechaComp=datetime.date(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
