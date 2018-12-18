@@ -504,7 +504,8 @@ def __get_descripcion(registro):
         
             descripcion = "Cesión a... "
         # Cuando es un egreso en respuesta a una solicitud
-        else:
+        elif registro.f_tipo_ingreso[0] == "Solicitud":
+       
             
             # Respuesta a la solicitud en la que se solicito la sustancia
             respuesta = db(db.t_Respuesta.id == registro.f_respuesta_solicitud
@@ -2813,7 +2814,188 @@ def detalles_solicitud():
 
     espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
 
-    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+    responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+
+
+    #Posibles respuesta a la solicitud
+    respuestas = ['Negación','Aceptación']
+
+    #Posibles forma en que se tratara la solicitud
+    formas = ['Cesión','Préstamo']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    espacios_a_cargo = __get_espacios(user_dep_id)
+
+    for esp in espacios_a_cargo:
+
+        for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
+                        (db.t_Inventario.espacio == esp)).select():
+
+            esp_aux = db((db.espacios_fisicos.id == esp)
+                ).select()[0]
+
+            espacios.append(esp_aux)
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    registro = solicitud.f_cod_registro
+
+    num_resp = validador_registro_respuestas(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+    esta_autorizado = not(auth.has_membership("TÉCNICO"))
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+
+
+
+        #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.numResp:
+
+        cantidad = float(request.vars.suministrar)
+        unidad = request.vars.unidad
+        respuesta = request.vars.respuesta
+        sustancia = sustancia.id
+        justificacion = request.vars.justificacion
+        forma = request.vars.forma
+        fecha_tope = request.vars.fecha_tope
+        espacio = request.vars.espacio
+        numResp = request.post_vars.numResp
+        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
+                                        f_cantidad= cantidad,
+                                        f_medida=unidad, 
+                                        f_tipo_respuesta=respuesta,
+                                        f_justificacion=justificacion,
+                                        f_calidad=forma,
+                                        f_fecha_tope_devolucion=fecha_tope,
+                                        f_espacio=espacio,
+                                        f_solicitud=solicitud.id,
+                                        f_responsable_entrega=personal_usuario.id)
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    return dict(solicitud = solicitud,
+                sustancia = sustancia,
+                espacio = espacio,
+                datos_solicitud=datos_solicitud,
+                responsable = responsable,
+                respuestas = respuestas,
+                formas = formas,
+                esta_autorizado = esta_autorizado,
+                espacios = espacios,
+                unidades_de_medida=unidades_de_medida
+                )
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_solicitud_realizada():
+
+    solicitud = db((db.t_Solicitud_smydp.f_cod_registro == request.vars.registro)).select()[0]
+
+    sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
+    espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
+
+    responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+
+
+    #Posibles respuesta a la solicitud
+    respuestas = ['Negación','Aceptación']
+
+    #Posibles forma en que se tratara la solicitud
+    formas = ['Cesión','Préstamo']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    espacios_a_cargo = __get_espacios(user_dep_id)
+
+    for esp in espacios_a_cargo:
+
+        for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
+                        (db.t_Inventario.espacio == esp)).select():
+
+            esp_aux = db((db.espacios_fisicos.id == esp)
+                ).select()[0]
+
+            espacios.append(esp_aux)
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    registro = solicitud.f_cod_registro
+
+    num_resp = validador_registro_respuestas(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+    esta_autorizado = not(auth.has_membership("TÉCNICO"))
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+
+    return dict(solicitud = solicitud,
+                sustancia = sustancia,
+                espacio = espacio,
+                datos_solicitud=datos_solicitud,
+                responsable = responsable,
+                respuestas = respuestas,
+                formas = formas,
+                esta_autorizado = esta_autorizado,
+                espacios = espacios,
+                unidades_de_medida=unidades_de_medida
+                )
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_respuesta():
+
+    respuesta = db((db.t_Respuesta.f_cod_registro == request.vars.registro)).select()[0]
+
+    solicitud = db((db.t_Solicitud_smydp.id == respuesta.f_solicitud)).select()[0]
+
+    sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
+    espacio = db((db.espacios_fisicos.id == respuesta.f_espacio)).select()[0]
+
+    responsable = db(db.t_Personal.f_usuario == respuesta.f_responsable_entrega).select()[0]
+
+    medida = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
 
     esta_autorizado = not(auth.has_membership("TÉCNICO"))
 
@@ -2865,37 +3047,100 @@ def detalles_solicitud():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+    
+    '''
+    #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.ci_receptor:
+        solic= db(db.t_Solicitud_smydp.id == respuesta.id).select()[0]
+        if solic.f_cantidad_conseguida < solic.f_cantidad:
+            
+            #COMO ESTA SOLICITANDO TIENE UN INGRESO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invSolic=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==solic.f_espacio ).select()
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balSol=db(db.t_Balance.f_inventario== invSolic[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invSolic[0].f_existencia
+            uso_int_viejo=invSolic[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
 
-        #----- AGREGAR RESPUESTA -----#
-    if request.post_vars.numResp:
+            total_nuevo = total_viejo + respuesta.f_cantidad
+            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            
+            invSolic[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+            print(respuesta.f_cantidad)
 
-        cantidad = float(request.vars.suministrar)
-        unidad = request.vars.unidad
-        respuesta = request.vars.respuesta
-        sustancia = sustancia.id
-        justificacion = request.vars.justificacion
-        forma = request.vars.forma
-        fecha_tope = request.vars.fecha_tope
-        espacio = request.vars.espacio
-        numResp = request.post_vars.numResp
-        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
-                                        f_cantidad= cantidad,
-                                        f_medida=unidad, 
-                                        f_tipo_respuesta=respuesta,
-                                        f_justificacion=justificacion,
-                                        f_calidad=forma,
-                                        f_fecha_tope_devolucion=fecha_tope,
-                                        f_espacio=espacio,
-                                        f_solicitud=solicitud.id,
-                                        f_responsable_entrega=personal_usuario.id)
+            db.t_Balance.insert(
+                f_cantidad = respuesta.f_cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto='Ingreso',
+                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invSolic[0].f_medida,
+                f_inventario=invSolic[0].id,
+                f_sustancia=solic.f_sustancia,
+                f_respuesta_solicitud=respuesta.id
+            )
+        
+            #COMO ESTA DANDO TIENE UN CONSUMO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invRespo=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==respuesta.f_espacio).select()
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balResp=db(db.t_Balance.f_inventario== invRespo[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invRespo[0].f_existencia
+            uso_int_viejo=invRespo[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            total_nuevo = total_viejo + respuesta.f_cantidad
+            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            
+            invRespo[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+            print(respuesta.f_cantidad)
+
+            db.t_Balance.insert(
+
+                f_cantidad = respuesta.f_cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto='Consumo',
+                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invRespo[0].f_medida,
+                f_inventario=invRespo[0].id,
+                f_sustancia=solic.f_sustancia
+            )
+
+            ##Cargo la CI del receptor de la sustancia 
+
+            cedula_receptor = int(request.post_vars.ci_receptor)
+            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
+        else :
+            if str(respuesta.f_calidad[0])== 'Cesión':
+                sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
+                        f_estatus='Completada')
+            else :
+                sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
+                        f_estatus='Prestamo por devolver')
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
-
-    return dict(solicitud = solicitud,
+'''
+    return dict(respuesta = respuesta,
+                medida = medida,
+                solicitud = solicitud,
                 sustancia = sustancia,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
-                respondable = respondable,
+                responsable = responsable,
                 respuestas = respuestas,
                 formas = formas,
                 esta_autorizado = esta_autorizado,
@@ -2903,6 +3148,170 @@ def detalles_solicitud():
                 unidades_de_medida=unidades_de_medida
                 )
 
+@auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_respuesta_realizada():
+
+    respuesta = db((db.t_Respuesta.f_cod_registro == request.vars.registro)).select()[0]
+
+    solicitud = db((db.t_Solicitud_smydp.id == respuesta.f_solicitud)).select()[0]
+
+    sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
+    espacio = db((db.espacios_fisicos.id == respuesta.f_espacio)).select()[0]
+
+    responsable = db(db.t_Personal.f_usuario == respuesta.f_responsable_entrega).select()[0]
+
+    medida = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+
+    esta_autorizado = not(auth.has_membership("TÉCNICO"))
+
+    #Posibles respuesta a la solicitud
+    respuestas = ['Negación','Aceptación']
+
+    #Posibles forma en que se tratara la solicitud
+    formas = ['Cesión','Préstamo']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    espacios_a_cargo = __get_espacios(user_dep_id)
+
+    for esp in espacios_a_cargo:
+
+        for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
+                        (db.t_Inventario.espacio == esp)).select():
+
+            esp_aux = db((db.espacios_fisicos.id == esp)
+                ).select()[0]
+
+            espacios.append(esp_aux)
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    registro = solicitud.f_cod_registro
+
+    num_resp = validador_registro_respuestas(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+    
+    #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.ci_receptor:
+        solic= db(db.t_Solicitud_smydp.id == respuesta.id).select()[0]
+        if solic.f_cantidad_conseguida < solic.f_cantidad:
+            
+            #COMO ESTA SOLICITANDO TIENE UN INGRESO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invSolic=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==solic.f_espacio ).select()
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balSol=db(db.t_Balance.f_inventario== invSolic[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invSolic[0].f_existencia
+            uso_int_viejo=invSolic[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            total_nuevo = total_viejo + respuesta.f_cantidad
+            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            
+            invSolic[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+            print(respuesta.f_cantidad)
+
+            db.t_Balance.insert(
+                f_cantidad = respuesta.f_cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto='Ingreso',
+                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invSolic[0].f_medida,
+                f_inventario=invSolic[0].id,
+                f_sustancia=solic.f_sustancia,
+                f_respuesta_solicitud=respuesta.id
+            )
+        
+            #COMO ESTA DANDO TIENE UN CONSUMO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invRespo=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==respuesta.f_espacio).select()
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balResp=db(db.t_Balance.f_inventario== invRespo[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invRespo[0].f_existencia
+            uso_int_viejo=invRespo[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            total_nuevo = total_viejo + respuesta.f_cantidad
+            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            
+            invRespo[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+            print(respuesta.f_cantidad)
+
+            db.t_Balance.insert(
+
+                f_cantidad = respuesta.f_cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto='Consumo',
+                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invRespo[0].f_medida,
+                f_inventario=invRespo[0].id,
+                f_sustancia=solic.f_sustancia
+            )
+
+            ##Cargo la CI del receptor de la sustancia 
+
+            cedula_receptor = int(request.post_vars.ci_receptor)
+            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
+        else :
+            if str(respuesta.f_calidad[0])== 'Cesión':
+                sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
+                        f_estatus='Completada')
+            else :
+                sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
+                        f_estatus='Prestamo por devolver')
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    return dict(respuesta = respuesta,
+                medida = medida,
+                solicitud = solicitud,
+                sustancia = sustancia,
+                espacio = espacio,
+                datos_solicitud=datos_solicitud,
+                responsable = responsable,
+                respuestas = respuestas,
+                formas = formas,
+                esta_autorizado = esta_autorizado,
+                espacios = espacios,
+                unidades_de_medida=unidades_de_medida
+                )
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
@@ -2940,10 +3349,12 @@ def solicitudes():
                                      ).select()[0]
                 espacios.append(esp_aux)
     
-
+            
+    
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
-
+        
+        
         cantidad = float(request.vars.total)
         unidad = request.vars.unidad
         sustancia = request.vars.sustancia
@@ -2951,6 +3362,18 @@ def solicitudes():
         justificacion = request.vars.justificacion
         fecha_caducidad = request.vars.fecha_caducidad
         espacio = request.vars.espacio
+
+        fechaCadu=request.vars.fecha_caducidad.split("-")
+        fecha_sumi=datetime.datetime(int(fechaCadu[0]),int(fechaCadu[1]),int(fechaCadu[2]))
+
+
+        fechaHoy = datetime.datetime.now()
+        if  fechaHoy > fecha_sumi:
+            response.flash = "Fecha de caducidad no puede ser menor a hoy"
+            session.flash = response.flash
+            redirect(URL('solicitudes'))
+
+        
         numRegistro = request.post_vars.numRegistro
         solicitante = request.post_vars.respSolicitud
         inv_id = db.t_Solicitud_smydp.insert(f_cantidad=cantidad, 
@@ -3143,7 +3566,6 @@ def respuestas():
                 respuestas_recibidas=respuestas_recibidas
                 )
 
-
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return locals()
@@ -3209,8 +3631,6 @@ def listado_respuestas_enviadas(db, espacios):
                                         'f_fecha': resp.created_on,
                                         }
     return respuestasEnviadas
-
-
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def ListaSolicitudesHechas(db, datos, espacios):
@@ -3383,7 +3803,6 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                             'f_fecha': sol.created_on,
                                             'f_estatus':sol.f_estatus
                                             }
-
     return solicitudesRecibidas
 
 
@@ -3419,6 +3838,10 @@ def validador_registro_respuestas(request, db, registro, contador=0):
 def sustancias():
     return locals()
 
+# Agrega un nuevo registro a la bitacora de una sustancia desde 
+def __agregar_registro_desde_solicitud(registro):
+
+   pass
 
 ############################################################################
 ############################################################################
