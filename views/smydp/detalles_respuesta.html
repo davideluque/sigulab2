@@ -161,50 +161,8 @@
                   <!-- Aqui va la barra lateral -->
                   <div class="col-sm-1 col1Body">
                     <span class="step activePass">1</span>
-                    <span class="step">2</span>
                   </div>
                   <!-- Aqui va la informacion -->
-                  <div class="col-sm-11 col11Body">
-                    <h4 class="titulosForm">Datos de la Solicitud</h4>      
-
-                      <!-- Numero Registro -->
-                      <label class="form-group" id="numResp" style="margin-bottom: 0px">Registro</label>
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="numResp" id="numResp" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
-                      </div>
-
-                      <!-- Dependencia Solicitante -->
-                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
-                      </div>
-
-                      <!-- Jefe Dependencia Solicitante -->
-                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
-                      </div>
-
-                      <!-- Responsable Solicitud -->
-                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
-                      </div>                         
-                  </div>
-                </div>
-                <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
-              </fieldset>
-              <!-- Fin Primer Paso -->
-              
-              <!-- Segundo Paso -->
-              <fieldset class="formField">
-                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
-                    <!-- Aqui va la barra lateral -->
-                    <div class="col-sm-1 col1Body">
-                      <span class="step">1</span>
-                      <span class="step activePass">2</span>
-                    </div>
-                    <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Datos de aceptar/rechazar sustancia</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
@@ -215,11 +173,11 @@
                           </div>
 
                       </div>
-                  </div>
-                  <button type="button" class="btn btn-previous botonForm ">                <i class="fas fa-arrow-left"></i>   </button>
-                  <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm"><i class="fas fa-arrow-right"></i> </button> 
+                </div>
+                <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm"><i class="fas fa-arrow-right"></i> </button> 
               </fieldset>
-              <!-- Fin Segundo Paso -->
+              <!-- Fin Primer Paso -->
+              
             </form>
             <!-- Fin Form -->
           </div>
