@@ -1,6 +1,11 @@
 <div class="col-sm-11 col11Body">
   <h4 class="titulosForm">Historial laboral</h4>
 
+  <div class="col-sm-12">
+      <p onclick="toggleTrabajo('trabajo1', 'texto1', 'texto2')" style="display: block;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto1">Agregar trabajo</p>
+  </div>
+
+<div style="display: none;" id = "trabajo1">
   <div class="form-group">
 
     <div class="col-sm-12">
@@ -85,11 +90,14 @@
     </div>
 
 
-    <div class="col-sm-12">
-      <p onclick="toggleTrabajo('trabajo2', 'texto2', 'texto3')" style="display: block;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto2">Agregar otro trabajo</p>
+    <div class="col-sm-6">
+      <p onclick="toggleTrabajo('trabajo2', 'texto2', 'texto3')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto2">Agregar otro trabajo</p>
     </div>
+    <div class="col-sm-6">
+        <p onclick="quitarTrabajo('trabajo1', 'texto1')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto2">Quitar trabajo</p>
+      </div>
   </div>
-
+</div>
 
 
 
@@ -178,8 +186,11 @@
       </div>
 
       
-      <div class="col-sm-12">
-        <p onclick="toggleTrabajo('trabajo3', 'texto3', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto3">Agregar otro trabajo</p>
+      <div class="col-sm-6">
+        <p onclick="toggleTrabajo('trabajo3', 'texto3', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto3">Agregar otro trabajo</p>
+      </div>
+      <div class="col-sm-6">
+        <p onclick="quitarTrabajo('trabajo2', 'texto2')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto3">Quitar trabajo</p>
       </div>
     </div>
   </div>
@@ -271,8 +282,11 @@
         {{pass}}
       </div>
 
-      <div class="col-sm-12">
-        <p onclick="toggleTrabajo('trabajo4', 'texto4', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto4">Agregar otro trabajo</p>
+      <div class="col-sm-6">
+        <p onclick="toggleTrabajo('trabajo4', 'texto4', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto4">Agregar otro trabajo</p>
+      </div>
+      <div class="col-sm-6">
+        <p onclick="quitarTrabajo('trabajo3', 'texto3')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto4">Quitar trabajo</p>
       </div>
   </div>
 
@@ -364,8 +378,11 @@
       </div>
       
 
-      <div class="col-sm-12">
-        <p onclick="toggleTrabajo('trabajo5', 'texto5', '')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" id="texto5">Agregar otro trabajo</p>
+      <div class="col-sm-6">
+        <p onclick="toggleTrabajo('trabajo5', 'texto5', 'texto6')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto5">Agregar otro trabajo</p>
+      </div>
+      <div class="col-sm-6">
+        <p onclick="quitarTrabajo('trabajo4', 'texto4')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto5">Quitar trabajo</p>
       </div>
     </div>
   </div>
@@ -452,6 +469,10 @@
             data-toggle="popover" data-placement="bottom" data-trigger="manual" data-content="Este campo es requerido" data-valido="true">
         <font color="red"><div id="err_celular" hidden></div></font>
         {{pass}}
+      </div>
+
+      <div class="col-sm-12">
+        <p onclick="quitarTrabajo('trabajo5', 'texto5')" style="display: none;color: #3679B5;font-size: 15px; cursor:pointer;margin-top: 1rem;" class="texto6">Quitar trabajo</p>
       </div>
     </div>
   </div>

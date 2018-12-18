@@ -1,0 +1,431 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugins/datatables2/datatables.min.css')}}"/>
+	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
+    <!-- Estilos de modales y listados -->
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+{{end}}
+
+{{block center}}
+
+<!-- Bloque de navegación secundaria (breadcrumb) -->
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+  <div class="breadcrumb">
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'inventarios')}}">Inventarios</a>
+  <a class="breadcrumb-item" href="{{=URL('vehiculos')}}">Vehiculos</a>
+  <a class="breadcrumb-item" href="{{=URL('detalles_vehiculo', vars=dict(vh=vehiculo['vh_placa']))}}">{{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} ({{=vehiculo['vh_placa']}})</a>
+  <span class="breadcrumb-item active">Mantenimiento O/S: {{= mantenimiento['hmvh_nro_registro']}}</span>
+  </div>
+</nav>
+<!-- Fin del bloque de navegación secundaria (breadcrumb) -->
+
+
+    <h3 class="dep-titulo text-center">Ficha de Mantenimiento</h3>
+    <h4 class="dep-titulo text-center">Nº Registro (O/S): {{= mantenimiento['hmvh_nro_registro']}}</h4>
+    <h4 class="dep-titulo text-center">Vehículo: {{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}}</h4>
+
+    <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+{{pass}}
+
+
+<!-- Inicio Boton Modificar VEHICULO -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <!-- Botón para atrás -->
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                {{ if esta_autorizado: }}
+                    <!-- Boton para autorizar devolución -->
+                    <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#editar"><i class="fas fas fa-pencil-alt fa-1x"></i></button>
+                {{ pass }}
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{{ pass }}
+<!-- Fin Boton Agregar Sustancia -->
+
+<!-- Ficha vehiculo aqui esta la informacion del vehiculo -->
+<div class="wrapper">
+
+    <div class="tab-wrapper">
+        <ul class="tabs">
+                <li class="tab-link active" data-tab="1">DATOS DE LA<br/>SOLICITUD<br/>DE SERVICIO</li>
+                <li class="tab-link" data-tab="2">DATOS<br/>DEL<br/>SERVICIO</li>
+            </ul>
+    </div>
+
+    <div class="content-wrapper">
+        <div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+                {{ for title in datos_solicitud_list: }}
+                    {{ if datos_solicitud_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= datos_solicitud_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+        </div>
+
+        <div id="tab-2" class="tab-content">
+            <div class="grid-container">
+                {{ for title in datos_servicio_list: }}
+                    {{ if datos_servicio_dict.get(title): }}
+                    <div class="grid-item">
+                        {{= title}}:
+                    </div>
+                    <div class="grid-item">
+                        {{= datos_servicio_dict.get(title)}}
+                    </div>
+                    {{ pass }}
+                {{ pass }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{ if esta_autorizado: }}
+<div class="modal fade" id="editar" role="dialog">
+    <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+    
+        <!-- Modal Header -->
+        <div class="modal-header addHeader">
+            <div class="row addRow" id="rowHeader">
+            <div class="col-sm-1" id="col1Header">
+                <div class="container">
+                    <i class="fas fa-pencil-alt fa-2x" style="
+                    display:block;
+                    margin-left: -16px;
+                    margin-top: 8px;
+                    "></i>
+                </div>
+            </div>
+            <div class="col-sm-11" id="col11Header">
+                <h4 class="modal-title" id="nuevaBien" style="
+                text-align: left;
+                padding-top: 12px;
+                color: white;
+                ">Editar Ficha de Mantenimiento<button type="button" class="close" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+            </div>
+        </div>
+        <!-- Fin Modal Header -->
+    
+        <!-- Modal Body -->
+        <div class="modal-body addBody">
+            <div class="row addRow">
+            <div class="col-md-12 form-box">
+                <form id="formularioMantenimiento" class="presta-form registration-form" method="post">
+    
+                    <!-- Primer paso-->
+                    <fieldset class="formField">
+                    <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                        <div class="col-sm-1 col1Body">
+                        <span class="step activePass">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información de la Solicitud</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+                        <div class="form-group">
+                            <label>Vehículo*</label>
+                            <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Vehículo*" title="Vehículo*" disabled value="{{= vehiculo['vh_marca'] }} {{= vehiculo['vh_modelo'] }} {{= vehiculo['vh_placa'] }}">
+                            <div style="color: #d03e3e;" id="err_vehiculo" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de solicitud*</label>
+                            <input type="date" class="form-control fecha_mantenimiento" id="fecha_solicitud_mant" name="fecha_solicitud_mant" placeholder="Fecha de solicitud*" title="Ingrese la fecha de solicitud" required value="{{= mantenimiento['hmvh_fecha_solicitud'].strftime('%Y-%m-%d') }}">
+                            <div class="dr" id="error-fecha_solicitud_mant" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nº Registro u Orden de Servicio (O/S)*</label>
+                            <input type="text" class="form-control" id="nro_registro" name="nro_registro" placeholder="Número de registro*" required value="{{= mantenimiento['hmvh_nro_registro'] }}">
+                            <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Proveedor*</label>
+                            <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" required value="{{= mantenimiento['hmvh_proveedor'] }}">
+                            <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Persona de Contacto*</label>
+                            <input type="text" class="form-control" id="persona_contacto" name="persona_contacto" placeholder="Persona de Contacto*" required value="{{= mantenimiento['hmvh_contacto'] }}">
+                            <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Telf. de Contacto</label>
+                            <input type="text" class="form-control campo_telf" id="telf_contacto" name="telf_contacto" placeholder="Telf. de Contacto" value="{{= mantenimiento['hmvh_telf_contacto'] }}">
+                            <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                        </div>
+                        </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                        <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    </fieldset>
+    
+                    <!-- Segundo paso-->
+                    <fieldset class="formField">
+                    <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                        <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                        <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step activePass">2</span>
+                        <span class="step">3</span>
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información de la Solicitud y Servicio</h4>
+                        <label>Campos marcados con * son obligatorios.</label>
+    
+                            <div class="form-group">
+                                <label>Tipo*</label>
+                                <select class="form-control" type="select" id="tipo_mant" name="tipo_mant" placeholder="Tipo*" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="Preventivo" {{ if mantenimiento['hmvh_tipo'] == "Preventivo": }} selected {{pass}}>Preventivo</option>
+                                    <option value="Correctivo" {{ if mantenimiento['hmvh_tipo'] == "Correctivo": }} selected {{pass}}>Correctivo</option>
+                                    <option value="Diagnóstico" {{ if mantenimiento['hmvh_tipo'] == "Diagnóstico": }} selected {{pass}}>Diagnóstico</option>
+                                    <option value="Otro" {{ if mantenimiento['hmvh_tipo'] == "Otro": }} selected {{pass}}>Otro</option>
+                                </select>
+                                <div class="dr" id="error-tipo_mant" style="color: #d03e3e;"> </div>
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Motivo*</label>
+                                <input type="text" class="form-control" id="motivo" name="motivo" placeholder="Ingrese el motivo de la solicitud*" title="Ingrese el motivo de la solicitud*" required value="{{= mantenimiento['hmvh_motivo'] }}">
+                                <div style="color: #d03e3e;" id="err_motivo" hidden></div>
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Descripción*</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion de la solicitud*" title="Ingrese la decripcion de la solicitud*" required value="{{= mantenimiento['hmvh_descripcion'] }}">
+                                <div style="color: #d03e3e;" id="err_descripcion" hidden></div>
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Fecha de inicio</label>
+                                <input type="date" class="form-control fecha_mantenimiento" id="fecha_inicio_mant" name="fecha_inicio_mant" placeholder="Fecha de inicio" title="Ingrese la fecha de inicio" {{ if mantenimiento['hmvh_fecha_inicio']: }} value="{{= mantenimiento['hmvh_fecha_inicio'].strftime('%Y-%m-%d') }}" {{pass}}>
+                                <div class="dr" id="error-fecha_inicio_mant" style="color: #d03e3e;"> </div>
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Fecha de culminación</label>
+                                <input type="date" class="form-control fecha_mantenimiento" id="fecha_culminacion_mant" name="fecha_culminacion_mant" placeholder="Fecha de culminación" title="Ingrese la fecha de culminación" {{ if mantenimiento['hmvh_fecha_fin']: }} value="{{= mantenimiento['hmvh_fecha_fin'].strftime('%Y-%m-%d') }}" {{pass}}>
+                                <div class="dr" id="error-fecha_culminacion_mant" style="color: #d03e3e;"> </div>
+                            </div>
+        
+                        </div>
+                    </div>
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                        <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    </fieldset>
+                    <!-- Fin Segundo Paso -->
+    
+                    <!-- Comienzo Tercer Paso -->
+                    <fieldset class="formField">
+                        <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                            <span class="step">1</span>
+                            <span class="step">2</span>
+                            <span class="step activePass">3</span>
+                        </div>
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body">
+                            <h4 class="titulosForm">Información del Servicio</h4>
+                            <label>Campos opcionales.</label>
+                            <div class="form-group" tag="Formato:">
+                                <label>Piezas reparadas</label>
+                                <input type="text" class="form-control" id="piezas_reparadas" name="piezas_reparadas" title="Ingrese las piezas reparadas" placeholder="Piezas reparadas" value="{{ if mantenimiento['hmvh_piezas_reparadas']: }} {{= mantenimiento['hmvh_piezas_reparadas'] }} {{ pass }}">
+                                <div class="dr" id="error-piezas_reparadas" style="color: #d03e3e;"> </div>
+                            </div>
+    
+                            <div class="form-group" tag="Formato:">
+                                <label>Piezas sustituidas</label>
+                                <input type="text" class="form-control" id="piezas_sustituidas" name="piezas_sustituidas" title="Ingrese las piezas sustituidas" placeholder="Piezas sustituidas" value="{{ if mantenimiento['hmvh_piezas_sustituidas']: }} {{= mantenimiento['hmvh_piezas_sustituidas'] }} {{ pass }}">
+                                <div class="dr" id="error-piezas_sustituidas" style="color: #d03e3e;"> </div>
+                            </div>
+    
+                            <div class="form-group">
+                            <label>Acción</label>
+                            <select class="form-control" type="select" id="accion" name="accion" placeholder="Acción">
+                                <option value="">Seleccione una opción</option>
+                                <option value="Periódica" {{ if mantenimiento['hmvh_accion'] == 'Periódica': }} selected {{ pass }}>Periódica</option>
+                                <option value="Extraordinaria" {{ if mantenimiento['hmvh_accion'] == 'Extraordinaria': }} selected {{ pass }}>Extraordinaria</option>
+                                <option value="Urgente" {{ if mantenimiento['hmvh_accion'] == 'Urgente': }} selected {{ pass }}>Urgente</option>
+                            </select>
+                            <div class="dr" id="error-accion" style="color: #d03e3e;"> </div>
+                        </div>
+    
+                            <div class="form-group" tag="Formato:">
+                                <label>Observaciones del servicio</label>
+                                <input type="text" class="form-control" id="observaciones" name="observaciones" title="Ingrese las observaciones" placeholder="Observaciones" value="{{ if mantenimiento['hmvh_observaciones']: }} {{= mantenimiento['hmvh_observaciones'] }} {{ pass }}">
+                                <div class="dr" id="error-observaciones" style="color: #d03e3e;"> </div>
+                            </div>
+                        </div>
+    
+    
+                        </div>
+                        <input type="hidden" name="edicion" id="edicion" value="True">
+                        <div style="position:fixed; bottom: 15px; right: 30px;">
+                        <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                        <button type="submit button" form="formularioMantenimiento" id="submitMantenimiento" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                        </div>
+                    </fieldset>
+                    <!-- Fin Tercer Paso -->
+                </form>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+{{ pass }}
+
+<script type="text/javascript">
+    var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
+
+    // Validación de campos requeridos y no llenados
+  // (ignora el resto de campos especiales)
+  $("input[required]").focusout(function() {
+        var value = $(this).val();
+
+        if (   !$(this).is("#num")
+            && !$(this).is("#serialCh")
+            && !$(this).is("#nro_puestos")
+            && !$(this).is("#ano")
+            && !$(this).is("#tiempo_previsto")
+        ) {
+            if (value.length == 0) {
+                $(this).css('border-color', '#d03e3e');
+                $(this).next().show();
+                $(this).next().text("Este campo es obligatorio.");
+            } else {
+                $(this).next().hide();
+                $(this).css('border-color', '#ddd');
+                $(this).css('color', '#888');
+            }
+        }
+    });
+
+    // Fecha de mantenimiento
+    $(document).ready(function() {
+        var minimo = "{{= vehiculo['vh_ano'] - 1 }}-01-01";
+
+        $(".fecha_mantenimiento").attr('min', minimo);
+    });
+
+    // Fecha de mantenimien
+    $(".fecha_mantenimiento").change(function() {
+        var fecha = new Date($(this).val());
+        var minimo = new Date("{{= vehiculo['vh_ano'] - 1 }}-01-01");
+
+        if  (minimo <= fecha) {
+            $(this).next().hide();
+            $(this).css('border-color', '#ddd');
+            $(this).css('color', '#888');
+        } else {
+            $(this).css('border-color', '#d03e3e');
+            $(this).css('color', '#d03e3e');
+            $(this).next().show();
+            $(this).next().text("Introduce una fecha mayor al 01/01/{{= vehiculo['vh_ano'] - 1 }}.");
+        }
+    });
+
+      // Validación de formato de telf custodio (formato del regex establecido)
+
+    $(".campo_telf").focusout(function() {
+        var tlf = $(this).val();
+
+        if (tlf.length > 0) {
+            $(this).attr('required', true);
+        } else {
+            $(this).attr('required', false);
+        }
+
+        if (regexTlf.test(tlf) || tlf.length == 0) {
+            $(this).next().hide();
+            $(this).css('border-color', '#ddd');
+            $(this).css('color', '#888');
+        }
+        else if (tlf.length != 0) {
+            $(this).css('border-color', '#d03e3e');
+            $(this).next().show();
+            $(this).next().text("Formato: (0###) ###-####");
+        }
+    });
+
+    // Máscara js para formato de teléfono
+    $(document).ready(function() {
+        $('.campo_telf').mask('(Y000) 000-0000', {
+        translation: {
+            "Y": {
+            pattern: /[0]/
+                }
+            }
+        });
+    });
+    
+</script>
+
+<script type="text/javascript">
+    $('.tab-link').click( function() {
+
+        var tabID = $(this).attr('data-tab');
+
+        $(this).addClass('active').siblings().removeClass('active');
+
+        $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+</script>
+{{end}}

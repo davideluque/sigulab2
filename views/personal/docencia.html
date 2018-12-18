@@ -12,18 +12,22 @@
           <a class="nav-link  " id="tab_datos_personales" href="#trabajos" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Dirección / Tutoría de Trabajos</b></a>
         </li>
 
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#trabajos" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Ponencias en eventos de formación</b></a>
+        <li class="nav-item disabled">
+          <a id="tab_datos_personales" href="#ponencias" ><b>Ponencias en eventos de formación</b></a>
         </li>
+
       </ul>
 
       <div class="tab-content">
         <div class="tab-pane active" id="materias">
-          <p>Aqui van las materias</p>
+            {{include 'personal/materias.html'}}
         </div>
 
         <div class="tab-pane" id="trabajos">
-          <p>Aqui van los trabajos</p>
+            {{include 'personal/trabajos-dirigidos.html'}}
+        </div>
+
+        <div class="tab-pane" id="ponencias">
         </div>
 
 

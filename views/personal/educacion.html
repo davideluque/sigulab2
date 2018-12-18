@@ -13,8 +13,8 @@
           <a class="nav-link  " id="tab_datos_personales" href="#eventos" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Cursos / Eventos de Formación</b></a>
         </li>
 
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#reconoc_educ" data-toggle="tab" role="tab" aria-controls="comisiones_comites"><b>Reconocimientos</b></a>
+        <li class="nav-item disabled">
+          <a href="#reconoc_educ"><b>Reconocimientos</b></a>
         </li>
 
       </ul>
@@ -25,11 +25,10 @@
         </div>
 
         <div class="tab-pane" id="eventos">
-          <p>Aqui van los eventos</p>
+          {{include 'personal/eventos-formacion.html'}}
         </div>
 
         <div class="tab-pane" id="reconoc_educ">
-          <p>Aqui van los reconocimientos</p>
         </div>
 
       </div>

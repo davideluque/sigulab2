@@ -14,11 +14,12 @@
         <table id="datatable2" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
                 <tr id="titulosListado">
-                    <th class="camposTabla linksNombres">ID</th>
+                    <th class="camposTabla linksNombres">REGISTRO</th>
                     <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                    <th class="camposTabla linksNombres">FECHA DE SALIDA</th>
+                    <th class="camposTabla linksNombres">FECHA DE DEVOLUCIÓN</th>
                     <th class="camposTabla linksNombres">SOLICITANTE</th>
                     <th class="camposTabla linksNombres">MOTIVO</th>
-                    <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </thead>
 
@@ -28,18 +29,19 @@
                     <td class="camposTabla">
                         <div class="text-center">
                             <a href="{{=URL('detalles_prestamo', vars=dict(prestamo=solicitud['id']))}}">
-                                {{= solicitud['id'] }}
+                                SIG-{{= db(db.dependencias.id == db(db.vehiculo.id == solicitud['hpvh_vh_id']).select().first()['vh_dependencia']).select().first()['codigo_registro']  }}/{{= str(solicitud['hpvh_fecha_solicitud'].year)[2:] }}-{{= str(solicitud['id']).zfill(3) }}
                             </a>
                         </div>
                     </td>
-                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'] }}</td>
+                    <td class="camposTabla">{{= solicitud['hpvh_fecha_solicitud'].strftime("%d/%m/%y %I:%M %p") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_salida'] is None else solicitud['hpvh_fecha_salida'].strftime("%d/%m/%y") }}</td>
+                    <td class="camposTabla">{{= "N/A" if solicitud['hpvh_fecha_devolucion'] is None else solicitud['hpvh_fecha_devolucion'].strftime("%d/%m/%y") }}</td>
                     <td class="camposTabla">
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().first_name }}
                         &nbsp;
                         {{= db(db.auth_user.id == solicitud['hpvh_solicitante']).select().first().last_name }}
                     </td>
                     <td class="camposTabla">{{= solicitud['hpvh_motivo'] }}</td>
-                    <td class="camposTabla">{{= solicitud['hpvh_estatus'] }}</td>
                 </tr>
             {{pass}}
             </tbody>
@@ -47,14 +49,15 @@
             <tfoot id="collapseFiltros">
                 <th class="camposTabla linksNombres">ID</th>
                 <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
+                <th class="camposTabla linksNombres">FECHA DE SALIDA</th>
+                <th class="camposTabla linksNombres">FECHA DE DEVOLUCIÓN</th>
                 <th class="camposTabla linksNombres">SOLICITANTE</th>
                 <th class="camposTabla linksNombres">MOTIVO</th>
-                <th class="camposTabla linksNombres">ESTATUS</th>
                 </tr>
             </tfoot>
-    
+
         </table>
         </div>
     </div>
-    </div>  
-    <!-- Fin Listado de sustancias --> 
+    </div>
+    <!-- Fin Listado de sustancias -->

@@ -1,20 +1,20 @@
 <!-- Inicio Listado de sustancias -->
 <div class="container" style="margin-left: -150px">
     <div class="row">
-    
+
         <div>
             <button class="dt-button btn boton-sigulabPlus" title="Agregar Mantenimiento" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addman"><i class="fa fa-plus"></i></button>  
         </div>
-    
+
         <br><br>
-    
+
         <br><br>
         <div id="buttons">
         <!-- Filtrado -->
-        <!-- Filtrado -->    
+        <!-- Filtrado -->
         </div>
         <br>
-    
+
         <div class="table-responsive no-padding no-margin">
         <table id="datatable" class="table table-hover table-striped dt-responsive display tablaListado" cellspacing="0" width="100%">
             <thead>
@@ -29,7 +29,7 @@
                     <!--<th class="camposTabla linksNombres">Estatus</th>-->
                 </tr>
             </thead>
-    
+
             <tbody>
             {{for bm in mantenimiento:}}
                 <tr>
@@ -40,9 +40,9 @@
                     <td class="camposTabla">{{=bm['hmbm_proveedor']}}</td>
                     <td class="camposTabla">{{=bm['hmbm_tiempo_ejec']}}</td>
                 </tr>
-            {{pass}}           
+            {{pass}}
             </tbody>
-    
+
             <tfoot id="collapseFiltros">
                 <th class="camposTabla linksNombres">FECHA DE SOLICITUD</th>
                 <th class="camposTabla linksNombres">SOLICITUD(O/S)</th>
@@ -53,9 +53,9 @@
             <!--<th class="camposTabla linksNombres">Estatus</th>-->
                 </tr>
             </tfoot>
-    
+
         </table>
         </div>
     </div>
-    </div>  
-    <!-- Fin Listado de sustancias --> 
+    </div>
+    <!-- Fin Listado de sustancias -->

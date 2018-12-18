@@ -63,16 +63,20 @@ def bitacora_general():
     '''
     entradas_query= db().select(db.bitacora_general.ALL)
     entradas = []
-
     for elm in entradas_query:
+        palabras = elm.f_accion.split(" ")
+        if (len(palabras)==0):
+            palabras.append("")
         responsable = db(db.auth_user.id == elm.created_by).select(db.auth_user.ALL).first()
 
         entradas.append({
             'id': elm.id,
             'accion': elm.f_accion,
             'fecha': elm.created_on,
-            'responsable': responsable.first_name + " " + responsable.last_name
+            'responsable': responsable.first_name + " " + responsable.last_name if responsable else '',
+            'correo': responsable.email,
+            'modulo': palabras[0].strip("[]")
         })
         
     return locals()
-
+    

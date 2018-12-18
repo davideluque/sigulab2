@@ -285,9 +285,7 @@ h3 {
     transition: all .4s ease-in-out;
 }
 
-form .form-bottom button.btn {
-    min-width: 105px;
-}
+
 
 form .form-bottom .input-error {
     border-color: #d03e3e;
@@ -298,3 +296,65 @@ form.registration-form fieldset {
     display: none;
 }
 
+.contenidoPestania {
+    border-top: none !important;
+    margin: 0 auto;
+}
+
+tr.border_bottom td {
+    font-size: 16px;
+    padding: 3px !important;
+    text-align: left;   
+    border-bottom:1px solid grey;
+}
+
+.fieldPersonal {
+    border-top: none !important;
+    width: 30%;
+}
+
+td {
+    border-top: none !important;
+    white-space:nowrap;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #337ab7;
+  border-bottom: 5px solid #337ab7;
+  padding-left: 5px;
+  width: 25px;
+  height: 25px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.loader {
+   position:absolute;
+    bottom: 5%; 
+    right:28%;
+}
+
+.btn-previous {
+    position:absolute !important;
+    bottom: 1% !important; 
+    right:18% !important;
+    width: 50px !important; 
+   
+}
+.btn-submit, .btn-next {
+    position:absolute;
+    bottom: 1% !important;
+    right:8% !important;
+    width: 50px !important;
+}
