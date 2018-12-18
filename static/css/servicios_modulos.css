@@ -10,6 +10,10 @@
 	width: 130px;
 }
 
+.iconosHome {
+	width: 100px !important;
+}
+
 .opciones {
 	text-align: center;
 	color: #606060;
