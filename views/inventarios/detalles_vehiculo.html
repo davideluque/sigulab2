@@ -1539,8 +1539,6 @@
 
 <!-- Scripts de préstamos-->
 <script type="text/javascript">
-  document.getElementById('fecha_solicitud').valueAsDate = new Date();
-
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
   var regexCI = new RegExp("^[VEve][-][0-9]{6,8}$");
 
@@ -1632,6 +1630,7 @@
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
+    $("#fecha_solicitud").val(minimo);
   });
 
   // Valida que la fecha de devolución sea posterior a la de salida
