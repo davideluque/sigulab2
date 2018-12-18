@@ -601,7 +601,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         return False
 
     # Si ya existe el numero de VH:
-    if num != None and db(db.vehiculo.vh_num == int(num)).select():
+    if num and db(db.vehiculo.vh_num == int(num)).select():
         vh = db(db.vehiculo.vh_num == int(num)).select()[0]
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
@@ -642,7 +642,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                           a la dependencia \"{1}\".".format(vh.vh_intt, nombre_dependencia)
         return False
 
-    if num is not None:
+    if num:
         num = int(num)
 
     # Se agrega el nuevo vehiculo a la base de datos
@@ -1069,7 +1069,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
 
-    if num is not None:
+    if num:
         num = int(num)
 
     db.modificacion_vehiculo.insert(
