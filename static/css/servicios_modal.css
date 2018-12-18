@@ -131,7 +131,7 @@
 	  margin-right: 5px;
 	  text-align: center;
 	  width: 1.6em;
-	  margin-top: 40px; 
+	  margin-top: 30px; 
 	}
 
 	.activePass {
@@ -298,5 +298,6 @@
 	.titulosForm {
 		text-align: left !important;
 	}
+
 
 }

@@ -720,14 +720,28 @@
 <script type="text/javascript">
  function toggleTrabajo(id, idText, idText2) {
   var trabajo = document.getElementById(id);
-  var texto = document.getElementById(idText);
+  var texto = document.getElementsByClassName(idText);
   if (idText2) {
-    var texto2 = document.getElementById(idText2);
+    var texto2 = document.getElementsByClassName(idText2);
+  }
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='none';
+  }
+
+  for(var i = 0; i < texto2.length; i++) { 
+    texto2[i].style.display='block';
   }
   trabajo.style.display = 'block';
-  texto.style.display = 'none';
-  texto2.style.display = 'block';
  }
+
+ function quitarTrabajo(trabajo, idText) {
+  document.getElementById(trabajo).style.display = 'none';
+  var texto = document.getElementsByClassName(idText);
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='block';
+  }
+ }
+
  function toggleLoader() {
   document.getElementById('loader').style.display = 'inline-block';
  }

@@ -3,7 +3,7 @@
  */
 
 const requiredFieldMessage = 'Este campo es requerido'
-const badYear1 = "No puede ser previa a la fecha de inicio"
+const badYear1 = "No puede ser previa a la fecha de inicio o posterior a la fecha actual."
 
 const current_year = (new Date).getFullYear()
 
@@ -1019,6 +1019,9 @@ function comparaFechas(fechaini, fechafin) {
     const fecha_final = voltearFecha(fechafin);
     if (!fecha_inicio || !fecha_final) return true;
     if( !moment(fecha_inicio).isSameOrBefore(fecha_final) ) {
+        return false
+    }
+    else if (!moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD"))){
         return false
     }
     else {
