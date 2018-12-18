@@ -1,0 +1,131 @@
+<h4 class="titulosForm">Estudios Formales</h4>
+
+{{ for i in range(1,6): }}
+<div class="estudios-container" id="estudios-container{{=i}}"{{if len(trabajo_list)<i and 1!=i:}}hidden{{pass}}>
+  
+  <h5>Estudio {{=i}}</h5>
+  
+  <div class="col-sm-11 col11Body">
+
+    <div class="form-row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Título obtenido:</label>
+          <input
+                 value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_titulo_trabajo}}"
+                 type="text" class="form-control" name="estudio{{=i}}_titulo_estudio" id="estudio{{=i}}_titulo_estudio" placeholder="Ingrese titulo obtenido"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="col-sm-6">
+        <div class="form-group">
+            <label for="estudiantes">Área:</label>
+            <input
+                value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_estudiantes}}"
+                type="text" class="form-control" name="estudio{{=i}}_area" id="estudio{{=i}}_area" placeholder="Ingrese el area"/>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+            <label for="anio">Año:</label>
+            <input value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_anio}}"
+                   type="text" class="form-control" name="estudio{{=i}}_anio" id="estudio{{=i}}_anio" placeholder="Ingrese año"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="institucion">Institución:</label>
+          <input
+              value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_institucion}}"
+              type="text" class="form-control" name="estudio{{=i}}_institucion" id="estudio{{=i}}_institucion" placeholder="Ingrese nombre de la institución"/>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="institucion">Ubicación/Sede:</label>
+          <input
+              value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_institucion}}"
+              type="text" class="form-control" name="estudio{{=i}}_ubicacion" id="estudio{{=i}}_ubicacion" placeholder="Ingrese ubicación de la institución"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="trabajo{{=i}}_nivel">Nivel:</label>
+            <select
+                class="form-control seleccion-competencia"
+                type="select" name="estudio{{=i}}_nivel" id="estudio{{=i}}_nivel"
+                data-placeholder="Seleccione nivel de educación">
+                <option value=""> Seleccione una opcion</option>
+                {{ for niv in nivel: }}
+                <option 
+                      {{ if len(trabajo_list)>=i and (niv in (trabajo_list[i-1].f_nivel)): }}
+                        selected
+                        {{pass}}
+                    value="{{=niv}}">{{=niv}}</option>
+                {{pass}}
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="estudio{{=i}}_categoria">Categoría:</label>
+            <select class="form-control seleccion-competencia" type="select"
+                    name="estudio{{=i}}_categoria" id="estudio{{=i}}_categoria" multiple required
+                    data-placeholder="Seleccione las categorías que apliquen" data-toggle="popover"
+                    placeholder="Introduzca el años" data-placement="bottom"
+                    data-trigger="manual" data-content="Este campo es requerido" required>
+                    <option value=""> Seleccione al menos una opcion</option>
+                    {{ for comp in competencias: }}
+                      <option 
+                        {{ if i<=len(evento_list):}}
+                        {{= 'selected' if comp in evento_list[i-1].f_categorias else '' }}
+                        {{pass}}
+                        value="{{=comp}}">{{=comp}}
+                      </option>
+                    {{pass}}
+            </select>
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+
+</div>
+
+{{ pass }}
+
+<a href="#"  id="add_tdir" onclick="add_tdir()">Agregar Estudio</a>
+<a href="#"  id="remove_tdir" onclick="remove_tdir()">Quitar Estudio</a>
+
+<script charset="utf-8">
+    var num_tdir = {{=len(trabajo_list) or 1}}
+    function add_tdir(){
+        if(num_tdir < 6){
+            num_tdir++;
+            $('#estudios-container'+num_tdir).show();
+        }
+    }
+    function remove_tdir() {
+        if(num_tdir > 1){
+            $('#estudios-container'+num_tdir).hide();
+            $('#trabajo'+num_tdir+'_nivel').val(['']).trigger("chosen:updated");
+            $('#trabajo'+num_tdir+'_anio').val('');
+            $('#trabajo'+num_tdir+'_titulo_trabajo').val('');
+            $('#trabajo'+num_tdir+'_estudiantes').val('');
+            $('#trabajo'+num_tdir+'_institucion').val('');
+            num_tdir--;
+        }
+    }
+</script>
