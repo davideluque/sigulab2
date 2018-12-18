@@ -6,7 +6,7 @@
 
   {{ if len(dependencias) == 0: }}
     <div>
-        <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo Vehículo" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addbm"><i class="fa fa-plus"></i></button>  
+        <button class="dt-button btn boton-sigulabPlus" title="Agregar un nuevo Vehículo" style="height: 50px; width: 50px; font-size: 13pt;" id='botonModal' data-toggle="modal" data-target="#addvh"><i class="fa fa-plus"></i></button>  
     </div>
   {{ pass }}
 
@@ -69,7 +69,7 @@
 
 
 <!-- Modal añadir un vehiculo nuevo al inventario -->
-<div class="modal fade" id="addbm" role="dialog">
+<div class="modal fade" id="addvh" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -105,7 +105,7 @@
             <fieldset class="formField">
                 <div class="form-bottom" data-step="1" data-title="Primer Paso">
                   <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                  <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                  <div class="col-sm-1 col1Body modalInventario columna-gris-formulario"> 
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
@@ -185,7 +185,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                    <div class="col-sm-1 col1Body modalInventario columna-gris-formulario"> 
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
@@ -241,7 +241,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                    <div class="col-sm-1 col1Body modalInventario columna-gris-formulario"> 
                       <span class="step">1</span>
                       <span class="step">2</span>
                       <span class="step activePass">3</span>
@@ -352,7 +352,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                      <div class="col-sm-1 col1Body modalInventario columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -440,7 +440,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body columna-gris-formulario"> 
+                      <div class="col-sm-1 col1Body modalInventario columna-gris-formulario"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -540,7 +540,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                      <div class="col-sm-1 col1Body modalInventario columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -596,7 +596,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body columna-gris-formulario">
+                      <div class="col-sm-1 col1Body modalInventario columna-gris-formulario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
