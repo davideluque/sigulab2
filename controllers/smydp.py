@@ -3048,44 +3048,138 @@ def solicitudes():
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def respuestas():
-    return locals()
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        
+        espacios_a_cargo = db(
+                (db.t_Personal.f_usuario == auth.user.id) &
+                (db.es_encargado.tecnico == db.t_Personal.id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
+
+        espacios = [e.espacios_fisicos for e in espacios_a_cargo]
+
+    else:
+        espacios_a_cargo = __get_espacios(user_dep_id)
+
+        for esp in espacios_a_cargo:
+                esp_aux = db(
+                    (db.espacios_fisicos.id == esp)
+                                     ).select()[0]
+                espacios.append(esp_aux)
+    
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
+
+            #solicitud_a_cambiar.elaborar_certificacion()
+
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
+    #----- DATOS DE SOLICITANTE -----#
+    
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable]
+
+    #----- GENERACION DE LISTADOS -----#
+    respuestas_recibidas = listado_respuestas_recibidas(db, espacios)
+
+    respuestas_enviadas = listado_respuestas_enviadas(db, espacios)
+
+
+    return dict(respuestas_enviadas=respuestas_enviadas,
+                respuestas_recibidas=respuestas_recibidas
+                )
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return locals()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado_respuestas_recibidas(db, datos, espacios):
+def listado_respuestas_recibidas(db, espacios):
     respuestas = db((db.t_Respuesta.id > 0)).select()
     respuestasRecibidas = {}
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
 
-    i = 0
+    for resp in respuestas:
 
-    for sol in respuestas:
+        solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
-        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
-
-        espacio = db((db.espacios_fisicos.id == sol.f_espacio)).select()[0]
+        espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
         for esp in espacios:
             if espacio.id != esp.id:
 
-                i += 1
-                respuestasRecibidas[int(i)] = {
-                                    'f_cod_registro': sol.f_cod_registro,
-                                    'f_solicitud': solicitud.f_cod_registro,
-                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
-                                    'f_cantidad': sol.f_cantidad,
-                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
-                                    'f_estatus':sol.f_estatus
-                                    }
+                if not resp.id in respuestasRecibidas:
+                    respuestasRecibidas[resp.id] = {
+                                        'f_cod_registro': resp.f_cod_registro,
+                                        'f_espacio': espacio.codigo,
+                                        'f_sustancia': solicitud.f_sustancia,
+                                        'f_cantidad': resp.f_cantidad,
+                                        'f_medida': resp.f_medida,
+                                        'f_tipo_respuesta': resp.f_tipo_respuesta,
+                                        'f_calidad': resp.f_calidad,
+                                        'f_fecha': resp.created_on,
+                                        }
     return respuestasRecibidas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado_respuestas_enviadas(db, datos, espacios):
+def listado_respuestas_enviadas(db, espacios):
     respuestas = db((db.t_Respuesta.id > 0)).select()
     respuestasEnviadas = {}
 
@@ -3094,26 +3188,26 @@ def listado_respuestas_enviadas(db, datos, espacios):
 
     i = 0
 
-    for sol in respuestas:
+    for resp in respuestas:
 
-        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+        solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
-        espacio = db(
-                        (db.espacios_fisicos.id == sol.f_espacio)
-                                ).select()[0]
+        espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
         for esp in espacios:
             if espacio.id == esp.id:
 
-                i += 1
-                respuestasEnviadas[int(i)] = {
-                                    'f_cod_registro': sol.f_cod_registro,
-                                    'f_solicitud': solicitud.f_cod_registro,
-                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
-                                    'f_cantidad': sol.f_cantidad,
-                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
-                                    'f_estatus':sol.f_estatus
-                                    }
+                if not resp.id in respuestasEnviadas:
+                    respuestasEnviadas[resp.id] = {
+                                        'f_cod_registro': resp.f_cod_registro,
+                                        'f_espacio': espacio.codigo,
+                                        'f_sustancia': solicitud.f_sustancia,
+                                        'f_cantidad': resp.f_cantidad,
+                                        'f_medida': resp.f_medida,
+                                        'f_tipo_respuesta': resp.f_tipo_respuesta,
+                                        'f_calidad': resp.f_calidad,
+                                        'f_fecha': resp.created_on,
+                                        }
     return respuestasEnviadas
 
 
