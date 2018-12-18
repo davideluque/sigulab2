@@ -4,9 +4,7 @@
 {{ for i in range(1,6): }}
 <div class="estudios-container" id="estudios-container{{=i}}"
      {{if len(estudio_list)<i:}}hidden{{pass}}>
-  
-  <h5>Estudio {{=i-1}}</h5>
-  
+  <h5>Estudio {{=i}}</h5>
   <div class="col-sm-11 col11Body">
 
     <div class="form-row">
@@ -15,7 +13,7 @@
           <label>Título obtenido:</label>
           <input
                  value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_titulo_trabajo}}"
-                 type="text" class="form-control" name="estudio{{=i}}_titulo_estudio" id="estudio{{=i}}_titulo_estudio" placeholder="Ingrese titulo obtenido"/>
+                 type="text" class="form-control pop-hide" name="estudio{{=i}}_titulo_estudio" id="estudio{{=i}}_titulo_estudio" placeholder="Ingrese titulo obtenido"/>
         </div>
       </div>
     </div>
@@ -26,7 +24,7 @@
             <label for="estudiantes">Área:</label>
             <input
                 value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_estudiantes}}"
-                type="text" class="form-control" name="estudio{{=i}}_area" id="estudio{{=i}}_area" placeholder="Ingrese el area"/>
+                type="text" class="form-control pop-hide" name="estudio{{=i}}_area" id="estudio{{=i}}_area" placeholder="Ingrese el area"/>
         </div>
       </div>
 
@@ -34,7 +32,7 @@
         <div class="form-group">
             <label for="anio">Año:</label>
             <input value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_anio}}"
-                   type="text" class="form-control" name="estudio{{=i}}_anio" id="estudio{{=i}}_anio" placeholder="Ingrese año"/>
+                   type="text" class="form-control pop-hide" name="estudio{{=i}}_anio" id="estudio{{=i}}_anio" placeholder="Ingrese año"/>
         </div>
       </div>
     </div>
@@ -45,7 +43,7 @@
           <label for="institucion">Institución:</label>
           <input
               value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_institucion}}"
-              type="text" class="form-control" name="estudio{{=i}}_institucion" id="estudio{{=i}}_institucion" placeholder="Ingrese nombre de la institución"/>
+              type="text" class="form-control pop-hide" name="estudio{{=i}}_institucion" id="estudio{{=i}}_institucion" placeholder="Ingrese nombre de la institución"/>
         </div>
       </div>
 
@@ -54,7 +52,7 @@
           <label for="institucion">Ubicación/Sede:</label>
           <input
               value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_institucion}}"
-              type="text" class="form-control" name="estudio{{=i}}_ubicacion" id="estudio{{=i}}_ubicacion" placeholder="Ingrese ubicación de la institución"/>
+              type="text" class="form-control pop-hide" name="estudio{{=i}}_ubicacion" id="estudio{{=i}}_ubicacion" placeholder="Ingrese ubicación de la institución"/>
         </div>
       </div>
     </div>
@@ -64,7 +62,7 @@
           <div class="form-group">
             <label for="trabajo{{=i}}_nivel">Nivel:</label>
             <select
-                class="form-control seleccion-competencia"
+                class="form-control pop-hide"
                 type="select" name="estudio{{=i}}_nivel" id="estudio{{=i}}_nivel"
                 data-placeholder="Seleccione nivel de educación">
                 <option value=""> Seleccione una opcion</option>
@@ -112,7 +110,7 @@
 <a href="#"  id="remove_est" onclick="remove_est()">Quitar Estudio</a>
 
 <script charset="utf-8">
-    var num_est = {{=len(estudio_list) or 1}}
+    var num_est = {{=len(estudio_list)}}
     function add_est(){
         if(num_est < 6){
             num_est++;
@@ -120,14 +118,13 @@
         }
     }
     function remove_est() {
-        if(num_est > 1){
+        if(num_est > 0){
             $('#estudio'+num_est+'_categoria').val(['']).trigger("chosen:updated");
-            $('#estudio'+num_est+'_nivel').val(['']).trigger("chosen:updated");
+            $('#estudio'+num_est+'_nivel').val('');
             $('#estudio'+num_est+'_anio').val('');
             $('#estudio'+num_est+'_titulo_estudio').val('');
             $('#estudio'+num_est+'_ubicacion').val('');
             $('#estudio'+num_est+'_institucion').val('');
-            $('#estudio'+num_est+'_categoria').val('');
             $('#estudio'+num_est+'_area').val('');
             $('#estudios-container'+num_est).hide();
             num_est--;
