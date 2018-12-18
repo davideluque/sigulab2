@@ -12,7 +12,7 @@
         <div class="form-group">
           <label>Título obtenido:</label>
           <input
-                 value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_titulo_trabajo}}"
+                 value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_titulo}}"
                  type="text" class="form-control pop-hide" name="estudio{{=i}}_titulo_estudio" id="estudio{{=i}}_titulo_estudio" placeholder="Ingrese titulo obtenido"/>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="form-group">
             <label for="estudiantes">Área:</label>
             <input
-                value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_estudiantes}}"
+                value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_area}}"
                 type="text" class="form-control pop-hide" name="estudio{{=i}}_area" id="estudio{{=i}}_area" placeholder="Ingrese el area"/>
         </div>
       </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
           <label for="institucion">Ubicación/Sede:</label>
           <input
-              value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_institucion}}"
+              value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_ubicacion}}"
               type="text" class="form-control pop-hide" name="estudio{{=i}}_ubicacion" id="estudio{{=i}}_ubicacion" placeholder="Ingrese ubicación de la institución"/>
         </div>
       </div>
