@@ -572,14 +572,14 @@ def __agregar_registro(concepto):
     
     total_viejo = inv.f_existencia
     uso_interno_viejo = inv.f_uso_interno
-
+ 
     # Nueva cantidad total y nueva cantidad para uso interno
 
 
     if concepto == 'Ingreso':
         total_nuevo = total_viejo + cantidad
         uso_interno_nuevo = uso_interno_viejo + cantidad
-
+        
         inv.update_record(
                 f_existencia=total_nuevo,
                 f_uso_interno=uso_interno_nuevo)
@@ -600,30 +600,11 @@ def __agregar_registro(concepto):
             elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month == fechaHoy.month and\
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
+                return False    
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
                 return False           
-            ##  Faltaria validar si estoy en los primeros 6 dias del mes
-            # 
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+    
 
             #############################################################
             #############################################################
@@ -661,27 +642,10 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
                 return False
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False     
+      
             db.t_Balance.insert(
                 f_cantidad=cantidad,
                 f_cantidad_total=total_nuevo,
@@ -708,30 +672,9 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
                 return False
-
-
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False     
 
             db.t_Balance.insert(
                 f_cantidad=cantidad,
@@ -764,29 +707,10 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_compra.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de Compra no puede menor a una semana"
                 return False
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False   
 
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
-            
             # Se registra la nueva compra en la tabla t_Compra
             compra_id = db.t_Compra.insert(
                 f_cantidad=cantidad,
@@ -812,6 +736,9 @@ def __agregar_registro(concepto):
     
     else:
 
+        total_nuevo = total_viejo - cantidad
+        uso_interno_nuevo = uso_interno_viejo - cantidad
+
         tipo_eg = request.vars.tipo_egreso            
         fecha_uso=request.vars.fecha_uso.split("-")
         fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
@@ -827,26 +754,6 @@ def __agregar_registro(concepto):
         
         fechaComp=datetime.date(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
-
-        for reg in bitacora:
-            if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                    auxIng+=float(reg['t_Balance']['f_cantidad'])
-                elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                    auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-        total_nuevo=(auxIng-auxEgr)-cantidad
-        total_nuevoAux=total_nuevo
-
-
-        for reg in bitacora:
-            if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                    total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                    total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
 
         # Nueva cantidad total luego del consumo
         if total_nuevo <= 0:
@@ -3773,7 +3680,7 @@ def generar_reporte_rl7():
     # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
     # EN EL SISTAMA 
     sustContl7= db((db.t_Sustancia.f_control=="RL7")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
-    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select()
+    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select(orderby=~db.t_Balance.f_fechaUso)
     medidas={}
     ids={}
     entradas = {}
@@ -4102,19 +4009,21 @@ def generar_reporte_rl7():
         ingAux=[]
         totalInd={}
         auxTotal=[]
-        
+        auxTotalNu=0
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
                 sufeAux.append(suFe['f_fechaUso'])
                 medida = suFe['f_medida']
                 if ( suFe['f_concepto']==['Ingreso']):
                     ingAux.append(float(suFe['f_cantidad']))
-                    #consAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu+=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
+
                 elif ( suFe['f_concepto']==['Consumo']):
                     consAux.append(float(suFe['f_cantidad']))
-                    #ingAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu-=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
+
         
         fechasImdiv[str(neId)] = sufeAux
         ingresoIndiv[str(neId)]= ingAux
@@ -4352,7 +4261,7 @@ def generar_reporte_rl4():
     # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
     # EN EL SISTAMA 
     sustContl7= db((db.t_Sustancia.f_control=="RL4")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
-    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select()
+    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select(orderby=~db.t_Balance.f_fechaUso)
     medidas={}
     ids={}
     entradas = {}
@@ -4380,9 +4289,7 @@ def generar_reporte_rl4():
                     entradas[str(suCo.id)]= auxEnt
                 elif ( suFe['f_concepto']==['Consumo']):
                     auxSal+=float(suFe['f_cantidad'])
-                    salidas[str(suCo.id)]= auxSal 
-
-                    
+                    salidas[str(suCo.id)]= auxSal  
                 if (int(str(suFe['f_fechaUso']).split('-')[2])<=auxFecIn):
                     totalIni[str(suCo.id)]=float(suFe['f_cantidad_total'])
                     auxFecIn=int(str(suFe['f_fechaUso']).split('-')[2] )
@@ -4687,6 +4594,8 @@ def generar_reporte_rl4():
         ingAux=[]
         totalInd={}
         auxTotal=[]
+        auxTotalNu=0
+        
         
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
@@ -4695,12 +4604,16 @@ def generar_reporte_rl4():
                 if ( suFe['f_concepto']==['Ingreso']):
                     ingAux.append(float(suFe['f_cantidad']))
                     consAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu+=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
                 elif ( suFe['f_concepto']==['Consumo']):
                     consAux.append(float(suFe['f_cantidad']))
                     ingAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu-=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
         
+
+                   
         fechasImdiv[str(neId)] = sufeAux
         ingresoIndiv[str(neId)]= ingAux
         consumoIndiv[str(neId)]= consAux 
