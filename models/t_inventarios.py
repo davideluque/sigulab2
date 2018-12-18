@@ -391,6 +391,7 @@ db.define_table(
     Field('vh_clasificacion', 'string', notnull=True, label=T('Clasificación')),
     Field('vh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
+    Field('vh_propiedad', 'boolean', notnull=True, default=True, label=T('Propiedad USB')),
 
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label=T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
@@ -418,13 +419,13 @@ db.define_table(
     Field('vh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de Adquisición')),
-    Field('vh_nro_adquisicion', 'string', notnull=True, default="", label=T('Número de Adquisición')),
-    Field('vh_proveedor', 'string', default="", label=T('Proveedor')),
-    Field('vh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
-    Field('vh_donante', 'string', default="", label=T('Donante')),
-    Field('vh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+    Field('vh_origen', 'string', label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
+    Field('vh_fecha_adquisicion', 'date', label=T('Fecha de Adquisición')),
+    Field('vh_nro_adquisicion', 'string', label=T('Número de Adquisición')),
+    Field('vh_proveedor', 'string', label=T('Proveedor')),
+    Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
+    Field('vh_donante', 'string', label=T('Donante')),
+    Field('vh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('vh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
