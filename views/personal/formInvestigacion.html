@@ -1,12 +1,12 @@
 <h3>Proyectos de Investigación (Máximo 10)</h3>
 
 {{ for i in range(1,11): }}
-<div class="proyecto-container" id="proyecto{{=i}}_cointaner"{{if len(proy_list)<i and 1!=i: }}hidden{{pass}}>
+<div class="proyecto-container" id="proyecto{{=i}}_container"{{if len(proy_list)<i: }}hidden{{pass}}>
     <h5>Proyecto {{=i}}</h5>
     <div class="form-row">
         <div class="form-group">
             <label for="proyecto{{=i}}_categoria">Categoría:</label>
-            <select class="form-control seleccion-competencia"
+            <select class="form-control pop-field seleccion-competencia"
                     type="select" name="proyecto{{=i}}_categoria"
                     id="proyecto{{=i}}_categoria" multiple required
                     data-placeholder="Seleccione las categorías que apliquen">
@@ -28,7 +28,7 @@
                 <label for="proyecto{{=i}}_desde">Desde:</label>
                 <input 
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
-                       class="datepicker"
+                       class="form-control pop-field datepicker"
                        name="proyecto{{=i}}_desde" type="text"
                        id="proyecto{{=i}}_desde"
                        data-placement="bottom" data-trigger="manual"
@@ -43,7 +43,7 @@
                 <label>Hasta:</label>
                 <input 
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_fecha_fin.strftime('%d-%m-%Y')}}"
-                       class="datepicker"
+                       class="form-control pop-field datepicker"
                        name="proyecto{{=i}}_hasta" type="text"
                        id="proyecto{{=i}}_hasta"
                        data-placement="bottom" data-trigger="manual"
@@ -59,7 +59,7 @@
         <label>Titulo:</label>
          <input
                 value="{{='' if len(proy_list)<i else proy_list[i-1].f_titulo}}"
-                type="text" class="form-control"
+                type="text" class="form-control pop-field"
                 name="proyecto{{=i}}_titulo"
                 id="proyecto{{=i}}_titulo"
                 data-toggle="popover" data-placement="bottom"
@@ -73,7 +73,7 @@
         <label>Responsabilidad/Participantes:</label>
          <input
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_responsabilidad}}"
-                       type="text" class="form-control"
+                       type="text" class="form-control pop-field"
                        name="proyecto{{=i}}_responsabilidad"
                        id="proyecto{{=i}}_responsabilidad"
                        data-toggle="popover" data-placement="bottom"
@@ -89,7 +89,7 @@
         <label>Resultados: </label>
          <input
                 value="{{='' if len(proy_list)<i else proy_list[i-1].f_resultados}}"
-                type="text" class="form-control"
+                type="text" class="form-control pop-field"
                 name="proyecto{{=i}}_resultados"
                 id="proyecto{{=i}}_resultados"
                 data-toggle="popover" data-placement="bottom"
@@ -103,7 +103,7 @@
         <label>Institución:</label>
          <input
                 value="{{='' if len(proy_list)<i else proy_list[i-1].f_institucion}}"
-                type="text" class="form-control"
+                type="text" class="form-control pop-field"
                 name="proyecto{{=i}}_institucion"
                 id="proyecto{{=i}}_institucion"
                 data-toggle="popover" data-placement="bottom"
@@ -119,18 +119,18 @@
 <a href="#"  id="remove_proy" onclick="remove_proy()">Quitar Proyecto</a>
 
 <script charset="utf-8">
-    var nump = {{=len(proy_list) or 1}};
+    var nump = {{=len(proy_list)}};
     function add_proy(){
         if(nump < 11){
             nump++;
-            $('#proyecto'+nump+'_cointaner').show();
+            $('#proyecto'+nump+'_container').show();
         if (nump >10){
             $('#add_field_p').remove();
             }
         }
     }
     function remove_proy(){
-        if(nump > 1){
+        if(nump > 0){
             $('#proyecto'+nump+'_categoria').val(['']).trigger("chosen:updated");
             $('#proyecto'+nump+'_desde').val('');
             $('#proyecto'+nump+'_hasta').val('');
@@ -138,7 +138,7 @@
             $('#proyecto'+nump+'_responsabilidad').val('');
             $('#proyecto'+nump+'_resultados').val('');
             $('#proyecto'+nump+'_institucion').val('');
-            $('#proyecto'+nump+'_cointaner').hide();
+            $('#proyecto'+nump+'_container').hide();
             nump--;
         }
     }

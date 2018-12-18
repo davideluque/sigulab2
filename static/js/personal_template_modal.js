@@ -33,16 +33,8 @@ const inputs = [
     'fecha_inicio_4_add', 'fecha_final_4_add', 'cargo_hist_4_add', 'dependencia_hist_4_add', 'organizacion_4_add',
     'fecha_inicio_5_add', 'fecha_final_5_add', 'cargo_hist_5_add', 'dependencia_hist_5_add', 'organizacion_5_add',
     // Competencias
-    'competencia1_nombre',
-    'competencia2_nombre',
-    'competencia3_nombre',
-    'competencia4_nombre',
-    'competencia5_nombre',
-    'competencia6_nombre',
-    'competencia7_nombre',
-    'competencia8_nombre',
-    'competencia9_nombre',
-    'competencia10_nombre',
+    'competencia1_nombre', 'competencia2_nombre', 'competencia3_nombre', 'competencia4_nombre', 'competencia5_nombre',
+    'competencia6_nombre', 'competencia7_nombre', 'competencia8_nombre', 'competencia9_nombre', 'competencia10_nombre',
     // Trabajos dirigidos
     'trabajo1_titulo_trabajo', 'trabajo1_anio', 'trabajo1_institucion', 'trabajo1_nivel',
     'trabajo2_titulo_trabajo', 'trabajo2_anio', 'trabajo2_institucion', 'trabajo2_nivel',
@@ -51,7 +43,8 @@ const inputs = [
     'trabajo5_titulo_trabajo', 'trabajo5_anio', 'trabajo5_institucion', 'trabajo5_nivel',
 ]
 
-const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
+const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',') +
+    ", .pop-field";
 
 // Funciones que validan toda la pagina 1 del formulario 
 function validaPaginaWeb () {
@@ -923,9 +916,6 @@ const validadoresCuartoPaso = [
 
 // ESCRIBE AQUI TUS FUNCIONES
 
-
-
-
 function validaTrabajosDirigidos(){
     var valid=true;
     var today = new Date();
@@ -1021,18 +1011,243 @@ function validaTrabajosDirigidos(){
     }
     return valid;
 }
-const validadoresOnceavoPaso = [
-    validaTrabajosDirigidos
-]
 
-function validaInvestigacion() {
+// Auxiliares
+function comparaFechas(fechaini, fechafin) {
+    const fecha_inicio = voltearFecha(fechaini);
+    const fecha_final = voltearFecha(fechafin);
+    if (!fecha_inicio || !fecha_final) return true;
+    if( !moment(fecha_inicio).isSameOrBefore(fecha_final) ) {
+        return false
+    }
+    else {
+        return true;
+    }
+}
+
+function validaEmpty(selector) {
+    if ( selector.val()==='' ) {
+        selector.attr('data-content', requiredFieldMessage);
+        selector.popover('show');
+        selector.addClass('input-error');
+        return false;
+    }
+    else {
+        selector.removeClass('input-error');
+        selector.popover('hide');
+        return true;
+    }
+}
+
+// Sexto paso
+function validaAdministrativas(){
     var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#administrativa'+i+'-container').is(':hidden'))
+            continue;
+        var desde = $('#administrativa'+i+'_desde');
+        var hasta = $('#administrativa'+i+'_hasta');
+        var cargo = $('#administrativa'+i+'_cargo');
+        var institucion = $('#administrativa'+i+'_institucion');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(cargo) && valid;
+        valid = validaEmpty(institucion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+
+    }
     return valid;
 
 }
 
+// Septimo Paso
+function validaExtension(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#extension'+i+'-container').is(':hidden'))
+            continue;
+        var desde = $('#extension'+i+'_desde');
+        var hasta = $('#extension'+i+'_hasta');
+        var cargo = $('#extension'+i+'_cargo');
+        var nombre = $('#extension'+i+'_nombre');
+        var institucion = $('#extension'+i+'_institucion');
+        var descripcion = $('#extension'+i+'_descripcion');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(cargo) && valid;
+        valid = validaEmpty(nombre) && valid;
+        valid = validaEmpty(institucion) && valid;
+        valid = validaEmpty(descripcion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#extension'+i+'_categoria_chosen');
+        var chosenval = $('#extension'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+
+function validaCursos(){
+    var valid=true;
+    for(var i=1; i<11; i++){
+        if($('#evento-container'+i).is(':hidden'))
+            continue;
+        var anio = $('#evento'+i+'_anio');
+        var formacion = $('#evento'+i+'_formacion');
+        var dictadoPor = $('#evento'+i+'_dictadoPor');
+        var horas = $('#evento'+i+'_horas');
+        valid = validaEmpty(anio) && valid;
+        valid = validaEmpty(formacion) && valid;
+        valid = validaEmpty(dictadoPor) && valid;
+        valid = validaEmpty(horas) && valid;
+        var chosen_container = $('#evento'+i+'_categoria_chosen');
+        var chosenval = $('#evento'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+
+function validaMaterias(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#materia-container'+i).is(':hidden'))
+            continue;
+        var desde = $('#materia'+i+'_fecha_inicio_materia');
+        var hasta = $('#materia'+i+'_fecha_final_materia');
+        var codigo = $('#materia'+i+'_codigo');
+        var nombre = $('#materia'+i+'_nombre_materia');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(codigo) && valid;
+        valid = validaEmpty(nombre) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#materia'+i+'_area_chosen');
+        var chosenval = $('#materia'+i+'_area').trigger('chosen-updated').val().length;
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+
+function validaProyectos(){
+    var valid=true;
+    for(var i=1; i<11; i++){
+        if($('#proyecto'+i+'_container').is(':hidden'))
+            continue;
+        console.log(i)
+        var desde = $('#proyecto'+i+'_desde');
+        var hasta = $('#proyecto'+i+'_hasta');
+        var titulo = $('#proyecto'+i+'_titulo');
+        var resultados = $('#proyecto'+i+'_resultados');
+        var institucion = $('#proyecto'+i+'_institucion');
+        var responsabilidad = $('#proyecto'+i+'_responsabilidad');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(titulo) && valid;
+        valid = validaEmpty(resultados) && valid;
+        valid = validaEmpty(responsabilidad) && valid;
+        valid = validaEmpty(institucion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#proyecto'+i+'_categoria_chosen');
+        var chosenval = $('#proyecto'+i+'_categoria').trigger('chosen-updated').val().length;
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+const validadoresSextoPaso = [
+    validaAdministrativas
+]
+const validadoresSeptimoPaso = [
+    validaExtension
+]
+const validadoresNovenoPaso = [
+    validaCursos
+]
+const validadoresDecimoPaso = [
+    validaMaterias
+]
+const validadoresOnceavoPaso = [
+    validaTrabajosDirigidos
+]
+
 const validadoresDoceavoPaso = [
-    validaInvestigacion
+    validaProyectos
 ]
 
 
@@ -1163,6 +1378,18 @@ $(document).ready(function () {
 
         else if (parent_fieldset.attr('id') === 'p5'){
             next_step = validadoresCorrectos(validadoresQuintoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p6'){
+            next_step = validadoresCorrectos(validadoresSextoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p7'){
+            next_step = validadoresCorrectos(validadoresSeptimoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p9'){
+            next_step = validadoresCorrectos(validadoresNovenoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p10'){
+            next_step = validadoresCorrectos(validadoresDecimoPaso)
         }
 
         else if (parent_fieldset.attr('id') === 'p11'){
