@@ -2859,7 +2859,17 @@ def detalles_prestamo():
     except:
         return "Solicitante inválido."
 
+    es_solicitante = auth.user.id == prestamo['hpvh_solicitante']
     esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    # Si el usuario marcó que quiere eliminar la solicitud (que no ha recibido respuesta)
+    if es_solicitante and request.vars.eliminar:
+        # Eliminamos la solicitud
+        db(db.historial_prestamo_vh.id == prestamo_id).delete()
+
+        # Mostramos una notificación
+        session.flash = "Se ha eliminado la solicitud de préstamo satisfactoriamente."
+        return redirect(URL('prestamos'))
 
     # Si el usuario autorizado marcó que quería registrar la salida del vehículo
     if esta_autorizado and request.vars.salida:
@@ -3129,7 +3139,7 @@ def detalles_prestamo():
     try:
         autorizado_por = db(db.auth_user.id == prestamo['hpvh_autorizado_por']).select().first()
         nombre_autorizado = "%s %s" % (autorizado_por.first_name, autorizado_por.last_name)
-    except Exception as e:
+    except:
         autorizado_por = -1
         nombre_autorizado = ""
 
@@ -3295,7 +3305,8 @@ def detalles_prestamo():
         info_transito_list=info_transito_list,
         info_salida_dict=info_salida_dict,
         info_devolucion_dict=info_devolucion_dict,
-        esta_autorizado=esta_autorizado
+        esta_autorizado=esta_autorizado,
+        es_solicitante=es_solicitante
     )
 
 @auth.requires(lambda: __check_role())
