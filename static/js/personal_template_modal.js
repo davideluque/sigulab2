@@ -1159,6 +1159,57 @@ function validaCursos(){
 
 }
 
+function validaEstudios(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#estudios-container'+i).is(':hidden'))
+            continue;
+
+        var nivel = $('#estudio'+i+'_nivel');
+        var anio = $('#estudio'+i+'_anio');
+        var titulo_estudio = $('#estudio'+i+'_titulo_estudio');
+        var ubicacion = $('#estudio'+i+'_ubicacion');
+        var institucion = $('#estudio'+i+'_institucion');
+        // var categoria = $('#estudio'+i+'_categoria');
+        var area = $('#estudio'+i+'_area');
+
+        // valid = validaEmpty(nivel) && valid;
+        valid = validaEmpty(anio) && valid;
+        valid = validaEmpty(titulo_estudio) && valid;
+        valid = validaEmpty(ubicacion) && valid;
+        valid = validaEmpty(institucion) && valid;
+        valid = validaEmpty(area) && valid;
+
+        var chosen_container = $('#estudio'+i+'_categoria_chosen');
+        var chosenval = $('#estudio'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+        if (anio.val() > current_year) {
+            anio.attr("data-content", 'Ingrese un año menor o igual al actual');
+            anio.popover('show');
+            anio.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            anio.removeClass('input-error');
+            anio.popover('hide');
+            valid = valid && true;
+        }
+
+    }
+    return valid;
+
+}
 function validaMaterias(){
     var valid=true;
     for(var i=1; i<6; i++){
@@ -1249,6 +1300,9 @@ const validadoresSextoPaso = [
 const validadoresSeptimoPaso = [
     validaExtension
 ]
+const validadoresOctavoPaso = [
+    validaEstudios
+]
 const validadoresNovenoPaso = [
     validaCursos
 ]
@@ -1258,7 +1312,6 @@ const validadoresDecimoPaso = [
 const validadoresOnceavoPaso = [
     validaTrabajosDirigidos
 ]
-
 const validadoresDoceavoPaso = [
     validaProyectos
 ]
@@ -1397,6 +1450,9 @@ $(document).ready(function () {
         }
         else if (parent_fieldset.attr('id') === 'p7'){
             next_step = validadoresCorrectos(validadoresSeptimoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p8'){
+            next_step = validadoresCorrectos(validadoresOctavoPaso)
         }
         else if (parent_fieldset.attr('id') === 'p9'){
             next_step = validadoresCorrectos(validadoresNovenoPaso)
