@@ -2813,7 +2813,7 @@ def detalles_solicitud():
 
     espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
 
-    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+    responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
 
     esta_autorizado = not(auth.has_membership("TÉCNICO"))
 
@@ -2895,7 +2895,7 @@ def detalles_solicitud():
                 sustancia = sustancia,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
-                respondable = respondable,
+                responsable = responsable,
                 respuestas = respuestas,
                 formas = formas,
                 esta_autorizado = esta_autorizado,
@@ -2907,13 +2907,17 @@ def detalles_solicitud():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def detalles_respuesta():
 
-    solicitud = db((db.t_Solicitud_smydp.f_cod_registro == request.vars.registro)).select()[0]
+    respuesta = db((db.t_Respuesta.f_cod_registro == request.vars.registro)).select()[0]
+
+    solicitud = db((db.t_Solicitud_smydp.id == respuesta.f_solicitud)).select()[0]
 
     sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
 
-    espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
+    espacio = db((db.espacios_fisicos.id == respuesta.f_espacio)).select()[0]
 
-    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+    responsable = db(db.t_Personal.f_usuario == respuesta.f_responsable_entrega).select()[0]
+
+    medida = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
 
     esta_autorizado = not(auth.has_membership("TÉCNICO"))
 
@@ -2967,35 +2971,24 @@ def detalles_respuesta():
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
 
         #----- AGREGAR RESPUESTA -----#
-    if request.post_vars.numResp:
+    if request.post_vars.ci_receptor:
 
-        cantidad = float(request.vars.suministrar)
-        unidad = request.vars.unidad
-        respuesta = request.vars.respuesta
-        sustancia = sustancia.id
-        justificacion = request.vars.justificacion
-        forma = request.vars.forma
-        fecha_tope = request.vars.fecha_tope
-        espacio = request.vars.espacio
-        numResp = request.post_vars.numResp
-        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
-                                        f_cantidad= cantidad,
-                                        f_medida=unidad, 
-                                        f_tipo_respuesta=respuesta,
-                                        f_justificacion=justificacion,
-                                        f_calidad=forma,
-                                        f_fecha_tope_devolucion=fecha_tope,
-                                        f_espacio=espacio,
-                                        f_solicitud=solicitud.id,
-                                        f_responsable_entrega=personal_usuario.id)
+        #Aqui va lo del balance que hiciste, y va la actualizacion de la cantidad recibida
+        #y se le asigna la cedula del receptor de la sustancia
+
+        cedula_receptor = int(request.post_vars.ci_receptor)
+        inv_id = db.t_Respuesta.insert(f_responsable_recepcion = cedula_receptor
+                                        )
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
-    return dict(solicitud = solicitud,
+    return dict(respuesta = respuesta,
+                medida = medida,
+                solicitud = solicitud,
                 sustancia = sustancia,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
-                respondable = respondable,
+                responsable = responsable,
                 respuestas = respuestas,
                 formas = formas,
                 esta_autorizado = esta_autorizado,
