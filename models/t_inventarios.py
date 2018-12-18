@@ -597,6 +597,7 @@ db.define_table(
     Field('hpvh_fecha_autorizacion', 'datetime', label=T('Fecha de autorización')),
     Field('hpvh_estatus', 'string', notnull=True, default="En espera de respuesta", label=T('Estatus de solicitud')),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
+    Field('hpvh_rechazo_notificado', 'boolean', notnull=True, default=False, label=T('Rechazo notificado')),
     Field('hpvh_razon_cancelacion', 'text', label=T('Razón de cancelación')),
     Field('hpvh_fecha_cancelacion', 'datetime', label=T("Fecha de cancelación")),
 
