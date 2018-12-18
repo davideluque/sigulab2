@@ -590,11 +590,13 @@ db.define_table(
     Field('hpvh_nro_celular_usuario', 'string', label=T('Nº Celular Usuario')),
     Field('hpvh_ci_usuario', 'string', label=T('C.I. Usuario')),
 
-    # Estatus (@TODO: Cambiar estatus por código int)
+    # Estatus
     Field('hpvh_autorizado_por', 'reference auth_user', label=T('Autorizado por')),
     Field('hpvh_fecha_autorizacion', 'datetime', label=T('Fecha de autorización')),
     Field('hpvh_estatus', 'string', notnull=True, default="En espera de respuesta", label=T('Estatus de solicitud')),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
+    Field('hpvh_razon_cancelacion', 'text', label=T('Razón de cancelación')),
+    Field('hpvh_fecha_cancelacion', 'datetime', label=T("Fecha de cancelación")),
 
     # Datos de salida
     Field('hpvh_autoriza_salida', 'reference auth_user', label=T('Autorizado por (salida)')),

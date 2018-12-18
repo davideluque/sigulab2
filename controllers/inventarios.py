@@ -21,12 +21,16 @@ def __obtener_registro_de_prestamo(id_prestamo):
     #   AA:     Últimos dos dígitos del año de la solicitud
     #   NNN:    Identificador único numérico de la solicitud (3 dígitos)
 
+    prestamo = db(db.historial_prestamo_vh.id == id_prestamo).select().first()
+    vehiculo = db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()
+    dependencia = db(db.dependencias.id == vehiculo['vh_dependencia']).select().first()
+
     registro = "SIG"
     registro += "-"
     
     registro += str(dependencia['codigo_registro'])
     registro += "/"
-    registro += prestamo['hpvh_fecha_solicitud'].year[2:]
+    registro += str(prestamo['hpvh_fecha_solicitud'].year)[2:]
     registro += "-"
     registro += str(prestamo['id']).zfill(3)
 
@@ -147,7 +151,7 @@ def __get_prestamos_vh(vh_id=None):
 
     prestamos_final = list()
     for prestamo in prestamos:
-        if "Vehículo devuelto" == prestamo.hpvh_estatus or "Denegada" == prestamo.hpvh_estatus:
+        if "Vehículo devuelto" == prestamo.hpvh_estatus or "Denegada" == prestamo.hpvh_estatus or "Cancelada por el solicitante" == prestamo.hpvh_estatus:
             prestamos_final.append(prestamo)
 
     return prestamos_final
@@ -2897,6 +2901,20 @@ def detalles_prestamo():
         session.flash = "Se ha eliminado la solicitud de préstamo %s satisfactoriamente." % registro
         return redirect(URL('prestamos'))
 
+    # Si el usuario marcó que quiere cancelar la solicitud (que está aprobada)
+    if es_solicitante and request.vars.cancelar:
+        # Marcamos la solicitud como cancelada
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_estatus="Cancelada por el solicitante",
+            hpvh_razon_cancelacion=request.vars.motivo_cancelacion,
+            hpvh_fecha_cancelacion=datetime.now()
+        )
+
+        # Mostramos una notificación
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+        session.flash = "Se ha cancelado la solicitud de préstamo %s satisfactoriamente." % registro
+        return redirect(URL('prestamos'))
+
     # Si el usuario autorizado marcó que quería registrar la salida del vehículo
     if esta_autorizado and request.vars.salida:
         # Actualizamos la entrada en la base de datos
@@ -3174,6 +3192,9 @@ def detalles_prestamo():
         autorizado_por = -1
         nombre_autorizado = ""
 
+    flujo_positivo = "Aprobada" in prestamo['hpvh_estatus'] or "devuelto" in prestamo['hpvh_estatus']
+    flujo_positivo = flujo_positivo or "uso" in prestamo['hpvh_estatus'] or "Cancelada" in prestamo['hpvh_estatus']
+
     informacion_dict = {
         "Vehículo Solicitado": "%s %s" % (
             vehiculo['vh_marca'],
@@ -3192,10 +3213,12 @@ def detalles_prestamo():
         "Tiempo Estimado de Uso": "%s %s" % (prestamo['hpvh_tiempo_estimado_uso'], prestamo['hpvh_tiempo_estimado_uso_md']),
         "Estatus": prestamo['hpvh_estatus'],
         "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
-        "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
-        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None,
-        "Fecha de Aprobación": prestamo['hpvh_fecha_autorizacion'] if "rechazada" in prestamo['hpvh_estatus'] else None,
-        "Fecha de Rechazo": prestamo['hpvh_fecha_autorizacion'] if "aprobada" in prestamo['hpvh_estatus'] else None
+        "Rechazada por": nombre_autorizado if "Denegada" in prestamo['hpvh_estatus'] else None,
+        "Aprobada por": nombre_autorizado if flujo_positivo else None,
+        "Fecha de Aprobación": None if not flujo_positivo else prestamo['hpvh_fecha_autorizacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Fecha de Rechazo": None if "Denegada" not in prestamo['hpvh_estatus'] else prestamo['hpvh_fecha_autorizacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Fecha de Cancelación": None if "Cancelada" not in prestamo['hpvh_estatus'] else prestamo['hpvh_fecha_cancelacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Razón de Cancelación": prestamo['hpvh_razon_cancelacion']
     }
 
     informacion_list = [
@@ -3209,11 +3232,13 @@ def detalles_prestamo():
         "Ruta Prevista",
         "Tiempo Estimado de Uso",
         "Estatus",
-        "Razón de Rechazo",
-        "Rechazada por",
         "Aprobada por",
+        "Rechazada por",
         "Fecha de Aprobación",
-        "Fecha de Rechazo"
+        "Fecha de Rechazo",
+        "Razón de Rechazo",
+        "Fecha de Cancelación",
+        "Razón de Cancelación"
     ]
 
     conductor_dict = {
@@ -4582,7 +4607,7 @@ def prestamos():
     # Pequeña función booleana para saber si un vehículo ha acabado
     # su flujo útil en préstamos
     def __flujo_listo(x):
-        return "Vehículo devuelto" == x['hpvh_estatus'] or "Denegada" == x['hpvh_estatus']
+        return "Vehículo devuelto" == x['hpvh_estatus'] or "Denegada" == x['hpvh_estatus'] or "Cancelada por el solicitante" == x['hpvh_estatus']
 
     # Hallamos información del usuario
     user_id = auth.user.id
