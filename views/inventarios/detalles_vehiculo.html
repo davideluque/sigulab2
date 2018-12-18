@@ -662,10 +662,11 @@
                                 <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
                             </div>
                         </div>
-
-                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
-                          Cargando, por favor espere
-                          <div class="ld ld-ring ld-spin-fast"></div>
+                        <div style="margin-left: auto; margin-right: auto; display: block;">
+                          <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
+                            Procesando los datos, por favor espere
+                            <div class="ld ld-ring ld-spin-fast"></div>
+                          </div>
                         </div>
 
                       </div>
@@ -1785,7 +1786,7 @@
 
   $("#submitPrestamo").click(function() {
     $("#loaderPrestamo").show();
-    $("#submitPrestamo").attr('disabled', 'true');
+    $("#loaderPrestamo").delay(7000).hide("fast");
     $("#formularioDevolucion").submit();
     return true;
   });
