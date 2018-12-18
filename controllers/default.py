@@ -5,7 +5,7 @@
 # - download y call son ejemplos de aplicaciones basicas de web2py.
 # -------------------------------------------------------------------------
 
-# Pagina principal 
+# Pagina principal
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     val = contar_validaciones()
@@ -14,6 +14,7 @@ def index():
         session.ficha_negada = db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.f_comentario).first().f_comentario
     except:
         pass
+    session.prestamo_rechazado = _obtener_prestamo_rechazado()
     return dict()
 
 def register():
@@ -25,6 +26,54 @@ def recoverpassword():
 # Inicio de Sesion
 def login():
     return redirect(URL('modulos', 'login', vars=dict(error='invalid_data')))
+
+# Devuelve el primer préstamo rechazado no notificado
+def _obtener_prestamo_rechazado():
+
+    def _obtener_registro_de_prestamo(id_prestamo):
+
+        # El formato dado es:
+        # SIG-DDDD/AA-NNN
+        #
+        # Donde:
+        #   DDDD:   Código de dependencia
+        #   AA:     Últimos dos dígitos del año de la solicitud
+        #   NNN:    Identificador único numérico de la solicitud (3 dígitos)
+
+        prestamo = db(db.historial_prestamo_vh.id == id_prestamo).select().first()
+        vehiculo = db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()
+        dependencia = db(db.dependencias.id == vehiculo['vh_dependencia']).select().first()
+
+        registro = "SIG"
+        registro += "-"
+
+        registro += str(dependencia['codigo_registro'])
+        registro += "/"
+        registro += str(prestamo['hpvh_fecha_solicitud'].year)[2:]
+        registro += "-"
+        registro += str(prestamo['id']).zfill(3)
+
+        return registro
+
+    user_id = auth.user.id
+
+    prestamos_rechazados = db((db.historial_prestamo_vh.hpvh_estatus == "Denegada") & (db.historial_prestamo_vh.hpvh_solicitante == user_id) & (db.historial_prestamo_vh.hpvh_rechazo_notificado == False)).select()
+
+    if len(prestamos_rechazados) == 0:
+        session.registro_prestamo = None
+        session.prestamo_rechazado = None
+        return None
+    else:
+        prestamo = prestamos_rechazados.first()
+        registro = _obtener_registro_de_prestamo(prestamo.id)
+        session.registro_prestamo = registro
+
+        db(db.historial_prestamo_vh.id == prestamo.id).update(
+            hpvh_rechazo_notificado = True
+        )
+
+        return prestamo
+
 
 def contar_validaciones():
     usuario =db(db.t_Personal.f_email == auth.user.email).select(db.t_Personal.ALL)

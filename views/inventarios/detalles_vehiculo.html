@@ -85,17 +85,18 @@
                 </form>
                 {{ pass }}
               {{ pass }}
-              <!-- Boton para solicitar prestamo-->
-              <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#prestamo"><i class="fas fa-car fa-1x"></i></button>
-              {{ if esta_autorizado: }}
-                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
-                <!-- Boton para ocultar el vehículo -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye fa-1x"></i></button>
-                <!-- Boton para eliminar vehículo-->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+              {{ if not request.vars.delete: }}
+                <!-- Boton para solicitar prestamo-->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#prestamo"><i class="fas fa-car fa-1x"></i></button>
+                {{ if esta_autorizado: }}
+                  <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                  <!-- Boton para ocultar el vehículo -->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye fa-1x"></i></button>
+                  <!-- Boton para eliminar vehículo-->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
-              {{ pass }}
+              {{ pass}}
             </div>
         </div>
     </div>
@@ -112,7 +113,9 @@
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
                     <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
                     <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
-                    <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
+                    {{ if vehiculo['vh_origen'] in ["Compra", "Donación"]: }}
+                      <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
+                    {{ pass }}
                     {{ if puede_ver_historial_mantenimiento: }}
                       <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
                     {{ pass }}
@@ -252,6 +255,7 @@
                 </div>
             </div>
 
+          {{ if vehiculo['vh_origen'] in ["Compra", "Donación"]: }}
             <div id="tab-4"class="tab-content">
                 <div class="grid-container">
                     <div class="grid-item">
@@ -270,6 +274,7 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_nro_adquisicion']}}
                     </div>
+                    {{ if vehiculo['vh_fecha_adquisicion']: }}
                     <div class="grid-item">
                         {{ if vehiculo['vh_origen'] == 'Compra': }}
                             Fecha Factura:
@@ -280,6 +285,7 @@
                     <div class="grid-item">
                         {{=vehiculo['vh_fecha_adquisicion'].strftime("%d/%m/%y") }}
                     </div>
+                    {{ pass }}
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
                         <div class="grid-item">
                             Proveedor:
@@ -309,6 +315,7 @@
                     {{ pass }}
                 </div>
             </div>
+          {{ pass }}
 
             <div id="tab-5"class="tab-content">
                 {{include 'inventarios/mantenimiento_v.html'}}
@@ -655,10 +662,11 @@
                                 <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
                             </div>
                         </div>
-
-                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
-                          Cargando, por favor espere
-                          <div class="ld ld-ring ld-spin-fast"></div>
+                        <div style="margin-left: auto; margin-right: auto; display: block;">
+                          <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
+                            Procesando los datos, por favor espere
+                            <div class="ld ld-ring ld-spin-fast"></div>
+                          </div>
                         </div>
 
                       </div>
@@ -921,13 +929,129 @@
           <div class="col-md-12 form-box">
               <form id="formularioCarga" class="registration-form" method="post">
 
-            <!-- Primer paso-->
-            <fieldset class="formField">
-                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                <!-- Comienzo Primer Paso -->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body modalInventario">
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                      <span class="step">4</span>
+                      <span class="step">5</span>
+                      <span class="step">6</span>
+                      <span class="step">7</span>
+                      <span class="step">8</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Datos de adquisición</h4>
+                      <label>Campos marcados con * son obligatorios.</label>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group" tag="Formato:">
+                              <label>Año*</label>
+                              <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required value="{{=vehiculo['vh_ano']}}">
+                              <div class="dr" id="error-ano" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="form-group">
+                            <label>¿El vehículo es propiedad de la USB?*</label>
+                            <select class="form-control" type="select" id="propiedad" name="propiedad" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Sí" {{ if vehiculo['vh_propiedad']: }}selected{{ pass }}>Sí</option>
+                                <option value="No" {{ if not vehiculo['vh_propiedad']: }}selected {{ pass }}>No</option>
+                            </select>
+                            <div class="dr" id="error-propiedad" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="dr text-center" id="alerta-propiedad" style="padding-top: 10px; padding-bottom: 10px;"></div>
+
+                      <div class="row" id="grupo-propiedad">
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                              <label>Nº Bien Nacional</label>
+                              <input type="text" class="form-control" id="num" name="num" placeholder="Nº B/N" title="Formato: ###### (6 dígitos)" {{ if vehiculo['vh_num']: }}value="{{=vehiculo['vh_num']}}" {{ pass }}>
+                              <div style="color: #d03e3e;" id="err_num" hidden></div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-8">
+                          <div class="form-group">
+                              <label>Origen</label>
+                              <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen">
+                                  <option value="">Seleccione una opción</option>
+                                  <option value="Compra" {{ if vehiculo['vh_origen'] == "Compra": }}selected{{ pass }}>Compra</option>
+                                  <option value="Donación" {{ if vehiculo['vh_origen'] == "Donación": }}selected{{ pass }}>Donación</option>
+                              </select>
+                              <div class="dr" id="error-origen" style="color: #d03e3e;"> </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div id="grupo-compra" {{ if vehiculo['vh_origen'] != "Compra": }}style="display: none;"{{ pass }}>
+                        <div class="form-group">
+                            <label>Nro Factura</label>
+                            <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura" title="Ingrese el Nro de Factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
+                            <div class="dr" id="error-nro_factura" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de factura</label>
+                            <input type="date" class="form-control campo_fecha" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura" title="Ingrese la fecha de factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
+                            <div class="dr" id="error-fecha_factura" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Proveedor</label>
+                            <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor" title="Ingrese el proveedor del vehículo" value="{{=vehiculo['vh_proveedor']}}">
+                            <div class="dr" id="error-proveedor" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>RIF</label>
+                            <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF Formato X-000000000-0 " title="Ingrese el RIF - Formato X-000000000-0" value="{{=vehiculo['vh_proveedor_rif']}}">
+                            <div class="dr" id="error-rif" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+                      <div id="grupo-donacion" {{ if vehiculo['vh_origen'] != "Donación": }}style="display: none;"{{ pass }}>
+                        <div class="form-group">
+                            <label>Nº Oficio</label>
+                            <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio" title="Ingrese el Nro de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
+                            <div class="dr" id="error-nro_oficio" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de oficio</label>
+                            <input type="date" class="form-control campo_fecha" id="fecha_oficio" name="fecha_oficio" placeholder="Fecha de oficio" title="Ingrese la fecha de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
+                            <div class="dr" id="error-fecha_oficio" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Donante</label>
+                            <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante" title="Ingrese el Donante" value="{{=vehiculo['vh_donante']}}">
+                            <div class="dr" id="error-donante" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono del Donante</label>
+                            <input type="text" class="form-control campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante" title="Ingrese el teléfono del Donante" value="{{=vehiculo['vh_contacto_donante']}}">
+                            <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <div style="position:fixed; bottom: 15px; right: 30px;">
+                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                </div>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+
+              <!-- Segundo paso-->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                   <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                   <div class="col-sm-1 col1Body modalInventario">
-                    <span class="step activePass">1</span>
-                    <span class="step">2</span>
+                    <span class="step">1</span>
+                    <span class="step activePass">2</span>
                     <span class="step">3</span>
                     <span class="step">4</span>
                     <span class="step">5</span>
@@ -939,11 +1063,7 @@
                   <div class="col-sm-11 col11Body">
                     <h4 class="titulosForm">Características del vehículo</h4>
                     <label>Campos marcados con * son obligatorios.</label>
-                    <div class="form-group">
-                        <label>Nº Bien Nacional*</label>
-                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" {{ if vehiculo['vh_num']: }}value="{{=vehiculo['vh_num']}}" {{ pass }}>
-                        <div style="color: #d03e3e;" id="err_num" hidden></div>
-                    </div>
+
                     <div class="form-group" tag="Formato:">
                         <label>Placa*</label>
                         <input type="text" class="form-control" id="placa" name="placa" title="Ingrese la placa del vehículo" placeholder="Placa*" required value="{{=vehiculo['vh_placa']}}">
@@ -985,11 +1105,6 @@
                         <div class="dr" id="error-marca" style="color: #d03e3e;"> </div>
                     </div>
                     <div class="form-group" tag="Formato:">
-                        <label>Año*</label>
-                        <input type="text" class="form-control" id="ano" name="ano" title="Ingrese el año del vehículo" placeholder="Año*" required value="{{=vehiculo['vh_ano']}}">
-                        <div class="dr" id="error-ano" style="color: #d03e3e;"> </div>
-                    </div>
-                    <div class="form-group" tag="Formato:">
                         <label>Color</label>
                         <input type="text" class="form-control" id="color" name="color" title="Ingrese el color del vehículo" placeholder="Color" value="{{=vehiculo['vh_color']}}">
                         <div class="dr" id="error-color" style="color: #d03e3e;"> </div>
@@ -998,18 +1113,19 @@
                   </div>
                 </div>
                 <div style="position:fixed; bottom: 15px; right: 30px;">
-                  <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                 </div>
               </fieldset>
 
-                <!-- Segundo paso-->
+                <!-- Tercer paso-->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                  <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
                     <div class="col-sm-1 col1Body modalInventario">
                       <span class="step">1</span>
-                      <span class="step activePass">2</span>
-                      <span class="step">3</span>
+                      <span class="step">2</span>
+                      <span class="step activePass">3</span>
                       <span class="step">4</span>
                       <span class="step">5</span>
                       <span class="step">6</span>
@@ -1057,17 +1173,16 @@
                     <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </div>
                 </fieldset>
-                <!-- Fin Segundo Paso -->     
+                <!-- Fin Tercer Paso -->
 
-                <!-- Tercer paso -->
+                <!-- Cuarto paso -->
                 <fieldset class="formField">
-                  <div class="form-bottom" data-step="3" data-title="Tercer Paso">
-                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body modalInventario"> 
+                  <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                    <div class="col-sm-1 col1Body modalInventario">
                       <span class="step">1</span>
                       <span class="step">2</span>
-                      <span class="step activePass">3</span>
-                      <span class="step">4</span>
+                      <span class="step">3</span>
+                      <span class="step activePass">4</span>
                       <span class="step">5</span>
                       <span class="step">6</span>
                       <span class="step">7</span>
@@ -1166,26 +1281,26 @@
                   </div>
                   <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>       
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                   </div>
               </fieldset>
-                <!-- Fin Tercer Paso -->
+                <!-- Fin Cuarto Paso -->
 
-                <!-- Comienzo Cuarto Paso -->
+                <!-- Comienzo Quinto Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
+                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
-                        <span class="step activePass">4</span>
-                        <span class="step">5</span>
+                        <span class="step">4</span>
+                        <span class="step activePass">5</span>
                         <span class="step">6</span>
                         <span class="step">7</span>
                         <span class="step">8</span>
                       </div>
-  
+
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">Características del Vehículo</h4>
@@ -1252,30 +1367,30 @@
                   </div>
               </fieldset>
 
-                <!-- Quinto Paso -->
+                <!-- Sexto Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                    <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body modalInventario"> 
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step activePass">5</span>
-                        <span class="step">6</span>
+                        <span class="step">5</span>
+                        <span class="step activePass">6</span>
                         <span class="step">7</span>
                         <span class="step">8</span>
                       </div>
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Ubicacion y responsable del Vehículo</h4>                
+                        <h4 class="titulosForm">Ubicacion y responsable del Vehículo</h4>
                         <label>Campos marcados con * son obligatorios.</label>
                         <div class="form-group">
                             <label>Nombre del propietario*</label>
                             <input type="text" class="form-control" id="propietario" name="propietario" placeholder="Nombre del propietario*" title="Ingrese el nombre del propietario del vehículo" required value="{{=vehiculo['vh_propietario']}}">
                             <div class="dr" id="error-propietario" style="color: #d03e3e;"> </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Responsable*</label>
                             <select class="form-control seleccion-escrita" type="select" name="responsable" id="responsable" class="input" required>
@@ -1286,7 +1401,7 @@
                             </select>
                             <div class="dr" id="error-responsable" style="color: #d03e3e;"> </div>
                         </div>
-                    
+
                         <div class="form-group">
                             <label>Custodio del vehículo*</label>
                             <select class="form-control seleccion-escrita" type="select" name="custodio" id="custodio" class="input" required>
@@ -1352,11 +1467,11 @@
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                     </div>
                 </fieldset>
-                <!-- Fin Quinto Paso -->
+                <!-- Fin Sexto Paso -->
 
-                <!-- Comienzo Sexto Paso -->
+                <!-- Comienzo Séptimo Paso -->
                 <fieldset class="formField">
-                    <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                    <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
@@ -1364,11 +1479,11 @@
                         <span class="step">3</span>
                         <span class="step">4</span>
                         <span class="step">5</span>
-                        <span class="step activePass">6</span>
-                        <span class="step">7</span>
+                        <span class="step">6</span>
+                        <span class="step activePass">7</span>
                         <span class="step">8</span>
                       </div>
-  
+
                       <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
                         <h4 class="titulosForm">SUDEBIP</h4>
@@ -1409,86 +1524,6 @@
                       <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
                     </div>
                 </fieldset>
-                <!-- Fin Sexto Paso -->
-
-                <!-- Comienzo Séptimo Paso -->
-                <fieldset class="formField">
-                    <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
-                      <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body modalInventario">
-                        <span class="step">1</span>
-                        <span class="step">2</span>
-                        <span class="step">3</span>
-                        <span class="step">4</span>
-                        <span class="step">5</span>
-                        <span class="step">6</span>
-                        <span class="step activePass">7</span>
-                        <span class="step">8</span>
-                      </div>
-                      <!-- Aqui va la informacion -->
-                      <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Datos de adquisición</h4>
-                        <label>Campos marcados con * son obligatorios.</label>
-                        <div class="form-group">
-                            <label>Origen*</label>
-                            <select class="form-control" type="select" id="origen" name="origen" placeholder="Origen*" required>
-                                <option value="">Seleccione una opción</option>
-                                <option value="Compra" {{ if vehiculo['vh_origen'] == "Compra": }}selected{{ pass }}>Compra</option>
-                                <option value="Donación" {{ if vehiculo['vh_origen'] == "Donación": }}selected{{ pass }}>Donación</option>
-                            </select>
-                            <div class="dr" id="error-origen" style="color: #d03e3e;"> </div>
-                        </div>
-                        <div id="grupo-compra" {{ if vehiculo['vh_origen'] != "Compra": }}style="display: none;"{{ pass }}>
-                          <div class="form-group">
-                              <label>Nro Factura*</label>
-                              <input type="text" class="form-control" id="nro_factura" name="nro_factura" placeholder="Nro Factura*" title="Ingrese el Nro de Factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
-                              <div class="dr" id="error-nro_factura" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>Fecha de factura*</label>
-                              <input type="date" class="form-control campo_fecha" id="fecha_factura" name="fecha_factura" placeholder="Fecha de factura*" title="Ingrese la fecha de factura" {{ if vehiculo['vh_origen'] == 'Compra': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
-                              <div class="dr" id="error-fecha_factura" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>Proveedor*</label>
-                              <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" title="Ingrese el proveedor del vehículo" value="{{=vehiculo['vh_proveedor']}}">
-                              <div class="dr" id="error-proveedor" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>RIF*</label>
-                              <input type="text" class="form-control" id="proveedor_rif" name="proveedor_rif" placeholder="RIF* Formato X-000000000-0 " title="Ingrese el RIF - Formato X-000000000-0" value="{{=vehiculo['vh_proveedor_rif']}}">
-                              <div class="dr" id="error-rif" style="color: #d03e3e;"> </div>
-                          </div>
-                        </div>
-                        <div id="grupo-donacion" {{ if vehiculo['vh_origen'] != "Donación": }}style="display: none;"{{ pass }}>
-                          <div class="form-group">
-                              <label>Nº Oficio*</label>
-                              <input type="text" class="form-control" id="nro_oficio" name="nro_oficio" placeholder="Nro oficio*" title="Ingrese el Nro de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_nro_adquisicion']}}"{{ pass }}>
-                              <div class="dr" id="error-nro_oficio" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>Fecha de oficio*</label>
-                              <input type="date" class="form-control campo_fecha" id="fecha_oficio" name="fecha_oficio" placeholder="Fecha de oficio*" title="Ingrese la fecha de oficio" {{ if vehiculo['vh_origen'] == 'Donación': }}value="{{=vehiculo['vh_fecha_adquisicion']}}"{{ pass }}>
-                              <div class="dr" id="error-fecha_oficio" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>Donante*</label>
-                              <input type="text" class="form-control" id="donante" name="donante" placeholder="Donante*" title="Ingrese el Donante" value="{{=vehiculo['vh_donante']}}">
-                              <div class="dr" id="error-donante" style="color: #d03e3e;"> </div>
-                          </div>
-                          <div class="form-group">
-                              <label>Teléfono del Donante*</label>
-                              <input type="text" class="form-control campo_telf" id="contacto_donante" name="contacto_donante" placeholder="Teléfono del Donante*" title="Ingrese el teléfono del Donante" value="{{=vehiculo['vh_contacto_donante']}}">
-                              <div class="dr" id="error-contacto_donante" style="color: #d03e3e;"> </div>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-                  <div style="position:fixed; bottom: 15px; right: 30px;">
-                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                      <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
-                  </div>
-              </fieldset>
                 <!-- Fin Séptimo Paso -->
 
                 <!-- Comienzo Octavo Paso -->
@@ -1519,7 +1554,7 @@
                   <input type="hidden" name="modificacion" id="modificacion" value="True">
                   <div style="position:fixed; bottom: 15px; right: 30px;">
                     <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                    <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>
                   </div>
               </fieldset>
                 <!-- Fin Octavo Paso -->
@@ -1538,8 +1573,6 @@
 
 <!-- Scripts de préstamos-->
 <script type="text/javascript">
-  document.getElementById('fecha_solicitud').valueAsDate = new Date();
-
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
   var regexCI = new RegExp("^[VEve][-][0-9]{6,8}$");
 
@@ -1592,6 +1625,31 @@
     }
   });
 
+  // Determina el flujo de acuerdo a la propiedad
+  $("#propiedad").change(function() {
+    var propiedad = $(this).children("option:selected").val();
+
+    if (propiedad == "Sí") {
+      $("#grupo-propiedad").show("fast");
+      $("#alerta-propiedad").show("fast")
+      $("#alerta-propiedad").text("Los siguientes campos son obligatorios.")
+      $("#num").attr('required', true);
+      $("#origen").attr('required', true);
+    } else if (propiedad == "No") {
+      $("#grupo-propiedad").show("fast");
+      $("#alerta-propiedad").show("fast")
+      $("#alerta-propiedad").text("Los siguientes campos son opcionales.")
+      $("#num").attr('required', false);
+      $("#origen").attr('required', false);
+      $("#error-origen").text("");
+      $("#origen").css('border-color', '#ddd');
+      $("#origen").css('color', '#888');
+    } else {
+      $("#grupo-propiedad").hide("fast");
+      $("#alerta-propiedad").hide("fast")
+    }
+  });
+
   $(".campo_telf_obligatorio").focusout(function() {
     var tlf = $(this).val();
 
@@ -1631,6 +1689,7 @@
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
+    $("#fecha_solicitud").val(minimo);
   });
 
   // Valida que la fecha de devolución sea posterior a la de salida
@@ -1727,7 +1786,7 @@
 
   $("#submitPrestamo").click(function() {
     $("#loaderPrestamo").show();
-    $("#submitPrestamo").attr('disabled', 'true');
+    $("#loaderPrestamo").delay(7000).hide("fast");
     $("#formularioDevolucion").submit();
     return true;
   });
@@ -2280,15 +2339,44 @@
   // Mostrar datos de compra o donacion según lo escogido
   $("#origen").change(function() {
     var origen = $(this).children("option:selected").val();
+
     if (origen == "Compra") {
       $("#grupo-compra").show("fast");
       $("#grupo-donacion").hide("fast");
+      $("#grupo-donacion input").val("");
+      $("#fecha_factura").attr('required', true);
+      $("#nro_factura").attr('required', true);
+      $("#proveedor").attr('required', true);
+      $("#proveedor_rif").attr('required', true);
+      $("#fecha_oficio").attr('required', false);
+      $("#nro_oficio").attr('required', false);
+      $("#donante").attr('required', false);
+      $("#contacto_donante").attr('required', false);
     } else if (origen == "Donación") {
       $("#grupo-compra").hide("fast");
+      $("#grupo-compra input").val("");
       $("#grupo-donacion").show("fast");
+      $("#fecha_factura").attr('required', false);
+      $("#nro_factura").attr('required', false);
+      $("#proveedor").attr('required', false);
+      $("#proveedor_rif").attr('required', false);
+      $("#fecha_oficio").attr('required', true);
+      $("#nro_oficio").attr('required', true);
+      $("#donante").attr('required', true);
+      $("#contacto_donante").attr('required', true);
     } else {
       $("#grupo-compra").hide("fast");
+      $("#grupo-compra input").val("");
       $("#grupo-donacion").hide("fast");
+      $("#grupo-donacion input").val("");
+      $("#fecha_factura").attr('required', false);
+      $("#nro_factura").attr('required', false);
+      $("#proveedor").attr('required', false);
+      $("#proveedor_rif").attr('required', false);
+      $("#fecha_oficio").attr('required', false);
+      $("#nro_oficio").attr('required', false);
+      $("#donante").attr('required', false);
+      $("#contacto_donante").attr('required', false);
     }
   });
 
@@ -2346,7 +2434,9 @@
   // Dropdown origen no vacío
   $(".btn-submit").click(function() {
     var origen = $("#origen").children("option:selected").val();
-    if (origen.length == 0) {
+    var propiedad = $("#propiedad").children("option:selected").val();
+    var esUSB = (propiedad == "Sí");
+    if (origen.length == 0 && esUSB) {
       $("#origen").css('border-color', '#d03e3e');
       $("#origen").next().show();
       $("#origen").next().text("Selecciona un origen de adquisición para el vehículo.");
@@ -2360,7 +2450,9 @@
   // Dropdown origen no vacío, parte 2
   $("#origen").change(function() {
     var origen = $("#origen").children("option:selected").val();
-    if (origen != "Compra" && origen != "Donación") {
+    var propiedad = $("#propiedad").children("option:selected").val();
+    var esUSB = (propiedad == "Sí");
+    if (origen != "Compra" && origen != "Donación" && esUSB) {
       $("#origen").css('border-color', '#d03e3e');
       $("#origen").css('color', '#d03e3e');
       $("#origen").next().show();

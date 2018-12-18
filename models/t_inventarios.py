@@ -391,6 +391,7 @@ db.define_table(
     Field('vh_clasificacion', 'string', notnull=True, label=T('Clasificación')),
     Field('vh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('vh_servicio', 'string', notnull=True, label=T('Servicio')),
+    Field('vh_propiedad', 'boolean', notnull=True, default=True, label=T('Propiedad USB')),
 
     # Capacidades
     Field('vh_nro_puestos', 'integer', notnull=True, default=0, label=T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
@@ -418,13 +419,13 @@ db.define_table(
     Field('vh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    Field('vh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('vh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de Adquisición')),
-    Field('vh_nro_adquisicion', 'string', notnull=True, default="", label=T('Número de Adquisición')),
-    Field('vh_proveedor', 'string', default="", label=T('Proveedor')),
-    Field('vh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
-    Field('vh_donante', 'string', default="", label=T('Donante')),
-    Field('vh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+    Field('vh_origen', 'string', label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
+    Field('vh_fecha_adquisicion', 'date', label=T('Fecha de Adquisición')),
+    Field('vh_nro_adquisicion', 'string', label=T('Número de Adquisición')),
+    Field('vh_proveedor', 'string', label=T('Proveedor')),
+    Field('vh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
+    Field('vh_donante', 'string', label=T('Donante')),
+    Field('vh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('vh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
@@ -474,6 +475,7 @@ db.define_table(
     Field('mvh_clasificacion', 'string', notnull=True, label=T('Clasificación')),
     Field('mvh_uso', 'string', notnull=True, label=T('Uso'), requires=IS_IN_SET(['Público', 'Privado'])),
     Field('mvh_servicio', 'string', notnull=True, label=T('Servicio')),
+    Field('mvh_propiedad', 'boolean', notnull=True, default=True, label=T('Propiedad USB')),
 
     # Capacidades
     Field('mvh_nro_puestos', 'integer', notnull=True, default=0, label=T('Nº de Puestos'), requires=IS_MATCH('^[0-9]{2}')),
@@ -502,13 +504,13 @@ db.define_table(
     Field('mvh_sudebip_categoria_especifica', 'string', notnull=True, label=T('SUDEBIP: Categoría específica')),
 
     # Datos Adquisición
-    Field('mvh_origen', 'string', notnull=True, default="", label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
-    Field('mvh_fecha_adquisicion', 'date', notnull=True, label=T('Fecha de Adquisición')),
-    Field('mvh_nro_adquisicion', 'string', notnull=True, default="", label=T('Número de Adquisición')),
-    Field('mvh_proveedor', 'string', default="", label=T('Proveedor')),
-    Field('mvh_proveedor_rif', 'string', default="", label=T('RIF del Proveedor')),
-    Field('mvh_donante', 'string', default="", label=T('Donante')),
-    Field('mvh_contacto_donante', 'string', default="", label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
+    Field('mvh_origen', 'string', label=T('Origen'), requires=IS_IN_SET(['Compra', 'Donación'])),
+    Field('mvh_fecha_adquisicion', 'date', label=T('Fecha de Adquisición')),
+    Field('mvh_nro_adquisicion', 'string', label=T('Número de Adquisición')),
+    Field('mvh_proveedor', 'string', label=T('Proveedor')),
+    Field('mvh_proveedor_rif', 'string', label=T('RIF del Proveedor')),
+    Field('mvh_donante', 'string', label=T('Donante')),
+    Field('mvh_contacto_donante', 'string', label=T('Contacto del donante'), requires=IS_MATCH('^[-()+0-9]*')),
 
     # Estatus de préstamo o mantenimiento
     Field('mvh_estatus', 'string', label=T('Estatus'), default='Disponible', requires=IS_IN_SET(['Disponible', 'En préstamo', 'En mantenimiento', 'En uso', 'Averiado'])),
@@ -595,6 +597,7 @@ db.define_table(
     Field('hpvh_fecha_autorizacion', 'datetime', label=T('Fecha de autorización')),
     Field('hpvh_estatus', 'string', notnull=True, default="En espera de respuesta", label=T('Estatus de solicitud')),
     Field('hpvh_razon_rechazo', 'text', label=T('Razón de rechazo')),
+    Field('hpvh_rechazo_notificado', 'boolean', notnull=True, default=False, label=T('Rechazo notificado')),
     Field('hpvh_razon_cancelacion', 'text', label=T('Razón de cancelación')),
     Field('hpvh_fecha_cancelacion', 'datetime', label=T("Fecha de cancelación")),
 
