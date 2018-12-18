@@ -27,7 +27,7 @@ def __obtener_registro_de_prestamo(id_prestamo):
 
     registro = "SIG"
     registro += "-"
-    
+
     registro += str(dependencia['codigo_registro'])
     registro += "/"
     registro += str(prestamo['hpvh_fecha_solicitud'].year)[2:]
@@ -41,7 +41,7 @@ def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
 
-# Función que retorna los valores ya existentes de datos únicos de la 
+# Función que retorna los valores ya existentes de datos únicos de la
 # tabla de vehículos
 def __obtener_valores_unicos_vh():
     vehiculos = db(db.vehiculo.id).select()
@@ -56,7 +56,7 @@ def __obtener_valores_unicos_vh():
         serial_chasis.add(vehiculo['vh_serial_chasis'])
         num.add(vehiculo['vh_num'])
         placa.add(vehiculo['vh_placa'])
-    
+
     valores_unicos = {
         'serial_carroceria': serial_carroceria,
         'serial_chasis': serial_chasis,
@@ -1388,8 +1388,8 @@ def index():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def vehiculos():
 # Inicializando listas de espacios fisicos y dependencias
-    
-    # PENDIENTE: Cableando la variable de es_espacio 
+
+    # PENDIENTE: Cableando la variable de es_espacio
     if not request.vars.acceso_direccion:
         request.vars.es_espacio = 'False'
         request.vars.acceso_direccion = False

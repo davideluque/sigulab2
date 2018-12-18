@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>SIGULAB</title>    
-  
+  <title>SIGULAB</title>
+
   <!-- http://dev.w3.org/html5/markup/meta.name.html -->
   <meta name="application-name" content="SIGULAB">
 
@@ -38,9 +38,9 @@
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-  
+
   {{block head}}
-  {{end}} 
+  {{end}}
 </head>
 <body>
 
@@ -54,14 +54,14 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" id="hide" href="#"><div class="logotext">SIGULAB</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
 
         <ul class="nav navbar-nav">
-            
+
             <li class="dropdown active-item" id="inicio">
               <a class="dropdown-toggle" href="{{=URL('..', 'sigulab2')}}">INICIO</a>
             </li>
@@ -74,7 +74,7 @@
                   <li><a href="{{=URL('informacion_documentada', 'lista_documentos')}}">Control de Documentos</a></li>
                   <li><a href="{{=URL('informacion_documentada', 'lista_registros')}}">Control de Registros</a></li>
                  </ul>
-            </li> 
+            </li>
 
             <li class="dropdown active-item" id="inventario">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INVENTARIOS<span class="caret"></span></a>
@@ -92,7 +92,7 @@
                   {{pass}}
                   <li><a href="{{=URL('inventarios', 'vehiculos')}}">Vehículos</a></li>
                 </ul>
-              </li> 
+              </li>
 
             <li class="dropdown active-item" id="personal">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PERSONAL<span class="caret"></span></a>
@@ -103,7 +103,7 @@
                 <li><a href="{{=URL('personal','busqueda')}}">Búsqueda</a></li>
               </ul>
             </li>
-            
+
             <li class="dropdown active-item" id="servicios">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVICIOS<span class="caret"></span></a>
                 <ul class=" dropdown-menu">
@@ -125,11 +125,18 @@
                   <li><a href="{{=URL('smydp', 'inventarios')}}">Inventario</a></li>
                   <li><a href="{{=URL('smydp', 'solicitudes')}}">Solicitudes</a></li>
                  </ul>
-            </li> 
-            
+            </li>
+
         </ul>
 
       <ul class="nav navbar-nav navbar-right">
+      {{ if session.prestamo_rechazado is not None: }}
+        <li class="dropdown">
+            <div class="dropdown">
+                  <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Solicitud de préstamo {{= session.registro_prestamo }} denegada"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
+            </div>
+          </li>
+      {{ pass }}
        {{if session.validaciones_pendientes>0:}}
        <li class="dropdown">
           <div class="dropdown">
@@ -146,7 +153,7 @@
           </li>
         {{pass}}
 
-          
+
       {{if auth.has_membership('ADMINISTRADOR PERSONAL') \
         or auth.has_membership('WEBMASTER')\
         or auth.has_membership('DIRECTOR'): }}
