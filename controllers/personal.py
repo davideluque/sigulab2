@@ -53,9 +53,10 @@ def resultados_busqueda():
 
         encontrado = "False"
         for cargo in cargos:
-            if (request.post_vars.cargo_busqueda.lower() in cargo.lower()):
-                encontrado = "True"
-                break
+            if (request.post_vars.cargo_busqueda):
+                if (request.post_vars.cargo_busqueda.lower() in cargo.lower()):
+                    encontrado = "True"
+                    break
 
         lista.append({
             'ci' : row.t_Personal.f_ci,
