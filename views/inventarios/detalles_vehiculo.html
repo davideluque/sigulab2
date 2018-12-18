@@ -85,17 +85,18 @@
                 </form>
                 {{ pass }}
               {{ pass }}
-              <!-- Boton para solicitar prestamo-->
-              <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#prestamo"><i class="fas fa-car fa-1x"></i></button>
-              {{ if esta_autorizado: }}
-                <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
-                <!-- Boton para ocultar el vehículo -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye fa-1x"></i></button>
-                <!-- Boton para eliminar vehículo-->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
+              {{ if not request.vars.delete: }}
+                <!-- Boton para solicitar prestamo-->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#prestamo"><i class="fas fa-car fa-1x"></i></button>
+                {{ if esta_autorizado: }}
+                  <!-- Boton que lleva al modal --> <!-- Cambiar data-target="#addservice por el id de la forma de la sustancia -->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#addbm"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                  <!-- Boton para ocultar el vehículo -->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmhide"><i class="fas fa-eye fa-1x"></i></button>
+                  <!-- Boton para eliminar vehículo-->
+                  <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#confirmdelete"><i class="fas fa-trash fa-1x"></i></button>
                 {{ pass }}
-              {{ pass }}
+              {{ pass}}
             </div>
         </div>
     </div>
