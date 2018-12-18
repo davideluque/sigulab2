@@ -58,7 +58,10 @@ def _obtener_prestamo_rechazado():
     user_id = auth.user.id
 
     prestamos_rechazados = db((db.historial_prestamo_vh.hpvh_estatus == "Denegada") & (db.historial_prestamo_vh.hpvh_solicitante == user_id) & (db.historial_prestamo_vh.hpvh_rechazo_notificado == False)).select()
+
     if len(prestamos_rechazados) == 0:
+        session.registro_prestamo = None
+        session.prestamo_rechazado = None
         return None
     else:
         prestamo = prestamos_rechazados.first()
@@ -69,7 +72,6 @@ def _obtener_prestamo_rechazado():
             hpvh_rechazo_notificado = True
         )
 
-        session.flash = "La solicitud de préstamo {{= session.registro_prestamo }} ha sido denegada."
         return prestamo
 
 

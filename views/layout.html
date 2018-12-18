@@ -130,13 +130,13 @@
         </ul>
 
       <ul class="nav navbar-nav navbar-right">
-      {{ if session.prestamo_rechazado is not None: }}
-        <li class="dropdown">
-            <div class="dropdown">
-                  <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Solicitud de préstamo {{= session.registro_prestamo }} denegada"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
-            </div>
+        {{ if session.prestamo_rechazado is not None: }}
+          <li class="dropdown">
+              <div class="dropdown">
+                    <a href="#" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Solicitud de préstamo {{= session.registro_prestamo }} denegada"><span id="iconoNotificacion" class=" btn btn-primary dropdown-toggle"><i class="fa fa-bell-o"></i></span></a>
+              </div>
           </li>
-      {{ pass }}
+        {{ pass }}
        {{if session.validaciones_pendientes>0:}}
        <li class="dropdown">
           <div class="dropdown">
