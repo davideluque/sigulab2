@@ -38,8 +38,8 @@
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Botón para atrás -->
-<h3 class="dep-titulo text-center">{{=solicitud.f_cod_registro}} </h3>
-<h4 class="dep-titulo text-center">{{=sustancia.f_nombre}}</h4>
+<h3 class="dep-titulo text-center">{{=respuesta.f_cod_registro}} </h3>
+<h4 class="dep-titulo text-center">{{=solicitud.f_cod_registro}}</h4>
 
 <!-- Inicio Boton Modificar VEHICULO -->
 <div class="container" id="containerAgregar">
@@ -71,54 +71,54 @@
 		<div id="tab-1" class="tab-content active">
             <div class="grid-container">
 
-
                 <div class="grid-item">
-                    Cantidad de sustancia solicitada:
-                </div>
-                <div class="grid-item">
-                    {{=solicitud.f_cantidad}}
-                </div>
-                <div class="grid-item">
-                    Cantidad de sustancia conseguida:
-                </div>
-                <div class="grid-item">
-                    {{=solicitud.f_cantidad_conseguida}}
-                </div>
-                <div class="grid-item">
-                    Estado actual de sustancia solicitada:
-                </div>
-                <div class="grid-item">
-                    {{=solicitud.f_estatus[0]}}
-                </div>
-                <div class="grid-item">
-                    Espacio Solicitante:
+                    Espacio que responde a solicitud:
                 </div>
                 <div class="grid-item">
                     {{=espacio.codigo}}
                 </div>
                 <div class="grid-item">
-                    Responsable de la solicitud:
+                    Cantidad de sustancia a dar:
                 </div>
                 <div class="grid-item">
-                    {{=respondable.f_email}}
+                    {{=respuesta.f_cantidad}}
                 </div>
                 <div class="grid-item">
-                    Justificacion:
+                    Medida de sustancia:
                 </div>
                 <div class="grid-item">
-                    {{=solicitud.f_justificacion}}
+                    {{=medida.f_abreviatura}}
                 </div>
                 <div class="grid-item">
-                    Fecha de caducidad de solicitud:
+                    Respuesta a la salicitud:
                 </div>
                 <div class="grid-item">
-                    {{=solicitud.f_fecha_caducidad}}
+                    {{=respuesta.f_tipo_respuesta[0]}}
                 </div>
                 <div class="grid-item">
-                    Fecha de creacion de solicitud:
+                    Justificacion de respuesta:
                 </div>
                 <div class="grid-item">
-                    {{=solicitud.created_on}}
+                    {{=respuesta.f_justificacion}}
+                </div>
+                <div class="grid-item">
+                    Calidad:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_calidad[0]}}
+                </div>
+                <div class="grid-item">
+                    Fecha tope de devolucion:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_fecha_tope_devolucion}}
+                </div>
+
+                <div class="grid-item">
+                    Fecha de creacion de respuesta:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.created_on}}
                 </div>
             </div>
         </div>
