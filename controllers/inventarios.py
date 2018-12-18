@@ -884,17 +884,17 @@ def __solicitar_prestamo_vh(
         )
     )
 
-    asunto_solicitud = "[SIGULAB] Solicitud #{} de Préstamo de Vehículos".format(prestamo_id)
+    asunto_solicitud = "[SIGULAB] Solicitud {} de Préstamo de Vehículos".format(registro)
 
     # Enviamos notificación al responsable patrimonial
     email_responsable = db(db.auth_user.id == vh.vh_responsable).select().first().email
     mensaje_solicitud_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha SOLICITADO " + \
-                                    "un préstamo de código #{} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                    "un préstamo de código {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
                                     "en fecha {}. Para obtener más detalles del préstamo, ingrese a SIGULAB, módulo de " + \
                                     "gestión de INVENTARIOS, sección SOLICITUDES.").format(
                                     usuario.first_name,
                                     usuario.last_name,
-                                    prestamo_id,
+                                    registro,
                                     vh.vh_marca,
                                     vh.vh_modelo,
                                     vh.vh_placa,
@@ -910,10 +910,10 @@ def __solicitar_prestamo_vh(
     # Enviamos notificación al solicitante
     email_solicitante = usuario.email
     mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que usted ha SOLICITADO " + \
-                                    "un préstamo de código #{} al vehículo {} {} {}, " + \
+                                    "un préstamo de código {} al vehículo {} {} {}, " + \
                                     "en fecha {}. Recibirá una notificación por correo electrónico al momento de que la " + \
                                     "solicitud sea aprobada o rechazada por el personal autorizado.").format(
-                                    prestamo_id,
+                                    registro,
                                     vh.vh_marca,
                                     vh.vh_modelo,
                                     vh.vh_placa,
@@ -2910,8 +2910,31 @@ def detalles_prestamo():
             hpvh_fecha_cancelacion=datetime.now()
         )
 
-        # Mostramos una notificación
         registro = __obtener_registro_de_prestamo(prestamo_id)
+
+        # Enviamos notificación al responsable
+        asunto_correo = "[SIGULAB] Solicitud de Préstamo {} Cancelada".format(registro)
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha CANCELADO " + \
+                                      "la solicitud de préstamo {} del vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      registro,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        # Manda correo de aprobación al responsable
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        # Mostramos una notificación
         session.flash = "Se ha cancelado la solicitud de préstamo %s satisfactoriamente." % registro
         return redirect(URL('prestamos'))
 
@@ -2947,23 +2970,25 @@ def detalles_prestamo():
             vh_estatus = "En uso"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Registrada la salida en préstamo del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Registrada la salida en préstamo {} del vehículo de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
         # Enviamos notificación al responsable
-        asunto_correo = "[SIGULAB] Salida de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        asunto_correo = "[SIGULAB] Salida de Vehículo en Solicitud de Préstamo {}".format(registro)
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
-                                      "LA SALIDA del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "LA SALIDA del vehículo {} {} {} en la ficha del Préstamo {} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       datetime.now()
@@ -2976,7 +3001,6 @@ def detalles_prestamo():
             mensaje_aprobacion_responsable
         )
 
-        registro = __obtener_registro_de_prestamo(prestamo_id)
         session.flash = "Se ha registrado la salida del vehículo en la Solicitud de Préstamo %s." % registro
         return redirect(URL('prestamos'))
 
@@ -3013,23 +3037,25 @@ def detalles_prestamo():
             vh_estatus = "Disponible"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Registrada la devolución del vehículo en préstamo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Registrada la devolución del vehículo en préstamo {} de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
         # Enviamos notificación al responsable
-        asunto_correo = "[SIGULAB] Devolución de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        asunto_correo = "[SIGULAB] Devolución de Vehículo en Solicitud de Préstamo {}".format(registro)
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
-                                      "LA DEVOLUCIÓN del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "LA DEVOLUCIÓN del vehículo {} {} {} en la ficha del Préstamo {} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       datetime.now()
@@ -3042,7 +3068,6 @@ def detalles_prestamo():
             mensaje_aprobacion_responsable
         )
 
-        registro = __obtener_registro_de_prestamo(prestamo_id)
         session.flash = "Se ha registrado la devolución del vehículo en la Solicitud de Préstamo #%s." % registro
         return redirect(URL('prestamos'))
 
