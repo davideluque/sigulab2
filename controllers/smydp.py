@@ -2898,7 +2898,7 @@ def detalles_solicitud():
                 sustancia = sustancia,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
-                respondable = respondable,
+                responsable = responsable,
                 respuestas = respuestas,
                 formas = formas,
                 esta_autorizado = esta_autorizado,
@@ -2916,7 +2916,7 @@ def detalles_solicitud_realizada():
 
     espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
 
-    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+    responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
 
 
     #Posibles respuesta a la solicitud
@@ -2968,33 +2968,6 @@ def detalles_solicitud_realizada():
     esta_autorizado = not(auth.has_membership("TÉCNICO"))
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
-
-
-
-        #----- AGREGAR RESPUESTA -----#
-    if request.post_vars.numResp:
-
-        cantidad = float(request.vars.suministrar)
-        unidad = request.vars.unidad
-        respuesta = request.vars.respuesta
-        sustancia = sustancia.id
-        justificacion = request.vars.justificacion
-        forma = request.vars.forma
-        fecha_tope = request.vars.fecha_tope
-        espacio = request.vars.espacio
-        numResp = request.post_vars.numResp
-        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
-                                        f_cantidad= cantidad,
-                                        f_medida=unidad, 
-                                        f_tipo_respuesta=respuesta,
-                                        f_justificacion=justificacion,
-                                        f_calidad=forma,
-                                        f_fecha_tope_devolucion=fecha_tope,
-                                        f_espacio=espacio,
-                                        f_solicitud=solicitud.id,
-                                        f_responsable_entrega=personal_usuario.id)
-
-        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
     return dict(solicitud = solicitud,
                 sustancia = sustancia,
