@@ -147,6 +147,7 @@
       </div>
       <!-- Fin Modal Header -->
       
+
       <!-- Modal Body -->
       <div class="modal-body addBody">
         <div class="row addRow">
@@ -205,65 +206,14 @@
                     </div>
                     <!-- Aqui va la informacion -->
                       <div class="col-sm-11 col11Body">
-                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <h4 class="titulosForm">Datos de aceptar/rechazar sustancia</h4>                
                         <label>Campos marcados con * son obligatorios.</label>
 
                           <div class="form-group">
-                            <input type="text" class="form-control" id="sustancia" name="sustancia" placeholder="Sustancia" value="{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})" required readonly>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="suministrar" placeholder="Cantidad a suministrar*" required>
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
-                                                    
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="unidad" name="unidad" required>
-                              <option value="" selected hidden >Unidad de medida*</option>
-                              {{for u in unidades_de_medida:}}
-                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
-                              {{pass}}
-                            </select>
-                          </div>
-
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="respuesta" name="respuesta" required>
-                              <option value="" selected hidden >Respuesta*</option>
-                              {{for respuesta in respuestas:}}
-                              <option value="{{=respuesta}}">{{=respuesta}}</option>
-                              {{pass}}
-                            </select>
-                          </div>
-
-                          <div class="form-group">
-                            <input type="text" class="form-control" name="justificacion" placeholder="Justificacion" required>
+                            <input type="text" class="form-control" name="ci_receptor" placeholder="CI de la persona que retira la sustancia * " required>
                             <div class="field-error"> <p id="error-total"> </p> </div>
                           </div>
 
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="forma" name="forma" required>
-                              <option value="" selected hidden >Calidad*</option>
-                              {{for forma in formas:}}
-                              <option value="{{=forma}}">{{=forma}}</option>
-                              {{pass}}
-                            </select>
-                          </div>
-
-                          <div id="fecha_uso_div" class="form-group esconder">
-                            <p>Fecha tope de devolucion: <input name = "fecha_tope" type="date"  data-date-format="YYYY MM DD"></p>
-                            <font color="red"><div id="err_fecha_uso" hidden></div></font>
-                          </div>
-
-                          <div class="form-group">
-                            <select class="form-control" type="select" id="espacio" name="espacio" required>
-                              <option value="" selected hidden >Espacio Fisico*</option>
-                              {{for esp in espacios:}}
-                              <option value="{{=esp.id}}">{{=esp.codigo}}</option>
-                              {{pass}}
-                            </select>
-                          </div>
-
-                          <div class="field-error" style="padding-bottom: 50px"> <p id="error-unidad"> </p> </div>
                       </div>
                   </div>
                   <button type="button" class="btn btn-previous botonForm ">                <i class="fas fa-arrow-left"></i>   </button>
