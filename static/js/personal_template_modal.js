@@ -3,7 +3,9 @@
  */
 
 const requiredFieldMessage = 'Este campo es requerido'
+const badYear1 = "No puede ser previa a la fecha de inicio"
 
+const current_year = (new Date).getFullYear()
 
 
 
@@ -918,8 +920,7 @@ const validadoresCuartoPaso = [
 
 function validaTrabajosDirigidos(){
     var valid=true;
-    var today = new Date();
-    var yyyy = today.getFullYear();
+    var yyyy = current_year
     for(var i=1; i<6;i++){
         if($('#trabajo-container'+i).is(':hidden'))
             continue;
@@ -1054,7 +1055,7 @@ function validaAdministrativas(){
         valid = validaEmpty(cargo) && valid;
         valid = validaEmpty(institucion) && valid;
         if (!comparaFechas(desde.val(), hasta.val())) {
-            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.attr("data-content", badYear1)
             hasta.addClass('input-error');
             hasta.popover('toggle');
             valid = false;
@@ -1087,7 +1088,7 @@ function validaExtension(){
         valid = validaEmpty(institucion) && valid;
         valid = validaEmpty(descripcion) && valid;
         if (!comparaFechas(desde.val(), hasta.val())) {
-            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.attr("data-content", badYear1)
             hasta.addClass('input-error');
             hasta.popover('toggle');
             valid = false;
@@ -1141,6 +1142,18 @@ function validaCursos(){
             chosen_container.removeClass('input-error');
             chosen_container.popover('hide');
         }
+        if (anio.val() > current_year) {
+            anio.attr("data-content", 'Ingrese un año menor o igual al actual');
+            anio.popover('show');
+            anio.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            anio.removeClass('input-error');
+            anio.popover('hide');
+            valid = valid && true;
+        }
+
     }
     return valid;
 
@@ -1160,7 +1173,7 @@ function validaMaterias(){
         valid = validaEmpty(codigo) && valid;
         valid = validaEmpty(nombre) && valid;
         if (!comparaFechas(desde.val(), hasta.val())) {
-            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.attr("data-content", badYear1)
             hasta.addClass('input-error');
             hasta.popover('toggle');
             valid = false;
@@ -1205,7 +1218,7 @@ function validaProyectos(){
         valid = validaEmpty(responsabilidad) && valid;
         valid = validaEmpty(institucion) && valid;
         if (!comparaFechas(desde.val(), hasta.val())) {
-            hasta.attr("data-content", "La fecha de fin no puede ser antes de la fecha de inicio.")
+            hasta.attr("data-content", badYear1)
             hasta.addClass('input-error');
             hasta.popover('toggle');
             valid = false;
