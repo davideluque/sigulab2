@@ -504,7 +504,8 @@ def __get_descripcion(registro):
         
             descripcion = "Cesión a... "
         # Cuando es un egreso en respuesta a una solicitud
-        else:
+        elif registro.f_tipo_ingreso[0] == "Solicitud":
+       
             
             # Respuesta a la solicitud en la que se solicito la sustancia
             respuesta = db(db.t_Respuesta.id == registro.f_respuesta_solicitud
@@ -3081,8 +3082,7 @@ def detalles_respuesta():
         #y se le asigna la cedula del receptor de la sustancia
 
         cedula_receptor = int(request.post_vars.ci_receptor)
-        inv_id = db.t_Respuesta.insert(f_responsable_recepcion = cedula_receptor
-                                        )
+        inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
