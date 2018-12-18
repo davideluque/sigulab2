@@ -1,9 +1,11 @@
+
 <h4 class="titulosForm">Estudios Formales</h4>
 
 {{ for i in range(1,6): }}
-<div class="estudios-container" id="estudios-container{{=i}}"{{if len(trabajo_list)<i and 1!=i:}}hidden{{pass}}>
+<div class="estudios-container" id="estudios-container{{=i}}"
+     {{if len(estudio_list)<i:}}hidden{{pass}}>
   
-  <h5>Estudio {{=i}}</h5>
+  <h5>Estudio {{=i-1}}</h5>
   
   <div class="col-sm-11 col11Body">
 
@@ -12,7 +14,7 @@
         <div class="form-group">
           <label>Título obtenido:</label>
           <input
-                 value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_titulo_trabajo}}"
+                 value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_titulo_trabajo}}"
                  type="text" class="form-control" name="estudio{{=i}}_titulo_estudio" id="estudio{{=i}}_titulo_estudio" placeholder="Ingrese titulo obtenido"/>
         </div>
       </div>
@@ -23,7 +25,7 @@
         <div class="form-group">
             <label for="estudiantes">Área:</label>
             <input
-                value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_estudiantes}}"
+                value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_estudiantes}}"
                 type="text" class="form-control" name="estudio{{=i}}_area" id="estudio{{=i}}_area" placeholder="Ingrese el area"/>
         </div>
       </div>
@@ -31,7 +33,7 @@
       <div class="col-sm-6">
         <div class="form-group">
             <label for="anio">Año:</label>
-            <input value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_anio}}"
+            <input value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_anio}}"
                    type="text" class="form-control" name="estudio{{=i}}_anio" id="estudio{{=i}}_anio" placeholder="Ingrese año"/>
         </div>
       </div>
@@ -42,7 +44,7 @@
         <div class="form-group">
           <label for="institucion">Institución:</label>
           <input
-              value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_institucion}}"
+              value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_institucion}}"
               type="text" class="form-control" name="estudio{{=i}}_institucion" id="estudio{{=i}}_institucion" placeholder="Ingrese nombre de la institución"/>
         </div>
       </div>
@@ -51,7 +53,7 @@
         <div class="form-group">
           <label for="institucion">Ubicación/Sede:</label>
           <input
-              value="{{='' if len(trabajo_list)<i else trabajo_list[i-1].f_institucion}}"
+              value="{{='' if len(estudio_list)<i else estudio_list[i-1].f_institucion}}"
               type="text" class="form-control" name="estudio{{=i}}_ubicacion" id="estudio{{=i}}_ubicacion" placeholder="Ingrese ubicación de la institución"/>
         </div>
       </div>
@@ -68,7 +70,7 @@
                 <option value=""> Seleccione una opcion</option>
                 {{ for niv in nivel: }}
                 <option 
-                      {{ if len(trabajo_list)>=i and (niv in (trabajo_list[i-1].f_nivel)): }}
+                      {{ if len(estudio_list)>=i and (niv in (estudio_list[i-1].f_nivel)): }}
                         selected
                         {{pass}}
                     value="{{=niv}}">{{=niv}}</option>
@@ -106,26 +108,29 @@
 
 {{ pass }}
 
-<a href="#"  id="add_tdir" onclick="add_tdir()">Agregar Estudio</a>
-<a href="#"  id="remove_tdir" onclick="remove_tdir()">Quitar Estudio</a>
+<a href="#"  id="add_est" onclick="add_est()">Agregar Estudio</a>
+<a href="#"  id="remove_est" onclick="remove_est()">Quitar Estudio</a>
 
 <script charset="utf-8">
-    var num_tdir = {{=len(trabajo_list) or 1}}
-    function add_tdir(){
-        if(num_tdir < 6){
-            num_tdir++;
-            $('#estudios-container'+num_tdir).show();
+    var num_est = {{=len(estudio_list) or 1}}
+    function add_est(){
+        if(num_est < 6){
+            num_est++;
+            $('#estudios-container'+num_est).show();
         }
     }
-    function remove_tdir() {
-        if(num_tdir > 1){
-            $('#estudios-container'+num_tdir).hide();
-            $('#trabajo'+num_tdir+'_nivel').val(['']).trigger("chosen:updated");
-            $('#trabajo'+num_tdir+'_anio').val('');
-            $('#trabajo'+num_tdir+'_titulo_trabajo').val('');
-            $('#trabajo'+num_tdir+'_estudiantes').val('');
-            $('#trabajo'+num_tdir+'_institucion').val('');
-            num_tdir--;
+    function remove_est() {
+        if(num_est > 1){
+            $('#estudio'+num_est+'_categoria').val(['']).trigger("chosen:updated");
+            $('#estudio'+num_est+'_nivel').val(['']).trigger("chosen:updated");
+            $('#estudio'+num_est+'_anio').val('');
+            $('#estudio'+num_est+'_titulo_estudio').val('');
+            $('#estudio'+num_est+'_ubicacion').val('');
+            $('#estudio'+num_est+'_institucion').val('');
+            $('#estudio'+num_est+'_categoria').val('');
+            $('#estudio'+num_est+'_area').val('');
+            $('#estudios-container'+num_est).hide();
+            num_est--;
         }
     }
 </script>
