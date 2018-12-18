@@ -3033,10 +3033,12 @@ def solicitudes():
                                      ).select()[0]
                 espacios.append(esp_aux)
     
-
+            
+    
     #----- AGREGAR SOLICITUDES -----#
     if request.post_vars.numRegistro:
-
+        
+        
         cantidad = float(request.vars.total)
         unidad = request.vars.unidad
         sustancia = request.vars.sustancia
@@ -3044,6 +3046,18 @@ def solicitudes():
         justificacion = request.vars.justificacion
         fecha_caducidad = request.vars.fecha_caducidad
         espacio = request.vars.espacio
+
+        fechaCadu=request.vars.fecha_caducidad.split("-")
+        fecha_sumi=datetime.datetime(int(fechaCadu[0]),int(fechaCadu[1]),int(fechaCadu[2]))
+
+
+        fechaHoy = datetime.datetime.now()
+        if  fechaHoy > fecha_sumi:
+            response.flash = "Fecha de caducidad no puede ser menor a hoy"
+            session.flash = response.flash
+            redirect(URL('solicitudes'))
+
+        
         numRegistro = request.post_vars.numRegistro
         solicitante = request.post_vars.respSolicitud
         inv_id = db.t_Solicitud_smydp.insert(f_cantidad=cantidad, 
