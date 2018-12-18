@@ -572,14 +572,14 @@ def __agregar_registro(concepto):
     
     total_viejo = inv.f_existencia
     uso_interno_viejo = inv.f_uso_interno
-
+ 
     # Nueva cantidad total y nueva cantidad para uso interno
 
 
     if concepto == 'Ingreso':
         total_nuevo = total_viejo + cantidad
         uso_interno_nuevo = uso_interno_viejo + cantidad
-
+        
         inv.update_record(
                 f_existencia=total_nuevo,
                 f_uso_interno=uso_interno_nuevo)
@@ -600,30 +600,11 @@ def __agregar_registro(concepto):
             elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month == fechaHoy.month and\
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
+                return False    
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
                 return False           
-            ##  Faltaria validar si estoy en los primeros 6 dias del mes
-            # 
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+    
 
             #############################################################
             #############################################################
@@ -661,27 +642,10 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
                 return False
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False     
+      
             db.t_Balance.insert(
                 f_cantidad=cantidad,
                 f_cantidad_total=total_nuevo,
@@ -708,30 +672,9 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_sumi.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de ingreso no puede menor a una semana"
                 return False
-
-
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False     
 
             db.t_Balance.insert(
                 f_cantidad=cantidad,
@@ -764,29 +707,10 @@ def __agregar_registro(concepto):
                     fechaHoy.day-6 > 0 and fecha_compra.day < (fechaHoy.day-6)):
                 response.flash = "Fecha de Compra no puede menor a una semana"
                 return False
+            elif (fecha_sumi.year==fechaHoy.year and fecha_sumi.month != fechaHoy.month):
+                response.flash = "Los registros se cierran mensualmente"
+                return False   
 
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        auxIng+=float(reg['t_Balance']['f_cantidad'])
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                        auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-            total_nuevo=(auxIng-auxEgr)+cantidad
-            total_nuevoAux=total_nuevo
-
-
-            for reg in bitacora:
-                if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                    if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                        total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                    elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                        total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                        db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-
-            
             # Se registra la nueva compra en la tabla t_Compra
             compra_id = db.t_Compra.insert(
                 f_cantidad=cantidad,
@@ -812,6 +736,9 @@ def __agregar_registro(concepto):
     
     else:
 
+        total_nuevo = total_viejo - cantidad
+        uso_interno_nuevo = uso_interno_viejo - cantidad
+
         tipo_eg = request.vars.tipo_egreso            
         fecha_uso=request.vars.fecha_uso.split("-")
         fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
@@ -827,26 +754,6 @@ def __agregar_registro(concepto):
         
         fechaComp=datetime.date(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
 
-
-        for reg in bitacora:
-            if reg['t_Balance']['f_fechaUso'] <= fechaComp:
-                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                    auxIng+=float(reg['t_Balance']['f_cantidad'])
-                elif(reg['t_Balance']['f_concepto']==['Consumo']):
-                    auxEgr+=float(reg['t_Balance']['f_cantidad'])
-
-        total_nuevo=(auxIng-auxEgr)-cantidad
-        total_nuevoAux=total_nuevo
-
-
-        for reg in bitacora:
-            if reg['t_Balance']['f_fechaUso'] > fechaComp:
-                if ( reg['t_Balance']['f_concepto']==['Ingreso']):
-                    total_nuevoAux = total_nuevoAux+float(reg['t_Balance']['f_cantidad'])
-                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
-                elif(reg['t_Balance']['f_concepto']==['Consumo']):  
-                    total_nuevoAux = total_nuevoAux-float(reg['t_Balance']['f_cantidad'])
-                    db(db.t_Balance.id == reg['t_Balance']['id']).update(f_cantidad_total= total_nuevoAux )
 
         # Nueva cantidad total luego del consumo
         if total_nuevo <= 0:
@@ -2908,17 +2815,97 @@ def detalles_solicitud():
 
     respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
 
+    esta_autorizado = not(auth.has_membership("TÉCNICO"))
+
+    #Posibles respuesta a la solicitud
+    respuestas = ['Negación','Aceptación']
+
+    #Posibles forma en que se tratara la solicitud
+    formas = ['Cesión','Préstamo']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    espacios_a_cargo = __get_espacios(user_dep_id)
+
+    for esp in espacios_a_cargo:
+
+        for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
+                        (db.t_Inventario.espacio == esp)).select():
+
+            esp_aux = db((db.espacios_fisicos.id == esp)
+                ).select()[0]
+
+            espacios.append(esp_aux)
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    registro = solicitud.f_cod_registro
+
+    num_resp = validador_registro_respuestas(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+
+        #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.numResp:
+
+        cantidad = float(request.vars.suministrar)
+        unidad = request.vars.unidad
+        respuesta = request.vars.respuesta
+        sustancia = sustancia.id
+        justificacion = request.vars.justificacion
+        forma = request.vars.forma
+        fecha_tope = request.vars.fecha_tope
+        espacio = request.vars.espacio
+        numResp = request.post_vars.numResp
+        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
+                                        f_cantidad= cantidad,
+                                        f_medida=unidad, 
+                                        f_tipo_respuesta=respuesta,
+                                        f_justificacion=justificacion,
+                                        f_calidad=forma,
+                                        f_fecha_tope_devolucion=fecha_tope,
+                                        f_espacio=espacio,
+                                        f_solicitud=solicitud.id,
+                                        f_responsable_entrega=personal_usuario.id)
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
     return dict(solicitud = solicitud,
                 sustancia = sustancia,
                 espacio = espacio,
-                respondable = respondable
+                datos_solicitud=datos_solicitud,
+                respondable = respondable,
+                respuestas = respuestas,
+                formas = formas,
+                esta_autorizado = esta_autorizado,
+                espacios = espacios,
+                unidades_de_medida=unidades_de_medida
                 )
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
-
-    sustancia_solicitud = None
 
     # Lista de sustancias en el catalogo para el modal de agregar sustancia
     # al alcanzar el nivel de espacios fisicos
@@ -3057,51 +3044,142 @@ def solicitudes():
                 datos_solicitud=datos_solicitud,
                 espacios=espacios,
                 sustancias=sustancias,
-                unidades_de_medida=unidades_de_medida,
-                sustancia_solicitud=sustancia_solicitud)
+                unidades_de_medida=unidades_de_medida)
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def respuestas():
-    return locals()
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    if auth.has_membership("TÉCNICO"):
+        
+        espacios_a_cargo = db(
+                (db.t_Personal.f_usuario == auth.user.id) &
+                (db.es_encargado.tecnico == db.t_Personal.id) & 
+                (db.espacios_fisicos.id == db.es_encargado.espacio_fisico)
+                                 ).select()
+
+        espacios = [e.espacios_fisicos for e in espacios_a_cargo]
+
+    else:
+        espacios_a_cargo = __get_espacios(user_dep_id)
+
+        for esp in espacios_a_cargo:
+                esp_aux = db(
+                    (db.espacios_fisicos.id == esp)
+                                     ).select()[0]
+                espacios.append(esp_aux)
+    
+    #----- CAMBIO DE ESTADO DE SOLICITUD -----#
+    if request.post_vars.idFicha:
+        solicitud_a_cambiar = Solicitud(db, auth)
+        solicitud_a_cambiar.instanciar(int(request.post_vars.idFicha))
+        solicitud_a_cambiar.cambiar_estado(int(request.post_vars.estado), request)
+        solicitud_a_cambiar.actualizar(int(request.post_vars.idFicha))
+
+        # if request.post_vars.estado == "1":
+        #     solicitud_a_cambiar.fecha_aprobacion = request.now
+        #     solicitud_a_cambiar.aprobada_por = auth.user.first_name
+        #     solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+        if request.post_vars.estado == "2":
+            solicitud_a_cambiar.observaciones = request.post_vars.observaciones
+            # solicitud_a_cambiar.elaborada_por = auth.user.first_name
+            # solicitud_a_cambiar.fecha_elaboracion = request.now
+            solicitud_a_cambiar.actualizar(request.post_vars.idFicha)
+
+            # TODO Quitar la solicitud de la lista de solicitudes luego de que pase a certificarse
+
+            #solicitud_a_cambiar.elaborar_certificacion()
+
+        # if request.post_vars.estado == "-1":
+        #     solicitud_a_cambiar.eliminar(int(request.post_vars.idFicha))
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE CAMBIO DE ESTADO DE SOLICITUD -----#
+
+    #----- ELIMINAR SOLICITUD -----#
+
+    if request.post_vars.eliminar:
+        id_a_eliminar = int(request.post_vars.idFicha_eliminar)
+        db(id_a_eliminar == db.solicitudes.id).delete()
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    #----- FIN DE ELIMINAR SOLICITUD -----#
+
+    #----- DATOS DE SOLICITANTE -----#
+    
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable]
+
+    #----- GENERACION DE LISTADOS -----#
+    respuestas_recibidas = listado_respuestas_recibidas(db, espacios)
+
+    respuestas_enviadas = listado_respuestas_enviadas(db, espacios)
+
+
+    return dict(respuestas_enviadas=respuestas_enviadas,
+                respuestas_recibidas=respuestas_recibidas
+                )
+
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def index():
     return locals()
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado_respuestas_recibidas(db, datos, espacios):
+def listado_respuestas_recibidas(db, espacios):
     respuestas = db((db.t_Respuesta.id > 0)).select()
     respuestasRecibidas = {}
 
     user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
     user_dep_id = user.f_dependencia
 
-    i = 0
+    for resp in respuestas:
 
-    for sol in respuestas:
+        solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
-        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
-
-        espacio = db(
-                        (db.espacios_fisicos.id == sol.f_espacio)
-                                ).select()[0]
+        espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
         for esp in espacios:
             if espacio.id != esp.id:
 
-                i += 1
-                respuestasRecibidas[int(i)] = {
-                                    'f_cod_registro': sol.f_cod_registro,
-                                    'f_solicitud': solicitud.f_cod_registro,
-                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
-                                    'f_cantidad': sol.f_cantidad,
-                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
-                                    'f_estatus':sol.f_estatus
-                                    }
+                if not resp.id in respuestasRecibidas:
+                    respuestasRecibidas[resp.id] = {
+                                        'f_cod_registro': resp.f_cod_registro,
+                                        'f_espacio': espacio.codigo,
+                                        'f_sustancia': solicitud.f_sustancia,
+                                        'f_cantidad': resp.f_cantidad,
+                                        'f_medida': resp.f_medida,
+                                        'f_tipo_respuesta': resp.f_tipo_respuesta,
+                                        'f_calidad': resp.f_calidad,
+                                        'f_fecha': resp.created_on,
+                                        }
     return respuestasRecibidas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
-def listado_respuestas_enviadas(db, datos, espacios):
+def listado_respuestas_enviadas(db, espacios):
     respuestas = db((db.t_Respuesta.id > 0)).select()
     respuestasEnviadas = {}
 
@@ -3110,26 +3188,26 @@ def listado_respuestas_enviadas(db, datos, espacios):
 
     i = 0
 
-    for sol in respuestas:
+    for resp in respuestas:
 
-        solicitud = db((db.t_Solicitud_smydp.id == sol.f_solicitud)).select()[0]
+        solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
-        espacio = db(
-                        (db.espacios_fisicos.id == sol.f_espacio)
-                                ).select()[0]
+        espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
         for esp in espacios:
             if espacio.id == esp.id:
 
-                i += 1
-                respuestasEnviadas[int(i)] = {
-                                    'f_cod_registro': sol.f_cod_registro,
-                                    'f_solicitud': solicitud.f_cod_registro,
-                                    'f_tipo_respuesta': sol.f_tipo_respuesta,
-                                    'f_cantidad': sol.f_cantidad,
-                                    'f_fecha_recepcion': sol.f_fecha_recepcion,
-                                    'f_estatus':sol.f_estatus
-                                    }
+                if not resp.id in respuestasEnviadas:
+                    respuestasEnviadas[resp.id] = {
+                                        'f_cod_registro': resp.f_cod_registro,
+                                        'f_espacio': espacio.codigo,
+                                        'f_sustancia': solicitud.f_sustancia,
+                                        'f_cantidad': resp.f_cantidad,
+                                        'f_medida': resp.f_medida,
+                                        'f_tipo_respuesta': resp.f_tipo_respuesta,
+                                        'f_calidad': resp.f_calidad,
+                                        'f_fecha': resp.created_on,
+                                        }
     return respuestasEnviadas
 
 
@@ -3323,6 +3401,20 @@ def validador_registro_solicitudes(request, db, registro, contador=0):
     else:
         return registronum
 
+def validador_registro_respuestas(request, db, registro, contador=0):
+    anio = str(request.now)[2:4]
+    contador = 1 + contador
+    digits = (3 - len(str(contador))) * '0' + str(contador)
+
+    registronum = registro + '/' + digits
+
+    check = db(db.t_Respuesta.f_cod_registro == registronum).count()
+
+    if check != 0:
+        return validador_registro_respuestas(request, db, registro, contador)
+    else:
+        return registronum
+
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def sustancias():
     return locals()
@@ -3488,7 +3580,7 @@ def generar_reporte_rl7():
     # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
     # EN EL SISTAMA 
     sustContl7= db((db.t_Sustancia.f_control=="RL7")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
-    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select()
+    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select(orderby=~db.t_Balance.f_fechaUso)
     medidas={}
     ids={}
     entradas = {}
@@ -3817,19 +3909,21 @@ def generar_reporte_rl7():
         ingAux=[]
         totalInd={}
         auxTotal=[]
-        
+        auxTotalNu=0
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
                 sufeAux.append(suFe['f_fechaUso'])
                 medida = suFe['f_medida']
                 if ( suFe['f_concepto']==['Ingreso']):
                     ingAux.append(float(suFe['f_cantidad']))
-                    #consAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu+=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
+
                 elif ( suFe['f_concepto']==['Consumo']):
                     consAux.append(float(suFe['f_cantidad']))
-                    #ingAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu-=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
+
         
         fechasImdiv[str(neId)] = sufeAux
         ingresoIndiv[str(neId)]= ingAux
@@ -4067,7 +4161,7 @@ def generar_reporte_rl4():
     # CONSULTA DE LAS SUSTANCIAS REGULADAS LR4 Y QUE SE LES HA APERTURADO BALANCE 
     # EN EL SISTAMA 
     sustContl7= db((db.t_Sustancia.f_control=="RL4")or (db.t_Sustancia.f_control=="RL4 y RL7")).select()
-    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select()
+    sustBit=db((db.t_Balance.f_fechaUso.year()==int(year))&(db.t_Balance.f_fechaUso.month()==int(mes))).select(orderby=~db.t_Balance.f_fechaUso)
     medidas={}
     ids={}
     entradas = {}
@@ -4095,9 +4189,7 @@ def generar_reporte_rl4():
                     entradas[str(suCo.id)]= auxEnt
                 elif ( suFe['f_concepto']==['Consumo']):
                     auxSal+=float(suFe['f_cantidad'])
-                    salidas[str(suCo.id)]= auxSal 
-
-                    
+                    salidas[str(suCo.id)]= auxSal  
                 if (int(str(suFe['f_fechaUso']).split('-')[2])<=auxFecIn):
                     totalIni[str(suCo.id)]=float(suFe['f_cantidad_total'])
                     auxFecIn=int(str(suFe['f_fechaUso']).split('-')[2] )
@@ -4402,6 +4494,8 @@ def generar_reporte_rl4():
         ingAux=[]
         totalInd={}
         auxTotal=[]
+        auxTotalNu=0
+        
         
         for suFe in sustBit:
             if (int(neId)== int(suFe['f_sustancia'])): 
@@ -4410,12 +4504,16 @@ def generar_reporte_rl4():
                 if ( suFe['f_concepto']==['Ingreso']):
                     ingAux.append(float(suFe['f_cantidad']))
                     consAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu+=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
                 elif ( suFe['f_concepto']==['Consumo']):
                     consAux.append(float(suFe['f_cantidad']))
                     ingAux.append(0)
-                    auxTotal.append(float(suFe['f_cantidad_total']))
+                    auxTotalNu-=float(suFe['f_cantidad'])
+                    auxTotal.append(float(auxTotalNu))
         
+
+                   
         fechasImdiv[str(neId)] = sufeAux
         ingresoIndiv[str(neId)]= ingAux
         consumoIndiv[str(neId)]= consAux 
