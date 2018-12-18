@@ -33,6 +33,32 @@
 
       <div class="col-sm-6">
 
+        {{ if usuario: }}
+
+        <div class="col-sm-4 columnas"> 
+          <a href="/sigulab2/personal/ficha/{{=ci}}">
+            <img class="iconos" src="{{=URL('static','images/miFichaPer.png')}}">
+            <h4 class="opciones">Mi Ficha</h4>
+          </a>
+        </div>
+
+        <div class="col-sm-4 columnas">
+          <a href="{{=URL('listado_estilo')}}">
+            <img class="iconos" src="{{=URL('static','images/gen.png')}}">
+            <h4 class="opciones">Listado General</h4>
+          </a>
+        </div>
+
+        <div class="col-sm-4 columnas">
+          <a href="{{=URL('busqueda')}}">
+            <img class="iconos" src="{{=URL('static','images/serv.png')}}">
+            <h4 class="opciones">Búsqueda</h4>
+          </a>
+        </div>
+
+        {{ else: }}
+
+
         <div class="col-sm-6 columnas">
           <a href="{{=URL('listado_estilo')}}">
             <img class="iconos" src="{{=URL('static','images/gen.png')}}">
@@ -47,6 +73,8 @@
           </a>
         </div>
 
+        {{ pass }}
+
       </div>
 
       <div class="col-sm-3">
@@ -55,7 +83,4 @@
     </div>
 </div>
 <!-- Fin del contenido principal de la página de gestión de servicios -->
-
-{{end}}
-
 {{end}}

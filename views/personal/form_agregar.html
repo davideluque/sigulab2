@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="addservice" role="dialog">
     <div class="modal-dialog">
 
@@ -37,6 +38,13 @@
                           <span class="step">3</span>
                           <span class="step">4</span>
                           <span class="step">5</span>
+                          <span class="step">6</span>
+                          <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
                         </div>
                         <!-- Aqui va la informacion -->
                         <div class="col-sm-11 col11Body">
@@ -164,6 +172,14 @@
                             </div>
                           </div>
 
+                          <div class="col-sm-6">
+                                  <label>Fecha de Nacimiento:</label>
+                                  <input class="datepicker" value="{{=usuario.f_fecha_nacimiento or ''}}"
+                                  name = "fecha_nacimiento_add" type="text" id="input-ingreso" data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha"
+                                  placeholder="Fecha de Nacimiento" required>
+                                  <font color="red"><div id="err_celular" hidden></div></font>
+                          </div>
+
 
 
                         </div>
@@ -182,6 +198,13 @@
                           <span class="step">3</span>
                           <span class="step">4</span>
                           <span class="step">5</span>
+                          <span class="step">6</span>
+                          <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -281,7 +304,7 @@
                                   <label>Ingreso a la ULAB:</label> <input class="datepicker" value="{{=usuario.f_fecha_ingreso_ulab or ''}}" name = "fecha_ingreso_ulab_add" type="text" required data-placement="bottom" data-trigger="manual" data-content="Seleccione una fecha">
                                 </div>
 
-                                
+
                               </div>
                             </div>
                         </div>
@@ -303,6 +326,13 @@
                         <span class="step activePass">3</span>
                         <span class="step">4</span>
                         <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
                       </div>
 
                       <!-- Aqui va la informacion -->
@@ -410,6 +440,13 @@
                           <span class="step">3</span>
                           <span class="step activePass">4</span>
                           <span class="step">5</span>
+                          <span class="step">6</span>
+                          <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
                         </div>
 
                         <!-- Aqui va la informacion -->
@@ -420,42 +457,255 @@
                         </div>
 
                       </div>
+                      
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </fieldset>
+                    <!-- Fin Cuarto Paso -->
+
+                    <!-- Quinto Paso -->
+                    <fieldset class="formField" id="p5">
+                      <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>
+                          <span class="step activePass">5</span>
+                          <span class="step">6</span>
+                          <span class="step">7</span>
+                          <span class="step">8</span>
+                          <span class="step">9</span>
+                          <span class="step">10</span>
+                          <span class="step">11</span>
+                          <span class="step">12</span>
+                        </div>
+
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                        {{include 'personal/formHistorial.html'}}
+                        </div>
+
+                      </div>
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                      
+                    </fieldset>
+                    <!-- Fin Quinto Paso -->
+
+                    <!-- Sexto Paso -->
+                    <fieldset class="formField" id="p6">
+                      <div class="form-bottom" data-step="6" data-title="Sexto Paso">
+                        <!-- Aqui va la barra lateral -->
+                        <div class="col-sm-1 col1Body">
+                          <span class="step">1</span>
+                          <span class="step">2</span>
+                          <span class="step">3</span>
+                          <span class="step">4</span>
+                          <span class="step">5</span>
+                          <span class="step activePass">6</span>
+                          <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
+                        </div>
+
+                        <!-- Aqui va la informacion -->
+                        <div class="col-sm-11 col11Body" >
+                          {{ include 'personal/form-administrativas.html' }}
+                        </div>
+
+                      </div>
                       <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
                         <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
                       </div>
                     </fieldset>
-                    <!-- Fin Cuarto Paso -->
+                    <!-- Fin Sexto Paso -->
 
-                  <!-- Quinto paso Paso -->
-                  <fieldset class="formField" id="p5">
-                    <div class="form-bottom" data-step="5" data-title="Quinto Paso">
+                  <!-- Septimo paso Paso -->
+                  <fieldset class="formField" id="p7">
+                    <div class="form-bottom" data-step="7" data-title="Septimo Paso">
                       <!-- Aqui va la barra lateral -->
                       <div class="col-sm-1 col1Body">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
                         <span class="step">4</span>
-                        <span class="step activePass">5</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step activePass">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
                       </div>
-
                       <!-- Aqui va la informacion -->
-                      
-                      <!--  Formulario para agregar historial laboral en el menu modal -->
-
-                      {{include 'personal/formHistorial.html'}}
-
-                        
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-extension.html' }}
+                      </div>
                     <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
                         <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
-                        <button type="button" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
                     </div>
-                    
-
                   </fieldset>
-                    <!-- Fin Quinto Paso -->
+                    <!-- Fin Septimo Paso -->
 
+                    <!-- Octavo Paso -->
+                    <!-- Estudios Formales -->
+                    <fieldset class="formField" id="p8">
+                    <div class="form-bottom" data-step="8" data-title="Octavo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step activePass">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-estudios.html' }}
+                      </div>
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                    <!-- Fin Octavo Paso -->
 
+                    <!-- Noveno Paso -->
+                    <!-- Cursos -->
+                    <fieldset class="formField" id="p9">
+                    <div class="form-bottom" data-step="9" data-title="Noveno Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step activePass">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-cursos.html' }}
+                      </div>
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                    <!-- Fin Noveno Paso -->
+
+                    <!-- Decimo Paso -->
+                    <!-- Materias Impartidas -->
+                    <fieldset class="formField" id="p10">
+                    <div class="form-bottom" data-step="10" data-title="Decimo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step activePass">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-materias.html' }}
+                      </div>
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                    <!-- Fin Decimo Paso -->
+
+                    <!-- Undecimo Paso -->
+                    <!-- Trabajos Dirigidos -->
+                  <fieldset class="formField" id="p11">
+                    <div class="form-bottom" data-step="11" data-title="Undecimo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step activePass">11</span>
+                        <span class="step">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form_trabajos_dirigidos.html' }}
+                      </div>
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
+                    <!-- Fin Undecimo Paso -->
+
+                    <!-- Duodecimo Paso -->
+                    <!-- Proyectos -->
+                    <fieldset class="formField" id="p12">
+                    <div class="form-bottom" data-step="12" data-title="Duodecimo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step activePass">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                          {{ include 'personal/formInvestigacion.html' }}
+                      </div>
+
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <div class="loader" id ="loader" style="display: none;"></div> 
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" onclick="return toggleLoader();" class="btn btn-submit botonForm" form="formularioCarga" name="envio" value="agregar" id="submit"><span class="fa fa-floppy-o" title="Enviar" /></button>
+                    </div>
+                  </fieldset>
+                  <!-- Fin Duodecimo Paso -->
 
 
                 </form>
@@ -470,12 +720,29 @@
 <script type="text/javascript">
  function toggleTrabajo(id, idText, idText2) {
   var trabajo = document.getElementById(id);
-  var texto = document.getElementById(idText);
+  var texto = document.getElementsByClassName(idText);
   if (idText2) {
-    var texto2 = document.getElementById(idText2);
+    var texto2 = document.getElementsByClassName(idText2);
+  }
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='none';
+  }
+
+  for(var i = 0; i < texto2.length; i++) { 
+    texto2[i].style.display='block';
   }
   trabajo.style.display = 'block';
-  texto.style.display = 'none';
-  texto2.style.display = 'block';
+ }
+
+ function quitarTrabajo(trabajo, idText) {
+  document.getElementById(trabajo).style.display = 'none';
+  var texto = document.getElementsByClassName(idText);
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='block';
+  }
+ }
+
+ function toggleLoader() {
+  document.getElementById('loader').style.display = 'inline-block';
  }
 </script>

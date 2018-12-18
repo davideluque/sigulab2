@@ -1,1 +1,23 @@
-<p>Aqui va la extension</p>
+<br>
+<table class="table contenidoFicha">
+    <tbody>
+        <tr style="color: White;">
+            <th> Categoría </th>
+            <th> Desde </th>
+            <th> Hasta </th>
+            <th> Nombre </th>
+            <th> Descripción:</th>
+            <th> Institución </th>
+        </tr>
+        {{for ext in ext_list:}}
+        <tr>
+            <td>{{=BEAUTIFY(", ".join(ext.f_categoria))}}</td>
+            <td>{{=ext.f_fecha_inicio}}</td>
+            <td>{{=ext.f_fecha_final}}</td>
+            <td>{{=BEAUTIFY(ext.f_nombre)}}</td>
+            <td>{{=BEAUTIFY(ext.f_descripcion)}}</td>
+            <td>{{=BEAUTIFY(ext.f_institucion)}}</td>
+        </tr>
+        {{pass}}
+    </tbody>
+</table>

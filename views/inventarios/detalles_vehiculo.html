@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="{{=URL('static', 'plugins/datatables2/datatables.min.js')}}"></script>
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
-     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}"> 
+     <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/listado.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_dependencia.css')}}">
      <link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventario_espacio.css')}}">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
     <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>
     <!-- Web2py JS - Especialmente para AJAX -->
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <style>
@@ -52,7 +52,7 @@
     <h3 class="dep-titulo text-center">{{=vehiculo['vh_marca']}} {{=vehiculo['vh_modelo']}} </h3>
     <h4 class="dep-titulo text-center">Año: {{=vehiculo['vh_ano']}}</h4>
     <h4 class="dep-titulo text-center">Placa: {{=vehiculo['vh_placa']}}</h4>
-    <h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>
+    {{ if vehiculo['vh_num']: }}<h4 class="dep-titulo text-center">Nº Bien Nacional: {{=vehiculo['vh_num']}}</h4>{{ pass }}
     {{ if request.vars.delete: }}
         <h4 class="text-center">DESCRIPCIÓN DE LA ELIMINACIÓN: {{=vehiculo['vh_desc_eliminar'].upper()}}</h4>
     {{ pass }}
@@ -106,14 +106,16 @@
 
 <!-- Ficha vehiculo aqui esta la infromacion del vehiculo -->
 <div class="wrapper">
-		
+
         <div class="tab-wrapper">
             <ul class="tabs">
                     <li class="tab-link active" data-tab="1"><br>CARACTERÍSTICAS</li>
                     <li class="tab-link" data-tab="2">RESPONSABILIDAD<br/>Y<br/>UBICACIÓN</li>
                     <li class="tab-link" data-tab="3"><br>SUDEBIP</li>
                     <li class="tab-link" data-tab="4">DATOS<br/>DE<br/>ADQUISICIÓN</li>
-                    <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    {{ if puede_ver_historial_mantenimiento: }}
+                      <li class="tab-link" data-tab="5">HISTORIAL DE MANTENIMIENTO</li>
+                    {{ pass }}
                     <li class="tab-link" data-tab="6">HISTORIAL DE PRÉSTAMOS</li>
                 </ul>
         </div>
@@ -276,7 +278,7 @@
                         {{ pass }}
                     </div>
                     <div class="grid-item">
-                        {{=vehiculo['vh_fecha_adquisicion']}}
+                        {{=vehiculo['vh_fecha_adquisicion'].strftime("%d/%m/%y") }}
                     </div>
                     {{ if vehiculo['vh_origen'] == 'Compra': }}
                         <div class="grid-item">
@@ -309,7 +311,7 @@
             </div>
 
             <div id="tab-5"class="tab-content">
-                {{include 'inventarios/mantenimiento.html'}}
+                {{include 'inventarios/mantenimiento_v.html'}}
             </div>
             <div id="tab-6"class="tab-content">
                 {{include 'inventarios/historial_prestamos_v.html'}}
@@ -457,13 +459,13 @@
         <div class="modal-body addBody">
           <div class="row addRow">
             <div class="col-md-12 form-box">
-                <form id="formularioCarga" class="registration-form" method="post">
+                <form id="formularioDevolucion" class="presta-form registration-form" method="post">
 
                   <!-- Primer paso-->
                   <fieldset class="formField">
                     <div class="form-bottom" data-step="1" data-title="Primer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step activePass">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -489,6 +491,11 @@
                             <div class="dr" id="error-fecha_solicitud" style="color: #d03e3e;"> </div>
                         </div>
                         <div class="form-group">
+                            <label>Fecha prevista de salida*</label>
+                            <input type="date" class="form-control campo_fecha_prestamo" id="fecha_prevista_salida" name="fecha_prevista_salida" placeholder="Fecha de devolución*" title="Ingrese la fecha prevista de devolución" required>
+                            <div class="dr" id="error-fecha_prevista_salida" style="color: #d03e3e;"> </div>
+                        </div>
+                        <div class="form-group">
                             <label>Fecha prevista de devolución*</label>
                             <input type="date" class="form-control campo_fecha_prestamo" id="fecha_prevista_devolucion" name="fecha_prevista_devolucion" placeholder="Fecha de devolución*" title="Ingrese la fecha prevista de devolución" required>
                             <div class="dr" id="error-fecha_prevista_devolucion" style="color: #d03e3e;"> </div>
@@ -504,7 +511,7 @@
                   <fieldset class="formField">
                     <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step activePass">2</span>
                         <span class="step">3</span>
@@ -515,11 +522,26 @@
                         <h4 class="titulosForm">Información de la Solicitud</h4>
                         <label>Campos marcados con * son obligatorios.</label>
 
-                          <div class="form-group">
-                              <label>Tiempo de uso previsto*</label>
-                              <input type="text" class="form-control" id="tiempo_previsto" name="tiempo_previsto" placeholder="Ingrese el tiempo de uso previsto*" title="Ingrese el tiempo de uso err_tiempo_previsto*" required>
-                              <div style="color: #d03e3e;" id="err_tiempo_previsto" hidden></div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tiempo de uso previsto*</label>
+                                <input type="text" class="form-control" id="tiempo_previsto" name="tiempo_previsto" placeholder="Ingrese el tiempo de uso previsto*" title="Ingrese el tiempo de uso err_tiempo_previsto*" required>
+                                <div style="color: #d03e3e;" id="err_tiempo_previsto" hidden></div>
+                            </div>
                           </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Tiempo de uso previsto (md)*</label>
+                                  <select class="form-control" type="select" id="tiempo_previsto_md" name="tiempo_previsto_md" placeholder="tiempo_previsto_md*" required>
+                                      <option value="">Seleccione una opción</option>
+                                      <option value="días">días</option>
+                                      <option value="horas">horas</option>
+                                  </select>
+                                  <div class="dr" id="err_tiempo_previsto_md" style="color: #d03e3e;"> </div>
+                              </div>
+                            </div>
+                        </div>
 
                           <div class="form-group">
                               <label>Ruta prevista*</label>
@@ -546,7 +568,7 @@
                   <fieldset class="formField">
                     <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step activePass">3</span>
@@ -605,7 +627,7 @@
                   <fieldset class="formField">
                       <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                         <!-- Aqui va la barra lateral -->
-                        <div class="col-sm-1 col1Body">
+                        <div class="col-sm-1 col1Body modalInventario">
                           <span class="step">1</span>
                           <span class="step">2</span>
                           <span class="step">3</span>
@@ -633,11 +655,17 @@
                                 <div class="dr" id="error-nro_usuario" style="color: #d03e3e;"> </div>
                             </div>
                         </div>
+
+                        <div id="loaderPrestamo" class="btn btn-default ld-ext-right running text-center" style="font-size:1em; display:none;">
+                          Cargando, por favor espere
+                          <div class="ld ld-ring ld-spin-fast"></div>
+                        </div>
+
                       </div>
                       <input type="hidden" name="prestamo" id="prestamo" value="True">
                       <div style="position:fixed; bottom: 15px; right: 30px;">
                         <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
-                        <button type="submit button" form="formularioCarga" id="submit" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                        <button type="submit button" form="formularioDevolucion" id="submitPrestamo" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
                       </div>
                   </fieldset>
                   <!-- Fin Cuarto Paso -->
@@ -651,6 +679,211 @@
 
 
 {{ if esta_autorizado: }}
+<!-- Modal para registrar mantenimiento -->
+<div class="modal fade" id="mantenimiento" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container">
+                <i class="fas fa-cog fa-2x" style="
+                display:block;
+                margin-left: -16px;
+                margin-top: 8px;
+                "></i>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevaBien" style="
+              text-align: left;
+              padding-top: 12px;
+              color: white;
+            ">Registrar Ficha de Mantenimiento<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+              <form id="formularioMantenimiento" class="presta-form registration-form" method="post">
+
+                <!-- Primer paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body modalInventario">
+                      <span class="step activePass">1</span>
+                      <span class="step">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Información de la Solicitud</h4>
+                      <label>Campos marcados con * son obligatorios.</label>
+                      <div class="form-group">
+                          <label>Vehículo*</label>
+                          <input type="text" class="form-control" id="vehiculo" name="vehiculo" placeholder="Vehículo*" title="Vehículo*" disabled value="{{= vehiculo['vh_marca'] }} {{= vehiculo['vh_modelo'] }} {{= vehiculo['vh_placa'] }}">
+                          <div style="color: #d03e3e;" id="err_vehiculo" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Fecha de solicitud*</label>
+                          <input type="date" class="form-control fecha_mantenimiento" id="fecha_solicitud_mant" name="fecha_solicitud_mant" placeholder="Fecha de solicitud*" title="Ingrese la fecha de solicitud" required>
+                          <div class="dr" id="error-fecha_solicitud_mant" style="color: #d03e3e;"> </div>
+                      </div>
+                      <div class="form-group">
+                          <label>Nº Registro u Orden de Servicio (O/S)*</label>
+                          <input type="text" class="form-control" id="nro_registro" name="nro_registro" placeholder="Número de registro*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Proveedor*</label>
+                          <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Persona de Contacto*</label>
+                          <input type="text" class="form-control" id="persona_contacto" name="persona_contacto" placeholder="Persona de Contacto*" required>
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                      <div class="form-group">
+                          <label>Telf. de Contacto</label>
+                          <input type="text" class="form-control campo_telf" id="telf_contacto" name="telf_contacto" placeholder="Telf. de Contacto" >
+                          <div style="color: #d03e3e;" id="err_solicitante" hidden></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+
+                <!-- Segundo paso-->
+                <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
+                    <div class="col-sm-1 col1Body modalInventario">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                      <span class="step">3</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                    <div class="col-sm-11 col11Body">
+                      <h4 class="titulosForm">Información de la Solicitud y Servicio</h4>
+                      <label>Campos marcados con * son obligatorios.</label>
+
+                        <div class="form-group">
+                            <label>Tipo*</label>
+                            <select class="form-control" type="select" id="tipo_mant" name="tipo_mant" placeholder="Tipo*" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="Preventivo">Preventivo</option>
+                                <option value="Correctivo">Correctivo</option>
+                                <option value="Diagnóstico">Diagnóstico</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                            <div class="dr" id="error-tipo_mant" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Motivo*</label>
+                            <input type="text" class="form-control" id="motivo" name="motivo" placeholder="Ingrese el motivo de la solicitud*" title="Ingrese el motivo de la solicitud*" required>
+                            <div style="color: #d03e3e;" id="err_motivo" hidden></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descripción*</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion de la solicitud*" title="Ingrese la decripcion de la solicitud*" required>
+                            <div style="color: #d03e3e;" id="err_descripcion" hidden></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha de inicio</label>
+                            <input type="date" class="form-control fecha_mantenimiento" id="fecha_inicio_mant" name="fecha_inicio_mant" placeholder="Fecha de inicio" title="Ingrese la fecha de inicio">
+                            <div class="dr" id="error-fecha_inicio_mant" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Fecha de culminación</label>
+                          <input type="date" class="form-control fecha_mantenimiento" id="fecha_culminacion_mant" name="fecha_culminacion_mant" placeholder="Fecha de culminación" title="Ingrese la fecha de culminación">
+                          <div class="dr" id="error-fecha_culminacion_mant" style="color: #d03e3e;"> </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div style="position:fixed; bottom: 15px; right: 30px;">
+                    <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                    <button type="button"  class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </fieldset>
+                <!-- Fin Segundo Paso -->
+
+                <!-- Comienzo Tercer Paso -->
+                <fieldset class="formField">
+                    <div class="form-bottom" data-step="3" data-title="Tercer Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body modalInventario">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step activePass">3</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Información del Servicio</h4>
+                        <label>Campos opcionales.</label>
+                        <div class="form-group" tag="Formato:">
+                            <label>Piezas reparadas</label>
+                            <input type="text" class="form-control" id="piezas_reparadas" name="piezas_reparadas" title="Ingrese las piezas reparadas" placeholder="Piezas reparadas">
+                            <div class="dr" id="error-piezas_reparadas" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Piezas sustituidas</label>
+                            <input type="text" class="form-control" id="piezas_sustituidas" name="piezas_sustituidas" title="Ingrese las piezas sustituidas" placeholder="Piezas sustituidas">
+                            <div class="dr" id="error-piezas_sustituidas" style="color: #d03e3e;"> </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Acción</label>
+                          <select class="form-control" type="select" id="accion" name="accion" placeholder="Acción">
+                              <option value="">Seleccione una opción</option>
+                              <option value="Periódica">Periódica</option>
+                              <option value="Extraordinaria">Extraordinaria</option>
+                              <option value="Urgente">Urgente</option>
+                          </select>
+                          <div class="dr" id="error-accion" style="color: #d03e3e;"> </div>
+                      </div>
+
+                        <div class="form-group" tag="Formato:">
+                            <label>Observaciones del servicio</label>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones" title="Ingrese las observaciones" placeholder="Observaciones">
+                            <div class="dr" id="error-observaciones" style="color: #d03e3e;"> </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <input type="hidden" name="mantenimiento" id="mantenimiento" value="True">
+                    <div style="position:fixed; bottom: 15px; right: 30px;">
+                      <button type="button" class="btn btn-previous botonForm"><i class="fas fa-arrow-left"></i></button>
+                      <button type="submit button" form="formularioMantenimiento" id="submitMantenimiento" class="btn btn-submit botonForm"><i class="fas fa-plus"></i></button>             
+                    </div>
+                </fieldset>
+                <!-- Fin Tercer Paso -->
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal editar vehículo -->
 <div class="modal fade" id="addbm" role="dialog">
   <div class="modal-dialog">
@@ -692,7 +925,7 @@
             <fieldset class="formField">
                 <div class="form-bottom" data-step="1" data-title="Primer Paso">
                   <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                  <div class="col-sm-1 col1Body">
+                  <div class="col-sm-1 col1Body modalInventario">
                     <span class="step activePass">1</span>
                     <span class="step">2</span>
                     <span class="step">3</span>
@@ -708,7 +941,7 @@
                     <label>Campos marcados con * son obligatorios.</label>
                     <div class="form-group">
                         <label>Nº Bien Nacional*</label>
-                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" required value="{{=vehiculo['vh_num']}}">
+                        <input type="text" class="form-control" id="num" name="num" placeholder="Número de Bien Nacional*" title="Formato: ###### (6 dígitos)" {{ if vehiculo['vh_num']: }}value="{{=vehiculo['vh_num']}}" {{ pass }}>
                         <div style="color: #d03e3e;" id="err_num" hidden></div>
                     </div>
                     <div class="form-group" tag="Formato:">
@@ -773,7 +1006,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="2" data-title="Segundo Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body">
+                    <div class="col-sm-1 col1Body modalInventario">
                       <span class="step">1</span>
                       <span class="step activePass">2</span>
                       <span class="step">3</span>
@@ -830,7 +1063,7 @@
                 <fieldset class="formField">
                   <div class="form-bottom" data-step="3" data-title="Tercer Paso">
                     <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                    <div class="col-sm-1 col1Body"> 
+                    <div class="col-sm-1 col1Body modalInventario"> 
                       <span class="step">1</span>
                       <span class="step">2</span>
                       <span class="step activePass">3</span>
@@ -842,7 +1075,7 @@
                     </div>
                     <!-- Aqui va la informacion -->
                     <div class="col-sm-11 col11Body">
-                      <h4 class="titulosForm">Características del Vehículo</h4>                
+                      <h4 class="titulosForm">Características del Vehículo</h4>
                       <label>Campos marcados con * son obligatorios.</label>
                       <div class="form-group" tag="Formato:">
                           <label>Clase*</label>
@@ -942,7 +1175,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="4" data-title="Cuarto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -1023,7 +1256,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="5" data-title="Quinto Paso">
                       <!-- Barra lateral gris (vacia en este caso, pues no hay pasos) -->
-                      <div class="col-sm-1 col1Body"> 
+                      <div class="col-sm-1 col1Body modalInventario"> 
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -1125,7 +1358,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="6" data-title="Sexto Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -1182,7 +1415,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="7" data-title="Séptimo Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -1262,7 +1495,7 @@
                 <fieldset class="formField">
                     <div class="form-bottom" data-step="8" data-title="Octavo Paso">
                       <!-- Aqui va la barra lateral -->
-                      <div class="col-sm-1 col1Body">
+                      <div class="col-sm-1 col1Body modalInventario">
                         <span class="step">1</span>
                         <span class="step">2</span>
                         <span class="step">3</span>
@@ -1308,7 +1541,7 @@
   document.getElementById('fecha_solicitud').valueAsDate = new Date();
 
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
-  var regexCI = new RegExp("^[VEve][-][0-9]{2}[.][0-9]{3}[.][0-9]{3}$");
+  var regexCI = new RegExp("^[VEve][-][0-9]{6,8}$");
 
   // Máscara js para formato de teléfono
   $(document).ready(function() {
@@ -1323,7 +1556,7 @@
 
   // Máscara js para formato de RIF
   $(document).ready(function() {
-    $('.campo_ci').mask('X-00.000.000', {
+    $('.campo_ci').mask('X-00000000', {
       translation: {
         "X": {
           pattern: /[VEve]/
@@ -1339,8 +1572,13 @@
 
     if (   !$(this).is("#num") 
         && !$(this).is("#serialCh")
+        && !$(this).is("#serialC")
+        && !$(this).is("#serialM")
+        && !$(this).is("#intt")
+        && !$(this).is("#placa")
         && !$(this).is("#nro_puestos")
         && !$(this).is("#ano")
+        && !$(this).is("#tiempo_previsto")
        ) {
       if (value.length == 0) {
         $(this).css('border-color', '#d03e3e');
@@ -1379,7 +1617,7 @@
     } else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Formato: X-00.000.000. Complete con 0 en caso de ser necesario");
+      $(this).next().text("Formato: X-00000000. Complete con 0 en caso de ser necesario");
     }
   });
 
@@ -1393,6 +1631,71 @@
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
+  });
+
+  // Valida que la fecha de devolución sea posterior a la de salida
+  $("#fecha_prevista_salida").change(function() {
+    var fecha = new Date($(this).val());
+
+    var dd = fecha.getDate();
+    var mm = fecha.getMonth() + 1;
+    var yyyy = fecha.getFullYear();
+
+    var minimo = yyyy + "-" + mm + "-" + dd;
+
+    $("#fecha_prevista_devolucion").attr('min', minimo);
+    $("#fecha_prevista_devolucion").val("");
+  });
+
+  const MS_AL_DIA = 1000 * 60 * 60 * 24;
+
+  function diferenciaEntreFechasEnDias(a, b) {
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / MS_AL_DIA);
+  }
+
+
+  // Configura el tiempo previsto por defecto
+  $("#fecha_prevista_devolucion").change(function() {
+    var fecha_salida = new Date($("#fecha_prevista_salida").val());
+    var fecha_devolucion = new Date($("#fecha_prevista_devolucion").val());
+
+    var diferencia = diferenciaEntreFechasEnDias(fecha_salida, fecha_devolucion);
+
+    if (diferencia > 0) {
+      $("#tiempo_previsto").val(diferencia);
+      $('#tiempo_previsto_md option[value="días"]').attr("selected", "selected");
+    } else {
+      $("#tiempo_previsto").val("");
+      $('#tiempo_previsto_md option[value=""]').attr("selected", "selected");
+    }
+
+  });
+
+  // Fecha de mantenimiento
+  $(document).ready(function() {
+    var minimo = "{{= vehiculo['vh_ano'] - 1 }}-01-01";
+
+    $(".fecha_mantenimiento").attr('min', minimo);
+  });
+
+  // Fecha de mantenimien
+  $(".fecha_mantenimiento").change(function() {
+    var fecha = new Date($(this).val());
+    var minimo = new Date("{{= vehiculo['vh_ano'] - 1 }}-01-01");
+
+    if  (minimo <= fecha) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    } else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).css('color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce una fecha mayor al 01/01/{{= vehiculo['vh_ano'] - 1 }}.");
+    }
   });
 
   // Verifica la fecha introducida
@@ -1417,10 +1720,17 @@
 <script type="text/javascript">
   var categorias_sudebip = {};
   var clasificaciones = {};
+  var valores_unicos = {};
   var regexTlf = new RegExp("^[(]{1}[0]{1}[0-9]{3}[)]{1}[\ ]{1}[0-9]{3}-[0-9]{4}$");
   var regexRIF = new RegExp("^[JGVEPC][-]([0-9]{7,9})[-]([0-9])");
   var regexExtension = new RegExp("^[0-9]{4}$");
 
+  $("#submitPrestamo").click(function() {
+    $("#loaderPrestamo").show();
+    $("#submitPrestamo").attr('disabled', 'true');
+    $("#formularioDevolucion").submit();
+    return true;
+  });
 
   // Carga las categorias de sudebip
   $(document).ready(function() {
@@ -1438,6 +1748,17 @@
           "{{=clasif}}",
         {{ pass }}
         ];
+    {{ pass }}
+  });
+
+  // Carga los valores únicos
+  $(document).ready(function() {
+    {{ for tipo in valores_unicos: }}
+      valores_unicos['{{=tipo}}'] = [
+        {{ for valor in valores_unicos[tipo]: }}
+        "{{=valor}}",
+        {{pass}}
+      ] 
     {{ pass }}
   });
 
@@ -1582,7 +1903,12 @@
   // Validación de bien mueble
   $("#num").focusout(function() {
     var num = $(this).val();
-    if (isNum(num) && num.length == 6) {
+    
+    var tiene_valor_actual = (num.length == 0) && "{{=vehiculo['vh_num']}}" == "None";
+    tiene_valor_actual = tiene_valor_actual || (num.length > 0) && num == "{{=vehiculo['vh_num']}}"
+    
+    var esta_repetido = valores_unicos['num'].includes(num) && !tiene_valor_actual;
+    if ((isNum(num) && num.length == 6 && !esta_repetido) || num.length == 0) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -1590,14 +1916,60 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce un número de 6 dígitos");
+      if (esta_repetido) {
+        $(this).next().text("El número introducido ya ha sido registrado en otro vehículo");
+      } else {
+        $(this).next().text("Introduce un número de 6 dígitos");
+      }
+    }
+  });
+
+  // Validación de tiempo previsto
+  $("#tiempo_previsto").focusout(function() {
+    var tiempo_previsto = $(this).val();
+    if (isNum(tiempo_previsto) && tiempo_previsto.length > 0) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      $(this).next().text("Introduce un número positivo");
+    }
+  });
+
+  // Validación de serial de chasis (17 dígitos)
+  $("#serialCh").focusout(function() {
+    var serial = $(this).val();
+
+    var tiene_valor_actual = "{{=vehiculo['vh_serial_chasis']}}" == serial;
+    var esta_repetido = valores_unicos['serial_chasis'].includes(serial) && !tiene_valor_actual;
+
+    if (serial.length == 17 && !esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado en otro vehículo");
+      } else {
+        $(this).next().text("Introduce un serial de 17 dígitos");
+      }
     }
   });
 
   // Validación de serial de carrocería (17 dígitos)
-  $("#serialCh").focusout(function() {
+  $("#serialC").focusout(function() {
     var serial = $(this).val();
-    if (serial.length == 17) {
+
+    var tiene_valor_actual = "{{=vehiculo['vh_serial_carroceria']}}" == serial;
+    var esta_repetido = valores_unicos['serial_carroceria'].includes(serial) && !tiene_valor_actual;
+
+    if (!esta_repetido) {
       $(this).next().hide();
       $(this).css('border-color', '#ddd');
       $(this).css('color', '#888');
@@ -1605,7 +1977,80 @@
     else {
       $(this).css('border-color', '#d03e3e');
       $(this).next().show();
-      $(this).next().text("Introduce un serial de 17 dígitos");
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado en otro vehículo");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de serial de motor (17 dígitos)
+  $("#serialM").focusout(function() {
+    var serial = $(this).val();
+
+    var tiene_valor_actual = "{{=vehiculo['vh_serial_motor']}}" == serial;
+    var esta_repetido = valores_unicos['serial_motor'].includes(serial) && !tiene_valor_actual;
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El serial introducido ya está registrado en otro vehículo");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de placa
+  $("#placa").focusout(function() {
+    var placa = $(this).val();
+
+    var tiene_valor_actual = "{{=vehiculo['vh_placa']}}" == placa;
+    var esta_repetido = valores_unicos['placa'].includes(placa) && !tiene_valor_actual;
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("La placa introducida ya está registrada en otro vehículo");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
+    }
+  });
+
+  // Validación de INTT
+  $("#intt").focusout(function() {
+    var intt = $(this).val();
+
+    var tiene_valor_actual = "{{=vehiculo['vh_intt']}}" == intt;
+    var esta_repetido = valores_unicos['intt'].includes(intt) && !tiene_valor_actual;
+
+    if (!esta_repetido) {
+      $(this).next().hide();
+      $(this).css('border-color', '#ddd');
+      $(this).css('color', '#888');
+    }
+    else {
+      $(this).css('border-color', '#d03e3e');
+      $(this).next().show();
+      if (esta_repetido) {
+        $(this).next().text("El número de INTT introducido ya está registrado en otro vehículo");
+      } else {
+        $(this).next().text("Este campo es obligatorio.");
+      }
     }
   });
 

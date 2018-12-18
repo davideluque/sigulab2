@@ -1,53 +1,25 @@
 <br>
-<div class="tab-pane" id="tab2">
-  <div class="span8">
-    <div class="tabbable">
-
-      <ul class="nav nav-tabs " id="myTab" role="tablist">
-        <li role="presentation" class="nav-item active">
-          <a href="#proyectos" class="nav-link active " data-toggle="tab" role="tab" aria-controls="tab_proyectos"><b>Proyectos</b></a>
-        </li>
-
-        <li class="nav-item ">
-          <a class="nav-link  " id="tab_datos_personales" href="#pubArb" data-toggle="tab" role="tab" aria-controls="tab_publicacione"><b>Publicaciones</b></a>
-        </li>
-      </ul>
-
-      <div class="tab-content">
-        <div class="tab-pane active" id="proyectos">
-          <br>
-          <table class="table contenidoFicha" id="tab_proyectos">
-            <tbody>
-                <tr style="color: White;"> 
-                    <th> Categoría </th>
-                    <th> Desde </th>
-                    <th> Hasta </th>
-                    <th> Título del Proyecto </th>
-                    <th> Responsabilidad </th>
-                    <th> Resultados </th>
-                    <th> Institución </th>
-                </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="tab-pane" id="pubArb">
-            <br>
-           <table class="table contenidoFicha" id="tab_publicaciones">
-            <tbody>
-              <tr style="color: White;"> 
-                  <th> Categoría </th>
-                  <th> Año </th>
-                  <th> Título del Trabajo </th>
-                  <th> Autor(es) </th>
-                  <th> Referencia </th>
-              </tr> 
-
-            </tbody>
-           </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<table class="table contenidoFicha" id="tab_proyectos">
+    <tbody>
+        <tr style="color: White;">
+            <th> Categoría </th>
+            <th> Desde </th>
+            <th> Hasta </th>
+            <th> Título del Proyecto </th>
+            <th> Responsables/Participantes </th>
+            <th> Resultados </th>
+            <th> Institución </th>
+        </tr>
+        {{for proy in proy_list:}}
+        <tr>
+            <td>{{=BEAUTIFY(", ".join(proy.f_categoria))}}</td>
+            <td>{{=proy.f_fecha_inicio}}</td>
+            <td>{{=proy.f_fecha_fin}}</td>
+            <td>{{=BEAUTIFY(proy.f_titulo)}}</td>
+            <td>{{=BEAUTIFY(proy.f_responsabilidad)}}</td>
+            <td>{{=BEAUTIFY(proy.f_resultados)}}</td>
+            <td>{{=BEAUTIFY(proy.f_institucion)}}</td>
+        </tr>
+        {{pass}}
+    </tbody>
+</table>

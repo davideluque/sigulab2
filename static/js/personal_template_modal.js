@@ -3,7 +3,9 @@
  */
 
 const requiredFieldMessage = 'Este campo es requerido'
+const badYear1 = "No puede ser previa a la fecha de inicio o posterior a la fecha actual."
 
+const current_year = (new Date).getFullYear()
 
 
 
@@ -24,7 +26,7 @@ COLOCA EN INPUTS TODOS TUS CAMPOS
 const inputs = [
     'nombre_add', 'apellido_add', 'ci_add', 'email_add', 'email_alt_add', 'telefono_add',
     'pagina_web_add', 'categoria_add', 'cargo_add', 'fecha_ingreso_add', 'fecha_salida_add',
-    'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add',
+    'estatus_add', 'operador_add', 'celular_add', 'persona_contacto', 'contacto_emergencia_add', 'fecha_nacimiento_add',
     'direccion_add', 'gremio_add', 'fecha_ingreso_usb_add', 'fecha_ingreso_ulab_add',
     'fecha_ingreso_admin_publica_add', 'condicion_add', 'ubicacion_add', 'dependencia_add', 'rol_add',
     'fecha_inicio_1_add', 'fecha_final_1_add', 'cargo_hist_1_add', 'dependencia_hist_1_add', 'organizacion_1_add',
@@ -33,19 +35,18 @@ const inputs = [
     'fecha_inicio_4_add', 'fecha_final_4_add', 'cargo_hist_4_add', 'dependencia_hist_4_add', 'organizacion_4_add',
     'fecha_inicio_5_add', 'fecha_final_5_add', 'cargo_hist_5_add', 'dependencia_hist_5_add', 'organizacion_5_add',
     // Competencias
-    'competencia1_nombre',
-    'competencia2_nombre',
-    'competencia3_nombre',
-    'competencia4_nombre',
-    'competencia5_nombre',
-    'competencia6_nombre',
-    'competencia7_nombre',
-    'competencia8_nombre',
-    'competencia9_nombre',
-    'competencia10_nombre',
+    'competencia1_nombre', 'competencia2_nombre', 'competencia3_nombre', 'competencia4_nombre', 'competencia5_nombre',
+    'competencia6_nombre', 'competencia7_nombre', 'competencia8_nombre', 'competencia9_nombre', 'competencia10_nombre',
+    // Trabajos dirigidos
+    'trabajo1_titulo_trabajo', 'trabajo1_anio', 'trabajo1_institucion', 'trabajo1_nivel',
+    'trabajo2_titulo_trabajo', 'trabajo2_anio', 'trabajo2_institucion', 'trabajo2_nivel',
+    'trabajo3_titulo_trabajo', 'trabajo3_anio', 'trabajo3_institucion', 'trabajo3_nivel',
+    'trabajo4_titulo_trabajo', 'trabajo4_anio', 'trabajo4_institucion', 'trabajo4_nivel',
+    'trabajo5_titulo_trabajo', 'trabajo5_anio', 'trabajo5_institucion', 'trabajo5_nivel',
 ]
 
-const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',')
+const inputSelectorsAll = inputs.map(i => `[name="${i}"]`).join(',') +
+    ", .pop-field";
 
 // Funciones que validan toda la pagina 1 del formulario 
 function validaPaginaWeb () {
@@ -211,6 +212,22 @@ function validaContactoEmergencia () {
     }
 }
 
+function validaFechaNac(){
+    const $this = $('[name="fecha_nacimiento_add"]');
+    if ($this.val() === ""){
+        $this.attr("data-content", requiredFieldMessage);
+        $this.addClass('input-error');
+        $this.attr("data-valido", 'false');
+        $this.popover('show');
+        return false;
+    }
+    else{
+        $this.removeClass('input-error');
+        $this.popover('hide');
+        return true;
+    }
+}
+
 const validadoresPrimerPaso = [
     validaPaginaWeb,
     validaEmailAlternativo,
@@ -219,7 +236,8 @@ const validadoresPrimerPaso = [
     validaDireccionHab,
     validaTelefonoResidencial,
     validaPersonaContacto,
-    validaContactoEmergencia
+    validaContactoEmergencia,
+    validaFechaNac
 ]
 
 // Funciones que validan la segunda pagina 
@@ -831,7 +849,7 @@ function validaFechaFin5(){
         $this.addClass('input-error');
         $this.attr("data-valido", 'false');
         $this.popover('show');
-        return false
+        return false;
     }
     else{
         $this.removeClass('input-error');
@@ -861,7 +879,7 @@ const validadoresQuintoPaso = [
 function validaCompetencia(){
     var valid=true;
     for(var i=1; i<11;i++){
-        if($('#competencia-container'+i).is(':hidden'))
+        if($('#competencia'+i+'-container').is(':hidden'))
             continue;
 
         var nombre = $('#competencia'+i+'_nombre');
@@ -891,7 +909,7 @@ function validaCompetencia(){
             valid = valid && true;
         }
     }
-    return valid
+    return valid;
 
 }
 const validadoresCuartoPaso = [
@@ -900,11 +918,406 @@ const validadoresCuartoPaso = [
 
 // ESCRIBE AQUI TUS FUNCIONES
 
+function validaTrabajosDirigidos(){
+    var valid=true;
+    var yyyy = current_year
+    for(var i=1; i<6;i++){
+        if($('#trabajo-container'+i).is(':hidden'))
+            continue;
 
+        var titulo_trabajo = $('#trabajo'+i+'_titulo_trabajo');
+        var anio = $('#trabajo'+i+'_anio');
+        var estudiantes = $('#trabajo'+i+'_estudiantes');
+        var institucion = $('#trabajo'+i+'_institucion');
+        var chosenval = $('#trabajo'+i+'_nivel').trigger("chosen-updated").val().length;
+        chosen_container = $('#trabajo'+i+'_nivel_chosen');
 
+        if (chosenval == 0 && titulo_trabajo.val()==='' && anio.val()==='' && estudiantes.val()==='' && institucion.val()===''){
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+            titulo_trabajo.removeClass('input-error');
+            titulo_trabajo.popover('hide');
+            anio.removeClass('input-error');
+            anio.popover('hide');
+            estudiantes.removeClass('input-error');
+            estudiantes.popover('hide');
+            institucion.removeClass('input-error');
+            institucion.popover('hide');
+            valid = valid && true;
+            continue;
+        }
+        else {
+            if (chosenval == 0){
+                chosen_container.attr("data-content", requiredFieldMessage);
+                chosen_container.addClass('input-error');
+                chosen_container.attr("data-valido", 'false');
+                chosen_container.popover('show');
+                valid = valid && false;
+            }
+            else {
+                chosen_container.removeClass('input-error');
+                chosen_container.popover('hide');
+                valid = valid && true;
+            }
+            if (titulo_trabajo.val()==='') {
+                titulo_trabajo.attr("data-content", requiredFieldMessage);
+                titulo_trabajo.popover('show');
+                titulo_trabajo.addClass('input-error');
+                valid = valid && false;
+            }
+            else {
+                titulo_trabajo.removeClass('input-error');
+                titulo_trabajo.popover('hide');
+                valid = valid && true;
+            }
+            if (anio.val()==='') {
+                anio.attr("data-content", requiredFieldMessage);
+                anio.popover('show');
+                anio.addClass('input-error');
+                valid = valid && false;
+            } else if (anio.val() > yyyy) {
+                anio.attr("data-content", 'Ingrese un año menor o igual al actual');
+                anio.popover('show');
+                anio.addClass('input-error');
+                valid = valid && false;
+            } else {
+                anio.removeClass('input-error');
+                anio.popover('hide');
+                valid = valid && true;
+            }
+            if (estudiantes.val()==='') {
+                estudiantes.attr("data-content", requiredFieldMessage);
+                estudiantes.popover('show');
+                estudiantes.addClass('input-error');
+                valid = valid && false;
+            }
+            else {
+                estudiantes.removeClass('input-error');
+                estudiantes.popover('hide');
+                valid = valid && true;
+            }
+            if (institucion.val()==='') {
+                institucion.attr("data-content", requiredFieldMessage);
+                institucion.popover('show');
+                institucion.addClass('input-error');
+                valid = valid && false;
+            }
+            else {
+                institucion.removeClass('input-error');
+                institucion.popover('hide');
+                valid = valid && true;
+            }
+        }
 
+    }
+    return valid;
+}
 
+// Auxiliares
+function comparaFechas(fechaini, fechafin) {
+    const fecha_inicio = voltearFecha(fechaini);
+    const fecha_final = voltearFecha(fechafin);
+    if (!fecha_inicio || !fecha_final) return true;
+    if( !moment(fecha_inicio).isSameOrBefore(fecha_final) ) {
+        return false
+    }
+    else if (!moment(fecha_final).isSameOrBefore(moment().format("YYYY-MM-DD"))){
+        return false
+    }
+    else {
+        return true;
+    }
+}
 
+function validaEmpty(selector) {
+    if ( selector.val()==='' ) {
+        selector.attr('data-content', requiredFieldMessage);
+        selector.popover('show');
+        selector.addClass('input-error');
+        return false;
+    }
+    else {
+        selector.removeClass('input-error');
+        selector.popover('hide');
+        return true;
+    }
+}
+
+// Sexto paso
+function validaAdministrativas(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#administrativa'+i+'-container').is(':hidden'))
+            continue;
+        var desde = $('#administrativa'+i+'_desde');
+        var hasta = $('#administrativa'+i+'_hasta');
+        var cargo = $('#administrativa'+i+'_cargo');
+        var institucion = $('#administrativa'+i+'_institucion');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(cargo) && valid;
+        valid = validaEmpty(institucion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", badYear1)
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+
+    }
+    return valid;
+
+}
+
+// Septimo Paso
+function validaExtension(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#extension'+i+'-container').is(':hidden'))
+            continue;
+        var desde = $('#extension'+i+'_desde');
+        var hasta = $('#extension'+i+'_hasta');
+        var cargo = $('#extension'+i+'_cargo');
+        var nombre = $('#extension'+i+'_nombre');
+        var institucion = $('#extension'+i+'_institucion');
+        var descripcion = $('#extension'+i+'_descripcion');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(cargo) && valid;
+        valid = validaEmpty(nombre) && valid;
+        valid = validaEmpty(institucion) && valid;
+        valid = validaEmpty(descripcion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", badYear1)
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#extension'+i+'_categoria_chosen');
+        var chosenval = $('#extension'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+
+function validaCursos(){
+    var valid=true;
+    for(var i=1; i<11; i++){
+        if($('#evento-container'+i).is(':hidden'))
+            continue;
+        var anio = $('#evento'+i+'_anio');
+        var formacion = $('#evento'+i+'_formacion');
+        var dictadoPor = $('#evento'+i+'_dictadoPor');
+        var horas = $('#evento'+i+'_horas');
+        valid = validaEmpty(anio) && valid;
+        valid = validaEmpty(formacion) && valid;
+        valid = validaEmpty(dictadoPor) && valid;
+        valid = validaEmpty(horas) && valid;
+        var chosen_container = $('#evento'+i+'_categoria_chosen');
+        var chosenval = $('#evento'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+        if (anio.val() > current_year) {
+            anio.attr("data-content", 'Ingrese un año menor o igual al actual');
+            anio.popover('show');
+            anio.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            anio.removeClass('input-error');
+            anio.popover('hide');
+            valid = valid && true;
+        }
+
+    }
+    return valid;
+
+}
+
+function validaEstudios(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#estudios-container'+i).is(':hidden'))
+            continue;
+
+        var nivel = $('#estudio'+i+'_nivel');
+        var anio = $('#estudio'+i+'_anio');
+        var titulo_estudio = $('#estudio'+i+'_titulo_estudio');
+        var ubicacion = $('#estudio'+i+'_ubicacion');
+        var institucion = $('#estudio'+i+'_institucion');
+        // var categoria = $('#estudio'+i+'_categoria');
+        var area = $('#estudio'+i+'_area');
+
+        // valid = validaEmpty(nivel) && valid;
+        valid = validaEmpty(anio) && valid;
+        valid = validaEmpty(titulo_estudio) && valid;
+        valid = validaEmpty(ubicacion) && valid;
+        valid = validaEmpty(institucion) && valid;
+        valid = validaEmpty(area) && valid;
+
+        var chosen_container = $('#estudio'+i+'_categoria_chosen');
+        var chosenval = $('#estudio'+i+'_categoria').trigger('chosen-updated').val().length;
+        console.log(chosenval);
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+        if (anio.val() > current_year) {
+            anio.attr("data-content", 'Ingrese un año menor o igual al actual');
+            anio.popover('show');
+            anio.addClass('input-error');
+            valid = valid && false;
+        }
+        else {
+            anio.removeClass('input-error');
+            anio.popover('hide');
+            valid = valid && true;
+        }
+
+    }
+    return valid;
+
+}
+function validaMaterias(){
+    var valid=true;
+    for(var i=1; i<6; i++){
+        if($('#materia-container'+i).is(':hidden'))
+            continue;
+        var desde = $('#materia'+i+'_fecha_inicio_materia');
+        var hasta = $('#materia'+i+'_fecha_final_materia');
+        var codigo = $('#materia'+i+'_codigo');
+        var nombre = $('#materia'+i+'_nombre_materia');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(codigo) && valid;
+        valid = validaEmpty(nombre) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", badYear1)
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#materia'+i+'_area_chosen');
+        var chosenval = $('#materia'+i+'_area').trigger('chosen-updated').val().length;
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+
+function validaProyectos(){
+    var valid=true;
+    for(var i=1; i<11; i++){
+        if($('#proyecto'+i+'_container').is(':hidden'))
+            continue;
+        console.log(i)
+        var desde = $('#proyecto'+i+'_desde');
+        var hasta = $('#proyecto'+i+'_hasta');
+        var titulo = $('#proyecto'+i+'_titulo');
+        var resultados = $('#proyecto'+i+'_resultados');
+        var institucion = $('#proyecto'+i+'_institucion');
+        var responsabilidad = $('#proyecto'+i+'_responsabilidad');
+        valid = validaEmpty(desde) && valid;
+        valid = validaEmpty(hasta) && valid;
+        valid = validaEmpty(titulo) && valid;
+        valid = validaEmpty(resultados) && valid;
+        valid = validaEmpty(responsabilidad) && valid;
+        valid = validaEmpty(institucion) && valid;
+        if (!comparaFechas(desde.val(), hasta.val())) {
+            hasta.attr("data-content", badYear1)
+            hasta.addClass('input-error');
+            hasta.popover('toggle');
+            valid = false;
+        } else if(valid) {
+            hasta.removeClass('input-error');
+            hasta.popover('hide');
+        }
+        var chosen_container = $('#proyecto'+i+'_categoria_chosen');
+        var chosenval = $('#proyecto'+i+'_categoria').trigger('chosen-updated').val().length;
+        if (chosenval == 0){
+            chosen_container.attr("data-content", requiredFieldMessage);
+            chosen_container.addClass('input-error');
+            chosen_container.attr("data-valido", 'false');
+            chosen_container.popover('show');
+            valid = false;
+        }
+        else {
+            chosen_container.removeClass('input-error');
+            chosen_container.popover('hide');
+        }
+    }
+    return valid;
+
+}
+const validadoresSextoPaso = [
+    validaAdministrativas
+]
+const validadoresSeptimoPaso = [
+    validaExtension
+]
+const validadoresOctavoPaso = [
+    validaEstudios
+]
+const validadoresNovenoPaso = [
+    validaCursos
+]
+const validadoresDecimoPaso = [
+    validaMaterias
+]
+const validadoresOnceavoPaso = [
+    validaTrabajosDirigidos
+]
+const validadoresDoceavoPaso = [
+    validaProyectos
+]
 
 
 
@@ -1032,7 +1445,28 @@ $(document).ready(function () {
             next_step = validadoresCorrectos(validadoresCuartoPaso)
         }
 
+        else if (parent_fieldset.attr('id') === 'p5'){
+            next_step = validadoresCorrectos(validadoresQuintoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p6'){
+            next_step = validadoresCorrectos(validadoresSextoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p7'){
+            next_step = validadoresCorrectos(validadoresSeptimoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p8'){
+            next_step = validadoresCorrectos(validadoresOctavoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p9'){
+            next_step = validadoresCorrectos(validadoresNovenoPaso)
+        }
+        else if (parent_fieldset.attr('id') === 'p10'){
+            next_step = validadoresCorrectos(validadoresDecimoPaso)
+        }
 
+        else if (parent_fieldset.attr('id') === 'p11'){
+            next_step = validadoresCorrectos(validadoresOnceavoPaso)
+        }
 
 
 
@@ -1099,7 +1533,7 @@ $(document).ready(function () {
         
         var parent_fieldset = $(this).parents('fieldset');
         
-        var enviar = validadoresCorrectos(validadoresQuintoPaso);
+        var enviar = validadoresCorrectos(validadoresDoceavoPaso);
 
 
 
@@ -1164,3 +1598,4 @@ $(document).ready(function () {
 
 
 });
+

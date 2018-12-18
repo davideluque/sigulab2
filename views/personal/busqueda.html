@@ -20,11 +20,18 @@
 	}
 </style>
 
+  <script>
+function goBack() {
+  window.history.back()
+}
+</script>
+
 <!-- Breadcrumb de navegación -->
 <nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
   <div class="breadcrumb">
   <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
-  <span class="breadcrumb-item active">Personal</span>
+  <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2/personal')}}">Personal</a>
+  <span class="breadcrumb-item active">Búsqueda</span>
   </div>
 </nav>
 <!-- Fin del Breadcrum de navegación --> 
@@ -36,6 +43,12 @@
 			<h2 id="tituloBienvenida">Búsqueda de Personal</h2>
 	  		<hr>
 		</div>
+
+		<div class="col-sm-12 text-left">
+                <div id="editar"  >
+                    <button style="border-radius: 50%;"  onclick="goBack()" class="btn btn-primary boton-sigulab"  style="align-self: left;"><i class="fa fa-arrow-left"></i></button>
+                </div>
+              </div>
 
     	<div class="col-sm-6 col-sm-offset-3 ">
 			<form class="form-horizontal" method="post" action="{{=URL('personal', 'resultados_busqueda')}}">
