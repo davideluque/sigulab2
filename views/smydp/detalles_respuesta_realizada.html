@@ -1,0 +1,132 @@
+{{extend 'layout.html'}}
+{{block head}}
+
+<meta charset="UTF-8">
+
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    
+      <!-- Estilo del listado de Solicitudes de Servicios -->
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_solicitud.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/servicios_modal.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'inventarios/css/template_modal.css')}}">
+    <!-- Para los mensajes con flash -->
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3-flash.css')}}"/>
+    <!-- Estilos de modales y listados -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="{{=URL('static', 'js/inventario_template_modal.js')}}"></script>   
+    <!-- Web2py JS - Especialmente para AJAX -->
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+    <style>
+    .row{
+        margin-right:0px!important;
+    }
+     </style>
+
+
+<link rel="stylesheet" href="{{=URL('static', 'css/smydp_inventarios.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'inventarios/css/detalles_bm.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/fselect.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/ficha_listado.css')}}">
+<link rel="stylesheet" href="{{=URL('static', 'css/servicios_template_modal.css')}}">	  
+{{end}}
+
+{{block center}}
+{{pass}}
+
+<!-- Flash message -->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+        <div class="breadcrumb">
+            <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+            <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+            <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+            <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias/solicitudes')}}">Solicitudes</a>
+            <span class="breadcrumb-item active">Detalle</span>
+        </div>
+    </nav>
+<!-- Botón para atrás -->
+<h3 class="dep-titulo text-center">{{=respuesta.f_cod_registro}} </h3>
+<h4 class="dep-titulo text-center">{{=solicitud.f_cod_registro}}</h4>
+
+<!-- Inicio Boton Modificar VEHICULO -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <!-- Botón para atrás -->
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+             
+              {{ pass }}
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="wrapper">
+		
+	<div class="content-wrapper">
+		<div id="tab-1" class="tab-content active">
+            <div class="grid-container">
+
+                <div class="grid-item">
+                    Espacio que responde a solicitud:
+                </div>
+                <div class="grid-item">
+                    {{=espacio.codigo}}
+                </div>
+                <div class="grid-item">
+                    Cantidad de sustancia a dar:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_cantidad}}
+                </div>
+                <div class="grid-item">
+                    Medida de sustancia:
+                </div>
+                <div class="grid-item">
+                    {{=medida.f_abreviatura}}
+                </div>
+                <div class="grid-item">
+                    Respuesta a la salicitud:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_tipo_respuesta[0]}}
+                </div>
+                <div class="grid-item">
+                    Justificacion de respuesta:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_justificacion}}
+                </div>
+                <div class="grid-item">
+                    Calidad:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_calidad[0]}}
+                </div>
+                <div class="grid-item">
+                    Fecha tope de devolucion:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.f_fecha_tope_devolucion}}
+                </div>
+
+                <div class="grid-item">
+                    Fecha de creacion de respuesta:
+                </div>
+                <div class="grid-item">
+                    {{=respuesta.created_on}}
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+

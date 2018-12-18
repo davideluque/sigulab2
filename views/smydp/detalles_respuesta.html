@@ -36,12 +36,20 @@
 
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+    <div class="breadcrumb">
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+        <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias/solicitudes')}}">Solicitudes</a>
+        <span class="breadcrumb-item active">Detalle</span>
+    </div>
+</nav>
 
 <!-- Botón para atrás -->
 <h3 class="dep-titulo text-center">{{=respuesta.f_cod_registro}} </h3>
 <h4 class="dep-titulo text-center">{{=solicitud.f_cod_registro}}</h4>
 
-<!-- Inicio Boton Modificar VEHICULO -->
 <div class="container" id="containerAgregar">
     <div class="row">
         <div class="col-sm-1">

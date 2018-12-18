@@ -171,7 +171,7 @@
           <tbody>
             {{for id_,solicitud in respuestas_enviadas.iteritems():}}
               <tr>
-                <th class="camposTabla"><a href="{{=URL('detalles_respuesta', vars=dict(registro=respuesta['f_cod_registro']) )}}"> {{=respuesta['f_cod_registro']}}</a></th>
+                <th class="camposTabla"><a href="{{=URL('detalles_respuesta_realizada', vars=dict(registro=respuesta['f_cod_registro']) )}}"> {{=respuesta['f_cod_registro']}}</a></th>
                 <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
                 <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
                 <th class="camposTabla">{{=solicitud['f_tipo_respuesta'][0]}}</th>
