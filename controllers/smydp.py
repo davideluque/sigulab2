@@ -2905,6 +2905,106 @@ def detalles_solicitud():
 
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
+def detalles_respuesta():
+
+    solicitud = db((db.t_Solicitud_smydp.f_cod_registro == request.vars.registro)).select()[0]
+
+    sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
+    espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
+
+    respondable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+
+    esta_autorizado = not(auth.has_membership("TÉCNICO"))
+
+    #Posibles respuesta a la solicitud
+    respuestas = ['Negación','Aceptación']
+
+    #Posibles forma en que se tratara la solicitud
+    formas = ['Cesión','Préstamo']
+
+    # Lista de unidades de medida
+    unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
+
+    personal_usuario = db(auth.user_id == db.t_Personal.f_usuario).select(db.t_Personal.ALL)[0]
+
+    # Espacios a cargo del usuario actual
+    espacios = []
+    user = db(db.t_Personal.f_usuario == auth.user.id).select()[0]
+    user_dep_id = user.f_dependencia
+
+    espacios_a_cargo = __get_espacios(user_dep_id)
+
+    for esp in espacios_a_cargo:
+
+        for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
+                        (db.t_Inventario.espacio == esp)).select():
+
+            esp_aux = db((db.espacios_fisicos.id == esp)
+                ).select()[0]
+
+            espacios.append(esp_aux)
+
+    dependencia_usuario = db(personal_usuario.f_dependencia == db.dependencias.id).select(db.dependencias.ALL)[0]
+
+    registro = solicitud.f_cod_registro
+
+    num_resp = validador_registro_respuestas(request, db, registro)
+
+    nombre_dependencia = dependencia_usuario.nombre
+
+    id_jefe_dependencia = dependencia_usuario.id_jefe_dependencia
+
+    usuario_jefe = db(id_jefe_dependencia == auth.user.id).select(db.auth_user.ALL)[0]
+
+    nombre_jefe = usuario_jefe.first_name
+    apellido_jefe = usuario_jefe.last_name
+    email_jefe = usuario_jefe.email
+
+    nombre_responsable = personal_usuario.f_nombre
+    email_responsable = personal_usuario.f_email
+
+    datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
+
+        #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.numResp:
+
+        cantidad = float(request.vars.suministrar)
+        unidad = request.vars.unidad
+        respuesta = request.vars.respuesta
+        sustancia = sustancia.id
+        justificacion = request.vars.justificacion
+        forma = request.vars.forma
+        fecha_tope = request.vars.fecha_tope
+        espacio = request.vars.espacio
+        numResp = request.post_vars.numResp
+        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
+                                        f_cantidad= cantidad,
+                                        f_medida=unidad, 
+                                        f_tipo_respuesta=respuesta,
+                                        f_justificacion=justificacion,
+                                        f_calidad=forma,
+                                        f_fecha_tope_devolucion=fecha_tope,
+                                        f_espacio=espacio,
+                                        f_solicitud=solicitud.id,
+                                        f_responsable_entrega=personal_usuario.id)
+
+        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+    return dict(solicitud = solicitud,
+                sustancia = sustancia,
+                espacio = espacio,
+                datos_solicitud=datos_solicitud,
+                respondable = respondable,
+                respuestas = respuestas,
+                formas = formas,
+                esta_autorizado = esta_autorizado,
+                espacios = espacios,
+                unidades_de_medida=unidades_de_medida
+                )
+
+
+@auth.requires_login(otherwise=URL('modulos', 'login'))
 def solicitudes():
 
     # Lista de sustancias en el catalogo para el modal de agregar sustancia
