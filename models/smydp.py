@@ -174,6 +174,9 @@ db.define_table(
 
     #Atributos;
 
+    # Codigo del registro
+    Field('f_cod_registro', 'string', label=T('Codigo del registro')),
+
     # Cantidad a suministrar. Vacio si la respuesta es una negacion
     Field('f_cantidad', 'double', label=T('Cantidad')),
 

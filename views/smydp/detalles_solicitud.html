@@ -32,28 +32,38 @@
 {{end}}
 
 {{block center}}
-  {{ if request.vars.delete: }}
-  <h3 class="dep-titulo text-center">VALIDACIÓN PENDIENTE</h3>
-  {{pass}}
-    {{ if request.vars.delete: }}
-    {{ pass }}
 {{pass}}
 
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
 <!-- Botón para atrás -->
-<div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-6">
-            <button id="boton-retorno" class="btn boton-sigulab" onclick="location.href = '{{=URL('..', 'sigulab2', 'smydp/solicitudes')}}';">
-                <i class="fas fa-arrow-left"></i>               
-            </button>
-        </div>
-    </div>
 <h3 class="dep-titulo text-center">{{=solicitud.f_cod_registro}} </h3>
 <h4 class="dep-titulo text-center">{{=sustancia.f_nombre}}</h4>
 
+<!-- Inicio Boton Modificar VEHICULO -->
+<div class="container" id="containerAgregar">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <!-- Botón para atrás -->
+            <button id="boton-retorno" class="btn boton-sigulab" onclick="window.history.go(-1); return false;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div id="columnBotonAgregar" class="col-sm-6">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+              {{ if esta_autorizado: }}
+                <!-- Boton que responder solicitud -->
+                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#respuesta"><i class="fas fa-pencil-alt fa-1x"></i></button>
+                {{ pass }}
+              {{ pass }}
+            </div>
+        </div>
+    </div>
+</div>
 <br>
 <div class="wrapper">
 		
@@ -114,3 +124,161 @@
         </div>
 	</div>
 </div>
+
+<!-- Inicio Modal Solicitar Sustancia -->
+<div class="modal fade" id="respuesta" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header addHeader">
+        <div class="row addRow" id="rowHeader">
+          <div class="col-sm-1" id="col1Header">
+            <div class="container" id="plus">
+              <h1 id="agregar">+</h1>
+            </div>
+          </div>
+          <div class="col-sm-11" id="col11Header">
+            <h4 class="modal-title" id="nuevoSustancia">Respuesta a Solicitud de Sustancia de Laboratorio</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Modal Header -->
+      
+      <!-- Modal Body -->
+      <div class="modal-body addBody">
+        <div class="row addRow">
+          <div class="col-md-12 form-box">
+            <!-- Inicio Form -->
+            <form id="formularioEdit" class="registration-form" method="post">
+
+              <!-- Primer Paso -->
+              <fieldset class="formField">
+                <div class="form-bottom" data-step="1" data-title="Primer Paso">
+                  <!-- Aqui va la barra lateral -->
+                  <div class="col-sm-1 col1Body">
+                    <span class="step activePass">1</span>
+                    <span class="step">2</span>
+                  </div>
+                  <!-- Aqui va la informacion -->
+                  <div class="col-sm-11 col11Body">
+                    <h4 class="titulosForm">Datos de la Solicitud</h4>      
+
+                      <!-- Numero Registro -->
+                      <label class="form-group" id="numResp" style="margin-bottom: 0px">Registro</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="numResp" id="numResp" placeholder="{{=datos_solicitud[6]}}" value="{{=datos_solicitud[6]}}" required readonly>
+                      </div>
+
+                      <!-- Dependencia Solicitante -->
+                      <label class="form-group" id="dependenciaSolicitante" style="margin-bottom: 0px">Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="dependenciaSolicitante" name="dependenciaSolicitante" placeholder="Dependencia Solicitante" value="{{=datos_solicitud[0]}}" required readonly>
+                      </div>
+
+                      <!-- Jefe Dependencia Solicitante -->
+                      <label class="form-group" id="jefeDependencia" style="margin-bottom: 0px">Jefe Dependencia Solicitante</label>
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="jefeDependencia" name="jefeDependenciaSolicitante" placeholder="Jefe de la Dependencia Solicitante" value="{{=datos_solicitud[1]}} {{=datos_solicitud[2]}} | {{=datos_solicitud[3]}}" required readonly>
+                      </div>
+
+                      <!-- Responsable Solicitud -->
+                      <label class="form-group" id="respSolicitud" style="margin-bottom: 0px">Responsable Solicitud</label>  
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="respSolicitud" name="responsableSolicitud" placeholder="Persona Responsable de la Solicitud" value="{{=datos_solicitud[4]}} | {{=datos_solicitud[5]}}" required readonly>
+                      </div>                         
+                  </div>
+                </div>
+                <button type="button" class="btn btn-next botonForm"><i class="fas fa-arrow-right"></i></button>
+              </fieldset>
+              <!-- Fin Primer Paso -->
+              
+              <!-- Segundo Paso -->
+              <fieldset class="formField">
+                  <div class="form-bottom" data-step="2" data-title="Segundo Paso">
+                    <!-- Aqui va la barra lateral -->
+                    <div class="col-sm-1 col1Body">
+                      <span class="step">1</span>
+                      <span class="step activePass">2</span>
+                    </div>
+                    <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body">
+                        <h4 class="titulosForm">Datos de ingreso</h4>                
+                        <label>Campos marcados con * son obligatorios.</label>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="sustancia" name="sustancia" placeholder="Sustancia" value="{{=sustancia.f_nombre}} | ({{=sustancia.f_cas}})" required readonly>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="suministrar" placeholder="Cantidad a suministrar*" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+                                                    
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="unidad" name="unidad" required>
+                              <option value="" selected hidden >Unidad de medida*</option>
+                              {{for u in unidades_de_medida:}}
+                              <option value="{{=u.id}}">{{=u.f_nombre}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="respuesta" name="respuesta" required>
+                              <option value="" selected hidden >Respuesta*</option>
+                              {{for respuesta in respuestas:}}
+                              <option value="{{=respuesta}}">{{=respuesta}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="justificacion" placeholder="Justificacion" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="forma" name="forma" required>
+                              <option value="" selected hidden >Calidad*</option>
+                              {{for forma in formas:}}
+                              <option value="{{=forma}}">{{=forma}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+
+                          <div id="fecha_uso_div" class="form-group esconder">
+                            <p>Fecha tope de devolucion: <input name = "fecha_tope" type="date"  data-date-format="YYYY MM DD"></p>
+                            <font color="red"><div id="err_fecha_uso" hidden></div></font>
+                          </div>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="espacio" name="espacio" required>
+                              <option value="" selected hidden >Espacio Fisico*</option>
+                              {{for esp in espacios:}}
+                              <option value="{{=esp.id}}">{{=esp.codigo}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
+
+                          <div class="field-error" style="padding-bottom: 50px"> <p id="error-unidad"> </p> </div>
+                      </div>
+                  </div>
+                  <button type="button" class="btn btn-previous botonForm ">                <i class="fas fa-arrow-left"></i>   </button>
+                  <button type="submit button" form="formularioEdit" id="submit" class="btn btn-submit botonForm"><i class="fas fa-arrow-right"></i> </button> 
+              </fieldset>
+              <!-- Fin Segundo Paso -->
+            </form>
+            <!-- Fin Form -->
+          </div>
+        </div>               
+      </div>
+      <!-- Fin Modal Body -->
+    </div>
+    <!-- Fin Modal content-->
+  </div>
+</div>
+<!-- Fin Modal Solicitar Sustancia Seleccionado-->
+
