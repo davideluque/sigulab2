@@ -347,14 +347,14 @@ td {
 
 .btn-previous {
     position:absolute !important;
-    bottom: 5% !important; 
+    bottom: 1% !important; 
     right:18% !important;
     width: 50px !important; 
    
 }
 .btn-submit, .btn-next {
     position:absolute;
-    bottom: 5% !important;
+    bottom: 1% !important;
     right:8% !important;
     width: 50px !important;
 }

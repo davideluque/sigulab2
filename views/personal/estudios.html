@@ -1,0 +1,25 @@
+<br>
+<table class="table contenidoFicha">
+    <tbody>
+        <tr style="color: White;">
+            <th> Año </th>
+            <th> Titulo </th>
+            <th> Nivel</th>
+            <th> Institución </th>
+            <th> Ubicación </th>
+            <th> Area </th>
+            <th> Categoria </th>
+        </tr>
+        {{ for estudio in estudio_list: }}
+        <tr>
+            <td>{{=BEAUTIFY(estudio.f_anio)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_titulo)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_nivel)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_institucion)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_ubicacion)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_area)}}</td>
+            <td>{{=BEAUTIFY(estudio.f_categorias)}}</td>
+        </tr>
+        {{pass}}
+    </tbody>
+</table>

@@ -53,9 +53,10 @@ def resultados_busqueda():
 
         encontrado = "False"
         for cargo in cargos:
-            if (request.post_vars.cargo_busqueda.lower() in cargo.lower()):
-                encontrado = "True"
-                break
+            if (request.post_vars.cargo_busqueda):
+                if (request.post_vars.cargo_busqueda.lower() in cargo.lower()):
+                    encontrado = "True"
+                    break
 
         lista.append({
             'ci' : row.t_Personal.f_ci,
@@ -386,6 +387,7 @@ def add_form():
         __get_trabajos(request, personal)
         __get_cursos(request, personal)
         __get__materias(request,personal)
+        __get_estudios(request, personal)
         redirect(URL('listado_estilo'))
 
 
@@ -493,6 +495,7 @@ def listado():
         historial = getDictHistorial(historial_rows),
         proy_list = lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(usuario.f_ci),
+        estudio_list=lista_estudio(usuario.f_ci),
         evento_list=lista_cursos(usuario.f_ci),
         materia_list=lista_materias(usuario.f_ci)
         )
@@ -626,6 +629,7 @@ def ficha():
         historial=getDictHistorial(historial_rows),
         proy_list=lista_proyectos(usuario.f_ci),
         trabajo_list=lista_trabajo(personal['ci']),
+        estudio_list=lista_estudio(usuario.f_ci),
         evento_list=lista_cursos(personal['ci']),
         materia_list=lista_materias(personal['ci'])
     )
@@ -788,6 +792,12 @@ def lista_trabajo(ci):
     query = db((db.t_Personal.id == db.t_Trabajos_dirigidos.f_Trabajo_Personal)
             & (db.t_Personal.f_ci == ci))
     rows = query.select(db.t_Trabajos_dirigidos.ALL, orderby=db.t_Trabajos_dirigidos.f_numero)
+    return rows
+
+def lista_estudio(ci):
+    query = db((db.t_Personal.id == db.t_Estudios.f_Estudios_Personal)
+            & (db.t_Personal.f_ci == ci))
+    rows = query.select(db.t_Estudios.ALL, orderby=db.t_Estudios.f_numero)
     return rows
 
 def lista_cursos(ci):
@@ -1062,6 +1072,48 @@ def __get_trabajos(request, personal):
                 print(e)
 
     return trabajos
+
+def __get_estudios(request, personal):
+    params = {}
+    estudios = []
+    for i in range(1,6):
+        params = {
+                'f_titulo' : request.post_vars['estudio{}_titulo_estudio'.format(i)],
+                'f_nivel' : request.post_vars['estudio{}_nivel'.format(i)],
+                'f_anio' : request.post_vars['estudio{}_anio'.format(i)],
+                'f_area' : request.post_vars['estudio{}_area'.format(i)],
+                'f_institucion' : request.post_vars['estudio{}_institucion'.format(i)],
+                'f_ubicacion' : request.post_vars['estudio{}_ubicacion'.format(i)],
+                'f_categorias' : request.post_vars['estudio{0}_categoria'.format(i)],
+                'f_numero': i,
+                'f_Estudios_Personal': personal.id
+                }
+        if not(None in params.values() or '' in params.values()):
+            try:
+                db.t_Estudios.update_or_insert(
+                        (db.t_Estudios.f_numero==i)&
+                        (db.t_Estudios.f_Estudios_Personal==personal.id),
+                        f_titulo=params['f_titulo'],
+                        f_nivel=params['f_nivel'],
+                        f_anio= params['f_anio'],
+                        f_area= params['f_area'],
+                        f_institucion= params['f_institucion'],
+                        f_ubicacion= params['f_ubicacion'],
+                        f_categorias = params['f_categorias'],
+                        f_numero= params['f_numero'],
+                        f_Estudios_Personal= params['f_Estudios_Personal'],
+                        )
+                estudios.append(params)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                db( (db.t_Estudios.f_Estudios_Personal == personal.id)
+                    & (db.t_Estudios.f_numero == i)).delete()
+            except Exception as e:
+                print(e)
+
+    return estudios
 
 def __get_cursos(request, personal):
     params = {}

@@ -3,7 +3,7 @@
 
 {{for i in range(1,6):}}
 <div class="extension-container" id="extension{{=i}}-container"
-    {{if len(ext_list)<i and 1!=i:}} hidden {{pass}}>
+    {{if len(ext_list)<i:}} hidden {{pass}}>
     <h4>Actividad ({{=i}})</h4>
     <div class="form-row">
         <div class="col-sm-6">
@@ -11,7 +11,7 @@
                 <label for="extension{{=i}}-desde">Desde: </label>
                 <input
                        value="{{='' if len(ext_list)<i else ext_list[i-1].f_fecha_inicio.strftime('%d-%m-%Y')}}"
-                       class="form-control datepicker"
+                       class="form-control datepicker pop-field"
                        name="extension{{=i}}_desde" type="text" 
                        id="extension{{=i}}_desde"
                        data-placement="bottom" data-trigger="manual"
@@ -25,7 +25,7 @@
                 <label>Hasta: </label>
                 <input 
                        value="{{='' if len(ext_list)<i else ext_list[i-1].f_fecha_final.strftime('%d-%m-%Y')}}"
-                       class="form-control datepicker"
+                       class="form-control datepicker pop-field"
                        name="extension{{=i}}_hasta" type="text"
                        id="extension{{=i}}_hasta"
                        data-placement="bottom" data-trigger="manual"
@@ -42,7 +42,7 @@
                 <label>Nombre: </label>
                 <input 
                        value="{{='' if len(ext_list)<i else ext_list[i-1].f_nombre}}"
-                       type="text" class="form-control"
+                       type="text" class="form-control pop-field"
                        name="extension{{=i}}_nombre"
                        id="extension{{=i}}_nombre"
                        data-toggle="popover" data-placement="bottom"
@@ -56,7 +56,7 @@
                 <label>Institucion: </label>
                 <input 
                        value="{{='' if len(ext_list)<i else ext_list[i-1].f_institucion}}"
-                       type="text" class="form-control"
+                       type="text" class="form-control pop-field"
                        name="extension{{=i}}_institucion"
                        id="extension{{=i}}_institucion"
                        placeholder="Nombre de la institucion" data-toggle="popover"
@@ -72,7 +72,7 @@
                 <label>Descripción: </label>
                 <input 
                        value="{{='' if len(ext_list)<i else ext_list[i-1].f_descripcion}}"
-                       type="text" class="form-control"
+                       type="text" class="form-control pop-field"
                        name="extension{{=i}}_descripcion"
                        id="extension{{=i}}_descripcion"
                        placeholder="Introduzca una descripción" data-toggle="popover"
@@ -108,7 +108,7 @@
 
 
 <script charset="utf-8">
-var num_ext = {{=len(ext_list) or 1}}
+var num_ext = {{=len(ext_list)}}
     function add_ext(){
         if(num_ext < 11){
             num_ext++;
@@ -119,7 +119,7 @@ var num_ext = {{=len(ext_list) or 1}}
         }
     }
     function remove_ext(){
-        if(num_ext > 1){
+        if(num_ext > 0){
             $('#extension'+num_ext+'-container').hide();
               $('#extension'+num_ext+'_desde').val('');
               $('#extension'+num_ext+'_hasta').val('');

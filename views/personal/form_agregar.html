@@ -557,7 +557,32 @@
 
                     <!-- Octavo Paso -->
                     <!-- Estudios Formales -->
-
+                    <fieldset class="formField" id="p8">
+                    <div class="form-bottom" data-step="8" data-title="Octavo Paso">
+                      <!-- Aqui va la barra lateral -->
+                      <div class="col-sm-1 col1Body">
+                        <span class="step">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                        <span class="step">6</span>
+                        <span class="step">7</span>
+                        <span class="step activePass">8</span>
+                        <span class="step">9</span>
+                        <span class="step">10</span>
+                        <span class="step">11</span>
+                        <span class="step">12</span>
+                      </div>
+                      <!-- Aqui va la informacion -->
+                      <div class="col-sm-11 col11Body" >
+                      {{ include 'personal/form-estudios.html' }}
+                      </div>
+                    <div class="botones-form" style="margin-top: 1rem;margin-bottom: 2em;">
+                        <button type="button" class="btn btn-previous botonForm"><span class="fa fa-arrow-left" title="Anterior"/></button>
+                        <button type="button" class="btn btn-next botonForm"><span class="fa fa-arrow-right" title="Siguiente"/></button>
+                    </div>
+                  </fieldset>
                     <!-- Fin Octavo Paso -->
 
                     <!-- Noveno Paso -->
@@ -695,14 +720,28 @@
 <script type="text/javascript">
  function toggleTrabajo(id, idText, idText2) {
   var trabajo = document.getElementById(id);
-  var texto = document.getElementById(idText);
+  var texto = document.getElementsByClassName(idText);
   if (idText2) {
-    var texto2 = document.getElementById(idText2);
+    var texto2 = document.getElementsByClassName(idText2);
+  }
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='none';
+  }
+
+  for(var i = 0; i < texto2.length; i++) { 
+    texto2[i].style.display='block';
   }
   trabajo.style.display = 'block';
-  texto.style.display = 'none';
-  texto2.style.display = 'block';
  }
+
+ function quitarTrabajo(trabajo, idText) {
+  document.getElementById(trabajo).style.display = 'none';
+  var texto = document.getElementsByClassName(idText);
+  for(var i = 0; i < texto.length; i++) { 
+    texto[i].style.display='block';
+  }
+ }
+
  function toggleLoader() {
   document.getElementById('loader').style.display = 'inline-block';
  }

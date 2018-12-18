@@ -204,7 +204,6 @@ db.define_table(
     Field('f_fecha_inicio_materia', 'date', label=T('Desde')),
     Field('f_fecha_final_materia', 'date', label=T('Hasta')),
     Field('f_numero', 'integer', default=1,label=T('Numero')),
-    #Referencia (Revisar si el label es asistio o organizo)
     Field('f_Materia_Personal',         'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None), label=T('Dirigió')),
     migrate=True
     )
@@ -212,6 +211,27 @@ db.define_table(
 db.t_Materia._plural = 'Materias'
 db.t_Materia._singular = 'Materia'
 
+#####################################################################
+#                                                                   #
+#                      Estudios Formales                            #
+#                                                                   #
+#####################################################################
+
+#t_Personal: Tabla de Materias.
+db.define_table(
+    #Nombre de la entidad
+    't_Estudios',
+    Field('f_numero', 'integer', default=1,label=T('Numero')),
+    Field('f_anio', 'integer', requires=IS_INT_IN_RANGE(minimum=1900,maximum=2100, error_message='Introduzca un año válido'), notnull=True, label=T('Año')),
+    Field('f_nivel', 'list:string', default='', label=T('Nivel')),
+    Field('f_titulo', 'string', label=T('Titulo')),
+    Field('f_area', 'string', label=T('Area de Especializacion')),
+    Field('f_institucion',          'string', label=T('Institución')),
+    Field('f_ubicacion', 'string', default='', label=T('Estudiantes')),
+    Field('f_categorias', 'list:string', default='', label=T('Categorías')),
+    Field('f_Estudios_Personal', 'reference t_Personal', requires=IS_IN_DB(db, db.t_Personal.id, '%(f_Personal)s', zero=None) ),
+    migrate=True
+    )
 
 '''
 
