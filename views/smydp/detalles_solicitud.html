@@ -33,7 +33,15 @@
 
 {{block center}}
 {{pass}}
-
+<nav class="navbar navbar-inverse navbar-fixed-top breadcrumbs">
+    <div class="breadcrumb">
+      <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2')}}">Inicio</a>
+      <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp')}}">SMyDP</a>
+      <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias')}}">SyM</a>
+      <a class="breadcrumb-item" href="{{=URL('..', 'sigulab2', 'smydp/sustancias/solicitudes')}}">Solicitudes</a>
+      <span class="breadcrumb-item active">Detalle</span>
+    </div>
+  </nav>
 <!-- Flash message -->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 
