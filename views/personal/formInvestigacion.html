@@ -70,7 +70,7 @@
 
     <div class="col-sm-6">
         <div class="form-group">
-        <label>Responsabilidad:</label>
+        <label>Responsabilidad/Participantes:</label>
          <input
                        value="{{='' if len(proy_list)<i else proy_list[i-1].f_responsabilidad}}"
                        type="text" class="form-control"
@@ -115,8 +115,8 @@
 </div>
 {{pass}}
 
-<a href="#"  id="add_proy" onclick="add_proy()">Agregar proyetencia</a>
-<a href="#"  id="remove_proy" onclick="remove_proy()">Quitar proyetencia</a>
+<a href="#"  id="add_proy" onclick="add_proy()">Agregar Proyecto</a>
+<a href="#"  id="remove_proy" onclick="remove_proy()">Quitar Proyecto</a>
 
 <script charset="utf-8">
     var nump = {{=len(proy_list) or 1}};
