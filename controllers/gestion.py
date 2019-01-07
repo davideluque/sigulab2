@@ -74,7 +74,7 @@ def bitacora_general():
             'accion': elm.f_accion,
             'fecha': elm.created_on,
             'responsable': responsable.first_name + " " + responsable.last_name if responsable else '',
-            'correo': responsable.email,
+            'correo': responsable.email if responsable else '',
             'modulo': palabras[0].strip("[]")
         })
         
