@@ -496,15 +496,15 @@ def __get_descripcion(registro):
             descripcion = "Ejecución del servicio \"{0}\"".format(nombre)
 
 
-        elif registro.f_tipo_egreso[0] == "Prestamo":
+        elif registro.f_tipo_egreso[0] == "Préstamo":
            
-            descripcion = "Prestamo a .. "
+            descripcion = "Préstamo a .. "
 
         elif registro.f_tipo_egreso[0] == "Cesión":
         
             descripcion = "Cesión a... "
         # Cuando es un egreso en respuesta a una solicitud
-        elif registro.f_tipo_ingreso[0] == "Solicitud":
+        elif registro.f_tipo_egreso[0] == "Solicitud":
        
             
             # Respuesta a la solicitud en la que se solicito la sustancia
@@ -2841,7 +2841,9 @@ def detalles_solicitud():
     for esp in espacios_a_cargo:
 
         for row in db((db.t_Inventario.sustancia == solicitud.f_sustancia) &
-                        (db.t_Inventario.espacio == esp)).select():
+                        (solicitud.f_espacio != esp) &
+                        (db.t_Inventario.espacio == esp)
+                        ).select():
 
             esp_aux = db((db.espacios_fisicos.id == esp)
                 ).select()[0]
@@ -2875,25 +2877,42 @@ def detalles_solicitud():
         #----- AGREGAR RESPUESTA -----#
     if request.post_vars.numResp:
 
-        cantidad = float(request.vars.suministrar)
-        unidad = request.vars.unidad
-        respuesta = request.vars.respuesta
-        sustancia = sustancia.id
-        justificacion = request.vars.justificacion
-        forma = request.vars.forma
-        fecha_tope = request.vars.fecha_tope
         espacio = request.vars.espacio
-        numResp = request.post_vars.numResp
-        inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
-                                        f_cantidad= cantidad,
-                                        f_medida=unidad, 
-                                        f_tipo_respuesta=respuesta,
-                                        f_justificacion=justificacion,
-                                        f_calidad=forma,
-                                        f_fecha_tope_devolucion=fecha_tope,
-                                        f_espacio=espacio,
-                                        f_solicitud=solicitud.id,
-                                        f_responsable_entrega=personal_usuario.id)
+        unidad = request.vars.unidad
+        cantidad = float(request.vars.suministrar)
+        invResp=db(db.t_Inventario.espacio==espacio).select()
+        medidaInv = db(db.t_Unidad_de_medida.id == invResp[0].f_medida).select()[0]
+        medidaResp = db(db.t_Unidad_de_medida.id == unidad).select()[0]
+        cantidadAux = __transformar_cantidad(cantidad, medidaResp.f_nombre, medidaInv.f_nombre)
+
+        if cantidadAux <= invResp[0].f_uso_interno:
+
+            cantidad = float(request.vars.suministrar)
+            unidad = request.vars.unidad
+            respuesta = request.vars.respuesta
+            sustancia = sustancia.id
+            justificacion = request.vars.justificacion
+            forma = request.vars.forma
+            fecha_tope = request.vars.fecha_tope
+            espacio = request.vars.espacio
+            numResp = request.post_vars.numResp
+            inv_id = db.t_Respuesta.insert(f_cod_registro=numResp, 
+                                            f_cantidad= cantidad,
+                                            f_medida=unidad, 
+                                            f_tipo_respuesta=respuesta,
+                                            f_justificacion=justificacion,
+                                            f_calidad=forma,
+                                            f_fecha_tope_devolucion=fecha_tope,
+                                            f_espacio=espacio,
+                                            f_solicitud=solicitud.id,
+                                            f_responsable_entrega=personal_usuario.id)
+
+        else:
+            response.flash = "Cantidad sobrepasa lo que se tiene de uso interno"
+            session.flash = response.flash
+            redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+
+
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
 
@@ -3054,11 +3073,18 @@ def detalles_respuesta():
     
     #----- AGREGAR RESPUESTA -----#
     if request.post_vars.ci_receptor:
-        if solicitud.f_cantidad_conseguida < solicitud.f_cantidad:
-            
+        sol = db((db.t_Solicitud_smydp.id == respuesta.f_solicitud)).select()[0]
+
+        medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+        medidaSol = db(db.t_Unidad_de_medida.id == sol.f_medida).select()[0]
+
+        cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
+
+        if sol.f_cantidad_conseguida+cantidad <= sol.f_cantidad:
+
             #COMO ESTA SOLICITANDO TIENE UN INGRESO
             #Inventario de quien hace la solicitud calculado por sustancia
-            invSolic=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==solicitud.f_espacio ).select()
+            invSolic=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==sol.f_espacio) ).select()
 
             if len(invSolic) == 0:
                 inv_id = db.t_Inventario.insert(f_existencia=float(0), 
@@ -3081,7 +3107,7 @@ def detalles_respuesta():
                                         f_sustancia=solicitud.f_sustancia,
                                         f_fechaUso=datetime.date.today())
 
-                invSolic=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==solicitud.f_espacio ).select()
+                invSolic=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==sol.f_espacio) ).select()
 
 
             # Busco el balance de la sustancia a la que me voy a hacer referencia
@@ -3119,7 +3145,7 @@ def detalles_respuesta():
         
             #COMO ESTA DANDO TIENE UN CONSUMO
             #Inventario de quien hace la solicitud calculado por sustancia
-            invRespo=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==respuesta.f_espacio).select()
+            invRespo=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==respuesta.f_espacio) ).select()
             # Busco el balance de la sustancia a la que me voy a hacer referencia
             balResp=db(db.t_Balance.f_inventario== invRespo[0].id).select()
             #Busco la sustancia a la que estoy sacandole cuentas 
@@ -3149,7 +3175,7 @@ def detalles_respuesta():
                 f_fechaUso=datetime.datetime.now,
                 f_medida=invRespo[0].f_medida,
                 f_inventario=invRespo[0].id,
-                f_sustancia=solicitud.f_sustancia
+                f_sustancia=sol.f_sustancia
             )
 
             ##Cargo la CI del receptor de la sustancia 
@@ -3160,24 +3186,29 @@ def detalles_respuesta():
             inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = invRespo[0].id)
 
             medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
-            medidaSol = db(db.t_Unidad_de_medida.id == solicitud.f_medida).select()[0]
+            medidaSol = db(db.t_Unidad_de_medida.id == sol.f_medida).select()[0]
 
             cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
 
-            solicitud.update_record(f_cantidad_conseguida=solicitud.f_cantidad_conseguida+cantidad)
+            sol.update_record(f_cantidad_conseguida=sol.f_cantidad_conseguida+cantidad)
 
             if str(respuesta.f_calidad[0])== 'Préstamo':
-                solicitud.update_record(
+                sol.update_record(
                         f_estatus='Prestamo por devolver')
+
+            if sol.f_cantidad_conseguida == sol.f_cantidad:
+
+                if str(sol.f_estatus[0]) != 'Prestamo por devolver':
+
+                    sol.update_record(f_estatus='Completada')
 
         else :
 
-            if str(solicitud.f_estatus[0]) != 'Prestamo por devolver':
+            response.flash = "Cantidad sobrepasa lo solicitado"
+            session.flash = response.flash
 
-                solicitud.update_record(f_estatus='Completada')
 
-
-        return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+        return redirect(URL('respuestas'))
 
     return dict(respuesta = respuesta,
                 medida = medida,
@@ -3627,24 +3658,26 @@ def listado_respuestas_recibidas(db, espacios):
 
     for resp in respuestas:
 
-        solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
+        if resp.f_responsable_recepcion == None:
 
-        espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
+            solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
-        for esp in espacios:
-            if espacio.id != esp.id:
+            espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
-                if not resp.id in respuestasRecibidas:
-                    respuestasRecibidas[resp.id] = {
-                                        'f_cod_registro': resp.f_cod_registro,
-                                        'f_espacio': espacio.codigo,
-                                        'f_sustancia': solicitud.f_sustancia,
-                                        'f_cantidad': resp.f_cantidad,
-                                        'f_medida': resp.f_medida,
-                                        'f_tipo_respuesta': resp.f_tipo_respuesta,
-                                        'f_calidad': resp.f_calidad,
-                                        'f_fecha': resp.created_on,
-                                        }
+            for esp in espacios:
+                if espacio.id != esp.id:
+
+                    if not resp.id in respuestasRecibidas:
+                        respuestasRecibidas[resp.id] = {
+                                            'f_cod_registro': resp.f_cod_registro,
+                                            'f_espacio': espacio.codigo,
+                                            'f_sustancia': solicitud.f_sustancia,
+                                            'f_cantidad': resp.f_cantidad,
+                                            'f_medida': resp.f_medida,
+                                            'f_tipo_respuesta': resp.f_tipo_respuesta,
+                                            'f_calidad': resp.f_calidad,
+                                            'f_fecha': resp.created_on,
+                                            }
     return respuestasRecibidas
 
 @auth.requires_login(otherwise=URL('modulos', 'login'))
@@ -3704,7 +3737,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                 if espacio.id == esp.id:
 
                     i += 1
-                    solicitudesHechas[int(i)] = {
+                    solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
@@ -3726,7 +3759,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                 if espacio.id == esp.id:
 
                     i += 1
-                    solicitudesHechas[int(i)] = {
+                    solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
@@ -3750,7 +3783,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                 if espacio.id == esp.id:
 
                     i += 1
-                    solicitudesHechas[int(i)] = {
+                    solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
                                         'f_espacio': sol.f_espacio,
@@ -3791,7 +3824,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                       (db.t_Inventario.f_existencia > 0)).select():
 
                             i += 1
-                            solicitudesRecibidas[int(i)] = {
+                            solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
                                                 'f_espacio': sol.f_espacio,
@@ -3818,7 +3851,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                       (db.t_Inventario.espacio == esp)).select():
 
                             i += 1
-                            solicitudesRecibidas[int(i)] = {
+                            solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
                                                 'f_espacio': sol.f_espacio,
@@ -3848,7 +3881,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                       (db.t_Inventario.espacio == esp.id)).select():
 
                             i += 1
-                            solicitudesRecibidas[int(i)] = {
+                            solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
                                                 'f_espacio': sol.f_espacio,

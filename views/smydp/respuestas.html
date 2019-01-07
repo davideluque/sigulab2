@@ -169,14 +169,14 @@
 
           <!-- Contenido Tabla Solicitudes -->
           <tbody>
-            {{for id_,solicitud in respuestas_enviadas.iteritems():}}
+            {{for id_,respuesta in respuestas_enviadas.iteritems():}}
               <tr>
                 <th class="camposTabla"><a href="{{=URL('detalles_respuesta_realizada', vars=dict(registro=respuesta['f_cod_registro']) )}}"> {{=respuesta['f_cod_registro']}}</a></th>
-                <th class="camposTabla">{{=solicitud['f_espacio']}}</th>
-                <th class="camposTabla">{{=solicitud['f_sustancia']}}</th>
-                <th class="camposTabla">{{=solicitud['f_tipo_respuesta'][0]}}</th>
-                <th class="camposTabla">{{=solicitud['f_calidad'][0]}}</th>
-                <th class="camposTabla">{{=solicitud['f_fecha']}}</th>
+                <th class="camposTabla">{{=respuesta['f_espacio']}}</th>
+                <th class="camposTabla">{{=respuesta['f_sustancia']}}</th>
+                <th class="camposTabla">{{=respuesta['f_tipo_respuesta'][0]}}</th>
+                <th class="camposTabla">{{=respuesta['f_calidad'][0]}}</th>
+                <th class="camposTabla">{{=respuesta['f_fecha']}}</th>
               </tr>
             {{pass}}
           </tbody>
