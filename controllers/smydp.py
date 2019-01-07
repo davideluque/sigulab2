@@ -3051,15 +3051,39 @@ def detalles_respuesta():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
     
-    '''
+    
     #----- AGREGAR RESPUESTA -----#
     if request.post_vars.ci_receptor:
-        solic= db(db.t_Solicitud_smydp.id == respuesta.id).select()[0]
-        if solic.f_cantidad_conseguida < solic.f_cantidad:
+        if solicitud.f_cantidad_conseguida < solicitud.f_cantidad:
             
             #COMO ESTA SOLICITANDO TIENE UN INGRESO
             #Inventario de quien hace la solicitud calculado por sustancia
-            invSolic=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==solic.f_espacio ).select()
+            invSolic=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==solicitud.f_espacio ).select()
+
+            if len(invSolic) == 0:
+                inv_id = db.t_Inventario.insert(f_existencia=float(0), 
+                                        f_uso_interno=float(0),
+                                        f_medida=respuesta.f_medida,
+                                        espacio=solicitud.f_espacio,
+                                        sustancia=solicitud.f_sustancia)
+
+                concepto = 'Ingreso'
+                tipo_ing = 'Ingreso inicial'
+
+                # Agregando la primera entrada de la sustancia en la bitacora
+                db.t_Balance.insert(
+                                        f_cantidad=float(0),
+                                        f_cantidad_total=float(0),
+                                        f_concepto=concepto,
+                                        f_tipo_ingreso=tipo_ing,
+                                        f_medida=respuesta.f_medida,
+                                        f_inventario=inv_id,
+                                        f_sustancia=solicitud.f_sustancia,
+                                        f_fechaUso=datetime.date.today())
+
+                invSolic=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==solicitud.f_espacio ).select()
+
+
             # Busco el balance de la sustancia a la que me voy a hacer referencia
             balSol=db(db.t_Balance.f_inventario== invSolic[0].id).select()
             #Busco la sustancia a la que estoy sacandole cuentas 
@@ -3069,29 +3093,33 @@ def detalles_respuesta():
             uso_int_viejo=invSolic[0].f_uso_interno
             espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
 
-            total_nuevo = total_viejo + respuesta.f_cantidad
-            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            medidaInv = db(db.t_Unidad_de_medida.id == invSolic[0].f_medida).select()[0]
+            medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaInv.f_nombre)
+
+            total_nuevo = total_viejo + cantidad
+            uso_interno_nuevo = uso_int_viejo + cantidad
             
             invSolic[0].update_record(
                     f_existencia=total_nuevo,
                     f_uso_interno=uso_interno_nuevo)
-            print(respuesta.f_cantidad)
 
             db.t_Balance.insert(
-                f_cantidad = respuesta.f_cantidad,
+                f_cantidad = cantidad,
                 f_cantidad_total=total_nuevo,
                 f_concepto='Ingreso',
                 f_tipo_ingreso=respuesta.f_calidad[0],
                 f_fechaUso=datetime.datetime.now,
                 f_medida=invSolic[0].f_medida,
                 f_inventario=invSolic[0].id,
-                f_sustancia=solic.f_sustancia,
+                f_sustancia=solicitud.f_sustancia,
                 f_respuesta_solicitud=respuesta.id
             )
         
             #COMO ESTA DANDO TIENE UN CONSUMO
             #Inventario de quien hace la solicitud calculado por sustancia
-            invRespo=db(db.t_Inventario.sustancia==solic.f_sustancia and db.t_Inventario.espacio==respuesta.f_espacio).select()
+            invRespo=db(db.t_Inventario.sustancia==solicitud.f_sustancia and db.t_Inventario.espacio==respuesta.f_espacio).select()
             # Busco el balance de la sustancia a la que me voy a hacer referencia
             balResp=db(db.t_Balance.f_inventario== invRespo[0].id).select()
             #Busco la sustancia a la que estoy sacandole cuentas 
@@ -3101,42 +3129,56 @@ def detalles_respuesta():
             uso_int_viejo=invRespo[0].f_uso_interno
             espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
 
-            total_nuevo = total_viejo + respuesta.f_cantidad
-            uso_interno_nuevo = uso_int_viejo + respuesta.f_cantidad
+            medidaInv = db(db.t_Unidad_de_medida.id == invRespo[0].f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaInv.f_nombre)
+
+            total_nuevo = total_viejo - cantidad
+            uso_interno_nuevo = uso_int_viejo - cantidad
             
             invRespo[0].update_record(
                     f_existencia=total_nuevo,
                     f_uso_interno=uso_interno_nuevo)
-            print(respuesta.f_cantidad)
 
             db.t_Balance.insert(
 
-                f_cantidad = respuesta.f_cantidad,
+                f_cantidad = float(cantidad),
                 f_cantidad_total=total_nuevo,
                 f_concepto='Consumo',
-                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_tipo_egreso=respuesta.f_calidad[0],
                 f_fechaUso=datetime.datetime.now,
                 f_medida=invRespo[0].f_medida,
                 f_inventario=invRespo[0].id,
-                f_sustancia=solic.f_sustancia
+                f_sustancia=solicitud.f_sustancia
             )
 
             ##Cargo la CI del receptor de la sustancia 
 
-            cedula_receptor = int(request.post_vars.ci_receptor)
-            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
-        else :
-            if str(respuesta.f_calidad[0])== 'Cesión':
-                sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
-                        f_estatus='Completada')
-            else :
-                sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
+            cedula_receptor = request.post_vars.ci_receptor
+            invRespo=db(db.t_Personal.f_ci==cedula_receptor).select()
+
+            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = invRespo[0].id)
+
+            medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+            medidaSol = db(db.t_Unidad_de_medida.id == solicitud.f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
+
+            solicitud.update_record(f_cantidad_conseguida=solicitud.f_cantidad_conseguida+cantidad)
+
+            if str(respuesta.f_calidad[0])== 'Préstamo':
+                solicitud.update_record(
                         f_estatus='Prestamo por devolver')
 
+        else :
+
+            if str(solicitud.f_estatus[0]) != 'Prestamo por devolver':
+
+                solicitud.update_record(f_estatus='Completada')
+
+
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
-'''
+
     return dict(respuesta = respuesta,
                 medida = medida,
                 solicitud = solicitud,
@@ -3216,7 +3258,7 @@ def detalles_respuesta_realizada():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
-    
+    '''
     #----- AGREGAR RESPUESTA -----#
     if request.post_vars.ci_receptor:
         solic= db(db.t_Solicitud_smydp.id == respuesta.id).select()[0]
@@ -3290,17 +3332,19 @@ def detalles_respuesta_realizada():
 
             cedula_receptor = int(request.post_vars.ci_receptor)
             inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
+            sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad)
+
         else :
             if str(respuesta.f_calidad[0])== 'Cesión':
                 sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
                         f_estatus='Completada')
             else :
                 sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
                         f_estatus='Prestamo por devolver')
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+    '''
 
     return dict(respuesta = respuesta,
                 medida = medida,
@@ -3732,52 +3776,56 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
         
         for sol in solicitudes:
 
-            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
-            espacio = db(
-                            (db.espacios_fisicos.id == sol.f_espacio)
-                                 ).select()[0]
+            if sol.f_estatus[0] != 'Completada':
 
-            for esp in espacios:
-                if espacio.id != esp.id:
+                sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
+                espacio = db(
+                                (db.espacios_fisicos.id == sol.f_espacio)
+                                     ).select()[0]
 
-                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
-                                  (db.t_Inventario.espacio == esp.id) &
-                                  (db.t_Inventario.f_existencia > 0)).select():
+                for esp in espacios:
+                    if espacio.id != esp.id:
 
-                        i += 1
-                        solicitudesRecibidas[int(i)] = {
-                                            'f_cod_registro': sol.f_cod_registro,
-                                            'f_sustancia': sustancia.f_nombre,
-                                            'f_espacio': sol.f_espacio,
-                                            'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.created_on,
-                                            'f_estatus':sol.f_estatus
-                                            }
+                        for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                      (db.t_Inventario.espacio == esp.id) &
+                                      (db.t_Inventario.f_existencia > 0)).select():
+
+                            i += 1
+                            solicitudesRecibidas[int(i)] = {
+                                                'f_cod_registro': sol.f_cod_registro,
+                                                'f_sustancia': sustancia.f_nombre,
+                                                'f_espacio': sol.f_espacio,
+                                                'f_cantidad': sol.f_cantidad,
+                                                'f_fecha': sol.created_on,
+                                                'f_estatus':sol.f_estatus
+                                                }
 
     elif auth.has_membership("JEFE DE SECCIÓN"):
 
         for sol in solicitudes:
 
-            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
-            espacio = db(
-                            (db.espacios_fisicos.id == sol.f_espacio)
-                                 ).select()[0]
+            if sol.f_estatus[0] != 'Completada':
 
-            for esp in espacios:
-                if espacio.id != esp.id:
+                sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
+                espacio = db(
+                                (db.espacios_fisicos.id == sol.f_espacio)
+                                     ).select()[0]
 
-                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
-                                  (db.t_Inventario.espacio == esp)).select():
+                for esp in espacios:
+                    if espacio.id != esp.id:
 
-                        i += 1
-                        solicitudesRecibidas[int(i)] = {
-                                            'f_cod_registro': sol.f_cod_registro,
-                                            'f_sustancia': sustancia.f_nombre,
-                                            'f_espacio': sol.f_espacio,
-                                            'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.created_on,
-                                            'f_estatus':sol.f_estatus
-                                            }
+                        for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                      (db.t_Inventario.espacio == esp)).select():
+
+                            i += 1
+                            solicitudesRecibidas[int(i)] = {
+                                                'f_cod_registro': sol.f_cod_registro,
+                                                'f_sustancia': sustancia.f_nombre,
+                                                'f_espacio': sol.f_espacio,
+                                                'f_cantidad': sol.f_cantidad,
+                                                'f_fecha': sol.created_on,
+                                                'f_estatus':sol.f_estatus
+                                                }
 
     # Si el usuario no es tecnico, para la base de datos es indiferente su ROL
     # pues la jerarquia de dependencias esta almacenada en la misma tabla
@@ -3786,26 +3834,28 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
 
         for sol in solicitudes:
 
-            sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
-            espacio = db(
-                            (db.espacios_fisicos.id == sol.f_espacio)
-                                 ).select()[0]
+            if sol.f_estatus[0] != 'Completada':
 
-            for esp in espacios:
-                if espacio.id != esp.id:
+                sustancia = db((db.t_Sustancia.id == sol.f_sustancia)).select()[0]
+                espacio = db(
+                                (db.espacios_fisicos.id == sol.f_espacio)
+                                     ).select()[0]
 
-                    for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
-                                  (db.t_Inventario.espacio == esp.id)).select():
+                for esp in espacios:
+                    if espacio.id != esp.id:
 
-                        i += 1
-                        solicitudesRecibidas[int(i)] = {
-                                            'f_cod_registro': sol.f_cod_registro,
-                                            'f_sustancia': sustancia.f_nombre,
-                                            'f_espacio': sol.f_espacio,
-                                            'f_cantidad': sol.f_cantidad,
-                                            'f_fecha': sol.created_on,
-                                            'f_estatus':sol.f_estatus
-                                            }
+                        for row in db((db.t_Inventario.sustancia == sol.f_sustancia) &
+                                      (db.t_Inventario.espacio == esp.id)).select():
+
+                            i += 1
+                            solicitudesRecibidas[int(i)] = {
+                                                'f_cod_registro': sol.f_cod_registro,
+                                                'f_sustancia': sustancia.f_nombre,
+                                                'f_espacio': sol.f_espacio,
+                                                'f_cantidad': sol.f_cantidad,
+                                                'f_fecha': sol.created_on,
+                                                'f_estatus':sol.f_estatus
+                                                }
     return solicitudesRecibidas
 
 
