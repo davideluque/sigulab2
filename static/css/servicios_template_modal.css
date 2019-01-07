@@ -336,7 +336,9 @@ form.registration-form fieldset {
 }
 .btn-submit, .btn-next {
     position:absolute;
-    bottom: 1% !important;
+    bottom: 15% !important;
     right:8% !important;
-    width: 50px !important;
+}
+.textFormBox{
+    height: 600px;
 }
