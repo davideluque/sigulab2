@@ -10,10 +10,63 @@ from datetime import datetime
 
 # < -------- Funciones privadas de Inventarios ------------>
 
+# Función que retorna el código de registro como string de una solicitud de préstamo
+def __obtener_registro_de_prestamo(id_prestamo):
+
+    # El formato dado es:
+    # SIG-DDDD/AA-NNN
+    #
+    # Donde:
+    #   DDDD:   Código de dependencia
+    #   AA:     Últimos dos dígitos del año de la solicitud
+    #   NNN:    Identificador único numérico de la solicitud (3 dígitos)
+
+    prestamo = db(db.historial_prestamo_vh.id == id_prestamo).select().first()
+    vehiculo = db(db.vehiculo.id == prestamo['hpvh_vh_id']).select().first()
+    dependencia = db(db.dependencias.id == vehiculo['vh_dependencia']).select().first()
+
+    registro = "SIG"
+    registro += "-"
+
+    registro += str(dependencia['codigo_registro'])
+    registro += "/"
+    registro += str(prestamo['hpvh_fecha_solicitud'].year)[2:]
+    registro += "-"
+    registro += str(prestamo['id']).zfill(3)
+
+    return registro
+
 # Función que envía un correo con los datos suministrados
 def __enviar_correo(destinatario, asunto, cuerpo):
     mail = auth.settings.mailer
     mail.send(destinatario, asunto, cuerpo)
+
+# Función que retorna los valores ya existentes de datos únicos de la
+# tabla de vehículos
+def __obtener_valores_unicos_vh():
+    vehiculos = db(db.vehiculo.id).select()
+
+    serial_carroceria, serial_motor, serial_chasis = set(), set(), set()
+    placa, num, intt = set(), set(), set()
+
+    for vehiculo in vehiculos:
+        serial_carroceria.add(vehiculo['vh_serial_carroceria'])
+        serial_motor.add(vehiculo['vh_serial_motor'])
+        intt.add(vehiculo['vh_intt'])
+        serial_chasis.add(vehiculo['vh_serial_chasis'])
+        num.add(vehiculo['vh_num'])
+        placa.add(vehiculo['vh_placa'])
+
+    valores_unicos = {
+        'serial_carroceria': serial_carroceria,
+        'serial_chasis': serial_chasis,
+        'serial_motor': serial_motor,
+        'intt': intt,
+        'num': num,
+        'placa': placa,
+    }
+
+    return valores_unicos
 
 # Función que parsea como entero y retorna None en caso de no poder
 def __safe_int(n):
@@ -98,7 +151,7 @@ def __get_prestamos_vh(vh_id=None):
 
     prestamos_final = list()
     for prestamo in prestamos:
-        if "Vehículo devuelto" == prestamo.hpvh_estatus or "Denegada" == prestamo.hpvh_estatus:
+        if "Vehículo devuelto" == prestamo.hpvh_estatus or "Denegada" == prestamo.hpvh_estatus or "Cancelada por el solicitante" == prestamo.hpvh_estatus:
             prestamos_final.append(prestamo)
 
     return prestamos_final
@@ -534,7 +587,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
-                 proveedor, proveedor_rif, num, tipo, clasificacion, rines,
+                 proveedor, proveedor_rif, num, tipo, clasificacion, rines, propiedad,
                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
                  donante, contacto_donante, oculto=0):
 
@@ -548,7 +601,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         return False
 
     # Si ya existe el numero de VH:
-    if db(db.vehiculo.vh_num == int(num)).select():
+    if num and db(db.vehiculo.vh_num == int(num)).select():
         vh = db(db.vehiculo.vh_num == int(num)).select()[0]
 
         nombre_dependencia = db(db.dependencias.id == vh.vh_dependencia).select()[0].nombre
@@ -589,9 +642,12 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
                           a la dependencia \"{1}\".".format(vh.vh_intt, nombre_dependencia)
         return False
 
+    if num:
+        num = int(num)
+
     # Se agrega el nuevo vehiculo a la base de datos
     db.vehiculo.insert(
-        vh_num=int(num),
+        vh_num=num,
         vh_marca=marca,
         vh_modelo=modelo,
         vh_ano=ano,
@@ -612,6 +668,7 @@ def __agregar_vh(marca, modelo, ano, serial_motor, serial_carroceria, serial_cha
         vh_clase=clase,
         vh_uso=uso,
         vh_servicio=servicio,
+        vh_propiedad=propiedad,
         vh_tara=tara,
         vh_tara_md=tara_md,
         vh_nro_puestos=nro_puestos,
@@ -818,24 +875,27 @@ def __solicitar_prestamo_vh(
         hpvh_ci_usuario=ci_usuario
     )
 
+    registro = __obtener_registro_de_prestamo(prestamo_id)
+
     db.bitacora_general.insert(
-        f_accion="[préstamos] Creada solicitud de préstamos. Vehículo: {}. Solicitante: {}".format(
+        f_accion="[préstamos] Creada solicitud de préstamo {}. Vehículo: {}. Solicitante: {}".format(
+            registro,
             vh.vh_marca + " " + vh.vh_modelo + " " + vh.vh_placa,
             usuario.first_name + " " + usuario.last_name
         )
     )
 
-    asunto_solicitud = "[SIGULAB] Solicitud #{} de Préstamo de Vehículos".format(prestamo_id)
+    asunto_solicitud = "[SIGULAB] Solicitud {} de Préstamo de Vehículos".format(registro)
 
     # Enviamos notificación al responsable patrimonial
     email_responsable = db(db.auth_user.id == vh.vh_responsable).select().first().email
     mensaje_solicitud_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha SOLICITADO " + \
-                                    "un préstamo de código #{} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                    "un préstamo de código {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
                                     "en fecha {}. Para obtener más detalles del préstamo, ingrese a SIGULAB, módulo de " + \
                                     "gestión de INVENTARIOS, sección SOLICITUDES.").format(
                                     usuario.first_name,
                                     usuario.last_name,
-                                    prestamo_id,
+                                    registro,
                                     vh.vh_marca,
                                     vh.vh_modelo,
                                     vh.vh_placa,
@@ -851,10 +911,10 @@ def __solicitar_prestamo_vh(
     # Enviamos notificación al solicitante
     email_solicitante = usuario.email
     mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que usted ha SOLICITADO " + \
-                                    "un préstamo de código #{} al vehículo {} {} {}, " + \
+                                    "un préstamo de código {} al vehículo {} {} {}, " + \
                                     "en fecha {}. Recibirá una notificación por correo electrónico al momento de que la " + \
                                     "solicitud sea aprobada o rechazada por el personal autorizado.").format(
-                                    prestamo_id,
+                                    registro,
                                     vh.vh_marca,
                                     vh.vh_modelo,
                                     vh.vh_placa,
@@ -999,7 +1059,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
                                  responsable, telf_responsable, custodio, telf_custodio, sudebip_localizacion,
                                  sudebip_codigo_localizacion, sudebip_categoria, sudebip_subcategoria,
                                  sudebip_categoria_especifica, fecha_adquisicion, nro_adquisicion, origen,
-                                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines,
+                                 proveedor, proveedor_rif, num, tipo, clasificacion, user, rines, propiedad,
                                  capacidad_carga_md, ubicacion_custodio, extension_custodio, extension_responsable,
                                  donante, contacto_donante, motivo, oculto=0):
 
@@ -1009,6 +1069,9 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
         response.flash = "El vehiculo de placa \"{0}\" tiene una modificación pendiente \
                         Por los momentos no se enviarán solicitudes de modificación.".format(placa)
         return False
+
+    if num:
+        num = int(num)
 
     db.modificacion_vehiculo.insert(
         mvh_id_vehiculo=id_vh,
@@ -1023,6 +1086,7 @@ def __agregar_modificar_vehiculo(id_vh, marca, modelo, ano, serial_motor, serial
         mvh_observaciones=observaciones,
         mvh_lugar_pernocta=lugar_pernocta,
         mvh_color=color,
+        mvh_propiedad=propiedad,
         mvh_clase=clase,
         mvh_uso=uso,
         mvh_dependencia=dependencia,
@@ -1324,8 +1388,8 @@ def index():
 @auth.requires_login(otherwise=URL('modulos', 'login'))
 def vehiculos():
 # Inicializando listas de espacios fisicos y dependencias
-    
-    # PENDIENTE: Cableando la variable de es_espacio 
+
+    # PENDIENTE: Cableando la variable de es_espacio
     if not request.vars.acceso_direccion:
         request.vars.es_espacio = 'False'
         request.vars.acceso_direccion = False
@@ -1433,8 +1497,9 @@ def vehiculos():
             sudebip_categoria="15000-0000 - Equipos de transporte, tracción y elevación",
             sudebip_subcategoria=request.vars.sudebip_subcategoria,
             sudebip_categoria_especifica=request.vars.sudebip_categoria_especifica,
-            fecha_adquisicion=request.vars.fecha_factura if request.vars.origen == "Compra" else request.vars.fecha_oficio,
+            propiedad=True if request.vars.propiedad == "Sí" else False,
             origen=request.vars.origen,
+            fecha_adquisicion=request.vars.fecha_factura if request.vars.origen == "Compra" else request.vars.fecha_oficio,
             nro_adquisicion=request.vars.nro_factura if request.vars.origen == "Compra" else request.vars.nro_oficio,
             proveedor=request.vars.proveedor,
             proveedor_rif=request.vars.proveedor_rif,
@@ -1738,6 +1803,9 @@ def vehiculos():
     except:
         pass
 
+    # Obtenemos valores únicos para el formulario
+    valores_unicos = __obtener_valores_unicos_vh()
+
     return dict(dep_nombre=dep_nombre,
                 dependencias=dependencias,
                 espacios=espacios,
@@ -1755,7 +1823,8 @@ def vehiculos():
                 localizacion=localizacion,
                 sede_id=sede_id,
                 dep_id=dep_id,
-                acceso_direccion=acceso_direccion
+                acceso_direccion=acceso_direccion,
+                valores_unicos=valores_unicos
                )
 
 @auth.requires(lambda: __check_role())
@@ -2103,6 +2172,7 @@ def detalles_mod_vehiculo():
             vh_uso=vehiculo['mvh_uso'],
             vh_servicio=vehiculo['mvh_servicio'],
             vh_tara=vehiculo['mvh_tara'],
+            vh_propiedad=vehiculo['mvh_propiedad'],
             vh_tara_md=vehiculo['mvh_tara_md'],
             vh_nro_puestos=vehiculo['mvh_nro_puestos'],
             vh_nro_ejes=vehiculo['mvh_nro_ejes'],
@@ -2126,7 +2196,7 @@ def detalles_mod_vehiculo():
         )
 
         db.bitacora_general.insert(
-            f_accion="[inventarios] Modificada la información del vehículo num {}".format(vehiculo['mvh_num'])
+            f_accion="[inventarios] Modificada la información del vehículo placa {}".format(vehiculo['mvh_placa'])
         )
         db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
         session.flash = "La información sobre el vehículo ha sido modificada"
@@ -2134,7 +2204,7 @@ def detalles_mod_vehiculo():
 
     if request.vars.no:
         db.bitacora_general.insert(
-            f_accion="[inventarios] Rechazada modificación de la información del vehículo num {}".format(vehiculo['mvh_num'])
+            f_accion="[inventarios] Rechazada modificación de la información del vehículo placa {}".format(vehiculo['mvh_placa'])
         )
         db(db.modificacion_vehiculo.mvh_id_vehiculo == vh_id).delete()
         session.flash = "La información sobre el vehículo no ha sido modificada"
@@ -2162,6 +2232,8 @@ def detalles_mod_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Propiedad USB',
+        'Estatus',
         'Visibilidad',
         'Observaciones',
     ]
@@ -2188,6 +2260,8 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo['mvh_capacidad_carga']) + " " + vehiculo['mvh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo['mvh_intt'],
         'Rines': vehiculo['mvh_rines'],
+        'Propiedad USB': "Sí" if vehiculo['mvh_propiedad'] else "No",
+        'Estatus': vehiculo['mvh_estatus'],
         'Visibilidad': None if vehiculo['mvh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo['mvh_observaciones'],
     }
@@ -2214,6 +2288,8 @@ def detalles_mod_vehiculo():
         'Capacidad de carga': str(vehiculo_original['vh_capacidad_carga']) + " " + vehiculo_original['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehiculo_original['vh_intt'],
         'Rines': vehiculo_original['vh_rines'],
+        'Propiedad USB': "Sí" if vehiculo_original['vh_propiedad'] else "No",
+        'Estatus': vehiculo_original['vh_estatus'],
         'Visibilidad': None if vehiculo_original['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehiculo_original['vh_observaciones'],
     }
@@ -2822,7 +2898,55 @@ def detalles_prestamo():
     except:
         return "Solicitante inválido."
 
+    es_solicitante = auth.user.id == prestamo['hpvh_solicitante']
     esta_autorizado = (auth.user.id == vehiculo['vh_responsable']) or (auth.user.id == vehiculo['vh_custodio']) or (auth.user.id == 1)
+
+    # Si el usuario marcó que quiere eliminar la solicitud (que no ha recibido respuesta)
+    if es_solicitante and request.vars.eliminar:
+        # Eliminamos la solicitud
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+        db(db.historial_prestamo_vh.id == prestamo_id).delete()
+
+        # Mostramos una notificación
+        session.flash = "Se ha eliminado la solicitud de préstamo %s satisfactoriamente." % registro
+        return redirect(URL('prestamos'))
+
+    # Si el usuario marcó que quiere cancelar la solicitud (que está aprobada)
+    if es_solicitante and request.vars.cancelar:
+        # Marcamos la solicitud como cancelada
+        db(db.historial_prestamo_vh.id == prestamo_id).update(
+            hpvh_estatus="Cancelada por el solicitante",
+            hpvh_razon_cancelacion=request.vars.motivo_cancelacion,
+            hpvh_fecha_cancelacion=datetime.now()
+        )
+
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
+        # Enviamos notificación al responsable
+        asunto_correo = "[SIGULAB] Solicitud de Préstamo {} Cancelada".format(registro)
+        email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
+        mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha CANCELADO " + \
+                                      "la solicitud de préstamo {} del vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "en fecha {}.").format(
+                                      auth.user.first_name,
+                                      auth.user.last_name,
+                                      registro,
+                                      vehiculo.vh_marca,
+                                      vehiculo.vh_modelo,
+                                      vehiculo.vh_placa,
+                                      datetime.now()
+        )
+
+        # Manda correo de aprobación al responsable
+        __enviar_correo(
+            email_responsable,
+            asunto_correo,
+            mensaje_aprobacion_responsable
+        )
+
+        # Mostramos una notificación
+        session.flash = "Se ha cancelado la solicitud de préstamo %s satisfactoriamente." % registro
+        return redirect(URL('prestamos'))
 
     # Si el usuario autorizado marcó que quería registrar la salida del vehículo
     if esta_autorizado and request.vars.salida:
@@ -2856,23 +2980,25 @@ def detalles_prestamo():
             vh_estatus = "En uso"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Registrada la salida en préstamo del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Registrada la salida en préstamo {} del vehículo de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
         # Enviamos notificación al responsable
-        asunto_correo = "[SIGULAB] Salida de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        asunto_correo = "[SIGULAB] Salida de Vehículo en Solicitud de Préstamo {}".format(registro)
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
-                                      "LA SALIDA del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "LA SALIDA del vehículo {} {} {} en la ficha del Préstamo {} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       datetime.now()
@@ -2885,7 +3011,7 @@ def detalles_prestamo():
             mensaje_aprobacion_responsable
         )
 
-        session.flash = "Se ha registrado la salida del vehículo en la Solicitud de Préstamo #%s." % prestamo_id
+        session.flash = "Se ha registrado la salida del vehículo en la Solicitud de Préstamo %s." % registro
         return redirect(URL('prestamos'))
 
     # Si el usuario autorizado marcó que quería registrar la devolución del vehículo
@@ -2921,23 +3047,25 @@ def detalles_prestamo():
             vh_estatus = "Disponible"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Registrada la devolución del vehículo en préstamo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Registrada la devolución del vehículo en préstamo {} de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
         # Enviamos notificación al responsable
-        asunto_correo = "[SIGULAB] Devolución de Vehículo en Solicitud de Preéstamo #{}".format(vehiculo.vh_placa)
+        asunto_correo = "[SIGULAB] Devolución de Vehículo en Solicitud de Préstamo {}".format(registro)
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha REGISTRADO " + \
-                                      "LA DEVOLUCIÓN del vehículo {} {} {} en la ficha del Préstamo #{} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "LA DEVOLUCIÓN del vehículo {} {} {} en la ficha del Préstamo {} realizado por {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       datetime.now()
@@ -2950,7 +3078,7 @@ def detalles_prestamo():
             mensaje_aprobacion_responsable
         )
 
-        session.flash = "Se ha registrado la devolución del vehículo en la Solicitud de Préstamo #%s." % prestamo_id
+        session.flash = "Se ha registrado la devolución del vehículo en la Solicitud de Préstamo #%s." % registro
         return redirect(URL('prestamos'))
 
 
@@ -2968,21 +3096,22 @@ def detalles_prestamo():
             vh_estatus = "En préstamo"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Aceptada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Aceptada solicitud de préstamo {} del vehículo de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
-        asunto_correo = "[SIGULAB] Solicitud de Préstamo #%s Aprobada" % prestamo_id
+        asunto_correo = "[SIGULAB] Solicitud de Préstamo %s Aprobada" % registro
 
         # Enviamos notificación al responsable
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_aprobacion_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
-                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "la Solicitud de Préstamo {} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       vehiculo.vh_marca,
@@ -3001,11 +3130,11 @@ def detalles_prestamo():
         # Enviamos notificación al solicitante
         email_solicitante = solicitante.email
         mensaje_aprobacion_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha APROBADO " + \
-                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "la Solicitud de Préstamo {} realizada por usted al vehículo {} {} {} " + \
                                       "en fecha {}. Puede proceder a contactar al responsable del vehículo para retirar las llaves otros documentos.").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
-                                      prestamo_id,
+                                      registro,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
@@ -3019,7 +3148,7 @@ def detalles_prestamo():
             mensaje_aprobacion_solicitante
         )
 
-        session.flash = "Se ha aprobado la Solicitud de Préstamo #%s." % prestamo_id
+        session.flash = "Se ha aprobado la Solicitud de Préstamo %s." % registro
         return redirect(URL('prestamos'))
 
     # Si el usuario autorizado ha rechazado la solicitud
@@ -3034,21 +3163,23 @@ def detalles_prestamo():
             hpvh_estatus="Denegada"
         )
 
+        registro = __obtener_registro_de_prestamo(prestamo_id)
+
         # Guardamos información en bitácora
         db.bitacora_general.insert(
-            f_accion="[préstamos] Rechazada solicitud de préstamo #{} del vehículo de placa {}.".format(prestamo_id, vehiculo['vh_placa'])
+            f_accion="[préstamos] Rechazada solicitud de préstamo {} del vehículo de placa {}.".format(registro, vehiculo['vh_placa'])
         )
 
-        asunto_rechazo = "[SIGULAB] Rechazo a la Solicitud de Préstamo #%s" % prestamo_id
+        asunto_rechazo = "[SIGULAB] Rechazo a la Solicitud de Préstamo %s" % registro
 
         # Enviamos notificación al responsable patrimonial
         email_responsable = db(db.auth_user.id == vehiculo.vh_responsable).select().first().email
         mensaje_rechazo_responsable = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
-                                      "la Solicitud de Préstamo #{} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
+                                      "la Solicitud de Préstamo {} realizada por {} {} al vehículo {} {} {}, del cual usted es Responsable Patrimonial, " + \
                                       "en fecha {}. Como razón de rechazo, se especificó: {}").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
-                                      prestamo_id,
+                                      registro,
                                       solicitante.first_name,
                                       solicitante.last_name,
                                       vehiculo.vh_marca,
@@ -3067,11 +3198,11 @@ def detalles_prestamo():
         # Enviamos notificación al solicitante
         email_solicitante = solicitante.email
         mensaje_rechazo_solicitante = ("Estimado usuario, por medio de la presente le notificamos que el usuario {} {} ha RECHAZADO " + \
-                                      "la Solicitud de Préstamo #{} realizada por usted al vehículo {} {} {} " + \
+                                      "la Solicitud de Préstamo {} realizada por usted al vehículo {} {} {} " + \
                                       "en fecha {}. Como razón de rechazo, se especificó: {}").format(
                                       auth.user.first_name,
                                       auth.user.last_name,
-                                      prestamo_id,
+                                      registro,
                                       vehiculo.vh_marca,
                                       vehiculo.vh_modelo,
                                       vehiculo.vh_placa,
@@ -3086,15 +3217,18 @@ def detalles_prestamo():
             mensaje_rechazo_solicitante
         )
 
-        session.flash = "Se ha rechazado la Solicitud de Préstamo #%s." % prestamo_id
+        session.flash = "Se ha rechazado la Solicitud de Préstamo %s." % registro
         return redirect(URL('prestamos'))
 
     try:
         autorizado_por = db(db.auth_user.id == prestamo['hpvh_autorizado_por']).select().first()
         nombre_autorizado = "%s %s" % (autorizado_por.first_name, autorizado_por.last_name)
-    except Exception as e:
+    except:
         autorizado_por = -1
         nombre_autorizado = ""
+
+    flujo_positivo = "Aprobada" in prestamo['hpvh_estatus'] or "devuelto" in prestamo['hpvh_estatus']
+    flujo_positivo = flujo_positivo or "uso" in prestamo['hpvh_estatus'] or "Cancelada" in prestamo['hpvh_estatus']
 
     informacion_dict = {
         "Vehículo Solicitado": "%s %s" % (
@@ -3114,10 +3248,12 @@ def detalles_prestamo():
         "Tiempo Estimado de Uso": "%s %s" % (prestamo['hpvh_tiempo_estimado_uso'], prestamo['hpvh_tiempo_estimado_uso_md']),
         "Estatus": prestamo['hpvh_estatus'],
         "Razón de Rechazo": prestamo['hpvh_razon_rechazo'],
-        "Rechazada por": nombre_autorizado if "rechazada" in prestamo['hpvh_estatus'] else None,
-        "Aprobada por": nombre_autorizado if "aprobada" in prestamo['hpvh_estatus'] else None,
-        "Fecha de Aprobación": prestamo['hpvh_fecha_autorizacion'] if "rechazada" in prestamo['hpvh_estatus'] else None,
-        "Fecha de Rechazo": prestamo['hpvh_fecha_autorizacion'] if "aprobada" in prestamo['hpvh_estatus'] else None
+        "Rechazada por": nombre_autorizado if "Denegada" in prestamo['hpvh_estatus'] else None,
+        "Aprobada por": nombre_autorizado if flujo_positivo else None,
+        "Fecha de Aprobación": None if not flujo_positivo else prestamo['hpvh_fecha_autorizacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Fecha de Rechazo": None if "Denegada" not in prestamo['hpvh_estatus'] else prestamo['hpvh_fecha_autorizacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Fecha de Cancelación": None if "Cancelada" not in prestamo['hpvh_estatus'] else prestamo['hpvh_fecha_cancelacion'].strftime("%d/%m/%y %I:%M %p"),
+        "Razón de Cancelación": prestamo['hpvh_razon_cancelacion']
     }
 
     informacion_list = [
@@ -3131,11 +3267,13 @@ def detalles_prestamo():
         "Ruta Prevista",
         "Tiempo Estimado de Uso",
         "Estatus",
-        "Razón de Rechazo",
-        "Rechazada por",
         "Aprobada por",
+        "Rechazada por",
         "Fecha de Aprobación",
-        "Fecha de Rechazo"
+        "Fecha de Rechazo",
+        "Razón de Rechazo",
+        "Fecha de Cancelación",
+        "Razón de Cancelación"
     ]
 
     conductor_dict = {
@@ -3258,7 +3396,8 @@ def detalles_prestamo():
         info_transito_list=info_transito_list,
         info_salida_dict=info_salida_dict,
         info_devolucion_dict=info_devolucion_dict,
-        esta_autorizado=esta_autorizado
+        esta_autorizado=esta_autorizado,
+        es_solicitante=es_solicitante
     )
 
 @auth.requires(lambda: __check_role())
@@ -3506,6 +3645,7 @@ def detalles_vehiculo():
             observaciones=request.vars.observaciones,
             lugar_pernocta=request.vars.pernocta,
             color=request.vars.color,
+            propiedad=True if request.vars.propiedad == "Sí" else False,
             clase=request.vars.clase,
             tipo=request.vars.tipo if request.vars.tipo != "Otros aparatos para circular" else "Otros aparatos para circular: " + request.vars.tipo2,
             clasificacion=request.vars.clasificacion if request.vars.clasificacion != "Emergencia" else "Emergencia: " + requesr.vars.clasificacion2,
@@ -3582,6 +3722,7 @@ def detalles_vehiculo():
         'Capacidad de carga',
         'Nº de Autorización INTT',
         'Rines',
+        'Propiedad USB',
         'Estatus',
         'Visibilidad',
         'Observaciones',
@@ -3609,6 +3750,7 @@ def detalles_vehiculo():
         'Capacidad de carga': str(vehi['vh_capacidad_carga']) + " " + vehi['vh_capacidad_carga_md'],
         'Nº de Autorización INTT': vehi['vh_intt'],
         'Rines': vehi['vh_rines'],
+        'Propiedad USB': "Sí" if vehi['vh_propiedad'] else "No",
         'Estatus': vehi['vh_estatus'],
         'Visibilidad': None if vehi['vh_oculto'] == 0 else "Oculto",
         'Observaciones': vehi['vh_observaciones'],
@@ -3621,6 +3763,9 @@ def detalles_vehiculo():
 
     esta_autorizado = (auth.user.id == vehi['vh_responsable']) or (auth.user.id == vehi['vh_custodio']) or (auth.user.id == 1)
     puede_ver_historial_mantenimiento = esta_autorizado or __es_jefe_dep_vh(auth.user.id, vehi['id'])
+
+    # Obtenemos valores únicos para el formulario
+    valores_unicos = __obtener_valores_unicos_vh()
 
     # Si solo estoy cargando la vista
     return dict(
@@ -3635,7 +3780,8 @@ def detalles_vehiculo():
         sede_id=sede_id,
         historial_prestamos=prestamos,
         esta_autorizado=esta_autorizado,
-        puede_ver_historial_mantenimiento=puede_ver_historial_mantenimiento
+        puede_ver_historial_mantenimiento=puede_ver_historial_mantenimiento,
+        valores_unicos=valores_unicos
     )
 
 # Muestra el inventario de acuerdo al cargo del usuario y la dependencia que tiene
@@ -4499,7 +4645,7 @@ def prestamos():
     # Pequeña función booleana para saber si un vehículo ha acabado
     # su flujo útil en préstamos
     def __flujo_listo(x):
-        return "Vehículo devuelto" == x['hpvh_estatus'] or "Denegada" == x['hpvh_estatus']
+        return "Vehículo devuelto" == x['hpvh_estatus'] or "Denegada" == x['hpvh_estatus'] or "Cancelada por el solicitante" == x['hpvh_estatus']
 
     # Hallamos información del usuario
     user_id = auth.user.id

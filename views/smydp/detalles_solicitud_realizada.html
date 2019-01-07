@@ -60,16 +60,7 @@
                 <i class="fas fa-arrow-left"></i>
             </button>
         </div>
-        {{ if esta_autorizado: }}
-        <div id="columnBotonAgregar" class="col-sm-6">
-            <div class="col-sm-6"></div>
-            <div class="col-sm-6">
-             
-                <!-- Boton que responder solicitud -->
-                <button style="color:#fff;background-color: #337ab7;border-color: #2e6da4" type="button" data-toggle="modal" data-target="#respuesta"><i class="fas fa-pencil-alt fa-1x"></i></button>
-              </div>
-            </div>
-      {{ pass }}
+   
       {{ pass }}
 
     </div>
@@ -236,26 +227,22 @@
                             </select>
                           </div>
 
-                          <div id='espacio_fisico_div' class="form-group">
-                            <select class="form-control" type="select" id="espacio" name="espacio" >
-                              <option value="" selected hidden >Espacio Fisico*</option>
-                              {{for esp in espacios:}}
-                              <option value="{{=esp.id}}">{{=esp.codigo}}</option>
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="respuesta" name="respuesta" required>
+                              <option value="" selected hidden >Respuesta*</option>
+                              {{for respuesta in respuestas:}}
+                              <option value="{{=respuesta}}">{{=respuesta}}</option>
                               {{pass}}
                             </select>
                           </div>
-                          
-                          <div id= 'respuesta_div' class="form-group">
-                            <select class="form-control" type="select" id="respuesta" name="respuesta" required onclick="activarRespuesta(this.value)">
-                                <option value="" selected hidden >Respuesta*</option>
-                                {{for respuesta in respuestas:}}
-                                <option value="{{=respuesta}}">{{=respuesta}}</option>
-                                {{pass}}
-                              </select>
-                            </div>
-                            
-                          <div id='calidad_div' class="form-group">
-                            <select class="form-control" type="select" id="forma" name="forma"  onclick ="activarCampos(this.value)">
+
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="justificacion" placeholder="Justificacion" required>
+                            <div class="field-error"> <p id="error-total"> </p> </div>
+                          </div>
+
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="forma" name="forma" required>
                               <option value="" selected hidden >Calidad*</option>
                               {{for forma in formas:}}
                               <option value="{{=forma}}">{{=forma}}</option>
@@ -263,17 +250,19 @@
                             </select>
                           </div>
 
-                          <div id ='justificacion_div' class="form-group">
-                            <input type="text" class="form-control" name="justificacion" placeholder="Justificacion" >
-                            <div class="field-error"> <p id="error-total"> </p> </div>
-                          </div>
                           <div id="fecha_uso_div" class="form-group esconder">
                             <p>Fecha tope de devolucion: <input name = "fecha_tope" type="date"  data-date-format="YYYY MM DD"></p>
                             <font color="red"><div id="err_fecha_uso" hidden></div></font>
                           </div>
 
-
-
+                          <div class="form-group">
+                            <select class="form-control" type="select" id="espacio" name="espacio" required>
+                              <option value="" selected hidden >Espacio Fisico*</option>
+                              {{for esp in espacios:}}
+                              <option value="{{=esp.id}}">{{=esp.codigo}}</option>
+                              {{pass}}
+                            </select>
+                          </div>
 
                           <div class="field-error" style="padding-bottom: 50px"> <p id="error-unidad"> </p> </div>
                       </div>
@@ -293,39 +282,4 @@
   </div>
 </div>
 <!-- Fin Modal Solicitar Sustancia Seleccionado-->
-<script type="text/javascript">
-  
-  // Obteniendo elementos a ser mostrados o escondidos
-  var respuesta_div = document.getElementById("respuesta_div");
-  var justificacion_div = document.getElementById("justificacion_div");
-  var calidad_div = document.getElementById("calidad_div");
-  var fecha_uso_div = document.getElementById("fecha_uso_div");
-  var espacio_fisico_div = document.getElementById("espacio_fisico_div");
-  justificacion_div.style.display = "none";
-  calidad_div.style.display = "none";
-  fecha_uso_div.style.display = "none";
 
-function activarRespuesta(respuesta){
-  if (respuesta == 'Aceptación'){
-      calidad_div.style.display = "block";
-
-      justificacion_div.style.display = "none";
-      
-    }else{
-      justificacion_div.style.display = "block";
-      calidad_div.style.display = "none";
-      fecha_uso_div.style.display = "none";
-  }
-}
-
-function activarCamposPrestamo(valor){
-  if(valor == 'Préstamo'){
-      fecha_uso_div.style.display = "block";
-
-  }else{
-      fecha_uso_div.style.display="none";
-  }
-}
-
-
-</Script>

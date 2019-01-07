@@ -100,12 +100,14 @@
             </tr>
         </thead>
 
+        {{aux = 0 }}
         <tbody>
           {{for registro in bitacora:}}
             {{auth_user = registro['auth_user']}}
             {{reg = registro['t_Balance']}}
             {{usuario = registro['t_Personal']}}
             {{fecha = reg.created_on.strftime("%d/%m/%Y %H:%M:%S").split(" ")}}
+
             <tr>
                 <td class="camposTabla">{{=reg['f_fechaUso']}}</td>
                 <td class="camposTabla">{{=fecha[1]}}</td>
@@ -114,7 +116,10 @@
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
-                <td class="camposTabla">{{=reg.f_cantidad_total}}</td>
+                {{ aux = int(aux) + int(reg.f_cantidad) if reg.f_concepto[0] == "Ingreso"  else str(aux)   }}
+                {{ aux = int(aux) - int(reg.f_cantidad) if not reg.f_concepto[0] == "Ingreso"  else  str(aux)  }}
+                <td class="camposTabla">{{= aux }}</td>
+
             </tr>
           {{pass}}
         </tbody>
