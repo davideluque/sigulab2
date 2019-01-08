@@ -117,7 +117,7 @@
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 {{ aux = float(aux) + float(reg.f_cantidad) if reg.f_concepto[0] == "Ingreso"  else str(aux)   }}
-                {{ aux = floar(aux) - float(reg.f_cantidad) if not reg.f_concepto[0] == "Ingreso"  else  str(aux)  }}
+                {{ aux = float(aux) - float(reg.f_cantidad) if not reg.f_concepto[0] == "Ingreso"  else  str(aux)  }}
                 <td class="camposTabla">{{= aux }}</td>
 
             </tr>
