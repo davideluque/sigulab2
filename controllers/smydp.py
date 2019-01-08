@@ -740,10 +740,11 @@ def __agregar_registro(concepto):
         total_nuevo = total_viejo - cantidad
         uso_interno_nuevo = uso_interno_viejo - cantidad
 
-        tipo_eg = request.vars.tipo_egreso            
-        fecha_uso=request.vars.fecha_uso.split("-")
-        fecha_u=datetime.datetime(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))
-
+        tipo_eg = request.vars.tipo_egreso  
+        fecha_uso=request.vars.fecha_compra.split("-")
+        fecha_u=datetime.date(int(fecha_uso[0]),int(fecha_uso[1]),int(fecha_uso[2]))  
+        
+                
         fechaHoy = datetime.datetime.now()
         if fechaHoy < fecha_u:
             response.flash = "Fecha de consumo no puede ser mayor a la actual"
@@ -799,11 +800,11 @@ def bitacora():
 
     # Tipos de consumos
     #tipos_egreso = db.t_Balance.f_tipo_egreso.requires.other.theset
-    tipos_egreso = ['Docencia','Investigación','Extensión','Prestamo','Cesión']
+    tipos_egreso = ['Docencia','Investigación','Extensión']
 
     # Tipos de ingresos
     #tipos_ingreso = db.t_Balance.f_tipo_ingreso.requires.other.theset
-    tipos_ingreso = ['Compra','Almacén','Prestamo','Cesión']
+    tipos_ingreso = ['Compra','Almacén']
 
     # Lista de unidades de medida
     unidades_de_medida = list(db(db.t_Unidad_de_medida.id > 0).select())
