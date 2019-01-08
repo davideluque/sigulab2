@@ -697,7 +697,7 @@ def __agregar_registro(concepto):
 
             fechaC=request.vars.fecha_compra.split("-")
             fecha_compra=datetime.datetime(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
-            #fechaComp=datetime.date(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
+            fechaComp=datetime.date(int(fechaC[0]),int(fechaC[1]),int(fechaC[2]))
 
 
             fechaHoy = datetime.datetime.now()
@@ -3070,6 +3070,146 @@ def detalles_respuesta():
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
     
+    
+    #----- AGREGAR RESPUESTA -----#
+    if request.post_vars.ci_receptor:
+        sol = db((db.t_Solicitud_smydp.id == respuesta.f_solicitud)).select()[0]
+
+        medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+        medidaSol = db(db.t_Unidad_de_medida.id == sol.f_medida).select()[0]
+
+        cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
+
+        if sol.f_cantidad_conseguida+cantidad <= sol.f_cantidad:
+
+            #COMO ESTA SOLICITANDO TIENE UN INGRESO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invSolic=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==sol.f_espacio) ).select()
+
+            if len(invSolic) == 0:
+                inv_id = db.t_Inventario.insert(f_existencia=float(0), 
+                                        f_uso_interno=float(0),
+                                        f_medida=respuesta.f_medida,
+                                        espacio=solicitud.f_espacio,
+                                        sustancia=solicitud.f_sustancia)
+
+                concepto = 'Ingreso'
+                tipo_ing = 'Ingreso inicial'
+
+                # Agregando la primera entrada de la sustancia en la bitacora
+                db.t_Balance.insert(
+                                        f_cantidad=float(0),
+                                        f_cantidad_total=float(0),
+                                        f_concepto=concepto,
+                                        f_tipo_ingreso=tipo_ing,
+                                        f_medida=respuesta.f_medida,
+                                        f_inventario=inv_id,
+                                        f_sustancia=solicitud.f_sustancia,
+                                        f_fechaUso=datetime.date.today())
+
+                invSolic=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==sol.f_espacio) ).select()
+
+
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balSol=db(db.t_Balance.f_inventario== invSolic[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invSolic[0].f_existencia
+            uso_int_viejo=invSolic[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            medidaInv = db(db.t_Unidad_de_medida.id == invSolic[0].f_medida).select()[0]
+            medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaInv.f_nombre)
+
+            total_nuevo = total_viejo + cantidad
+            uso_interno_nuevo = uso_int_viejo + cantidad
+            
+            invSolic[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+
+            db.t_Balance.insert(
+                f_cantidad = cantidad,
+                f_cantidad_total=total_nuevo,
+                f_concepto='Ingreso',
+                f_tipo_ingreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invSolic[0].f_medida,
+                f_inventario=invSolic[0].id,
+                f_sustancia=solicitud.f_sustancia,
+                f_respuesta_solicitud=respuesta.id
+            )
+        
+            #COMO ESTA DANDO TIENE UN CONSUMO
+            #Inventario de quien hace la solicitud calculado por sustancia
+            invRespo=db((db.t_Inventario.sustancia==sol.f_sustancia) & (db.t_Inventario.espacio==respuesta.f_espacio) ).select()
+            # Busco el balance de la sustancia a la que me voy a hacer referencia
+            balResp=db(db.t_Balance.f_inventario== invRespo[0].id).select()
+            #Busco la sustancia a la que estoy sacandole cuentas 
+            
+        
+            total_viejo= invRespo[0].f_existencia
+            uso_int_viejo=invRespo[0].f_uso_interno
+            espacio = db(db.espacios_fisicos.id == respuesta.f_espacio).select()[0]
+
+            medidaInv = db(db.t_Unidad_de_medida.id == invRespo[0].f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaInv.f_nombre)
+
+            total_nuevo = total_viejo - cantidad
+            uso_interno_nuevo = uso_int_viejo - cantidad
+            
+            invRespo[0].update_record(
+                    f_existencia=total_nuevo,
+                    f_uso_interno=uso_interno_nuevo)
+
+            db.t_Balance.insert(
+
+                f_cantidad = float(cantidad),
+                f_cantidad_total=total_nuevo,
+                f_concepto='Consumo',
+                f_tipo_egreso=respuesta.f_calidad[0],
+                f_fechaUso=datetime.datetime.now,
+                f_medida=invRespo[0].f_medida,
+                f_inventario=invRespo[0].id,
+                f_sustancia=sol.f_sustancia
+            )
+
+            ##Cargo la CI del receptor de la sustancia 
+
+            cedula_receptor = request.post_vars.ci_receptor
+            invRespo=db(db.t_Personal.f_ci==cedula_receptor).select()
+
+            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = invRespo[0].id)
+
+            medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
+            medidaSol = db(db.t_Unidad_de_medida.id == sol.f_medida).select()[0]
+
+            cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
+
+            sol.update_record(f_cantidad_conseguida=sol.f_cantidad_conseguida+cantidad)
+
+            if str(respuesta.f_calidad[0])== 'Préstamo':
+                sol.update_record(
+                        f_estatus='Prestamo por devolver')
+
+            if sol.f_cantidad_conseguida == sol.f_cantidad:
+
+                if str(sol.f_estatus[0]) != 'Prestamo por devolver':
+
+                    sol.update_record(f_estatus='Completada')
+
+        else :
+
+            response.flash = "Cantidad sobrepasa lo solicitado"
+            session.flash = response.flash
+
+
+        return redirect(URL('respuestas'))
+
     return dict(respuesta = respuesta,
                 medida = medida,
                 solicitud = solicitud,
@@ -3149,7 +3289,7 @@ def detalles_respuesta_realizada():
     email_responsable = personal_usuario.f_email
 
     datos_solicitud = [nombre_dependencia, nombre_jefe, apellido_jefe, email_jefe, nombre_responsable, email_responsable, num_resp]
-    
+    '''
     #----- AGREGAR RESPUESTA -----#
     if request.post_vars.ci_receptor:
         solic= db(db.t_Solicitud_smydp.id == respuesta.id).select()[0]
@@ -3223,17 +3363,19 @@ def detalles_respuesta_realizada():
 
             cedula_receptor = int(request.post_vars.ci_receptor)
             inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = cedula_receptor)
+            sol[0].update_record(
+                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad)
+
         else :
             if str(respuesta.f_calidad[0])== 'Cesión':
                 sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
                         f_estatus='Completada')
             else :
                 sol[0].update_record(
-                        f_cantidad_conseguida=sol[0].f_cantidad_conseguida+respuesta.f_cantidad,
                         f_estatus='Prestamo por devolver')
 
         return redirect(URL(args=request.args, vars=request.get_vars, host=True)) 
+    '''
 
     return dict(respuesta = respuesta,
                 medida = medida,
@@ -3516,6 +3658,8 @@ def listado_respuestas_recibidas(db, espacios):
 
     for resp in respuestas:
 
+        print(resp.f_responsable_recepcion)
+
         if resp.f_responsable_recepcion == None:
 
             solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
@@ -3748,6 +3892,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                                                 'f_estatus':sol.f_estatus
                                                 }
     return solicitudesRecibidas
+
 
 def validador_registro_solicitudes(request, db, registro, contador=0):
     anio = str(request.now)[2:4]
