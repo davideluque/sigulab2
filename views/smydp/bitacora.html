@@ -100,7 +100,7 @@
             </tr>
         </thead>
 
-        {{aux = 0 }}
+        {{aux = 0.0 }}
         <tbody>
           {{for registro in bitacora:}}
             {{auth_user = registro['auth_user']}}
@@ -116,8 +116,8 @@
                 <td class="camposTabla">{{=reg['descripcion']}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if reg.f_concepto[0] == "Ingreso" else ""}}</td>
                 <td class="camposTabla">{{=reg.f_cantidad if not reg.f_concepto[0] == "Ingreso" else ""}}</td>
-                {{ aux = int(aux) + int(reg.f_cantidad) if reg.f_concepto[0] == "Ingreso"  else str(aux)   }}
-                {{ aux = int(aux) - int(reg.f_cantidad) if not reg.f_concepto[0] == "Ingreso"  else  str(aux)  }}
+                {{ aux = float(aux) + float(reg.f_cantidad) if reg.f_concepto[0] == "Ingreso"  else str(aux)   }}
+                {{ aux = float(aux) - float(reg.f_cantidad) if not reg.f_concepto[0] == "Ingreso"  else  str(aux)  }}
                 <td class="camposTabla">{{= aux }}</td>
 
             </tr>
