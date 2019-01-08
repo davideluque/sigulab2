@@ -1576,6 +1576,12 @@
   var regexTlf = new RegExp("^[(][0][0-9]{3}[)][\ ][0-9]{3}-[0-9]{4}$");
   var regexCI = new RegExp("^[VEve][-][0-9]{6,8}$");
 
+  // Retorna números redondeados
+  function zfill_pad(num, size) {
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+  }
+
   // Máscara js para formato de teléfono
   $(document).ready(function() {
     $('.campo_telf_obligatorio').mask('(Y000) 000-0000', {
@@ -1686,6 +1692,9 @@
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
 
+    mm = zfill_pad(mm, 2);
+    dd = zfill_pad(dd, 2);
+
     var minimo = yyyy + "-" + mm + "-" + dd;
 
     $(".campo_fecha_prestamo").attr('min', minimo);
@@ -1696,9 +1705,12 @@
   $("#fecha_prevista_salida").change(function() {
     var fecha = new Date($(this).val());
 
-    var dd = fecha.getDate();
+    var dd = fecha.getDate() + 1;
     var mm = fecha.getMonth() + 1;
     var yyyy = fecha.getFullYear();
+
+    mm = zfill_pad(mm, 2);
+    dd = zfill_pad(dd, 2);
 
     var minimo = yyyy + "-" + mm + "-" + dd;
 

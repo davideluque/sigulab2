@@ -1080,12 +1080,21 @@
     {{ pass }}
   });
 
+  // Retorna números redondeados
+  function zfill_pad(num, size) {
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+  }
+
   // Valida la fecha del selector de fecha factura/oficio
   $(document).ready(function() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
+
+    mm = zfill_pad(mm, 2);
+    dd = zfill_pad(dd, 2);
 
     var maximo = yyyy + "-" + mm + "-" + dd;
 
