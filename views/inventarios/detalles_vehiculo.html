@@ -1705,7 +1705,7 @@
   $("#fecha_prevista_salida").change(function() {
     var fecha = new Date($(this).val());
 
-    var dd = fecha.getDate();
+    var dd = fecha.getDate() + 1;
     var mm = fecha.getMonth() + 1;
     var yyyy = fecha.getFullYear();
 
