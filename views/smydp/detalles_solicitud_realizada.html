@@ -86,6 +86,12 @@
                     {{=solicitud.f_cantidad_conseguida}}
                 </div>
                 <div class="grid-item">
+                    Medida de sustancia:
+                </div>
+                <div class="grid-item">
+                    {{=medida.f_abreviatura}}
+                </div>
+                <div class="grid-item">
                     Estado actual de sustancia solicitada:
                 </div>
                 <div class="grid-item">
@@ -257,7 +263,7 @@
 
                           <div class="form-group">
                             <select class="form-control" type="select" id="espacio" name="espacio" required>
-                              <option value="" selected hidden >Espacio Fisico*</option>
+                              <option value="" selected hidden >Espacio Fisico que Responde*</option>
                               {{for esp in espacios:}}
                               <option value="{{=esp.id}}">{{=esp.codigo}}</option>
                               {{pass}}
