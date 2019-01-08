@@ -4547,7 +4547,7 @@ def generar_reporte_rl4():
     year= request.vars.ayoR4
     #Encabezado
     ws.title = "Informe mensual"
-    img = Image("applications/sigulab2/static/images/gob.jpg")
+    img = Image("gob.jpg")
     ws.add_image(img, 'A1')
    
 
@@ -4880,7 +4880,7 @@ def generar_reporte_rl4():
 
         ws2.title = n
         
-        img = Image("applications/sigulab2/static/images/gob.jpg")
+        img = Image("gob.jpg")
         ws2.add_image(img, 'A1')
 
         #tamaño de las columnas
