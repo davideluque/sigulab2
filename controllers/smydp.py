@@ -498,11 +498,11 @@ def __get_descripcion(registro):
 
         elif registro.f_tipo_egreso[0] == "Préstamo":
            
-            descripcion = "Préstamo a .. "
+            descripcion = "Egreso por prestamo "
 
         elif registro.f_tipo_egreso[0] == "Cesión":
         
-            descripcion = "Cesión a... "
+            descripcion = "Egreso por Cesión "
         # Cuando es un egreso en respuesta a una solicitud
         elif registro.f_tipo_egreso[0] == "Solicitud":
        
@@ -2819,6 +2819,8 @@ def detalles_solicitud():
 
     responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
 
+    medida = db(db.t_Unidad_de_medida.id == solicitud.f_medida).select()[0]
+
 
     #Posibles respuesta a la solicitud
     respuestas = ['Negación','Aceptación']
@@ -2918,6 +2920,7 @@ def detalles_solicitud():
 
     return dict(solicitud = solicitud,
                 sustancia = sustancia,
+                medida = medida,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
                 responsable = responsable,
@@ -2939,6 +2942,8 @@ def detalles_solicitud_realizada():
     espacio = db((db.espacios_fisicos.id == solicitud.f_espacio)).select()[0]
 
     responsable = db(db.t_Personal.f_usuario == solicitud.f_responsable_solicitud).select()[0]
+
+    medida = db(db.t_Unidad_de_medida.id == solicitud.f_medida).select()[0]
 
 
     #Posibles respuesta a la solicitud
@@ -2993,6 +2998,7 @@ def detalles_solicitud_realizada():
 
     return dict(solicitud = solicitud,
                 sustancia = sustancia,
+                medida = medida,
                 espacio = espacio,
                 datos_solicitud=datos_solicitud,
                 responsable = responsable,
@@ -3081,6 +3087,19 @@ def detalles_respuesta():
         cantidad = __transformar_cantidad(respuesta.f_cantidad, medidaResp.f_nombre, medidaSol.f_nombre)
 
         if sol.f_cantidad_conseguida+cantidad <= sol.f_cantidad:
+
+            ##Cargo la CI del receptor de la sustancia 
+
+            cedula_receptor = request.post_vars.ci_receptor
+            invRespo=db(db.t_Personal.f_ci==cedula_receptor).select()
+
+            if len(invRespo)== 0:
+                response.flash = "No existe un usuario con esta cedula"
+                session.flash = response.flash
+                return redirect(URL('respuestas'))
+
+            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = invRespo[0].id)
+
 
             #COMO ESTA SOLICITANDO TIENE UN INGRESO
             #Inventario de quien hace la solicitud calculado por sustancia
@@ -3178,12 +3197,7 @@ def detalles_respuesta():
                 f_sustancia=sol.f_sustancia
             )
 
-            ##Cargo la CI del receptor de la sustancia 
 
-            cedula_receptor = request.post_vars.ci_receptor
-            invRespo=db(db.t_Personal.f_ci==cedula_receptor).select()
-
-            inv_id = db(db.t_Respuesta.id == respuesta.id).update(f_responsable_recepcion = invRespo[0].id)
 
             medidaResp = db(db.t_Unidad_de_medida.id == respuesta.f_medida).select()[0]
             medidaSol = db(db.t_Unidad_de_medida.id == sol.f_medida).select()[0]
@@ -3664,6 +3678,8 @@ def listado_respuestas_recibidas(db, espacios):
 
             solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
+            sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
             espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
             for esp in espacios:
@@ -3673,7 +3689,7 @@ def listado_respuestas_recibidas(db, espacios):
                         respuestasRecibidas[resp.id] = {
                                             'f_cod_registro': resp.f_cod_registro,
                                             'f_espacio': espacio.codigo,
-                                            'f_sustancia': solicitud.f_sustancia,
+                                            'f_sustancia': sustancia.f_nombre,
                                             'f_cantidad': resp.f_cantidad,
                                             'f_medida': resp.f_medida,
                                             'f_tipo_respuesta': resp.f_tipo_respuesta,
@@ -3696,6 +3712,8 @@ def listado_respuestas_enviadas(db, espacios):
 
         solicitud = db((db.t_Solicitud_smydp.id == resp.f_solicitud)).select()[0]
 
+        sustancia = db((db.t_Sustancia.id == solicitud.f_sustancia)).select()[0]
+
         espacio = db((db.espacios_fisicos.id == resp.f_espacio)).select()[0]
 
         for esp in espacios:
@@ -3705,7 +3723,7 @@ def listado_respuestas_enviadas(db, espacios):
                     respuestasEnviadas[resp.id] = {
                                         'f_cod_registro': resp.f_cod_registro,
                                         'f_espacio': espacio.codigo,
-                                        'f_sustancia': solicitud.f_sustancia,
+                                        'f_sustancia': sustancia.f_nombre,
                                         'f_cantidad': resp.f_cantidad,
                                         'f_medida': resp.f_medida,
                                         'f_tipo_respuesta': resp.f_tipo_respuesta,
@@ -3742,7 +3760,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                     solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
-                                        'f_espacio': sol.f_espacio,
+                                        'f_espacio': espacio.codigo,
                                         'f_cantidad': sol.f_cantidad,
                                         'f_fecha': sol.created_on,
                                         'f_estatus':sol.f_estatus
@@ -3764,7 +3782,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                     solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
-                                        'f_espacio': sol.f_espacio,
+                                        'f_espacio': espacio.codigo,
                                         'f_cantidad': sol.f_cantidad,
                                         'f_fecha': sol.created_on,
                                         'f_estatus':sol.f_estatus
@@ -3788,7 +3806,7 @@ def ListaSolicitudesHechas(db, datos, espacios):
                     solicitudesHechas[sol.id] = {
                                         'f_cod_registro': sol.f_cod_registro,
                                         'f_sustancia': sustancia.f_nombre,
-                                        'f_espacio': sol.f_espacio,
+                                        'f_espacio': espacio.codigo,
                                         'f_cantidad': sol.f_cantidad,
                                         'f_fecha': sol.created_on,
                                         'f_estatus': sol.f_estatus
@@ -3829,7 +3847,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                             solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
-                                                'f_espacio': sol.f_espacio,
+                                                'f_espacio': espacio.codigo,
                                                 'f_cantidad': sol.f_cantidad,
                                                 'f_fecha': sol.created_on,
                                                 'f_estatus':sol.f_estatus
@@ -3856,7 +3874,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                             solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
-                                                'f_espacio': sol.f_espacio,
+                                                'f_espacio': espacio.codigo,
                                                 'f_cantidad': sol.f_cantidad,
                                                 'f_fecha': sol.created_on,
                                                 'f_estatus':sol.f_estatus
@@ -3886,7 +3904,7 @@ def ListaSolicitudesRecibidas(db, datos, espacios):
                             solicitudesRecibidas[sol.id] = {
                                                 'f_cod_registro': sol.f_cod_registro,
                                                 'f_sustancia': sustancia.f_nombre,
-                                                'f_espacio': sol.f_espacio,
+                                                'f_espacio': espacio.codigo,
                                                 'f_cantidad': sol.f_cantidad,
                                                 'f_fecha': sol.created_on,
                                                 'f_estatus':sol.f_estatus
